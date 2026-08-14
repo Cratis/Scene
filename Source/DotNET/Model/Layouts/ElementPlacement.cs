@@ -13,4 +13,4 @@ namespace Cratis.Scene.Model.Layouts;
 /// <param name="Y">The vertical offset.</param>
 /// <param name="Width">The width.</param>
 /// <param name="Height">The height.</param>
-public record ElementPlacement(Element Element, double X, double Y, double Width, double Height);
+public record ElementPlacement(SceneElement Element, double X, double Y, double Width, double Height);

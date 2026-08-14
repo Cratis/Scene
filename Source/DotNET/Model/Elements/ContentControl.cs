@@ -11,5 +11,5 @@ public record ContentControl : Control
     /// <summary>
     /// Gets the content hosted by the control.
     /// </summary>
-    public required Element Content { get; init; }
+    public required SceneElement Content { get; init; }
 }

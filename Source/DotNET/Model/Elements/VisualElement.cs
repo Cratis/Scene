@@ -6,9 +6,9 @@ using Cratis.Scene.Model.Common;
 namespace Cratis.Scene.Model.Elements;
 
 /// <summary>
-/// An <see cref="Element"/> that occupies space and can be shown or hidden.
+/// A <see cref="SceneElement"/> that occupies space and can be shown or hidden.
 /// </summary>
-public abstract record VisualElement : Element
+public abstract record VisualElement : SceneElement
 {
     /// <summary>
     /// Gets whether, and how, the element occupies space when not shown.

@@ -11,5 +11,5 @@ public abstract record Panel : FrameworkElement
     /// <summary>
     /// Gets the panel's children, in render order.
     /// </summary>
-    public IReadOnlyList<Element> Children { get; init; } = [];
+    public IReadOnlyList<SceneElement> Children { get; init; } = [];
 }

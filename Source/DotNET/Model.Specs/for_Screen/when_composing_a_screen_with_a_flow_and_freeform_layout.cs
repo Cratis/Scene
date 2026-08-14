@@ -41,7 +41,7 @@ public class when_composing_a_screen_with_a_flow_and_freeform_layout : Specifica
         _screen = new Screen(
             "Dashboard",
             _layout.Name,
-            new Dictionary<string, IReadOnlyList<Element>>
+            new Dictionary<string, IReadOnlyList<SceneElement>>
             {
                 ["header"] = [_title],
                 ["widgets"] = [_summaryWidget]

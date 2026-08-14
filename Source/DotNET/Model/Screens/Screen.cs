@@ -19,6 +19,6 @@ namespace Cratis.Scene.Model.Screens;
 public record Screen(
     string Name,
     string Layout,
-    IReadOnlyDictionary<string, IReadOnlyList<Element>> SlotContent,
+    IReadOnlyDictionary<string, IReadOnlyList<SceneElement>> SlotContent,
     IReadOnlyList<Form> Forms,
     IReadOnlyList<Contribution> Contributions);

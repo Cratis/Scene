@@ -6,7 +6,7 @@ namespace Cratis.Scene.Model.Elements;
 /// <summary>
 /// The root of every node in a Scene element tree.
 /// </summary>
-public abstract record Element
+public abstract record SceneElement
 {
     /// <summary>
     /// Gets the unique identifier of the element within its screen.

@@ -18,5 +18,5 @@ public record ItemsControl : Control
     /// <summary>
     /// Gets the template rendered once per item.
     /// </summary>
-    public required Element ItemTemplate { get; init; }
+    public required SceneElement ItemTemplate { get; init; }
 }

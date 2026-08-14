@@ -13,4 +13,4 @@ namespace Cratis.Scene.Model.ContributionPoints;
 /// <param name="ContributionPointName">The resolved name of the contribution point this targets.</param>
 /// <param name="Content">The contributed content.</param>
 /// <param name="Order">Where this contribution sorts relative to others at the same contribution point.</param>
-public record Contribution(string ContributionPointName, Element Content, int? Order = null);
+public record Contribution(string ContributionPointName, SceneElement Content, int? Order = null);

@@ -19,5 +19,5 @@ public record ExternalComponent : FrameworkElement
     /// <summary>
     /// Gets the named content slots passed to the component, each a list of child elements.
     /// </summary>
-    public IReadOnlyDictionary<string, IReadOnlyList<Element>> Slots { get; init; } = new Dictionary<string, IReadOnlyList<Element>>();
+    public IReadOnlyDictionary<string, IReadOnlyList<SceneElement>> Slots { get; init; } = new Dictionary<string, IReadOnlyList<SceneElement>>();
 }

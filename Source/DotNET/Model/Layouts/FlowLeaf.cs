@@ -9,4 +9,4 @@ namespace Cratis.Scene.Model.Layouts;
 /// A <see cref="FlowNode"/> leaf that positions one of the slot's own content elements within the flow tree.
 /// </summary>
 /// <param name="Content">The element being positioned.</param>
-public record FlowLeaf(Element Content) : FlowNode;
+public record FlowLeaf(SceneElement Content) : FlowNode;
