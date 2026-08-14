@@ -283,6 +283,7 @@ __pycache__/
 package-json.lock
 package-lock.json
 dist
+storybook-static
 **/node_modules/
 *.tsbuildinfo
 .eslintcache
