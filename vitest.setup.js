@@ -1,7 +1,6 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import '@cratis/fundamentals/reflection';
 import * as chai from 'chai';
 chai.should();
 import * as chaiAsPromised from 'chai-as-promised';
@@ -12,7 +11,7 @@ import * as sinonChai from 'sinon-chai';
 // to override these, which fails in strict mode. Delete them first so sinon-chai can define them properly.
 const sinonChaiMethodNames = ['callCount', 'calledBefore', 'calledAfter', 'calledWith', 'calledOnceWith', 'returned'];
 for (const name of sinonChaiMethodNames) {
-    delete (chai.Assertion.prototype as Record<string, unknown>)[name];
+    delete chai.Assertion.prototype[name];
 }
 
 chai.use(sinonChai.default);

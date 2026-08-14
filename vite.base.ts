@@ -38,11 +38,11 @@ export function createConfig() {
             },
             exclude: ['**/dist/**', '**/node_modules/**', 'node_modules/**', '**/wwwroot/**', 'wwwroot/**', '**/given/**'],
             include: ['**/for_*/when_*/**/*.ts', '**/for_*/**/when_*.ts'],
-            setupFiles: `${__dirname}/vitest.setup.ts`
+            setupFiles: `${__dirname}/vitest.setup.js`
         },
         plugins: [
             commonjs(),
-            tsconfigPaths()
+            tsconfigPaths({ ignoreConfigErrors: true })
         ]
     };
 }
