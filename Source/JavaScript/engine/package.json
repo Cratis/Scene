@@ -1,0 +1,45 @@
+{
+    "name": "@cratis/scene.engine",
+    "version": "1.0.0",
+    "description": "The Scene runtime: walks a Scene element tree and drives whichever renderer is plugged in. Does not know React, or any other rendering platform, exists.",
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist",
+        "**/*.ts"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up"
+    },
+    "dependencies": {
+        "@cratis/scene.model": "1.0.0"
+    },
+    "devDependencies": {
+        "@cratis/scene.model": "1.0.0"
+    }
+}

@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Model</AssemblyName>
+        <RootNamespace>Cratis.Scene.Model</RootNamespace>
+        <Description>Platform-agnostic object model for Scene: screens, layouts, forms, contribution points, ui profiles and themes.</Description>
+        <PackageTags>cratis;scene;screenplay;ui</PackageTags>
+    </PropertyGroup>
+</Project>

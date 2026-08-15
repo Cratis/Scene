@@ -1,0 +1,127 @@
+name: Publish
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NUGET_OUTPUT: ./Artifacts/NuGet
+  DOTNET_VERSION: "10.0.x"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
+        default: '0.0.0'
+        type: string
+      release-notes:
+        description: 'Release notes'
+        required: true
+        default: 'No release notes'
+        type: string
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+    paths:
+      - "Source/**"
+      - "Directory.Build.props"
+      - "Directory.Packages.props"
+      - "package.json"
+      - "global.json"
+
+permissions:
+  contents: write
+  deployments: write
+  id-token: write
+
+jobs:
+  release:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      publish: ${{ steps.release.outputs.should-publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release
+        id: release
+        uses: cratis/release-action@v1
+        with:
+          version: ${{ github.event.inputs.version }}
+          release-notes: ${{ github.event.inputs.release-notes }}
+
+  publish-dotnet-packages:
+    if: needs.release.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    needs: [release]
+    permissions:
+      id-token: write   # Required for NuGet trusted publishing using OIDC tokens
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Remove any existing artifacts
+        run: rm -rf ${{ env.NUGET_OUTPUT }}
+      - name: Build
+        run: dotnet build --configuration Release
+      - name: Create NuGet packages
+        run: dotnet pack --no-build --configuration Release -o ${{ env.NUGET_OUTPUT }} -p:PackageVersion=${{ needs.release.outputs.version }}
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - name: Push NuGet packages
+        run: dotnet nuget push --skip-duplicate '${{ env.NUGET_OUTPUT }}/*.nupkg' --timeout 900 --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+
+  publish-npm-packages:
+    if: needs.release.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    needs: [release]
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 23.x
+          registry-url: 'https://registry.npmjs.org'
+      - name: Configure npm for OIDC-based publishing
+        run: |
+          # setup-node writes a placeholder _authToken into .npmrc and exports NODE_AUTH_TOKEN
+          # with the same placeholder. npm uses this token as-is → 404. Remove it so npm falls
+          # back to OIDC.
+          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
+          echo "NODE_AUTH_TOKEN=" >> "$GITHUB_ENV"
+      - name: Upgrade npm for trusted publishing (requires >= 11.5.1)
+        run: npm install -g npm@11
+      - uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: |
+            .yarn/cache
+            **/node_modules
+            **/.eslintcache
+            **/yarn.lock
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+      - run: yarn
+      - name: Publish NPM packages
+        run: |
+          yarn build
+          yarn publish-version ${{ needs.release.outputs.version }}
+      - name: Git reset (package.json files changed)
+        run: git reset --hard
+
+  verify-published:
+    if: always() && github.event_name == 'pull_request' && needs.release.result == 'success' && needs.release.outputs.publish != 'true'
+    runs-on: ubuntu-latest
+    needs: [release]
+    steps:
+      - run: |
+          echo "::error::The release action reported should-publish: false for a merged pull request. No label (major/minor/patch) means nothing was published — add a semver label before merging next time."
+          exit 1

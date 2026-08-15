@@ -1,0 +1,116 @@
+name: .NET Build
+
+# The build runs on pull_request_target, where github.ref is the branch being merged into rather than the pull
+# request - refs/heads/main for every one of them. Grouping on it therefore put every open pull request in one
+# group, and cancel-in-progress made each new one cancel the build of whichever was already running. The pull
+# request that lost was left with a cancelled run and no failing job, which reads as though it is still going
+# rather than as though anything is wrong. So the group is the pull request when there is one, and the ref only
+# for the manual runs that have no pull request to name.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_VERSION: "10.0.x"
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+  pull_request_target:
+    branches:
+      - "**"
+    paths:
+      - "Source/DotNET/**"
+      - "Directory.Build.props"
+      - "Directory.Packages.props"
+      - "global.json"
+      - "Scene.slnx"
+      - ".github/workflows/dotnet-build.yml"
+
+jobs:
+  dotnet-build:
+    runs-on: ubuntu-latest
+    outputs:
+      spec-projects: ${{ steps.discover-specs.outputs.projects }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+
+      - name: Discover spec projects
+        id: discover-specs
+        run: |
+          projects=$(find Source/DotNET -name "*.Specs.csproj" \
+            | sed 's|/[^/]*\.csproj$||' \
+            | sort \
+            | jq -Rc '.' \
+            | jq -sc '.')
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/Directory.*.props') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Archive build output
+        run: find . -type d -name bin -not -path '*/node_modules/*' -not -path './.git/*' -print0 | tar --null -czf build-output.tar.gz -T -
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: build-output.tar.gz
+          retention-days: 1
+          if-no-files-found: error
+
+  specs:
+    needs: [dotnet-build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJson(needs.dotnet-build.outputs.spec-projects) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      - name: Extract build output
+        run: tar -xzf build-output.tar.gz
+
+      - name: Test (${{ matrix.project }})
+        run: dotnet test ${{ matrix.project }} --no-build --configuration Release

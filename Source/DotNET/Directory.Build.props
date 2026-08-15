@@ -1,0 +1,62 @@
+<Project>
+    <Import Project="$(MSBuildThisFileDirectory)../../Directory.Build.props" />
+
+    <PropertyGroup>
+        <Version>1.0.0</Version>
+        <Copyright>Copyright Cratis</Copyright>
+        <Authors>all contributors</Authors>
+        <DebugType>portable</DebugType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryUrl>https://github.com/cratis/scene</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/cratis/scene</PackageProjectUrl>
+
+        <GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
+        <GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
+
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsTestProject>false</IsTestProject>
+
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <IsPackable>true</IsPackable>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+        <MSBuildTreatWarningsAsErrors>False</MSBuildTreatWarningsAsErrors>
+        <CodeAnalysisTreatWarningsAsErrors>False</CodeAnalysisTreatWarningsAsErrors>
+        <StyleCopTreatErrorsAsWarnings>True</StyleCopTreatErrorsAsWarnings>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <MSBuildTreatWarningsAsErrors>True</MSBuildTreatWarningsAsErrors>
+        <CodeAnalysisTreatWarningsAsErrors>True</CodeAnalysisTreatWarningsAsErrors>
+        <StyleCopTreatErrorsAsWarnings>False</StyleCopTreatErrorsAsWarnings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)/../../README.md" Pack="true" PackagePath="/" />
+        <Compile Include="$(MSBuildThisFileDirectory)/GlobalAssemblyInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IsTestProject)'=='true'">
+        <PackageReference Include="Cratis.Specifications.XUnit" />
+        <PackageReference Include="NSubstitute" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <Compile Include="$(MSBuildThisFileDirectory)/GlobalUsings.Specs.cs" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(IsTestProject)'=='true'">
+        <NoWarn>$(NoWarn);IDE1006;IDE0005;MA0101;RCS1266;xUnit1031</NoWarn>
+    </PropertyGroup>
+</Project>
