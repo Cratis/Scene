@@ -38,7 +38,8 @@
         "NavigationItem": ["label", "targetScreen", "routeParameterBindings", "order", "group"],
         "UiProfile": ["name", "targetPlatform", "packages", "defaultSizeClass"],
         "Theme": ["name", "compatibleWith"],
-        "Screen": ["name", "layout", "slotContent", "forms", "contributions"]
+        "Screen": ["name", "layout", "slotContent", "forms", "contributions"],
+        "UiStarter": ["name", "packages", "themes", "gallery"]
     },
     "enums": {
         "WidthSizeClass": ["Compact", "Regular"],
