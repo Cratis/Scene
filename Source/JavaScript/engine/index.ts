@@ -12,3 +12,5 @@ export * from './evaluateFlowArrangement';
 export * from './evaluateFreeformArrangement';
 export * from './aggregateContributions';
 export * from './themeCompatibility';
+export * from './buildStarterProfile';
+export * from './incompatibleStarterThemes';
