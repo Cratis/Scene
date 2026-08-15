@@ -10,4 +10,11 @@ namespace Cratis.Scene.Model.Layouts;
 /// </summary>
 /// <param name="Name">The layout's name.</param>
 /// <param name="Slots">The slots the layout declares, in declaration order.</param>
-public record Layout(string Name, IReadOnlyList<Slot> Slots);
+/// <param name="Arrangement">
+/// How the layout's own <paramref name="Slots"/> position relative to each other - a <see cref="FlowArrangement"/>
+/// (leaves are <see cref="FlowSlotLeaf"/>) or <see cref="FreeformSlotArrangement"/>, or <see langword="null"/>
+/// for the slots' declaration order with no further positioning information. Distinct from each
+/// <see cref="Layouts.Slot"/>'s own <see cref="Slot.Arrangement"/>, which positions that one slot's filled
+/// content instead of positioning the slots themselves.
+/// </param>
+public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrangement = null);
