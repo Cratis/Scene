@@ -9,3 +9,4 @@ export * from './forms';
 export * from './contributionPoints';
 export * from './profiles';
 export * from './screens';
+export * from './starters';

@@ -1,0 +1,46 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Engine.Starters (C#) and buildStarterProfile.ts/incompatibleStarterThemes.ts (TypeScript, @cratis/scene.engine) - both sides assert every case here independently, so the two implementations of Cratis/Scene#6's starter-profile and starter-theme rules cannot drift apart.",
+    "profileCases": [
+        {
+            "name": "a starter's sandboxed profile is scoped to exactly its own packages",
+            "starter": { "name": "Admin", "packages": ["core", "PrimeReact"], "themes": ["Aurora"], "gallery": ["SampleDashboard"] },
+            "targetPlatform": "web",
+            "expectedProfile": { "name": "Admin", "targetPlatform": "web", "packages": ["core", "PrimeReact"] }
+        },
+        {
+            "name": "a starter with only core still produces a valid profile",
+            "starter": { "name": "Minimal", "packages": ["core"], "themes": [], "gallery": [] },
+            "targetPlatform": "ios",
+            "expectedProfile": { "name": "Minimal", "targetPlatform": "ios", "packages": ["core"] }
+        }
+    ],
+    "themeCases": [
+        {
+            "name": "every declared theme compatible with the starter's packages is not incompatible",
+            "starter": { "name": "Admin", "packages": ["core", "PrimeReact"], "themes": ["Aurora"], "gallery": [] },
+            "themes": { "Aurora": { "compatibleWith": ["core", "PrimeReact"] } },
+            "expectedIncompatible": []
+        },
+        {
+            "name": "a declared theme missing one of the starter's packages is incompatible",
+            "starter": { "name": "Admin", "packages": ["core", "PrimeReact"], "themes": ["Aurora"], "gallery": [] },
+            "themes": { "Aurora": { "compatibleWith": ["core"] } },
+            "expectedIncompatible": ["Aurora"]
+        },
+        {
+            "name": "a starter theme not present in the theme catalog at all is incompatible",
+            "starter": { "name": "Admin", "packages": ["core"], "themes": ["Midnight"], "gallery": [] },
+            "themes": { "Aurora": { "compatibleWith": ["core"] } },
+            "expectedIncompatible": ["Midnight"]
+        },
+        {
+            "name": "a starter with multiple themes reports only the incompatible ones",
+            "starter": { "name": "Admin", "packages": ["core", "PrimeReact"], "themes": ["Aurora", "Midnight"], "gallery": [] },
+            "themes": {
+                "Aurora": { "compatibleWith": ["core", "PrimeReact"] },
+                "Midnight": { "compatibleWith": ["core"] }
+            },
+            "expectedIncompatible": ["Midnight"]
+        }
+    ]
+}
