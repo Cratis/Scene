@@ -1,0 +1,40 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Engine.Profiles.ThemeCompatibility (C#) and themeCompatibility.ts (TypeScript, @cratis/scene.engine) - both sides assert every case here independently, so the two implementations of Cratis/Scene#5's compatibility rule cannot drift apart. Mirrors the exact rule already implemented in Screenplay's compiler (ValidateThemes): every package a profile declares must be in the theme's compatibleWith list - no implicit exemption for 'core'.",
+    "cases": [
+        {
+            "name": "a theme compatible with every profile package is fully compatible",
+            "theme": { "compatibleWith": ["core", "PrimeReact"] },
+            "profile": { "packages": ["core", "PrimeReact"] },
+            "expectedIncompatible": [],
+            "expectedApplicable": ["core", "PrimeReact"]
+        },
+        {
+            "name": "a theme missing one profile package is incompatible for exactly that package",
+            "theme": { "compatibleWith": ["core"] },
+            "profile": { "packages": ["core", "PrimeReact"] },
+            "expectedIncompatible": ["PrimeReact"],
+            "expectedApplicable": ["core"]
+        },
+        {
+            "name": "core is not implicitly exempt - a profile explicitly listing core against a theme that does not declare it is incompatible for core too",
+            "theme": { "compatibleWith": ["PrimeReact"] },
+            "profile": { "packages": ["core", "PrimeReact"] },
+            "expectedIncompatible": ["core"],
+            "expectedApplicable": ["PrimeReact"]
+        },
+        {
+            "name": "a theme declaring compatibility with packages the profile does not use does not affect compatibility",
+            "theme": { "compatibleWith": ["core", "PrimeReact", "Internal.Widgets"] },
+            "profile": { "packages": ["core"] },
+            "expectedIncompatible": [],
+            "expectedApplicable": ["core"]
+        },
+        {
+            "name": "a theme compatible with none of the profile's packages is incompatible with all of them",
+            "theme": { "compatibleWith": ["Internal.Widgets"] },
+            "profile": { "packages": ["core", "PrimeReact"] },
+            "expectedIncompatible": ["core", "PrimeReact"],
+            "expectedApplicable": []
+        }
+    ]
+}
