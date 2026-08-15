@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Engine.Specs</AssemblyName>
+        <RootNamespace>Cratis.Scene.Engine</RootNamespace>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="../Engine/Engine.csproj" />
+    </ItemGroup>
+</Project>
