@@ -11,4 +11,9 @@ namespace Cratis.Scene.Model.Layouts;
 /// in a future native renderer).
 /// </summary>
 /// <param name="Root">The root of the flow tree.</param>
-public record FlowArrangement(FlowNode Root) : Arrangement;
+/// <param name="Overrides">
+/// Replacements for <paramref name="Root"/> targeting specific width/height size classes - the most
+/// specific match wins (both dimensions targeted beats one), and the last declared wins among equally
+/// specific matches. <see langword="null"/> or empty when the tree never varies by size class.
+/// </param>
+public record FlowArrangement(FlowNode Root, IReadOnlyList<FlowOverride>? Overrides = null) : Arrangement;
