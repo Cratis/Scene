@@ -7,3 +7,6 @@ export * from './renderElement';
 export * from './elementKind';
 export * from './ComponentResolution';
 export * from './resolveComponentName';
+export * from './computeSizeClass';
+export * from './evaluateFlowArrangement';
+export * from './evaluateFreeformArrangement';
