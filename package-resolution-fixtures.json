@@ -1,0 +1,75 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Engine.Profiles.PackageResolver (C#) and resolveComponentName (TypeScript, @cratis/scene.engine) - both sides assert every case here independently, so the two implementations of Cratis/Scene#3's algorithm cannot drift apart.",
+    "cases": [
+        {
+            "name": "bare name declared by exactly one active package resolves to it",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["table"], "PrimeReact": ["dropdown"] },
+            "requestedName": "dropdown",
+            "expected": { "name": "dropdown", "package": "PrimeReact", "shadows": [] }
+        },
+        {
+            "name": "bare name falls back to core when no listed package declares it",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["table"], "PrimeReact": ["dropdown"] },
+            "requestedName": "table",
+            "expected": { "name": "table", "package": "core", "shadows": [] }
+        },
+        {
+            "name": "bare name declared by two active packages resolves to the later, higher-priority one",
+            "profile": { "packages": ["PrimeReact", "Internal.Widgets"] },
+            "catalog": { "core": ["button"], "PrimeReact": ["button"], "Internal.Widgets": ["button"] },
+            "requestedName": "button",
+            "expected": { "name": "button", "package": "Internal.Widgets", "shadows": ["PrimeReact", "core"] }
+        },
+        {
+            "name": "core listed explicitly in packages is not duplicated in the effective order",
+            "profile": { "packages": ["core", "PrimeReact"] },
+            "catalog": { "core": ["button"], "PrimeReact": ["button"] },
+            "requestedName": "button",
+            "expected": { "name": "button", "package": "PrimeReact", "shadows": ["core"] }
+        },
+        {
+            "name": "bare name nothing in scope declares is unresolved",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["table"], "PrimeReact": ["dropdown"] },
+            "requestedName": "missing",
+            "expected": null
+        },
+        {
+            "name": "package-qualified name with a simple package resolves directly against it",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["button"], "PrimeReact": ["button"] },
+            "requestedName": "core.button",
+            "expected": { "name": "button", "package": "core", "shadows": [] }
+        },
+        {
+            "name": "package-qualified name with a dotted package splits on the last dot",
+            "profile": { "packages": ["Internal.Widgets"] },
+            "catalog": { "core": [], "Internal.Widgets": ["TrendChart"] },
+            "requestedName": "Internal.Widgets.TrendChart",
+            "expected": { "name": "TrendChart", "package": "Internal.Widgets", "shadows": [] }
+        },
+        {
+            "name": "package-qualified name bypasses priority order entirely - resolves against the lower-priority package even when a higher one also declares the bare name",
+            "profile": { "packages": ["PrimeReact", "Internal.Widgets"] },
+            "catalog": { "core": ["button"], "PrimeReact": ["button"], "Internal.Widgets": ["button"] },
+            "requestedName": "core.button",
+            "expected": { "name": "button", "package": "core", "shadows": [] }
+        },
+        {
+            "name": "package-qualified name whose named package does not declare it is unresolved",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["button"], "PrimeReact": [] },
+            "requestedName": "PrimeReact.button",
+            "expected": null
+        },
+        {
+            "name": "package-qualified name whose named package is not active at all is unresolved",
+            "profile": { "packages": ["PrimeReact"] },
+            "catalog": { "core": ["button"], "PrimeReact": ["button"] },
+            "requestedName": "Vendor.widget",
+            "expected": null
+        }
+    ]
+}
