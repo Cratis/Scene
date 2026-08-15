@@ -3,6 +3,7 @@
 
 import { Arrangement } from './Arrangement';
 import { FlowNode } from './FlowNode';
+import { FlowOverride } from './FlowOverride';
 
 /**
  * Arranges a slot's content by reflowing it with the neutral `flow` primitives ({@link FlowRow},
@@ -13,6 +14,13 @@ import { FlowNode } from './FlowNode';
  */
 export interface FlowArrangement extends Arrangement {
     root: FlowNode;
+
+    /**
+     * Replacements for `root` targeting specific width/height size classes - the most specific match
+     * wins (both dimensions targeted beats one), and the last declared wins among equally specific
+     * matches. `undefined` or empty when the tree never varies by size class.
+     */
+    overrides?: FlowOverride[];
 }
 
-export const FlowArrangementPropertyNames: (keyof FlowArrangement)[] = ['root'];
+export const FlowArrangementPropertyNames: (keyof FlowArrangement)[] = ['root', 'overrides'];

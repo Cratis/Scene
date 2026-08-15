@@ -1,0 +1,77 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Engine.Layouts.FlowArrangementEvaluator/FreeformArrangementEvaluator (C#) and evaluateFlowArrangement/evaluateFreeformArrangement (TypeScript, @cratis/scene.engine) - both sides assert every case here independently, so the two implementations of Cratis/Scene#4's selection algorithm cannot drift apart. Trees and placements are reduced to a distinguishing 'tag' string, since the evaluators only select which one wins - they never descend into or transform the tree itself.",
+    "flowCases": [
+        {
+            "name": "no overrides - the base root always wins",
+            "rootTag": "base",
+            "overrides": [],
+            "sizeClass": { "width": "Compact", "height": "Regular" },
+            "expectedTag": "base"
+        },
+        {
+            "name": "a width-only override matching the current size class wins over the base root",
+            "rootTag": "base",
+            "overrides": [{ "width": "Compact", "height": null, "tag": "compact-width" }],
+            "sizeClass": { "width": "Compact", "height": "Regular" },
+            "expectedTag": "compact-width"
+        },
+        {
+            "name": "a height-only override matching the current size class wins over the base root",
+            "rootTag": "base",
+            "overrides": [{ "width": null, "height": "Compact", "tag": "compact-height" }],
+            "sizeClass": { "width": "Regular", "height": "Compact" },
+            "expectedTag": "compact-height"
+        },
+        {
+            "name": "an override targeting both dimensions wins over a less specific one, regardless of declaration order",
+            "rootTag": "base",
+            "overrides": [
+                { "width": "Compact", "height": "Regular", "tag": "both-dimensions" },
+                { "width": "Compact", "height": null, "tag": "width-only" }
+            ],
+            "sizeClass": { "width": "Compact", "height": "Regular" },
+            "expectedTag": "both-dimensions"
+        },
+        {
+            "name": "two equally specific overrides both matching - the later declared wins",
+            "rootTag": "base",
+            "overrides": [
+                { "width": "Compact", "height": null, "tag": "first-declared" },
+                { "width": null, "height": "Regular", "tag": "second-declared" }
+            ],
+            "sizeClass": { "width": "Compact", "height": "Regular" },
+            "expectedTag": "second-declared"
+        },
+        {
+            "name": "an override targeting a size class that is not current does not match - the base root wins",
+            "rootTag": "base",
+            "overrides": [{ "width": "Compact", "height": null, "tag": "compact-width" }],
+            "sizeClass": { "width": "Regular", "height": "Regular" },
+            "expectedTag": "base"
+        }
+    ],
+    "freeformCases": [
+        {
+            "name": "a variant whose size class exactly matches resolves",
+            "variants": [{ "width": "Compact", "height": "Regular", "tag": "phone-portrait" }],
+            "sizeClass": { "width": "Compact", "height": "Regular" },
+            "expectedTag": "phone-portrait"
+        },
+        {
+            "name": "no variant matches the current size class - nothing resolves",
+            "variants": [{ "width": "Compact", "height": "Regular", "tag": "phone-portrait" }],
+            "sizeClass": { "width": "Regular", "height": "Regular" },
+            "expectedTag": null
+        },
+        {
+            "name": "only the exact match resolves among several variants",
+            "variants": [
+                { "width": "Compact", "height": "Compact", "tag": "phone-landscape" },
+                { "width": "Compact", "height": "Regular", "tag": "phone-portrait" },
+                { "width": "Regular", "height": "Regular", "tag": "tablet-desktop" }
+            ],
+            "sizeClass": { "width": "Regular", "height": "Regular" },
+            "expectedTag": "tablet-desktop"
+        }
+    ]
+}

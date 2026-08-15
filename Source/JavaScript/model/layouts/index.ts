@@ -5,6 +5,7 @@ export * from './Layout';
 export * from './Slot';
 export * from './Arrangement';
 export * from './FlowArrangement';
+export * from './FlowOverride';
 export * from './FlowNode';
 export * from './FlowContainer';
 export * from './FlowRow';
