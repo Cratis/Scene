@@ -5,3 +5,5 @@ export * from './Renderer';
 export * from './BindingResolver';
 export * from './renderElement';
 export * from './elementKind';
+export * from './ComponentResolution';
+export * from './resolveComponentName';
