@@ -10,6 +10,7 @@ export * from './resolveComponentName';
 export * from './computeSizeClass';
 export * from './evaluateFlowArrangement';
 export * from './evaluateFreeformArrangement';
+export * from './evaluateFreeformSlotArrangement';
 export * from './aggregateContributions';
 export * from './themeCompatibility';
 export * from './buildStarterProfile';
