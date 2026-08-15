@@ -10,3 +10,4 @@ export * from './resolveComponentName';
 export * from './computeSizeClass';
 export * from './evaluateFlowArrangement';
 export * from './evaluateFreeformArrangement';
+export * from './aggregateContributions';
