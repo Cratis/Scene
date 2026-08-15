@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Engine</AssemblyName>
+        <RootNamespace>Cratis.Scene.Engine</RootNamespace>
+        <Description>Platform-agnostic runtime and design-time resolution logic for Scene: package/component name resolution, layout arrangement evaluation, contribution aggregation.</Description>
+        <PackageTags>cratis;scene;screenplay;ui</PackageTags>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="../Model/Model.csproj" />
+    </ItemGroup>
+</Project>

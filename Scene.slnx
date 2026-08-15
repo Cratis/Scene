@@ -3,5 +3,7 @@
     <Folder Name="/Source/DotNET/">
         <Project Path="Source/DotNET/Model/Model.csproj" />
         <Project Path="Source/DotNET/Model.Specs/Model.Specs.csproj" />
+        <Project Path="Source/DotNET/Engine/Engine.csproj" />
+        <Project Path="Source/DotNET/Engine.Specs/Engine.Specs.csproj" />
     </Folder>
 </Solution>
