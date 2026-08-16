@@ -44,14 +44,16 @@ public static class ScreenTemplateResolver
                 continue;
             }
 
-            var candidates = containersBySlot.TryGetValue(template.FitsSlot, out var found)
-                ? found.Where(container => container != template.Name).ToList()
+            var (qualifier, slot) = SplitQualifiedSlot(template.FitsSlot);
+
+            var candidates = containersBySlot.TryGetValue(slot, out var found)
+                ? found.Where(container => container != template.Name && (qualifier is null || container == qualifier)).ToList()
                 : [];
 
             if (candidates.Count == 1)
             {
                 parents[template.Name] = candidates[0];
-                slots[template.Name] = template.FitsSlot;
+                slots[template.Name] = slot;
             }
             else
             {
@@ -77,6 +79,23 @@ public static class ScreenTemplateResolver
             [.. placements.OrderBy(placement => placement.Depth).ThenBy(placement => placement.Template, StringComparer.Ordinal)],
             unplaced,
             cycles);
+    }
+
+    /// <summary>
+    /// Splits a <see cref="ScreenTemplate.FitsSlot"/> into the container it names and the slot within it.
+    /// </summary>
+    /// <param name="fitsSlot">The declared value - bare (<c>body</c>) or container-qualified (<c>ModuleWorkspace.body</c>).</param>
+    /// <returns>The qualifier, or <see langword="null"/> when the value is bare, and the slot name.</returns>
+    /// <remarks>
+    /// The same rule component names use: a bare name searches, a qualified one goes straight to what it
+    /// names. A slot called <c>body</c> is a good name at every level of a nesting chain, so several
+    /// templates legitimately declare one - and a bare <c>body</c> then has no single answer. Qualifying it
+    /// says which, without forcing every slot in an application to carry a unique name.
+    /// </remarks>
+    static (string? Qualifier, string Slot) SplitQualifiedSlot(string fitsSlot)
+    {
+        var lastDot = fitsSlot.LastIndexOf('.');
+        return lastDot < 0 ? (null, fitsSlot) : (fitsSlot[..lastDot], fitsSlot[(lastDot + 1)..]);
     }
 
     /// <summary>

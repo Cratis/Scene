@@ -3,109 +3,499 @@
     "cases": [
         {
             "name": "a template fitting a layout slot is placed directly inside the layout",
-            "layout": { "name": "AppShell", "slots": ["topbar", "sidebar", "content", "footer"] },
-            "templates": [{ "name": "ModuleWorkspace", "fitsSlot": "content", "slots": ["moduleNav", "moduleContent"] }],
-            "expectedPlacements": [{ "template": "ModuleWorkspace", "slot": "content", "container": "AppShell", "depth": 1 }],
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "topbar",
+                    "sidebar",
+                    "content",
+                    "footer"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "moduleNav",
+                        "moduleContent"
+                    ]
+                }
+            ],
+            "expectedPlacements": [
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                }
+            ],
             "expectedUnplaced": [],
             "expectedCycles": []
         },
         {
             "name": "the trickle-down chain places each template inside the one declaring its slot",
-            "layout": { "name": "AppShell", "slots": ["topbar", "sidebar", "content", "footer"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "topbar",
+                    "sidebar",
+                    "content",
+                    "footer"
+                ]
+            },
             "templates": [
-                { "name": "ModuleWorkspace", "fitsSlot": "content", "slots": ["moduleNav", "moduleContent"] },
-                { "name": "FeatureList", "fitsSlot": "moduleContent", "slots": ["list", "details"] },
-                { "name": "SliceDetail", "fitsSlot": "details", "slots": [] }
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "moduleNav",
+                        "moduleContent"
+                    ]
+                },
+                {
+                    "name": "FeatureList",
+                    "fitsSlot": "moduleContent",
+                    "slots": [
+                        "list",
+                        "details"
+                    ]
+                },
+                {
+                    "name": "SliceDetail",
+                    "fitsSlot": "details",
+                    "slots": []
+                }
             ],
             "expectedPlacements": [
-                { "template": "ModuleWorkspace", "slot": "content", "container": "AppShell", "depth": 1 },
-                { "template": "FeatureList", "slot": "moduleContent", "container": "ModuleWorkspace", "depth": 2 },
-                { "template": "SliceDetail", "slot": "details", "container": "FeatureList", "depth": 3 }
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "FeatureList",
+                    "slot": "moduleContent",
+                    "container": "ModuleWorkspace",
+                    "depth": 2
+                },
+                {
+                    "template": "SliceDetail",
+                    "slot": "details",
+                    "container": "FeatureList",
+                    "depth": 3
+                }
             ],
             "expectedUnplaced": [],
             "expectedCycles": []
         },
         {
             "name": "declaration order does not decide nesting - a chain declared backwards resolves the same way",
-            "layout": { "name": "AppShell", "slots": ["content"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
             "templates": [
-                { "name": "SliceDetail", "fitsSlot": "details", "slots": [] },
-                { "name": "FeatureList", "fitsSlot": "moduleContent", "slots": ["list", "details"] },
-                { "name": "ModuleWorkspace", "fitsSlot": "content", "slots": ["moduleNav", "moduleContent"] }
+                {
+                    "name": "SliceDetail",
+                    "fitsSlot": "details",
+                    "slots": []
+                },
+                {
+                    "name": "FeatureList",
+                    "fitsSlot": "moduleContent",
+                    "slots": [
+                        "list",
+                        "details"
+                    ]
+                },
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "moduleNav",
+                        "moduleContent"
+                    ]
+                }
             ],
             "expectedPlacements": [
-                { "template": "ModuleWorkspace", "slot": "content", "container": "AppShell", "depth": 1 },
-                { "template": "FeatureList", "slot": "moduleContent", "container": "ModuleWorkspace", "depth": 2 },
-                { "template": "SliceDetail", "slot": "details", "container": "FeatureList", "depth": 3 }
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "FeatureList",
+                    "slot": "moduleContent",
+                    "container": "ModuleWorkspace",
+                    "depth": 2
+                },
+                {
+                    "template": "SliceDetail",
+                    "slot": "details",
+                    "container": "FeatureList",
+                    "depth": 3
+                }
             ],
             "expectedUnplaced": [],
             "expectedCycles": []
         },
         {
             "name": "two templates fitting the same slot are both placed there - a slot can host more than one",
-            "layout": { "name": "AppShell", "slots": ["content"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
             "templates": [
-                { "name": "Invoicing", "fitsSlot": "content", "slots": [] },
-                { "name": "Reporting", "fitsSlot": "content", "slots": [] }
+                {
+                    "name": "Invoicing",
+                    "fitsSlot": "content",
+                    "slots": []
+                },
+                {
+                    "name": "Reporting",
+                    "fitsSlot": "content",
+                    "slots": []
+                }
             ],
             "expectedPlacements": [
-                { "template": "Invoicing", "slot": "content", "container": "AppShell", "depth": 1 },
-                { "template": "Reporting", "slot": "content", "container": "AppShell", "depth": 1 }
+                {
+                    "template": "Invoicing",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "Reporting",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                }
             ],
             "expectedUnplaced": [],
             "expectedCycles": []
         },
         {
             "name": "a template naming a slot nothing declares is reported unplaced with no candidates",
-            "layout": { "name": "AppShell", "slots": ["content"] },
-            "templates": [{ "name": "Orphan", "fitsSlot": "nowhere", "slots": [] }],
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "Orphan",
+                    "fitsSlot": "nowhere",
+                    "slots": []
+                }
+            ],
             "expectedPlacements": [],
-            "expectedUnplaced": [{ "template": "Orphan", "slot": "nowhere", "candidates": [] }],
+            "expectedUnplaced": [
+                {
+                    "template": "Orphan",
+                    "slot": "nowhere",
+                    "candidates": []
+                }
+            ],
             "expectedCycles": []
         },
         {
             "name": "a slot name declared by two containers is reported ambiguous with both candidates, never guessed",
-            "layout": { "name": "AppShell", "slots": ["content"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
             "templates": [
-                { "name": "Left", "fitsSlot": "content", "slots": ["detail"] },
-                { "name": "Right", "fitsSlot": "content", "slots": ["detail"] },
-                { "name": "Detail", "fitsSlot": "detail", "slots": [] }
+                {
+                    "name": "Left",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "detail"
+                    ]
+                },
+                {
+                    "name": "Right",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "detail"
+                    ]
+                },
+                {
+                    "name": "Detail",
+                    "fitsSlot": "detail",
+                    "slots": []
+                }
             ],
             "expectedPlacements": [
-                { "template": "Left", "slot": "content", "container": "AppShell", "depth": 1 },
-                { "template": "Right", "slot": "content", "container": "AppShell", "depth": 1 }
+                {
+                    "template": "Left",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "Right",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                }
             ],
-            "expectedUnplaced": [{ "template": "Detail", "slot": "detail", "candidates": ["Left", "Right"] }],
+            "expectedUnplaced": [
+                {
+                    "template": "Detail",
+                    "slot": "detail",
+                    "candidates": [
+                        "Left",
+                        "Right"
+                    ]
+                }
+            ],
             "expectedCycles": []
         },
         {
             "name": "a template declaring the slot it also fits does not place inside itself",
-            "layout": { "name": "AppShell", "slots": ["content"] },
-            "templates": [{ "name": "SelfHost", "fitsSlot": "inner", "slots": ["inner"] }],
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "SelfHost",
+                    "fitsSlot": "inner",
+                    "slots": [
+                        "inner"
+                    ]
+                }
+            ],
             "expectedPlacements": [],
-            "expectedUnplaced": [{ "template": "SelfHost", "slot": "inner", "candidates": [] }],
+            "expectedUnplaced": [
+                {
+                    "template": "SelfHost",
+                    "slot": "inner",
+                    "candidates": []
+                }
+            ],
             "expectedCycles": []
         },
         {
             "name": "two templates each fitting the other's slot are reported as a cycle and left unplaced",
-            "layout": { "name": "AppShell", "slots": ["content"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
             "templates": [
-                { "name": "A", "fitsSlot": "insideB", "slots": ["insideA"] },
-                { "name": "B", "fitsSlot": "insideA", "slots": ["insideB"] }
+                {
+                    "name": "A",
+                    "fitsSlot": "insideB",
+                    "slots": [
+                        "insideA"
+                    ]
+                },
+                {
+                    "name": "B",
+                    "fitsSlot": "insideA",
+                    "slots": [
+                        "insideB"
+                    ]
+                }
             ],
             "expectedPlacements": [],
             "expectedUnplaced": [],
-            "expectedCycles": [["A", "B"]]
+            "expectedCycles": [
+                [
+                    "A",
+                    "B"
+                ]
+            ]
         },
         {
             "name": "a template with no declared slot is skipped rather than reported - it is placed explicitly",
-            "layout": { "name": "AppShell", "slots": ["content"] },
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
             "templates": [
-                { "name": "Floating", "fitsSlot": null, "slots": [] },
-                { "name": "ModuleWorkspace", "fitsSlot": "content", "slots": [] }
+                {
+                    "name": "Floating",
+                    "fitsSlot": null,
+                    "slots": []
+                },
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": []
+                }
             ],
-            "expectedPlacements": [{ "template": "ModuleWorkspace", "slot": "content", "container": "AppShell", "depth": 1 }],
+            "expectedPlacements": [
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                }
+            ],
             "expectedUnplaced": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a container-qualified slot resolves directly, even when several containers declare that name",
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "body"
+                    ]
+                },
+                {
+                    "name": "FeatureSection",
+                    "fitsSlot": "ModuleWorkspace.body",
+                    "slots": [
+                        "body"
+                    ]
+                },
+                {
+                    "name": "SliceSection",
+                    "fitsSlot": "FeatureSection.body",
+                    "slots": []
+                }
+            ],
+            "expectedPlacements": [
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "FeatureSection",
+                    "slot": "body",
+                    "container": "ModuleWorkspace",
+                    "depth": 2
+                },
+                {
+                    "template": "SliceSection",
+                    "slot": "body",
+                    "container": "FeatureSection",
+                    "depth": 3
+                }
+            ],
+            "expectedUnplaced": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a bare slot name stays resolvable until a third container declares it, then goes ambiguous",
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "body"
+                    ]
+                },
+                {
+                    "name": "FeatureSection",
+                    "fitsSlot": "body",
+                    "slots": [
+                        "body"
+                    ]
+                },
+                {
+                    "name": "SliceSection",
+                    "fitsSlot": "body",
+                    "slots": []
+                }
+            ],
+            "expectedPlacements": [
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                },
+                {
+                    "template": "FeatureSection",
+                    "slot": "body",
+                    "container": "ModuleWorkspace",
+                    "depth": 2
+                }
+            ],
+            "expectedUnplaced": [
+                {
+                    "template": "SliceSection",
+                    "slot": "body",
+                    "candidates": [
+                        "ModuleWorkspace",
+                        "FeatureSection"
+                    ]
+                }
+            ],
+            "expectedCycles": []
+        },
+        {
+            "name": "a qualifier naming a container that does not declare the slot is unplaced, not silently searched",
+            "layout": {
+                "name": "AppShell",
+                "slots": [
+                    "content"
+                ]
+            },
+            "templates": [
+                {
+                    "name": "ModuleWorkspace",
+                    "fitsSlot": "content",
+                    "slots": [
+                        "body"
+                    ]
+                },
+                {
+                    "name": "Stray",
+                    "fitsSlot": "AppShell.body",
+                    "slots": []
+                }
+            ],
+            "expectedPlacements": [
+                {
+                    "template": "ModuleWorkspace",
+                    "slot": "content",
+                    "container": "AppShell",
+                    "depth": 1
+                }
+            ],
+            "expectedUnplaced": [
+                {
+                    "template": "Stray",
+                    "slot": "AppShell.body",
+                    "candidates": []
+                }
+            ],
             "expectedCycles": []
         }
     ]

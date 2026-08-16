@@ -78,11 +78,15 @@ export function resolveScreenTemplates(layout: Layout, templates: ScreenTemplate
     for (const template of templates) {
         if (template.fitsSlot === undefined) continue;
 
-        const candidates = (containersBySlot.get(template.fitsSlot) ?? []).filter((container) => container !== template.name);
+        const [qualifier, slot] = splitQualifiedSlot(template.fitsSlot);
+
+        const candidates = (containersBySlot.get(slot) ?? []).filter(
+            (container) => container !== template.name && (qualifier === undefined || container === qualifier)
+        );
 
         if (candidates.length === 1) {
             parents.set(template.name, candidates[0]);
-            slots.set(template.name, template.fitsSlot);
+            slots.set(template.name, slot);
         } else {
             unplaced.push({ template: template.name, slot: template.fitsSlot, candidates });
         }
@@ -107,6 +111,19 @@ export function resolveScreenTemplates(layout: Layout, templates: ScreenTemplate
     placements.sort((left, right) => left.depth - right.depth || left.template.localeCompare(right.template));
 
     return { placements, unplaced, cycles };
+}
+
+/**
+ * Splits a `fitsSlot` into the container it names and the slot within it.
+ *
+ * The same rule component names use: a bare name searches, a qualified one goes straight to what it names.
+ * A slot called `body` is a good name at every level of a nesting chain, so several templates legitimately
+ * declare one — and a bare `body` then has no single answer. Qualifying it says which, without forcing
+ * every slot in an application to carry a unique name.
+ */
+function splitQualifiedSlot(fitsSlot: string): [string | undefined, string] {
+    const lastDot = fitsSlot.lastIndexOf('.');
+    return lastDot < 0 ? [undefined, fitsSlot] : [fitsSlot.substring(0, lastDot), fitsSlot.substring(lastDot + 1)];
 }
 
 function buildSlotIndex(layout: Layout, templates: ScreenTemplate[]): Map<string, string[]> {

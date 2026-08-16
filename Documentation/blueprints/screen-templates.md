@@ -46,6 +46,27 @@ design.
 
 `FitsSlot` is nullable for a template placed explicitly rather than by declaration.
 
+## Qualifying a slot when the name is not enough
+
+`body` is a good name for a slot at every level of a chain, so several templates legitimately declare one.
+A bare `body` then has no single answer, and resolution reports it as unplaced with the candidates rather
+than guessing — putting a template in the wrong parent renders content in the wrong region, which is far
+harder to diagnose than being told the name is ambiguous.
+
+Qualify it with the container to settle it:
+
+```csharp
+new ScreenTemplate("FeatureSection", "ModuleWorkspace.body", [new Slot("body")]);
+new ScreenTemplate("SliceSection", "FeatureSection.body", []);
+```
+
+This is the same rule component names use: a bare name searches, a qualified one goes straight to what it
+names. Everything before the last `.` is the container, everything after is the slot. A qualifier naming a
+container that does not declare that slot is unplaced too — it is never quietly downgraded to a search.
+
+Note that a bare name only becomes ambiguous once *more than one other* container declares it. A template
+never competes with itself, so a two-level chain where both levels declare `body` still resolves.
+
 ## Slots and content
 
 `Slots` are what this template offers to whatever it contains — the next level down. `Content` is what the
