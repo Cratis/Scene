@@ -179,7 +179,9 @@
             "name",
             "targetPlatform",
             "packages",
-            "defaultSizeClass"
+            "defaultSizeClass",
+            "layout",
+            "theme"
         ],
         "Theme": [
             "name",
