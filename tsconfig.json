@@ -56,6 +56,21 @@
         },
         {
             "path": "./Source/JavaScript/react"
+        },
+        {
+            "path": "./Source/JavaScript/tailwind"
+        },
+        {
+            "path": "./Source/JavaScript/primereact"
+        },
+        {
+            "path": "./Source/JavaScript/components"
+        },
+        {
+            "path": "./Source/JavaScript/blueprint.default"
+        },
+        {
+            "path": "./Source/JavaScript/blueprint.components"
         }
     ]
 }

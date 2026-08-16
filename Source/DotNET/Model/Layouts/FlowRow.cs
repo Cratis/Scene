@@ -6,4 +6,8 @@ namespace Cratis.Scene.Model.Layouts;
 /// <summary>
 /// A <see cref="FlowContainer"/> that arranges its children horizontally.
 /// </summary>
-public record FlowRow : FlowContainer;
+public record FlowRow : FlowContainer
+{
+    /// <inheritdoc/>
+    public override FlowContainerKind Kind => FlowContainerKind.Row;
+}

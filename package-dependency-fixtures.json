@@ -1,0 +1,537 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Engine.Packages (C#) and resolvePackageDependencies.ts / packageVersionRange.ts / packageCatalog.ts (TypeScript, @cratis/scene.engine) - both sides assert every case here independently, so the two implementations cannot drift apart. Same pattern as package-resolution-fixtures.json and theme-compatibility-fixtures.json.",
+    "catalog": [
+        {
+            "name": "core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [],
+            "components": [
+                "button",
+                "text",
+                "card"
+            ],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "Tailwind",
+            "version": "4.3.3",
+            "kind": "Styling",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "PrimeReact",
+            "version": "10.9.8",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "Tailwind"
+                }
+            ],
+            "components": [
+                "button",
+                "table",
+                "dialog"
+            ],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": [
+                "Lara Light Blue",
+                "Lara Dark Blue"
+            ]
+        },
+        {
+            "name": "Cratis.Components",
+            "version": "2.8.1",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "PrimeReact",
+                    "versionRange": ">=10.9.0"
+                },
+                {
+                    "name": "Tailwind",
+                    "versionRange": "^4.0.0"
+                }
+            ],
+            "components": [
+                "dataPage",
+                "commandForm",
+                "table"
+            ],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "Cratis.Blueprint.Default",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [
+                {
+                    "name": "PrimeReact"
+                },
+                {
+                    "name": "Cratis.Components"
+                }
+            ],
+            "components": [
+                "appShell",
+                "topbar",
+                "sidebar"
+            ],
+            "layouts": [
+                "AppShell",
+                "FullPage"
+            ],
+            "screenTemplates": [
+                "ModuleWorkspace",
+                "FeatureList"
+            ],
+            "dialogTemplates": [
+                "Confirm"
+            ],
+            "themes": []
+        },
+        {
+            "name": "Broken.MissingDependency",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "NotInCatalog"
+                }
+            ],
+            "components": [
+                "widget"
+            ],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "Broken.WrongVersion",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "PrimeReact",
+                    "versionRange": "^11.0.0"
+                }
+            ],
+            "components": [
+                "widget"
+            ],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "Cycle.A",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "Cycle.B"
+                }
+            ],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        },
+        {
+            "name": "Cycle.B",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [
+                {
+                    "name": "Cycle.A"
+                }
+            ],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+        }
+    ],
+    "resolutionCases": [
+        {
+            "name": "a package with no dependencies resolves to itself",
+            "selected": [
+                "core"
+            ],
+            "expectedPackages": [
+                "core"
+            ],
+            "expectedAdded": [],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a dependency is pulled in automatically and ordered before the package that needs it",
+            "selected": [
+                "PrimeReact"
+            ],
+            "expectedPackages": [
+                "Tailwind",
+                "PrimeReact"
+            ],
+            "expectedAdded": [
+                "Tailwind"
+            ],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a transitive chain is fully expanded, dependencies first",
+            "selected": [
+                "Cratis.Components"
+            ],
+            "expectedPackages": [
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expectedAdded": [
+                "Tailwind",
+                "PrimeReact"
+            ],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a blueprint pulls in both component libraries it is built from",
+            "selected": [
+                "Cratis.Blueprint.Default"
+            ],
+            "expectedPackages": [
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components",
+                "Cratis.Blueprint.Default"
+            ],
+            "expectedAdded": [
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "an already-complete selection keeps the caller's order where dependencies allow it",
+            "selected": [
+                "core",
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expectedPackages": [
+                "core",
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expectedAdded": [],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a selection listing a dependent before its dependency is reordered so the dependency comes first",
+            "selected": [
+                "Cratis.Components",
+                "Tailwind",
+                "PrimeReact"
+            ],
+            "expectedPackages": [
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expectedAdded": [],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a dependency the catalog does not contain is reported as missing rather than silently dropped",
+            "selected": [
+                "Broken.MissingDependency"
+            ],
+            "expectedPackages": [
+                "Broken.MissingDependency"
+            ],
+            "expectedAdded": [],
+            "expectedMissing": [
+                {
+                    "package": "Broken.MissingDependency",
+                    "dependsOn": "NotInCatalog"
+                }
+            ],
+            "expectedVersionConflicts": [],
+            "expectedCycles": []
+        },
+        {
+            "name": "a dependency satisfied by name but not by version is reported as a conflict, and still ordered",
+            "selected": [
+                "Broken.WrongVersion"
+            ],
+            "expectedPackages": [
+                "Tailwind",
+                "PrimeReact",
+                "Broken.WrongVersion"
+            ],
+            "expectedAdded": [
+                "Tailwind",
+                "PrimeReact"
+            ],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [
+                {
+                    "package": "Broken.WrongVersion",
+                    "dependsOn": "PrimeReact",
+                    "requiredRange": "^11.0.0",
+                    "actualVersion": "10.9.8"
+                }
+            ],
+            "expectedCycles": []
+        },
+        {
+            "name": "a cycle is reported and its packages are kept rather than dropped",
+            "selected": [
+                "Cycle.A"
+            ],
+            "expectedPackages": [
+                "Cycle.A",
+                "Cycle.B"
+            ],
+            "expectedAdded": [
+                "Cycle.B"
+            ],
+            "expectedMissing": [],
+            "expectedVersionConflicts": [],
+            "expectedCycles": [
+                [
+                    "Cycle.A",
+                    "Cycle.B"
+                ]
+            ]
+        }
+    ],
+    "versionRangeCases": [
+        {
+            "version": "10.9.8",
+            "range": null,
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "*",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "10.9.8",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "=10.9.8",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "10.9.7",
+            "expected": false
+        },
+        {
+            "version": "10.9.8",
+            "range": "^10.9.0",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "^10.0.0",
+            "expected": true
+        },
+        {
+            "version": "11.1.0",
+            "range": "^10.0.0",
+            "expected": false
+        },
+        {
+            "version": "10.8.0",
+            "range": "^10.9.0",
+            "expected": false
+        },
+        {
+            "version": "0.2.5",
+            "range": "^0.2.0",
+            "expected": true
+        },
+        {
+            "version": "0.3.0",
+            "range": "^0.2.0",
+            "expected": false
+        },
+        {
+            "version": "0.0.3",
+            "range": "^0.0.3",
+            "expected": true
+        },
+        {
+            "version": "0.0.4",
+            "range": "^0.0.3",
+            "expected": false
+        },
+        {
+            "version": "10.9.8",
+            "range": "~10.9.0",
+            "expected": true
+        },
+        {
+            "version": "10.10.0",
+            "range": "~10.9.0",
+            "expected": false
+        },
+        {
+            "version": "10.9.8",
+            "range": ">=10.9.0",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": ">=11.0.0",
+            "expected": false
+        },
+        {
+            "version": "10.9.8",
+            "range": ">10.9.8",
+            "expected": false
+        },
+        {
+            "version": "10.9.9",
+            "range": ">10.9.8",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "<=10.9.8",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "<10.9.8",
+            "expected": false
+        },
+        {
+            "version": "2.8.1-beta.1",
+            "range": "^2.8.0",
+            "expected": true
+        },
+        {
+            "version": "10.9",
+            "range": "^10.9.0",
+            "expected": true
+        },
+        {
+            "version": "10.9.8",
+            "range": "not-a-range",
+            "expected": false
+        },
+        {
+            "version": "not-a-version",
+            "range": "^1.0.0",
+            "expected": false
+        }
+    ],
+    "catalogCases": [
+        {
+            "name": "base component libraries are the ones not layered on another component library",
+            "query": "baseComponentLibraries",
+            "expected": [
+                "core",
+                "PrimeReact",
+                "Broken.MissingDependency"
+            ]
+        },
+        {
+            "name": "only the packages needing nothing beyond it are available when just a styling package is selected",
+            "query": "availableFor",
+            "selected": [
+                "Tailwind"
+            ],
+            "expected": [
+                "core",
+                "PrimeReact"
+            ]
+        },
+        {
+            "name": "a component package becomes available once both of its dependencies are selected",
+            "query": "availableFor",
+            "selected": [
+                "Tailwind",
+                "PrimeReact"
+            ],
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "Broken.WrongVersion"
+            ]
+        },
+        {
+            "name": "a blueprint becomes available once the libraries it is built from are selected",
+            "query": "availableFor",
+            "selected": [
+                "Tailwind",
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "expected": [
+                "core",
+                "Cratis.Blueprint.Default",
+                "Broken.WrongVersion"
+            ]
+        },
+        {
+            "name": "components are the union of the selected packages' declarations, sorted and deduplicated",
+            "query": "componentsFor",
+            "selected": [
+                "core",
+                "PrimeReact"
+            ],
+            "expected": [
+                "button",
+                "card",
+                "dialog",
+                "table",
+                "text"
+            ]
+        }
+    ]
+}

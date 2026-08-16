@@ -1,0 +1,12 @@
+- name: Overview
+  href: index.md
+- name: The binding registry
+  href: binding-registry.md
+- name: Naming and shadowing
+  href: naming-and-shadowing.md
+- name: Theming through design tokens
+  href: theming.md
+- name: What this package does not cover
+  href: coverage.md
+- name: Component reference
+  href: components.md

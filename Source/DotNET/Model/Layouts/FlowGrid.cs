@@ -8,6 +8,9 @@ namespace Cratis.Scene.Model.Layouts;
 /// </summary>
 public record FlowGrid : FlowContainer
 {
+    /// <inheritdoc/>
+    public override FlowContainerKind Kind => FlowContainerKind.Grid;
+
     /// <summary>
     /// Gets the number of columns, or <see langword="null"/> to size columns from content.
     /// </summary>

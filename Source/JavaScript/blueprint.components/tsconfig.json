@@ -1,0 +1,54 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "dist/esm",
+        "paths": {
+            "@cratis/scene.model/*": [
+                "../model/dist/esm/*"
+            ],
+            "@cratis/scene.engine/*": [
+                "../engine/dist/esm/*"
+            ],
+            "@cratis/scene.react/*": [
+                "../react/dist/esm/*"
+            ],
+            "@cratis/scene.blueprint.default/*": [
+                "../blueprint.default/dist/esm/*"
+            ],
+            "@cratis/scene.components/*": [
+                "../components/dist/esm/*"
+            ]
+        }
+    },
+    "files": [
+        "../../../test.d.ts",
+        "../../../global.d.ts"
+    ],
+    "include": [
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "references": [
+        {
+            "path": "../model"
+        },
+        {
+            "path": "../engine"
+        },
+        {
+            "path": "../react"
+        },
+        {
+            "path": "../blueprint.default"
+        },
+        {
+            "path": "../components"
+        }
+    ],
+    "exclude": [
+        "dist",
+        "vite.config.mts",
+        ".storybook"
+    ]
+}

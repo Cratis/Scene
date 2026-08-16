@@ -1,0 +1,72 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/*
+ * Scene design tokens -> Cratis Components CSS variables.
+ *
+ * `@cratis/components` reads a `--cratis-*` variable layer (its own `tokens.css`) rather than
+ * PrimeReact's variables directly, so that one build works across PrimeReact major versions: each token
+ * resolves the PrimeReact 11 design token first and falls back to the legacy version 10 theme variable.
+ * That indirection is the seam this file plugs into.
+ *
+ * Scene has its own vocabulary. A `Theme` carries semantic token names (`surface.card`, `text.color`),
+ * and `SceneThemeProvider` writes them onto its wrapping element as `--scene-*` custom properties. This
+ * stylesheet inserts those in front of the library's own chain, so a Scene theme drives
+ * `@cratis/components` without either side knowing the other exists: Scene never learns what
+ * `--cratis-surface-card` is, and the library never learns what a Scene theme is.
+ *
+ *   --cratis-surface-card: var(--scene-surface-card, var(--p-content-background, var(--surface-card)));
+ *                              ^ Scene theme        ^ PrimeReact v11        ^ v10 legacy
+ *
+ * Three consequences worth stating, because each one is a decision:
+ *
+ * - The Scene value is only a *first* preference. Every mapping keeps the library's original fallback
+ *   chain behind it, so a theme that defines eight of the thirteen tokens leaves the other five exactly
+ *   as the active PrimeReact theme had them, rather than blanking them.
+ *
+ * - The rules are scoped to the element a theme is applied to, never to `:root`. `applyThemeTokens`
+ *   writes onto the `SceneThemeProvider`'s element, so `--scene-*` does not exist at the document root;
+ *   a `:root` rule here would resolve every mapping to nothing and wipe out the PrimeReact fallbacks
+ *   this file is supposed to preserve. Both attributes are matched because a host may apply a theme
+ *   through `applyThemeTokens` directly (`data-scene-theme`) rather than through the provider
+ *   (`data-scene-theme-root`).
+ *
+ * - Only tokens Scene actually has a name for are mapped. `--cratis-primary-500`, `--cratis-green-500`
+ *   and the rest of the primitive palette are left untouched, so they keep resolving against the
+ *   PrimeReact theme. Inventing Scene names for them would be asserting a vocabulary the themes on the
+ *   other side do not have.
+ *
+ * The token names are the ones `@cratis/scene.primereact` themes are written in, and both packages
+ * intend them to stay one vocabulary.
+ */
+
+[data-scene-theme-root],
+[data-scene-theme] {
+    /* Surfaces */
+    --cratis-surface-0: var(--scene-surface-card, var(--p-surface-0, var(--surface-0)));
+    --cratis-surface-100: var(--scene-surface-hover, var(--p-surface-100, var(--surface-100)));
+    --cratis-surface-ground: var(--scene-surface-background, var(--p-content-background, var(--surface-ground)));
+    --cratis-surface-section: var(--scene-surface-hover, var(--p-content-hover-background, var(--surface-section)));
+    --cratis-surface-card: var(--scene-surface-card, var(--p-content-background, var(--surface-card)));
+    --cratis-surface-overlay: var(--scene-surface-overlay, var(--p-overlay-modal-background, var(--surface-overlay)));
+    --cratis-surface-hover: var(--scene-surface-hover, var(--p-content-hover-background, var(--surface-hover)));
+    --cratis-surface-border: var(--scene-surface-border, var(--p-content-border-color, var(--surface-border)));
+
+    /* Text */
+    --cratis-text-color: var(--scene-text-color, var(--p-text-color, var(--text-color)));
+    --cratis-text-color-secondary: var(--scene-text-muted-color, var(--p-text-muted-color, var(--text-color-secondary)));
+
+    /* Primary brand */
+    --cratis-primary-color: var(--scene-primary-color, var(--p-primary-color, var(--primary-color)));
+    --cratis-primary-color-text: var(--scene-primary-contrast-color, var(--p-primary-contrast-color, var(--primary-color-text)));
+
+    /* Highlight / selection */
+    --cratis-highlight-bg: var(--scene-highlight-background, var(--p-highlight-background, var(--highlight-bg)));
+    --cratis-highlight-text-color: var(--scene-highlight-color, var(--p-highlight-color, var(--highlight-text-color)));
+
+    /* Geometry */
+    --cratis-border-radius: var(--scene-content-border-radius, var(--p-content-border-radius, var(--border-radius)));
+
+    /* Effects */
+    --cratis-focus-ring: var(--scene-focus-ring, var(--p-focus-ring-shadow, var(--focus-ring)));
+}

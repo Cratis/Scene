@@ -5,3 +5,5 @@ export * from './SceneElementView';
 export * from './renderer';
 export * from './core';
 export * from './NavBar';
+export * from './packages';
+export * from './theme';

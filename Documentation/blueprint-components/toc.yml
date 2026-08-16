@@ -1,0 +1,24 @@
+- name: Overview
+  href: index.md
+
+- name: Getting started
+  items:
+      - name: Use the Components blueprint
+        href: getting-started.md
+
+- name: Guides
+  items:
+      - name: Wire the binding registry
+        href: wiring-the-binding-registry.md
+      - name: Add a template of your own
+        href: add-a-template.md
+
+- name: Understand
+  items:
+      - name: Layering on another blueprint
+        href: layering-on-a-blueprint.md
+
+- name: Reference
+  items:
+      - name: The template catalogue
+        href: template-catalogue.md
