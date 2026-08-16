@@ -8,5 +8,6 @@ export * from './layouts';
 export * from './forms';
 export * from './contributionPoints';
 export * from './profiles';
+export * from './packages';
 export * from './screens';
 export * from './starters';

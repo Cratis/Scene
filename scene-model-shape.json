@@ -41,11 +41,14 @@
         "Contribution": ["contributionPointName", "content", "order"],
         "NavigationItem": ["label", "targetScreen", "routeParameterBindings", "order", "group"],
         "UiProfile": ["name", "targetPlatform", "packages", "defaultSizeClass"],
-        "Theme": ["name", "compatibleWith"],
+        "Theme": ["name", "compatibleWith", "tokens", "isDark", "author", "authorUrl", "license", "description"],
+        "PackageDependency": ["name", "versionRange"],
+        "ScenePackage": ["name", "version", "kind", "dependencies", "components", "layouts", "themes", "displayName", "description", "module"],
         "Screen": ["name", "layout", "slotContent", "forms", "contributions"],
         "UiStarter": ["name", "packages", "themes", "gallery"]
     },
     "enums": {
+        "PackageKind": ["ComponentLibrary", "Styling", "Layout"],
         "WidthSizeClass": ["Compact", "Regular"],
         "HeightSizeClass": ["Compact", "Regular"],
         "HorizontalAlignment": ["Stretch", "Left", "Center", "Right"],
