@@ -111,7 +111,7 @@ If you are adding a name to this package, or writing a package of your own:
 
 - **Bare names are `lowerCamelCase`** — `inputText`, `dataTable`, `selectButton`.
 - **The name follows what the component *is*, not what one library calls it this major version.** This
-  package maps `toggleSwitch` onto PrimeReact 10's `InputSwitch`; PrimeReact 11 renames that component to
+  package mapped `toggleSwitch` onto PrimeReact 10's `InputSwitch`; PrimeReact 11 renamed that component to
   `ToggleSwitch`, so the abstract name was already right and the port changes only an import.
 - **Reuse a name another package declares when you genuinely provide a better implementation of the same
   idea.** Invent a new one when it is a different idea.

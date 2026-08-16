@@ -1,262 +1,180 @@
 ---
 title: Component reference
-description: Every abstract component name the PrimeReact package declares, the PrimeReact 10 component behind it, and what is deliberately not covered.
+description: Every abstract component name the PrimeReact package declares, the adapter that implements it, and what backs it in PrimeReact 11.
 ---
 
-87 abstract names across ten families. Every name is `lowerCamelCase`; every registry key is
+**83** abstract names across ten families. Every name is `lowerCamelCase`; every registry key is
 `PrimeReact:<name>`.
+
+The **Backed by** column is generated from the adapters' own imports — followed one level into a sibling
+component, so a name that delegates still reports what it really builds on. It cannot drift from what the
+code does. Three kinds of entry appear:
+
+- a `primereact/*` module — the name maps onto a real PrimeReact 11 component;
+- a `@primereact/headless/*` hook marked **(headless)** — v11 ships the behavior but no presentation, so
+  this package renders it;
+- **Cratis-owned** — PrimeReact 11 removed the component outright and this package implements it. Such a
+  name may still list `primereact/*` modules: an owned replacement is usually composed from surviving v11
+  primitives (`confirmDialog` is built from `Dialog` and `Button`). See
+  [the migration record](./primereact-11-migration.md#names-that-lost-their-component).
 
 ## Form
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `inputText` | `InputText` | `primereact/inputtext` |
-| `inputTextarea` | `InputTextarea` | `primereact/inputtextarea` |
-| `inputNumber` | `InputNumber` | `primereact/inputnumber` |
-| `password` | `Password` | `primereact/password` |
-| `inputMask` | `InputMask` | `primereact/inputmask` |
-| `floatLabel` | `FloatLabel` + `InputText` | `primereact/floatlabel`, `primereact/inputtext` |
-| `iconField` | `IconField` + `InputIcon` + `InputText` | `primereact/iconfield`, `primereact/inputicon`, `primereact/inputtext` |
-| `dropdown` | `Dropdown` | `primereact/dropdown` |
-| `multiSelect` | `MultiSelect` | `primereact/multiselect` |
-| `listBox` | `ListBox` | `primereact/listbox` |
-| `selectButton` | `SelectButton` | `primereact/selectbutton` |
-| `checkbox` | `Checkbox` | `primereact/checkbox` |
-| `radioButton` | `RadioButton` | `primereact/radiobutton` |
-| `toggleSwitch` | `InputSwitch` | `primereact/inputswitch` |
-| `slider` | `Slider` | `primereact/slider` |
-| `rating` | `Rating` | `primereact/rating` |
-| `knob` | `Knob` | `primereact/knob` |
-| `calendar` | `Calendar` | `primereact/calendar` |
-| `colorPicker` | `ColorPicker` | `primereact/colorpicker` |
-| `chips` | `Chips` | `primereact/chips` |
-| `autoComplete` | `AutoComplete` | `primereact/autocomplete` |
-| `treeSelect` | `TreeSelect` | `primereact/treeselect` |
-| `cascadeSelect` | `CascadeSelect` | `primereact/cascadeselect` |
-
-`radioButton` renders the whole group from its `options`, sharing one `name` so the browser enforces
-exclusivity — a lone radio button is never what a screen means, the choice is the group.
-
-`autoComplete` filters the authored `options` case-insensitively. PrimeReact asks the host for suggestions
-through `completeMethod` because in a real application that is a server call, and a Scene element cannot
-express one.
+| `inputText` | `form/PrimeInputText.tsx` | `primereact/inputtext` |
+| `inputTextarea` | `form/PrimeInputTextarea.tsx` | `primereact/textarea` |
+| `inputNumber` | `form/PrimeInputNumber.tsx` | `primereact/inputnumber` |
+| `password` | `form/PrimePassword.tsx` | `primereact/inputpassword` |
+| `floatLabel` | `form/PrimeFloatLabel.tsx` | `primereact/floatlabel`, `primereact/inputtext` |
+| `iconField` | `form/PrimeIconField.tsx` | `primereact/iconfield`, `primereact/inputtext` |
+| `dropdown` | `form/PrimeDropdown.tsx` | `primereact/select` |
+| `multiSelect` | `form/PrimeMultiSelect.tsx` | `primereact/select` |
+| `listBox` | `form/PrimeListBox.tsx` | `primereact/listbox` |
+| `selectButton` | `form/PrimeSelectButton.tsx` | `primereact/togglebutton`, `primereact/togglebuttongroup` |
+| `checkbox` | `form/PrimeCheckbox.tsx` | `primereact/checkbox` |
+| `radioButton` | `form/PrimeRadioButton.tsx` | `primereact/radiobutton` |
+| `toggleSwitch` | `form/PrimeToggleSwitch.tsx` | `primereact/toggleswitch` |
+| `slider` | `form/PrimeSlider.tsx` | `primereact/slider` |
+| `rating` | `form/PrimeRating.tsx` | `primereact/rating` |
+| `knob` | `form/PrimeKnob.tsx` | `primereact/knob` |
+| `calendar` | `form/PrimeCalendar.tsx` | `primereact/datepicker`, `primereact/inputtext` |
+| `colorPicker` | `form/PrimeColorPicker.tsx` | `primereact/inputcolor` |
+| `chips` | `form/PrimeChips.tsx` | `primereact/inputtags` |
+| `autoComplete` | `form/PrimeAutoComplete.tsx` | `primereact/autocomplete` |
+| `treeSelect` | `form/PrimeTreeSelect.tsx` | `primereact/popover`, `primereact/tree` + **Cratis-owned** |
 
 ## Button
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `button` | `Button` | `primereact/button` |
-| `splitButton` | `SplitButton` | `primereact/splitbutton` |
-| `speedDial` | `SpeedDial` | `primereact/speeddial` |
-| `buttonGroup` | `ButtonGroup` + `Button` | `primereact/buttongroup`, `primereact/button` |
-
-`button` deliberately shares its name with `core` — see
-[Understanding name resolution](./understanding-name-resolution.md).
+| `button` | `button/PrimeButton.tsx` | `primereact/button` |
+| `splitButton` | `button/PrimeSplitButton.tsx` | `primereact/button`, `primereact/popover` + **Cratis-owned** |
+| `speedDial` | `button/PrimeSpeedDial.tsx` | `primereact/speeddial` |
+| `buttonGroup` | `button/PrimeButtonGroup.tsx` | `primereact/button`, `primereact/buttongroup` |
 
 ## Data
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `dataTable` | `DataTable` + `Column` | `primereact/datatable`, `primereact/column` |
-| `table` | `DataTable` + `Column` (the same adapter as `dataTable`) | `primereact/datatable`, `primereact/column` |
-| `column` | `Column` | `primereact/column` |
-| `dataView` | `DataView` | `primereact/dataview` |
-| `tree` | `Tree` | `primereact/tree` |
-| `treeTable` | `TreeTable` + `Column` | `primereact/treetable`, `primereact/column` |
-| `timeline` | `Timeline` | `primereact/timeline` |
-| `paginator` | `Paginator` | `primereact/paginator` |
-| `orderList` | `OrderList` | `primereact/orderlist` |
-| `pickList` | `PickList` | `primereact/picklist` |
-| `organizationChart` | `OrganizationChart` | `primereact/organizationchart` |
-| `virtualScroller` | `VirtualScroller` | `primereact/virtualscroller` |
-
-A table works out its columns in order of how explicitly the screen stated them: nested `column` children
-first, then a `columns` property, then the keys of the first row. That last step matters more than it looks
-— a table given rows and no column configuration is the most common thing an author writes first, and
-inferring the columns means it renders their data instead of an empty grid.
-
-> [!NOTE]
-> `column` renders nothing on its own. That is PrimeReact's own semantics — a bare `<Column/>` outside a
-> `DataTable` renders nothing either. When nested under `dataTable` or `table`, the table reads its
-> `field`, `header` and `sortable` off the **model** rather than the rendered node, because PrimeReact
-> identifies its columns by React element type and a Scene adapter wrapping one would not be recognized.
-
-`organizationChart` renders empty when no nodes are authored. PrimeReact's own `OrganizationChart` reads
-the root node's `expanded` flag without checking there is a root and throws on an empty value; an element
-whose data has not been authored yet is an ordinary state on a screen under construction, and taking the
-whole screen down for it would be the wrong failure.
+| `dataTable` | `data/PrimeDataTable.tsx` | `primereact/datatable` |
+| `table` | `data/PrimeDataTable.tsx` | `primereact/datatable` |
+| `column` | `data/PrimeColumn.tsx` | **Cratis-owned** |
+| `dataView` | `data/PrimeDataView.tsx` | `primereact/dataview`, `primereact/paginator` |
+| `tree` | `data/PrimeTree.tsx` | `primereact/tree` |
+| `timeline` | `data/PrimeTimeline.tsx` | `primereact/timeline` |
+| `paginator` | `data/PrimePaginator.tsx` | `primereact/paginator` |
+| `orderList` | `data/PrimeOrderList.tsx` | `@primereact/headless/orderlist` (headless) |
+| `pickList` | `data/PrimePickList.tsx` | `@primereact/headless/picklist` (headless) |
+| `organizationChart` | `data/PrimeOrganizationChart.tsx` | `primereact/organizationchart` |
 
 ## Panel
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `card` | `Card` | `primereact/card` |
-| `panel` | `Panel` | `primereact/panel` |
-| `accordion` | `Accordion` + `AccordionTab` | `primereact/accordion` |
-| `fieldset` | `Fieldset` | `primereact/fieldset` |
-| `divider` | `Divider` | `primereact/divider` |
-| `splitter` | `Splitter` + `SplitterPanel` | `primereact/splitter` |
-| `scrollPanel` | `ScrollPanel` | `primereact/scrollpanel` |
-| `tabView` | `TabView` + `TabPanel` | `primereact/tabview` |
-| `toolbar` | `Toolbar` | `primereact/toolbar` |
-| `stepper` | `Stepper` + `StepperPanel` + `Button` | `primereact/stepper`, `primereact/stepperpanel`, `primereact/button` |
-
-`accordion`, `tabView`, `splitter` and `stepper` all pair a `headers` property with the `content` slot by
-position — a screen puts as many children in the slot as it lists headers. This is for the same reason
-`column` is read from the model: PrimeReact identifies these sections by React element type.
-
-`stepper` renders its own Back and Next buttons. PrimeReact's `Stepper` advances only when something calls
-`nextCallback`/`prevCallback` on its ref, and a stepper that cannot step is not a stepper.
-
-`toolbar` takes `start`, `center` and `end` slots rather than properties, because what goes in them is other
-components — buttons, a search field, a menu — not values.
+| `card` | `panel/PrimeCard.tsx` | `primereact/card` |
+| `panel` | `panel/PrimePanel.tsx` | `primereact/panel` |
+| `accordion` | `panel/PrimeAccordion.tsx` | `primereact/accordion` |
+| `fieldset` | `panel/PrimeFieldset.tsx` | `primereact/fieldset` |
+| `divider` | `panel/PrimeDivider.tsx` | `primereact/divider` |
+| `splitter` | `panel/PrimeSplitter.tsx` | `primereact/splitter` |
+| `scrollPanel` | `panel/PrimeScrollPanel.tsx` | `primereact/scrollarea` |
+| `tabView` | `panel/PrimeTabView.tsx` | `primereact/tabs` |
+| `toolbar` | `panel/PrimeToolbar.tsx` | `primereact/toolbar` |
+| `stepper` | `panel/PrimeStepper.tsx` | `primereact/button`, `primereact/stepper` |
 
 ## Overlay
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `dialog` | `Dialog` + `Button` | `primereact/dialog`, `primereact/button` |
-| `confirmDialog` | `ConfirmDialog` + `Button` | `primereact/confirmdialog`, `primereact/button` |
-| `overlayPanel` | `OverlayPanel` + `Button` | `primereact/overlaypanel`, `primereact/button` |
-| `sidebar` | `Sidebar` + `Button` | `primereact/sidebar`, `primereact/button` |
-| `tooltip` | `Tooltip` | `primereact/tooltip` |
-
-Each of these renders its own trigger. An overlay is only interesting while it is open, and "the user
-closed it" is state a Scene element has nowhere to record — so the adapter owns visibility locally and keeps
-a way back. Without the trigger, dismissing a previewed dialog would leave a permanently blank spot.
+| `dialog` | `overlay/PrimeDialog.tsx` | `primereact/button`, `primereact/dialog` |
+| `confirmDialog` | `overlay/PrimeConfirmDialog.tsx` | `primereact/button`, `primereact/dialog` + **Cratis-owned** |
+| `overlayPanel` | `overlay/PrimeOverlayPanel.tsx` | `primereact/button`, `primereact/popover` |
+| `sidebar` | `overlay/PrimeSidebar.tsx` | `primereact/button`, `primereact/drawer` |
+| `tooltip` | `overlay/PrimeTooltip.tsx` | `primereact/tooltip` |
 
 ## Menu
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `menu` | `Menu` | `primereact/menu` |
-| `menubar` | `Menubar` | `primereact/menubar` |
-| `breadcrumb` | `BreadCrumb` | `primereact/breadcrumb` |
-| `tabMenu` | `TabMenu` | `primereact/tabmenu` |
-| `steps` | `Steps` | `primereact/steps` |
-| `tieredMenu` | `TieredMenu` | `primereact/tieredmenu` |
-| `panelMenu` | `PanelMenu` | `primereact/panelmenu` |
-| `contextMenu` | `ContextMenu` | `primereact/contextmenu` |
-| `megaMenu` | `MegaMenu` | `primereact/megamenu` |
-| `dock` | `Dock` | `primereact/dock` |
-
-All ten read the same nested `{ label, icon, url, disabled, separator, items }` model to any depth, so one
-authored menu can be shown as a menubar, a tiered menu or a dock without being restructured.
+| `menu` | `menu/PrimeMenu.tsx` | `primereact/menu` |
+| `menubar` | `menu/PrimeMenubar.tsx` | **Cratis-owned** |
+| `breadcrumb` | `menu/PrimeBreadcrumb.tsx` | `primereact/breadcrumb` |
+| `tabMenu` | `menu/PrimeTabMenu.tsx` | **Cratis-owned** |
+| `steps` | `menu/PrimeSteps.tsx` | **Cratis-owned** |
+| `tieredMenu` | `menu/PrimeTieredMenu.tsx` | **Cratis-owned** |
+| `panelMenu` | `menu/PrimePanelMenu.tsx` | `primereact/accordion` + **Cratis-owned** |
+| `contextMenu` | `menu/PrimeContextMenu.tsx` | `primereact/contextmenu` |
+| `megaMenu` | `menu/PrimeMegaMenu.tsx` | **Cratis-owned** |
+| `dock` | `menu/PrimeDock.tsx` | **Cratis-owned** |
 
 ## Messages
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `message` | `Message`, full width | `primereact/message` |
-| `inlineMessage` | `Message`, sized to content | `primereact/message` |
-| `toast` | `Toast` | `primereact/toast` |
-
-`message` and `inlineMessage` share one PrimeReact component but mean different things on a screen — one is
-about a region, the other about the field beside it — and the width is the difference a reader sees.
-
-`toast` shows its message once on mount from the element's own properties. PrimeReact's `Toast` is purely
-imperative and renders nothing until someone calls `show`; a Scene element cannot make that call, so the
-element reads as "this screen announces this" rather than as a component that renders nothing.
+| `message` | `messages/PrimeMessage.tsx` | `primereact/message` |
+| `inlineMessage` | `messages/PrimeInlineMessage.tsx` | `primereact/message` |
+| `toast` | `messages/PrimeToast.tsx` | `primereact/toast`, `primereact/toaster` |
 
 ## Media
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `image` | `Image` | `primereact/image` |
-| `galleria` | `Galleria` | `primereact/galleria` |
-| `carousel` | `Carousel` | `primereact/carousel` |
-
-`galleria` and `carousel` ship no default item template, so each adapter supplies one built from the fields
-the element names. Without it every item renders empty and the component looks broken rather than
-unconfigured.
+| `image` | `media/PrimeImage.tsx` | `primereact/dialog` + **Cratis-owned** |
+| `galleria` | `media/PrimeGalleria.tsx` | `primereact/gallery` |
+| `carousel` | `media/PrimeCarousel.tsx` | `primereact/carousel` |
 
 ## Misc
 
-| Name | PrimeReact 10 component | Import |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `avatar` | `Avatar` | `primereact/avatar` |
-| `badge` | `Badge` | `primereact/badge` |
-| `chip` | `Chip` | `primereact/chip` |
-| `tag` | `Tag` | `primereact/tag` |
-| `progressBar` | `ProgressBar` | `primereact/progressbar` |
-| `progressSpinner` | `ProgressSpinner` | `primereact/progressspinner` |
-| `skeleton` | `Skeleton` | `primereact/skeleton` |
-| `scrollTop` | `ScrollTop` | `primereact/scrolltop` |
-| `blockUI` | `BlockUI` | `primereact/blockui` |
-| `inplace` | `Inplace` + `InplaceDisplay` + `InplaceContent` | `primereact/inplace` |
-| `terminal` | `Terminal` | `primereact/terminal` |
+| `avatar` | `misc/PrimeAvatar.tsx` | `primereact/avatar` |
+| `badge` | `misc/PrimeBadge.tsx` | `primereact/badge` |
+| `chip` | `misc/PrimeChip.tsx` | `primereact/chip` |
+| `tag` | `misc/PrimeTag.tsx` | `primereact/tag` |
+| `progressBar` | `misc/PrimeProgressBar.tsx` | `primereact/progressbar` |
+| `progressSpinner` | `misc/PrimeProgressSpinner.tsx` | `primereact/progressspinner` |
+| `skeleton` | `misc/PrimeSkeleton.tsx` | `primereact/skeleton` |
+| `scrollTop` | `misc/PrimeScrollTop.tsx` | `primereact/button` + **Cratis-owned** |
+| `blockUI` | `misc/PrimeBlockUI.tsx` | **Cratis-owned** |
+| `inplace` | `misc/PrimeInplace.tsx` | `primereact/inplace` |
+| `terminal` | `misc/PrimeTerminal.tsx` | `primereact/terminal` |
 
-`progressBar` follows whether a `value` was given at all: progress you cannot measure is exactly what
-indeterminate mode is for, so an element with no value animates rather than sitting at zero.
+## Screen directives
 
-`terminal` accepts input and answers nothing until the hosting application subscribes to PrimeReact's
-`TerminalService`. Responding to a command is application behavior, not something a Scene element can
-express — this is the honest shape of a terminal with no backend, not a broken one.
-
-## Screen
-
-Screenplay's screen vocabulary, plus `text`.
-
-| Name | Renders | PrimeReact 10 component |
+| Name | Adapter | Backed by |
 | --- | --- | --- |
-| `text` | a themed `<span>` | (none — written directly) |
-| `title` | a real `<h1>`–`<h6>` at the authored level | (none — written directly) |
-| `field` | a labeled value bound by `aria-labelledby` | (none — written directly) |
-| `section` | a real `<section>` with a heading and a rule | `Divider` |
-| `summary` | a description list of label/value pairs | `Card` |
-| `action` | a button whose intent maps to a severity | `Button` |
+| `text` | `screen/PrimeText.tsx` | _renders plain markup_ |
+| `title` | `screen/PrimeTitle.tsx` | _renders plain markup_ |
+| `field` | `screen/PrimeField.tsx` | _renders plain markup_ |
+| `section` | `screen/PrimeSection.tsx` | `primereact/divider` |
+| `summary` | `screen/PrimeSummary.tsx` | `primereact/card` |
+| `action` | `screen/PrimeAction.tsx` | `primereact/button` |
 
-`title` clamps its level to 1–6. Heading level is the document outline a screen reader navigates by, so it
-is not a styling choice — and an out-of-range value must degrade to a valid heading, not an invalid tag.
+## Names that are no longer declared
 
-`action` maps intent to severity in one place:
+Four names were dropped in the PrimeReact 11 migration, because v11 removed the component with no
+equivalent and no headless hook to rebuild it from. `validatePackageBundle` still passes — they were
+removed from the manifest and the registry together.
 
-| `intent` | PrimeReact `severity` |
+| Dropped name | Use instead |
 | --- | --- |
-| `primary` | (default) |
-| `secondary` | `secondary`, outlined |
-| `destructive`, `danger` | `danger` |
-| `positive`, `success` | `success` |
+| `cascadeSelect` | `dropdown` with grouped options, or `treeSelect` for a hierarchy |
+| `inputMask` | `inputText` with validation |
+| `treeTable` | `tree` for hierarchy, `dataTable` for tabular data |
+| `virtualScroller` | `dataTable`'s own scrolling for long lists |
 
-## Reading properties
-
-Element properties arrive as untyped JSON. Every adapter narrows through the same readers, so a wrongly
-typed property behaves exactly like a missing one instead of reaching PrimeReact and failing there:
-
-```ts
-import { arrayProperty, booleanProperty, numberProperty, optionsProperty, stringProperty } from '@cratis/scene.primereact';
-
-stringProperty(element, 'label');                 // string | undefined
-stringProperty(element, 'label', 'Save');         // string
-booleanProperty(element, 'disabled', false);      // boolean
-numberProperty(element, 'rows', 4);               // number
-arrayProperty(element, 'items');                  // unknown[] - never undefined
-optionsProperty(element, 'options');              // SelectOption[]
-```
-
-`optionsProperty` accepts both shapes an author might reasonably write — `['Draft', 'Published']` and
-`[{ label: 'Draft', value: 'draft' }]` — and flattens them to one type. `numberProperty` rejects `NaN`
-alongside non-numbers: it is a number by `typeof` but never a usable size, count or bound.
-
-## Interactive state
-
-PrimeReact's inputs are controlled, and a Scene element has nowhere to put "what the user has typed so far"
-— `properties` is authored design-time configuration. Every interactive adapter therefore holds that state
-locally, seeded from its properties. The consequence is deliberate: a preview is genuinely typeable rather
-than frozen, and the value stays local to the rendered component rather than being pushed back into the
-model.
-
-## Deliberately not covered
+## Not covered
 
 | Component | Why |
 | --- | --- |
-| `chart` | PrimeReact's `Chart` is a thin wrapper over Chart.js and does nothing without `chart.js` installed and a full Chart.js configuration object. Adding a charting library as a dependency of a component-mapping package is out of scope, and charting deserves its own Scene package with its own vocabulary. |
+| `chart` | PrimeReact's `Chart` is a thin wrapper over Chart.js and does nothing without `chart.js` installed and a full Chart.js configuration object. Adding a charting library as a dependency of a component-mapping package is out of scope; charting deserves its own Scene package with its own vocabulary. |
 | `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
 
-Both are genuinely useful, and both are omissions rather than oversights. A profile needing them should
+Both are genuinely useful and both are deliberate omissions, not oversights. A profile needing them should
 activate a package that owns that dependency.
 
-## Next
-
-See [Theme reference](./theme-reference.md) for the themes, or
-[Migrating to PrimeReact 11](./primereact-11-migration.md) for what changes when the version moves.
+Also worth knowing: `column` renders nothing on its own. That is deliberate — since PrimeReact 11 removed
+`primereact/column`, `column` is a Cratis-owned declaration component that returns `null`, and the table
+reads its `field`/`header`/`sortable` off the *model* (`element.slots`) rather than the rendered node.
+Nesting a `column` element under `dataTable` or `table` is what gives it meaning.

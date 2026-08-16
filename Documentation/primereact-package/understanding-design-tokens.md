@@ -1,6 +1,6 @@
 ---
 title: Understanding design tokens
-description: The thirteen semantic tokens every Scene package agrees on, and the stylesheet that bridges them onto PrimeReact 10's CSS variables in both directions.
+description: The thirteen semantic tokens every Scene package agrees on, and the stylesheet that bridges them onto PrimeReact 11's design tokens in both directions.
 ---
 
 Write one rule that says `color: var(--text-color)` and you have quietly married your layout to PrimeReact.
@@ -48,13 +48,13 @@ name appear together. It bridges them in **both** directions, and the scoping is
 ```mermaid
 flowchart TD
     subgraph root [":root"]
-        PT["PrimeReact theme.css<br/>--primary-color, --surface-card, ..."]
+        PT["@primeuix/styled runtime<br/>--p-primary-color, --p-content-background, ..."]
         ST["--scene-* fall back to them"]
         PT --> ST
     end
     subgraph themed ["[data-scene-theme-root]"]
         Inline["SceneThemeProvider writes the<br/>theme's tokens inline"]
-        Back["--primary-color, --surface-card, ...<br/>read from --scene-*"]
+        Back["--p-primary-color, --p-content-background, ...<br/>read from --scene-*"]
         Inline --> Back
     end
     ST -.->|inherits when the theme<br/>defines no token| Inline
@@ -62,12 +62,12 @@ flowchart TD
 ```
 
 **Downward, on `:root`:** every Scene token falls back to whatever PrimeReact theme is loaded. An
-application that loads `lara-light-blue/theme.css` and applies no Scene theme at all still gets meaningful
+application that hands `PrimeReactProvider` a preset and applies no Scene theme at all still gets meaningful
 values for all thirteen tokens.
 
 ```css
 :root {
-    --scene-primary-color: var(--primary-color);
+    --scene-primary-color: var(--p-primary-color);
     --scene-surface-card: var(--surface-card);
     --scene-text-color: var(--text-color);
 }
@@ -78,7 +78,7 @@ theme re-tints PrimeReact's own components and not only Scene's wrappers.
 
 ```css
 [data-scene-theme-root] {
-    --primary-color: var(--scene-primary-color);
+    --p-primary-color: var(--scene-primary-color);
     --surface-card: var(--scene-surface-card);
     --text-color: var(--scene-text-color);
 }
@@ -128,7 +128,7 @@ incompatiblePackages(primeReactTheme('soho-dark')!, profile); // []
 Every theme in this package lists `['PrimeReact', 'Tailwind', 'core']`, and the `core` entry is a precise
 claim rather than a courtesy. A theme reaches a screen in two layers, and only one of them is universal:
 
-- **The compiled PrimeReact stylesheet** matches `.p-*` elements. It does nothing for `core`'s bare
+- **The preset's `--p-*` properties** are read by PrimeReact's own components. They do nothing for `core`'s bare
   `<span>` and `<button>`.
 - **The semantic token layer** applies to everything under the theme root. `core`'s primitives inherit the
   theme's type color, and anything reading `--scene-*` gets the theme's values.
@@ -137,5 +137,6 @@ So the themes genuinely apply to `core` — through tokens, not through the comp
 
 ## Next
 
-Tokens describe a theme. Loading one is a separate step, because a PrimeReact 10 theme is a file — see
+Tokens describe a theme. Applying one is a separate step, because a PrimeReact 11 theme is a preset object
+handed to a provider — see
 [Switch themes live](./switch-themes-live.md).

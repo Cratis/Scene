@@ -6,7 +6,7 @@ description: The Scene package that maps abstract component names onto real Prim
 A screen written in Screenplay says `button`. It does not say `PrimeReact.Button`, and it does not import
 anything. Something has to turn that name into a real React component — and that something is a package.
 
-`@cratis/scene.primereact` is the package that turns Scene's abstract names into PrimeReact 10 components.
+`@cratis/scene.primereact` is the package that turns Scene's abstract names into PrimeReact 11 components.
 Add `PrimeReact` to a `ui profile` and 87 names become resolvable, 25 themes become selectable, and every
 screen you have already written renders through a real, themed component library without a single edit.
 
@@ -47,7 +47,7 @@ why that is the mechanism and not a collision.
 import { primeReactPackageManifest } from '@cratis/scene.primereact';
 
 primeReactPackageManifest.name;         // 'PrimeReact'
-primeReactPackageManifest.version;      // '10.9.8'
+primeReactPackageManifest.version;      // '11.1.0'
 primeReactPackageManifest.kind;         // PackageKind.ComponentLibrary
 primeReactPackageManifest.dependencies; // [{ name: 'Tailwind' }]
 primeReactPackageManifest.components;   // 87 abstract names
@@ -68,25 +68,26 @@ supplies the layout and the templates themselves. See [Blueprints](../blueprints
 
 ## The two halves of theming
 
-A PrimeReact 10 theme is a pre-compiled CSS file, not a set of runtime variables. So theming a Scene screen
-that uses this package takes two things working together:
+A PrimeReact 11 theme is a `@primeuix/themes` preset object, which `@primeuix/styled` turns into `--p-*`
+custom properties at runtime. So theming a Scene screen that uses this package takes two things working
+together:
 
 ```mermaid
 flowchart LR
     Theme["Scene Theme<br/>(name + 13 tokens)"]
     Hook["usePrimeReactTheme"]
     Provider["SceneThemeProvider"]
-    Link["&lt;link id='theme-link'&gt;<br/>theme.css"]
+    Preset["PrimeReactProvider<br/>--p-* properties"]
     Tokens["--scene-* on the<br/>theme root element"]
-    Prime["PrimeReact components<br/>(.p-* elements)"]
+    Prime["PrimeReact components<br/>(read --p-*)"]
     Wrappers["Scene wrappers, core,<br/>layout CSS"]
 
-    Theme --> Hook --> Link --> Prime
+    Theme --> Hook --> Preset --> Prime
     Theme --> Provider --> Tokens --> Wrappers
     Tokens -.->|primeReactTheme.css<br/>bridges back| Prime
 ```
 
-Neither half is enough alone: drop the hook and PrimeReact's components keep the old skin; drop the provider
+Neither half is enough alone: drop the hook and PrimeReact's components render unstyled; drop the provider
 and the wrappers around them do not follow. [Switch themes live](./switch-themes-live.md) shows the wiring,
 and [Understanding design tokens](./understanding-design-tokens.md) explains the bridge in the middle.
 

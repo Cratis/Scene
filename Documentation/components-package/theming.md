@@ -89,13 +89,13 @@ CSS custom property: it splits on `.`, kebab-cases each part, and prefixes `--sc
 ## A theme still has to be loaded
 
 The bridge tints the surfaces the Cratis wrappers own. It does not, on its own, skin PrimeReact's widgets:
-in PrimeReact 10 every widget's *structural* CSS — padding, borders, the dialog frame, focus rings — ships
+in PrimeReact 11 every widget's *structural* CSS — padding, borders, the dialog frame, focus rings — comes
 inside the theme file, and there is no separate primitives stylesheet. An application that loads no
 PrimeReact theme has no structural CSS, and its components render as raw HTML primitives whatever the tokens
 say.
 
 So load a PrimeReact theme underneath, and use Scene tokens to move it to your palette. The
-[PrimeReact package](../primereact-package/index.md) ships every free PrimeReact 10 theme as a Scene theme,
+[PrimeReact package](../primereact-package/index.md) ships 24 themes built on PrimeTek's `@primeuix/themes` presets as Scene themes,
 with its tokens read verbatim out of the theme's own `:root` block — so the token layer always agrees with
 what the stylesheet renders. Its [theme reference](../primereact-package/theme-reference.md) lists the
 values each theme carries for the thirteen tokens above.

@@ -11,12 +11,11 @@ You need a React application, `@cratis/scene.react`, and the blueprint itself.
 
 ## Install and load the stylesheet
 
-The blueprint's shell is hand-written CSS - PrimeReact 10 has no application-shell primitive to lean on -
+The blueprint's shell is hand-written CSS - it predates any application-shell primitive to lean on -
 so the stylesheet has to be loaded once, at your entry point, along with PrimeReact's own.
 
 ```ts
-import 'primereact/resources/primereact.min.css';
-import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primeicons/primeicons.css';
 import 'primeicons/primeicons.css';
 import '@cratis/scene.blueprint.default/styles';
 ```

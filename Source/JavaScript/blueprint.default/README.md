@@ -99,7 +99,7 @@ rule below references a `--scene-*` name - the same bridge pattern `@cratis/comp
 
 The stylesheet is a plain `.css` file rather than an import from TypeScript, because this repo's rollup
 config has no CSS plugin and adding one is not this package's call. A host imports
-`@cratis/scene.blueprint.default/styles` once; Storybook does it in `.storybook/preview.ts`.
+`@cratis/scene.blueprint.default/styles` once; Storybook does it in `.storybook/preview.tsx`.
 
 ## Theme attribution
 
@@ -149,22 +149,35 @@ papered-over one. A host with all four bundles uses `galleryProfile` and sees th
 
 ## PrimeReact 11
 
-This shell is deliberately hand-rolled CSS **today**, because PrimeReact 10 has no app-shell primitive:
-its `Sidebar` is an overlay drawer (v11 renames it `Drawer` for exactly that reason), and the docked, rail,
-reveal and drawer behaviors have nowhere to come from but a stylesheet.
+This package builds on PrimeReact 11. Two things about that upgrade are worth knowing before editing any
+shell component.
 
-PrimeReact 11 introduces a first-class `Sidebar` for the app-shell role, with `variant`, `collapsible`,
-`side`, `overlay` and `openOnHover` props and a `Sidebar.Layout` registry. A v11 port would collapse:
+**`Sidebar` and `Drawer` swapped meanings, and the swap is silent.** v10's `Sidebar` was an overlay
+drawer; v11 calls that `primereact/drawer` and gives the name `primereact/sidebar` to a genuinely new
+app-shell primitive (`SidebarLayout`, `SidebarAside`, `SidebarPanel`, `SidebarMenu`…). An import that kept
+the v10 name still resolves, still compiles, and quietly renders an app shell where an overlay used to be.
+`ConfigPanel` is the one place here that used it, and it is on `Drawer`. Nothing in this package imports
+`primereact/sidebar` - `shell/Sidebar.tsx` is *this blueprint's own* component for the docked panel's
+chrome and has nothing to do with either.
 
-- the docked/off-canvas rules (`layout-static*`, `layout-overlay*`) into `variant` + `overlay`;
-- the reveal and drawer hover machinery, and most of `isSidebarRevealed`, into `openOnHover`;
-- the rail widths (`slim`, `slim-plus`, `compact`) into `collapsible` plus a width token;
-- the wrapper-class plumbing in `layoutWrapperClasses` into `Sidebar.Layout`.
+**Every widget is compositional.** `model` arrays are gone, so the breadcrumb and the user menu render
+their entries as children, and `primereact/menuitem` - the data type those arrays were made of - was
+removed with them. This package owns the replacement shape as `shell/MenuEntry.ts`. `Button` lost `icon`,
+`label`, `text` and `outlined`: an icon is a child, and `text`/`outlined` are values of `variant`.
+
+The app-shell `Sidebar` primitive is a **standing opportunity, not a completed port**. Every mode here is
+still hand-written CSS. Adopting it would collapse:
+
+- the docked/off-canvas rules (`layout-static*`, `layout-overlay*`) into its variant and overlay props;
+- the reveal and drawer hover machinery, and most of `isSidebarRevealed`, into its hover-open behavior;
+- the rail widths (`slim`, `slim-plus`, `compact`) into a collapsible width token;
+- the wrapper-class plumbing in `layoutWrapperClasses` into `SidebarLayout`.
 
 What would **not** collapse, and would stay this package's own: the mobile forcing at 991px, the
 persistence, the menu-theme axis, and `horizontal` (a sidebar that stops being a sidebar is not a sidebar
-variant). Studio pins `primereact` to `10.9.8` and `@cratis/components` hard-depends on it, so the port is
-blocked on that pin, not on this package.
+variant). That is a deliberate follow-up rather than part of the version bump - rewriting eight layout
+modes onto a new primitive is a behavior change, and doing it inside a dependency upgrade would make both
+impossible to review.
 
 ## Deliberately not built
 

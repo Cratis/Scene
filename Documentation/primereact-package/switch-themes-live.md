@@ -1,6 +1,6 @@
 ---
 title: Switch themes live
-description: Wire a theme picker that swaps the PrimeReact stylesheet and the Scene tokens together, with no reload and no lost state.
+description: Wire a theme picker that swaps the PrimeReact preset and the Scene tokens together, with no reload and no lost state.
 ---
 
 This guide wires a theme picker that changes the whole appearance of a rendered Scene screen without a
@@ -9,139 +9,109 @@ reload, without remounting the subtree, and without losing what the user has typ
 ## Before you start
 
 You need a React application already rendering Scene screens through `SceneElementView` with the
-`primeReactComponents` registry, and PrimeReact's stylesheets loaded.
+`primeReactComponents` registry.
 
-## Load the stylesheets in the right order
+> [!IMPORTANT]
+> PrimeReact 11 requires a PrimeUI license key. Without one every page shows an *"Invalid PrimeUI
+> License"* banner, in development and production alike — this is not specific to theming, it is checked
+> whenever `PrimeReactProvider` mounts. See [the licensing
+> section](./primereact-11-migration.md#licensing).
 
-PrimeReact's structural CSS and one compiled theme come first; the token bridge comes after, because it
-reads the theme's variables.
+## Load the stylesheets
+
+There is far less to load than there was on PrimeReact 10. **v11 ships no CSS at all** — there is no
+`primereact/resources` directory, so there is no structural stylesheet and no compiled theme to import.
+What remains is the icon font and the Scene token bridge:
 
 ```ts
-import 'primereact/resources/themes/lara-light-blue/theme.css';
-import 'primereact/resources/primereact.css';
 import 'primeicons/primeicons.css';
 import '@cratis/scene.primereact/primeReactTheme.css';
 ```
 
-If your build serves the themes as static files rather than importing them, declare the initial theme as a
-`<link>` in your HTML and give it the id `theme-link`:
-
-```html
-<link id="theme-link" rel="stylesheet" href="/assets/themes/lara-light-blue/theme.css">
-```
-
-Either works. The `<link>` form gives you control over where themes are served from, and the swap keeps
-whatever path shape you wrote.
+The `<link id="theme-link">` arrangement PrimeReact 10 used is gone with the stylesheets it pointed at. A
+theme is no longer a file that can be served from a path you choose; it is an object you hand to a
+provider.
 
 ## Wire the two halves
 
-A PrimeReact 10 theme is a pre-compiled CSS file, so there is nothing to *set* — only a different file to
-load. That is why theming takes two pieces: `usePrimeReactTheme` swaps the stylesheet that skins PrimeReact's
-components, and `SceneThemeProvider` writes the same theme's semantic tokens onto the wrapping element,
-which is what reaches this package's own wrappers, `core`'s primitives, and any layout CSS reading
-`--scene-*`.
+Theming a Scene screen still takes two pieces, but the first one changed completely.
+
+`usePrimeReactTheme` resolves a Scene `Theme` to the configuration `PrimeReactProvider` needs — a
+`@primeuix/themes` preset plus its dark-mode selector. That is what makes `@primeuix/styled` emit the
+`--p-*` custom properties PrimeReact's own components read.
+
+`SceneThemeProvider` writes the same theme's semantic tokens onto the wrapping element, which is what
+reaches this package's own wrappers, `core`'s primitives, and any layout CSS reading `--scene-*`.
 
 ```tsx
 import { useState } from 'react';
-import { SceneElement, Theme } from '@cratis/scene.model';
-import { SceneElementView, SceneThemeProvider } from '@cratis/scene.react';
-import { primeReactComponents, primeReactThemes, usePrimeReactTheme } from '@cratis/scene.primereact';
+import { PrimeReactProvider } from '@primereact/core';
+import { SceneThemeProvider } from '@cratis/scene.react';
+import { primeReactTheme, primeReactThemes, usePrimeReactTheme } from '@cratis/scene.primereact';
 
-export const ThemedScreen = ({ element }: { element: SceneElement }) => {
-    const [theme, setTheme] = useState<Theme>(primeReactThemes[0]);
-    usePrimeReactTheme(theme);
+export const ThemedScreen = ({ children }: { children: React.ReactNode }) => {
+    const [theme, setTheme] = useState(primeReactTheme('lara-light-blue'));
+    const configuration = usePrimeReactTheme(theme);
 
     return (
-        <>
-            <select
-                aria-label='Theme'
-                value={theme.name}
-                onChange={(event) =>
-                    setTheme(primeReactThemes.find((candidate) => candidate.name === event.target.value) ?? primeReactThemes[0])
-                }>
-                {primeReactThemes.map((candidate) => (
-                    <option key={candidate.name} value={candidate.name}>
-                        {candidate.name}
-                        {candidate.isDark ? ' (dark)' : ''}
-                    </option>
-                ))}
-            </select>
+        <PrimeReactProvider value={configuration}>
             <SceneThemeProvider theme={theme}>
-                <SceneElementView element={element} registry={primeReactComponents} resolveBinding={() => undefined} />
+                <select value={theme?.name} onChange={(event) => setTheme(primeReactTheme(event.target.value))}>
+                    {primeReactThemes.map((candidate) => (
+                        <option key={candidate.name} value={candidate.name}>
+                            {candidate.name}
+                        </option>
+                    ))}
+                </select>
+                {children}
             </SceneThemeProvider>
-        </>
+        </PrimeReactProvider>
     );
 };
 ```
 
-Drop the hook and PrimeReact's components keep the old skin. Drop the provider and the wrappers around them
-do not follow. Both, and the whole screen moves together.
+Switching is live: nothing reloads, nothing below the provider remounts, and no state is lost.
 
-## What the swap actually does
+## Why this got simpler
 
-`usePrimeReactTheme` follows the mechanism PrimeReact 10.9.8 implements in `PrimeReactContext.changeTheme`:
-find the `<link>` by id, build a new URL, create a **replacement** `<link>` element, and swap it into the
-same position. Creating a new element rather than assigning to `href` matters — some browsers do not
-reliably re-fetch a stylesheet whose `href` is mutated in place.
+On PrimeReact 10 this page had to explain a `<link>` element, an element id, why the swap created a
+*replacement* element rather than assigning to `href` (some browsers will not re-fetch a mutated `href`),
+and how to keep the application in charge of where theme files were served from.
 
-Two things differ from PrimeReact's own implementation, both deliberately:
+None of that survives, because none of it has anything to swap any more:
 
-| PrimeReact 10.9.8 | This package |
+| PrimeReact 10 | PrimeReact 11 |
 | --- | --- |
-| String-replaces the old theme name anywhere in the URL | Replaces the theme *folder segment*, so an application served from `/nano/` can leave the `nano` theme without corrupting its own path |
-| Throws when the `<link>` is missing | Creates it, because a host embedding a preview has no reason to have pre-declared one |
+| `applyPrimeReactTheme(name)` swapped a `<link>` | Removed — there is no stylesheet |
+| `primeReactThemeStylesheet(name)` returned a CSS path | `primeReactThemePreset(name)` returns a preset object |
+| A theme could 404 | A theme cannot 404 — it is a value, not a fetch |
+| Switching could flash unstyled while the new sheet loaded | No fetch, so no flash |
 
-## Group the picker by scheme
+`usePrimeReactTheme` kept its name because it kept its job — keep PrimeReact's half of the theme in step
+with the Scene theme — but it returns a value now instead of performing a DOM side effect.
 
-Every theme says whether it is dark, so a picker can group rather than making the reader guess from the name:
+## Dark themes
 
-```tsx
-import { primeReactThemes } from '@cratis/scene.primereact';
-
-const light = primeReactThemes.filter((theme) => !theme.isDark);
-const dark = primeReactThemes.filter((theme) => theme.isDark);
-```
-
-## Credit the author in the picker
-
-Every theme in this package is PrimeTek's work, and the `Theme` fields carry the attribution so a picker can
-show it:
+`@primeuix/themes` resolves every `light-dark()` token pair against a CSS selector rather than the
+operating system preference, so something has to put that selector on the page. `usePrimeReactTheme` hands
+the preset `.scene-dark` as its `darkModeSelector`; add that class to an ancestor when the active theme is
+a dark one:
 
 ```tsx
-<a href={theme.authorUrl} target='_blank' rel='noreferrer'>
-    {theme.author}
-</a>{' '}
-&middot; {theme.license}
+<div className={theme?.isDark ? 'scene-dark' : undefined}>
 ```
 
-Do this. It is one line, the data is already there, and it is the difference between using someone's work
-and passing it off as your own. The full table is in [Theme reference](./theme-reference.md).
+Every theme in the catalog reports `isDark`, so a picker can do this without a lookup table.
 
-## Switch to a theme by name
+## Themes from another package
 
-When the theme comes from configuration rather than a picker, look it up — an unknown name returns
-`undefined` rather than a plausible-looking value:
+`usePrimeReactTheme` returns `undefined` for a theme this package does not ship, rather than falling back
+to a default preset. That is deliberate: silently theming a screen as something other than what was asked
+for is much harder to notice than nothing happening. A profile mixing in a theme from another package
+leaves PrimeReact's own styling to whichever package owns that theme.
 
-```ts
-import { primeReactTheme, primeReactThemeStylesheet } from '@cratis/scene.primereact';
+## See also
 
-primeReactTheme('soho-dark');                    // the Theme
-primeReactThemeStylesheet('soho-dark');          // 'primereact/resources/themes/soho-dark/theme.css'
-primeReactThemeStylesheet('lara-light-chartreuse'); // undefined
-```
-
-## Swap outside React
-
-`applyPrimeReactTheme` is the same operation without the hook, for a theme chosen before React mounts or by
-code that is not a component:
-
-```ts
-import { applyPrimeReactTheme } from '@cratis/scene.primereact';
-
-applyPrimeReactTheme('lara-dark-teal'); // true when it swapped, false when the theme is unknown
-```
-
-## Next
-
-Look up what a name maps to in the [Component reference](./component-reference.md), or see every theme in
-the [Theme reference](./theme-reference.md).
+- [Theme reference](./theme-reference.md) — the 24 themes, their preset families and the attribution table.
+- [Understanding design tokens](./understanding-design-tokens.md) — what the thirteen Scene tokens mean and
+  how the bridge resolves them.
