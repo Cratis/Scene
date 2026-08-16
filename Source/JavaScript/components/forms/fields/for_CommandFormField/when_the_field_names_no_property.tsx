@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { expect } from 'chai';
 import { render, screen } from '@testing-library/react';
 import { externalComponent } from '../../../given';
 import { SceneInputTextField } from '../SceneInputTextField';
@@ -11,5 +12,5 @@ describe('when the field names no property', () => {
     });
 
     it('should render a placeholder rather than a field bound to nothing', () =>
-        screen.getByText("Missing 'property' on Cratis.Components:inputTextField").should.exist);
+        expect(screen.getByText("Missing 'property' on Cratis.Components:inputTextField")).to.exist);
 });

@@ -1,7 +1,16 @@
 - name: Documentation
   href: index.md
+
+- name: Understand
   items:
     - name: Packages
       href: packages/toc.yml
+
+- name: Reference
+  items:
     - name: Blueprints
       href: blueprints/toc.yml
+    - name: PrimeReact package
+      href: primereact-package/toc.yml
+    - name: Cratis Components package
+      href: components-package/toc.yml

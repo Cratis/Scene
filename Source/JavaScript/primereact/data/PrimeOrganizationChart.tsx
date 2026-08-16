@@ -10,7 +10,14 @@ import { treeNodesProperty } from '../treeNodes';
  *
  * Takes the same node model as `tree` and `treeSelect`, so one authored hierarchy can be shown three
  * different ways without being restructured.
+ *
+ * The empty case is guarded because PrimeReact's OrganizationChart reads the root node's `expanded` flag
+ * without checking there is a root, and throws on an empty `value`. An element whose nodes have not been
+ * authored yet is an ordinary state on a screen under construction; taking the whole screen down for it
+ * would be the wrong failure.
  */
 export function PrimeOrganizationChart({ element }: RegisteredComponentProps) {
-    return <OrganizationChart data-scene-id={element.id} value={treeNodesProperty(element, 'nodes')} />;
+    const nodes = treeNodesProperty(element, 'nodes');
+    if (nodes.length === 0) return <div data-scene-id={element.id} />;
+    return <OrganizationChart data-scene-id={element.id} value={nodes} />;
 }

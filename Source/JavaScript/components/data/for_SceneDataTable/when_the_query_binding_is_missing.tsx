@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { expect } from 'chai';
 import { render, screen } from '@testing-library/react';
 import { externalComponent } from '../../given';
 import { clearBindings, registerQuery } from '../../bindings';
@@ -19,7 +20,7 @@ describe('when the query binding is missing', () => {
         });
 
         it('should render a placeholder naming the binding rather than throwing', () =>
-            screen.getByText("Unresolved query binding 'AllInvoices' on Cratis.Components:dataTable").should.exist);
+            expect(screen.getByText("Unresolved query binding 'AllInvoices' on Cratis.Components:dataTable")).to.exist);
     });
 
     describe('and the screen names no query at all', () => {
@@ -29,7 +30,7 @@ describe('when the query binding is missing', () => {
         });
 
         it('should render a placeholder saying the binding is missing', () =>
-            screen.getByText('Missing query binding on Cratis.Components:dataTable').should.exist);
+            expect(screen.getByText('Missing query binding on Cratis.Components:dataTable')).to.exist);
     });
 
     describe('and the named query is registered', () => {
@@ -42,6 +43,6 @@ describe('when the query binding is missing', () => {
         it('should render no placeholder', () => (screen.queryByText(/query binding/) === null).should.be.true);
 
         it('should hand off to the lazily loaded Arc-bound table', () =>
-            document.querySelector('[data-scene-arc-loading]')!.should.exist);
+            expect(document.querySelector('[data-scene-arc-loading]')).to.exist);
     });
 });

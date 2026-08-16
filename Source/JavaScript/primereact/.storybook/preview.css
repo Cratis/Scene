@@ -1,0 +1,47 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/*
+ * A stand-in for the handful of Tailwind utility classes this package's wrappers use.
+ *
+ * The package declares a Scene dependency on the Tailwind *package*, not an npm dependency on
+ * `tailwindcss` - a Scene profile activates Tailwind, and the application it is embedded in owns that
+ * build. Storybook has no such application, so without this the galleries would render every wrapper
+ * unstyled and misrepresent what the components look like in a real profile.
+ *
+ * This is deliberately only the classes actually used in this package's `.tsx` files, written out by
+ * hand. It is Storybook scaffolding, not a Tailwind implementation, and nothing outside `.storybook`
+ * loads it.
+ */
+
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+.block { display: block; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.p-3 { padding: 0.75rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.m-2 { margin: 0.5rem; }
+.w-full { width: 100%; }
+.w-64 { width: 16rem; }
+.w-40 { width: 10rem; }
+.h-40 { height: 10rem; }
+.h-12 { height: 3rem; }
+.relative { position: relative; }
+.overflow-auto { overflow: auto; }
+.border { border: 1px solid var(--scene-surface-border); }
+.font-semibold { font-weight: 600; }
+.opacity-75 { opacity: 0.75; }
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }

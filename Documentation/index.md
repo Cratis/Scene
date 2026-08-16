@@ -1,4 +1,7 @@
-# Scene
+---
+title: Scene
+description: The object model and runtime for describing a user interface without describing a platform - screens, layouts, templates, packages and themes, shared by Stage at build time and Studio at design time.
+---
 
 Scene is the object model and runtime for describing a user interface without describing a platform.
 

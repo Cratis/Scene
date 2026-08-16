@@ -1,0 +1,14 @@
+- name: Overview
+  href: index.md
+- name: Understanding name resolution
+  href: understanding-name-resolution.md
+- name: Understanding design tokens
+  href: understanding-design-tokens.md
+- name: Switch themes live
+  href: switch-themes-live.md
+- name: Component reference
+  href: component-reference.md
+- name: Theme reference
+  href: theme-reference.md
+- name: Migrating to PrimeReact 11
+  href: primereact-11-migration.md
