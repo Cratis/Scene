@@ -25,8 +25,15 @@ public enum PackageKind
     Styling = 1,
 
     /// <summary>
-    /// Provides ready-made <see cref="Layouts.Layout"/>s and the shell components that fill their slots.
-    /// A layout package depends on the component libraries its shell is built from.
+    /// Provides the shape of an application: its <see cref="Layouts.Layout"/>s, the
+    /// <see cref="Screens.ScreenTemplate"/>s and <see cref="Screens.DialogTemplate"/>s built on them, and
+    /// the components that fill their slots. An application selects one blueprint, and gets a coherent
+    /// set rather than assembling layouts and templates from unrelated sources.
     /// </summary>
-    Layout = 2
+    /// <remarks>
+    /// A blueprint depends on the component libraries it is built from - the default blueprint is written
+    /// against PrimeReact and Cratis Components, and says so. That is what makes "which blueprints can I
+    /// use" answerable from the packages a profile already has.
+    /// </remarks>
+    Blueprint = 2
 }

@@ -4,10 +4,17 @@
 namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
-/// A named template of slots that a <see cref="Screens.Screen"/> fills with content. Mirrors Screenplay's
+/// An application's base navigational look - the shell its screens render inside. Mirrors Screenplay's
 /// <c>layout</c> construct: a bare layout with plain slots is a special case of a layout whose slots all
 /// use the default arrangement.
 /// </summary>
+/// <remarks>
+/// A layout is application-level and there is one in force: it is what an application *selects*, usually
+/// from a <see cref="Packages.PackageKind.Blueprint"/> package. What goes inside it - the shapes a module,
+/// feature or slice brings - are <see cref="Screens.ScreenTemplate"/>s, and an application has many. The
+/// two are structurally alike on purpose (both are slots plus an arrangement, evaluated by the same
+/// engine); they differ in role, and a screen template additionally declares which slot it fits into.
+/// </remarks>
 /// <param name="Name">The layout's name.</param>
 /// <param name="Slots">The slots the layout declares, in declaration order.</param>
 /// <param name="Arrangement">

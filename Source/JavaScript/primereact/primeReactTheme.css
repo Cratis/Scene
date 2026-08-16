@@ -1,0 +1,88 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/*
+ * Scene design tokens <-> PrimeReact 10 CSS variables.
+ *
+ * This is the seam that lets layout and component CSS stay library-agnostic. Everything Scene writes -
+ * a layout's grid, this package's own wrappers, a screen's own styling - reads `--scene-*` and never
+ * names a PrimeReact variable. This file is the only place the two vocabularies meet, so swapping the
+ * component library underneath a screen is a matter of shipping a different bridge, not of editing
+ * every rule that mentioned a color.
+ *
+ * It is the same indirection `@cratis/components/tokens.css` uses to span PrimeReact major versions -
+ * one abstract token name resolving to whatever the underlying library calls it this year.
+ *
+ * The bridge runs in both directions, and the order matters:
+ *
+ *   1. On `:root`, every Scene token falls back to the loaded PrimeReact theme. An application that
+ *      loads `lara-light-blue/theme.css` and applies no Scene theme at all still gets meaningful values
+ *      for every `--scene-*` token.
+ *
+ *   2. Inside a Scene theme root, the Scene tokens are fed *back* onto PrimeReact's variables, so a
+ *      Scene theme re-tints PrimeReact's own components and not only Scene's wrappers.
+ *
+ * The second rule is deliberately scoped to `[data-scene-theme-root]` and must never be moved to
+ * `:root`. Custom properties that reference each other in a cycle are invalid at computed-value time and
+ * resolve to nothing, so `--scene-primary-color: var(--primary-color)` and
+ * `--primary-color: var(--scene-primary-color)` on the *same* element would silently blank both. Split
+ * across two elements there is no cycle: `SceneThemeProvider` writes the theme's tokens as inline styles
+ * on the theme root, which is a literal value with no dependency, and the fallbacks on `:root` are
+ * already resolved by the time they inherit down.
+ *
+ * The token vocabulary is small on purpose. Every Scene package has to agree on it, and a vocabulary
+ * that grows per package is one no package can rely on. Thirteen tokens: a primary color and its
+ * contrast, five surfaces, two text colors, two highlight colors, a radius and a focus ring.
+ */
+
+:root {
+    /* Primary brand */
+    --scene-primary-color: var(--primary-color);
+    --scene-primary-contrast-color: var(--primary-color-text);
+
+    /* Surfaces */
+    --scene-surface-background: var(--surface-ground);
+    --scene-surface-card: var(--surface-card);
+    --scene-surface-border: var(--surface-border);
+    --scene-surface-hover: var(--surface-hover);
+    --scene-surface-overlay: var(--surface-overlay);
+
+    /* Text */
+    --scene-text-color: var(--text-color);
+    --scene-text-muted-color: var(--text-color-secondary);
+
+    /* Selection */
+    --scene-highlight-background: var(--highlight-bg);
+    --scene-highlight-color: var(--highlight-text-color);
+
+    /* Geometry and focus */
+    --scene-content-border-radius: var(--border-radius);
+    --scene-focus-ring: var(--focus-ring);
+}
+
+[data-scene-theme-root] {
+    --primary-color: var(--scene-primary-color);
+    --primary-color-text: var(--scene-primary-contrast-color);
+
+    --surface-ground: var(--scene-surface-background);
+    --surface-card: var(--scene-surface-card);
+    --surface-border: var(--scene-surface-border);
+    --surface-hover: var(--scene-surface-hover);
+    --surface-overlay: var(--scene-surface-overlay);
+
+    --text-color: var(--scene-text-color);
+    --text-color-secondary: var(--scene-text-muted-color);
+
+    --highlight-bg: var(--scene-highlight-background);
+    --highlight-text-color: var(--scene-highlight-color);
+
+    --border-radius: var(--scene-content-border-radius);
+    --focus-ring: var(--scene-focus-ring);
+
+    /*
+     * A themed root paints itself, so a preview embedded in a host page reads as the theme rather than
+     * as the host's background showing through between components.
+     */
+    background: var(--scene-surface-background);
+    color: var(--scene-text-color);
+}

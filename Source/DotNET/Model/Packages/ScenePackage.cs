@@ -13,7 +13,9 @@ namespace Cratis.Scene.Model.Packages;
 /// <param name="Kind">What the package contributes.</param>
 /// <param name="Dependencies">Other packages that must be active in the same profile for this one to work.</param>
 /// <param name="Components">The component names this package declares - the catalog entry <see cref="Profiles.UiProfile"/> resolution walks.</param>
-/// <param name="Layouts">The names of the <see cref="Layouts.Layout"/>s this package provides, empty for a package that provides none.</param>
+/// <param name="Layouts">The names of the <see cref="Layouts.Layout"/>s this package provides - an application's base navigational shells. Empty for anything that is not a <see cref="PackageKind.Blueprint"/>.</param>
+/// <param name="ScreenTemplates">The names of the <see cref="Screens.ScreenTemplate"/>s this package provides - the shapes that go inside a layout, at module, feature and slice level.</param>
+/// <param name="DialogTemplates">The names of the <see cref="Screens.DialogTemplate"/>s this package provides.</param>
 /// <param name="Themes">The names of the <see cref="Profiles.Theme"/>s this package ships, empty for a package that ships none.</param>
 /// <param name="DisplayName">A human-readable name for a package picker, falling back to <paramref name="Name"/> when absent.</param>
 /// <param name="Description">A one-line description for a package picker.</param>
@@ -28,6 +30,8 @@ public record ScenePackage(
     IReadOnlyList<PackageDependency> Dependencies,
     IReadOnlyList<string> Components,
     IReadOnlyList<string> Layouts,
+    IReadOnlyList<string> ScreenTemplates,
+    IReadOnlyList<string> DialogTemplates,
     IReadOnlyList<string> Themes,
     string? DisplayName = null,
     string? Description = null,

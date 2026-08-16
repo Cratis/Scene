@@ -51,6 +51,8 @@ public static class PackageFixtures
             [.. element.GetProperty("dependencies").EnumerateArray().Select(ToDependency)],
             Strings(element, "components"),
             Strings(element, "layouts"),
+            Strings(element, "screenTemplates"),
+            Strings(element, "dialogTemplates"),
             Strings(element, "themes"));
 
     static PackageDependency ToDependency(JsonElement element) =>

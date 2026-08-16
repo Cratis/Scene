@@ -1,0 +1,818 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/*
+ * Cratis Scene - default layout package stylesheet.
+ *
+ * Every mode this shell implements is hand-written here. PrimeReact 10 has no app-shell primitive to
+ * lean on: its `Sidebar` is an overlay drawer (renamed `Drawer` in v11), not a dockable application
+ * sidebar, so the docked/rail/reveal/drawer behaviors have to be CSS. PrimeReact 11 introduces a real
+ * `Sidebar` with `variant`/`collapsible`/`side`/`overlay`/`openOnHover` props and a `Sidebar.Layout`
+ * registry that would replace most of this file - see the README for what a v11 port collapses.
+ *
+ * TOKEN BRIDGE
+ * ------------
+ * Scene themes publish semantic tokens as `--scene-*` custom properties (see `themeTokens.ts` in
+ * `@cratis/scene.react` for how a token name becomes a property name). This file aliases those into
+ * `--layout-*` locals exactly once, in the block below, and every rule after that references only the
+ * `--layout-*` names - the same indirection `@cratis/components` uses for its `--cratis-*` layer.
+ *
+ * That single seam is what makes the shell theme-agnostic: swap the theme and every mode restyles, and
+ * a host that wants to take over the look overrides `--scene-*` (or `--layout-*` directly) without
+ * touching a rule here. The fallbacks are neutral greys so an unthemed shell is still legible rather
+ * than invisible - they are a safety net, not a palette.
+ */
+
+.layout-wrapper,
+.layout-full-page {
+    /* Palette - aliased from the active Scene theme's tokens, never referenced directly below. */
+    --layout-primary: var(--scene-primary-color, #4f46e5);
+    --layout-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
+    --layout-background: var(--scene-surface-background, #f4f5f7);
+    --layout-card: var(--scene-surface-card, #ffffff);
+    --layout-border: var(--scene-surface-border, #e2e5e9);
+    --layout-hover: var(--scene-surface-hover, #eceef1);
+    --layout-text: var(--scene-text-color, #1f2430);
+    --layout-text-muted: var(--scene-text-muted-color, #6b7280);
+    --layout-radius: var(--scene-content-border-radius, 0.5rem);
+    --layout-focus-ring: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+
+    /* Geometry - the measurements the PrimeTek template line uses for each mode. */
+    --layout-topbar-height: 4rem;
+    --layout-sidebar-width: 18rem;
+    --layout-slim-width: 5rem;
+    --layout-slim-plus-width: 7rem;
+    --layout-compact-width: 5rem;
+    --layout-reveal-strip-width: 4.25rem;
+    --layout-drawer-collapsed-width: 5.25rem;
+    --layout-gap: 1rem;
+    --layout-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Stacking - one place, so a floating sidebar can never end up under its own mask. */
+    --layout-z-content: 1;
+    --layout-z-topbar: 100;
+    --layout-z-mask: 998;
+    --layout-z-sidebar: 999;
+    --layout-z-config: 1100;
+
+    /* Derived surfaces - computed from the tokens above rather than introducing new ones. */
+    --layout-sidebar-surface: var(--layout-card);
+    --layout-sidebar-text: var(--layout-text);
+    --layout-sidebar-muted: var(--layout-text-muted);
+    --layout-sidebar-hover: var(--layout-hover);
+
+    /* How far the content is pushed by whatever sidebar the current mode renders. */
+    --layout-content-offset: 0rem;
+
+    box-sizing: border-box;
+    min-height: 100vh;
+    color: var(--layout-text);
+    background: var(--layout-background);
+    font-family: inherit;
+}
+
+.layout-wrapper *,
+.layout-full-page * {
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------------
+ * Menu theme - the sidebar's own tint, independent of the page's color scheme.
+ * ------------------------------------------------------------------------ */
+
+.layout-menu-dark {
+    --layout-sidebar-surface: color-mix(in srgb, var(--layout-text) 92%, black);
+    --layout-sidebar-text: var(--layout-card);
+    --layout-sidebar-muted: color-mix(in srgb, var(--layout-card) 65%, transparent);
+    --layout-sidebar-hover: color-mix(in srgb, var(--layout-card) 12%, transparent);
+}
+
+.layout-menu-primary {
+    --layout-sidebar-surface: var(--layout-primary);
+    --layout-sidebar-text: var(--layout-primary-contrast);
+    --layout-sidebar-muted: color-mix(in srgb, var(--layout-primary-contrast) 70%, transparent);
+    --layout-sidebar-hover: color-mix(in srgb, var(--layout-primary-contrast) 15%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * Structure - shared by every mode. Only the offsets and the sidebar's own
+ * geometry change from mode to mode.
+ * ------------------------------------------------------------------------ */
+
+.layout-topbar {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    z-index: var(--layout-z-topbar);
+    display: flex;
+    align-items: center;
+    gap: var(--layout-gap);
+    height: var(--layout-topbar-height);
+    padding: 0 1.25rem;
+    background: var(--layout-card);
+    border-bottom: 1px solid var(--layout-border);
+    transition: inset-inline-start var(--layout-transition);
+}
+
+.layout-topbar-start,
+.layout-topbar-end {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.layout-topbar-end {
+    margin-inline-start: auto;
+}
+
+.layout-sidebar {
+    position: fixed;
+    inset-block-start: var(--layout-topbar-height);
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    z-index: var(--layout-z-sidebar);
+    display: flex;
+    flex-direction: column;
+    width: var(--layout-sidebar-width);
+    padding: 1rem 0.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: var(--layout-sidebar-text);
+    background: var(--layout-sidebar-surface);
+    border-inline-end: 1px solid var(--layout-border);
+    transition: transform var(--layout-transition), width var(--layout-transition);
+}
+
+.layout-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.layout-main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-block-start: var(--layout-topbar-height);
+    margin-inline-start: var(--layout-content-offset);
+    transition: margin-inline-start var(--layout-transition);
+}
+
+.layout-breadcrumb {
+    padding: 0.75rem 1.5rem 0;
+}
+
+.layout-content {
+    position: relative;
+    z-index: var(--layout-z-content);
+    flex: 1 1 auto;
+    padding: 1.5rem;
+}
+
+.layout-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--layout-gap);
+    padding: 1rem 1.5rem;
+    color: var(--layout-text-muted);
+    border-top: 1px solid var(--layout-border);
+}
+
+.layout-right-panel {
+    position: fixed;
+    inset-block-start: var(--layout-topbar-height);
+    inset-inline-end: 0;
+    inset-block-end: 0;
+    z-index: var(--layout-z-topbar);
+    width: 20rem;
+    padding: 1rem;
+    overflow-y: auto;
+    background: var(--layout-card);
+    border-inline-start: 1px solid var(--layout-border);
+}
+
+.layout-wrapper:has(> .layout-right-panel) .layout-main {
+    margin-inline-end: 20rem;
+}
+
+.layout-mask {
+    position: fixed;
+    inset: 0;
+    z-index: var(--layout-z-mask);
+    background: rgb(0 0 0 / 0.4);
+    border: none;
+    animation: layout-mask-in var(--layout-transition);
+}
+
+@keyframes layout-mask-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * Menu - one markup shape, restyled per mode.
+ * ------------------------------------------------------------------------ */
+
+.layout-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.layout-menu-section-title {
+    padding: 0.75rem 0.75rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--layout-sidebar-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.layout-menu-item > .layout-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--layout-radius);
+    cursor: pointer;
+    transition: background-color var(--layout-transition);
+}
+
+.layout-menu-item > .layout-menu-link:hover {
+    background: var(--layout-sidebar-hover);
+}
+
+.layout-menu-item > .layout-menu-link:focus-visible {
+    outline: none;
+    box-shadow: var(--layout-focus-ring);
+}
+
+.layout-menu-item[data-active='true'] > .layout-menu-link {
+    font-weight: 600;
+    color: var(--layout-primary);
+    background: var(--layout-sidebar-hover);
+}
+
+.layout-menu-icon {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    text-align: center;
+}
+
+.layout-menu-label {
+    flex: 1 1 auto;
+    white-space: nowrap;
+}
+
+.layout-menu-badge {
+    padding: 0.05rem 0.45rem;
+    font-size: 0.7rem;
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+    border-radius: 999px;
+}
+
+.layout-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0 0 0 1.75rem;
+    margin: 0;
+    list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * static - the sidebar is docked and the content is pushed, never covered.
+ * ------------------------------------------------------------------------ */
+
+.layout-static {
+    --layout-content-offset: var(--layout-sidebar-width);
+}
+
+.layout-static .layout-topbar {
+    inset-inline-start: var(--layout-sidebar-width);
+}
+
+.layout-static-inactive {
+    --layout-content-offset: 0rem;
+}
+
+.layout-static-inactive .layout-topbar {
+    inset-inline-start: 0;
+}
+
+.layout-static-inactive .layout-sidebar {
+    transform: translateX(-100%);
+}
+
+/* ---------------------------------------------------------------------------
+ * overlay - the sidebar is parked off-canvas and floats over the content.
+ * ------------------------------------------------------------------------ */
+
+.layout-overlay .layout-sidebar {
+    inset-block-start: 0;
+    z-index: var(--layout-z-sidebar);
+    transform: translateX(-100%);
+    box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
+}
+
+.layout-overlay-active .layout-sidebar,
+.layout-mobile-active .layout-sidebar {
+    transform: translateX(0);
+}
+
+/* ---------------------------------------------------------------------------
+ * slim - an icon-only rail; submenus pop out anchored at the rail's width.
+ * ------------------------------------------------------------------------ */
+
+.layout-slim {
+    --layout-content-offset: var(--layout-slim-width);
+}
+
+.layout-slim .layout-topbar {
+    inset-inline-start: var(--layout-slim-width);
+}
+
+.layout-slim .layout-sidebar {
+    width: var(--layout-slim-width);
+    padding-inline: 0.5rem;
+    overflow: visible;
+}
+
+.layout-slim .layout-menu-label,
+.layout-slim .layout-menu-badge,
+.layout-slim .layout-sidebar-title {
+    display: none;
+}
+
+.layout-slim .layout-menu-item > .layout-menu-link {
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-inline: auto;
+    border-radius: 50%;
+}
+
+.layout-slim .layout-submenu,
+.layout-slim-plus .layout-submenu {
+    position: absolute;
+    inset-inline-start: 100%;
+    z-index: var(--layout-z-sidebar);
+    display: none;
+    min-width: 14rem;
+    padding: 0.5rem;
+    background: var(--layout-sidebar-surface);
+    border: 1px solid var(--layout-border);
+    border-radius: var(--layout-radius);
+    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.15);
+}
+
+.layout-slim .layout-menu-item,
+.layout-slim-plus .layout-menu-item {
+    position: relative;
+}
+
+.layout-slim .layout-menu-item:hover > .layout-submenu,
+.layout-slim-plus .layout-menu-item:hover > .layout-submenu {
+    display: flex;
+}
+
+.layout-slim .layout-submenu .layout-menu-label,
+.layout-slim-plus .layout-submenu .layout-menu-label {
+    display: block;
+}
+
+/* ---------------------------------------------------------------------------
+ * slim-plus - the same rail, wider, with the label stacked under the icon.
+ * ------------------------------------------------------------------------ */
+
+.layout-slim-plus {
+    --layout-content-offset: var(--layout-slim-plus-width);
+}
+
+.layout-slim-plus .layout-topbar {
+    inset-inline-start: var(--layout-slim-plus-width);
+}
+
+.layout-slim-plus .layout-sidebar {
+    width: var(--layout-slim-plus-width);
+    padding-inline: 0.35rem;
+    overflow: visible;
+}
+
+.layout-slim-plus .layout-menu-item > .layout-menu-link {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.6rem 0.25rem;
+    text-align: center;
+}
+
+.layout-slim-plus .layout-menu-label {
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+.layout-slim-plus .layout-menu-badge,
+.layout-slim-plus .layout-sidebar-title {
+    display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * compact - the icon rail again, with square buttons, and a shifted topbar.
+ * ------------------------------------------------------------------------ */
+
+.layout-compact {
+    --layout-content-offset: var(--layout-compact-width);
+}
+
+.layout-compact .layout-topbar {
+    inset-inline-start: var(--layout-compact-width);
+}
+
+.layout-compact .layout-sidebar {
+    width: var(--layout-compact-width);
+    padding-inline: 0.5rem;
+    overflow: visible;
+}
+
+.layout-compact .layout-menu-label,
+.layout-compact .layout-menu-badge,
+.layout-compact .layout-sidebar-title {
+    display: none;
+}
+
+.layout-compact .layout-menu-item > .layout-menu-link {
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-inline: auto;
+    border-radius: var(--layout-radius);
+}
+
+.layout-compact .layout-menu-item {
+    position: relative;
+}
+
+.layout-compact .layout-submenu {
+    position: absolute;
+    inset-inline-start: 100%;
+    display: none;
+    min-width: 14rem;
+    padding: 0.5rem;
+    background: var(--layout-sidebar-surface);
+    border: 1px solid var(--layout-border);
+    border-radius: var(--layout-radius);
+}
+
+.layout-compact .layout-menu-item:hover > .layout-submenu {
+    display: flex;
+}
+
+.layout-compact .layout-submenu .layout-menu-label {
+    display: block;
+}
+
+/* ---------------------------------------------------------------------------
+ * horizontal - the sidebar stops being a sidebar and flows into the topbar.
+ * ------------------------------------------------------------------------ */
+
+.layout-horizontal {
+    --layout-content-offset: 0rem;
+}
+
+.layout-horizontal .layout-sidebar {
+    position: static;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    padding: 0;
+    overflow: visible;
+    background: transparent;
+    border: none;
+}
+
+.layout-horizontal .layout-sidebar-header {
+    display: none;
+}
+
+.layout-horizontal .layout-menu {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.layout-horizontal .layout-menu-item {
+    position: relative;
+}
+
+.layout-horizontal .layout-submenu {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    z-index: var(--layout-z-sidebar);
+    display: none;
+    min-width: 14rem;
+    padding: 0.5rem;
+    background: var(--layout-card);
+    border: 1px solid var(--layout-border);
+    border-radius: var(--layout-radius);
+    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.15);
+}
+
+.layout-horizontal .layout-menu-item:hover > .layout-submenu {
+    display: flex;
+}
+
+/* ---------------------------------------------------------------------------
+ * reveal - a full panel parked off-left behind a strip of icons. Hovering
+ * slides the whole panel in over the content; pinning pushes the content out.
+ * ------------------------------------------------------------------------ */
+
+.layout-reveal {
+    --layout-content-offset: var(--layout-reveal-strip-width);
+}
+
+.layout-reveal .layout-topbar {
+    inset-inline-start: var(--layout-reveal-strip-width);
+}
+
+.layout-reveal .layout-sidebar {
+    width: var(--layout-sidebar-width);
+    transform: translateX(calc(var(--layout-reveal-strip-width) - var(--layout-sidebar-width)));
+}
+
+.layout-reveal .layout-menu-item > .layout-menu-link {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+.layout-reveal.layout-sidebar-active .layout-sidebar {
+    transform: translateX(0);
+    box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
+}
+
+.layout-reveal.layout-sidebar-anchored {
+    --layout-content-offset: var(--layout-sidebar-width);
+}
+
+.layout-reveal.layout-sidebar-anchored .layout-topbar {
+    inset-inline-start: var(--layout-sidebar-width);
+}
+
+.layout-reveal.layout-sidebar-anchored .layout-sidebar {
+    box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * drawer - a collapsed rail that grows its width on hover. Reveal slides a
+ * fixed-width panel; drawer animates the width itself.
+ * ------------------------------------------------------------------------ */
+
+.layout-drawer {
+    --layout-content-offset: var(--layout-drawer-collapsed-width);
+}
+
+.layout-drawer .layout-topbar {
+    inset-inline-start: var(--layout-drawer-collapsed-width);
+}
+
+.layout-drawer .layout-sidebar {
+    width: var(--layout-drawer-collapsed-width);
+}
+
+.layout-drawer.layout-sidebar-active .layout-sidebar {
+    width: var(--layout-sidebar-width);
+    box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
+}
+
+.layout-drawer.layout-sidebar-anchored {
+    --layout-content-offset: var(--layout-sidebar-width);
+}
+
+.layout-drawer.layout-sidebar-anchored .layout-topbar {
+    inset-inline-start: var(--layout-sidebar-width);
+}
+
+.layout-drawer.layout-sidebar-anchored .layout-sidebar {
+    box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * mobile - not a mode anyone picks. Below the breakpoint every mode is forced
+ * off-canvas, the mode picker is disabled, and the mask is the way back out.
+ * ------------------------------------------------------------------------ */
+
+@media (max-width: 991px) {
+    .layout-wrapper {
+        --layout-content-offset: 0rem;
+    }
+
+    .layout-wrapper .layout-topbar {
+        inset-inline-start: 0;
+    }
+
+    .layout-wrapper .layout-sidebar {
+        inset-block-start: 0;
+        width: var(--layout-sidebar-width);
+        transform: translateX(-100%);
+        box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
+    }
+
+    .layout-wrapper .layout-menu-label,
+    .layout-wrapper .layout-sidebar-title {
+        display: block;
+    }
+
+    .layout-wrapper .layout-right-panel,
+    .layout-wrapper:has(> .layout-right-panel) .layout-main {
+        position: static;
+        width: auto;
+        margin-inline-end: 0;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * Page furniture the shell itself owns.
+ * ------------------------------------------------------------------------ */
+
+.layout-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--layout-gap);
+    margin-bottom: 1.25rem;
+}
+
+.layout-page-header-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.layout-page-header-subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--layout-text-muted);
+}
+
+.layout-page-header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.layout-logo {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+}
+
+.layout-logo-mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+    border-radius: var(--layout-radius);
+}
+
+.layout-user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.layout-user-menu-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.layout-user-menu-role {
+    font-size: 0.75rem;
+    color: var(--layout-text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * Configurator - a floating trigger plus a panel, present in both shells.
+ * ------------------------------------------------------------------------ */
+
+.layout-config-button {
+    position: fixed;
+    inset-inline-end: 0;
+    inset-block-start: 50%;
+    z-index: var(--layout-z-config);
+    transform: translateY(-50%);
+}
+
+.layout-config-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.layout-config-section-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.layout-config-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.layout-config-option {
+    padding: 0.35rem 0.75rem;
+    color: var(--layout-text);
+    cursor: pointer;
+    background: var(--layout-card);
+    border: 1px solid var(--layout-border);
+    border-radius: var(--layout-radius);
+}
+
+.layout-config-option:hover:not(:disabled) {
+    background: var(--layout-hover);
+}
+
+.layout-config-option[aria-pressed='true'] {
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+    border-color: var(--layout-primary);
+}
+
+.layout-config-option:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.layout-config-note {
+    margin: 0.5rem 0 0;
+    font-size: 0.8rem;
+    color: var(--layout-text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * Full-page shell - no chrome, an optional branding aside, and the same
+ * configurator. Login, register, error, access-denied, not-found and landing
+ * all use this rather than a chrome-less variant of the app shell.
+ * ------------------------------------------------------------------------ */
+
+.layout-full-page {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+.layout-full-page-aside {
+    display: flex;
+    flex: 0 0 40%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem;
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+}
+
+.layout-full-page-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem;
+}
+
+@media (max-width: 991px) {
+    .layout-full-page {
+        flex-direction: column;
+    }
+
+    .layout-full-page-aside {
+        flex: 0 0 auto;
+        padding: 2rem;
+    }
+}
