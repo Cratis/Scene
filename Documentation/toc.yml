@@ -10,6 +10,8 @@
   items:
     - name: Blueprints
       href: blueprints/toc.yml
+    - name: Cratis Components blueprint
+      href: blueprint-components/toc.yml
     - name: PrimeReact package
       href: primereact-package/toc.yml
     - name: Cratis Components package

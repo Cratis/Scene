@@ -68,6 +68,9 @@
         },
         {
             "path": "./Source/JavaScript/blueprint.default"
+        },
+        {
+            "path": "./Source/JavaScript/blueprint.components"
         }
     ]
 }
