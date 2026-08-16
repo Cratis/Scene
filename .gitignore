@@ -163,6 +163,10 @@ PublishScripts/
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+# ...and except our own source, where "packages" is a real folder of real code.
+# Without this, Source/JavaScript/*/packages/ is silently dropped from every commit:
+# the build stays green locally because the files are on disk, and CI fails on a fresh clone.
+!Source/JavaScript/*/packages/**
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
