@@ -3,7 +3,7 @@
 
 import { Button } from 'primereact/button';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { booleanProperty, stringProperty } from '../properties';
+import {booleanProperty, severityProperty, stringProperty} from '../properties';
 
 /**
  * The `PrimeReact:button` component.
@@ -25,7 +25,7 @@ import { booleanProperty, stringProperty } from '../properties';
  */
 export function PrimeButton({ element, slots }: RegisteredComponentProps) {
     const icon = stringProperty(element, 'icon');
-    const severity = stringProperty(element, 'severity');
+    const severity = severityProperty(element, 'severity');
     const loading = booleanProperty(element, 'loading', false);
 
     let variant: 'link' | 'text' | 'outlined' | undefined;
@@ -35,7 +35,7 @@ export function PrimeButton({ element, slots }: RegisteredComponentProps) {
     return (
         <Button
             data-scene-id={element.id}
-            severity={severity === 'warning' ? 'warn' : severity}
+            severity={severity}
             variant={variant}
             rounded={booleanProperty(element, 'rounded', false)}
             disabled={loading || booleanProperty(element, 'disabled', false)}

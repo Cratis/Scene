@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Toast } from 'primereact/toast';
 import { Toaster, toast, useToasterContext } from 'primereact/toaster';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { numberProperty, stringProperty } from '../properties';
+import {numberProperty, severityProperty, stringProperty} from '../properties';
 
 /**
  * Renders whatever notifications are currently queued for the surrounding toaster.
@@ -70,8 +70,7 @@ function ToastList() {
  * the element was actually authored, which is where a design-time tool looks for it.
  */
 export function PrimeToast({ element }: RegisteredComponentProps) {
-    const authored = stringProperty(element, 'severity', 'info');
-    const severity = authored === 'warning' ? 'warn' : authored;
+    const severity = severityProperty(element, 'severity', 'info');
     const summary = stringProperty(element, 'summary', '');
     const detail = stringProperty(element, 'detail', '');
     const life = numberProperty(element, 'life', 3000);

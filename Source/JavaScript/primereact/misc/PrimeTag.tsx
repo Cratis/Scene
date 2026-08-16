@@ -3,7 +3,7 @@
 
 import { Tag } from 'primereact/tag';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { booleanProperty, stringProperty } from '../properties';
+import {booleanProperty, severityProperty, stringProperty} from '../properties';
 
 /**
  * The `PrimeReact:tag` component - a colored status label, the read-only counterpart to a chip.
@@ -17,11 +17,13 @@ import { booleanProperty, stringProperty } from '../properties';
  */
 export function PrimeTag({ element }: RegisteredComponentProps) {
     const icon = stringProperty(element, 'icon');
-    const severity = stringProperty(element, 'severity');
+    // Tag and Badge are the two components PrimeReact 11 gives no `help` variant, so an authored
+    // `help` degrades to the default styling rather than failing to compile.
+    const severity = severityProperty(element, 'severity');
     return (
         <Tag
             data-scene-id={element.id}
-            severity={(severity === 'warning' ? 'warn' : severity) as 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' | undefined}
+            severity={severity === 'help' ? undefined : severity}
             rounded={booleanProperty(element, 'rounded', false)}>
             {icon !== undefined && <i className={icon} aria-hidden='true' />}
             {stringProperty(element, 'value', '')}

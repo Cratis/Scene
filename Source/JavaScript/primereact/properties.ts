@@ -2,7 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { SceneElement } from '@cratis/scene.model';
+import { PrimeSeverity } from './PrimeSeverity';
 import { SelectOption } from './SelectOption';
+
+/** Every severity PrimeReact 11 knows, so an unrecognized one can fall back rather than reach a component. */
+const severities: PrimeSeverity[] = ['secondary', 'info', 'success', 'warn', 'danger', 'help', 'contrast'];
 
 /**
  * Reads a string configuration value off a Scene element.
@@ -131,4 +135,30 @@ export function optionsProperty(element: SceneElement, name: string): SelectOpti
     }
 
     return options;
+}
+
+/**
+ * Reads a severity off a Scene element, in the vocabulary PrimeReact 11 uses.
+ *
+ * This exists because PrimeReact renamed one severity between v10 and v11 - `warning` became `warn` - and
+ * the rename is silent in the worst way. The v11 prop types are string-literal unions, so an unchanged
+ * `warning` does not fail to compile when it arrives through `stringProperty`; it simply falls through to
+ * the default color, and a screen authored against the old vocabulary loses its warning styling without
+ * anything reporting a problem.
+ *
+ * Six adapters need that translation, which is five too many to leave copied. Putting it here also keeps
+ * the promise the rest of this file makes: properties are narrowed in exactly one place, so an
+ * unrecognized value behaves the same way everywhere - like an absent one, rather than like a broken one.
+ *
+ * @param element The element whose properties to read.
+ * @param name The property name, `severity` for every current caller.
+ * @param fallback The severity to use when the property is missing or is not one PrimeReact knows.
+ * @returns The severity, or `fallback` (`undefined` when none was given).
+ */
+export function severityProperty(element: SceneElement, name: string): PrimeSeverity | undefined;
+export function severityProperty(element: SceneElement, name: string, fallback: PrimeSeverity): PrimeSeverity;
+export function severityProperty(element: SceneElement, name: string, fallback?: PrimeSeverity): PrimeSeverity | undefined {
+    const authored = stringProperty(element, name);
+    const translated = authored === 'warning' ? 'warn' : authored;
+    return severities.includes(translated as PrimeSeverity) ? (translated as PrimeSeverity) : fallback;
 }

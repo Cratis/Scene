@@ -3,7 +3,7 @@
 
 import { Badge } from 'primereact/badge';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { stringProperty } from '../properties';
+import {severityProperty, stringProperty} from '../properties';
 
 /**
  * The `PrimeReact:badge` component - a small count or status marker.
@@ -18,11 +18,13 @@ import { stringProperty } from '../properties';
  * the unsized badge *is* the normal one, so nothing needs translating.
  */
 export function PrimeBadge({ element }: RegisteredComponentProps) {
-    const severity = stringProperty(element, 'severity');
+    // Tag and Badge are the two components PrimeReact 11 gives no `help` variant, so an authored
+    // `help` degrades to the default styling rather than failing to compile.
+    const severity = severityProperty(element, 'severity');
     return (
         <Badge
             data-scene-id={element.id}
-            severity={(severity === 'warning' ? 'warn' : severity) as 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' | undefined}
+            severity={severity === 'help' ? undefined : severity}
             size={stringProperty(element, 'size') as 'small' | 'large' | 'xlarge' | undefined}>
             {stringProperty(element, 'value', '')}
         </Badge>
