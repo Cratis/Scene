@@ -8,19 +8,33 @@ import { stringProperty } from '../properties';
 /**
  * The `PrimeReact:tooltip` component - explanatory text shown on hover.
  *
- * Tooltip attaches itself to a CSS selector rather than wrapping anything, so the adapter renders the
- * hover target too and points the tooltip at it with a `data-` attribute selector. An attribute selector
- * is used rather than a class because a Scene element id is free-form and may legally start with a digit,
- * which is not a valid class selector.
+ * The adapter renders the hover target as well as the tooltip, because a tooltip with nothing to point
+ * at has nothing to do.
+ *
+ * PrimeReact 11 replaced the v10 mechanism entirely and this adapter got simpler for it. v10's `Tooltip`
+ * attached itself to a CSS selector and read its text from a `data-pr-tooltip` attribute on whatever it
+ * found, which forced this adapter to invent a unique attribute selector - and to use an attribute rather
+ * than a class, because a Scene element id is free-form and may legally start with a digit, which is not
+ * a valid class selector. v11 wraps the target instead: `Tooltip.Trigger` *is* the target, so the
+ * selector, the generated attribute and the whole indirection are gone.
+ *
+ * The trigger is rendered as a `span` rather than v11's default `button`, because the `content` slot may
+ * hold any Scene children at all - including a button, which nested inside another button is invalid
+ * markup that browsers silently restructure. The cost is that a bare label is not keyboard focusable and
+ * so shows on hover only; when a screen puts a real control in the slot, that control brings its own
+ * focus behavior.
  */
 export function PrimeTooltip({ element, slots }: RegisteredComponentProps) {
-    const target = `[data-scene-tooltip-target="${element.id}"]`;
     return (
-        <>
-            <Tooltip target={target} position={stringProperty(element, 'position', 'top') as 'top' | 'bottom' | 'left' | 'right'} />
-            <span data-scene-id={element.id} data-scene-tooltip-target={element.id} data-pr-tooltip={stringProperty(element, 'text', '')}>
+        <Tooltip.Root>
+            <Tooltip.Trigger as='span' data-scene-id={element.id}>
                 {slots.content?.length ? slots.content : stringProperty(element, 'label', 'Hover me')}
-            </span>
-        </>
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+                <Tooltip.Positioner side={stringProperty(element, 'position', 'top') as 'top' | 'bottom' | 'left' | 'right'}>
+                    <Tooltip.Popup>{stringProperty(element, 'text', '')}</Tooltip.Popup>
+                </Tooltip.Positioner>
+            </Tooltip.Portal>
+        </Tooltip.Root>
     );
 }

@@ -27,13 +27,14 @@ export function Topbar({ element, slots }: RegisteredComponentProps) {
                 {showsToggle && (
                     <Button
                         type='button'
-                        text
+                        variant='text'
                         rounded
-                        icon='pi pi-bars'
+                        iconOnly
                         aria-label={config.isSidebarOpen ? 'Close the menu' : 'Open the menu'}
                         aria-expanded={config.isSidebarOpen}
-                        onClick={toggleSidebar}
-                    />
+                        onClick={toggleSidebar}>
+                        <i className='pi pi-bars' aria-hidden='true' />
+                    </Button>
                 )}
                 {slots.logo}
                 {slots.start}

@@ -4,7 +4,7 @@
 import { lazy } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
-import { booleanProperty, stringArrayProperty, stringProperty } from '../properties';
+import { stringArrayProperty, stringProperty } from '../properties';
 
 const DataTableForObservableQuery = lazy(async () => ({
     default: (await import('@cratis/components/DataTables')).DataTableForObservableQuery,
@@ -19,6 +19,10 @@ const DataTableForObservableQuery = lazy(async () => ({
  * re-renders when the server's read model changes, and a plain query does not. A screen that names an
  * observable query here is stating that its data is live, which is a design decision worth being able to
  * read off the screen.
+ *
+ * As with `dataTable`, no `clientFiltering` property is exposed: `@cratis/components` 3.0.0 keeps the
+ * prop for source compatibility but ignores it, and a screen property that cannot change anything is
+ * worse than an absent one.
  */
 export function SceneObservableDataTable({ element, slots }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Query);
@@ -31,7 +35,6 @@ export function SceneObservableDataTable({ element, slots }: RegisteredComponent
                 emptyMessage={stringProperty(element.properties, 'emptyMessage') ?? ''}
                 dataKey={stringProperty(element.properties, 'dataKey')}
                 globalFilterFields={stringArrayProperty(element.properties, 'globalFilterFields')}
-                clientFiltering={booleanProperty(element.properties, 'clientFiltering')}
                 className={stringProperty(element.properties, 'className')}
             >
                 {slots.content}

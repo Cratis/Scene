@@ -4,3 +4,4 @@
 export * from './PrimeImage';
 export * from './PrimeGalleria';
 export * from './PrimeCarousel';
+export * from './Image';

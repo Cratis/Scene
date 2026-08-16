@@ -5,3 +5,4 @@ export * from './PrimeButton';
 export * from './PrimeSplitButton';
 export * from './PrimeSpeedDial';
 export * from './PrimeButtonGroup';
+export * from './SplitButton';

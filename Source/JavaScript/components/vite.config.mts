@@ -15,9 +15,4 @@ config.plugins.push(react());
 config.test.environment = 'jsdom';
 config.test.include = [...config.test.include, '**/for_*/when_*/**/*.tsx', '**/for_*/**/when_*.tsx'];
 
-// `@cratis/components` and PrimeReact are published as ESM that still uses directory imports
-// (`primereact/api`), which Node's own ESM resolver rejects. Inlining them puts both through Vite's
-// resolver - the same one that serves them in a browser build - instead of leaving them to Node.
-config.test.server = { deps: { inline: [/@cratis[\\/]components/, /primereact/] } };
-
 export default defineConfig(config);

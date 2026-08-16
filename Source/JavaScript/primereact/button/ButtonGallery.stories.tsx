@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The button family. Note that `button` deliberately claims the same bare name `core` declares, so a profile listing core then PrimeReact resolves it here.' } },
+        docs: { description: { component: 'The button family. Note that `button` deliberately claims the same bare name `core` declares, so a profile listing core then PrimeReact resolves it here. `splitButton` is a Cratis-owned rebuild - PrimeReact 11 removed its own with no replacement - composed from the `Button` and `Popover` that survived, so it is themed and positioned by the same machinery as everything beside it.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

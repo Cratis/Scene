@@ -18,6 +18,15 @@ const CommandDialog = lazy(async () => ({ default: (await import('@cratis/compon
  * reimplementing the protocol.
  *
  * The `command` property names an Arc command proxy; the fields go in the `content` slot.
+ *
+ * `dismissable` and `closeAriaLabel` are here rather than on `dialog` alone because `CommandDialog`
+ * forwards both to the dialog it wraps, and in `@cratis/components` 3.0.0 that forwarding actually
+ * happens - 2.x accepted the two props and dropped them on the floor. `dismissable` matters more on a
+ * command dialog than anywhere else: it decides whether a half-filled form can be abandoned with
+ * `Escape` or a backdrop click, which is a decision about the command, not about the chrome.
+ *
+ * The `resizable` property this adapter used to carry is gone. It is still declared upstream so call
+ * sites compile, but PrimeReact 11's headless dialog has no resize handle and nothing reads the prop.
  */
 export function SceneCommandDialog({ element, slots }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Command);
@@ -30,9 +39,10 @@ export function SceneCommandDialog({ element, slots }: RegisteredComponentProps)
                 command={target}
                 visible={booleanProperty(element.properties, 'visible') ?? true}
                 width={stringProperty(element.properties, 'width')}
-                resizable={booleanProperty(element.properties, 'resizable')}
+                dismissable={booleanProperty(element.properties, 'dismissable')}
                 okLabel={stringProperty(element.properties, 'okLabel')}
                 cancelLabel={stringProperty(element.properties, 'cancelLabel')}
+                closeAriaLabel={stringProperty(element.properties, 'closeAriaLabel')}
                 className={stringProperty(element.properties, 'className')}
             >
                 {slots.content}

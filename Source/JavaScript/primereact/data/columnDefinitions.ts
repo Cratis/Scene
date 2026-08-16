@@ -19,9 +19,11 @@ import { ColumnDefinition } from './ColumnDefinition';
  * an empty grid they have to debug.
  *
  * Note that the children are read from `element.slots` - the *model* - and not from the rendered React
- * nodes the adapter is handed. PrimeReact's DataTable identifies its columns by React element type, so a
- * Scene adapter wrapping `Column` would not be recognized as one; reading the definitions off the model
- * and constructing real `Column` elements is what makes nested `column` children work at all.
+ * nodes the adapter is handed. Those nodes are `PrimeColumn` adapters produced by Scene's renderer, one
+ * level removed from the `Column` declarations they render, so no amount of inspecting them recovers the
+ * declaration. Reading the model instead is what makes nested `column` children work at all, and it is
+ * why this derivation survived PrimeReact 11 removing `primereact/column` unchanged: it never depended
+ * on the component in the first place.
  *
  * @param element The table element.
  * @param rows The rows the table will show, used for the inference step.

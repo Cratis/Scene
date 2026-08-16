@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The overlay family. Each one renders its own trigger: an overlay is only interesting while it is open, and a Scene element has nowhere to record that a user closed it, so the adapter owns visibility and keeps a way back.' } },
+        docs: { description: { component: 'The overlay family, on PrimeReact 11. Each one renders its own trigger: an overlay is only interesting while it is open, and a Scene element has nowhere to record that a user closed it, so something has to keep a way back. `dialog`, `confirmDialog` and `sidebar` hold that visibility in the adapter and answer v11\'s `onOpenChange`; `overlayPanel` and `tooltip` let the v11 composition own it, because their trigger is part of the component rather than a button beside it. `sidebar` is built on `primereact/drawer` - v11\'s `Sidebar` is an unrelated application-shell primitive.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

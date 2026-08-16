@@ -2,7 +2,7 @@
 /* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
 
 /*
- * Scene design tokens <-> PrimeReact 10 CSS variables.
+ * Scene design tokens <-> PrimeReact 11 design tokens.
  *
  * This is the seam that lets layout and component CSS stay library-agnostic. Everything Scene writes -
  * a layout's grid, this package's own wrappers, a screen's own styling - reads `--scene-*` and never
@@ -13,19 +13,28 @@
  * It is the same indirection `@cratis/components/tokens.css` uses to span PrimeReact major versions -
  * one abstract token name resolving to whatever the underlying library calls it this year.
  *
+ * The PrimeReact 11 port made this file *smaller*, and the reason is worth recording. In v10 the right
+ * hand side of each mapping was whatever the theme's SCSS happened to have called it, so the bridge had
+ * to know an ad-hoc vocabulary: `--primary-color` but `--primary-color-text`, `--surface-ground` but
+ * `--surface-card`, `--highlight-bg` but `--highlight-text-color`, `--text-color-secondary`,
+ * `--border-radius`. Those names shared no scheme and could only be learned by reading the compiled
+ * stylesheets. In v11 `@primeuix/styled` emits one flat, systematic `--p-*` namespace derived from the
+ * preset's token paths, so every mapping below is the same mechanical `token.path` -> `--p-token-path`
+ * transformation. Nothing here has to be memorised any more.
+ *
  * The bridge runs in both directions, and the order matters:
  *
- *   1. On `:root`, every Scene token falls back to the loaded PrimeReact theme. An application that
- *      loads `lara-light-blue/theme.css` and applies no Scene theme at all still gets meaningful values
- *      for every `--scene-*` token.
+ *   1. On `:root`, every Scene token falls back to the active preset's `--p-*` value. An application
+ *      that hands `PrimeReactProvider` a preset and applies no Scene theme at all still gets meaningful
+ *      values for every `--scene-*` token.
  *
  *   2. Inside a Scene theme root, the Scene tokens are fed *back* onto PrimeReact's variables, so a
  *      Scene theme re-tints PrimeReact's own components and not only Scene's wrappers.
  *
  * The second rule is deliberately scoped to `[data-scene-theme-root]` and must never be moved to
  * `:root`. Custom properties that reference each other in a cycle are invalid at computed-value time and
- * resolve to nothing, so `--scene-primary-color: var(--primary-color)` and
- * `--primary-color: var(--scene-primary-color)` on the *same* element would silently blank both. Split
+ * resolve to nothing, so `--scene-primary-color: var(--p-primary-color)` and
+ * `--p-primary-color: var(--scene-primary-color)` on the *same* element would silently blank both. Split
  * across two elements there is no cycle: `SceneThemeProvider` writes the theme's tokens as inline styles
  * on the theme root, which is a literal value with no dependency, and the fallbacks on `:root` are
  * already resolved by the time they inherit down.
@@ -37,47 +46,61 @@
 
 :root {
     /* Primary brand */
-    --scene-primary-color: var(--primary-color);
-    --scene-primary-contrast-color: var(--primary-color-text);
+    --scene-primary-color: var(--p-primary-color);
+    --scene-primary-contrast-color: var(--p-primary-contrast-color);
 
-    /* Surfaces */
-    --scene-surface-background: var(--surface-ground);
-    --scene-surface-card: var(--surface-card);
-    --scene-surface-border: var(--surface-border);
-    --scene-surface-hover: var(--surface-hover);
-    --scene-surface-overlay: var(--surface-overlay);
+    /*
+     * Surfaces. `content.background` is the raised surface a card or panel paints itself with; the page
+     * behind it is one step down the surface ramp, which is what `--p-surface-50` / `--p-surface-950`
+     * resolve to for a light and a dark preset respectively. Only the ground needs the light/dark split
+     * spelled out - every other token below already carries it inside the preset's own `light-dark()`.
+     */
+    --scene-surface-background: var(--p-surface-50);
+    --scene-surface-card: var(--p-content-background);
+    --scene-surface-border: var(--p-content-border-color);
+    --scene-surface-hover: var(--p-content-hover-background);
+    --scene-surface-overlay: var(--p-overlay-popover-background);
 
     /* Text */
-    --scene-text-color: var(--text-color);
-    --scene-text-muted-color: var(--text-color-secondary);
+    --scene-text-color: var(--p-text-color);
+    --scene-text-muted-color: var(--p-text-muted-color);
 
     /* Selection */
-    --scene-highlight-background: var(--highlight-bg);
-    --scene-highlight-color: var(--highlight-text-color);
+    --scene-highlight-background: var(--p-highlight-background);
+    --scene-highlight-color: var(--p-highlight-color);
 
     /* Geometry and focus */
-    --scene-content-border-radius: var(--border-radius);
-    --scene-focus-ring: var(--focus-ring);
+    --scene-content-border-radius: var(--p-content-border-radius);
+    --scene-focus-ring: var(--p-focus-ring-shadow);
+}
+
+.scene-dark {
+    /*
+     * The dark half of the ground. `usePrimeReactTheme` hands `.scene-dark` to the preset as its
+     * `darkModeSelector`, so by the time this rule matches every other `--p-*` has already flipped to its
+     * dark value on its own. The ground is the one token the bridge picks off the ramp by hand, so it is
+     * also the one the bridge has to flip by hand.
+     */
+    --scene-surface-background: var(--p-surface-950);
 }
 
 [data-scene-theme-root] {
-    --primary-color: var(--scene-primary-color);
-    --primary-color-text: var(--scene-primary-contrast-color);
+    --p-primary-color: var(--scene-primary-color);
+    --p-primary-contrast-color: var(--scene-primary-contrast-color);
 
-    --surface-ground: var(--scene-surface-background);
-    --surface-card: var(--scene-surface-card);
-    --surface-border: var(--scene-surface-border);
-    --surface-hover: var(--scene-surface-hover);
-    --surface-overlay: var(--scene-surface-overlay);
+    --p-content-background: var(--scene-surface-card);
+    --p-content-border-color: var(--scene-surface-border);
+    --p-content-hover-background: var(--scene-surface-hover);
+    --p-overlay-popover-background: var(--scene-surface-overlay);
 
-    --text-color: var(--scene-text-color);
-    --text-color-secondary: var(--scene-text-muted-color);
+    --p-text-color: var(--scene-text-color);
+    --p-text-muted-color: var(--scene-text-muted-color);
 
-    --highlight-bg: var(--scene-highlight-background);
-    --highlight-text-color: var(--scene-highlight-color);
+    --p-highlight-background: var(--scene-highlight-background);
+    --p-highlight-color: var(--scene-highlight-color);
 
-    --border-radius: var(--scene-content-border-radius);
-    --focus-ring: var(--scene-focus-ring);
+    --p-content-border-radius: var(--scene-content-border-radius);
+    --p-focus-ring-shadow: var(--scene-focus-ring);
 
     /*
      * A themed root paints itself, so a preview embedded in a host page reads as the theme rather than

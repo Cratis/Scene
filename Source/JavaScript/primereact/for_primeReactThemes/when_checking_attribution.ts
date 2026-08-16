@@ -16,12 +16,18 @@ describe('when checking attribution', () => {
         primeReactThemes.filter((theme) => theme.license === undefined || theme.license === '').should.deep.equal([]);
     });
 
-    it('should credit PrimeTek, who made every one of them', () => {
+    it('should credit PrimeTek, whose presets every one of them is built on', () => {
         primeReactThemes.filter((theme) => theme.author !== 'PrimeTek').should.deep.equal([]);
     });
 
-    it('should state the license the primereact package actually ships under', () => {
-        primeReactThemes.filter((theme) => theme.license !== 'MIT').should.deep.equal([]);
+    /**
+     * The assertion this spec exists for. Until PrimeReact 11 these themes really were MIT, and the
+     * previous version of this file pinned exactly that. Relicensing is invisible to a compiler and to
+     * every other spec in this package, so without a spec that names the current license out loud, the
+     * catalog would have gone on advertising MIT indefinitely.
+     */
+    it('should state the commercial license PrimeReact 11 actually ships under, not the MIT of v10', () => {
+        primeReactThemes.filter((theme) => theme.license !== 'PrimeUI Commercial').should.deep.equal([]);
     });
 
     it('should describe every theme for a picker', () => {

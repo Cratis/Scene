@@ -21,17 +21,27 @@ const tailwind: ScenePackage = {
     themes: [],
 };
 
-/** The base component library `Cratis.Components` wraps, at the version this repository pins. */
+/**
+ * The base component library `Cratis.Components` wraps, at the version this repository pins.
+ *
+ * The theme names are drawn from the catalog PrimeReact 11 actually has. Version 11 ships no theme
+ * stylesheets at all - a look is a `@primeuix/themes` preset applied at runtime - and the catalog was
+ * rebuilt on those presets, so names read `<family>-<light|dark>-<accent>` across the Aura, Lara and Nora
+ * families. Several version 10 names (`saga-*`, `vela-*`, `soho-*`, `nano`, `mira` and the rest) have no
+ * preset behind them any more and are simply gone; the Lara pair below survived the rebuild, and an Aura
+ * pair is listed alongside them so the stub is visibly the version 11 catalog rather than a version 10
+ * remnant that happens to still be valid.
+ */
 const primeReact: ScenePackage = {
     name: 'PrimeReact',
-    version: '10.9.8',
+    version: '11.1.0',
     kind: PackageKind.ComponentLibrary,
     dependencies: [{ name: 'Tailwind' }],
     components: ['button', 'table', 'dialog'],
     layouts: [],
     screenTemplates: [],
     dialogTemplates: [],
-    themes: ['lara-light-blue', 'lara-dark-blue'],
+    themes: ['aura-light-blue', 'aura-dark-blue', 'lara-light-blue', 'lara-dark-blue'],
 };
 
 describe('when resolving its dependencies', () => {
@@ -57,12 +67,12 @@ describe('when resolving its dependencies', () => {
             ]));
     });
 
-    describe('and PrimeReact is older than the range the token layer needs', () => {
-        const older = resolvePackageDependencies(['Cratis.Components'], [tailwind, { ...primeReact, version: '10.8.0' }, cratisComponentsPackageManifest]);
+    describe('and PrimeReact is older than the major version the library is built against', () => {
+        const older = resolvePackageDependencies(['Cratis.Components'], [tailwind, { ...primeReact, version: '10.9.8' }, cratisComponentsPackageManifest]);
 
         it('should report the version conflict', () =>
             older.versionConflicts.should.deep.equal([
-                { package: 'Cratis.Components', dependsOn: 'PrimeReact', requiredRange: '>=10.9.0', actualVersion: '10.8.0' },
+                { package: 'Cratis.Components', dependsOn: 'PrimeReact', requiredRange: '>=11.0.0', actualVersion: '10.9.8' },
             ]));
     });
 });

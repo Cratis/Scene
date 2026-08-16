@@ -7,15 +7,16 @@ import { themePresets } from './themePresets';
 /**
  * The packages a PrimeReact theme declares itself compatible with.
  *
- * `PrimeReact` and `Tailwind` are obvious - the stylesheet skins PrimeReact's components, and this
- * package's own wrappers lay themselves out with Tailwind utilities.
+ * `PrimeReact` and `Tailwind` are obvious - the preset skins PrimeReact's components, and this package's
+ * own wrappers lay themselves out with Tailwind utilities.
  *
  * `core` is the interesting one, and it is listed deliberately rather than by reflex. A theme reaches a
- * screen in two layers: a stylesheet that only ever matches PrimeReact's own `.p-*` elements, and a set
- * of semantic Scene tokens that `SceneThemeProvider` writes onto the wrapping element. The second layer
- * applies to *everything* underneath it, `core`'s unstyled primitives included - they inherit the
- * theme's type color and can read any token they choose to. So the claim being made is precise: these
- * themes genuinely reach `core`'s components, through tokens rather than through the component skin.
+ * screen in two layers: the `--p-*` custom properties `@primeuix/styled` emits for the active preset,
+ * which only PrimeReact's own components read, and a set of semantic Scene tokens that
+ * `SceneThemeProvider` writes onto the wrapping element. The second layer applies to *everything*
+ * underneath it, `core`'s unstyled primitives included - they inherit the theme's type color and can read
+ * any token they choose to. So the claim being made is precise: these themes genuinely reach `core`'s
+ * components, through tokens rather than through the component skin.
  *
  * This has to be said explicitly because `ThemeCompatibility` has no implicit exemption for `core`. A
  * theme that leaves it out is reported incompatible for every profile that lists `core`, which for a
@@ -24,24 +25,42 @@ import { themePresets } from './themePresets';
 export const primeReactThemeCompatibility: string[] = ['PrimeReact', 'Tailwind', 'core'];
 
 /**
- * Every free PrimeReact 10 theme this package ships, as Scene {@link Theme}s.
+ * The license every theme in this catalog is published under.
  *
- * None of these themes are ours. They are PrimeTek's, shipped under the MIT license that covers the
- * whole `primereact` package (verified in `node_modules/primereact/LICENSE.md`: "The MIT License (MIT),
- * Copyright (c) 2016-2025 PrimeTek"). Redistributing them without saying so would be dishonest, which is
- * what `Theme`'s `author`, `authorUrl` and `license` fields exist to prevent - and why the credit is
- * applied here, once, to every preset, rather than written out per theme where it could be forgotten.
+ * This is **not** MIT, and the difference matters enough to be a named constant rather than a string
+ * repeated twenty-four times. PrimeReact 10 - presets included - was MIT. PrimeReact 11 relicensed the
+ * entire stack (`primereact`, `@primereact/core`, `@primereact/headless`, `primeicons`,
+ * `@primeuix/themes`, `@primeuix/styled`) under the commercial PrimeUI license, which requires a license
+ * key: without one, `PrimeReactProvider` warns on the console and injects an "Invalid PrimeUI License"
+ * banner, in development and production alike.
  *
- * Several themes are PrimeTek's interpretation of someone else's design language - Bootstrap, Material
- * Design, Fluent, Tailwind UI. The compiled CSS is still PrimeTek's own work, so PrimeTek is still the
- * author; the lineage is recorded in each theme's description instead of by misattributing the file.
+ * `Theme`'s `license` field exists so a theme picker, an audit, or a person reading the catalog can see
+ * what they are actually taking on. Reporting these as MIT because the *previous* major was MIT is the
+ * exact mistake the field is there to prevent.
+ *
+ * @see https://primeui.dev/licenses/community for the free community tier and its eligibility limits.
+ * @see https://primeui.dev/licenses/commercial for the paid tier.
+ */
+export const primeReactThemeLicense = 'PrimeUI Commercial';
+
+/**
+ * Every theme this package ships, as Scene {@link Theme}s.
+ *
+ * None of these themes are ours. They are PrimeTek's `@primeuix/themes` presets - Aura, Lara, Nora and
+ * Material - with one of the preset's own primitive color ramps bound to its primary scale. Choosing
+ * which accent to bind is the only design decision Scene makes here, and it is not enough to claim
+ * authorship over: the surface ramps, the radii, the focus rings, the component styling and the design
+ * language are all PrimeTek's work.
+ *
+ * That is what `Theme`'s `author`, `authorUrl` and `license` fields exist to record, and why the credit
+ * is applied here, once, to every preset, rather than written out per theme where it could be forgotten.
  */
 export const primeReactThemes: Theme[] = themePresets.map((preset) => ({
     ...preset,
     compatibleWith: primeReactThemeCompatibility,
     author: 'PrimeTek',
     authorUrl: 'https://primereact.org',
-    license: 'MIT',
+    license: primeReactThemeLicense,
 }));
 
 /**
@@ -53,7 +72,7 @@ export const primeReactThemeNames: string[] = primeReactThemes.map((theme) => th
 /**
  * Finds one of this package's themes by name.
  *
- * @param name The theme name, which is also its folder under `primereact/resources/themes`.
+ * @param name The theme name.
  * @returns The theme, or `undefined` when this package does not ship one by that name.
  */
 export function primeReactTheme(name: string): Theme | undefined {

@@ -12,3 +12,5 @@ export * from './PrimeScrollTop';
 export * from './PrimeBlockUI';
 export * from './PrimeInplace';
 export * from './PrimeTerminal';
+export * from './BlockUI';
+export * from './ScrollTop';
