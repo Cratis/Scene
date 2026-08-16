@@ -191,7 +191,8 @@
             "author",
             "authorUrl",
             "license",
-            "description"
+            "description",
+            "licenseUrl"
         ],
         "PackageDependency": [
             "name",
@@ -209,7 +210,9 @@
             "themes",
             "displayName",
             "description",
-            "module"
+            "module",
+            "license",
+            "licenseUrl"
         ],
         "Screen": [
             "name",

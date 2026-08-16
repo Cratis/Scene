@@ -42,6 +42,8 @@ export const defaultBlueprintManifest: ScenePackage = {
     displayName: 'Cratis Default Blueprint',
     description: 'Application shells with eight menu modes, the components that fill their slots, and a full screen and dialog template set.',
     module: '@cratis/scene.blueprint.default',
+    license: 'MIT',
+    licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
 };
 
 /**

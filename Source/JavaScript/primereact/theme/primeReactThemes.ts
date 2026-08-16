@@ -41,7 +41,14 @@ export const primeReactThemeCompatibility: string[] = ['PrimeReact', 'Tailwind',
  * @see https://primeui.dev/licenses/community for the free community tier and its eligibility limits.
  * @see https://primeui.dev/licenses/commercial for the paid tier.
  */
-export const primeReactThemeLicense = 'PrimeUI Commercial';
+export const primeReactThemeLicense = 'PrimeUI Community / Commercial';
+
+/**
+ * Where those terms live. A license name alone tells a reader nothing about whether they qualify for the
+ * free Community tier or owe a commercial fee, so the catalog carries the link rather than making them
+ * search for it.
+ */
+export const primeReactThemeLicenseUrl = 'https://primeui.dev/licenses/community';
 
 /**
  * Every theme this package ships, as Scene {@link Theme}s.
@@ -61,6 +68,7 @@ export const primeReactThemes: Theme[] = themePresets.map((preset) => ({
     author: 'PrimeTek',
     authorUrl: 'https://primereact.org',
     license: primeReactThemeLicense,
+    licenseUrl: primeReactThemeLicenseUrl,
 }));
 
 /**

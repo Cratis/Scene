@@ -50,6 +50,11 @@ export interface Theme {
      * A one-line description for a theme picker.
      */
     description?: string;
+
+    /**
+     * Where those license terms live, so a reader can check them rather than take `license` on trust.
+     */
+    licenseUrl?: string;
 }
 
 export const ThemePropertyNames: (keyof Theme)[] = [
@@ -61,4 +66,5 @@ export const ThemePropertyNames: (keyof Theme)[] = [
     'authorUrl',
     'license',
     'description',
+    'licenseUrl',
 ];

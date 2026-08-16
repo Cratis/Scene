@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { primeReactThemes } from '../theme';
+import { primeReactThemeLicense, primeReactThemeLicenseUrl, primeReactThemes } from '../theme';
 
 describe('when checking attribution', () => {
     it('should credit an author on every theme', () => {
@@ -27,7 +27,17 @@ describe('when checking attribution', () => {
      * catalog would have gone on advertising MIT indefinitely.
      */
     it('should state the commercial license PrimeReact 11 actually ships under, not the MIT of v10', () => {
-        primeReactThemes.filter((theme) => theme.license !== 'PrimeUI Commercial').should.deep.equal([]);
+        primeReactThemeLicense.should.equal('PrimeUI Community / Commercial');
+        primeReactThemes.filter((theme) => theme.license !== primeReactThemeLicense).should.deep.equal([]);
+    });
+
+    /**
+     * A license name on its own does not tell a reader whether they qualify for the free Community tier
+     * or owe a commercial fee. The link is the part that answers that, so it is pinned too.
+     */
+    it('should link to the terms on every theme, not just name them', () => {
+        primeReactThemeLicenseUrl.should.equal('https://primeui.dev/licenses/community');
+        primeReactThemes.filter((theme) => theme.licenseUrl !== primeReactThemeLicenseUrl).should.deep.equal([]);
     });
 
     it('should describe every theme for a picker', () => {
