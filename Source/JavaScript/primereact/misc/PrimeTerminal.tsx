@@ -8,17 +8,26 @@ import { stringProperty } from '../properties';
 /**
  * The `PrimeReact:terminal` component - a command-line surface.
  *
- * Terminal publishes typed commands on `TerminalService` and waits for something to answer. Nothing in
- * this package answers, because responding to a command is application behavior and a Scene element
- * cannot express it. The component therefore accepts input and prints nothing back until the hosting
- * application subscribes - which is the honest shape of a terminal with no backend, not a broken one.
+ * Terminal accepts input and waits for something to answer. Nothing in this package answers, because
+ * responding to a command is application behavior and a Scene element cannot express it. The component
+ * therefore echoes what is typed and prints nothing back until the hosting application supplies an
+ * answer - which is the honest shape of a terminal with no backend, not a broken one.
+ *
+ * PrimeReact 11 changed how that answer arrives: v10 published commands on a global `TerminalService`
+ * that any listener could subscribe to, and v11 takes an `onCommand` callback on the component instead.
+ * That is a real improvement for an application - the wiring is local and typed rather than a global
+ * channel keyed by nothing - but it is also why the gap cannot be closed here: a callback has to come from
+ * whoever mounts the screen, and the adapter only has the element.
+ *
+ * `CommandList` and `Prompt` render themselves from the component's own state when given no children, so
+ * the composition is just naming the three regions a terminal has.
  */
 export function PrimeTerminal({ element }: RegisteredComponentProps) {
     return (
-        <Terminal
-            data-scene-id={element.id}
-            welcomeMessage={stringProperty(element, 'welcomeMessage', 'Welcome')}
-            prompt={stringProperty(element, 'prompt', '$')}
-        />
+        <Terminal.Root data-scene-id={element.id} prompt={stringProperty(element, 'prompt', '$')}>
+            <Terminal.Welcome>{stringProperty(element, 'welcomeMessage', 'Welcome')}</Terminal.Welcome>
+            <Terminal.CommandList />
+            <Terminal.Prompt />
+        </Terminal.Root>
     );
 }

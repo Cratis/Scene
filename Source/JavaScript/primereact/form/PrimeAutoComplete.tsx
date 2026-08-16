@@ -4,33 +4,49 @@
 import { useState } from 'react';
 import { AutoComplete } from 'primereact/autocomplete';
 import { RegisteredComponentProps } from '@cratis/scene.react';
+import { SelectOption } from '../SelectOption';
 import { booleanProperty, optionsProperty, stringProperty } from '../properties';
 
 /**
  * The `PrimeReact:autoComplete` component - a text field that suggests from a known set as you type.
  *
- * AutoComplete has no built-in filtering: it asks the host to produce suggestions through
- * `completeMethod`, because in a real application that is a server call. A Scene element cannot express
- * a server call, so the adapter filters the authored `options` case-insensitively instead - enough for
- * the component to behave like itself in a preview, and honest about where the data came from.
+ * AutoComplete has no built-in filtering: it asks the host to narrow the list through `onComplete`,
+ * because in a real application that is a server call. A Scene element cannot express a server call, so
+ * the adapter filters the authored `options` case-insensitively instead - enough for the component to
+ * behave like itself in a preview, and honest about where the data came from.
+ *
+ * PrimeReact 11 renamed the two halves of that arrangement: the narrowed list is `options` (v10 called it
+ * `suggestions`) and the callback is `onComplete` (v10's `completeMethod`), and `AutoComplete.List`
+ * renders the list itself from `optionLabel` / `optionValue`. The v10 `dropdown` flag is gone as a prop
+ * for the same reason it is gone from every other v11 overlay: the button either exists in the
+ * composition or it does not, so the property now decides whether to render `AutoComplete.Trigger`.
  */
 export function PrimeAutoComplete({ element }: RegisteredComponentProps) {
-    const options = optionsProperty(element, 'options');
-    const [value, setValue] = useState(stringProperty(element, 'value', ''));
-    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const all = optionsProperty(element, 'options');
+    const [options, setOptions] = useState<SelectOption[]>(all);
 
     return (
-        <AutoComplete
+        <AutoComplete.Root
             data-scene-id={element.id}
-            value={value}
-            onChange={(event) => setValue(typeof event.value === 'string' ? event.value : '')}
-            suggestions={suggestions}
-            completeMethod={(event) =>
-                setSuggestions(options.filter((option) => option.label.toLowerCase().includes(event.query.toLowerCase())).map((option) => option.label))
-            }
-            dropdown={booleanProperty(element, 'dropdown', false)}
-            placeholder={stringProperty(element, 'placeholder')}
-            disabled={booleanProperty(element, 'disabled', false)}
-        />
+            options={options}
+            optionLabel='label'
+            optionValue='value'
+            defaultInputValue={stringProperty(element, 'value', '')}
+            onComplete={(event) => setOptions(all.filter((option) => option.label.toLowerCase().includes(event.query.toLowerCase())))}
+            disabled={booleanProperty(element, 'disabled', false)}>
+            <AutoComplete.Input placeholder={stringProperty(element, 'placeholder')} />
+            {booleanProperty(element, 'dropdown', false) && (
+                <AutoComplete.Trigger>
+                    <i className='pi pi-chevron-down' />
+                </AutoComplete.Trigger>
+            )}
+            <AutoComplete.Portal>
+                <AutoComplete.Positioner>
+                    <AutoComplete.Popup>
+                        <AutoComplete.List />
+                    </AutoComplete.Popup>
+                </AutoComplete.Positioner>
+            </AutoComplete.Portal>
+        </AutoComplete.Root>
     );
 }

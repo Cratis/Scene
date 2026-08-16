@@ -18,12 +18,13 @@ import { primeReactThemeNames, primeReactThemes } from './theme';
  */
 export const primeReactPackageManifest: ScenePackage = {
     name: 'PrimeReact',
-    version: '10.9.8',
+    version: '11.1.0',
     kind: PackageKind.ComponentLibrary,
 
     /**
-     * PrimeReact's own components need nothing from Tailwind - they are skinned by a compiled theme
-     * stylesheet. The dependency is here because *this package's wrappers* use Tailwind utility classes
+     * PrimeReact's own components need nothing from Tailwind - they are skinned by the `--p-*` custom
+     * properties the active `@primeuix/themes` preset emits. The dependency is here because *this
+     * package's wrappers* use Tailwind utility classes
      * for the layout around them: the row a checkbox and its label sit on, the column a radio group
      * stacks into, the grid a summary lays its pairs out in. A profile that activates this package
      * without Tailwind renders those wrappers unstyled, so declaring it is what makes the profile picker
@@ -32,10 +33,10 @@ export const primeReactPackageManifest: ScenePackage = {
     dependencies: [{ name: 'Tailwind' }],
 
     components: [
-        'inputText', 'inputTextarea', 'inputNumber', 'password', 'inputMask', 'floatLabel', 'iconField', 'dropdown', 'multiSelect',
+        'inputText', 'inputTextarea', 'inputNumber', 'password', 'floatLabel', 'iconField', 'dropdown', 'multiSelect',
         'listBox', 'selectButton', 'checkbox', 'radioButton', 'toggleSwitch', 'slider', 'rating', 'knob', 'calendar', 'colorPicker',
-        'chips', 'autoComplete', 'treeSelect', 'cascadeSelect', 'button', 'splitButton', 'speedDial', 'buttonGroup', 'dataTable', 'table',
-        'column', 'dataView', 'tree', 'treeTable', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart', 'virtualScroller',
+        'chips', 'autoComplete', 'treeSelect', 'button', 'splitButton', 'speedDial', 'buttonGroup', 'dataTable', 'table',
+        'column', 'dataView', 'tree', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart',
         'card', 'panel', 'accordion', 'fieldset', 'divider', 'splitter', 'scrollPanel', 'tabView', 'toolbar', 'stepper', 'dialog',
         'confirmDialog', 'overlayPanel', 'sidebar', 'tooltip', 'menu', 'menubar', 'breadcrumb', 'tabMenu', 'steps', 'tieredMenu',
         'panelMenu', 'contextMenu', 'megaMenu', 'dock', 'message', 'inlineMessage', 'toast', 'image', 'galleria', 'carousel', 'avatar',
@@ -68,7 +69,7 @@ export const primeReactPackageManifest: ScenePackage = {
     themes: primeReactThemeNames,
 
     displayName: 'PrimeReact',
-    description: 'PrimeReact 10 components and its free PrimeTek themes, mapped onto Scene\'s abstract component names.',
+    description: 'PrimeReact 11 components and PrimeTek\'s @primeuix/themes presets, mapped onto Scene\'s abstract component names.',
     module: '@cratis/scene.primereact',
 };
 

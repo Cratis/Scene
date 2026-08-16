@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The message family. `message` and `inlineMessage` share PrimeReact\'s Message component but mean different things on a screen - one is about a region, the other about the field beside it - and the width is the difference a reader sees.' } },
+        docs: { description: { component: 'The message family. `message` and `inlineMessage` share PrimeReact 11\'s singular `message` module but mean different things on a screen - one is about a region, the other about the field beside it - which v11 lets them say with `variant` as well as with width. The plural `messages` module was removed in v11; this package never declared a name for it. `toast` announces itself once on mount, grouped by the element\'s own id, because a Scene element has no other way to make an imperative call.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

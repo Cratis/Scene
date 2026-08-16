@@ -4,7 +4,7 @@
 import { lazy } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
-import { booleanProperty, stringArrayProperty, stringProperty } from '../properties';
+import { stringArrayProperty, stringProperty } from '../properties';
 
 const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/components/DataTables')).DataTableForQuery }));
 
@@ -19,6 +19,12 @@ const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/co
  * back into it, where PrimeReact's `DataTable` is handed rows and knows nothing about where they came from.
  *
  * The `query` property names an Arc query proxy; the columns come from the `content` slot.
+ *
+ * There is deliberately no `clientFiltering` property. `@cratis/components` 3.0.0 still accepts the prop
+ * so existing call sites compile, but it no longer does anything - filtering is always applied to the
+ * loaded page. Exposing a screen property that reads as a choice and silently is not would be worse than
+ * not offering it, so a screen that set it now gets a property-not-recognized signal rather than a
+ * setting that quietly stopped mattering.
  */
 export function SceneDataTable({ element, slots }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Query);
@@ -31,7 +37,6 @@ export function SceneDataTable({ element, slots }: RegisteredComponentProps) {
                 emptyMessage={stringProperty(element.properties, 'emptyMessage') ?? ''}
                 dataKey={stringProperty(element.properties, 'dataKey')}
                 globalFilterFields={stringArrayProperty(element.properties, 'globalFilterFields')}
-                clientFiltering={booleanProperty(element.properties, 'clientFiltering')}
                 className={stringProperty(element.properties, 'className')}
             >
                 {slots.content}

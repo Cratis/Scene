@@ -8,9 +8,16 @@ import { booleanProperty, objectArrayProperty, stringProperty } from '../propert
 /**
  * The `Cratis.Components:dropdown` component - `Dropdown` from `@cratis/components/Dropdown`.
  *
- * The library's own `Dropdown` rather than PrimeReact's, because it carries the overlay z-index fix the
- * library applies across every overlay it owns - a dropdown inside a dialog renders above the dialog
- * instead of behind it, which is the single most common overlay bug in a PrimeReact application.
+ * The library's own `Dropdown` rather than PrimeReact's `Select`, and the reason changed with PrimeReact
+ * 11. It used to be the overlay z-index fix: a version 10 dropdown panel opened inside a dialog rendered
+ * within the dialog's own subtree and could land under its mask, so the library appended every overlay to
+ * the document body and handed out z-indexes itself. Version 11 does both natively - the select panel
+ * portals to the body and the shared z-index registry puts a later overlay above whatever is already
+ * open - and `@cratis/components` 3.0.0 accordingly deleted that workaround. What the wrapper is worth
+ * now is its curated surface: a single/multi select expressed in `options` / `optionLabel` /
+ * `optionValue` terms, where version 11's `Select` is compositional (`Select.Root`, `.Trigger`,
+ * `.Portal`, `.Popup`, `.List`, `.Option`) and would have to be assembled here, in an adapter whose whole
+ * input is a property bag.
  *
  * This is the standalone dropdown, not the command-form one: it takes its options from the screen and is
  * not bound to a command property. Use `dropdownField` inside a `commandForm`.

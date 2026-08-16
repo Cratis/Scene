@@ -14,11 +14,14 @@ config.plugins.push(react());
 config.test.environment = 'jsdom';
 config.test.include = [...config.test.include, '**/for_*/when_*/**/*.tsx', '**/for_*/**/when_*.tsx'];
 
-// `@cratis/components` and PrimeReact are published as ESM that still uses directory imports
-// (`primereact/api`), which Node's own ESM resolver rejects - and this package reaches them transitively,
-// through `@cratis/scene.components`, so the whole `@cratis` scope has to go through Vite's resolver
-// rather than only the leaf that causes it. `@cratis/scene.components` matches this package's specs
-// import it directly, and every Scene package it pulls in behind that.
+// The `@cratis` scope has to go through Vite's resolver rather than Node's own ESM loader. The Scene
+// packages publish `dist/esm/*.js` without declaring `"type": "module"`, so Node reads those files as
+// CommonJS and chokes on their `import`/`export` syntax - and this package's specs import
+// `@cratis/scene.components` directly, plus every Scene package it pulls in behind that.
+//
+// PrimeReact is kept on the list although the reason it was added for - v10's directory imports, which
+// Node's resolver rejected - is gone: v11 declares `"type": "module"` and a complete subpath `exports`
+// map, so Node can load it unaided. Narrowing this is a separate change with its own test run.
 config.test.server = { deps: { inline: [/@cratis[\\/]/, /primereact/] } };
 
 export default defineConfig(config);

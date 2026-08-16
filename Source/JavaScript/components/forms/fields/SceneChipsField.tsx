@@ -14,6 +14,12 @@ const ChipsField = lazy(async () => ({ default: (await import('@cratis/component
  * A free-form list of strings - tags, labels, recipients - where the values are typed rather than picked.
  * `multiSelectField` is the right choice whenever the values come from a known set; this one exists for
  * when they do not.
+ *
+ * There is no `separator` property. PrimeReact 11's `InputTags` commits exactly one tag per `Enter` and
+ * no longer splits pasted text, so `@cratis/components` keeps the prop only so existing call sites
+ * compile and never reads it. A screen that wrote `separator: ','` and watched a pasted comma-separated
+ * list arrive as a single tag would have no way to tell that from a bug, which is precisely why the
+ * property is withdrawn rather than passed through.
  */
 export function SceneChipsField({ element }: RegisteredComponentProps) {
     return (
@@ -23,7 +29,6 @@ export function SceneChipsField({ element }: RegisteredComponentProps) {
                     {...binding}
                     placeholder={stringProperty(element.properties, 'placeholder')}
                     max={numberProperty(element.properties, 'max')}
-                    separator={stringProperty(element.properties, 'separator')}
                     addOnBlur={booleanProperty(element.properties, 'addOnBlur')}
                     allowDuplicate={booleanProperty(element.properties, 'allowDuplicate')}
                     className={stringProperty(element.properties, 'className')}

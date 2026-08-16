@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The remaining components: indicators, badges, placeholders and a terminal. `terminal` accepts input and answers nothing until the hosting application subscribes to PrimeReact\'s TerminalService - responding to a command is application behavior, not something a Scene element can express.' } },
+        docs: { description: { component: 'The remaining components: indicators, badges, placeholders and a terminal. Two of them - `blockUI` and `scrollTop` - are Cratis-owned rebuilds, because PrimeReact 11 removed both with no replacement and no headless hook; they render here through the same registry as everything else, which is the point. `terminal` accepts input and answers nothing until the hosting application passes an `onCommand` callback - responding to a command is application behavior, not something a Scene element can express.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

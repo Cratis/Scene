@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The panel family. `accordion`, `tabView`, `splitter` and `stepper` pair a headers property with the content slot by position, because PrimeReact identifies their sections by React element type and a Scene adapter wrapping one would not be recognized.' } },
+        docs: { description: { component: 'The panel family, on PrimeReact 11. `accordion`, `tabView`, `splitter` and `stepper` pair a headers property with the content slot by position, because a slot arrives as a flat list of already-rendered children with nowhere to hang a per-child title. Every component here except `divider` is compositional in v11, so each adapter assembles the parts - a `tabView` with no `Tabs.Indicator`, or a `splitter` with no `Splitter.Gutter`, renders without an active underline or a drag bar rather than failing.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

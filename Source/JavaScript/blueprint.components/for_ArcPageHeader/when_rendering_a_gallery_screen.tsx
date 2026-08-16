@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { render, screen } from '@testing-library/react';
+import { PrimeReactProvider } from '@primereact/core';
 import { SceneElement } from '@cratis/scene.model';
 import { SceneElementView } from '@cratis/scene.react';
 import { clearBindings, registerQuery } from '@cratis/scene.components';
@@ -11,13 +12,19 @@ import { SampleBindingName, arcPageHeader } from '../templates';
 
 class AllInvoices {}
 
+// These pages render inside the default blueprint's shell, which reaches for PrimeReact directly. Every
+// PrimeReact 11 component resolves its configuration through `PrimeReactProvider` and throws without one,
+// so the provider is what makes the render happen at all rather than a styling nicety. No preset is handed
+// over: these specs assert structure and text, and a theme would only add runtime CSS nothing here reads.
 function renderElement(element: SceneElement) {
     render(
-        <SceneElementView
-            element={resolveElementComponentNames(element, componentsBlueprintProfile, componentsBlueprintCatalog)}
-            registry={componentsPreviewRegistry}
-            resolveBinding={() => undefined}
-        />,
+        <PrimeReactProvider>
+            <SceneElementView
+                element={resolveElementComponentNames(element, componentsBlueprintProfile, componentsBlueprintCatalog)}
+                registry={componentsPreviewRegistry}
+                resolveBinding={() => undefined}
+            />
+        </PrimeReactProvider>,
     );
 }
 

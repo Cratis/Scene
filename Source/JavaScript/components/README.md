@@ -130,8 +130,13 @@ both packages write themes in one language: `primary.color`, `primary.contrastCo
   for a faceted browser that has nothing to show at design time. An application that wants it imports it
   directly.
 - **`card`** — see above.
-- **`column`** — PrimeReact's `Column` is a configuration element and belongs to the PrimeReact package;
-  a duplicate here would be a shadow with nothing behind it. Columns come through the `content` slot.
+- **`column`** — a column is a configuration element, not a rendered component: it declares `field`,
+  `header`, `sortable` and `filter`, and the table reads those off its children. Columns therefore come
+  through the `content` slot, and declaring a name here would add a registry entry for something no
+  screen resolves on its own. Note that the *ownership* of `Column` moved in PrimeReact 11 — `primereact/column`
+  was removed and `@cratis/components` now ships its own (`@cratis/components/DataTables`, re-exported from
+  `DataPage`) — so if a `column` name is ever wanted, this is the package that would have the component
+  behind it. The decision not to declare one is unchanged; only the reason for it is different.
 - **Event handlers** — Scene has no action-binding seam yet. Where a callback drives a component's own
   visible state the adapter holds it (`useEditableCopy`), so the breadcrumb, schema editor and time machine
   behave like themselves; where it would reach outside, the adapter exposes nothing rather than a handler
@@ -181,12 +186,17 @@ yarn lint:ci
 yarn build-storybook
 ```
 
-Two notes on the Storybook and Vitest configuration, both worked around in this folder and both upstream
-issues rather than ours:
+Two workarounds used to live in this folder for upstream problems that `@cratis/components` 3.0.0 and
+PrimeReact 11 removed the cause of. Both are gone, and neither should come back without new evidence:
 
-- `@cratis/components@2.9.0` ships `dist/esm/TimeMachine/Properties.css` with `//` line comments, which are
-  not valid CSS. Vite 8's default lightningcss minifier rejects the whole bundle over it, so
-  `.storybook/main.ts` sets `cssMinify: 'esbuild'`.
-- `@cratis/components` and PrimeReact are published as ESM that still uses directory imports
-  (`primereact/api`), which Node's own resolver rejects. `vite.config.mts` inlines both so Vite resolves them
-  instead.
+- `.storybook/main.ts` no longer forces `cssMinify: 'esbuild'`. It was there because
+  `@cratis/components@2.9.0` shipped `dist/esm/TimeMachine/Properties.css` with `//` line comments, which
+  are not CSS, and Vite's default lightningcss minifier rejects a whole bundle over one invalid file.
+  3.0.0 takes CSS out of the JavaScript module graph entirely: there are no per-component stylesheets any
+  more, only `styles.css`, `tokens.css` and `theme.css` at the package root, and all three minify cleanly
+  under lightningcss.
+- `vite.config.mts` no longer inlines `@cratis/components` and `primereact` for Vitest. That existed
+  because both were published as ESM using directory imports (`primereact/api`), which Node's own resolver
+  rejects. `primereact/api` does not exist in version 11 at all; PrimeReact's `exports` map now resolves
+  `./*` to a concrete `./*/index.mjs`, and every `@cratis/components` subpath points at a real file, so
+  Node loads them natively and Vitest can externalize them as it does every other dependency.

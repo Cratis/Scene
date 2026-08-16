@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export * from './elementProperties';
+export * from './MenuEntry';
 export * from './ThemeOption';
 export * from './AppShell';
 export * from './FullPageShell';

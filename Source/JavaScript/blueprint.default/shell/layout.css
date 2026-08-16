@@ -4,11 +4,11 @@
 /*
  * Cratis Scene - default layout package stylesheet.
  *
- * Every mode this shell implements is hand-written here. PrimeReact 10 has no app-shell primitive to
- * lean on: its `Sidebar` is an overlay drawer (renamed `Drawer` in v11), not a dockable application
- * sidebar, so the docked/rail/reveal/drawer behaviors have to be CSS. PrimeReact 11 introduces a real
- * `Sidebar` with `variant`/`collapsible`/`side`/`overlay`/`openOnHover` props and a `Sidebar.Layout`
- * registry that would replace most of this file - see the README for what a v11 port collapses.
+ * Every mode this shell implements is hand-written here. PrimeReact 11 does ship a real app-shell
+ * `Sidebar` - a genuinely new primitive, not v10's overlay drawer, which is now `Drawer` - and adopting
+ * it would replace most of this file. That is a deliberate follow-up rather than something the version
+ * bump did: rewriting eight layout modes onto a new primitive is a behavior change. See the README for
+ * what such a port collapses and what would stay this package's own.
  *
  * TOKEN BRIDGE
  * ------------

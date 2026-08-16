@@ -1,7 +1,7 @@
 # @cratis/scene.primereact
 
 The PrimeReact component package for Scene. It maps Scene's abstract component names onto real
-PrimeReact 10 components, and PrimeReact's free PrimeTek themes onto Scene `Theme` objects.
+PrimeReact 11 components, and PrimeTek's `@primeuix/themes` presets onto Scene `Theme` objects.
 
 User-facing documentation lives in [`Documentation/primereact-package/`](../../../Documentation/primereact-package/index.md).
 This file is the contributor's note: the conventions the source follows and the reasoning behind them.
@@ -13,12 +13,13 @@ primereact/
 ├── primeReactPackage.ts        the ScenePackage manifest + the ScenePackageBundle
 ├── primeReactComponents.ts     the ComponentRegistry - every abstract name to its adapter
 ├── properties.ts               typed readers for element.properties
-├── menuItems.ts, treeNodes.ts  shared readers for the two nested models PrimeReact reuses
-├── primeReactTheme.css         the Scene token <-> PrimeReact variable bridge
+├── menuItems.ts, treeNodes.ts  shared readers for the two nested models the menus and trees reuse
+├── MenuItem.ts, TreeNode.ts    those two models - Scene's own since v11 removed PrimeReact's
+├── primeReactTheme.css         the Scene token <-> PrimeReact design-token bridge
 ├── storyElements.ts            fixture builders the galleries share
 ├── button/ data/ form/ media/ menu/ messages/ misc/ overlay/ panel/ screen/
 │                               one adapter per file, grouped by PrimeReact family
-├── theme/                      the theme catalog, the stylesheet helper and the live swap
+├── theme/                      the theme catalog and the preset resolution behind it
 └── for_*/                      BDD specs beside the code they specify
 ```
 
@@ -30,8 +31,9 @@ and two things called `Dropdown` in one file is how confusion starts. It follows
 `CoreText` precedent in `@cratis/scene.react`.
 
 **Abstract names are `lowerCamelCase`** — `inputText`, `dataTable`, `selectButton`. The abstract name
-follows what the component *is*, not what PrimeReact 10 happens to call it: `toggleSwitch` maps onto v10's
-`InputSwitch`, and v11 renames that component to `ToggleSwitch`, so the abstract name was already right.
+follows what the component *is*, not what PrimeReact happens to call it this major version:
+`toggleSwitch` mapped onto v10's `InputSwitch`, and v11 renamed that component to `ToggleSwitch` - the
+abstract name had been right all along and did not move.
 
 **Three names are deliberately shared with `core`** — `text`, `button` and `card`. That is override
 priority working as designed, not a collision. Seven more (`table`, `column`, `title`, `field`,
@@ -53,52 +55,59 @@ Thirteen semantic tokens, and every Scene package must agree on them — a vocab
 package is one no package can rely on. `primeReactTheme.css` is the only place the Scene names and
 PrimeReact's names meet.
 
-| Scene token | CSS custom property | PrimeReact 10 variable |
+| Scene token | CSS custom property | PrimeReact 11 design token |
 | --- | --- | --- |
-| `primary.color` | `--scene-primary-color` | `--primary-color` |
-| `primary.contrastColor` | `--scene-primary-contrast-color` | `--primary-color-text` |
-| `surface.background` | `--scene-surface-background` | `--surface-ground` |
-| `surface.card` | `--scene-surface-card` | `--surface-card` |
-| `surface.border` | `--scene-surface-border` | `--surface-border` |
-| `surface.hover` | `--scene-surface-hover` | `--surface-hover` |
-| `surface.overlay` | `--scene-surface-overlay` | `--surface-overlay` |
-| `text.color` | `--scene-text-color` | `--text-color` |
-| `text.mutedColor` | `--scene-text-muted-color` | `--text-color-secondary` |
-| `highlight.background` | `--scene-highlight-background` | `--highlight-bg` |
-| `highlight.color` | `--scene-highlight-color` | `--highlight-text-color` |
-| `content.borderRadius` | `--scene-content-border-radius` | `--border-radius` |
-| `focus.ring` | `--scene-focus-ring` | `--focus-ring` |
+| `primary.color` | `--scene-primary-color` | `--p-primary-color` |
+| `primary.contrastColor` | `--scene-primary-contrast-color` | `--p-primary-contrast-color` |
+| `surface.background` | `--scene-surface-background` | `--p-surface-50` / `--p-surface-950` |
+| `surface.card` | `--scene-surface-card` | `--p-content-background` |
+| `surface.border` | `--scene-surface-border` | `--p-content-border-color` |
+| `surface.hover` | `--scene-surface-hover` | `--p-content-hover-background` |
+| `surface.overlay` | `--scene-surface-overlay` | `--p-overlay-popover-background` |
+| `text.color` | `--scene-text-color` | `--p-text-color` |
+| `text.mutedColor` | `--scene-text-muted-color` | `--p-text-muted-color` |
+| `highlight.background` | `--scene-highlight-background` | `--p-highlight-background` |
+| `highlight.color` | `--scene-highlight-color` | `--p-highlight-color` |
+| `content.borderRadius` | `--scene-content-border-radius` | `--p-content-border-radius` |
+| `focus.ring` | `--scene-focus-ring` | `--p-focus-ring-shadow` |
+
+The v10 column of this table was an ad-hoc vocabulary that could only be learned by reading compiled
+stylesheets; v11's is one systematic `--p-*` namespace derived from the preset's own token paths, so
+the bridge shrank.
 
 The bridge runs both ways, and the scoping is load-bearing. On `:root`, each Scene token falls back to
-the loaded PrimeReact theme. Inside `[data-scene-theme-root]` — the element `SceneThemeProvider` writes
+the active preset's `--p-*` value. Inside `[data-scene-theme-root]` — the element `SceneThemeProvider` writes
 tokens onto — the Scene tokens are fed back onto PrimeReact's variables. The second rule must never move
 to `:root`: custom properties that reference each other on the *same* element form a cycle, are invalid
 at computed-value time, and resolve to nothing.
 
 ## Themes
 
-25 free PrimeTek themes. Token values are read verbatim from each theme's own `theme.css` `:root` block,
-so a Scene token always agrees with what the PrimeReact stylesheet renders — including `lara-light-teal`,
-which really does ship the same color for `--highlight-bg` and `--highlight-text-color`. There is one
-deliberate deviation: PrimeReact 10.9.8 ships `viva-dark` with an unresolved SCSS expression,
-`rgba($primaryColor, 0.08)`, for `--surface-hover`; that is not valid CSS, so the intended value is used
-instead.
+24 themes across the four `@primeuix/themes` preset families - Aura, Lara, Nora and Material - each bound
+to one of the preset's own primitive color ramps for its accent.
 
-Every theme is PrimeTek's work and none is ours. Attribution is applied once in `primeReactThemes.ts` to
-every preset rather than written per theme, so a twenty-sixth theme cannot be added without it. The full
-attribution table is in
+The token values are **generated**, not transcribed. A v10 theme was a compiled stylesheet whose `:root`
+block could be read with a text editor; a v11 preset is a JavaScript object whose values are token
+references (`{emerald.500}`, `light-dark({surface.0}, {surface.900})`) that `@primeuix/styled` resolves at
+runtime. What is committed in `themePresets.ts` is the output of running those same resolution rules, so
+the catalog stays plain data a picker can read without booting a theme engine while still agreeing with
+what the preset renders. A spec fails the build if any token still holds an unresolved reference.
+
+Every theme is PrimeTek's design work and none is ours - Scene picks the accent and nothing else.
+Attribution is applied once in `primeReactThemes.ts` to every preset rather than written per theme, so a
+twenty-fifth theme cannot be added without it. The full attribution table is in
 [the theme reference](../../../Documentation/primereact-package/theme-reference.md).
 
 | Field | Value |
 | --- | --- |
 | `author` | `PrimeTek` |
 | `authorUrl` | `https://primereact.org` |
-| `license` | `MIT` — verified in `node_modules/primereact/LICENSE.md`: "The MIT License (MIT), Copyright (c) 2016-2025 PrimeTek" |
+| `license` | `PrimeUI Commercial` - **not MIT.** v10 and its themes were MIT; v11 relicensed the whole stack. See [Licensing](#licensing). |
 
 `compatibleWith` is `['PrimeReact', 'Tailwind', 'core']`. `core` is listed deliberately:
 `ThemeCompatibility` has no implicit exemption for it, and these themes genuinely reach `core`'s
-components — through the semantic token layer `SceneThemeProvider` applies to the whole subtree, though
-not through the PrimeReact stylesheet, which only ever matches `.p-*` elements.
+components - through the semantic token layer `SceneThemeProvider` applies to the whole subtree, though
+not through the `--p-*` properties, which only PrimeReact's own components read.
 
 ## Not covered
 
@@ -110,65 +119,43 @@ not through the PrimeReact stylesheet, which only ever matches `.p-*` elements.
 Both are genuinely useful and both are deliberate omissions, not oversights. A profile needing them
 should activate a package that owns that dependency.
 
-Also worth knowing: `column` renders nothing on its own. That is PrimeReact's own semantics — a bare
-`<Column/>` outside a `DataTable` renders nothing either. When a `column` element is nested under
-`dataTable` or `table`, the table reads its `field`/`header`/`sortable` off the *model* (`element.slots`)
-rather than the rendered node, because PrimeReact identifies its columns by React element type and a
-wrapper would not be recognized as one.
+Also worth knowing: `column` renders nothing on its own, and since PrimeReact 11 that is *our* semantics
+rather than PrimeReact's. v11 removed `primereact/column`, so `data/Column.tsx` is a Cratis-owned
+declaration component that returns `null`. When a `column` element is nested under `dataTable` or `table`,
+the table reads its `field`/`header`/`sortable` off the *model* (`element.slots`) rather than the rendered
+node - which is why the derivation survived the v11 port unchanged.
 
-## Migrating to PrimeReact 11
+## PrimeReact 11
 
-PrimeReact 11 exists, but this package targets **10.9.8** and must keep doing so: Cratis Studio pins
-`primereact` to `10.9.8` through a root `resolutions` entry, and `@cratis/components` depends on exactly
-that version. Import from `primereact/*` only — never `@primereact/*` or `@primeuix/themes`.
+This package targets **11.1.0**. The full record of the port from 10.9.8 - every rename, every abstract
+name that lost its component, and what was built, converted or dropped for each - is in
+[the migration page](../../../Documentation/primereact-package/primereact-11-migration.md).
 
-The renames are recorded here so the eventual port is a known quantity rather than a discovery.
+The short version for a contributor:
 
-### Renames
+- **v11 is compositional.** `primereact/select` exports `Select.Root` / `Trigger` / `Value` / `Portal` /
+  `Positioner` / `Popup` / `List` / `Option` and you assemble them. Most renames are more than an import.
+- **`Sidebar` is the trap.** v10's `Sidebar` is v11's `Drawer`, *and* v11 introduces a brand-new,
+  unrelated `Sidebar` for application-shell navigation. Following the name rather than the behavior
+  compiles cleanly and silently swaps an overlay for a static shell.
+- **v11 ships zero CSS.** There is no `primereact/resources` directory. A look comes from a preset handed
+  to `PrimeReactProvider`; `usePrimeReactTheme` returns that configuration for a Scene theme.
+- **14 abstract names are now backed by Cratis-owned components** built here because v11 removed theirs,
+  2 are expressed over `@primereact/headless` hooks, and 4 were dropped from the manifest
+  (`cascadeSelect`, `inputMask`, `treeTable`, `virtualScroller`).
+- **`MenuItem` and `TreeNode` are Scene's types now** - `primereact/menuitem` and `primereact/treenode`
+  were removed. Import them from this package, never from `primereact/*`.
 
-| PrimeReact 10 | PrimeReact 11 |
-| --- | --- |
-| `Dropdown` | `Select` |
-| `Calendar` | `DatePicker` |
-| `OverlayPanel` | `Popover` |
-| **`Sidebar`** | **`Drawer`** |
-| `InputSwitch` | `ToggleSwitch` |
-| `TabView` + `TabPanel` | `Tabs` |
-| `InputTextarea` | `Textarea` |
-| `Password` | `InputPassword` |
-| `Chips` | `InputTags` |
-| `ColorPicker` | `InputColor` |
-| `Galleria` | `Gallery` |
-| `ScrollPanel` | `ScrollArea` |
-| `SelectButton` | `ToggleButtonGroup` |
+### Licensing
 
-> [!WARNING]
-> **`Sidebar` is the trap.** v10's `Sidebar` becomes `Drawer`, *and* v11 introduces a brand-new,
-> unrelated `Sidebar` for application-shell navigation. A port that follows the name rather than the
-> behavior silently swaps a slide-in overlay for a static shell element, and it will compile.
+PrimeReact 10 was MIT. PrimeReact 11 is not, and neither is `primeicons` 8, `@primereact/core`,
+`@primereact/headless`, `@primeuix/themes` or `@primeuix/styled` - all are under the commercial PrimeUI
+license and **require a license key regardless of how you style**. The check runs in `PrimeReactProvider`
+on mount with no condition on `unstyled`, on `theme`, or on `NODE_ENV`; without a key you get a console
+warning and an "Invalid PrimeUI License" banner in development and production alike.
 
-### Moved to commercial packages
-
-`Chart` and `Editor` move to `@primeuipro/*` and have no React release yet. This package does not map
-either of them, so nothing here is affected.
-
-### Became hooks
-
-`InputMask`, `KeyFilter`, `ScrollTop`, `OrderList` and `PickList` are hooks in v11 rather than
-components. The four this package maps — `inputMask`, `scrollTop`, `orderList`, `pickList` — each need a
-rewrite, not a rename.
-
-### Removed
-
-`ConfirmPopup`, `BlockUI`, `PanelMenu`, `TabMenu`, `DeferredContent`, `DataScroller`,
-`TriStateCheckbox`, `MultiStateCheckbox`, `SlideMenu`, `Mention`, `Dock` and `Ripple` are gone. Four of
-them are mapped here — `blockUI`, `panelMenu`, `tabMenu` and `dock` — and each needs a replacement built
-from what remains, or the abstract name retired from the manifest.
-
-### Icons
-
-v11 components ship **no icons**. Every `icon` property this package passes through assumes `primeicons`
-is loaded, which stays true, but v11's own components no longer bundle their internal ones.
+See [the migration page](../../../Documentation/primereact-package/primereact-11-migration.md#licensing)
+for the community and commercial tiers and the redistribution clause.
 
 ## Gates
 

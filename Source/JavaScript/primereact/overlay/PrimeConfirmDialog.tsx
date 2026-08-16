@@ -3,28 +3,33 @@
 
 import { useState } from 'react';
 import { Button } from 'primereact/button';
-import { ConfirmDialog } from 'primereact/confirmdialog';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { stringProperty } from '../properties';
+import { ConfirmDialog } from './ConfirmDialog';
 
 /**
  * The `PrimeReact:confirmDialog` component - a yes/no question before a consequential action.
  *
- * Uses ConfirmDialog's declarative form rather than the imperative `confirmDialog()` call, because the
- * imperative one needs a caller and a Scene element is configuration, not a caller. Visibility is owned
- * locally for the reason described on {@link PrimeDialog}.
+ * Adapts {@link ConfirmDialog}, which this package owns because PrimeReact 11 removed
+ * `primereact/confirmdialog` and shipped no successor - see that component for what the replacement
+ * deliberately leaves behind. The adapter itself is unchanged in spirit from the v10 one: it was already
+ * using the declarative form rather than the imperative `confirmDialog()` call, because that call needs a
+ * caller and a Scene element is configuration, not a caller. That choice is what made this the one
+ * removal in the family that cost nothing at the adapter boundary.
  *
- * In PrimeReact 11 the sibling `ConfirmPopup` is removed; `ConfirmDialog` remains.
+ * Visibility is owned locally for the reason described on {@link PrimeDialog}.
+ *
+ * A Scene element has nowhere to send an answer - there is no handler to bind to - so accepting and
+ * rejecting differ only in closing the dialog. The two callbacks are still wired rather than omitted, so
+ * the seam is here the moment Scene grows a way to express an action.
  */
 export function PrimeConfirmDialog({ element }: RegisteredComponentProps) {
     const [visible, setVisible] = useState(false);
     return (
         <div data-scene-id={element.id}>
-            <Button
-                label={stringProperty(element, 'triggerLabel', 'Confirm')}
-                severity={stringProperty(element, 'severity', 'danger') as 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'help'}
-                onClick={() => setVisible(true)}
-            />
+            <Button severity={stringProperty(element, 'severity', 'danger')} onClick={() => setVisible(true)}>
+                {stringProperty(element, 'triggerLabel', 'Confirm')}
+            </Button>
             <ConfirmDialog
                 visible={visible}
                 onHide={() => setVisible(false)}

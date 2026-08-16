@@ -12,7 +12,7 @@ const meta = {
     tags: ['autodocs'],
     parameters: {
         layout: 'padded',
-        docs: { description: { component: 'The media family. `galleria` and `carousel` both ship without a default template, so each adapter supplies one built from the fields the element names.' } },
+        docs: { description: { component: 'The media family. `galleria` and `carousel` are compositions in PrimeReact 11 rather than components taking render-prop templates, so each adapter writes out the item list itself from the fields the element names - `galleria` from `{ src, thumbnail, alt }`, `carousel` from `titleField` and `descriptionField`. `image` is a Cratis-owned rebuild: PrimeReact 11 removed its `Image` with no replacement, and the preview overlay here is a PrimeReact `Dialog`.' } },
     },
 } satisfies Meta<typeof SceneElementView>;
 

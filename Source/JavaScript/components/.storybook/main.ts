@@ -39,12 +39,6 @@ const config: StorybookConfig = {
             ...(config.build.rollupOptions ?? {}),
             external: [/^@cratis\/arc/, '@cratis/fundamentals'],
         };
-        // Vite 8 minifies CSS with lightningcss, which rejects the whole bundle over one invalid file:
-        // `@cratis/components@2.9.0` ships `dist/esm/TimeMachine/Properties.css` with `//` line comments,
-        // which are not CSS. esbuild's minifier tolerates them. This is an upstream defect and the
-        // workaround belongs here, in preview tooling, rather than anywhere it could hide the problem -
-        // remove this line once the Components package ships that file with `/* */` comments.
-        config.build.cssMinify = 'esbuild';
         return config;
     },
 };

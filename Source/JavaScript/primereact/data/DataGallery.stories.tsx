@@ -38,10 +38,6 @@ export const Gallery: Story = {
             sceneComponent('dataTable', 'dataTable', { rows: [{ id: 1, title: 'Inferred columns' }] }),
             sceneComponent('dataView', 'dataView', { rows: [{ title: 'Kickoff', description: 'Agree the scope' }] }),
             sceneComponent('tree', 'tree', { nodes: [{ label: 'Documents', children: ['Work', 'Home'] }] }),
-            sceneComponent('treeTable', 'treeTable', {
-                columns: [{ field: 'name', header: 'Name' }],
-                nodes: [{ label: 'Root', data: { name: 'Root' }, children: [{ label: 'Child', data: { name: 'Child' } }] }],
-            }),
             sceneComponent('timeline', 'timeline', {
                 events: [{ title: 'Ordered', description: 'Order placed', date: '09:00' }, { title: 'Shipped', description: 'Left the depot', date: '14:20' }],
             }),
@@ -49,7 +45,6 @@ export const Gallery: Story = {
             sceneComponent('orderList', 'orderList', { header: 'Priority', items: ['First', 'Second', 'Third'] }),
             sceneComponent('pickList', 'pickList', { source: ['Alpha', 'Beta'], target: ['Gamma'] }),
             sceneComponent('organizationChart', 'organizationChart', { nodes: [{ label: 'CEO', children: ['CTO', 'CFO'] }] }),
-            sceneComponent('virtualScroller', 'virtualScroller', { items: Array.from({ length: 200 }, (_, index) => `Row ${index + 1}`) }),
         ]),
         registry: primeReactComponents,
         resolveBinding: () => undefined,

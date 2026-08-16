@@ -11,19 +11,28 @@ import { booleanProperty, numberProperty } from '../properties';
  *
  * Given a width because Slider renders as a zero-height track that collapses to nothing in an
  * auto-sized container - the one piece of layout it cannot supply for itself.
+ *
+ * PrimeReact 11 exposes the track, the filled range and the handle as separate parts, which is what makes
+ * a range slider a matter of rendering a second `Handle` rather than a `range` prop. This adapter renders
+ * one, so the value stays a single number; `onValueChange` still reports `number[]` for the range case,
+ * hence the narrowing on the way back in.
  */
 export function PrimeSlider({ element }: RegisteredComponentProps) {
     const [value, setValue] = useState(numberProperty(element, 'value', 50));
     return (
         <div data-scene-id={element.id} className='w-64'>
-            <Slider
+            <Slider.Root
                 value={value}
-                onChange={(event) => setValue(typeof event.value === 'number' ? event.value : value)}
+                onValueChange={(event) => setValue(typeof event.value === 'number' ? event.value : value)}
                 min={numberProperty(element, 'min', 0)}
                 max={numberProperty(element, 'max', 100)}
                 step={numberProperty(element, 'step', 1)}
-                disabled={booleanProperty(element, 'disabled', false)}
-            />
+                disabled={booleanProperty(element, 'disabled', false)}>
+                <Slider.Track>
+                    <Slider.Range />
+                </Slider.Track>
+                <Slider.Handle />
+            </Slider.Root>
         </div>
     );
 }

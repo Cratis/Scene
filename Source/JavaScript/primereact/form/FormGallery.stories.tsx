@@ -28,11 +28,10 @@ export const Gallery: Story = {
             sceneComponent('inputTextarea', 'inputTextarea', { placeholder: 'Notes', rows: 3 }),
             sceneComponent('inputNumber', 'inputNumber', { value: 42, showButtons: true }),
             sceneComponent('password', 'password', { placeholder: 'Password' }),
-            sceneComponent('inputMask', 'inputMask', { mask: '99-999999' }),
             sceneComponent('floatLabel', 'floatLabel', { label: 'Project name' }),
             sceneComponent('iconField', 'iconField', { icon: 'pi pi-search', placeholder: 'Search' }),
             sceneComponent('dropdown', 'dropdown', { options: ['Draft', 'In review', 'Published'], placeholder: 'Status' }),
-            sceneComponent('multiSelect', 'multiSelect', { options: ['Design', 'Engineering', 'Support'], display: 'chip' }),
+            sceneComponent('multiSelect', 'multiSelect', { options: ['Design', 'Engineering', 'Support'], placeholder: 'Teams' }),
             sceneComponent('listBox', 'listBox', { options: ['Daily', 'Weekly', 'Monthly'] }),
             sceneComponent('selectButton', 'selectButton', { options: ['Day', 'Week', 'Month'], value: 'Week' }),
             sceneComponent('checkbox', 'checkbox', { label: 'Notify me', checked: true }),
@@ -47,9 +46,6 @@ export const Gallery: Story = {
             sceneComponent('autoComplete', 'autoComplete', { options: ['Amsterdam', 'Athens', 'Auckland'], dropdown: true }),
             sceneComponent('treeSelect', 'treeSelect', {
                 options: [{ label: 'Documents', children: ['Work', 'Home'] }],
-            }),
-            sceneComponent('cascadeSelect', 'cascadeSelect', {
-                options: [{ label: 'Europe', items: [{ label: 'Norway' }, { label: 'Sweden' }] }],
             }),
         ]),
         registry: primeReactComponents,

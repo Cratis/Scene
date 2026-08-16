@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import type { MenuItem } from 'primereact/menuitem';
+import { MenuItem } from './MenuItem';
 import { SceneElement } from '@cratis/scene.model';
 import { arrayProperty } from './properties';
 

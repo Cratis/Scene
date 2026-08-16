@@ -13,6 +13,11 @@ import { booleanProperty, optionsProperty, stringProperty } from '../properties'
  * choice is the group. The adapter therefore renders the whole group from `options`, sharing one
  * `name` so the browser enforces exclusivity, and falls back to a single button when only a `label` was
  * given.
+ *
+ * PrimeReact 11 splits each button into `Root` (the real radio input and its state), `Box` and
+ * `Indicator`, and reports selection as `onCheckedChange`. Only the transition *into* checked is acted
+ * on: the browser also fires the sibling losing its check, and treating that as a selection would clear
+ * the value a moment after the user set it.
  */
 export function PrimeRadioButton({ element }: RegisteredComponentProps) {
     const [value, setValue] = useState<string | undefined>(stringProperty(element, 'value'));
@@ -23,14 +28,19 @@ export function PrimeRadioButton({ element }: RegisteredComponentProps) {
         <div data-scene-id={element.id} className='flex flex-col gap-2'>
             {choices.map((choice) => (
                 <div key={choice.value} className='flex items-center gap-2'>
-                    <RadioButton
+                    <RadioButton.Root
                         inputId={`${element.id}-${choice.value}`}
                         name={element.id}
                         value={choice.value}
                         checked={value === choice.value}
-                        onChange={(event) => setValue(event.value)}
-                        disabled={disabled}
-                    />
+                        onCheckedChange={(event) => {
+                            if (event.checked) setValue(choice.value);
+                        }}
+                        disabled={disabled}>
+                        <RadioButton.Box>
+                            <RadioButton.Indicator />
+                        </RadioButton.Box>
+                    </RadioButton.Root>
                     <label htmlFor={`${element.id}-${choice.value}`}>{choice.label}</label>
                 </div>
             ))}

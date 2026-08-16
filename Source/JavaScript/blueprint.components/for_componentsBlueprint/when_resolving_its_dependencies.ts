@@ -21,10 +21,18 @@ const tailwind: ScenePackage = {
     themes: [],
 };
 
-/** The base component library both of this blueprint's dependencies are written against, at the version this repository pins. */
+/**
+ * The base component library both of this blueprint's dependencies are written against, at the version
+ * this repository pins.
+ *
+ * The version is load-bearing rather than incidental: `Cratis.Components` declares a required range on
+ * `PrimeReact`, and this fixture is what that range is resolved against. It moved to 11.1.0 with the
+ * PrimeReact 11 migration, and a stale 10.x here fails the selection as a version conflict - which is the
+ * spec doing its job, not a spec to be relaxed.
+ */
 const primeReact: ScenePackage = {
     name: 'PrimeReact',
-    version: '10.9.8',
+    version: '11.1.0',
     kind: PackageKind.ComponentLibrary,
     dependencies: [{ name: 'Tailwind' }],
     components: ['column', 'table', 'dialog'],

@@ -30,13 +30,14 @@ export function Sidebar({ element, slots }: RegisteredComponentProps) {
                 {isPinnable && (
                     <Button
                         type='button'
-                        text
+                        variant='text'
                         rounded
-                        icon={config.isSidebarAnchored ? 'pi pi-lock' : 'pi pi-lock-open'}
+                        iconOnly
                         aria-label={config.isSidebarAnchored ? 'Unpin the menu' : 'Pin the menu open'}
                         aria-pressed={config.isSidebarAnchored}
-                        onClick={toggleSidebarAnchor}
-                    />
+                        onClick={toggleSidebarAnchor}>
+                        <i className={config.isSidebarAnchored ? 'pi pi-lock' : 'pi pi-lock-open'} aria-hidden='true' />
+                    </Button>
                 )}
             </div>
             {slots.content}

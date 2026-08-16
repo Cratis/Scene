@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export * from './SelectOption';
+export * from './MenuItem';
+export * from './PrimeSeverity';
+export * from './TreeNode';
 export * from './properties';
 export * from './menuItems';
 export * from './treeNodes';
