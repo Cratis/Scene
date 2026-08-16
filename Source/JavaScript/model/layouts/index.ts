@@ -8,6 +8,7 @@ export * from './FlowArrangement';
 export * from './FlowOverride';
 export * from './FlowNode';
 export * from './FlowContainer';
+export * from './FlowContainerKind';
 export * from './FlowRow';
 export * from './FlowColumn';
 export * from './FlowGrid';

@@ -4,3 +4,31 @@
   href: layouts.md
 - name: Screen and dialog templates
   href: screen-templates.md
+
+- name: Getting started
+  items:
+      - name: Use the default blueprint
+        href: getting-started.md
+
+- name: Guides
+  items:
+      - name: Ship your own blueprint
+        href: ship-your-own-blueprint.md
+
+- name: Understand
+  items:
+      - name: Understanding blueprints
+        href: understanding-blueprints.md
+      - name: Composing screens from templates
+        href: composing-screens.md
+
+- name: Reference
+  items:
+      - name: Regions and slots
+        href: regions-and-slots.md
+      - name: Layout modes
+        href: layout-modes.md
+      - name: The template set
+        href: template-set.md
+      - name: Theme tokens
+        href: theme-tokens.md

@@ -92,11 +92,17 @@
         ],
         "FlowContainer": [
             "gap",
-            "children"
+            "children",
+            "kind"
         ],
-        "FlowRow": [],
-        "FlowColumn": [],
+        "FlowRow": [
+            "kind"
+        ],
+        "FlowColumn": [
+            "kind"
+        ],
         "FlowGrid": [
+            "kind",
             "columns",
             "rows"
         ],
@@ -265,6 +271,11 @@
             "Visible",
             "Hidden",
             "Collapsed"
+        ],
+        "FlowContainerKind": [
+            "Row",
+            "Column",
+            "Grid"
         ]
     }
 }

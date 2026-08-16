@@ -1,4 +1,7 @@
-# Layouts
+---
+title: Layouts
+description: An application's base navigational shell - its slots, how they are arranged, and how a layout differs from a screen template.
+---
 
 A layout is an application's base navigational look: the shell everything else renders inside.
 

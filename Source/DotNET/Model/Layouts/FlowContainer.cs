@@ -18,4 +18,13 @@ public abstract record FlowContainer : FlowNode
     /// Gets the container's children, in order.
     /// </summary>
     public IReadOnlyList<FlowNode> Children { get; init; } = [];
+
+    /// <summary>
+    /// Gets which way this container arranges its children.
+    /// </summary>
+    /// <remarks>
+    /// Fixed by the concrete type rather than settable, so it can never disagree with it. It exists because
+    /// the TypeScript mirror has no types to test at runtime - see <see cref="FlowContainerKind"/>.
+    /// </remarks>
+    public abstract FlowContainerKind Kind { get; }
 }

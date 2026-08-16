@@ -1,4 +1,7 @@
-# Screen and dialog templates
+---
+title: Screen and dialog templates
+description: The reusable shapes that go inside a layout - how fitsSlot composes them into a tree, and how a screen instantiates one.
+---
 
 A [layout](layouts.md) is the shell. A screen template is a reusable shape that goes *inside* it.
 
@@ -20,7 +23,7 @@ needs a shape of its own.
 
 A template states where it belongs. It is not told by whatever happens to host it:
 
-```
+```text
 AppShell (layout)
   slots: topbar, sidebar, content, footer
         │
