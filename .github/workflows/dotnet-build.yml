@@ -39,6 +39,7 @@ on:
 jobs:
   dotnet-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     outputs:
       spec-projects: ${{ steps.discover-specs.outputs.projects }}
 
@@ -88,6 +89,7 @@ jobs:
   specs:
     needs: [dotnet-build]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
