@@ -2,6 +2,16 @@
     "name": "@cratis/scene.react",
     "version": "1.0.0",
     "description": "The React renderer implementing Scene.Engine's Renderer contract against real React/DOM.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "renderer",
+        "event-modeling",
+        "cqrs",
+        "low-code"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {

@@ -2,6 +2,16 @@
     "name": "@cratis/scene.blueprint.default",
     "version": "1.0.0",
     "description": "The default blueprint: application shell layouts, the screen and dialog templates that go inside them, the components that fill their slots, and two themes.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "templates",
+        "blueprint",
+        "themes",
+        "low-code"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {

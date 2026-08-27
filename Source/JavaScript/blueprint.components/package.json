@@ -2,6 +2,16 @@
     "name": "@cratis/scene.blueprint.components",
     "version": "1.0.0",
     "description": "A blueprint of Arc-bound screen and dialog templates: full pages built from Cratis Components composites, so a data list, a command form or a master-detail screen is a template rather than something you assemble.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "templates",
+        "blueprint",
+        "cqrs",
+        "event-sourcing"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {
