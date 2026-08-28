@@ -2,6 +2,17 @@
     "name": "@cratis/scene.components",
     "version": "1.0.0",
     "description": "The Cratis Components package: exposes @cratis/components' Arc-bound data, form and dialog composites as Scene components. Built on PrimeReact and Tailwind, and declares both as dependencies.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "components",
+        "primereact",
+        "tailwind",
+        "cqrs",
+        "event-sourcing"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {

@@ -2,6 +2,16 @@
     "name": "@cratis/scene.engine",
     "version": "1.0.0",
     "description": "The Scene runtime: walks a Scene element tree and drives whichever renderer is plugged in. Does not know React, or any other rendering platform, exists.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "ui",
+        "runtime",
+        "renderer",
+        "event-modeling",
+        "cqrs",
+        "low-code"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {
