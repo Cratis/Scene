@@ -241,6 +241,37 @@
             "content",
             "displayName",
             "description"
+        ],
+        "GridLength": [
+            "value",
+            "unitType"
+        ],
+        "Canvas": [],
+        "StackPanel": [
+            "orientation",
+            "spacing"
+        ],
+        "DockPanel": [
+            "lastChildFill"
+        ],
+        "WrapPanel": [
+            "orientation",
+            "itemWidth",
+            "itemHeight"
+        ],
+        "RowDefinition": [
+            "height",
+            "minimumHeight",
+            "maximumHeight"
+        ],
+        "ColumnDefinition": [
+            "width",
+            "minimumWidth",
+            "maximumWidth"
+        ],
+        "Grid": [
+            "rows",
+            "columns"
         ]
     },
     "enums": {
@@ -278,6 +309,21 @@
             "Row",
             "Column",
             "Grid"
+        ],
+        "Orientation": [
+            "Horizontal",
+            "Vertical"
+        ],
+        "Dock": [
+            "Left",
+            "Top",
+            "Right",
+            "Bottom"
+        ],
+        "GridUnitType": [
+            "Auto",
+            "Absolute",
+            "Star"
         ]
     }
 }

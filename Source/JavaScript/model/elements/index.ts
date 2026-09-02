@@ -9,3 +9,4 @@ export * from './Panel';
 export * from './ItemsControl';
 export * from './ContentControl';
 export * from './ExternalComponent';
+export * from './panels';
