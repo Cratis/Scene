@@ -246,7 +246,6 @@
             "value",
             "unitType"
         ],
-        "Canvas": [],
         "StackPanel": [
             "orientation",
             "spacing"

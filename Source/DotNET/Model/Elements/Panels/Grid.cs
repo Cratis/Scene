@@ -3,6 +3,12 @@
 
 namespace Cratis.Scene.Model.Elements.Panels;
 
+// There is deliberately no Canvas panel here. Absolute placement is already the layout model's job -
+// FreeformArrangement carries an ElementPlacement (x, y, width, height) per element *per size class*,
+// which says strictly more than a canvas with attached Left/Top coordinates can. A Canvas panel would
+// also declare no properties of its own, and every element kind in this model is told apart by a
+// property no other kind has - so it could not be recognized at render time either.
+
 /// <summary>
 /// Lays its children out in rows and columns. A child states which cell it occupies through the
 /// <c>Grid.Row</c>, <c>Grid.Column</c>, <c>Grid.RowSpan</c> and <c>Grid.ColumnSpan</c> keys of its
