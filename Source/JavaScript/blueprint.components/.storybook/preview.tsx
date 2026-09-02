@@ -2,20 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import type { Preview } from '@storybook/react';
+import { PrimeReactProvider } from '@primereact/core';
 import { CratisComponentsProvider } from '@cratis/components/Common';
 
-// The stylesheet layers a page in this blueprint needs, in the order they resolve. PrimeReact 11 ships
-// zero CSS - `primereact/resources/themes/*` does not exist any more - and `@cratis/components` 3.0.0 took
-// its own CSS out of the JavaScript module graph, so every sheet below is an explicit import rather than
-// something a bundler injects behind an `import './Foo.css'`.
+// The stylesheet layers a page in this blueprint needs, in the order they resolve. Components 4 owns its
+// own CSS outright and keeps it out of the JavaScript module graph, so every sheet below is an explicit
+// import rather than something a bundler injects behind an `import './Foo.css'`.
 //
 // `tokens` defines the `--cratis-*` layer, `styles` is every component stylesheet plus the Tailwind
 // utilities that consume it, and `theme` is the Cratis-authored MIT baseline that assigns those tokens
-// actual values. That order matters: the last two both read the first. `theme` is what gives this preview
-// a look at all, because with no `@primeuix/themes` preset there are no `--p-*` values for the tokens to
-// resolve to - which also means the raw PrimeReact widgets the default blueprint's shell renders come out
-// structural rather than styled. That is the honest picture of an unstyled-first host, and this package
-// takes no dependency on a preset to paper over it.
+// actual values. That order matters: the last two both read the first.
 //
 // The Scene package's bridge puts Scene's `--scene-*` tokens in front of that, and the default blueprint's
 // `layout.css` draws the shell every one of these pages sits inside - which is the sheet this package does
@@ -31,24 +27,31 @@ import 'primeicons/primeicons.css';
 import '../../components/theme/sceneTokenBridge.css';
 import '../../blueprint.default/shell/layout.css';
 
+// The baseline theme is scoped to a `cratis-theme` ancestor rather than to `:root`, so something has to
+// carry the class, and overlays portal to the body rather than into the story's subtree.
+document.body.classList.add('cratis-theme');
+
 /**
- * Every story renders inside `CratisComponentsProvider`, the library's own configuration provider over
- * PrimeReact's. Without it the wrapped components fall back to PrimeReact's defaults rather than Cratis',
- * so a story would show something subtly different from what an application renders - which defeats the
- * point of having stories at all.
+ * Two providers, because these pages are two things at once.
  *
- * On PrimeReact 11 it is also load-bearing rather than merely advisable: every v11 component resolves its
- * configuration, theme and z-index registry through `PrimeReactProvider`, which this wraps, and throws
- * outright without one. These pages sit inside the default blueprint's shell, which reaches for PrimeReact
- * directly in five places, so removing this decorator would not degrade the stories - it would stop them
- * rendering.
+ * The page bodies are Components 4, which owns its own markup and configuration and no longer sits on
+ * PrimeReact at all - `CratisComponentsProvider` now carries only what the library itself owns.
+ *
+ * The shell they sit inside is the default blueprint's, and that reaches for PrimeReact directly in five
+ * places (`Topbar`, `Sidebar`, `Breadcrumb`, `UserMenu`, `ConfigPanel`). Every PrimeReact 11 component
+ * resolves its configuration, theme and z-index registry through `PrimeReactProvider` and throws without
+ * one. Until Components 3 that provider came for free, because `CratisComponentsProvider` wrapped it;
+ * under Components 4 it does not, so this preview supplies it explicitly. Dropping it would not degrade
+ * these stories - it would stop them rendering.
  */
 const preview: Preview = {
     decorators: [
         Story => (
-            <CratisComponentsProvider>
-                <Story />
-            </CratisComponentsProvider>
+            <PrimeReactProvider>
+                <CratisComponentsProvider value={{ locale: 'en-US' }}>
+                    <Story />
+                </CratisComponentsProvider>
+            </PrimeReactProvider>
         ),
     ],
     parameters: {

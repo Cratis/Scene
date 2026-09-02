@@ -22,7 +22,11 @@ export function SceneTooltip({ element, slots }: RegisteredComponentProps) {
             position={unionProperty(element.properties, 'position', positions)}
             disabled={booleanProperty(element.properties, 'disabled')}
         >
-            {slots.content}
+            {/* Components 4 takes a single focusable trigger, which it clones to attach its own
+                class and part attributes, and a Scene slot is a list. The span is that one element:
+                without it a slot holding anything other than exactly one node fails to type, and a
+                slot is authored content we cannot assume the shape of. */}
+            <span>{slots.content}</span>
         </Tooltip>
     );
 }
