@@ -8,3 +8,7 @@ export * from './HorizontalAlignment';
 export * from './VerticalAlignment';
 export * from './Visibility';
 export * from './BindingExpression';
+export * from './Orientation';
+export * from './Dock';
+export * from './GridUnitType';
+export * from './GridLength';
