@@ -2,6 +2,16 @@
     "name": "@cratis/scene.primereact",
     "version": "1.0.0",
     "description": "The PrimeReact component package: maps Scene's abstract component names onto real PrimeReact components, and PrimeReact's free themes onto Scene themes.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "primereact",
+        "components",
+        "themes",
+        "low-code"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {

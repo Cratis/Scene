@@ -6,11 +6,9 @@ import { CratisComponentsProvider } from '@cratis/components/Common';
 
 // The stylesheet stack a `@cratis/components` component needs, in the order the layers resolve.
 //
-// PrimeReact 11 ships no CSS whatsoever - `primereact/resources/` does not exist, so the compiled theme
-// this file used to import has nothing left to resolve to. A look is no longer a stylesheet at all: it is
-// either a `@primeuix/themes` preset handed to the provider, which `@primeuix/styled` turns into `--p-*`
-// custom properties at runtime, or a sheet that assigns the library's own `--cratis-*` tokens directly.
-// This preview takes the second path - see the decorator below for why.
+// Components 4 owns its own markup and styling outright - there is no PrimeReact underneath it any more,
+// and so no preset and no `--p-*` values behind the tokens. A look is one thing now: a sheet that assigns
+// the library's own `--cratis-*` tokens.
 //
 // `tokens` declares the `--cratis-*` layer every component stylesheet reads, `styles` is that component
 // CSS plus the compiled Tailwind utilities and the vendored Allotment sheet `DataPage`'s split view needs,
@@ -20,35 +18,33 @@ import { CratisComponentsProvider } from '@cratis/components/Common';
 import '@cratis/components/tokens';
 import '@cratis/components/styles';
 import '@cratis/components/theme';
+// Components 4 renders an `Icon` given a string as `<i className={icon} />` - a consumer-owned icon font,
+// whichever one the consumer happens to load. These stories demonstrate that with `pi pi-*`, so the
+// preview loads primeicons to make them visible. It is a Storybook devDependency for exactly this reason
+// and nothing in the package's own source reaches for it.
 import 'primeicons/primeicons.css';
 import '../theme/sceneTokenBridge.css';
 
 // The baseline theme is scoped to a `cratis-theme` ancestor rather than to `:root`, so something has to
-// carry the class. `<body>` rather than a wrapper inside each story, because PrimeReact 11 portals its
-// overlays - dialogs, select panels, the filter panel - straight to `document.body`; a wrapper would
-// leave every one of them outside the themed subtree and rendering unstyled.
+// carry the class. `<body>` rather than a wrapper inside each story, because overlays - dialogs, select
+// panels, the filter panel - are portaled to `document.body`; a wrapper would leave every one of them
+// outside the themed subtree and rendering unstyled.
 document.body.classList.add('cratis-theme');
 
 /**
- * Every story renders inside `CratisComponentsProvider`, the library's own configuration provider over
- * PrimeReact's. Without it the wrapped components fall back to PrimeReact's defaults rather than
- * Cratis', so a story would be showing something subtly different from what an application renders -
- * which defeats the point of having stories at all.
+ * Every story renders inside `CratisComponentsProvider`, so a story shows what an application shows.
  *
- * `unstyled` is the posture the imported `@cratis/components/theme` is written for: it is Cratis-authored
- * MIT CSS that assigns the `--cratis-*` tokens outright, so it needs neither a `@primeuix/themes` preset
- * nor the PrimeUI license key a styled preset is gated behind. Choosing it over a preset also keeps this
- * package's dependency surface honest - `@primeuix/themes` is not one of its dependencies, and a preview
- * is the wrong place to start relying on a package nobody declared.
- *
- * It is the right choice for these stories on its own terms too. The `--cratis-*` token layer is exactly
- * what `theme/sceneTokenBridge.css` overrides, so a Scene theme visibly takes over from the baseline in
- * the `Themed` story rather than from a preset's `--p-*` values one level further down the chain.
+ * Components 4 narrowed the provider to configuration the library itself owns - `locale` and `messages`.
+ * The renderer keys it used to carry (`license`, `theme`, `defaults`, `pt`, `ripple`, `unstyled`) existed
+ * to configure PrimeReact underneath, and there is no PrimeReact underneath any more. `unstyled` in
+ * particular is gone rather than defaulted: the imported `@cratis/components/theme` is the look now, and
+ * `theme/sceneTokenBridge.css` overrides its `--cratis-*` tokens directly, which is what lets the `Themed`
+ * story visibly take over from the baseline.
  */
 const preview: Preview = {
     decorators: [
         Story => (
-            <CratisComponentsProvider value={{ unstyled: true }}>
+            <CratisComponentsProvider value={{ locale: 'en-US' }}>
                 <Story />
             </CratisComponentsProvider>
         ),

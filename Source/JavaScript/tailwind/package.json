@@ -2,6 +2,15 @@
     "name": "@cratis/scene.tailwind",
     "version": "1.0.0",
     "description": "The Tailwind styling package: a Scene package declaring the utility CSS system component libraries are written against, plus the themes that ride on it.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "tailwind",
+        "themes",
+        "low-code"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {

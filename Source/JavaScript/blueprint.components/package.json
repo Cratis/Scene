@@ -2,6 +2,16 @@
     "name": "@cratis/scene.blueprint.components",
     "version": "1.0.0",
     "description": "A blueprint of Arc-bound screen and dialog templates: full pages built from Cratis Components composites, so a data list, a command form or a master-detail screen is a template rather than something you assemble.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "templates",
+        "blueprint",
+        "cqrs",
+        "event-sourcing"
+    ],
     "author": "Cratis",
     "license": "MIT",
     "repository": {
@@ -40,7 +50,7 @@
         "build-storybook": "storybook build"
     },
     "dependencies": {
-        "@cratis/components": "^3.0.0",
+        "@cratis/components": "^4.1.1",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
@@ -48,7 +58,7 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/components": "^3.0.0",
+        "@cratis/components": "^4.1.1",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
@@ -66,7 +76,7 @@
         "storybook": "^10.4.1"
     },
     "peerDependencies": {
-        "@cratis/components": "^3.0.0",
+        "@cratis/components": "^4.1.1",
         "@primereact/core": "^11.0.0",
         "@primereact/headless": "^11.0.0",
         "primeicons": "^8.0.0",
