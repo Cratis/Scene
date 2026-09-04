@@ -27,6 +27,8 @@ export const tailwindPackageManifest: ScenePackage = {
     displayName: 'Tailwind CSS',
     description: 'Utility-first CSS. The styling system Cratis Components and the default layouts are written against.',
     module: '@cratis/scene.tailwind',
+    license: 'MIT',
+    licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
 };
 
 /**

@@ -90,6 +90,8 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     displayName: 'Cratis Components',
     description: "Cratis' Arc-bound data, form and dialog composites, built on PrimeReact and Tailwind.",
     module: '@cratis/scene.components',
+    license: 'MIT',
+    licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
 };
 
 /**

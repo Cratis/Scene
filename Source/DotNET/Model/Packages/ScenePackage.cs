@@ -23,6 +23,16 @@ namespace Cratis.Scene.Model.Packages;
 /// The module that implements the package - an npm package name for a web renderer. Design-time tooling
 /// needs it to know what to import; the model itself never loads anything.
 /// </param>
+/// <param name="License">
+/// The license the package is available under, as a short human-readable name (<c>MIT</c>,
+/// <c>PrimeUI Community</c>). A package picker shows it, because "what am I taking on by selecting this"
+/// is a question an author needs answered before they select it, not after.
+/// </param>
+/// <param name="LicenseUrl">
+/// Where the license terms actually live, so a reader can go and check rather than take
+/// <paramref name="License"/> on trust. Required in practice for anything that is not a permissive
+/// standard license - a name alone tells an author nothing about eligibility or obligations.
+/// </param>
 public record ScenePackage(
     string Name,
     string Version,
@@ -35,4 +45,6 @@ public record ScenePackage(
     IReadOnlyList<string> Themes,
     string? DisplayName = null,
     string? Description = null,
-    string? Module = null);
+    string? Module = null,
+    string? License = null,
+    string? LicenseUrl = null);

@@ -71,6 +71,11 @@ export const primeReactPackageManifest: ScenePackage = {
     displayName: 'PrimeReact',
     description: 'PrimeReact 11 components and PrimeTek\'s @primeuix/themes presets, mapped onto Scene\'s abstract component names.',
     module: '@cratis/scene.primereact',
+    // PrimeReact 11 is PrimeTek's commercial PrimeUI, not MIT as version 10 was. The Community
+    // tier is free for eligible projects but still requires a key, so an author selecting this
+    // package needs to see the terms before they select it, not after a banner appears.
+    license: 'PrimeUI Community / Commercial',
+    licenseUrl: 'https://primeui.dev/licenses/community',
 };
 
 /**

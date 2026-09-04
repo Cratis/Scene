@@ -72,6 +72,20 @@ export interface ScenePackage {
      * tooling needs it to know what to import; the model itself never loads anything.
      */
     module?: string;
+
+    /**
+     * The license the package is available under, as a short human-readable name (`MIT`,
+     * `PrimeUI Community`). A package picker shows it, because "what am I taking on by selecting this"
+     * is a question an author needs answered before they select it, not after.
+     */
+    license?: string;
+
+    /**
+     * Where the license terms actually live, so a reader can go and check rather than take `license` on
+     * trust. Required in practice for anything that is not a permissive standard license — a name alone
+     * tells an author nothing about eligibility or obligations.
+     */
+    licenseUrl?: string;
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -87,4 +101,6 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'displayName',
     'description',
     'module',
+    'license',
+    'licenseUrl',
 ];

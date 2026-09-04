@@ -49,6 +49,8 @@ export const componentsBlueprintManifest: ScenePackage = {
     displayName: 'Cratis Components Blueprint',
     description: 'Arc-bound screen and dialog templates: whole pages built from the Cratis Components composites, for the default blueprint shell.',
     module: '@cratis/scene.blueprint.components',
+    license: 'MIT',
+    licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
 };
 
 /**

@@ -25,6 +25,8 @@ export const corePackageManifest: ScenePackage = {
     displayName: 'Core',
     description: 'The built-in fallback vocabulary every ui profile resolves against.',
     module: '@cratis/scene.react',
+    license: 'MIT',
+    licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
 };
 
 /**
