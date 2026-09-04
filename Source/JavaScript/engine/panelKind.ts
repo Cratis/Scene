@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DockPanel, Grid, Panel, StackPanel, WrapPanel } from '@cratis/scene.model';
+import { Canvas, DockPanel, Grid, Panel, StackPanel, WrapPanel } from '@cratis/scene.model';
 
 /**
  * Type guards telling the concrete panels apart, by the property each one alone declares - the same way
@@ -12,6 +12,10 @@ import { DockPanel, Grid, Panel, StackPanel, WrapPanel } from '@cratis/scene.mod
  * says nothing about how it arranges its children is a grouping, and a renderer is free to lay it out in
  * whatever way its platform considers neutral.
  */
+
+export function isCanvas(panel: Panel): panel is Canvas {
+    return 'extent' in panel;
+}
 
 export function isGrid(panel: Panel): panel is Grid {
     return 'rows' in panel && 'columns' in panel;

@@ -1,8 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DockPanel, Grid, HorizontalAlignment, Orientation, Panel, StackPanel, VerticalAlignment, Visibility, WrapPanel } from '@cratis/scene.model';
-import { isDockPanel, isGrid, isStackPanel, isWrapPanel } from '../index';
+import { Canvas, DockPanel, Grid, HorizontalAlignment, Orientation, Panel, StackPanel, VerticalAlignment, Visibility, WrapPanel } from '@cratis/scene.model';
+import { isCanvas, isDockPanel, isGrid, isStackPanel, isWrapPanel } from '../index';
 
 const base = {
     id: 'panel',
@@ -21,6 +21,7 @@ const base = {
     children: [],
 };
 
+const canvas: Canvas = { ...base, extent: { width: 1280, height: 800 } };
 const grid: Grid = { ...base, rows: [], columns: [] };
 const dock: DockPanel = { ...base, lastChildFill: true };
 const stack: StackPanel = { ...base, orientation: Orientation.Vertical, spacing: 0 };
@@ -28,6 +29,7 @@ const wrap: WrapPanel = { ...base, orientation: Orientation.Horizontal };
 const plain: Panel = { ...base };
 
 describe('when telling the panels apart', () => {
+    it('should recognize a canvas by its extent', () => isCanvas(canvas).should.be.true);
     it('should recognize a grid by its tracks', () => isGrid(grid).should.be.true);
     it('should recognize a dock panel by its fill flag', () => isDockPanel(dock).should.be.true);
     it('should recognize a stack panel by its spacing', () => isStackPanel(stack).should.be.true);
@@ -36,7 +38,10 @@ describe('when telling the panels apart', () => {
     it('should not mistake a stack panel for a wrap panel', () => isWrapPanel(stack).should.be.false);
     it('should not mistake a wrap panel for a stack panel', () => isStackPanel(wrap).should.be.false);
     it('should not mistake a grid for a dock panel', () => isDockPanel(grid).should.be.false);
+    it('should not mistake a canvas for a grouping panel', () => isCanvas(plain).should.be.false);
+    it('should leave a canvas unclaimed by the arranging guards', () =>
+        [isGrid(canvas), isDockPanel(canvas), isStackPanel(canvas), isWrapPanel(canvas)].should.have.members([false, false, false, false]));
 
     it('should leave a plain panel unclaimed by every guard', () =>
-        [isGrid(plain), isDockPanel(plain), isStackPanel(plain), isWrapPanel(plain)].should.have.members([false, false, false, false]));
+        [isCanvas(plain), isGrid(plain), isDockPanel(plain), isStackPanel(plain), isWrapPanel(plain)].should.have.members([false, false, false, false, false]));
 });
