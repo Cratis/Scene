@@ -23,8 +23,8 @@ namespace Cratis.Scene.Model.Profiles;
 /// </param>
 /// <param name="AuthorUrl">A link to the original creator or the theme's home, shown alongside <paramref name="Author"/>.</param>
 /// <param name="License">The license the theme is used under, so redistributing it stays honest.</param>
-/// <param name="LicenseUrl">Where those license terms live, so a reader can check them rather than take <paramref name="License"/> on trust.</param>
 /// <param name="Description">A one-line description for a theme picker.</param>
+/// <param name="LicenseUrl">Where those license terms live, so a reader can check them rather than take <paramref name="License"/> on trust.</param>
 public record Theme(
     string Name,
     IReadOnlyList<string> CompatibleWith,
