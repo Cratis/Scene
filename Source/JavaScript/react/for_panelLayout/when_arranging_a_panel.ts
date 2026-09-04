@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ColumnDefinition, Dock, DockPanel, Grid, GridUnitType, HorizontalAlignment, Orientation, RowDefinition, SceneElement, StackPanel, VerticalAlignment, Visibility, WrapPanel } from '@cratis/scene.model';
+import { Canvas, ColumnDefinition, Dock, DockPanel, Grid, GridUnitType, HorizontalAlignment, Orientation, RowDefinition, SceneElement, StackPanel, VerticalAlignment, Visibility, WrapPanel } from '@cratis/scene.model';
 import { childStyle, panelStyle } from '../renderer/panelLayout';
 
 const base = {
@@ -28,6 +28,29 @@ const row = (over: Partial<RowDefinition> = {}): RowDefinition => ({ height: sta
 const column = (over: Partial<ColumnDefinition> = {}): ColumnDefinition => ({ width: star(1), minimumWidth: 0, maximumWidth: Number.POSITIVE_INFINITY, ...over });
 
 describe('when arranging a panel', () => {
+    it('should make a canvas the coordinate space its children are placed against', () => {
+        const panel: Canvas = { ...base, extent: {} };
+        panelStyle(panel)!.position!.should.equal('relative');
+    });
+
+    it('should size a canvas to its extent', () => {
+        const panel: Canvas = { ...base, extent: { width: 1280, height: 800 } };
+        const style = panelStyle(panel)!;
+        [style.width, style.height].should.have.members([1280, 800]);
+    });
+
+    it('should place a canvas child at the edges it names', () => {
+        const panel: Canvas = { ...base, extent: {} };
+        const style = childStyle(panel, child({ 'Canvas.Left': 40, 'Canvas.Top': 24 }), 0)!;
+        style.position!.should.equal('absolute');
+        [style.left, style.top].should.have.members([40, 24]);
+    });
+
+    it('should leave a canvas child that names no edge in flow', () => {
+        const panel: Canvas = { ...base, extent: {} };
+        (childStyle(panel, child(), 0) === undefined).should.be.true;
+    });
+
     it('should lay a stack panel out along its orientation', () => {
         const panel: StackPanel = { ...base, orientation: Orientation.Horizontal, spacing: 8 };
         panelStyle(panel)!.flexDirection!.should.equal('row');

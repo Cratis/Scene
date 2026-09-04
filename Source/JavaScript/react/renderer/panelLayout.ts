@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import type { CSSProperties } from 'react';
-import { isDockPanel, isGrid, isStackPanel, isWrapPanel } from '@cratis/scene.engine';
+import { isCanvas, isDockPanel, isGrid, isStackPanel, isWrapPanel } from '@cratis/scene.engine';
 import { Dock, GridUnitType, Orientation } from '@cratis/scene.model';
 import type { ColumnDefinition, GridLength, Panel, RowDefinition, SceneElement } from '@cratis/scene.model';
 
@@ -39,6 +39,16 @@ const number = (value: unknown): number | undefined => (typeof value === 'number
 
 /** The CSS that arranges a panel's own children. */
 export function panelStyle(panel: Panel): CSSProperties | undefined {
+    if (isCanvas(panel)) {
+        // Absolutely placed children need a positioned ancestor to be placed against, and the canvas is
+        // that ancestor rather than whatever happens to be above it.
+        return {
+            position: 'relative',
+            width: panel.extent?.width ?? undefined,
+            height: panel.extent?.height ?? undefined,
+        };
+    }
+
     if (isGrid(panel)) {
         return {
             display: 'grid',
@@ -76,6 +86,17 @@ export function panelStyle(panel: Panel): CSSProperties | undefined {
 /** The CSS that places one child within its panel, or `undefined` when the panel places children implicitly. */
 export function childStyle(panel: Panel, child: SceneElement, index: number): CSSProperties | undefined {
     const properties = child.properties ?? {};
+
+    if (isCanvas(panel)) {
+        const left = number(properties['Canvas.Left']);
+        const top = number(properties['Canvas.Top']);
+        const right = number(properties['Canvas.Right']);
+        const bottom = number(properties['Canvas.Bottom']);
+        // A child that names no edge is not placed by the canvas at all, so it keeps whatever flow the
+        // renderer would otherwise have given it rather than being pinned to the origin.
+        if (left === undefined && top === undefined && right === undefined && bottom === undefined) return undefined;
+        return { position: 'absolute', left, top, right, bottom };
+    }
 
     if (isGrid(panel)) {
         const row = number(properties['Grid.Row']);
