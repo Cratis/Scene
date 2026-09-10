@@ -8,5 +8,11 @@ on:
 jobs:
   update:
     uses: Cratis/Workflows/.github/workflows/update-packages.yml@main
+    with:
+      # The project runs TypeScript 7 with typescript-eslint 8.x, which does not
+      # support TS 7 yet: the eslint toolchain runs on a typescript@6 alias
+      # (typescript-for-eslint). Hold the alias and the plugin family until
+      # typescript-eslint ships TS 7 support.
+      npm-package-exclusions: typescript,typescript-for-eslint,typescript-eslint,@typescript-eslint/eslint-plugin,@typescript-eslint/parser
     secrets:
       PAT_WORKFLOWS: ${{ secrets.PAT_WORKFLOWS }}
