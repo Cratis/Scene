@@ -6,15 +6,15 @@ namespace Cratis.Scene.Engine.Packages;
 /// <summary>
 /// Checks a <see cref="Model.Packages.PackageDependency.VersionRange"/> against a package's actual
 /// version. A deliberately small subset of semver - enough to express what a package declaration
-/// realistically needs, and small enough that the TypeScript twin in <c>@cratis/scene.engine</c> can
+/// realistically needs, and small enough that the TypeScript twin in <c language="csharp">@cratis/scene.engine</c> can
 /// match it exactly rather than approximately. Both sides are asserted against the same shared fixture
 /// corpus.
 /// </summary>
 /// <remarks>
-/// Supported: an empty range or <c>*</c> (anything), a bare or <c>=</c>-prefixed exact version,
-/// <c>^</c> (npm caret - compatible within the leftmost non-zero component), <c>~</c> (patch-level
-/// changes), and the comparisons <c>&gt;=</c>, <c>&gt;</c>, <c>&lt;=</c>, <c>&lt;</c>. Versions are read
-/// as <c>major.minor.patch</c> with any pre-release or build metadata suffix ignored - a package
+/// Supported: an empty range or <c language="csharp">*</c> (anything), a bare or <c language="csharp">=</c>-prefixed exact version,
+/// <c language="csharp">^</c> (npm caret - compatible within the leftmost non-zero component), <c language="csharp">~</c> (patch-level
+/// changes), and the comparisons <c language="csharp">&gt;=</c>, <c language="csharp">&gt;</c>, <c language="csharp">&lt;=</c>, <c language="csharp">&lt;</c>. Versions are read
+/// as <c language="csharp">major.minor.patch</c> with any pre-release or build metadata suffix ignored - a package
 /// declaring a pre-release version is compared on its numeric components alone. Anything the parser does
 /// not recognize is treated as unsatisfiable rather than as "anything", so a typo surfaces as a conflict
 /// instead of silently passing.
@@ -73,8 +73,8 @@ public static class PackageVersionRange
 
     /// <summary>
     /// Applies npm's caret rule: compatibility is bounded by the leftmost non-zero component, so
-    /// <c>^1.2.3</c> allows anything below <c>2.0.0</c>, <c>^0.2.3</c> anything below <c>0.3.0</c>, and
-    /// <c>^0.0.3</c> only <c>0.0.3</c> itself.
+    /// <c language="csharp">^1.2.3</c> allows anything below <c language="csharp">2.0.0</c>, <c language="csharp">^0.2.3</c> anything below <c language="csharp">0.3.0</c>, and
+    /// <c language="csharp">^0.0.3</c> only <c language="csharp">0.0.3</c> itself.
     /// </summary>
     /// <param name="version">The version the caret was written against.</param>
     /// <returns>The exclusive upper bound the caret allows.</returns>

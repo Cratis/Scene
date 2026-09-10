@@ -11,8 +11,8 @@ namespace Cratis.Scene.Model.Profiles;
 /// <param name="Name">The theme's name.</param>
 /// <param name="CompatibleWith">The component packages this theme is declared compatible with.</param>
 /// <param name="Tokens">
-/// The theme's design tokens, keyed by semantic name (<c>primary.color</c>, <c>surface.background</c>,
-/// <c>content.borderColor</c>, ...). Deliberately semantic rather than CSS: a renderer decides how a token
+/// The theme's design tokens, keyed by semantic name (<c language="csharp">primary.color</c>, <c language="csharp">surface.background</c>,
+/// <c language="csharp">content.borderColor</c>, ...). Deliberately semantic rather than CSS: a renderer decides how a token
 /// becomes a custom property, a native style, or anything else. Empty for a theme a package applies by
 /// its own means rather than through tokens.
 /// </param>

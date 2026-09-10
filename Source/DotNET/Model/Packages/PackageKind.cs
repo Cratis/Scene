@@ -12,7 +12,7 @@ public enum PackageKind
 {
     /// <summary>
     /// Declares component names a screen can resolve against. A package with no dependency on another
-    /// <see cref="ComponentLibrary"/> is a base library (PrimeReact, <c>core</c>); one that depends on
+    /// <see cref="ComponentLibrary"/> is a base library (PrimeReact, <c language="csharp">core</c>); one that depends on
     /// another layers on top of it.
     /// </summary>
     ComponentLibrary = 0,

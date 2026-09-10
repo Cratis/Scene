@@ -19,7 +19,7 @@ public static class StarterProfileBuilder
     /// Builds the sandboxed <see cref="UiProfile"/> for a <see cref="UiStarter"/>'s gallery.
     /// </summary>
     /// <param name="starter">The <see cref="UiStarter"/> to build the profile for.</param>
-    /// <param name="targetPlatform">The platform the gallery runs on (e.g. <c>web</c>).</param>
+    /// <param name="targetPlatform">The platform the gallery runs on (e.g. <c language="csharp">web</c>).</param>
     /// <param name="defaultSizeClass">The size class assumed when the renderer cannot otherwise determine one.</param>
     /// <returns>A <see cref="UiProfile"/> named after the starter, scoped to exactly its own <see cref="UiStarter.Packages"/>.</returns>
     public static UiProfile BuildProfile(UiStarter starter, string targetPlatform, SizeClass? defaultSizeClass = null) =>

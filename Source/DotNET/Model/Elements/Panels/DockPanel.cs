@@ -4,7 +4,7 @@
 namespace Cratis.Scene.Model.Elements.Panels;
 
 /// <summary>
-/// Lays its children out against its edges, each child stating which edge through the <c>Dock</c> key
+/// Lays its children out against its edges, each child stating which edge through the <c language="csharp">Dock</c> key
 /// of its <see cref="SceneElement.Properties"/>.
 /// </summary>
 public record DockPanel : Panel

@@ -9,11 +9,11 @@ namespace Cratis.Scene.Model.Profiles;
 /// A named target: a platform, a default size class, an ordered list of component packages, and the
 /// application shell and visual theme it selects. Declaration order in <see cref="Packages"/> is override
 /// priority - a later package shadows an earlier one when both resolve the same bare component name.
-/// <c>core</c> is always the final fallback, so a minimum vocabulary resolves regardless of which packages
+/// <c language="csharp">core</c> is always the final fallback, so a minimum vocabulary resolves regardless of which packages
 /// a profile lists.
 /// </summary>
 /// <param name="Name">The profile's name.</param>
-/// <param name="TargetPlatform">The platform this profile targets (e.g. <c>web</c>, <c>ios</c>, <c>android</c>, <c>desktop</c>).</param>
+/// <param name="TargetPlatform">The platform this profile targets (e.g. <c language="csharp">web</c>, <c language="csharp">ios</c>, <c language="csharp">android</c>, <c language="csharp">desktop</c>).</param>
 /// <param name="Packages">The component packages this profile draws from, in override-priority order.</param>
 /// <param name="DefaultSizeClass">The size class assumed when the renderer cannot otherwise determine one.</param>
 /// <param name="Layout">

@@ -7,7 +7,7 @@ using Cratis.Scene.Model.Packages;
 namespace Cratis.Scene.Engine.for_PackageDependencyResolver;
 
 /// <summary>
-/// Reads the catalog out of <c>package-dependency-fixtures.json</c> - the same file the TypeScript specs
+/// Reads the catalog out of <c language="csharp">package-dependency-fixtures.json</c> - the same file the TypeScript specs
 /// read, so both languages resolve against an identical set of packages rather than two hand-written
 /// ones that can quietly diverge.
 /// </summary>

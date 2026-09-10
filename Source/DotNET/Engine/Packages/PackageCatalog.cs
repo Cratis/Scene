@@ -29,7 +29,7 @@ public static class PackageCatalog
     /// <returns>Every base <see cref="PackageKind.ComponentLibrary"/>, in catalog order.</returns>
     /// <remarks>
     /// "Base" is not a declared property; it falls out of the dependency graph. PrimeReact depends on a
-    /// styling package but on no other component library, so it is a base. <c>@cratis/components</c>
+    /// styling package but on no other component library, so it is a base. <c language="csharp">@cratis/components</c>
     /// depends on PrimeReact, so it is not - it is something you add on top of a base you already picked.
     /// Deriving it this way means a third party shipping their own library gets classified correctly
     /// without having to declare anything extra.
@@ -50,7 +50,7 @@ public static class PackageCatalog
     /// <returns>Every not-yet-selected package whose dependencies the selection already satisfies, in catalog order.</returns>
     /// <remarks>
     /// This is the "what else works with what I have picked" list: choose PrimeReact and Tailwind, and
-    /// <c>@cratis/components</c> becomes available because both of its dependencies are now met. It is
+    /// <c language="csharp">@cratis/components</c> becomes available because both of its dependencies are now met. It is
     /// deliberately stricter than <see cref="PackageDependencyResolver"/>, which will happily add the
     /// missing dependencies for you - a picker wants to show what fits, not what would drag more in.
     /// </remarks>

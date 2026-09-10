@@ -18,7 +18,7 @@ namespace Cratis.Scene.Engine.Screens;
 /// </para>
 /// <para>
 /// The same rule applies at every level, so nesting has no depth limit and no separate mechanism per level.
-/// The TypeScript twin in <c>@cratis/scene.engine</c> implements the same algorithm; both are asserted
+/// The TypeScript twin in <c language="csharp">@cratis/scene.engine</c> implements the same algorithm; both are asserted
 /// against the same shared fixture corpus so they cannot drift apart.
 /// </para>
 /// </remarks>
@@ -84,12 +84,12 @@ public static class ScreenTemplateResolver
     /// <summary>
     /// Splits a <see cref="ScreenTemplate.FitsSlot"/> into the container it names and the slot within it.
     /// </summary>
-    /// <param name="fitsSlot">The declared value - bare (<c>body</c>) or container-qualified (<c>ModuleWorkspace.body</c>).</param>
+    /// <param name="fitsSlot">The declared value - bare (<c language="csharp">body</c>) or container-qualified (<c language="csharp">ModuleWorkspace.body</c>).</param>
     /// <returns>The qualifier, or <see langword="null"/> when the value is bare, and the slot name.</returns>
     /// <remarks>
     /// The same rule component names use: a bare name searches, a qualified one goes straight to what it
-    /// names. A slot called <c>body</c> is a good name at every level of a nesting chain, so several
-    /// templates legitimately declare one - and a bare <c>body</c> then has no single answer. Qualifying it
+    /// names. A slot called <c language="csharp">body</c> is a good name at every level of a nesting chain, so several
+    /// templates legitimately declare one - and a bare <c language="csharp">body</c> then has no single answer. Qualifying it
     /// says which, without forcing every slot in an application to carry a unique name.
     /// </remarks>
     static (string? Qualifier, string Slot) SplitQualifiedSlot(string fitsSlot)

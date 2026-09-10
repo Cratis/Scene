@@ -6,11 +6,11 @@ using Cratis.Scene.Model.Common;
 namespace Cratis.Scene.Model.ContributionPoints;
 
 /// <summary>
-/// A contribution to the built-in <c>Navigation</c> contribution point. How <c>navigate to &lt;Screen&gt;</c>
+/// A contribution to the built-in <c language="csharp">Navigation</c> contribution point. How <c language="csharp">navigate to &lt;Screen&gt;</c>
 /// becomes a concrete route (URL path, query string, or native deep link) is owned by the renderer's NavBar
 /// widget, not this record — this only carries the declared shape.
 /// </summary>
-/// <param name="Label">The item's label — plain text, or the literal <c>$strings.&lt;key&gt;</c> reference.</param>
+/// <param name="Label">The item's label — plain text, or the literal <c language="csharp">$strings.&lt;key&gt;</c> reference.</param>
 /// <param name="TargetScreen">The resolved name of the screen this navigates to.</param>
 /// <param name="RouteParameterBindings">Route parameter values, keyed by parameter name.</param>
 /// <param name="Order">Where this item sorts relative to its siblings.</param>

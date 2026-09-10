@@ -7,7 +7,7 @@ namespace Cratis.Scene.Model.ContributionPoints;
 
 /// <summary>
 /// One piece of content contributed to a <see cref="ContributionPoint"/>. Resolution to a specific
-/// contribution point (nearest enclosing, or an explicit <c>... in &lt;ContributionPoint&gt;</c> override)
+/// contribution point (nearest enclosing, or an explicit <c language="csharp">... in &lt;ContributionPoint&gt;</c> override)
 /// happens before this model is built — this record already carries the resolved target.
 /// </summary>
 /// <param name="ContributionPointName">The resolved name of the contribution point this targets.</param>

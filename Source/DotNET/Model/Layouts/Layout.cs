@@ -5,7 +5,7 @@ namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
 /// An application's base navigational look - the shell its screens render inside. Mirrors Screenplay's
-/// <c>layout</c> construct: a bare layout with plain slots is a special case of a layout whose slots all
+/// <c language="csharp">layout</c> construct: a bare layout with plain slots is a special case of a layout whose slots all
 /// use the default arrangement.
 /// </summary>
 /// <remarks>

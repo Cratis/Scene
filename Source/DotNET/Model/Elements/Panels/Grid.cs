@@ -11,7 +11,7 @@ namespace Cratis.Scene.Model.Elements.Panels;
 
 /// <summary>
 /// Lays its children out in rows and columns. A child states which cell it occupies through the
-/// <c>Grid.Row</c>, <c>Grid.Column</c>, <c>Grid.RowSpan</c> and <c>Grid.ColumnSpan</c> keys of its
+/// <c language="csharp">Grid.Row</c>, <c language="csharp">Grid.Column</c>, <c language="csharp">Grid.RowSpan</c> and <c language="csharp">Grid.ColumnSpan</c> keys of its
 /// <see cref="SceneElement.Properties"/>.
 /// </summary>
 public record Grid : Panel

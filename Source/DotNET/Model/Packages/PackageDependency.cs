@@ -5,7 +5,7 @@ namespace Cratis.Scene.Model.Packages;
 
 /// <summary>
 /// One package a <see cref="ScenePackage"/> needs present in the same <see cref="Profiles.UiProfile"/> to
-/// work. <c>@cratis/components</c> is written against PrimeReact and Tailwind, so it declares both - a
+/// work. <c language="csharp">@cratis/components</c> is written against PrimeReact and Tailwind, so it declares both - a
 /// profile listing it without them is stating something that cannot render, and that has to be visible
 /// rather than discovered at runtime.
 /// </summary>

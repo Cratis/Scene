@@ -6,8 +6,8 @@ namespace Cratis.Scene.Model.Starters;
 /// <summary>
 /// A packaged, versioned UI starting point: a package list, the themes it ships compatible with, and a
 /// gallery of ordinary screens shipped alongside it - part of Cratis/Scene#6. A starter is data, not a
-/// <c>.play</c> language construct; Studio's "new project" flow scaffolds from it, and its gallery boots
-/// through the real <c>Scene.Engine</c> + <c>Scene.React</c> inside a sandboxed <see cref="Profiles.UiProfile"/>
+/// <c language="csharp">.play</c> language construct; Studio's "new project" flow scaffolds from it, and its gallery boots
+/// through the real <c language="csharp">Scene.Engine</c> + <c language="csharp">Scene.React</c> inside a sandboxed <see cref="Profiles.UiProfile"/>
 /// built from <see cref="Packages"/> - there is no separate preview pipeline and no mocked screens.
 /// </summary>
 /// <param name="Name">The starter's name.</param>

@@ -8,10 +8,10 @@ namespace Cratis.Scene.Engine.Profiles;
 /// <summary>
 /// Checks a <see cref="Theme"/>'s <see cref="Theme.CompatibleWith"/> declaration against a
 /// <see cref="UiProfile"/>'s package list - part of Cratis/Scene#5. The same rule Screenplay's compiler
-/// already applies to warn on an incompatible <c>ui profile</c>/<c>theme</c> pairing, reused here so
-/// Stage (build time) and Studio (design time) don't each reimplement it - and so <c>Scene.React</c> knows
+/// already applies to warn on an incompatible <c language="csharp">ui profile</c>/<c language="csharp">theme</c> pairing, reused here so
+/// Stage (build time) and Studio (design time) don't each reimplement it - and so <c language="csharp">Scene.React</c> knows
 /// which packages to actually apply a theme's tokens to. There is deliberately no implicit exemption for
-/// <c>core</c>: a theme wanting broad applicability declares <c>compatible with core</c> itself, exactly
+/// <c language="csharp">core</c>: a theme wanting broad applicability declares <c language="csharp">compatible with core</c> itself, exactly
 /// like the profile/package resolver has no implicit special case for it either.
 /// </summary>
 public static class ThemeCompatibility

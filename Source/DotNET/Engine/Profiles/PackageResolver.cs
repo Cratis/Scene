@@ -8,7 +8,7 @@ namespace Cratis.Scene.Engine.Profiles;
 /// <summary>
 /// Resolves a bare or package-qualified component name against a <see cref="UiProfile"/>'s package list -
 /// the design-time half of Cratis/Scene#3, run by Studio's tooling. Stage's build-time resolution and
-/// Scene.React's runtime resolution use the TypeScript twin of this algorithm in <c>@cratis/scene.engine</c>;
+/// Scene.React's runtime resolution use the TypeScript twin of this algorithm in <c language="csharp">@cratis/scene.engine</c>;
 /// both sides are asserted against the same shared fixture corpus so they cannot drift apart.
 /// </summary>
 public static class PackageResolver
@@ -36,15 +36,15 @@ public static class PackageResolver
     /// <summary>
     /// Resolves a component name against a <see cref="UiProfile"/>.
     /// </summary>
-    /// <param name="requestedName">The name as written on a screen - bare (<c>button</c>) or package-qualified (<c>Internal.Widgets.TrendChart</c>).</param>
+    /// <param name="requestedName">The name as written on a screen - bare (<c language="csharp">button</c>) or package-qualified (<c language="csharp">Internal.Widgets.TrendChart</c>).</param>
     /// <param name="profile">The <see cref="UiProfile"/> whose package list to resolve against.</param>
     /// <param name="catalog">Every active package's declared component names, keyed by package name.</param>
     /// <returns>The <see cref="ComponentResolution"/>, or <see langword="null"/> when nothing in scope declares the name.</returns>
     /// <remarks>
-    /// A name containing a <c>.</c> is package-qualified - everything before the last <c>.</c> is the package,
+    /// A name containing a <c language="csharp">.</c> is package-qualified - everything before the last <c language="csharp">.</c> is the package,
     /// everything after is the bare name - and resolves directly against that one package, bypassing shadow
     /// tracking and the profile's priority order entirely (an author naming the package explicitly has
-    /// already disambiguated). A name with no <c>.</c> is bare and resolves by walking
+    /// already disambiguated). A name with no <c language="csharp">.</c> is bare and resolves by walking
     /// <see cref="EffectivePackages"/> from highest to lowest priority; every other active package that also
     /// declares the name is recorded in <see cref="ComponentResolution.Shadows"/>, not discarded, so a caller
     /// can explain the pick rather than only report it.

@@ -24,8 +24,8 @@ namespace Cratis.Scene.Model.Packages;
 /// needs it to know what to import; the model itself never loads anything.
 /// </param>
 /// <param name="License">
-/// The license the package is available under, as a short human-readable name (<c>MIT</c>,
-/// <c>PrimeUI Community</c>). A package picker shows it, because "what am I taking on by selecting this"
+/// The license the package is available under, as a short human-readable name (<c language="csharp">MIT</c>,
+/// <c language="csharp">PrimeUI Community</c>). A package picker shows it, because "what am I taking on by selecting this"
 /// is a question an author needs answered before they select it, not after.
 /// </param>
 /// <param name="LicenseUrl">

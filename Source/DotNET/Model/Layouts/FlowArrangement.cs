@@ -4,10 +4,10 @@
 namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
-/// Arranges a slot's content by reflowing it with the neutral <c>flow</c> primitives (<see cref="FlowRow"/>,
+/// Arranges a slot's content by reflowing it with the neutral <c language="csharp">flow</c> primitives (<see cref="FlowRow"/>,
 /// <see cref="FlowColumn"/>, <see cref="FlowGrid"/>, <see cref="FlowLeaf"/>), recomputed against the
 /// current size class rather than fixed per breakpoint. Deliberately not CSS-flavored — a renderer maps these
-/// primitives to whatever native layout mechanism it has (flexbox/grid in <c>Scene.React</c>, something else
+/// primitives to whatever native layout mechanism it has (flexbox/grid in <c language="csharp">Scene.React</c>, something else
 /// in a future native renderer).
 /// </summary>
 /// <param name="Root">The root of the flow tree.</param>

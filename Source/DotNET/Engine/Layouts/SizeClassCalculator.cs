@@ -7,7 +7,7 @@ namespace Cratis.Scene.Engine.Layouts;
 
 /// <summary>
 /// Computes the current <see cref="SizeClass"/> from actual available dimensions - shared by every
-/// renderer (<c>Scene.React</c>, any future native renderer, Studio's preview surface) so they all agree
+/// renderer (<c language="csharp">Scene.React</c>, any future native renderer, Studio's preview surface) so they all agree
 /// on when a class boundary is crossed. Reactive (recompute on resize) vs. fixed-per-launch (mobile,
 /// where orientation change is the only runtime variable) are both just "call this again when the
 /// dimensions you have available change" - the API shape is the same either way, only the caller's

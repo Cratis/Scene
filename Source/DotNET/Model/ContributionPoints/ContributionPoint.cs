@@ -4,8 +4,8 @@
 namespace Cratis.Scene.Model.ContributionPoints;
 
 /// <summary>
-/// A named point in the element tree that a widget declares (<c>contributes &lt;Name&gt;</c>) and that other
-/// templates contribute content to (<c>contribute to &lt;Name&gt;</c>). Aggregation is a computed view over
+/// A named point in the element tree that a widget declares (<c language="csharp">contributes &lt;Name&gt;</c>) and that other
+/// templates contribute content to (<c language="csharp">contribute to &lt;Name&gt;</c>). Aggregation is a computed view over
 /// whatever is currently contributed from the tree beneath it — a widget bound to a contribution point is
 /// never wired to a fixed source.
 /// </summary>
