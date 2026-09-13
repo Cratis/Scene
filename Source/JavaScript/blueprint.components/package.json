@@ -50,7 +50,7 @@
         "build-storybook": "storybook build"
     },
     "dependencies": {
-        "@cratis/components": "^4.2.2",
+        "@cratis/components": "^4.2.3",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
@@ -58,7 +58,7 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/components": "^4.2.2",
+        "@cratis/components": "^4.2.3",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
