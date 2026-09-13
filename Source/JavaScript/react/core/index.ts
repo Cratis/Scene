@@ -4,5 +4,6 @@
 export * from './CoreText';
 export * from './CoreButton';
 export * from './CoreCard';
+export * from './ScreenplayCoreComponents';
 export * from './coreComponents';
 export * from './corePackage';
