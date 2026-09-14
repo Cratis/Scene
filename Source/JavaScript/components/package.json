@@ -58,7 +58,7 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/components": "^4.2.3",
+        "@cratis/components": "^4.4.0",
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
         "@cratis/scene.react": "1.0.0",
