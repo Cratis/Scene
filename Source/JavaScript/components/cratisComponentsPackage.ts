@@ -88,7 +88,7 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     themes: [],
 
     displayName: 'Cratis Components',
-    description: "Cratis' Arc-bound data, form and dialog composites, built on PrimeReact and Tailwind.",
+    description: "Cratis' Arc-bound data, form and dialog composites, built on PrimeReact and Tailwind. dataTable and table accept optional object-valued queryArguments for collection queries.",
     module: '@cratis/scene.components',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
