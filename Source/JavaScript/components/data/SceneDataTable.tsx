@@ -4,7 +4,8 @@
 import { lazy } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
-import { stringArrayProperty, stringProperty } from '../properties';
+import { objectProperty, stringArrayProperty, stringProperty } from '../properties';
+import { Placeholder } from '../bindings/Placeholder';
 
 const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/components/DataTables')).DataTableForQuery }));
 
@@ -19,6 +20,9 @@ const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/co
  * back into it, where PrimeReact's `DataTable` is handed rows and knows nothing about where they came from.
  *
  * The `query` property names an Arc query proxy; the columns come from the `content` slot.
+ * Optional `queryArguments` is an explicit object forwarded unchanged to that proxy. Invalid values
+ * render a placeholder rather than accidentally executing a query without its arguments. This remains
+ * a collection table; forwarding arguments does not make optional single-result queries compatible.
  *
  * There is deliberately no `clientFiltering` property. `@cratis/components` 3.0.0 still accepts the prop
  * so existing call sites compile, but it no longer does anything - filtering is always applied to the
@@ -30,10 +34,16 @@ export function SceneDataTable({ element, slots }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Query);
     if (!target) return <MissingBinding element={element} kind={BindingKind.Query} name={name} />;
 
+    const queryArguments = objectProperty(element.properties, 'queryArguments');
+    if (element.properties.queryArguments !== undefined && queryArguments === undefined) {
+        return <Placeholder element={element} problem='Invalid queryArguments: expected an object' />;
+    }
+
     return (
         <ArcRuntimeBoundary>
             <DataTableForQuery
                 query={target}
+                {...(queryArguments === undefined ? {} : { queryArguments })}
                 emptyMessage={stringProperty(element.properties, 'emptyMessage') ?? ''}
                 dataKey={stringProperty(element.properties, 'dataKey')}
                 globalFilterFields={stringArrayProperty(element.properties, 'globalFilterFields')}
