@@ -3,7 +3,7 @@
 
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { SceneDataPage, SceneFormElement, ScenePage } from './pages';
-import { SceneDataTable, SceneObservableDataTable } from './data';
+import { SceneDataTable, SceneObservableDataTable, SceneSingleResult } from './data';
 import {
     SceneCalendarField,
     SceneCheckboxField,
@@ -49,6 +49,7 @@ export const cratisComponents: ComponentRegistry = {
     [componentRegistryKey(cratisComponentsPackageName, 'dataPage')]: SceneDataPage,
     [componentRegistryKey(cratisComponentsPackageName, 'formElement')]: SceneFormElement,
 
+    [componentRegistryKey(cratisComponentsPackageName, 'singleResult')]: SceneSingleResult,
     [componentRegistryKey(cratisComponentsPackageName, 'dataTable')]: SceneDataTable,
     [componentRegistryKey(cratisComponentsPackageName, 'table')]: SceneDataTable,
     [componentRegistryKey(cratisComponentsPackageName, 'observableDataTable')]: SceneObservableDataTable,
