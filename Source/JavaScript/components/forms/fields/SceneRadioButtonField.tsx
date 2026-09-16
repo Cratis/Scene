@@ -20,13 +20,16 @@ const RadioButtonField = lazy(async () => ({ default: (await import('@cratis/com
  * numeric code is common enough that forcing it through as `'1'` would bind the wrong value.
  */
 export function SceneRadioButtonField({ element }: RegisteredComponentProps) {
+    // Use the same reader as CommandFormField's binding gate; that gate owns missing-property feedback.
+    const name = stringProperty(element.properties, 'property');
     const buttonValue = stringProperty(element.properties, 'buttonValue') ?? numberProperty(element.properties, 'buttonValue') ?? '';
 
     return (
         <CommandFormField element={element}>
-            {binding => (
+            {binding => name !== undefined && (
                 <RadioButtonField
                     {...binding}
+                    name={name}
                     buttonValue={buttonValue}
                     label={stringProperty(element.properties, 'label')}
                     className={stringProperty(element.properties, 'className')}

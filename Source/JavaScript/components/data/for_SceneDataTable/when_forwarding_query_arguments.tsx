@@ -5,8 +5,8 @@ import { act, cleanup, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { externalComponent } from '../../given';
 
-class InvoicesForProject {}
-class AnotherQuery {}
+let InvoicesForProject: typeof import('../../bindings/for_requireArcProxy/NativeProxies').Snapshot;
+let AnotherQuery: typeof InvoicesForProject;
 
 // Load a fresh adapter so its lazy component cannot leak the peer double into other specs.
 describe('when forwarding query arguments', () => {
@@ -24,6 +24,8 @@ describe('when forwarding query arguments', () => {
                 return <div data-testid='query-table' />;
             },
         }));
+        ({ Snapshot: InvoicesForProject } = await import('../../bindings/for_requireArcProxy/NativeProxies'));
+        AnotherQuery = InvoicesForProject;
         bindings = await import('../../bindings');
         bindings.clearBindings();
         bindings.registerQuery('InvoicesForProject', InvoicesForProject);

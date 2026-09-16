@@ -7,7 +7,7 @@ import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding 
 import { booleanProperty, stringProperty, unionProperty } from '../properties';
 
 const StepperCommandDialog = lazy(async () => ({
-    default: (await import('@cratis/components/CommandDialog')).StepperCommandDialog,
+    default: (await import('../bindings/ArcBoundComponents')).BoundStepperCommandDialog,
 }));
 
 /** Whether the step headers run across the top or down the side. */
