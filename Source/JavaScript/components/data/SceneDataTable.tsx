@@ -7,7 +7,7 @@ import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding 
 import { objectProperty, stringArrayProperty, stringProperty } from '../properties';
 import { Placeholder } from '../bindings/Placeholder';
 
-const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/components/DataTables')).DataTableForQuery }));
+const DataTableForQuery = lazy(async () => ({ default: (await import('../bindings/ArcBoundComponents')).BoundDataTable }));
 
 /**
  * The `Cratis.Components:dataTable` component, also registered as `table` - `DataTableForQuery` from

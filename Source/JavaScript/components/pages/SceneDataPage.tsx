@@ -6,7 +6,7 @@ import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import { stringArrayProperty, stringProperty } from '../properties';
 
-const DataPage = lazy(async () => ({ default: (await import('@cratis/components/DataPage')).DataPage }));
+const DataPage = lazy(async () => ({ default: (await import('../bindings/ArcBoundComponents')).BoundDataPage }));
 
 /**
  * The `Cratis.Components:dataPage` component - `DataPage` from `@cratis/components/DataPage`.

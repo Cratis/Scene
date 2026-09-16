@@ -7,7 +7,7 @@ import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding 
 import { stringArrayProperty, stringProperty } from '../properties';
 
 const DataTableForObservableQuery = lazy(async () => ({
-    default: (await import('@cratis/components/DataTables')).DataTableForObservableQuery,
+    default: (await import('../bindings/ArcBoundComponents')).BoundObservableDataTable,
 }));
 
 /**

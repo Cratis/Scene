@@ -36,6 +36,7 @@ export const cratisComponentsPackageManifest: ScenePackage = {
         'page',
         'dataPage',
         'formElement',
+        'singleResult',
         'dataTable',
         'table',
         'observableDataTable',
@@ -88,7 +89,7 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     themes: [],
 
     displayName: 'Cratis Components',
-    description: "Cratis' Arc-bound data, form and dialog composites, built on PrimeReact and Tailwind. dataTable and table accept optional object-valued queryArguments for collection queries.",
+    description: "Cratis' Arc-bound data, form and dialog composites, built on PrimeReact and Tailwind. dataTable and table accept optional object-valued queryArguments for collection queries. singleResult displays one read-only scalar own resultField of an optional model using an explicit query, object queryArguments and enabled: true.",
     module: '@cratis/scene.components',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',

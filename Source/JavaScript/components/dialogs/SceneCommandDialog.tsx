@@ -6,7 +6,7 @@ import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import { booleanProperty, stringProperty } from '../properties';
 
-const CommandDialog = lazy(async () => ({ default: (await import('@cratis/components/CommandDialog')).CommandDialog }));
+const CommandDialog = lazy(async () => ({ default: (await import('../bindings/ArcBoundComponents')).BoundCommandDialog }));
 
 /**
  * The `Cratis.Components:commandDialog` component - `CommandDialog` from `@cratis/components/CommandDialog`.

@@ -72,7 +72,8 @@ unbound table costs one dashed box, not the whole screen.
 ### Arc is loaded lazily
 
 `@cratis/arc`, `@cratis/arc.react` and `@cratis/fundamentals` are peer dependencies of `@cratis/components`
-that the *host* supplies. They are not installed in this repository, and a design surface is not a host.
+that the *host* supplies. This package also declares Arc and Arc React as optional peers and pins
+22.16.1 as development dependencies for native integration tests. A design surface is not a host.
 
 Every adapter that reaches them does so through a dynamic `import()` inside `React.lazy`, wrapped in
 `ArcRuntimeBoundary` (`Suspense` + the library's own `ErrorBoundary`). A screen built only from the library's
@@ -86,6 +87,54 @@ This splits the library cleanly, and the split is the library's own:
 
 The Storybook build externalizes the Arc packages (`.storybook/main.ts`) so the lazy chunk can be emitted
 with its imports left bare. No story loads that chunk, because no story registers a binding.
+
+## Optional single-result view (read-only)
+
+`Cratis.Components:singleResult` is a narrow adapter for an optional **single model**, not a collection.
+For example, a host registers its generated `ProjectName` proxy and supplies these ExternalComponent
+properties (the identifier comes from the host's committed input, never a guessed project):
+
+```typescript
+registerQuery('ProjectName', ProjectName);
+const properties = {
+    query: 'ProjectName',
+    queryArguments: Object.freeze({ projectId: committedProjectId }),
+    enabled: true,
+    resultField: 'name',
+};
+```
+
+Use the actual own-field name of the generated model. `resultField` selects exactly one own data field:
+no dotted-path traversal, getters, inherited members, expressions, JSON display or result-binding DSL.
+Strings, finite numbers and booleans render as escaped text, including `0`, `false` and empty strings.
+An absent/non-scalar field is a visible failure, not a missing model. A successful null/undefined model
+is `Not found`; unsuccessful, unauthorized, invalid and exception envelopes are `Unable to load result`.
+Idle, loading and failure states never display server exception messages or stacks.
+
+`enabled` defaults to false and must be exactly true; the element must also be enabled. The host owns
+input controls, validation feedback and committing/replacing immutable `queryArguments` objects. Even
+parameterless queries require an explicit `{}`. Missing bindings take precedence over all other checks
+and never import Arc. Disabled or malformed adapter properties do not import the lazy runtime either.
+Native Arc `perform` owns required-parameter and generated-validator checks before HTTP; Scene adds no
+business validation and forwards the argument object by identity.
+
+The private lazy runtime creates a fresh native proxy per request generation, configures all four Arc
+context connection/header values, and aborts on replacement or unmount. It also ignores late completion
+when cancellation is ignored, masks previous results on the input-changing render, and responds to
+header-callback identity and `queryVersion` changes. Hosts must replace the callback or bump the version
+when credentials change invisibly inside a stable callback. There is no shared cache, command-triggered
+refresh, polling, retry button, or observable-query subscription.
+
+Published Arc 22.16.1 itself normalizes top-level falsy primitive payloads to null in `QueryResult`.
+This adapter therefore promises scalar **fields of models**, not top-level primitive queries; it does
+not fork Arc deserialization to recover those payloads. `isReady: false` is a failure for this one-shot
+view rather than an invented retry protocol. Enumerable proxies are rejected before execution.
+
+Tests use a real `QueryFor` subclass with unmodified `perform`, native validation and only the HTTP
+boundary replaced. Separate lazy-boundary doubles test Arc-free gating, not native client correctness.
+They do not prove a generated server route, backend persistence or end-to-end editable input. Scene #39
+must remain open: editable Scene parameter binding, input/commit semantics, cross-component binding and
+a general result-binding model are still unimplemented. No default profile, generator or schema changed.
 
 ## Naming and shadowing
 
@@ -149,7 +198,7 @@ both packages write themes in one language: `primary.color`, `primary.contrastCo
 ```
 bindings/    the registry, BindingKind, BoundConstructor, MissingBinding, ArcRuntimeBoundary
 pages/       page, dataPage, formElement
-data/        dataTable, table, observableDataTable
+data/        dataTable, table, observableDataTable, singleResult
 forms/       commandForm; forms/fields/ the twelve field types
 dialogs/     dialog, confirmationDialog, busyIndicatorDialog, commandDialog, stepperCommandDialog
 common/      icon, tooltip, dropdown, errorBoundary

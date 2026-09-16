@@ -3,8 +3,14 @@
 
 import { externalComponent } from '../../../given';
 import { resolveFieldBinding } from '../resolveFieldBinding';
+import type { FieldBinding } from '../FieldBinding';
 
 describe('when resolving a field binding', () => {
+    it('should preserve manually constructed field bindings without a native group name', () => {
+        const binding: FieldBinding = { value: instance => instance.customerName, title: 'Customer' };
+        binding.value({ customerName: 'Acme' })!.should.equal('Acme');
+    });
+
     describe('and the element names a property with a title and description', () => {
         const binding = resolveFieldBinding(
             externalComponent('Cratis.Components:inputTextField', {
