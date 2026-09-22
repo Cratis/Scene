@@ -55,7 +55,9 @@ describe('when mounting bound adapters', () => {
         await act(async () => {
             render(<SceneDataTable element={externalComponent('Cratis.Components:dataTable', { query: 'wrong' })} slots={{}} />);
         });
-        expect(screen.getByText("Invalid query binding 'Save': expected a zero-argument Arc query proxy")).toBeTruthy();
+        // The published Components boundary sanitizes exception text; assert visible failure, not
+        // its former raw-error presentation. requireArcProxy's specs cover the precise diagnostic.
+        expect(screen.getByRole('alert')).toBeTruthy();
         expect(received).not.toHaveBeenCalled();
     });
 
@@ -65,7 +67,7 @@ describe('when mounting bound adapters', () => {
             <Boundary><BoundCommandDialog command={proxies.Snapshot} title='' visible /></Boundary>
             <Boundary><BoundStepperCommandDialog command={proxies.Live} title='' visible /></Boundary>
             <Boundary><BoundDataPage query={proxies.Save} title='' emptyMessage='' children={undefined} /></Boundary></>);
-        expect(screen.getAllByText('Error')).toHaveLength(4);
+        expect(screen.getAllByRole('alert')).toHaveLength(4);
         expect(received).not.toHaveBeenCalled();
     });
 });

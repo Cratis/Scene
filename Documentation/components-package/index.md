@@ -17,13 +17,13 @@ package delivers.
 
 ## What is in the box
 
-Thirty-seven abstract names across seven families:
+Abstract names across seven families:
 
 | Family | Names | What they wrap |
 |---|---|---|
 | Pages | `page`, `dataPage`, `formElement` | `Page`, `DataPage`, `FormElement` |
 | Data | `dataTable`, `table`, `observableDataTable` | `DataTableForQuery`, `DataTableForObservableQuery` |
-| Forms | `commandForm` and twelve field types | `AutoCommandForm` and the `CommandForm` fields |
+| Forms | `commandForm`, `queryInputForm` and twelve field types | `AutoCommandForm`, command fields, and an opt-in string-input query form |
 | Dialogs | `dialog`, `confirmationDialog`, `busyIndicatorDialog`, `commandDialog`, `stepperCommandDialog` | `Dialogs` and `CommandDialog` |
 | Common | `icon`, `tooltip`, `dropdown`, `errorBoundary` | `IconDisplay`, `Tooltip`, `Dropdown`, `ErrorBoundary` |
 | Editors | `objectContentEditor`, `objectNavigationalBar`, `schemaEditor`, `timeMachine`, `filterPanel` | The editing and inspection surfaces |
@@ -88,6 +88,7 @@ before you build anything on this package; everything else here assumes it.
 ## Where to go next
 
 - [The binding registry](binding-registry.md) — how a screen names a query, and a host supplies it.
+- [Query input form](query-input-form.md) — editable string arguments committed on submit, with exact optional-single binding.
 - [Naming and shadowing](naming-and-shadowing.md) — why `table` resolves here and not to PrimeReact.
 - [Theming through design tokens](theming.md) — how a Scene theme drives the library.
 - [What this package does not cover](coverage.md) — and why each omission is deliberate.

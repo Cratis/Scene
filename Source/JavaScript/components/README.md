@@ -132,9 +132,44 @@ view rather than an invented retry protocol. Enumerable proxies are rejected bef
 
 Tests use a real `QueryFor` subclass with unmodified `perform`, native validation and only the HTTP
 boundary replaced. Separate lazy-boundary doubles test Arc-free gating, not native client correctness.
-They do not prove a generated server route, backend persistence or end-to-end editable input. Scene #39
-must remain open: editable Scene parameter binding, input/commit semantics, cross-component binding and
-a general result-binding model are still unimplemented. No default profile, generator or schema changed.
+They do not prove a generated server route or backend persistence. The opt-in `queryInputForm` below
+adds form-local editable input/commit semantics; Scene #39 remains open for broader binding and acceptance.
+No default profile, generator or schema changed.
+
+## Query input form (opt-in)
+
+`Cratis.Components:queryInputForm` composes controlled native web string inputs with the **existing**
+`SingleResultRuntime`. Its package-local `QueryInput` declarations name exact parameters, labels,
+required state and optional whole-string patterns. It validates on submit, freezes a fresh committed
+snapshot, cancels/hides obsolete results on edit and supports repeat submit. There is no query while
+editing, fake command context, new executor, core schema, default identifier or inferred route.
+
+Published Components `InputTextField` is wrapped with `asCommandFormField` and consumes command context;
+it is not an exported independent controlled input. Native labelled text inputs are deliberately used
+instead. The existing command-field adapters and command-slot behavior are unchanged.
+
+`registerQueryIdentity(name, sourceIdentity, proxy)` is the explicit opt-in collision-aware API:
+identical identities replace on hot reload; different sources with the same name are ambiguous.
+`queryInputForm` subscribes to exact-binding changes. Legacy `registerQuery` keeps its last-write-wins
+semantics and is authoritative for legacy `resolveQuery` when present. Otherwise a unique identity-only
+registration also serves existing tables and `singleResult`; multiple identities show their unresolved
+placeholder without selecting a candidate. Existing adapters re-resolve on host render.
+`registeredQueryNames` includes the sorted union of both namespaces. Strict `resolveExactQuery` still
+counts mixed candidates as ambiguous: Stage should emit one identity registration per source, not also
+register the same name through `registerQueries`.
+
+At the existing lazy runtime boundary, form declarations must map exactly to scalar `String` or `Guid`
+proxy descriptors. Unsupported/missing/duplicate descriptors fail before HTTP; no coercion is performed.
+The canonical generated Guid proxy shape is tested unchanged. Native Arc validates required arguments
+and proxy rules, but does not automatically validate GUID format: declare an explicit pattern if needed.
+The lazy runtime uses the optional Fundamentals peer already required by Arc; no Components peer-floor
+change is required.
+
+The [public contract](../../../Documentation/components-package/query-input-form.md) documents the exact
+payload and Stage consumption pattern. Tests render through real `SceneElementView`, unmodified native
+Arc `QueryFor.perform` and only substituted HTTP, including validation, stale requests and unmount.
+They are not generated/browser acceptance; the DOM suite dispatches submit rather than simulating a
+browser's implicit Enter algorithm.
 
 ## Naming and shadowing
 
@@ -199,7 +234,7 @@ both packages write themes in one language: `primary.color`, `primary.contrastCo
 bindings/    the registry, BindingKind, BoundConstructor, MissingBinding, ArcRuntimeBoundary
 pages/       page, dataPage, formElement
 data/        dataTable, table, observableDataTable, singleResult
-forms/       commandForm; forms/fields/ the twelve field types
+forms/       commandForm, queryInputForm; forms/fields/ the twelve field types
 dialogs/     dialog, confirmationDialog, busyIndicatorDialog, commandDialog, stepperCommandDialog
 common/      icon, tooltip, dropdown, errorBoundary
 editors/     objectContentEditor, objectNavigationalBar, schemaEditor, timeMachine, filterPanel

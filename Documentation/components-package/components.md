@@ -39,6 +39,11 @@ and re-renders when the read model changes.
 | Name | Wraps | Properties | Slots |
 |---|---|---|---|
 | `commandForm` | `AutoCommandForm` | **`command`** (binding), `exclude` | — |
+| `queryInputForm` | Native web inputs + existing optional-single runtime | **`query`** (exact binding), `inputs`, `resultField`, `label`, `submitLabel` | — |
+
+[`queryInputForm`](query-input-form.md) is opt-in and submits explicit string drafts, never querying while
+editing. Unlike forgiving display properties, malformed input declarations fail visibly and execute
+nothing. It does not use command fields or a new core form schema.
 
 `AutoCommandForm` generates its fields from the command's own property descriptors, so the form follows the
 command rather than going stale when a property is added on the backend. `exclude` keeps it from generating a

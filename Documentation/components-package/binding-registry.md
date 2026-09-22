@@ -86,6 +86,20 @@ without unwinding the previous run. `clearBindings()` exists because the registr
 right for a host that registers once at startup, wrong for Studio switching between projects or a spec that
 must not inherit what the previous one registered.
 
+## Opt-in exact lookup identities
+
+`queryInputForm` can use `registerQueryIdentity(name, sourceIdentity, proxy)` to distinguish source-name
+collisions from hot-reload replacement. `resolveExactQuery(name)` returns a constructor, `'ambiguous'`, or
+`undefined`; `unregisterQueryIdentity(name, sourceIdentity)` removes a source. `resolveQuery` keeps
+legacy last-registration-wins precedence; only when no legacy registration exists does it resolve a
+unique identity. Multiple identity-only candidates return `undefined`, producing the existing adapters'
+visible unresolved placeholder without selection. Existing adapters look up on host render, not by
+subscription. `registeredQueryNames()` includes the sorted union of both namespaces, deduplicated and
+including ambiguous names. Registering a lookup in both namespaces makes strict `resolveExactQuery`
+ambiguous, while legacy resolution still prefers its legacy registration. Stage can emit one identity
+registration per source for the same semantic name and serve both old adapters and `queryInputForm`. See the [query input form contract](query-input-form.md#collision-aware-registration-for-stage)
+for the Stage emission pattern, lifecycle and migration boundary.
+
 ## The classes are not typed as Arc types
 
 `registerQuery` takes a `BoundConstructor` — "something that can be constructed" — not

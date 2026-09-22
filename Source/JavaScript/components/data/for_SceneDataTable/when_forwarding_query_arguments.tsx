@@ -57,6 +57,25 @@ describe('when forwarding query arguments', () => {
         properties.should.have.property('queryArguments').that.deep.equals({ projectId: suppliedId });
     });
 
+    it('should bridge an identity-only query to an existing table without a second legacy registration', async () => {
+        bindings.clearBindings();
+        bindings.registerQueryIdentity('InvoicesForProject', 'Invoices/ForProject', InvoicesForProject);
+        const queryArguments = { projectId: suppliedId };
+        await renderTable({ query: 'InvoicesForProject', queryArguments });
+        await screen.findByTestId('query-table');
+        (received.mock.lastCall![0].query === InvoicesForProject).should.equal(true);
+        (received.mock.lastCall![0].queryArguments === queryArguments).should.equal(true);
+    });
+
+    it('should visibly reject ambiguous identity-only tables without selecting either native proxy', async () => {
+        bindings.clearBindings();
+        bindings.registerQueryIdentity('InvoicesForProject', 'One/ForProject', InvoicesForProject);
+        bindings.registerQueryIdentity('InvoicesForProject', 'Two/ForProject', AnotherQuery);
+        await renderTable({ query: 'InvoicesForProject' });
+        (screen.getByText("Unresolved query binding 'InvoicesForProject' on Cratis.Components:dataTable") !== null).should.equal(true);
+        received.mock.calls.should.have.lengthOf(0);
+    });
+
     it('should preserve all supplied keys and values without normalization or defaults', async () => {
         const queryArguments = { projectId: suppliedId, ProjectID: 'distinct', limit: 0, enabled: false, optional: null, filter: { names: ['one'] } };
         await renderTable({ query: 'InvoicesForProject', queryArguments });
