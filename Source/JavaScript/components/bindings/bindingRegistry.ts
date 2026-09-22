@@ -5,6 +5,47 @@ import { BoundConstructor } from './BoundConstructor';
 
 const queries = new Map<string, BoundConstructor>();
 const commands = new Map<string, BoundConstructor>();
+// Opt-in identities are separate from the legacy last-registration-wins namespace.
+const queryIdentities = new Map<string, Map<string, BoundConstructor>>();
+const queryBindingListeners = new Set<() => void>();
+
+function notifyQueryBindings(): void {
+    for (const listener of queryBindingListeners) listener();
+}
+
+/** Subscribe to exact-binding changes. Existing adapters retain their render-time lookup contract. */
+export function subscribeQueryBindings(listener: () => void): () => void {
+    queryBindingListeners.add(listener);
+    return () => { queryBindingListeners.delete(listener); };
+}
+
+/**
+ * Registers one source identity for an exact query name. The same identity replaces on hot reload;
+ * different identities remain distinct candidates, even when their constructors happen to match.
+ * Legacy resolution also accepts a unique identity when no legacy registration exists.
+ */
+export function registerQueryIdentity(name: string, identity: string, queryClass: BoundConstructor): void {
+    const candidates = queryIdentities.get(name) ?? new Map<string, BoundConstructor>();
+    candidates.set(identity, queryClass);
+    queryIdentities.set(name, candidates);
+    notifyQueryBindings();
+}
+
+/** Removes a source identity when a generated module is removed or renamed. */
+export function unregisterQueryIdentity(name: string, identity: string): void {
+    const candidates = queryIdentities.get(name);
+    candidates?.delete(identity);
+    if (candidates?.size === 0) queryIdentities.delete(name);
+    notifyQueryBindings();
+}
+
+/** Exact binding: a legacy registration counts as one candidate alongside opt-in identities. */
+export function resolveExactQuery(name: string): BoundConstructor | 'ambiguous' | undefined {
+    const legacy = queries.get(name);
+    const candidates = queryIdentities.get(name);
+    if ((legacy ? 1 : 0) + (candidates?.size ?? 0) > 1) return 'ambiguous';
+    return legacy ?? candidates?.values().next().value;
+}
 
 /**
  * Registers an Arc query proxy under the name screens refer to it by.
@@ -24,6 +65,7 @@ const commands = new Map<string, BoundConstructor>();
  */
 export function registerQuery(name: string, queryClass: BoundConstructor): void {
     queries.set(name, queryClass);
+    notifyQueryBindings();
 }
 
 /**
@@ -40,14 +82,18 @@ export function registerQueries(bindings: Record<string, BoundConstructor>): voi
 }
 
 /**
- * The query proxy registered under a name, or `undefined` when nothing is registered under it.
+ * Legacy registrations are authoritative. Otherwise resolve a unique source identity, or `undefined`
+ * when absent or ambiguous (existing adapters display their unresolved-binding placeholder).
  *
  * `undefined` rather than a throw: design-time preview in Studio normally has nothing registered at all,
  * and a screen still has to render so its layout can be worked on. Every adapter turns `undefined` into
  * a visible placeholder naming the binding it wanted.
  */
 export function resolveQuery(name: string): BoundConstructor | undefined {
-    return queries.get(name);
+    const legacy = queries.get(name);
+    if (legacy) return legacy;
+    const candidates = queryIdentities.get(name);
+    return candidates?.size === 1 ? candidates.values().next().value : undefined;
 }
 
 /**
@@ -75,14 +121,14 @@ export function resolveCommand(name: string): BoundConstructor | undefined {
 }
 
 /**
- * Every registered query name, sorted.
+ * The sorted union of legacy and identity query names, including ambiguous names.
  *
  * A design-time tool uses this to offer the names a screen can actually bind to, and a diagnostics
  * surface uses it to explain a placeholder - "this screen wants `AllInvoices`, and here is what is
  * registered" is a far more useful message than the placeholder alone.
  */
 export function registeredQueryNames(): string[] {
-    return [...queries.keys()].sort();
+    return [...new Set([...queries.keys(), ...queryIdentities.keys()])].sort();
 }
 
 /**
@@ -102,4 +148,6 @@ export function registeredCommandNames(): string[] {
 export function clearBindings(): void {
     queries.clear();
     commands.clear();
+    queryIdentities.clear();
+    notifyQueryBindings();
 }

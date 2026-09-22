@@ -10,6 +10,7 @@ import {
     SceneChipsField,
     SceneColorPickerField,
     SceneCommandForm,
+    SceneQueryInputForm,
     SceneDropdownField,
     SceneInputTextField,
     SceneMultiSelectField,
@@ -54,6 +55,7 @@ export const cratisComponents: ComponentRegistry = {
     [componentRegistryKey(cratisComponentsPackageName, 'table')]: SceneDataTable,
     [componentRegistryKey(cratisComponentsPackageName, 'observableDataTable')]: SceneObservableDataTable,
 
+    [componentRegistryKey(cratisComponentsPackageName, 'queryInputForm')]: SceneQueryInputForm,
     [componentRegistryKey(cratisComponentsPackageName, 'commandForm')]: SceneCommandForm,
     [componentRegistryKey(cratisComponentsPackageName, 'inputTextField')]: SceneInputTextField,
     [componentRegistryKey(cratisComponentsPackageName, 'numberField')]: SceneNumberField,

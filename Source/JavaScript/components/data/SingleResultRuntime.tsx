@@ -4,6 +4,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { ArcContext } from '@cratis/arc.react';
 import type { QueryFor } from '@cratis/arc/queries';
+import { Guid } from '@cratis/fundamentals';
 import type { BoundConstructor } from '../bindings/BoundConstructor';
 import { SingleResultStatus } from './SingleResultStatus';
 
@@ -11,6 +12,8 @@ interface Props {
     query: BoundConstructor;
     queryArguments: Record<string, unknown>;
     resultField: string;
+    /** queryInputForm alone opts into scalar String/Guid descriptor mapping; no value conversion. */
+    stringInputs?: boolean;
 }
 
 type Outcome = { state: 'failure' | 'notFound' } | { state: 'success'; value: string };
@@ -19,12 +22,12 @@ type Outcome = { state: 'failure' | 'notFound' } | { state: 'success'; value: st
  * Private execution owner. Arc owns validation, routing, HTTP and deserialization; this component
  * owns only request lifetime and presentation. No shared cache can hand B the result belonging to A.
  */
-export default function SingleResultRuntime({ query, queryArguments, resultField }: Props) {
+export default function SingleResultRuntime({ query, queryArguments, resultField, stringInputs = false }: Props) {
     const arc = useContext(ArcContext);
     const { microservice, apiBasePath, origin, httpHeadersCallback, queryVersion } = arc;
     // Identity is deliberate: hosts replace immutable committed arguments rather than mutating them.
-    const request = useMemo(() => ({ query, queryArguments, resultField, microservice, apiBasePath, origin, httpHeadersCallback, queryVersion }),
-        [query, queryArguments, resultField, microservice, apiBasePath, origin, httpHeadersCallback, queryVersion]);
+    const request = useMemo(() => ({ query, queryArguments, resultField, stringInputs, microservice, apiBasePath, origin, httpHeadersCallback, queryVersion }),
+        [query, queryArguments, resultField, stringInputs, microservice, apiBasePath, origin, httpHeadersCallback, queryVersion]);
     const [settled, setSettled] = useState<{ request: typeof request; outcome: Outcome }>();
 
     useEffect(() => {
@@ -39,6 +42,17 @@ export default function SingleResultRuntime({ query, queryArguments, resultField
                 // The registry intentionally stores constructors without an eager Arc dependency.
                 instance = new request.query() as QueryFor<unknown, Record<string, unknown>>;
                 if (instance.enumerable !== false) {
+                    publish({ state: 'failure' });
+                    return;
+                }
+                // Arc perform does not validate argument-to-descriptor types. The form supports only
+                // scalar String/Guid inputs, matched by exact name and constructor, never by naming
+                // convention. This check is lazy and form-only; singleResult's host contract is intact.
+                if (request.stringInputs && !Object.entries(request.queryArguments).every(([name, value]) => {
+                    const descriptors = instance!.parameterDescriptors.filter(descriptor => descriptor.name === name);
+                    return typeof value === 'string' && descriptors.length === 1 && !descriptors[0].isEnumerable
+                        && (descriptors[0].type === String || descriptors[0].type === Guid);
+                })) {
                     publish({ state: 'failure' });
                     return;
                 }
