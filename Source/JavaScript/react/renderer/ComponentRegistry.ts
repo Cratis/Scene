@@ -17,9 +17,10 @@ export interface RegisteredComponentProps {
      *
      * Passed to the component rather than applied by the renderer because only the component knows which node
      * that is - on a button it is the button, on a table it is the row. It is empty when the document attached
-     * nothing, so spreading it is always safe.
+     * nothing, and absent when the component is rendered directly rather than through the renderer - a
+     * specification, or a gallery. Spreading it is safe either way.
      */
-    interactions: InteractionHandlers;
+    interactions?: InteractionHandlers;
 }
 
 /**
