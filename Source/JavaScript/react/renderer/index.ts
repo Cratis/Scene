@@ -4,3 +4,4 @@
 export * from './ComponentRegistry';
 export * from './UnresolvedComponent';
 export * from './createReactRenderer';
+export * from './InteractiveComponent';

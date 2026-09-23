@@ -7,3 +7,4 @@ export * from './core';
 export * from './NavBar';
 export * from './packages';
 export * from './theme';
+export * from './interactions';

@@ -5,6 +5,7 @@ import { ReactNode, createElement } from 'react';
 import { Renderer } from '@cratis/scene.engine';
 import { ContentControl, ExternalComponent, ItemsControl, Panel } from '@cratis/scene.model';
 import { ComponentRegistry } from './ComponentRegistry';
+import { InteractiveComponent } from './InteractiveComponent';
 import { childStyle, panelStyle } from './panelLayout';
 import { UnresolvedComponent } from './UnresolvedComponent';
 
@@ -28,7 +29,7 @@ export function createReactRenderer(registry: ComponentRegistry): Renderer<React
 
         renderExternalComponent(element: ExternalComponent, slots: Record<string, ReactNode[]>): ReactNode {
             const Component = registry[element.componentName] ?? UnresolvedComponent;
-            return createElement(Component, { key: element.id, element, slots });
+            return createElement(InteractiveComponent, { key: element.id, component: Component, element, slots });
         },
 
         renderPanel(element: Panel, children: ReactNode[]): ReactNode {

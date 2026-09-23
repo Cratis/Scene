@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { InteractionBinding } from '@cratis/scene.model';
+import { ResolvedBinding } from './resolveBehaviors';
 import {
     ConfirmAction,
     ExecuteCommandAction,
@@ -43,7 +45,7 @@ export enum InteractionStop {
  * application, and 'this application produced no findings' has to be checkable rather than a matter of opinion.
  */
 export interface InteractionFinding {
-    kind: 'unknownAction' | 'unresolvedMessage';
+    kind: 'unknownAction' | 'unresolvedMessage' | 'unresolvedCondition';
     detail: string;
 }
 
@@ -231,4 +233,52 @@ async function runOne(
             run.stop = InteractionStop.Reported;
             return true;
     }
+}
+
+/**
+ * Runs the bindings a trigger resolved to, in order, honouring each one's guard.
+ *
+ * The `where` guard belongs here rather than in a renderer for the same reason the sequencing does: whether a
+ * binding applies is a property of the document, not of the event that arrived. A guard that resolves to
+ * nothing is treated as false and reported - an interaction that silently does nothing is indistinguishable
+ * from one that is broken, and the whole point of a finding is to tell those apart.
+ *
+ * @param bindings The bindings to run, already resolved and ordered.
+ * @param dispatcher The seam that performs the effects.
+ * @param context How to resolve bindings and localization.
+ * @returns What happened across all of them.
+ */
+export async function runBindings(
+    bindings: ResolvedBinding[],
+    dispatcher: ActionDispatcher,
+    context: InteractionContext
+): Promise<InteractionRun> {
+    const run: InteractionRun = { stop: InteractionStop.Completed, findings: [], ran: [] };
+
+    for (const candidate of bindings) {
+        if (!applies(candidate.binding, context, run)) continue;
+
+        await runSequence(candidate.binding.actions ?? [], dispatcher, context, run);
+
+        // A navigation or a declined confirm ends the interaction, not merely the binding that caused it.
+        // The screen the later bindings were attached to is gone, or the gate they sat behind was refused.
+        if (run.stop !== InteractionStop.Completed) break;
+    }
+
+    return run;
+}
+
+function applies(binding: InteractionBinding, context: InteractionContext, run: InteractionRun): boolean {
+    if (!binding.condition) return true;
+
+    const value = context.resolve(binding.condition);
+    if (value === undefined || value === null) {
+        run.findings.push({
+            kind: 'unresolvedCondition',
+            detail: `The guard '${binding.condition.path}' resolved to nothing, so the binding did not run`,
+        });
+        return false;
+    }
+
+    return Boolean(value);
 }

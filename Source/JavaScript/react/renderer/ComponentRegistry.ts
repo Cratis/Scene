@@ -3,6 +3,7 @@
 
 import { ComponentType, ReactNode } from 'react';
 import { ExternalComponent } from '@cratis/scene.model';
+import { InteractionHandlers } from '../interactions';
 
 /**
  * The props every registered component receives.
@@ -10,6 +11,15 @@ import { ExternalComponent } from '@cratis/scene.model';
 export interface RegisteredComponentProps {
     element: ExternalComponent;
     slots: Record<string, ReactNode[]>;
+
+    /**
+     * The handlers for whatever the document attached to this element, to spread onto the node they belong on.
+     *
+     * Passed to the component rather than applied by the renderer because only the component knows which node
+     * that is - on a button it is the button, on a table it is the row. It is empty when the document attached
+     * nothing, so spreading it is always safe.
+     */
+    interactions: InteractionHandlers;
 }
 
 /**
