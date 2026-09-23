@@ -73,7 +73,7 @@ unbound table costs one dashed box, not the whole screen.
 
 `@cratis/arc`, `@cratis/arc.react` and `@cratis/fundamentals` are peer dependencies of `@cratis/components`
 that the *host* supplies. This package also declares Arc and Arc React as optional peers and pins
-22.16.1 as development dependencies for native integration tests. A design surface is not a host.
+22.19.1 as development dependencies for native integration tests. A design surface is not a host.
 
 Every adapter that reaches them does so through a dynamic `import()` inside `React.lazy`, wrapped in
 `ArcRuntimeBoundary` (`Suspense` + the library's own `ErrorBoundary`). A screen built only from the library's
@@ -87,6 +87,22 @@ This splits the library cleanly, and the split is the library's own:
 
 The Storybook build externalizes the Arc packages (`.storybook/main.ts`) so the lazy chunk can be emitted
 with its imports left bare. No story loads that chunk, because no story registers a binding.
+
+## Actionable command forms
+
+`commandForm` supplies a native submit button via `AutoCommandForm`'s optional `footer` ReactNode seam.
+`submitLabel` is an optional string, defaulting to `Submit`. A private lazy runtime keeps Arc out of unbound
+previews; its footer child reads the actual native form context for execution and authorization state.
+Validity does not disable submission: native validation must be able to show errors on untouched forms.
+Scene neither executes the command directly nor creates another form or command context.
+
+Optional explicit `inputs` use exact native proxy descriptor names and types (`string`/`guid`) in one
+Arc CommandForm; missing, ambiguous, uncovered required or unsupported declarations block the form. Auto
+mode is fields-only and only supports String/Number/Boolean/Date providers, so required Guid does not silently
+disappear. The content slot is not connected to either mode. A valid Guid draft becomes a typed Guid; Guid
+JSON canonicalizes textual case without changing identity. No ID is generated. The declared peers require
+published Components >=4.13.0 for the footer and Arc/Arc React >=22.19.1 for native custom-error gating.
+Arc peers remain optional so unbound previews stay Arc-free.
 
 ## Optional single-result view (read-only)
 

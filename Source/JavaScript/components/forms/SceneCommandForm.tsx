@@ -1,45 +1,48 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentType, lazy } from 'react';
+import { lazy } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { ArcRuntimeBoundary, BindingKind, BoundConstructor, MissingBinding, resolveElementBinding } from '../bindings';
-import { stringArrayProperty } from '../properties';
+import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
+import type { BoundConstructor } from '../bindings';
+import { stringArrayProperty, stringProperty } from '../properties';
+import { commandInputs } from './commandInputs';
 
-interface AutoCommandFormElementProps {
-    command: BoundConstructor;
-    exclude?: string[];
+const CommandFormRuntime = lazy(() => import('./CommandFormRuntime'));
+
+// Arc's useCommand constructs the proxy only on mount. Key by the actual registered class,
+// not its Scene name (which may be re-registered with a different route or roles).
+const commandKeys = new WeakMap<BoundConstructor, number>();
+let nextCommandKey = 0;
+function commandKey(command: BoundConstructor): number {
+    let key = commandKeys.get(command);
+    if (key === undefined) {
+        key = ++nextCommandKey;
+        commandKeys.set(command, key);
+    }
+    return key;
 }
 
 /**
- * `AutoCommandForm` types `exclude` as `(keyof TCommand)[]`, which collapses to `never[]` when the
- * command type is only known at runtime - as it always is here, since the class arrives from the binding
- * registry rather than from a type annotation. The conversion states the shape this adapter actually
- * passes; the underlying component reads `exclude` as property names either way.
- */
-const AutoCommandForm = lazy(async () => ({
-    default: (await import('@cratis/components/CommandForm')).AutoCommandForm as unknown as ComponentType<AutoCommandFormElementProps>,
-}));
-
-/**
- * The `Cratis.Components:commandForm` component - `AutoCommandForm` from `@cratis/components/CommandForm`.
- *
- * `AutoCommandForm` rather than `CommandForm`, because a screen that had to list every field by hand
- * would go stale the moment a property is added to the command on the backend. `AutoCommandForm` reads
- * the command's own property descriptors and picks a field component per property type, so the form
- * follows the command - which is the same guarantee Arc's generated proxies give the rest of the stack.
- *
- * A screen that does want to place fields itself puts the field components from this package in the
- * `content` slot and names them individually; `exclude` keeps `AutoCommandForm` from generating a second
- * copy of anything placed that way.
+ * Auto mode follows supported native proxy descriptors; opt-in inputs bind exactly named fields
+ * inside a single native Arc form. Neither mode consumes the content slot.
  */
 export function SceneCommandForm({ element }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Command);
     if (!target) return <MissingBinding element={element} kind={BindingKind.Command} name={name} />;
 
+    const inputs = Object.hasOwn(element.properties, 'inputs') ? commandInputs(element.properties) : undefined;
+    if (Object.hasOwn(element.properties, 'inputs') && !inputs) return <div role='alert'>Invalid command form inputs declaration</div>;
+
     return (
         <ArcRuntimeBoundary>
-            <AutoCommandForm command={target} exclude={stringArrayProperty(element.properties, 'exclude')} />
+            <CommandFormRuntime
+                key={commandKey(target)}
+                command={target}
+                inputs={inputs}
+                exclude={stringArrayProperty(element.properties, 'exclude')}
+                submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}
+            />
         </ArcRuntimeBoundary>
     );
 }

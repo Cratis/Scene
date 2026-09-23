@@ -38,16 +38,40 @@ and re-renders when the read model changes.
 
 | Name | Wraps | Properties | Slots |
 |---|---|---|---|
-| `commandForm` | `AutoCommandForm` | **`command`** (binding), `exclude` | — |
+| `commandForm` | `AutoCommandForm` (legacy) or native Arc `CommandForm` (explicit) | **`command`** (binding), `inputs`, `exclude` (auto only), `submitLabel` | — |
 | `queryInputForm` | Native web inputs + existing optional-single runtime | **`query`** (exact binding), `inputs`, `resultField`, `label`, `submitLabel` | — |
 
 [`queryInputForm`](query-input-form.md) is opt-in and submits explicit string drafts, never querying while
 editing. Unlike forgiving display properties, malformed input declarations fail visibly and execute
 nothing. It does not use command fields or a new core form schema.
 
-`AutoCommandForm` generates its fields from the command's own property descriptors, so the form follows the
-command rather than going stale when a property is added on the backend. `exclude` keeps it from generating a
-second copy of anything placed by hand.
+Without `inputs`, `AutoCommandForm` generates fields from native proxy descriptors (String, Number, Boolean,
+Date only). A required Guid or other unsupported required descriptor, including one removed with `exclude`,
+shows a diagnostic rather than a partial form. The `content` slot is **not** consumed by this adapter;
+`exclude` does not connect independently placed fields to the form. Prefer an authored screen for complete
+layout control. Opt into exactly named fields with `inputs`, for example:
+
+```json
+[{"property":"projectId","type":"guid","label":"Project ID"},{"property":"name","type":"string","label":"Name"}]
+```
+
+Explicit mode requires every required descriptor to have an input; optional descriptors may be left out.
+Only String and Guid fields can be declared. Missing, duplicate, ambiguous or mismatched names and unsupported
+input types fail visibly without execution. Guid drafts must match the canonical hyphenated 8-4-4-4-12 hex
+format before native submission. The input is not generated or inferred: valid Guid text is parsed into the
+proxy's Guid type, whose JSON representation canonicalizes letter case (the identifier itself is unchanged).
+String values are forwarded unchanged, without trimming. Native Arc owns validation, authorization, execution
+and feedback; no Scene HTTP executor is introduced.
+
+`commandForm` adds a native submit button after the generated fields. `submitLabel` accepts a string and
+defaults to `Submit` when absent or of another type. The button submits the containing Arc form; Arc owns
+validation, execution and feedback. It disables while native `isExecuting` is true or `isAuthorized` is
+false, but not merely because the form is invalid: submitting untouched fields must expose validation
+feedback. No Scene action handler or command executor is needed.
+
+**Dependency requirement:** Components >=4.13.0 supplies the auto-form footer; Arc and Arc React
+>=22.19.1 supply the custom-field-error execution gate for explicit Guid inputs. These are the declared
+peer floors for this package. Arc peers remain optional: unbound previews stay lazy and do not import Arc.
 
 ### Field types
 
