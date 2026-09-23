@@ -22,9 +22,29 @@ export interface InteractionScopeValue {
     onFindings?: (findings: InteractionFinding[]) => void;
 }
 
+/**
+ * The context a scope uses when it was given none.
+ *
+ * A document whose messages are literal text and whose actions take no arguments resolves nothing, and that is
+ * an ordinary document rather than a degenerate one. Requiring a context anyway would make every host invent
+ * an empty resolver, and an invented one is a place for a mistake to hide.
+ */
+const resolvesNothing: InteractionContext = { resolve: () => undefined };
+
 const Scope = createContext<InteractionScopeValue | undefined>(undefined);
 
-export interface InteractionScopeProps extends InteractionScopeValue {
+/**
+ * The properties of {@link InteractionScope}.
+ *
+ * The context is the one thing an author may leave out, because a document whose messages are literal text and
+ * whose actions take no arguments resolves nothing. Everything beneath a scope still reads a context that is
+ * definitely there, so only the author is spared, not the code doing the work.
+ */
+export interface InteractionScopeProps extends Omit<InteractionScopeValue, 'context'> {
+    /** How bindings and localization resolve. Omitted means nothing resolves. */
+    context?: InteractionContext;
+
+    /** What the scope encloses. */
     children: ReactNode;
 }
 
@@ -36,7 +56,7 @@ export interface InteractionScopeProps extends InteractionScopeValue {
  * additive rule true in a renderer - a module's behavior is still in scope at a button six levels down,
  * without the button knowing the module exists.
  */
-export function InteractionScope({ children, dispatcher, context, attachments, onFindings }: InteractionScopeProps) {
+export function InteractionScope({ children, dispatcher, context = resolvesNothing, attachments, onFindings }: InteractionScopeProps) {
     const enclosing = useContext(Scope);
 
     const value = useMemo<InteractionScopeValue>(() => ({
