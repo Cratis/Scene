@@ -63,7 +63,7 @@
         "@cratis/scene.react": "1.0.0",
         "@primereact/core": "11.1.0",
         "@primereact/headless": "11.1.0",
-        "@primeuix/themes": "^3.0.0",
+        "@primeuix/themes": "^3.0.1",
         "@storybook/addon-links": "^10.6.0",
         "@storybook/react": "^10.6.0",
         "@storybook/react-vite": "^10.6.0",
