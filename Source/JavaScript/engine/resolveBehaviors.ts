@@ -12,6 +12,15 @@ import { Behavior, InteractionBinding, InteractionTrigger, InteractionTriggerKin
 export interface BehaviorAttachment {
     level: string;
     behaviors: Behavior[];
+
+    /**
+     * How deeply nested this attachment is, with 0 the outermost.
+     *
+     * Optional, defaulting to the position in the list. Stating it explicitly is what lets a caller assemble the
+     * list in whatever order is convenient - walking a tree upwards from the element, for instance - without the
+     * resolved order silently depending on that choice.
+     */
+    depth?: number;
 }
 
 /**
@@ -57,7 +66,7 @@ export function resolveBehaviors(attachments: BehaviorAttachment[], kind: Intera
 
                 resolved.push({
                     entry: { level: attachment.level, behaviorName: behavior.name, binding },
-                    level,
+                    level: attachment.depth ?? level,
                     declaration: declaration++,
                     order: behavior.order,
                 });

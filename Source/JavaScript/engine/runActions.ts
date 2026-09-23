@@ -118,8 +118,9 @@ function messageOf(message: InteractionMessage, context: InteractionContext, fin
  * - A navigation stops the sequence, because the screen the remaining actions were written for is gone. The
  *   compiler reports that as unreachable, so reaching it at runtime means the document changed underneath.
  * - An action that can fail branches into `onSuccess` or `onFailure`; a dialog also runs `onResult`.
- * - An action kind the engine does not know is **reported and skipped**, never silently ignored - which is what
- *   lets a newer document be opened by an older renderer without pretending it worked.
+ * - An action kind the engine does not know is **reported and the sequence abandoned**, never silently skipped.
+ *   Continuing would half-apply a sequence whose gate may well have been the action this renderer could not
+ *   understand. This is what lets a newer document be opened by an older renderer without pretending it worked.
  *
  * @param actions The actions to run.
  * @param dispatcher The seam that performs the effects.
@@ -228,6 +229,6 @@ async function runOne(
         default:
             run.findings.push({ kind: 'unknownAction', detail: `The renderer does not know the action kind '${String(action.kind)}'` });
             run.stop = InteractionStop.Reported;
-            return false;
+            return true;
     }
 }
