@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Cratis.Scene.Model.Elements;
+using Cratis.Scene.Model.Interactions;
 using Cratis.Scene.Model.Layouts;
 
 namespace Cratis.Scene.Model.Screens;
@@ -51,4 +52,10 @@ public record ScreenTemplate(
     Arrangement? Arrangement = null,
     IReadOnlyDictionary<string, IReadOnlyList<SceneElement>>? Content = null,
     string? DisplayName = null,
-    string? Description = null);
+    string? Description = null)
+{
+    /// <summary>
+    /// Gets the behaviors attached to the screen template. Additive with whatever is attached further out or further in.
+    /// </summary>
+    public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+}

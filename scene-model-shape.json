@@ -1,334 +1,422 @@
 {
-    "description": "Shared shape contract between Cratis.Scene.Model (C#, source of truth) and @cratis/scene.model (the hand-maintained TypeScript mirror). Both a C# spec (Model.Specs/for_SceneModelShape) and a TypeScript spec (model/for_shape) assert their own side's reflected/declared shape against this file independently, so a desync on either side fails its own build rather than only the other one's.",
-    "types": {
-        "Color": [
-            "red",
-            "green",
-            "blue",
-            "alpha"
-        ],
-        "Size": [
-            "width",
-            "height"
-        ],
-        "Thickness": [
-            "left",
-            "top",
-            "right",
-            "bottom"
-        ],
-        "BindingExpression": [
-            "path"
-        ],
-        "SizeClass": [
-            "width",
-            "height"
-        ],
-        "SceneElement": [
-            "id",
-            "properties"
-        ],
-        "VisualElement": [
-            "visibility",
-            "isEnabled",
-            "opacity",
-            "size",
-            "zIndex"
-        ],
-        "FrameworkElement": [
-            "name",
-            "minimumSize",
-            "maximumSize",
-            "margin",
-            "horizontalAlignment",
-            "verticalAlignment"
-        ],
-        "Control": [
-            "background",
-            "foreground",
-            "borderColor",
-            "borderThickness",
-            "padding",
-            "fontFamily",
-            "fontSize",
-            "tabIndex"
-        ],
-        "Panel": [
-            "children"
-        ],
-        "Canvas": [
-            "extent"
-        ],
-        "ItemsControl": [
-            "itemsSource",
-            "itemTemplate"
-        ],
-        "ContentControl": [
-            "content"
-        ],
-        "ExternalComponent": [
-            "componentName",
-            "slots"
-        ],
-        "Layout": [
-            "name",
-            "slots",
-            "arrangement"
-        ],
-        "Slot": [
-            "name",
-            "arrangement"
-        ],
-        "Arrangement": [],
-        "FlowArrangement": [
-            "root",
-            "overrides"
-        ],
-        "FlowOverride": [
-            "width",
-            "height",
-            "root"
-        ],
-        "FlowNode": [
-            "grow",
-            "span"
-        ],
-        "FlowContainer": [
-            "gap",
-            "children",
-            "kind"
-        ],
-        "FlowRow": [
-            "kind"
-        ],
-        "FlowColumn": [
-            "kind"
-        ],
-        "FlowGrid": [
-            "kind",
-            "columns",
-            "rows"
-        ],
-        "FlowLeaf": [
-            "content"
-        ],
-        "FlowSlotLeaf": [
-            "slotName"
-        ],
-        "FreeformArrangement": [
-            "variants"
-        ],
-        "FreeformVariant": [
-            "sizeClass",
-            "placements"
-        ],
-        "ElementPlacement": [
-            "element",
-            "x",
-            "y",
-            "width",
-            "height"
-        ],
-        "FreeformSlotArrangement": [
-            "variants"
-        ],
-        "FreeformSlotVariant": [
-            "sizeClass",
-            "placements"
-        ],
-        "SlotPlacement": [
-            "slotName",
-            "x",
-            "y",
-            "width",
-            "height"
-        ],
-        "PopulateSource": [],
-        "PopulateViaQuery": [
-            "queryName",
-            "parameterBindings"
-        ],
-        "PopulateFromItem": [
-            "itemBinding"
-        ],
-        "FormField": [
-            "name",
-            "sourceProperty",
-            "composeUsing",
-            "label"
-        ],
-        "Form": [
-            "name",
-            "forCommand",
-            "populateSource",
-            "fields"
-        ],
-        "ContributionPoint": [
-            "name"
-        ],
-        "Contribution": [
-            "contributionPointName",
-            "content",
-            "order"
-        ],
-        "NavigationItem": [
-            "label",
-            "targetScreen",
-            "routeParameterBindings",
-            "order",
-            "group"
-        ],
-        "UiProfile": [
-            "name",
-            "targetPlatform",
-            "packages",
-            "defaultSizeClass",
-            "layout",
-            "theme"
-        ],
-        "Theme": [
-            "name",
-            "compatibleWith",
-            "tokens",
-            "isDark",
-            "author",
-            "authorUrl",
-            "license",
-            "description",
-            "licenseUrl"
-        ],
-        "PackageDependency": [
-            "name",
-            "versionRange"
-        ],
-        "ScenePackage": [
-            "name",
-            "version",
-            "kind",
-            "dependencies",
-            "components",
-            "layouts",
-            "screenTemplates",
-            "dialogTemplates",
-            "themes",
-            "displayName",
-            "description",
-            "module",
-            "license",
-            "licenseUrl"
-        ],
-        "Screen": [
-            "name",
-            "layout",
-            "slotContent",
-            "forms",
-            "contributions",
-            "screenTemplate"
-        ],
-        "UiStarter": [
-            "name",
-            "packages",
-            "themes",
-            "gallery"
-        ],
-        "ScreenTemplate": [
-            "name",
-            "fitsSlot",
-            "slots",
-            "arrangement",
-            "content",
-            "displayName",
-            "description"
-        ],
-        "DialogTemplate": [
-            "name",
-            "slots",
-            "arrangement",
-            "content",
-            "displayName",
-            "description"
-        ],
-        "GridLength": [
-            "value",
-            "unitType"
-        ],
-        "StackPanel": [
-            "orientation",
-            "spacing"
-        ],
-        "DockPanel": [
-            "lastChildFill"
-        ],
-        "WrapPanel": [
-            "orientation",
-            "itemWidth",
-            "itemHeight"
-        ],
-        "RowDefinition": [
-            "height",
-            "minimumHeight",
-            "maximumHeight"
-        ],
-        "ColumnDefinition": [
-            "width",
-            "minimumWidth",
-            "maximumWidth"
-        ],
-        "Grid": [
-            "rows",
-            "columns"
-        ]
-    },
-    "enums": {
-        "PackageKind": [
-            "ComponentLibrary",
-            "Styling",
-            "Blueprint"
-        ],
-        "WidthSizeClass": [
-            "Compact",
-            "Regular"
-        ],
-        "HeightSizeClass": [
-            "Compact",
-            "Regular"
-        ],
-        "HorizontalAlignment": [
-            "Stretch",
-            "Left",
-            "Center",
-            "Right"
-        ],
-        "VerticalAlignment": [
-            "Stretch",
-            "Top",
-            "Center",
-            "Bottom"
-        ],
-        "Visibility": [
-            "Visible",
-            "Hidden",
-            "Collapsed"
-        ],
-        "FlowContainerKind": [
-            "Row",
-            "Column",
-            "Grid"
-        ],
-        "Orientation": [
-            "Horizontal",
-            "Vertical"
-        ],
-        "Dock": [
-            "Left",
-            "Top",
-            "Right",
-            "Bottom"
-        ],
-        "GridUnitType": [
-            "Auto",
-            "Absolute",
-            "Star"
-        ]
-    }
+  "description": "Shared shape contract between Cratis.Scene.Model (C#, source of truth) and @cratis/scene.model (the hand-maintained TypeScript mirror). Both a C# spec (Model.Specs/for_SceneModelShape) and a TypeScript spec (model/for_shape) assert their own side's reflected/declared shape against this file independently, so a desync on either side fails its own build rather than only the other one's.",
+  "types": {
+    "Color": [
+      "red",
+      "green",
+      "blue",
+      "alpha"
+    ],
+    "Size": [
+      "width",
+      "height"
+    ],
+    "Thickness": [
+      "left",
+      "top",
+      "right",
+      "bottom"
+    ],
+    "BindingExpression": [
+      "path"
+    ],
+    "SizeClass": [
+      "width",
+      "height"
+    ],
+    "SceneElement": [
+      "id",
+      "properties",
+      "behaviors"
+    ],
+    "VisualElement": [
+      "visibility",
+      "isEnabled",
+      "opacity",
+      "size",
+      "zIndex"
+    ],
+    "FrameworkElement": [
+      "name",
+      "minimumSize",
+      "maximumSize",
+      "margin",
+      "horizontalAlignment",
+      "verticalAlignment"
+    ],
+    "Control": [
+      "background",
+      "foreground",
+      "borderColor",
+      "borderThickness",
+      "padding",
+      "fontFamily",
+      "fontSize",
+      "tabIndex"
+    ],
+    "Panel": [
+      "children"
+    ],
+    "Canvas": [
+      "extent"
+    ],
+    "ItemsControl": [
+      "itemsSource",
+      "itemTemplate"
+    ],
+    "ContentControl": [
+      "content"
+    ],
+    "ExternalComponent": [
+      "componentName",
+      "slots"
+    ],
+    "Layout": [
+      "name",
+      "slots",
+      "arrangement",
+      "behaviors"
+    ],
+    "Slot": [
+      "name",
+      "arrangement"
+    ],
+    "Arrangement": [],
+    "FlowArrangement": [
+      "root",
+      "overrides"
+    ],
+    "FlowOverride": [
+      "width",
+      "height",
+      "root"
+    ],
+    "FlowNode": [
+      "grow",
+      "span"
+    ],
+    "FlowContainer": [
+      "gap",
+      "children",
+      "kind"
+    ],
+    "FlowRow": [
+      "kind"
+    ],
+    "FlowColumn": [
+      "kind"
+    ],
+    "FlowGrid": [
+      "kind",
+      "columns",
+      "rows"
+    ],
+    "FlowLeaf": [
+      "content"
+    ],
+    "FlowSlotLeaf": [
+      "slotName"
+    ],
+    "FreeformArrangement": [
+      "variants"
+    ],
+    "FreeformVariant": [
+      "sizeClass",
+      "placements"
+    ],
+    "ElementPlacement": [
+      "element",
+      "x",
+      "y",
+      "width",
+      "height"
+    ],
+    "FreeformSlotArrangement": [
+      "variants"
+    ],
+    "FreeformSlotVariant": [
+      "sizeClass",
+      "placements"
+    ],
+    "SlotPlacement": [
+      "slotName",
+      "x",
+      "y",
+      "width",
+      "height"
+    ],
+    "PopulateSource": [],
+    "PopulateViaQuery": [
+      "queryName",
+      "parameterBindings"
+    ],
+    "PopulateFromItem": [
+      "itemBinding"
+    ],
+    "FormField": [
+      "name",
+      "sourceProperty",
+      "composeUsing",
+      "label"
+    ],
+    "Form": [
+      "name",
+      "forCommand",
+      "populateSource",
+      "fields",
+      "behaviors"
+    ],
+    "ContributionPoint": [
+      "name"
+    ],
+    "Contribution": [
+      "contributionPointName",
+      "content",
+      "order"
+    ],
+    "NavigationItem": [
+      "label",
+      "targetScreen",
+      "routeParameterBindings",
+      "order",
+      "group"
+    ],
+    "UiProfile": [
+      "name",
+      "targetPlatform",
+      "packages",
+      "defaultSizeClass",
+      "layout",
+      "theme"
+    ],
+    "Theme": [
+      "name",
+      "compatibleWith",
+      "tokens",
+      "isDark",
+      "author",
+      "authorUrl",
+      "license",
+      "description",
+      "licenseUrl"
+    ],
+    "PackageDependency": [
+      "name",
+      "versionRange"
+    ],
+    "ScenePackage": [
+      "name",
+      "version",
+      "kind",
+      "dependencies",
+      "components",
+      "layouts",
+      "screenTemplates",
+      "dialogTemplates",
+      "themes",
+      "displayName",
+      "description",
+      "module",
+      "license",
+      "licenseUrl"
+    ],
+    "Screen": [
+      "name",
+      "layout",
+      "slotContent",
+      "forms",
+      "contributions",
+      "screenTemplate",
+      "behaviors"
+    ],
+    "UiStarter": [
+      "name",
+      "packages",
+      "themes",
+      "gallery"
+    ],
+    "ScreenTemplate": [
+      "name",
+      "fitsSlot",
+      "slots",
+      "arrangement",
+      "content",
+      "displayName",
+      "description",
+      "behaviors"
+    ],
+    "DialogTemplate": [
+      "name",
+      "slots",
+      "arrangement",
+      "content",
+      "displayName",
+      "description",
+      "behaviors"
+    ],
+    "GridLength": [
+      "value",
+      "unitType"
+    ],
+    "StackPanel": [
+      "orientation",
+      "spacing"
+    ],
+    "DockPanel": [
+      "lastChildFill"
+    ],
+    "WrapPanel": [
+      "orientation",
+      "itemWidth",
+      "itemHeight"
+    ],
+    "RowDefinition": [
+      "height",
+      "minimumHeight",
+      "maximumHeight"
+    ],
+    "ColumnDefinition": [
+      "width",
+      "minimumWidth",
+      "maximumWidth"
+    ],
+    "Grid": [
+      "rows",
+      "columns"
+    ],
+    "Behavior": [
+      "name",
+      "bindings",
+      "order"
+    ],
+    "InteractionBinding": [
+      "trigger",
+      "actions",
+      "condition"
+    ],
+    "InteractionTrigger": [],
+    "BuiltInInteractionTrigger": [
+      "kind"
+    ],
+    "EventInteractionTrigger": [
+      "eventName"
+    ],
+    "IntervalInteractionTrigger": [
+      "seconds"
+    ],
+    "ApplicationTriggerInteractionTrigger": [
+      "triggerName"
+    ],
+    "InteractionAction": [
+      "arguments",
+      "onSuccess",
+      "onFailure",
+      "onResult"
+    ],
+    "ExecuteCommandAction": [
+      "command"
+    ],
+    "NavigateAction": [
+      "screen"
+    ],
+    "NavigateBackAction": [],
+    "OpenDialogAction": [
+      "dialogTemplate"
+    ],
+    "CloseDialogAction": [],
+    "RefreshQueryAction": [
+      "query"
+    ],
+    "SetStateAction": [
+      "target",
+      "value"
+    ],
+    "NotifyAction": [
+      "level",
+      "message"
+    ],
+    "ConfirmAction": [
+      "message"
+    ],
+    "RaiseTriggerAction": [
+      "trigger"
+    ],
+    "InteractionArgument": [
+      "name",
+      "value"
+    ],
+    "InteractionMessage": [
+      "text",
+      "stringsKey",
+      "binding"
+    ]
+  },
+  "enums": {
+    "PackageKind": [
+      "ComponentLibrary",
+      "Styling",
+      "Blueprint"
+    ],
+    "WidthSizeClass": [
+      "Compact",
+      "Regular"
+    ],
+    "HeightSizeClass": [
+      "Compact",
+      "Regular"
+    ],
+    "HorizontalAlignment": [
+      "Stretch",
+      "Left",
+      "Center",
+      "Right"
+    ],
+    "VerticalAlignment": [
+      "Stretch",
+      "Top",
+      "Center",
+      "Bottom"
+    ],
+    "Visibility": [
+      "Visible",
+      "Hidden",
+      "Collapsed"
+    ],
+    "FlowContainerKind": [
+      "Row",
+      "Column",
+      "Grid"
+    ],
+    "Orientation": [
+      "Horizontal",
+      "Vertical"
+    ],
+    "Dock": [
+      "Left",
+      "Top",
+      "Right",
+      "Bottom"
+    ],
+    "GridUnitType": [
+      "Auto",
+      "Absolute",
+      "Star"
+    ],
+    "InteractionTriggerKind": [
+      "Click",
+      "DoubleClick",
+      "Select",
+      "Submit",
+      "Change",
+      "Load",
+      "Unload",
+      "Enter",
+      "Leave"
+    ],
+    "NotificationLevel": [
+      "Info",
+      "Warning",
+      "Error"
+    ]
+  }
 }
