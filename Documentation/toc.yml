@@ -3,6 +3,10 @@
 
 - name: Understand
   items:
+    - name: Layering and seams
+      href: architecture/layering.md
+    - name: Glossary
+      href: glossary.md
     - name: Packages
       href: packages/toc.yml
 

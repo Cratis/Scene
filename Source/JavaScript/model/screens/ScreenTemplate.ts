@@ -3,6 +3,7 @@
 
 import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
+import { Behavior } from '../interactions';
 
 /**
  * A reusable screen structure that fills a named slot on whatever contains it, and offers slots of its
@@ -57,6 +58,11 @@ export interface ScreenTemplate {
      * A one-line description for a template picker.
      */
     description?: string;
+    /**
+     * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
+     * attached further out or further in.
+     */
+    behaviors?: Behavior[];
 }
 
 export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
@@ -67,4 +73,5 @@ export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
     'content',
     'displayName',
     'description',
+    'behaviors',
 ];

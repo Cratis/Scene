@@ -79,6 +79,70 @@ const rules = {
     },
 };
 
+// Seam invariants from UIPlan/01-foundations-architecture.md §3 (I3, I4).
+//
+// I3 — the engine and the model have no framework or DOM dependency. The engine is pure functions over the
+// model so its behaviour can be asserted without a DOM, and so a non-React renderer inherits correct
+// semantics rather than reimplementing them. Enforced by ADR-005 and ADR-006.
+//
+// I4 — no URL string is constructed outside a renderer package. The model declares `navigate to <Screen>`;
+// deciding that this means `/invoicing/invoices` is renderer work, per ADR-004. A route-template literal in
+// `model/` or `engine/` means that decision has leaked down a layer.
+const seamRestrictedPackages = [
+    { name: 'react', message: 'I3: the engine and the model are framework-neutral. Move React usage into a renderer package such as @cratis/scene.react.' },
+    { name: 'react-dom', message: 'I3: the engine and the model are framework-neutral. Move React usage into a renderer package such as @cratis/scene.react.' },
+    { name: '@cratis/scene.react', message: 'I3: the engine and the model must not depend on a renderer. The dependency runs the other way.' },
+];
+
+const seamRestrictedGlobals = [
+    'window',
+    'document',
+    'navigator',
+    'location',
+    'history',
+    'localStorage',
+    'sessionStorage',
+    'fetch',
+    'XMLHttpRequest',
+    'alert',
+    'confirm',
+].map(name => ({
+    name,
+    message: `I3: '${name}' is a host environment API. The engine and the model must run without a DOM — take it as an injected seam (a transport, a dispatcher, a store) supplied by the renderer.`,
+}));
+
+const routeLiteralMessage =
+    'I4: no URL is constructed outside a renderer package. The model and the engine deal in screen references and parameter maps; a renderer turns those into a path (ADR-004).';
+
+const seamConfig = [
+    {
+        files: ['Source/JavaScript/engine/**/*.ts', 'Source/JavaScript/model/**/*.ts'],
+        languageOptions: {
+            globals: {},
+        },
+        rules: {
+            'no-restricted-imports': ['error', { paths: seamRestrictedPackages }],
+            'no-restricted-globals': ['error', ...seamRestrictedGlobals],
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector: 'Literal[value=/^\\//]',
+                    message: routeLiteralMessage,
+                },
+                {
+                    // A relative route template — caught separately so it is reported once, not twice.
+                    selector: 'Literal[value=/^[^/].*\\/:/]',
+                    message: routeLiteralMessage,
+                },
+                {
+                    selector: 'TemplateElement[value.raw=/^\\//]',
+                    message: routeLiteralMessage,
+                },
+            ],
+        },
+    },
+];
+
 const reactCompat = compat.extends('plugin:react/recommended');
 const reactPlugin = reactCompat[0].plugins.react;
 
@@ -133,6 +197,7 @@ const defaultConfig = [
             'no-restricted-globals': 0,
         },
     },
+    ...seamConfig,
 ];
 
 const config = tseslint.config(...defaultConfig);

@@ -4,3 +4,4 @@
 export * from './WidthSizeClass';
 export * from './HeightSizeClass';
 export * from './SizeClass';
+export * from './TargetSizeClass';

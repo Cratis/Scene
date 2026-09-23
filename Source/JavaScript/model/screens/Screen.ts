@@ -4,6 +4,7 @@
 import { SceneElement } from '../elements';
 import { Form } from '../forms';
 import { Contribution } from '../contributionPoints';
+import { Behavior } from '../interactions';
 
 /**
  * A named screen: the structure it fills, the content that fills it, the forms it hosts, and whatever it
@@ -45,6 +46,11 @@ export interface Screen {
      * never has to state its own position.
      */
     screenTemplate?: string;
+    /**
+     * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
+     * attached further out or further in.
+     */
+    behaviors?: Behavior[];
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors'];

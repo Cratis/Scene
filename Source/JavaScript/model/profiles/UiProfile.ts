@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SizeClass } from '../sizeClasses';
+import { TargetSizeClass } from '../sizeClasses';
 
 /**
  * A named target: a platform, a default size class, an ordered list of component packages, and the
@@ -33,7 +33,7 @@ export interface UiProfile {
     /**
      * The size class assumed when the renderer cannot otherwise determine one.
      */
-    defaultSizeClass?: SizeClass;
+    defaultSizeClass?: TargetSizeClass;
 
     /**
      * The name of the {@link Layout} this profile renders inside — the application's base navigational

@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Model.Interactions;
+
 namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
@@ -24,4 +26,10 @@ namespace Cratis.Scene.Model.Layouts;
 /// <see cref="Layouts.Slot"/>'s own <see cref="Slot.Arrangement"/>, which positions that one slot's filled
 /// content instead of positioning the slots themselves.
 /// </param>
-public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrangement = null);
+public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrangement = null)
+{
+    /// <summary>
+    /// Gets the behaviors attached to the layout. Additive with whatever is attached further out or further in.
+    /// </summary>
+    public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+}

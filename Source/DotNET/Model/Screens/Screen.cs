@@ -4,6 +4,7 @@
 using Cratis.Scene.Model.ContributionPoints;
 using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Forms;
+using Cratis.Scene.Model.Interactions;
 
 namespace Cratis.Scene.Model.Screens;
 
@@ -34,4 +35,10 @@ public record Screen(
     IReadOnlyDictionary<string, IReadOnlyList<SceneElement>> SlotContent,
     IReadOnlyList<Form> Forms,
     IReadOnlyList<Contribution> Contributions,
-    string? ScreenTemplate = null);
+    string? ScreenTemplate = null)
+{
+    /// <summary>
+    /// Gets the behaviors attached to the screen. Additive with whatever is attached further out or further in.
+    /// </summary>
+    public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+}

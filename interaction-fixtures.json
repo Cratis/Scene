@@ -1,0 +1,373 @@
+{
+  "description": "Shared behavior corpus for the interaction engine - resolveBehaviors.ts and runActions.ts (@cratis/scene.engine). Every case here is asserted independently of the unit specs, so the two rules most likely to drift - which behaviors a trigger runs and in what order, and where a sequence stops - are pinned by data rather than by prose. Same pattern as screen-template-fixtures.json and layout-evaluation-fixtures.json. NOTE: unlike those corpora, this one currently has a single consumer. There is no C# interaction engine yet; the sequencing rules live only in TypeScript, because the engine runs where the interaction happens. When a second implementation appears it asserts these same cases, which is the reason the corpus is a file rather than a fixture module.",
+  "resolutionCases": [
+    {
+      "name": "every matching attachment runs, not only the most specific",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "layout",
+          "behaviors": [
+            {
+              "name": "LayoutWide",
+              "trigger": "Click"
+            }
+          ]
+        },
+        {
+          "level": "module",
+          "behaviors": [
+            {
+              "name": "ModuleWide",
+              "trigger": "Click"
+            }
+          ]
+        },
+        {
+          "level": "element",
+          "behaviors": [
+            {
+              "name": null,
+              "trigger": "Click"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "LayoutWide",
+        "ModuleWide",
+        null
+      ]
+    },
+    {
+      "name": "the outermost attachment runs first even when the list was built innermost-first",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "element",
+          "depth": 2,
+          "behaviors": [
+            {
+              "name": "Innermost",
+              "trigger": "Click"
+            }
+          ]
+        },
+        {
+          "level": "screen",
+          "depth": 1,
+          "behaviors": [
+            {
+              "name": "Middle",
+              "trigger": "Click"
+            }
+          ]
+        },
+        {
+          "level": "module",
+          "depth": 0,
+          "behaviors": [
+            {
+              "name": "Outermost",
+              "trigger": "Click"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "Outermost",
+        "Middle",
+        "Innermost"
+      ]
+    },
+    {
+      "name": "an explicit order wins over position",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "layout",
+          "behaviors": [
+            {
+              "name": "LayoutWide",
+              "trigger": "Click"
+            }
+          ]
+        },
+        {
+          "level": "element",
+          "behaviors": [
+            {
+              "name": "RunsFirst",
+              "trigger": "Click",
+              "order": 1
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "RunsFirst",
+        "LayoutWide"
+      ]
+    },
+    {
+      "name": "declaration order decides between two behaviors at the same level",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "screen",
+          "behaviors": [
+            {
+              "name": "First",
+              "trigger": "Click"
+            },
+            {
+              "name": "Second",
+              "trigger": "Click"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "First",
+        "Second"
+      ]
+    },
+    {
+      "name": "a binding for another trigger is not resolved",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "screen",
+          "behaviors": [
+            {
+              "name": "OnSubmitOnly",
+              "trigger": "Submit"
+            },
+            {
+              "name": "OnClick",
+              "trigger": "Click"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        "OnClick"
+      ]
+    },
+    {
+      "name": "an attachment point with nothing attached resolves to nothing",
+      "trigger": "Click",
+      "attachments": [
+        {
+          "level": "element",
+          "behaviors": []
+        }
+      ],
+      "expected": []
+    }
+  ],
+  "sequencingCases": [
+    {
+      "name": "actions run in the order they were declared",
+      "actions": [
+        {
+          "kind": "RefreshQuery",
+          "query": "Invoices"
+        },
+        {
+          "kind": "Notify",
+          "level": "Info",
+          "text": "Done"
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "refreshQuery:Invoices",
+        "notify:Info:Done"
+      ],
+      "expectedStop": "Completed"
+    },
+    {
+      "name": "a command that succeeds takes the success branch",
+      "actions": [
+        {
+          "kind": "ExecuteCommand",
+          "command": "RegisterInvoice",
+          "onSuccess": [
+            {
+              "kind": "CloseDialog"
+            }
+          ],
+          "onFailure": [
+            {
+              "kind": "Notify",
+              "level": "Error",
+              "text": "Failed"
+            }
+          ]
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "executeCommand:RegisterInvoice",
+        "closeDialog"
+      ],
+      "expectedStop": "Completed"
+    },
+    {
+      "name": "a command that fails takes the failure branch",
+      "actions": [
+        {
+          "kind": "ExecuteCommand",
+          "command": "RegisterInvoice",
+          "onSuccess": [
+            {
+              "kind": "CloseDialog"
+            }
+          ],
+          "onFailure": [
+            {
+              "kind": "Notify",
+              "level": "Error",
+              "text": "Failed"
+            }
+          ]
+        }
+      ],
+      "commandSucceeds": false,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "executeCommand:RegisterInvoice",
+        "notify:Error:Failed"
+      ],
+      "expectedStop": "Completed"
+    },
+    {
+      "name": "a declined confirm stops the sequence, because gating what follows is the whole point of it",
+      "actions": [
+        {
+          "kind": "Confirm",
+          "text": "Are you sure?",
+          "onSuccess": [
+            {
+              "kind": "ExecuteCommand",
+              "command": "CancelInvoice"
+            }
+          ]
+        },
+        {
+          "kind": "Notify",
+          "level": "Info",
+          "text": "Never runs"
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": false,
+      "expectedCalls": [
+        "confirm:Are you sure?"
+      ],
+      "expectedStop": "Declined"
+    },
+    {
+      "name": "an accepted confirm runs what it gates",
+      "actions": [
+        {
+          "kind": "Confirm",
+          "text": "Are you sure?",
+          "onSuccess": [
+            {
+              "kind": "ExecuteCommand",
+              "command": "CancelInvoice"
+            }
+          ]
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "confirm:Are you sure?",
+        "executeCommand:CancelInvoice"
+      ],
+      "expectedStop": "Completed"
+    },
+    {
+      "name": "a navigation stops the sequence, because the screen the rest was written for is gone",
+      "actions": [
+        {
+          "kind": "Navigate",
+          "screen": "InvoiceList"
+        },
+        {
+          "kind": "Notify",
+          "level": "Info",
+          "text": "Never runs"
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "navigate:InvoiceList"
+      ],
+      "expectedStop": "Navigated"
+    },
+    {
+      "name": "navigating back stops the sequence for the same reason",
+      "actions": [
+        {
+          "kind": "NavigateBack"
+        },
+        {
+          "kind": "CloseDialog"
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "navigateBack"
+      ],
+      "expectedStop": "Navigated"
+    },
+    {
+      "name": "a dialog's result continuation runs after it closes",
+      "actions": [
+        {
+          "kind": "OpenDialog",
+          "dialogTemplate": "InvoiceDetails",
+          "onResult": [
+            {
+              "kind": "RefreshQuery",
+              "query": "Invoices"
+            }
+          ]
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [
+        "openDialog:InvoiceDetails",
+        "refreshQuery:Invoices"
+      ],
+      "expectedStop": "Completed"
+    },
+    {
+      "name": "an action kind the engine does not know is reported and the sequence abandoned",
+      "actions": [
+        {
+          "kind": "SomethingFromALaterVersion"
+        },
+        {
+          "kind": "CloseDialog"
+        }
+      ],
+      "commandSucceeds": true,
+      "confirmAnswer": true,
+      "expectedCalls": [],
+      "expectedStop": "Reported",
+      "expectedFindings": [
+        "unknownAction"
+      ]
+    }
+  ]
+}

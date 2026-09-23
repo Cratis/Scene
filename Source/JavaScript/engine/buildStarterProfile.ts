@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SizeClass, UiProfile, UiStarter } from '@cratis/scene.model';
+import { TargetSizeClass, UiProfile, UiStarter } from '@cratis/scene.model';
 
 /**
  * Builds the sandboxed {@link UiProfile} a {@link UiStarter}'s gallery boots through - part of
@@ -16,6 +16,6 @@ import { SizeClass, UiProfile, UiStarter } from '@cratis/scene.model';
  * @param defaultSizeClass The size class assumed when the renderer cannot otherwise determine one.
  * @returns A {@link UiProfile} named after the starter, scoped to exactly its own `packages`.
  */
-export function buildStarterProfile(starter: UiStarter, targetPlatform: string, defaultSizeClass?: SizeClass): UiProfile {
+export function buildStarterProfile(starter: UiStarter, targetPlatform: string, defaultSizeClass?: TargetSizeClass): UiProfile {
     return { name: starter.name, targetPlatform, packages: starter.packages, defaultSizeClass };
 }

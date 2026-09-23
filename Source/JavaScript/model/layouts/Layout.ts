@@ -3,6 +3,7 @@
 
 import { Arrangement } from './Arrangement';
 import { Slot } from './Slot';
+import { Behavior } from '../interactions';
 
 /**
  * A named template of slots that a {@link Screen} fills with content. Mirrors Screenplay's `layout`
@@ -21,6 +22,11 @@ export interface Layout {
      * themselves.
      */
     arrangement?: Arrangement;
+    /**
+     * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
+     * attached further out or further in.
+     */
+    behaviors?: Behavior[];
 }
 
-export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement'];
+export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors'];

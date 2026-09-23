@@ -22,6 +22,6 @@ public static class StarterProfileBuilder
     /// <param name="targetPlatform">The platform the gallery runs on (e.g. <c language="csharp">web</c>).</param>
     /// <param name="defaultSizeClass">The size class assumed when the renderer cannot otherwise determine one.</param>
     /// <returns>A <see cref="UiProfile"/> named after the starter, scoped to exactly its own <see cref="UiStarter.Packages"/>.</returns>
-    public static UiProfile BuildProfile(UiStarter starter, string targetPlatform, SizeClass? defaultSizeClass = null) =>
+    public static UiProfile BuildProfile(UiStarter starter, string targetPlatform, TargetSizeClass? defaultSizeClass = null) =>
         new(starter.Name, targetPlatform, starter.Packages, defaultSizeClass);
 }
