@@ -442,6 +442,11 @@
       "Notify",
       "Confirm",
       "RaiseTrigger"
+    ],
+    "TargetSizeClass": [
+      "Compact",
+      "Regular",
+      "Expanded"
     ]
   }
 }

@@ -36,6 +36,6 @@ public record UiProfile(
     string Name,
     string TargetPlatform,
     IReadOnlyList<string> Packages,
-    SizeClass? DefaultSizeClass = null,
+    TargetSizeClass? DefaultSizeClass = null,
     string? Layout = null,
     string? Theme = null);
