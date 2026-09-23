@@ -10,4 +10,4 @@ export interface RaiseTriggerAction extends InteractionAction {
     trigger: string;
 }
 
-export const RaiseTriggerActionPropertyNames: (keyof RaiseTriggerAction)[] = ['trigger'];
+export const RaiseTriggerActionPropertyNames: (keyof RaiseTriggerAction)[] = ['trigger', 'kind'];

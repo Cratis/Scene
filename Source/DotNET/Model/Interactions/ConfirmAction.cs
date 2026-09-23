@@ -7,4 +7,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// Gates the actions that follow on the user agreeing.
 /// </summary>
 /// <param name="Message">What to ask.</param>
-public record ConfirmAction(InteractionMessage Message) : InteractionAction;
+public record ConfirmAction(InteractionMessage Message) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.Confirm;
+}

@@ -31,6 +31,11 @@ namespace Cratis.Scene.Model.Interactions;
 public abstract record InteractionAction
 {
     /// <summary>
+    /// Gets which effect this action is.
+    /// </summary>
+    public abstract InteractionActionKind Kind { get; }
+
+    /// <summary>
     /// Gets the arguments supplied to the action.
     /// </summary>
     public IReadOnlyList<InteractionArgument> Arguments { get; init; } = [];

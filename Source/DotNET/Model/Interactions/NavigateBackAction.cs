@@ -6,4 +6,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// <summary>
 /// Pops navigation history.
 /// </summary>
-public record NavigateBackAction : InteractionAction;
+public record NavigateBackAction : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.NavigateBack;
+}

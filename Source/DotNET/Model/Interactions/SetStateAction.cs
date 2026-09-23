@@ -10,4 +10,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// </summary>
 /// <param name="Target">The declared state name being written.</param>
 /// <param name="Value">The value to write.</param>
-public record SetStateAction(string Target, BindingExpression Value) : InteractionAction;
+public record SetStateAction(string Target, BindingExpression Value) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.SetState;
+}

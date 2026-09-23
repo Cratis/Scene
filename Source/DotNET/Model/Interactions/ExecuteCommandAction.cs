@@ -7,4 +7,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// Submits a modeled command.
 /// </summary>
 /// <param name="Command">The command to submit.</param>
-public record ExecuteCommandAction(string Command) : InteractionAction;
+public record ExecuteCommandAction(string Command) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.ExecuteCommand;
+}

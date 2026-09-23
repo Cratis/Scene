@@ -10,4 +10,4 @@ export interface RefreshQueryAction extends InteractionAction {
     query: string;
 }
 
-export const RefreshQueryActionPropertyNames: (keyof RefreshQueryAction)[] = ['query'];
+export const RefreshQueryActionPropertyNames: (keyof RefreshQueryAction)[] = ['query', 'kind'];

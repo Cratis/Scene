@@ -17,7 +17,7 @@ export interface Form {
      * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
      * attached further out or further in.
      */
-    behaviors: Behavior[];
+    behaviors?: Behavior[];
 }
 
 export const FormPropertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'fields', 'behaviors'];

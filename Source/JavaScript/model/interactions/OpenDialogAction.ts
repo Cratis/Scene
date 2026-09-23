@@ -10,4 +10,4 @@ export interface OpenDialogAction extends InteractionAction {
     dialogTemplate: string;
 }
 
-export const OpenDialogActionPropertyNames: (keyof OpenDialogAction)[] = ['dialogTemplate'];
+export const OpenDialogActionPropertyNames: (keyof OpenDialogAction)[] = ['dialogTemplate', 'kind'];

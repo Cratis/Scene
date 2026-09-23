@@ -8,4 +8,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// </summary>
 /// <param name="Level">How prominently to surface it.</param>
 /// <param name="Message">The message.</param>
-public record NotifyAction(NotificationLevel Level, InteractionMessage Message) : InteractionAction;
+public record NotifyAction(NotificationLevel Level, InteractionMessage Message) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.Notify;
+}

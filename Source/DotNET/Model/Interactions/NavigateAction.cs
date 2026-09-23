@@ -11,4 +11,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// The screen is named, never addressed. Turning a screen reference into a URL is a renderer's job, so this
 /// model stays meaningful to a renderer that has no URLs at all.
 /// </remarks>
-public record NavigateAction(string Screen) : InteractionAction;
+public record NavigateAction(string Screen) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.Navigate;
+}

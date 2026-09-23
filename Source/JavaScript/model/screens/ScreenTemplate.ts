@@ -62,7 +62,7 @@ export interface ScreenTemplate {
      * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
      * attached further out or further in.
      */
-    behaviors: Behavior[];
+    behaviors?: Behavior[];
 }
 
 export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [

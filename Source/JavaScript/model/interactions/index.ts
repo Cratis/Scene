@@ -10,6 +10,7 @@ export * from './IntervalInteractionTrigger';
 export * from './ApplicationTriggerInteractionTrigger';
 export * from './InteractionMessage';
 export * from './InteractionArgument';
+export * from './InteractionActionKind';
 export * from './InteractionAction';
 export * from './ExecuteCommandAction';
 export * from './NavigateAction';

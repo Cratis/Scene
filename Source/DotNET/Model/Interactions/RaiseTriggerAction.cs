@@ -7,4 +7,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// Fires a declared application trigger.
 /// </summary>
 /// <param name="Trigger">The application trigger to fire.</param>
-public record RaiseTriggerAction(string Trigger) : InteractionAction;
+public record RaiseTriggerAction(string Trigger) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.RaiseTrigger;
+}

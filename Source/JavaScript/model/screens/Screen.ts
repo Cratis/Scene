@@ -50,7 +50,7 @@ export interface Screen {
      * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
      * attached further out or further in.
      */
-    behaviors: Behavior[];
+    behaviors?: Behavior[];
 }
 
 export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors'];

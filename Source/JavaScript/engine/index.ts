@@ -22,3 +22,6 @@ export * from './packageCatalog';
 export * from './resolveScreenTemplates';
 export * from './buildStarterProfile';
 export * from './incompatibleStarterThemes';
+export * from './ActionDispatcher';
+export * from './runActions';
+export * from './resolveBehaviors';

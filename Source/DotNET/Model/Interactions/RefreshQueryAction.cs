@@ -7,4 +7,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// Re-runs a query-backed element.
 /// </summary>
 /// <param name="Query">The query to re-run.</param>
-public record RefreshQueryAction(string Query) : InteractionAction;
+public record RefreshQueryAction(string Query) : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.RefreshQuery;
+}

@@ -7,3 +7,5 @@ import { InteractionAction } from './InteractionAction';
  * Pops navigation history.
  */
 export interface NavigateBackAction extends InteractionAction {}
+
+export const NavigateBackActionPropertyNames: (keyof NavigateBackAction)[] = ['kind'];

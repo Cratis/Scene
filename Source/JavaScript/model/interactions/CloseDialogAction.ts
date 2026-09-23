@@ -7,3 +7,5 @@ import { InteractionAction } from './InteractionAction';
  * Dismisses the innermost dialog.
  */
 export interface CloseDialogAction extends InteractionAction {}
+
+export const CloseDialogActionPropertyNames: (keyof CloseDialogAction)[] = ['kind'];

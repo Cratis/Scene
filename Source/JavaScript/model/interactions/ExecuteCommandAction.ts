@@ -10,4 +10,4 @@ export interface ExecuteCommandAction extends InteractionAction {
     command: string;
 }
 
-export const ExecuteCommandActionPropertyNames: (keyof ExecuteCommandAction)[] = ['command'];
+export const ExecuteCommandActionPropertyNames: (keyof ExecuteCommandAction)[] = ['command', 'kind'];

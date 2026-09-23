@@ -10,4 +10,4 @@ export interface NavigateAction extends InteractionAction {
     screen: string;
 }
 
-export const NavigateActionPropertyNames: (keyof NavigateAction)[] = ['screen'];
+export const NavigateActionPropertyNames: (keyof NavigateAction)[] = ['screen', 'kind'];

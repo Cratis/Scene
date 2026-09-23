@@ -11,4 +11,4 @@ export interface ConfirmAction extends InteractionAction {
     message: InteractionMessage;
 }
 
-export const ConfirmActionPropertyNames: (keyof ConfirmAction)[] = ['message'];
+export const ConfirmActionPropertyNames: (keyof ConfirmAction)[] = ['message', 'kind'];

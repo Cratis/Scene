@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { InteractionActionKind } from './InteractionActionKind';
 import { InteractionArgument } from './InteractionArgument';
 
 /**
@@ -11,10 +12,11 @@ import { InteractionArgument } from './InteractionArgument';
  * that does nothing when clicked.
  */
 export interface InteractionAction {
-    arguments: InteractionArgument[];
-    onSuccess: InteractionAction[];
-    onFailure: InteractionAction[];
-    onResult: InteractionAction[];
+    kind: InteractionActionKind;
+    arguments?: InteractionArgument[];
+    onSuccess?: InteractionAction[];
+    onFailure?: InteractionAction[];
+    onResult?: InteractionAction[];
 }
 
-export const InteractionActionPropertyNames: (keyof InteractionAction)[] = ['arguments', 'onSuccess', 'onFailure', 'onResult'];
+export const InteractionActionPropertyNames: (keyof InteractionAction)[] = ['kind', 'arguments', 'onSuccess', 'onFailure', 'onResult'];

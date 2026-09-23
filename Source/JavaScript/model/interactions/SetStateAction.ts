@@ -12,4 +12,4 @@ export interface SetStateAction extends InteractionAction {
     value: BindingExpression;
 }
 
-export const SetStateActionPropertyNames: (keyof SetStateAction)[] = ['target', 'value'];
+export const SetStateActionPropertyNames: (keyof SetStateAction)[] = ['target', 'value', 'kind'];

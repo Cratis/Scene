@@ -6,4 +6,8 @@ namespace Cratis.Scene.Model.Interactions;
 /// <summary>
 /// Dismisses the innermost dialog.
 /// </summary>
-public record CloseDialogAction : InteractionAction;
+public record CloseDialogAction : InteractionAction
+{
+    /// <inheritdoc/>
+    public override InteractionActionKind Kind => InteractionActionKind.CloseDialog;
+}

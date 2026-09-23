@@ -308,38 +308,51 @@
       "triggerName"
     ],
     "InteractionAction": [
+      "kind",
       "arguments",
       "onSuccess",
       "onFailure",
       "onResult"
     ],
     "ExecuteCommandAction": [
-      "command"
+      "command",
+      "kind"
     ],
     "NavigateAction": [
-      "screen"
+      "screen",
+      "kind"
     ],
-    "NavigateBackAction": [],
+    "NavigateBackAction": [
+      "kind"
+    ],
     "OpenDialogAction": [
-      "dialogTemplate"
+      "dialogTemplate",
+      "kind"
     ],
-    "CloseDialogAction": [],
+    "CloseDialogAction": [
+      "kind"
+    ],
     "RefreshQueryAction": [
-      "query"
+      "query",
+      "kind"
     ],
     "SetStateAction": [
       "target",
-      "value"
+      "value",
+      "kind"
     ],
     "NotifyAction": [
       "level",
-      "message"
+      "message",
+      "kind"
     ],
     "ConfirmAction": [
-      "message"
+      "message",
+      "kind"
     ],
     "RaiseTriggerAction": [
-      "trigger"
+      "trigger",
+      "kind"
     ],
     "InteractionArgument": [
       "name",
@@ -417,6 +430,18 @@
       "Info",
       "Warning",
       "Error"
+    ],
+    "InteractionActionKind": [
+      "ExecuteCommand",
+      "Navigate",
+      "NavigateBack",
+      "OpenDialog",
+      "CloseDialog",
+      "RefreshQuery",
+      "SetState",
+      "Notify",
+      "Confirm",
+      "RaiseTrigger"
     ]
   }
 }

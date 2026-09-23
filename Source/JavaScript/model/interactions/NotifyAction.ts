@@ -13,4 +13,4 @@ export interface NotifyAction extends InteractionAction {
     message: InteractionMessage;
 }
 
-export const NotifyActionPropertyNames: (keyof NotifyAction)[] = ['level', 'message'];
+export const NotifyActionPropertyNames: (keyof NotifyAction)[] = ['level', 'message', 'kind'];
