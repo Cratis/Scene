@@ -41,6 +41,7 @@ on:
       - "global.json"
 
 permissions:
+  issues: write
   contents: write
   deployments: write
   id-token: write
