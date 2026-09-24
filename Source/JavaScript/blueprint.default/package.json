@@ -67,7 +67,7 @@
         "@storybook/addon-links": "^10.6.0",
         "@storybook/react": "^10.6.0",
         "@storybook/react-vite": "^10.6.0",
-        "primeicons": "8.0.1",
+        "primeicons": "8.0.2",
         "primereact": "11.1.0",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",

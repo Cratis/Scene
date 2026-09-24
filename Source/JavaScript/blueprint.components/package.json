@@ -50,7 +50,7 @@
         "build-storybook": "storybook build"
     },
     "dependencies": {
-        "@cratis/components": "^4.13.0",
+        "@cratis/components": "^4.13.1",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
@@ -58,7 +58,7 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/components": "^4.13.0",
+        "@cratis/components": "^4.13.1",
         "@cratis/scene.blueprint.default": "1.0.0",
         "@cratis/scene.components": "1.0.0",
         "@cratis/scene.engine": "1.0.0",
@@ -69,7 +69,7 @@
         "@storybook/addon-links": "^10.6.0",
         "@storybook/react": "^10.6.0",
         "@storybook/react-vite": "^10.6.0",
-        "primeicons": "8.0.1",
+        "primeicons": "8.0.2",
         "primereact": "11.1.0",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
