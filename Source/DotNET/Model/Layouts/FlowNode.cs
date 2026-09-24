@@ -1,12 +1,25 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
 /// A node in a <see cref="FlowArrangement"/>'s tree: a container (<see cref="FlowRow"/>, <see cref="FlowColumn"/>,
 /// <see cref="FlowGrid"/>) or a leaf positioning one of the slot's own content elements (<see cref="FlowLeaf"/>).
 /// </summary>
+/// <remarks>
+/// See the same remark on <see cref="Arrangement"/> - without <see cref="JsonPolymorphicAttribute"/>, every
+/// node in a <see cref="FlowContainer.Children"/> list serializes as its static base type instead of the
+/// concrete row/column/grid/leaf it actually is.
+/// </remarks>
+[JsonPolymorphic]
+[JsonDerivedType(typeof(FlowRow))]
+[JsonDerivedType(typeof(FlowColumn))]
+[JsonDerivedType(typeof(FlowGrid))]
+[JsonDerivedType(typeof(FlowLeaf))]
+[JsonDerivedType(typeof(FlowSlotLeaf))]
 public abstract record FlowNode
 {
     /// <summary>

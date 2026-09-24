@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Model.Layouts;
 
 /// <summary>
@@ -12,4 +14,15 @@ namespace Cratis.Scene.Model.Layouts;
 /// that slot's own filled content elements (leaves carry the element itself: <see cref="FlowLeaf"/>/
 /// <see cref="ElementPlacement"/>).
 /// </summary>
+/// <remarks>
+/// Without <see cref="JsonPolymorphicAttribute"/> here, `System.Text.Json` serializes a reference typed as
+/// the abstract base by its static type - an empty object, regardless of whether it holds a real
+/// <see cref="FlowArrangement"/> tree. A renderer reading `/stage/scene` then sees `{}` for every layout
+/// and screen template arrangement, which is indistinguishable from "none declared" and was silently
+/// discarding real arrangement data end to end.
+/// </remarks>
+[JsonPolymorphic]
+[JsonDerivedType(typeof(FlowArrangement))]
+[JsonDerivedType(typeof(FreeformArrangement))]
+[JsonDerivedType(typeof(FreeformSlotArrangement))]
 public abstract record Arrangement;
