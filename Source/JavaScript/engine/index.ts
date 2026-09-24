@@ -25,3 +25,4 @@ export * from './incompatibleStarterThemes';
 export * from './ActionDispatcher';
 export * from './runActions';
 export * from './resolveBehaviors';
+export * from './resolveStrings';
