@@ -58,9 +58,9 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/arc": "22.30.0",
-        "@cratis/arc.react": "22.30.0",
-        "@cratis/components": "4.16.0",
+        "@cratis/arc": "22.31.0",
+        "@cratis/arc.react": "22.31.0",
+        "@cratis/components": "4.18.0",
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
         "@cratis/scene.react": "1.0.0",
