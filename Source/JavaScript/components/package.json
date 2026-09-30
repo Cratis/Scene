@@ -58,19 +58,19 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/arc": "22.33.1",
-        "@cratis/arc.react": "22.33.1",
-        "@cratis/components": "4.21.0",
+        "@cratis/arc": "22.39.0",
+        "@cratis/arc.react": "22.39.0",
+        "@cratis/components": "4.21.1",
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
         "@cratis/scene.react": "1.0.0",
-        "@storybook/addon-links": "^10.6.0",
-        "@storybook/react": "^10.6.0",
-        "@storybook/react-vite": "^10.6.0",
+        "@storybook/addon-links": "^10.6.1",
+        "@storybook/react": "^10.6.1",
+        "@storybook/react-vite": "^10.6.1",
         "primeicons": "8.0.2",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
-        "storybook": "^10.6.0"
+        "storybook": "^10.6.1"
     },
     "peerDependencies": {
         "@cratis/arc": "^22.19.1",
