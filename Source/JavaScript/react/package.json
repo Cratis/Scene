@@ -24,7 +24,8 @@
     "files": [
         "dist",
         "**/*.ts",
-        "**/*.tsx"
+        "**/*.tsx",
+        "!**/for_*/**"
     ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",

@@ -25,6 +25,7 @@
         "test": "node ./run-task-on-workspaces.js test",
         "ci": "node ./run-task-on-workspaces.js ci",
         "build-storybook": "node ./run-task-on-workspaces.js build-storybook",
+        "verify-packages": "node ./verify-package-contents.js",
         "publish-version": "node ./run-task-on-workspaces.js publish-version $*",
         "up": "node ./run-task-on-workspaces.js up",
         "postinstall": "node ./link-eslint-typescript.js"

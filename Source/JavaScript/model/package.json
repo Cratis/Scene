@@ -23,7 +23,8 @@
     },
     "files": [
         "dist",
-        "**/*.ts"
+        "**/*.ts",
+        "!**/for_*/**"
     ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",

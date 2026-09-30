@@ -25,7 +25,8 @@
         "dist",
         "**/*.ts",
         "**/*.tsx",
-        "shell/layout.css"
+        "shell/layout.css",
+        "!**/for_*/**"
     ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
