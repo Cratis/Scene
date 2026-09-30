@@ -55,5 +55,8 @@ jobs:
           export NODE_OPTIONS="--max-old-space-size=4096"
           yarn ci
 
+      - name: Verify packed packages hold no specifications
+        run: yarn verify-packages
+
       - name: Build Storybook
         run: yarn build-storybook
