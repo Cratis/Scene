@@ -27,8 +27,15 @@ function packedFiles(packageDirectory) {
         throw new Error(`npm pack failed in '${packageDirectory}':\n${result.stderr}`);
     }
 
+    // npm 10 runs the package's `prepare` script even with --ignore-scripts, and that script writes its own
+    // progress to stdout ahead of the JSON report, so parse from the line where the report starts.
     // npm reports an array of packed packages; newer versions key the same entries by package name.
-    const report = JSON.parse(result.stdout);
+    const start = result.stdout.search(/^[[{]\s*$/m);
+    if (start < 0) {
+        throw new Error(`npm pack reported no packed files in '${packageDirectory}':\n${result.stdout}`);
+    }
+
+    const report = JSON.parse(result.stdout.slice(start));
     const entry = Array.isArray(report) ? report[0] : Object.values(report)[0];
     return entry.files.map(_ => _.path);
 }
