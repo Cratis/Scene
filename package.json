@@ -10,6 +10,9 @@
     "engines": {
         "node": ">=23.0.0"
     },
+    "resolutions": {
+        "motion-dom": "13.4.5"
+    },
     "scripts": {
         "g:clean": "cd $INIT_CWD && tsc -b --clean",
         "g:build": "cd $INIT_CWD && tsc -b && rollup -c ./rollup.config.mjs",
