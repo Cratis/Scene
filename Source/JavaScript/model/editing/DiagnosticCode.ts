@@ -55,4 +55,12 @@ export enum DiagnosticCode {
     CollectionItemNotFound = 'collectionItemNotFound',
     DuplicateCollectionItem = 'duplicateCollectionItem',
     UnknownInstance = 'unknownInstance',
+
+    // Icons
+    MissingIconLibrary = 'missingIconLibrary',
+    MissingIcon = 'missingIcon',
+    MissingIconVariant = 'missingIconVariant',
+    IncompatibleIconLibrary = 'incompatibleIconLibrary',
+    IconCatalogUnavailable = 'iconCatalogUnavailable',
+    IconNotVerified = 'iconNotVerified',
 }

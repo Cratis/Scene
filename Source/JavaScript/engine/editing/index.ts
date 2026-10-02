@@ -19,3 +19,6 @@ export * from './EditingContext';
 export * from './inspect';
 export * from './EditOutcome';
 export * from './applyEdit';
+export * from './iconDiagnostics';
+export * from './diagnoseIcons';
+export * from './collectIconUsages';

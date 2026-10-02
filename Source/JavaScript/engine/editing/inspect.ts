@@ -2,12 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-    DiagnosticCode, EditTarget, InspectedCollectionItem, InspectedProperty, NodeInspection,
+    DiagnosticCode, DiagnosticSeverity, EditTarget, InspectedCollectionItem, InspectedProperty, NodeInspection,
     NodeProvenance, ProvenanceKind, PropertyDescriptor, PropertyValueType, SceneDiagnostic, SceneDocument, SceneNodeKind, ValueSource,
 } from '@cratis/scene.model';
 import { describeNode, readNodeValue } from './describeNode';
+import { EffectiveIconCatalog } from '../icons/EffectiveIconCatalog';
 import { EditingContext } from './EditingContext';
 import { computeExposureGrants, ExposureGrant, grantKey } from './exposureGrants';
+import { iconProblemsOfItems, iconProblemsOfProperty } from './iconDiagnostics';
 import { indexDocument } from './indexDocument';
 import { NodeRecord } from './DocumentIndex';
 import { resolveEffectiveConfiguration } from './resolveEffectiveConfiguration';
@@ -91,6 +93,22 @@ function inspectProperty(
 }
 
 /**
+ * Reports icons the profile cannot supply - on the node itself and in configuration contributed to it. The values
+ * stay where they are; these are warnings.
+ */
+function iconDiagnosticsOf(properties: InspectedProperty[], iconCatalog: EffectiveIconCatalog, nodeId: string): SceneDiagnostic[] {
+    return properties.flatMap(property => {
+        const descriptor = property.descriptor;
+        if (descriptor.valueType !== PropertyValueType.Collection) {
+            return iconProblemsOfProperty(iconCatalog, descriptor, property.effectiveValue, DiagnosticSeverity.Warning, { nodeId });
+        }
+
+        const items = (property.items ?? []).map(item => ({ id: item.id, values: item.values, instance: item.origin === 'owner' ? undefined : item.origin }));
+        return iconProblemsOfItems(iconCatalog, descriptor.item, items, DiagnosticSeverity.Warning, { nodeId, path: descriptor.path });
+    });
+}
+
+/**
  * Describes one node for an editor: what it is, where it comes from, what can be edited on it - with current and
  * effective values and effective editability - and what can be done with it.
  *
@@ -127,6 +145,11 @@ export function inspect(document: SceneDocument, nodeId: string, context: Editin
         diagnostics.push(...chain.diagnostics.filter(diagnostic => diagnostic.code === DiagnosticCode.UnknownScope));
     }
 
+    const properties = description.properties.map(descriptor => inspectProperty(descriptor, record, provenance, scopeInstance, scopeGrants, configuredValues));
+    if (context.iconCatalog) {
+        diagnostics.push(...iconDiagnosticsOf(properties, context.iconCatalog, nodeId));
+    }
+
     return {
         nodeId,
         kind: record.kind,
@@ -134,7 +157,7 @@ export function inspect(document: SceneDocument, nodeId: string, context: Editin
         label: record.label,
         parentId: record.parentId,
         provenance,
-        properties: description.properties.map(descriptor => inspectProperty(descriptor, record, provenance, scopeInstance, scopeGrants, configuredValues)),
+        properties,
         capabilities: description.capabilities,
         removable: isRemovable(record, provenance),
         diagnostics,

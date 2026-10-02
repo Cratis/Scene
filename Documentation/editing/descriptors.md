@@ -32,7 +32,8 @@ const pageSize: PropertyDescriptor = {
 ## Value types
 
 - **icon** holds an `IconReference`: `{ library, key, variant? }`. Equality is all three fields; a label,
-  class name or SVG is never identity.
+  class name or SVG is never identity. When the editing context carries an effective icon catalog, an icon value
+  is also checked against it - see [Icons in editing](../icon-libraries/icons-in-editing.md).
 - **destination** holds a `DestinationReference`: `{ screen, routeParameterBindings? }`. Scene names screens; a
   renderer turns the name into a route.
 - **queryReference** holds a [`QueryBinding`](query-binding.md). A plain query name - what screens carried

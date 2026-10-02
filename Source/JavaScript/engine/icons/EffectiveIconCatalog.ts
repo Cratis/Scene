@@ -24,7 +24,7 @@ import { matchesIconQuery } from './matchesIconQuery';
 export class EffectiveIconCatalog {
     readonly #sources: Map<string, IconCatalogSource>;
     readonly #loads = new Map<string, Promise<IconEntry[]>>();
-    readonly #loaded = new Set<string>();
+    readonly #loadedEntries = new Map<string, IconEntry[]>();
 
     /**
      * @param resolution The active libraries and the problems found with them.
@@ -53,7 +53,7 @@ export class EffectiveIconCatalog {
      * Whether a library's catalog has been read yet.
      */
     isLoaded(library: string): boolean {
-        return this.#loaded.has(library);
+        return this.#loadedEntries.has(library);
     }
 
     /**
@@ -73,7 +73,7 @@ export class EffectiveIconCatalog {
             load = source.loadEntries();
             this.#loads.set(library, load);
             load.then(
-                () => this.#loaded.add(library),
+                (entries) => this.#loadedEntries.set(library, entries),
                 () => this.#loads.delete(library)
             );
         }
@@ -129,17 +129,36 @@ export class EffectiveIconCatalog {
      */
     async resolve(reference: IconReference): Promise<IconResolution> {
         const library = this.libraries.find((resolved) => resolved.library === reference.library);
+        if (library && !this.isLoaded(library.library) && !this.#incompatibility(library)) {
+            const outcome = await this.#entriesOrDiagnostic(library);
+            if ('diagnostic' in outcome) return { isResolved: false, reference, diagnostic: { ...outcome.diagnostic, reference } };
+        }
+
+        return this.lookup(reference) as IconResolution;
+    }
+
+    /**
+     * Looks a reference up without loading anything, for callers that cannot wait - an edit is applied
+     * synchronously. Resolves everything that is decidable from what is already known: a library that is not
+     * active, one at an incompatible version, and - once the library's catalog has been loaded - a missing
+     * icon or variant.
+     *
+     * @returns The resolution, or `undefined` when the library is active but its catalog has not been loaded,
+     * so nothing can be said about the icon yet. Call {@link load} first to make the answer definite.
+     */
+    lookup(reference: IconReference): IconResolution | undefined {
+        const library = this.libraries.find((resolved) => resolved.library === reference.library);
         if (!library) {
             return this.#unresolved(reference, 'missing-library', `The icon library '${reference.library}' is not active in this profile`);
         }
 
-        const incompatible = this.diagnostics.find((diagnostic) => diagnostic.kind === 'incompatible-version' && diagnostic.library === library.library);
+        const incompatible = this.#incompatibility(library);
         if (incompatible) return { isResolved: false, reference, diagnostic: { ...incompatible, reference } };
 
-        const outcome = await this.#entriesOrDiagnostic(library);
-        if ('diagnostic' in outcome) return { isResolved: false, reference, diagnostic: { ...outcome.diagnostic, reference } };
+        const entries = this.#loadedEntries.get(library.library);
+        if (!entries) return undefined;
 
-        const entry = outcome.entries.find((candidate) => candidate.key === reference.key);
+        const entry = entries.find((candidate) => candidate.key === reference.key);
         if (!entry) {
             return this.#unresolved(reference, 'missing-icon', `The icon library '${library.library}' has no icon '${reference.key}'`);
         }
@@ -151,6 +170,20 @@ export class EffectiveIconCatalog {
         return { isResolved: true, reference, library, entry };
     }
 
+    /**
+     * Loads the catalogs of one library, or of every active library, so that {@link lookup} can answer
+     * definitely. Libraries whose catalog cannot be loaded are reported, not thrown.
+     */
+    async load(library?: string): Promise<IconDiagnostic[]> {
+        const covered = this.libraries.filter((resolved) => library === undefined || resolved.library === library);
+        const outcomes = await Promise.all(covered.map(async (resolved) => this.#entriesOrDiagnostic(resolved)));
+        return outcomes.flatMap((outcome) => ('diagnostic' in outcome ? [outcome.diagnostic] : []));
+    }
+
+    #incompatibility(library: ResolvedIconLibrary): IconDiagnostic | undefined {
+        return this.diagnostics.find((diagnostic) => diagnostic.kind === 'incompatible-version' && diagnostic.library === library.library);
+    }
+
     async #entriesOrDiagnostic(library: ResolvedIconLibrary): Promise<{ entries: IconEntry[] } | { diagnostic: IconDiagnostic }> {
         try {
             return { entries: (await this.entriesOf(library.library)) ?? [] };
@@ -160,7 +193,7 @@ export class EffectiveIconCatalog {
         }
     }
 
-    #unresolved(reference: IconReference, kind: IconDiagnostic['kind'], message: string): IconResolution {
+    #unresolved(reference: IconReference, kind: IconDiagnostic['kind'], message: string): IconResolution & { isResolved: false } {
         return { isResolved: false, reference, diagnostic: { kind, library: reference.library, message, reference } };
     }
 }

@@ -50,6 +50,7 @@ author sees is what plays. There is no design-time flag anywhere in the engine.
 ## What Scene does not do
 
 - It does not discover queries. The host works out which queries are in scope and passes them in.
-- It does not own the icon catalog. An icon is a `{ library, key, variant? }` reference; the libraries and
-  the picker live elsewhere.
+- It does not own the icon catalog. An icon is a `{ library, key, variant? }` reference; the
+  [icon libraries](../icon-libraries/index.md) a profile has supply the catalog, and the host hands it to editing
+  through `EditingContext.iconCatalog`. The picker lives elsewhere.
 - It does not draw anything. Presentation, selection handles and drag feedback belong to the host.
