@@ -1,0 +1,12 @@
+- name: Overview
+  href: index.md
+- name: Describing what can be edited
+  href: descriptors.md
+- name: Inspecting and editing
+  href: inspection-and-editing.md
+- name: Exposing a template to its screens
+  href: exposure-and-configuration.md
+- name: Binding queries
+  href: query-binding.md
+- name: Layout type reference
+  href: layout-types.md
