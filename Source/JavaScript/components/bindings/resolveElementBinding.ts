@@ -18,6 +18,22 @@ const bindingPropertyNames: Record<BindingKind, string> = {
 };
 
 /**
+ * Reads a binding name from a property that holds either the name itself or a `QueryBinding`, which is what an
+ * editor stores when a query is bound to a host-supplied candidate. Both resolve through the registry by name.
+ */
+function bindingName(properties: Record<string, unknown>, property: string): string | undefined {
+    const direct = stringProperty(properties, property);
+    if (direct !== undefined) return direct;
+
+    const binding = properties[property];
+    if (binding !== null && typeof binding === 'object' && !Array.isArray(binding)) {
+        return stringProperty(binding as Record<string, unknown>, 'query');
+    }
+
+    return undefined;
+}
+
+/**
  * Reads the binding name an element carries for the given kind and looks it up in the binding registry.
  *
  * Every Arc-bound adapter starts here, so the "name in, class out" step happens in exactly one place and
@@ -26,7 +42,7 @@ const bindingPropertyNames: Record<BindingKind, string> = {
  * turns into a visible placeholder.
  */
 export function resolveElementBinding(element: ExternalComponent, kind: BindingKind): ElementBinding {
-    const name = stringProperty(element.properties, bindingPropertyNames[kind]);
+    const name = bindingName(element.properties, bindingPropertyNames[kind]);
     if (name === undefined) return {};
 
     return { name, target: kind === BindingKind.Query ? resolveQuery(name) : resolveCommand(name) };

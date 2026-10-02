@@ -12,3 +12,7 @@ export * from './packages';
 export * from './interactions';
 export * from './screens';
 export * from './starters';
+export * from './queries';
+export * from './descriptors';
+export * from './exposure';
+export * from './editing';
