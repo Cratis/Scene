@@ -8,6 +8,7 @@ export * from './layouts';
 export * from './forms';
 export * from './contributionPoints';
 export * from './profiles';
+export * from './icons';
 export * from './packages';
 export * from './interactions';
 export * from './screens';

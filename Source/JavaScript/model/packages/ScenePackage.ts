@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { IconLibrary } from '../icons';
 import { PackageDependency } from './PackageDependency';
 import { PackageKind } from './PackageKind';
 
@@ -86,6 +87,11 @@ export interface ScenePackage {
      * tells an author nothing about eligibility or obligations.
      */
     licenseUrl?: string;
+
+    /**
+     * What the package declares about its icons. Present exactly for a {@link PackageKind.IconLibrary}.
+     */
+    iconLibrary?: IconLibrary;
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -103,4 +109,5 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'module',
     'license',
     'licenseUrl',
+    'iconLibrary',
 ];

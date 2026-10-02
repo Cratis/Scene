@@ -33,6 +33,7 @@ namespace Cratis.Scene.Model.Packages;
 /// <paramref name="License"/> on trust. Required in practice for anything that is not a permissive
 /// standard license - a name alone tells an author nothing about eligibility or obligations.
 /// </param>
+/// <param name="IconLibrary">What the package declares about its icons. Present exactly for a <see cref="PackageKind.IconLibrary"/>.</param>
 public record ScenePackage(
     string Name,
     string Version,
@@ -47,4 +48,5 @@ public record ScenePackage(
     string? Description = null,
     string? Module = null,
     string? License = null,
-    string? LicenseUrl = null);
+    string? LicenseUrl = null,
+    Icons.IconLibrary? IconLibrary = null);
