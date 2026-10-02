@@ -65,6 +65,69 @@ sealed class ChangeContext(
         _violations.Add(new SceneDocumentViolation(code, message, subject));
 
     /// <summary>
+    /// Whether a stored document establishes an owner by name. An owner that establishes no exposure still establishes that
+    /// nothing is exposed; an absent declaration is not the same as an unknown owner.
+    /// </summary>
+    /// <param name="owner">The layout, template, dialog template or screen name.</param>
+    /// <returns><see langword="true"/> when a reference establishes the owner; otherwise <see langword="false"/>.</returns>
+    public bool HasReferenceOwner(string owner) => References.Any(reference =>
+        reference.Name == owner
+        || reference.Document.Layouts.ContainsKey(owner)
+        || reference.Document.ScreenTemplates.ContainsKey(owner)
+        || reference.Document.DialogTemplates.ContainsKey(owner)
+        || reference.Document.Screens.ContainsKey(owner));
+
+    /// <summary>
+    /// Gets what an authoritative owner exposes, retaining whether the owner itself is known when it exposes nothing.
+    /// </summary>
+    /// <param name="owner">The owner.</param>
+    /// <returns>The known-owner state and its declaration, when it has one.</returns>
+    public (bool Known, ExposureEntry? Entry) ReferenceExposure(string owner)
+    {
+        var named = References.Where(reference => reference.Name == owner).Concat(References.Where(reference => reference.Name != owner));
+        foreach (var (_, document) in named)
+        {
+            if (document.Exposures.TryGetValue(owner, out var entry))
+            {
+                return (true, entry);
+            }
+        }
+
+        return (HasReferenceOwner(owner), null);
+    }
+
+    /// <summary>
+    /// Gets what an authoritative instance contributes, retaining whether the instance itself is known when it contributes
+    /// nothing. A known instance with no contribution is an authoritative empty value.
+    /// </summary>
+    /// <param name="instance">The id of the instance.</param>
+    /// <returns>The known-instance state and its contributions.</returns>
+    public (bool Known, IReadOnlyList<ContributionEntry> Entries) ReferenceContributions(string instance)
+    {
+        var (prefix, name) = instance.Split(':', 2) is [var kind, var value] ? (kind, value) : (string.Empty, string.Empty);
+        var named = References.Where(reference => reference.Name == name).Concat(References.Where(reference => reference.Name != name));
+        var known = false;
+        foreach (var (_, document) in named)
+        {
+            known |= prefix switch
+            {
+                "template" => document.ScreenTemplates.ContainsKey(name),
+                "screen" => document.Screens.ContainsKey(name),
+                "dialog" => document.DialogTemplates.ContainsKey(name),
+                "layout" => document.Layouts.ContainsKey(name),
+                _ => false
+            };
+            var entries = document.ContributionsOf(instance).ToList();
+            if (entries.Count > 0)
+            {
+                return (true, entries);
+            }
+        }
+
+        return (known, []);
+    }
+
+    /// <summary>
     /// The stored document a thing is authoritatively kept in: the document of the template that bears its name when there is
     /// one, otherwise the first stored document that has it.
     /// </summary>
@@ -85,18 +148,5 @@ sealed class ChangeContext(
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// What the stored documents hold for an instance: the document of the template of that name when it is one, otherwise the
-    /// first stored document that has any contribution by it.
-    /// </summary>
-    /// <param name="instance">The id of the instance.</param>
-    /// <returns>Its contributions as stored; empty when no stored document has any.</returns>
-    public IReadOnlyList<ContributionEntry> ReferenceContributions(string instance)
-    {
-        var templateName = instance.StartsWith("template:", StringComparison.Ordinal) ? instance["template:".Length..] : null;
-        var ordered = References.Where(reference => reference.Name == templateName).Concat(References.Where(reference => reference.Name != templateName));
-        return ordered.Select(reference => reference.Document.ContributionsOf(instance).ToList()).FirstOrDefault(entries => entries.Count > 0) ?? [];
     }
 }

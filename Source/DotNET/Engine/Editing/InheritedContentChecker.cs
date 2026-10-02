@@ -42,7 +42,8 @@ static class InheritedContentChecker
         foreach (var name in submitted.Keys.Concat(previous.Keys).Distinct().Where(name => !context.Owns(ownedKind, name)))
         {
             var reference = context.Reference(name, document => Lookup(select(document), name));
-            Judge(context, $"The {kind} '{name}'", name, Lookup(submitted, name), Lookup(previous, name), reference);
+            var authoritativeAbsence = context.References.Count > 0 && reference is null && previous.Count == 0;
+            Judge(context, $"The {kind} '{name}'", name, Lookup(submitted, name), Lookup(previous, name), authoritativeAbsence ? _nothingStored : reference);
         }
     }
 
@@ -54,8 +55,8 @@ static class InheritedContentChecker
 
         foreach (var owner in owners)
         {
-            var reference = context.Reference(owner, document => Declared(document.Exposures.GetValueOrDefault(owner)));
-            Judge(context, $"What '{owner}' exposes", owner, Declared(context.Submitted.Exposures.GetValueOrDefault(owner)), Declared(previous.GetValueOrDefault(owner)), reference);
+            var reference = context.ReferenceExposure(owner);
+            Judge(context, $"What '{owner}' exposes", owner, Declared(context.Submitted.Exposures.GetValueOrDefault(owner)), Declared(previous.GetValueOrDefault(owner)), reference.Known ? Declared(reference.Entry) ?? _nothingStored : null);
         }
     }
 
@@ -70,7 +71,7 @@ static class InheritedContentChecker
             var before = previous.Where(entry => entry.Instance == instance).ToList();
             var reference = context.ReferenceContributions(instance);
 
-            foreach (var key in submitted.Concat(before).Concat(reference).Select(entry => entry.Key).Distinct())
+            foreach (var key in submitted.Concat(before).Concat(reference.Entries).Select(entry => entry.Key).Distinct())
             {
                 Judge(
                     context,
@@ -78,7 +79,7 @@ static class InheritedContentChecker
                     instance,
                     Raw(submitted, key),
                     Raw(before, key),
-                    reference.Count == 0 ? null : Raw(reference, key) ?? _nothingStored);
+                    reference.Known ? Raw(reference.Entries, key) ?? _nothingStored : null);
             }
         }
     }

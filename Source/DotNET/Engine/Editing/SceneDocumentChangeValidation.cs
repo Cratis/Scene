@@ -66,11 +66,28 @@ public static class SceneDocumentChangeValidation
             return Refused(SceneDocumentViolationCode.UnknownScope, $"There is no {Describe(scope)} in the document.");
         }
 
+        RequireAuthoritativeScreenAncestry(context);
         var grants = ExposureGrants.Compute(chain);
         InheritedContentChecker.Check(context);
         ExposureChecker.Check(context, chain, grants);
         ContributionChecker.Check(context, chain, grants);
         return new SceneDocumentChangeResult(context.Violations);
+    }
+
+    static void RequireAuthoritativeScreenAncestry(ChangeContext context)
+    {
+        if (context.Scope.Kind != EditingScopeKind.Screen || context.References.Count == 0 || !context.Submitted.Screens.TryGetValue(context.Scope.Name, out var screen))
+        {
+            return;
+        }
+
+        foreach (var owner in new[] { JsonData.String(screen, "layout"), JsonData.String(screen, "screenTemplate") }.OfType<string>())
+        {
+            if (!context.HasReferenceOwner(owner))
+            {
+                context.Add(SceneDocumentViolationCode.NodeNotEditable, $"The screen inherits '{owner}', which is not in its authoritative template ancestry.", owner);
+            }
+        }
     }
 
     static SceneDocumentChangeResult Refused(SceneDocumentViolationCode code, string message) =>

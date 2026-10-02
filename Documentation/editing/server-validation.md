@@ -56,9 +56,13 @@ The check compares the submitted document with the one it replaces, so what was 
 - A copy of a template that has since moved on is not refused while it is unchanged. A changed copy must be exactly
   what the stored template says, which is how a stale copy is brought up to date.
 - A screen does not have to embed its template. When the stored template is passed in `references`, it is part of the
-  chain the screen's values are checked against.
-- Something new that no stored document knows, such as a blueprint template the server has no copy of, is taken to be
-  authored by the document.
+  chain the screen's values are checked against. A screen with references must name a layout and screen template from that
+  authoritative ancestry; a name invented in the submitted document is refused.
+- An owner that exists in a reference but has no exposure declares **zero grants**. The server refuses a submitted exposure
+  or contribution for it; absence is never interpreted as "the client may define it".
+- The server must resolve `scope` and `references` from its own application, module, feature and slice context. Never derive
+  either from the submitted document. When it cannot resolve that context, refuse the save rather than treating unfamiliar
+  layouts, templates or instances as authored by the client.
 
 ## What it does not check
 
