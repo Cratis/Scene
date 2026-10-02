@@ -11,4 +11,5 @@ export * from './common';
 export * from './editors';
 export * from './toolbar';
 export * from './cratisComponents';
+export * from './cratisComponentsDescriptors';
 export * from './cratisComponentsPackage';

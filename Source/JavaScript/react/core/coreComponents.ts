@@ -6,6 +6,7 @@ import { componentRegistryKey } from '../packages';
 import { CoreText } from './CoreText';
 import { CoreButton } from './CoreButton';
 import { CoreCard } from './CoreCard';
+import { CoreNavigationBar } from './CoreNavigationBar';
 import {
     CoreAction,
     CoreCode,
@@ -39,4 +40,5 @@ export const coreComponents: ComponentRegistry = {
     [componentRegistryKey('core', 'field')]: CoreField,
     [componentRegistryKey('core', 'code')]: CoreCode,
     [componentRegistryKey('core', 'file')]: CoreFile,
+    [componentRegistryKey('core', 'navigationBar')]: CoreNavigationBar,
 };

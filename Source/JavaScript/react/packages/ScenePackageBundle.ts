@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { ComponentDescriptor, DialogTemplate, Layout, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
 import { ComponentRegistry } from '../renderer';
 
 /**
@@ -51,6 +51,14 @@ export interface ScenePackageBundle {
     screens?: Screen[];
 
     /**
+     * What can be edited on this package's components - one {@link ComponentDescriptor} per component that is
+     * editable at design time. They are data, so Studio reads them without rendering anything, and they travel with
+     * the components they describe rather than in a registry of their own. {@link validatePackageBundle} checks
+     * that every descriptor names a component the manifest declares.
+     */
+    descriptors?: ComponentDescriptor[];
+
+    /**
      * The themes this package ships, if any.
      */
     themes?: Theme[];
@@ -71,7 +79,8 @@ export function componentRegistryKey(packageName: string, componentName: string)
 }
 
 /**
- * Checks that a bundle provides everything its manifest declares, and declares everything it provides.
+ * Checks that a bundle provides everything its manifest declares, and declares everything it provides, and that
+ * every descriptor it ships is for a component it declares and is well formed.
  *
  * A manifest that promises a component the bundle does not register renders as `UnresolvedComponent` at
  * runtime — a blank box, far from where the mistake was made. A component registered but not declared is
@@ -120,6 +129,44 @@ export function validatePackageBundle(bundle: ScenePackageBundle): string[] {
     for (const name of manifest.themes) {
         if (!providedThemes.has(name)) {
             problems.push(`declares the theme '${name}' but provides no definition for it`);
+        }
+    }
+
+    problems.push(...validateDescriptors(bundle));
+    return problems;
+}
+
+function validateDescriptors(bundle: ScenePackageBundle): string[] {
+    const problems: string[] = [];
+    const declared = new Set(bundle.manifest.components.map((name) => componentRegistryKey(bundle.manifest.name, name)));
+    const described = new Set<string>();
+
+    for (const descriptor of bundle.descriptors ?? []) {
+        if (!declared.has(descriptor.component)) {
+            problems.push(`describes '${descriptor.component}', which the manifest does not declare as a component`);
+        }
+
+        if (described.has(descriptor.component)) {
+            problems.push(`describes '${descriptor.component}' more than once`);
+        }
+
+        described.add(descriptor.component);
+
+        const paths = new Set<string>();
+        for (const property of descriptor.properties) {
+            if (paths.has(property.path)) {
+                problems.push(`'${descriptor.component}' describes the property '${property.path}' more than once`);
+            }
+
+            paths.add(property.path);
+
+            if (property.valueType === PropertyValueType.Collection && property.item === undefined) {
+                problems.push(`'${descriptor.component}' describes the collection '${property.path}' without describing its items`);
+            }
+
+            if (property.valueType === PropertyValueType.Enum && (property.choices ?? []).length === 0) {
+                problems.push(`'${descriptor.component}' describes the enum '${property.path}' without choices`);
+            }
         }
     }
 
