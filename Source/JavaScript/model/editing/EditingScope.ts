@@ -12,6 +12,13 @@ export interface EditingScope {
 
     /** The name of the screen, template or layout. */
     name: string;
+
+    /**
+     * For a template scope: the name of the layout the template ultimately sits in. A template does not say
+     * which layout it belongs to, so a document with several layouts needs to be told. A screen scope reads it
+     * from the screen itself.
+     */
+    layout?: string;
 }
 
-export const EditingScopePropertyNames: (keyof EditingScope)[] = ['kind', 'name'];
+export const EditingScopePropertyNames: (keyof EditingScope)[] = ['kind', 'name', 'layout'];

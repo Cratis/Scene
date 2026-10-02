@@ -26,3 +26,4 @@ export * from './ActionDispatcher';
 export * from './runActions';
 export * from './resolveBehaviors';
 export * from './resolveStrings';
+export * from './editing';
