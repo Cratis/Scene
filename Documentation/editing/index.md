@@ -14,6 +14,7 @@ in an editor, in a test and in a different renderer.
 | What is this node, and can I change it from here? | `inspect(document, nodeId, context)` returns a `NodeInspection` | [Inspecting and editing](inspection-and-editing.md) |
 | Change it | `applyEdit(document, edit, context)` returns a new document or refuses with diagnostics | [Inspecting and editing](inspection-and-editing.md) |
 | What may a screen change on its template? | An `ExposureDeclaration` on the template, `InstanceContribution`s on the screen | [Exposing a template](exposure-and-configuration.md) |
+| Is a saved document within what its scope may change? | `SceneDocumentChangeValidation.Validate(...)` in `Cratis.Scene.Engine`, from .NET | [Validating on the server](server-validation.md) |
 | What does a data component bind to? | A `QueryBinding` checked against host-supplied `QueryCandidate`s | [Binding queries](query-binding.md) |
 
 ## The document

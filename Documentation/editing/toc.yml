@@ -8,5 +8,7 @@
   href: exposure-and-configuration.md
 - name: Binding queries
   href: query-binding.md
+- name: Validating a saved document on the server
+  href: server-validation.md
 - name: Layout type reference
   href: layout-types.md
