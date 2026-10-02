@@ -1,7 +1,9 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, DialogTemplate, Layout, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { ComponentDescriptor, DialogTemplate, Layout, PackageKind, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
+import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
 
 /**
@@ -62,6 +64,12 @@ export interface ScenePackageBundle {
      * The themes this package ships, if any.
      */
     themes?: Theme[];
+
+    /**
+     * The icon catalog and renderer adapter of an icon-library package. Present exactly when the
+     * manifest declares an icon library.
+     */
+    iconLibrary?: IconLibraryBundle;
 }
 
 /**
@@ -132,7 +140,47 @@ export function validatePackageBundle(bundle: ScenePackageBundle): string[] {
         }
     }
 
+    problems.push(...validateIconLibrary(bundle));
     problems.push(...validateDescriptors(bundle));
+
+    return problems;
+}
+
+function validateIconLibrary(bundle: ScenePackageBundle): string[] {
+    const problems: string[] = [];
+    const { manifest, iconLibrary } = bundle;
+    const declaresIconLibrary = manifest.kind === PackageKind.IconLibrary || manifest.iconLibrary !== undefined;
+
+    if (manifest.kind === PackageKind.IconLibrary && !manifest.iconLibrary) {
+        problems.push('is an icon library but declares no iconLibrary metadata');
+    }
+
+    if (manifest.kind !== PackageKind.IconLibrary && manifest.iconLibrary) {
+        problems.push('declares iconLibrary metadata but is not of kind IconLibrary');
+    }
+
+    if (declaresIconLibrary && !iconLibrary) {
+        problems.push('declares an icon library but the bundle provides no catalog or adapter for it');
+    }
+
+    if (!declaresIconLibrary && iconLibrary) {
+        problems.push('provides an icon catalog and adapter, which the manifest does not declare');
+    }
+
+    if (iconLibrary) {
+        if (iconLibrary.catalog.library !== manifest.name) {
+            problems.push(`provides an icon catalog for '${iconLibrary.catalog.library}' instead of '${manifest.name}'`);
+        }
+
+        if (iconLibrary.adapter.library !== manifest.name) {
+            problems.push(`provides an icon adapter for '${iconLibrary.adapter.library}' instead of '${manifest.name}'`);
+        }
+
+        if (manifest.iconLibrary && !manifest.iconLibrary.renderers.includes('react')) {
+            problems.push("provides a React icon adapter but does not list 'react' among its icon renderers");
+        }
+    }
+
     return problems;
 }
 
@@ -181,4 +229,13 @@ function validateDescriptors(bundle: ScenePackageBundle): string[] {
  */
 export function mergePackageRegistries(bundles: ScenePackageBundle[]): ComponentRegistry {
     return Object.assign({}, ...bundles.map((bundle) => bundle.components)) as ComponentRegistry;
+}
+
+/**
+ * Collects the icon adapters of several bundles into the registry `SceneIcon` renders through.
+ *
+ * @throws Error when two bundles provide an adapter for the same library.
+ */
+export function mergeIconAdapters(bundles: ScenePackageBundle[]): IconAdapterRegistry {
+    return createIconAdapterRegistry(bundles.flatMap((bundle) => (bundle.iconLibrary ? [bundle.iconLibrary.adapter] : [])));
 }

@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-    AddCollectionItemEdit, CollectionOperation, ContributedItem, DiagnosticCode, EditCollectionItemEdit, InstanceContribution,
+    AddCollectionItemEdit, CollectionOperation, ContributedItem, DiagnosticCode, DiagnosticSeverity, EditCollectionItemEdit, InstanceContribution,
     PropertyValueType, RemoveCollectionItemEdit, ReorderCollectionItemEdit, ResetInstanceValueEdit, SceneDiagnostic,
     SceneDocument, SetInstanceValueEdit,
 } from '@cratis/scene.model';
-import { errorDiagnostic } from './diagnostics';
+import { errorDiagnostic, hasErrors } from './diagnostics';
+import { iconProblemsOfItems } from './iconDiagnostics';
 import { EditSession } from './EditSession';
 import { ExposureGrant, grantKey } from './exposureGrants';
 import { cloneData } from './pathAccess';
@@ -66,7 +67,7 @@ function permitted(grant: ExposureGrant, operation: CollectionOperation, instanc
     return true;
 }
 
-function checkFields(grant: ExposureGrant, values: Record<string, unknown>, itemId: string, instance: string, diagnostics: SceneDiagnostic[], requireAll: boolean): boolean {
+function checkFields(session: EditSession, grant: ExposureGrant, values: Record<string, unknown>, itemId: string, instance: string, diagnostics: SceneDiagnostic[], requireAll: boolean): boolean {
     const context = { instance, component: grant.component, path: grant.path, itemId };
     let valid = true;
 
@@ -86,6 +87,13 @@ function checkFields(grant: ExposureGrant, values: Record<string, unknown>, item
             `'${problem.field}' ${problem.problem}.`,
             context));
         valid = false;
+    }
+
+    const icons = session.context.iconCatalog;
+    if (icons && valid) {
+        const iconProblems = iconProblemsOfItems(icons, itemDescriptor, [{ id: itemId, values }], DiagnosticSeverity.Error, context);
+        diagnostics.push(...iconProblems);
+        valid = !hasErrors(iconProblems);
     }
 
     return valid;
@@ -163,7 +171,7 @@ export function applyAddCollectionItem(session: EditSession, edit: AddCollection
         return;
     }
 
-    if (!checkFields(grant, edit.item.values, edit.item.id, instance, diagnostics, true)) return;
+    if (!checkFields(session, grant, edit.item.values, edit.item.id, instance, diagnostics, true)) return;
 
     const { contribution, items } = ownItems(clone, instance, grant);
     if (edit.index !== undefined && (!Number.isInteger(edit.index) || edit.index < 0 || edit.index > items.length)) {
@@ -236,7 +244,7 @@ export function applyEditCollectionItem(session: EditSession, edit: EditCollecti
     const position = findOwnItem(items, edit.itemId, resolved.instance, resolved.grant, session, diagnostics);
     if (position < 0) return;
 
-    if (!checkFields(resolved.grant, { [edit.field]: edit.value }, edit.itemId, resolved.instance, diagnostics, false)) return;
+    if (!checkFields(session, resolved.grant, { [edit.field]: edit.value }, edit.itemId, resolved.instance, diagnostics, false)) return;
 
     const next = items.map((item, index) => index === position ? { ...item, values: { ...item.values, [edit.field]: cloneData(edit.value) } } : item);
     save(clone, resolved.instance, resolved.grant, contribution, next);

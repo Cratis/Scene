@@ -1,0 +1,25 @@
+{
+    "description": "Shared behavior corpus for Cratis.Scene.Model.Icons.IconReference (C#) and iconReferences (TypeScript, @cratis/scene.model) - both sides assert every case here independently, so the text form and the equality rule cannot drift apart.",
+    "formatCases": [
+        { "name": "library and key", "reference": { "library": "@cratis/scene.icons.lucide", "key": "house" }, "expected": "@cratis/scene.icons.lucide#house" },
+        { "name": "library, key and variant", "reference": { "library": "@cratis/scene.icons.lucide", "key": "house", "variant": "solid" }, "expected": "@cratis/scene.icons.lucide#house#solid" }
+    ],
+    "parseCases": [
+        { "name": "library and key", "text": "acme#home", "expected": { "library": "acme", "key": "home" } },
+        { "name": "library, key and variant", "text": "acme#home#outline", "expected": { "library": "acme", "key": "home", "variant": "outline" } },
+        { "name": "a bare legacy icon name has no library", "text": "pi pi-home", "expected": null },
+        { "name": "an empty key", "text": "acme#", "expected": null },
+        { "name": "an empty library", "text": "#home", "expected": null },
+        { "name": "an empty variant", "text": "acme#home#", "expected": null },
+        { "name": "too many parts", "text": "acme#home#outline#extra", "expected": null },
+        { "name": "empty text", "text": "", "expected": null }
+    ],
+    "equalityCases": [
+        { "name": "same library, key and variant", "left": { "library": "a", "key": "home", "variant": "solid" }, "right": { "library": "a", "key": "home", "variant": "solid" }, "expected": true },
+        { "name": "both without a variant", "left": { "library": "a", "key": "home" }, "right": { "library": "a", "key": "home" }, "expected": true },
+        { "name": "same key in different libraries", "left": { "library": "a", "key": "home" }, "right": { "library": "b", "key": "home" }, "expected": false },
+        { "name": "different keys", "left": { "library": "a", "key": "home" }, "right": { "library": "a", "key": "house" }, "expected": false },
+        { "name": "a variant against none", "left": { "library": "a", "key": "home", "variant": "solid" }, "right": { "library": "a", "key": "home" }, "expected": false },
+        { "name": "different variants", "left": { "library": "a", "key": "home", "variant": "solid" }, "right": { "library": "a", "key": "home", "variant": "outline" }, "expected": false }
+    ]
+}

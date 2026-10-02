@@ -8,6 +8,7 @@ export * from './elementKind';
 export * from './panelKind';
 export * from './flowNodeKind';
 export * from './ComponentResolution';
+export * from './icons';
 export * from './resolveComponentName';
 export * from './computeSizeClass';
 export * from './evaluateFlowArrangement';

@@ -17,6 +17,8 @@
 
 - name: Reference
   items:
+    - name: Icon libraries
+      href: icon-libraries/toc.yml
     - name: Blueprints
       href: blueprints/toc.yml
     - name: Cratis Components blueprint

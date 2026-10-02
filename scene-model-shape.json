@@ -218,7 +218,28 @@
       "description",
       "module",
       "license",
-      "licenseUrl"
+      "licenseUrl",
+      "iconLibrary"
+    ],
+    "IconReference": [
+      "library",
+      "key",
+      "variant"
+    ],
+    "IconLibrary": [
+      "variants",
+      "renderers",
+      "attribution",
+      "attributionUrl",
+      "iconCount"
+    ],
+    "IconEntry": [
+      "key",
+      "name",
+      "categories",
+      "aliases",
+      "tags",
+      "variants"
     ],
     "Screen": [
       "name",
@@ -368,7 +389,8 @@
     "PackageKind": [
       "ComponentLibrary",
       "Styling",
-      "Blueprint"
+      "Blueprint",
+      "IconLibrary"
     ],
     "WidthSizeClass": [
       "Compact",

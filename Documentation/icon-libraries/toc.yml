@@ -1,0 +1,18 @@
+- name: Overview
+  href: index.md
+
+- name: Guides
+  items:
+      - name: Package an icon library
+        href: package-an-icon-library.md
+      - name: Look up and render icons
+        href: look-up-and-render-icons.md
+      - name: Icons in editing
+        href: icons-in-editing.md
+      - name: Migrate existing icon values
+        href: migrate-existing-icon-values.md
+
+- name: Understand
+  items:
+      - name: Why icon references name a library
+        href: understanding-icon-references.md

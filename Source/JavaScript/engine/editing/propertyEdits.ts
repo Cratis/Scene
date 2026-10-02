@@ -2,14 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-    DiagnosticCode, PropertyDescriptor, PropertyValueType, QueryBinding, ResetPropertyEdit, SceneDiagnostic, SceneDocument,
+    DiagnosticCode, DiagnosticSeverity, PropertyDescriptor, PropertyValueType, QueryBinding, ResetPropertyEdit, SceneDiagnostic, SceneDocument,
     SceneNodeKind, SetPropertyEdit,
 } from '@cratis/scene.model';
 import { describeNode } from './describeNode';
-import { errorDiagnostic } from './diagnostics';
+import { errorDiagnostic, hasErrors } from './diagnostics';
 import { NodeRecord } from './DocumentIndex';
 import { getAtPath, mirroredPaths } from './documentPaths';
 import { EditSession } from './EditSession';
+import { iconProblemsOfProperty } from './iconDiagnostics';
 import { cloneData, removeValueAtPath, setValueAtPath } from './pathAccess';
 import { validateBinding } from './validateBinding';
 import { validateValue } from './validateValue';
@@ -73,6 +74,13 @@ export function checkValue(session: EditSession, descriptor: PropertyDescriptor,
         const problems = validateBinding(descriptor, candidates.find(candidate => candidate.id === binding.queryId), binding);
         diagnostics.push(...problems.map(problemDiagnostic => ({ ...problemDiagnostic, ...context })));
         return problems.length === 0;
+    }
+
+    const icons = session.context.iconCatalog;
+    if (icons) {
+        const problems = iconProblemsOfProperty(icons, descriptor, value, DiagnosticSeverity.Error, context);
+        diagnostics.push(...problems);
+        return !hasErrors(problems);
     }
 
     return true;

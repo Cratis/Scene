@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { EditingScope, QueryCandidate } from '@cratis/scene.model';
+import { EffectiveIconCatalog } from '../icons/EffectiveIconCatalog';
 import { DescriptorCatalog } from './DescriptorCatalog';
 
 /**
@@ -20,4 +21,14 @@ export interface EditingContext {
      * edited it is checked against these; without them it is checked for shape only.
      */
     queryCandidates?: QueryCandidate[];
+
+    /**
+     * The icons the profile can use. When present, an icon value that is edited is checked against it - a
+     * library the profile lacks, an icon the library no longer has, a library at an incompatible version -
+     * and inspection reports the same problems for values already stored, which are kept either way.
+     * Without it an icon value is checked for shape only. An edit is applied synchronously, so
+     * `await iconCatalog.load()` first for definite answers about icons and variants; until a library's
+     * catalog is loaded its icons are reported as not verified.
+     */
+    iconCatalog?: EffectiveIconCatalog;
 }

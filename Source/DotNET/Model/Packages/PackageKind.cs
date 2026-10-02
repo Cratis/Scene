@@ -35,5 +35,19 @@ public enum PackageKind
     /// against PrimeReact and Cratis Components, and says so. That is what makes "which blueprints can I
     /// use" answerable from the packages a profile already has.
     /// </remarks>
-    Blueprint = 2
+    Blueprint = 2,
+
+    /// <summary>
+    /// Provides icons - a named, versioned library of them, such as Lucide or PrimeIcons - that screens,
+    /// templates and blueprints refer to by <see cref="Icons.IconReference"/> rather than by CSS class or
+    /// markup. A library declares its variants, renderer adapters and attribution through
+    /// <see cref="ScenePackage.IconLibrary"/>; its icon catalog is loaded on demand, never listed in the package.
+    /// </summary>
+    /// <remarks>
+    /// It is a package kind rather than a contribution on another kind because everything an author asks of
+    /// a library - select it in a profile, see its license and version, have it pulled in by the components
+    /// that need it - is already what a package is. Several libraries coexist in one profile, and the library
+    /// is part of every icon's identity, so same-named icons never shadow one another.
+    /// </remarks>
+    IconLibrary = 3
 }

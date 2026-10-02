@@ -12,5 +12,4 @@ export * from './Orientation';
 export * from './Dock';
 export * from './GridUnitType';
 export * from './GridLength';
-export * from './IconReference';
 export * from './DestinationReference';
