@@ -17,5 +17,5 @@ public class when_a_stored_document_cannot_be_read : Specification
         Submitted,
         new Dictionary<string, string> { ["Module"] = "also not json" });
 
-    [Fact] void should_treat_it_as_nothing_to_compare_with() => _result.IsValid.ShouldBeTrue();
+    [Fact] void should_refuse_without_authoritative_ancestry() => _result.IsValid.ShouldBeFalse();
 }

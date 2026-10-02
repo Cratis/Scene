@@ -16,7 +16,7 @@ public class when_the_document_only_differs_in_formatting : Specification
 
     SceneDocumentChangeResult _result = null!;
 
-    void Because() => _result = SceneDocumentChangeValidation.Validate(new EditingScope(EditingScopeKind.Screen, "Home"), Stored, Resubmitted);
+    void Because() => _result = SceneDocumentChangeValidation.Validate(new EditingScope(EditingScopeKind.Screen, "Home"), Stored, Resubmitted, new Dictionary<string, string> { ["Shell"] = Stored });
 
     [Fact] void should_not_consider_it_a_change() => _result.IsValid.ShouldBeTrue();
 }

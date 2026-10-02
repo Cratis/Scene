@@ -61,8 +61,9 @@ The check compares the submitted document with the one it replaces, so what was 
 - An owner that exists in a reference but has no exposure declares **zero grants**. The server refuses a submitted exposure
   or contribution for it; absence is never interpreted as "the client may define it".
 - The server must resolve `scope` and `references` from its own application, module, feature and slice context. Never derive
-  either from the submitted document. When it cannot resolve that context, refuse the save rather than treating unfamiliar
-  layouts, templates or instances as authored by the client.
+  either from the submitted document. Screen and screen-template saves without authoritative ancestry are refused; when it
+  cannot resolve that context, the server must refuse rather than treating unfamiliar layouts, templates or instances as
+  authored by the client.
 
 ## What it does not check
 

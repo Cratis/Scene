@@ -66,6 +66,11 @@ public static class SceneDocumentChangeValidation
             return Refused(SceneDocumentViolationCode.UnknownScope, $"There is no {Describe(scope)} in the document.");
         }
 
+        if (scope.Kind is EditingScopeKind.Screen or EditingScopeKind.ScreenTemplate && stores.Count == 0)
+        {
+            return Refused(SceneDocumentViolationCode.NodeNotEditable, $"{Describe(scope)} has no authoritative template or layout ancestry.");
+        }
+
         RequireAuthoritativeScreenAncestry(context);
         var grants = ExposureGrants.Compute(chain);
         InheritedContentChecker.Check(context);

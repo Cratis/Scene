@@ -19,7 +19,7 @@ interface DocumentChangeCase {
 
 const path = join(import.meta.dirname, '..', '..', '..', '..', '..', 'document-change-fixtures.json');
 const corpus = JSON.parse(readFileSync(path, 'utf-8')) as { cases: DocumentChangeCase[] };
-const edited = corpus.cases.filter(documentCase => documentCase.edit !== null && documentCase.previous !== null);
+const edited = corpus.cases.filter(documentCase => documentCase.edit !== null && documentCase.previous !== null && Object.keys(documentCase.references).length > 0);
 
 // The server checks a submitted document against these same cases (Cratis.Scene.Engine, SceneDocumentChangeValidation). Here the
 // editor is what is asked: a change the corpus says is allowed must be one applyEdit makes and produce exactly the document the
