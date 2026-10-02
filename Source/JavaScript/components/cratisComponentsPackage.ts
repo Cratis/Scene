@@ -4,6 +4,7 @@
 import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle } from '@cratis/scene.react';
 import { cratisComponents, cratisComponentsPackageName } from './cratisComponents';
+import { cratisComponentsDescriptors } from './cratisComponentsDescriptors';
 
 /**
  * The `Cratis.Components` package's declaration - what a profile gets when it lists this package.
@@ -106,4 +107,5 @@ export const cratisComponentsPackageManifest: ScenePackage = {
 export const cratisComponentsPackage: ScenePackageBundle = {
     manifest: cratisComponentsPackageManifest,
     components: cratisComponents,
+    descriptors: cratisComponentsDescriptors,
 };

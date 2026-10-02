@@ -10,6 +10,11 @@
     - name: Packages
       href: packages/toc.yml
 
+- name: Edit
+  items:
+    - name: Editing screens and templates
+      href: editing/toc.yml
+
 - name: Reference
   items:
     - name: Icon libraries

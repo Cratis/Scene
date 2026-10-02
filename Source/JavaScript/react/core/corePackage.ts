@@ -4,6 +4,7 @@
 import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle } from '../packages';
 import { coreComponents } from './coreComponents';
+import { coreDescriptors } from './coreDescriptors';
 
 /**
  * The `core` package's declaration. Every other package is loaded by a host that reads its manifest;
@@ -32,6 +33,7 @@ export const corePackageManifest: ScenePackage = {
         'field',
         'code',
         'file',
+        'navigationBar',
     ],
     layouts: [],
     screenTemplates: [],
@@ -50,4 +52,5 @@ export const corePackageManifest: ScenePackage = {
 export const corePackage: ScenePackageBundle = {
     manifest: corePackageManifest,
     components: coreComponents,
+    descriptors: coreDescriptors,
 };
