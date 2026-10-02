@@ -57,6 +57,8 @@ is what makes an interaction that names nothing real a diagnostic instead of a d
 | **Package** | A named set of components a profile draws from, in override-priority order. `core` is the final fallback. |
 | **Blueprint** | A shipped bundle: layouts, shell chrome, a template set and theme tokens. Selected by name in a UI profile, the same way a theme is. |
 | **Theme** | A set of visual tokens, compatible with one or more packages. |
+| **Icon library** | A package of kind `IconLibrary`: a named, versioned set of icons that screens refer to by `IconReference`. Several coexist in one profile. |
+| **Icon reference** | `{ library, key, variant? }` - the persisted, renderer-neutral identity of one icon. Never a CSS class or markup. |
 | **Shadowing** | A higher-priority package supplying a component by the same name, overriding a lower one. |
 
 ## The layers themselves

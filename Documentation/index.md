@@ -49,6 +49,8 @@ be active for it to work.
 - A **blueprint** ships the shape of an application: its layouts, the screen and dialog templates built on
   them, and the components that fill their slots. An application selects one blueprint and gets a coherent
   set, rather than assembling parts from unrelated sources.
+- An **[icon library](icon-libraries/index.md)** provides icons that screens refer to by library-qualified
+  reference. Several coexist in a profile, and a reference always says which one it means.
 
 Dependencies between packages are declared, resolved and ordered, so "Cratis Components needs PrimeReact and
 Tailwind" is a fact the tooling can check rather than a note in a README.
