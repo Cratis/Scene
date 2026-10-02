@@ -383,6 +383,34 @@
       "text",
       "stringsKey",
       "binding"
+    ],
+    "ExposedProperty": [
+      "component",
+      "path",
+      "label",
+      "operations",
+      "editableFields",
+      "reExposes"
+    ],
+    "ExposureDeclaration": [
+      "owner",
+      "properties"
+    ],
+    "ContributedItem": [
+      "id",
+      "values"
+    ],
+    "InstanceContribution": [
+      "instance",
+      "component",
+      "path",
+      "value",
+      "items"
+    ],
+    "EditingScope": [
+      "kind",
+      "name",
+      "layout"
     ]
   },
   "enums": {
@@ -469,6 +497,18 @@
       "Compact",
       "Regular",
       "Expanded"
+    ],
+    "CollectionOperation": [
+      "Add",
+      "Remove",
+      "Reorder",
+      "EditFields"
+    ],
+    "EditingScopeKind": [
+      "Screen",
+      "ScreenTemplate",
+      "DialogTemplate",
+      "Layout"
     ]
   }
 }
