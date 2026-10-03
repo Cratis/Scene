@@ -6,7 +6,9 @@ import { vi } from 'vitest';
 import { PrimeChart } from '../chart/PrimeChart';
 import { sceneComponent } from '../storyElements';
 
-const { Chart } = vi.hoisted(() => ({ Chart: vi.fn<(target: HTMLCanvasElement, configuration: unknown) => { destroy(): void }>() }));
+const { Chart } = vi.hoisted(() => ({
+    Chart: Object.assign(vi.fn<(target: HTMLCanvasElement, configuration: unknown) => { destroy(): void }>(), { getChart: vi.fn<(target: HTMLCanvasElement) => { destroy(): void } | undefined>() }),
+}));
 
 vi.mock('chart.js/auto', () => ({ default: Chart }));
 
@@ -23,6 +25,15 @@ describe('when Chart.js fails to draw a chart', () => {
 
     afterEach(() => {
         process.off('unhandledRejection', record);
+    });
+
+    it('should release the instance Chart.js registered on the canvas before it threw', async () => {
+        const destroy = vi.fn();
+        Chart.getChart.mockReturnValue({ destroy });
+        Chart.mockImplementation(function () { throw new Error('"nonexistentScale" is not a registered scale.'); });
+        const { findByRole } = render(<PrimeChart element={sceneComponent('chart', 'chart', { data: sales })} slots={{}} />);
+        await findByRole('alert');
+        destroy.mock.calls.length.should.equal(1);
     });
 
     it('should report the reason instead of leaving a blank canvas', async () => {
