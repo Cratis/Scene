@@ -17,8 +17,10 @@ export function PrimeEditor({ element, interactions }: RegisteredComponentProps)
     const authoredValue = stringProperty(element, 'value', '');
     const [value, setValue] = useState(authoredValue);
     const [mounted, setMounted] = useState(false);
+    const [ready, setReady] = useState(false);
     const [unavailable, setUnavailable] = useState(false);
     const interactionReference = useRef(interactions);
+    const ariaLabel = stringProperty(element, 'ariaLabel', 'Rich text editor');
     const readOnly = booleanProperty(element, 'readOnly', false);
     const showHeader = booleanProperty(element, 'showHeader', true);
     interactionReference.current = interactions;
@@ -32,6 +34,7 @@ export function PrimeEditor({ element, interactions }: RegisteredComponentProps)
         let editor: { root: HTMLElement; on(event: string, listener: () => void): void } | undefined;
         void import('quill').then(module => {
             if (!active || host.current === null) return;
+            host.current.replaceChildren();
             editor = new module.default(host.current, {
                 modules: { toolbar: showHeader ? [['bold', 'italic', 'underline'], [{ header: [1, 2, 3, false] }], [{ list: 'ordered' }, { list: 'bullet' }], ['link']] : false },
                 placeholder: stringProperty(element, 'placeholder'),
@@ -39,6 +42,9 @@ export function PrimeEditor({ element, interactions }: RegisteredComponentProps)
                 theme: 'snow',
             });
             editor.root.innerHTML = authoredValue;
+            editor.root.setAttribute('aria-label', ariaLabel);
+            editor.root.setAttribute('aria-readonly', String(readOnly));
+            setReady(true);
             editor.on('text-change', () => {
                 const updated = editor?.root.innerHTML ?? '';
                 setValue(updated);
@@ -49,12 +55,12 @@ export function PrimeEditor({ element, interactions }: RegisteredComponentProps)
         });
 
         return () => { active = false; };
-    }, [mounted, element.id, authoredValue, element.properties, readOnly, showHeader]);
+    }, [mounted, element.id, authoredValue, ariaLabel, element.properties, readOnly, showHeader]);
 
     return (
-        <section data-scene-id={element.id} aria-label={stringProperty(element, 'ariaLabel', 'Rich text editor')} aria-readonly={readOnly}>
-            {!mounted ? <div dangerouslySetInnerHTML={{ __html: authoredValue }} /> : <div ref={host} />}
-            {unavailable && <p role='status'>Rich-text editing requires the optional Quill peer dependency.</p>}
+        <section data-scene-id={element.id} onClick={interactions?.onClick} onDoubleClick={interactions?.onDoubleClick}>
+            <div ref={host} dangerouslySetInnerHTML={ready ? undefined : { __html: authoredValue }} />
+            {unavailable && <p role='status'>Rich-text editing requires the optional Quill peer dependency; authored HTML remains available.</p>}
             <output aria-live='polite'>{readOnly ? 'Read only' : `${value.length} characters`}</output>
         </section>
     );

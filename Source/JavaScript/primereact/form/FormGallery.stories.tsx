@@ -26,6 +26,7 @@ export const Gallery: Story = {
         element: sceneGallery('gallery', [
             sceneComponent('inputText', 'inputText', { placeholder: 'Name' }),
             sceneComponent('inputTextarea', 'inputTextarea', { placeholder: 'Notes', rows: 3 }),
+            sceneComponent('editor', 'editor', { value: '<p>Write a <strong>rich</strong> note.</p>' }),
             sceneComponent('inputNumber', 'inputNumber', { value: 42, showButtons: true }),
             sceneComponent('password', 'password', { placeholder: 'Password' }),
             sceneComponent('floatLabel', 'floatLabel', { label: 'Project name' }),

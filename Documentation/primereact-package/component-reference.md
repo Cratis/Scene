@@ -44,6 +44,13 @@ code does. Three kinds of entry appear:
 | `chips` | `form/PrimeChips.tsx` | `primereact/inputtags` |
 | `autoComplete` | `form/PrimeAutoComplete.tsx` | `primereact/autocomplete` |
 | `treeSelect` | `form/PrimeTreeSelect.tsx` | `primereact/popover`, `primereact/tree` + **Cratis-owned** |
+| `editor` | `form/PrimeEditor.tsx` | `quill` optional peer + **Cratis-owned** browser lifecycle adapter |
+
+## File
+
+| Name | Adapter | Backed by |
+| --- | --- | --- |
+| `fileUpload` | `file/PrimeFileUpload.tsx` | `primereact/fileupload`; optional host upload handler |
 
 ## Button
 
@@ -62,7 +69,9 @@ code does. Three kinds of entry appear:
 | `table` | `data/PrimeDataTable.tsx` | `primereact/datatable` |
 | `column` | `data/PrimeColumn.tsx` | **Cratis-owned** |
 | `dataView` | `data/PrimeDataView.tsx` | `primereact/dataview`, `primereact/paginator` |
+| `dataScroller` | `data/PrimeDataScroller.tsx` | **Cratis-owned** progressive list |
 | `tree` | `data/PrimeTree.tsx` | `primereact/tree` |
+| `treeTable` | `data/PrimeTreeTable.tsx` | **Cratis-owned** hierarchical table |
 | `timeline` | `data/PrimeTimeline.tsx` | `primereact/timeline` |
 | `paginator` | `data/PrimePaginator.tsx` | `primereact/paginator` |
 | `orderList` | `data/PrimeOrderList.tsx` | `@primereact/headless/orderlist` (headless) |
@@ -171,17 +180,12 @@ removed from the manifest and the registry together.
 | --- | --- |
 | `cascadeSelect` | `dropdown` with grouped options, or `treeSelect` for a hierarchy |
 | `inputMask` | `inputText` with validation |
-| `treeTable` | `tree` for hierarchy, `dataTable` for tabular data |
 | `virtualScroller` | `dataTable`'s own scrolling for long lists |
 
-## Not covered
+## Optional Quill peer
 
-| Component | Why |
-| --- | --- |
-| `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
-
-The editor is a deliberate omission, not an oversight. A profile needing it should activate a package that
-owns that dependency.
+`editor` loads `quill@^2.0.3` only after browser mount. Install the optional peer in every host that renders
+an editable rich-text control; server rendering and hosts without Quill keep the authored HTML available without importing Quill.
 
 Also worth knowing: `column` renders nothing on its own. That is deliberate — since PrimeReact 11 removed
 `primereact/column`, `column` is a Cratis-owned declaration component that returns `null`, and the table

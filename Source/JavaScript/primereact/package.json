@@ -82,11 +82,15 @@
         "chart.js": "^4.5.1",
         "primeicons": "^8.0.0",
         "primereact": "^11.0.0",
+        "quill": "^2.0.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
     "peerDependenciesMeta": {
         "chart.js": {
+            "optional": true
+        },
+        "quill": {
             "optional": true
         }
     }

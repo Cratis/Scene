@@ -36,8 +36,8 @@ export const primeReactPackageManifest: ScenePackage = {
     components: [
         'inputText', 'inputTextarea', 'inputNumber', 'password', 'floatLabel', 'iconField', 'dropdown', 'multiSelect',
         'listBox', 'selectButton', 'checkbox', 'multiStateCheckbox', 'radioButton', 'toggleSwitch', 'slider', 'rating', 'knob', 'calendar', 'colorPicker',
-        'chips', 'autoComplete', 'treeSelect', 'button', 'splitButton', 'speedDial', 'buttonGroup', 'dataTable', 'table',
-        'column', 'dataView', 'tree', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart', 'chart',
+        'chips', 'autoComplete', 'treeSelect', 'editor', 'fileUpload', 'button', 'splitButton', 'speedDial', 'buttonGroup', 'dataTable', 'table',
+        'column', 'dataView', 'dataScroller', 'tree', 'treeTable', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart', 'chart',
         'card', 'panel', 'accordion', 'fieldset', 'divider', 'splitter', 'scrollPanel', 'tabView', 'toolbar', 'stepper', 'dialog',
         'confirmDialog', 'overlayPanel', 'sidebar', 'tooltip', 'menu', 'menubar', 'breadcrumb', 'tabMenu', 'steps', 'tieredMenu',
         'panelMenu', 'contextMenu', 'megaMenu', 'dock', 'message', 'inlineMessage', 'toast', 'image', 'galleria', 'carousel', 'avatar',

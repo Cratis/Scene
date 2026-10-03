@@ -25,7 +25,11 @@ export function PrimeDataScroller({ element, interactions }: RegisteredComponent
     return (
         <div
             data-scene-id={element.id}
+            role='region'
+            tabIndex={inline ? 0 : undefined}
             aria-label={stringProperty(element, 'ariaLabel', 'Scrollable data')}
+            onClick={interactions?.onClick}
+            onDoubleClick={interactions?.onDoubleClick}
             onScroll={scrolled}
             style={inline && scrollHeight !== undefined ? { maxHeight: `${scrollHeight}px`, overflowY: 'auto' } : undefined}>
             <ol>

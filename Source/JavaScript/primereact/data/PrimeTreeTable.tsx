@@ -19,14 +19,15 @@ export function PrimeTreeTable({ element, interactions }: RegisteredComponentPro
     const [expanded, setExpanded] = useState(() => expandedKeys(nodes));
     const [selected, setSelected] = useState(() => selectedKeysOf(element.properties.selection));
     const [page, setPage] = useState(0);
-    const rows = visibleRows(nodes, expanded);
-    const start = paginator ? page * pageSize : 0;
-    const visible = rows.slice(start, paginator ? start + pageSize : undefined);
-    const pageCount = Math.max(Math.ceil(rows.length / pageSize), 1);
+    const pageCount = Math.max(Math.ceil(nodes.length / pageSize), 1);
+    const pageNodes = paginator ? nodes.slice(page * pageSize, (page + 1) * pageSize) : nodes;
+    const visible = visibleRows(pageNodes, expanded);
 
     useEffect(() => setPage(current => Math.min(current, pageCount - 1)), [pageCount]);
 
-    const toggle = (key: string) => setExpanded(current => toggleKey(current, key));
+    const toggle = (key: string) => {
+        if (element.isEnabled) setExpanded(current => toggleKey(current, key));
+    };
     const select = (key: string) => {
         if (mode === TreeTableSelectionMode.None || !element.isEnabled) return;
         setSelected(current => selectedKeysFor(mode, current, key));
@@ -35,7 +36,7 @@ export function PrimeTreeTable({ element, interactions }: RegisteredComponentPro
     };
 
     return (
-        <div data-scene-id={element.id}>
+        <div data-scene-id={element.id} onClick={interactions?.onClick} onDoubleClick={interactions?.onDoubleClick}>
             <table aria-label={stringProperty(element, 'ariaLabel', 'Hierarchical data')}>
                 <thead>
                     <tr>{columns.map(column => <th key={column.field}>{column.header}</th>)}</tr>
@@ -46,7 +47,7 @@ export function PrimeTreeTable({ element, interactions }: RegisteredComponentPro
                             {columns.map((column, index) => (
                                 <td key={column.field} style={index === 0 ? { paddingInlineStart: `${row.depth * 1.25}rem` } : undefined}>
                                     {index === 0 && row.node.children?.length ? (
-                                        <button type='button' aria-expanded={expanded.has(row.node.key ?? '')} onClick={() => toggle(row.node.key ?? '')}>
+                                        <button type='button' disabled={!element.isEnabled} aria-expanded={expanded.has(row.node.key ?? '')} onClick={() => toggle(row.node.key ?? '')}>
                                             {expanded.has(row.node.key ?? '') ? 'Collapse' : 'Expand'}
                                         </button>
                                     ) : null}
@@ -75,9 +76,9 @@ export function PrimeTreeTable({ element, interactions }: RegisteredComponentPro
             </table>
             {paginator && (
                 <nav aria-label='Tree table pages'>
-                    <button type='button' disabled={page === 0} onClick={() => setPage(current => current - 1)}>Previous</button>
+                    <button type='button' disabled={!element.isEnabled || page === 0} onClick={() => setPage(current => current - 1)}>Previous</button>
                     <span>{page + 1} / {pageCount}</span>
-                    <button type='button' disabled={page + 1 >= pageCount} onClick={() => setPage(current => current + 1)}>Next</button>
+                    <button type='button' disabled={!element.isEnabled || page + 1 >= pageCount} onClick={() => setPage(current => current + 1)}>Next</button>
                 </nav>
             )}
         </div>

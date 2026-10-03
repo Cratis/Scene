@@ -24,3 +24,4 @@ export * from './PrimeChips';
 export * from './PrimeAutoComplete';
 export * from './TreeSelect';
 export * from './PrimeTreeSelect';
+export * from './PrimeEditor';

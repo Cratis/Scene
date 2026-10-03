@@ -109,16 +109,9 @@ twenty-fifth theme cannot be added without it. The full attribution table is in
 components - through the semantic token layer `SceneThemeProvider` applies to the whole subtree, though
 not through the `--p-*` properties, which only PrimeReact's own components read.
 
-## Not covered
+## Optional peers
 
-| Component | Why |
-| --- | --- |
-| `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
-
-The editor is a deliberate omission, not an oversight. A profile needing it should activate a package
-that owns its dependency.
-
-## Chart.js peer dependency
+### Chart.js peer dependency
 
 PrimeReact 11 removed its former Chart.js wrapper, so the Scene `chart` adapter mounts a Chart.js canvas
 itself. `chart.js@^4.5.1` is an optional peer dependency of `@cratis/scene.primereact`: install it in a
@@ -127,6 +120,12 @@ it destroys and recreates the Chart.js instance whenever data, options, type, or
 
 `chart` accepts canonical string types (`bar`, `line`, `pie`, `doughnut`, `polarArea`, `radar`, `bubble`,
 `scatter`) and also renders the old numeric .NET enum values without rewriting the stored element.
+
+### Quill peer dependency
+
+`editor` loads `quill@^2.0.3` only after the editor mounts in a browser, so server rendering remains safe.
+Install the optional peer in hosts that render editable rich text. Without it, Scene keeps the authored HTML
+visible and reports that rich-text editing is unavailable instead of replacing it with a text-area substitute.
 
 Also worth knowing: `column` renders nothing on its own, and since PrimeReact 11 that is *our* semantics
 rather than PrimeReact's. v11 removed `primereact/column`, so `data/Column.tsx` is a Cratis-owned
@@ -149,9 +148,9 @@ The short version for a contributor:
   compiles cleanly and silently swaps an overlay for a static shell.
 - **v11 ships zero CSS.** There is no `primereact/resources` directory. A look comes from a preset handed
   to `PrimeReactProvider`; `usePrimeReactTheme` returns that configuration for a Scene theme.
-- **14 abstract names are now backed by Cratis-owned components** built here because v11 removed theirs,
-  2 are expressed over `@primereact/headless` hooks, and 4 were dropped from the manifest
-  (`cascadeSelect`, `inputMask`, `treeTable`, `virtualScroller`).
+- **16 abstract names are now backed by Cratis-owned components** built here because v11 removed theirs,
+  2 are expressed over `@primereact/headless` hooks, and 3 were dropped from the manifest
+  (`cascadeSelect`, `inputMask`, `virtualScroller`).
 - **`MenuItem` and `TreeNode` are Scene's types now** - `primereact/menuitem` and `primereact/treenode`
   were removed. Import them from this package, never from `primereact/*`.
 

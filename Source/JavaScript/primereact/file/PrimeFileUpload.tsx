@@ -43,6 +43,7 @@ export function PrimeFileUpload({ element, interactions }: RegisteredComponentPr
         disabled: !element.isEnabled,
         maxFileSize: numberProperty(element, 'maxFileSize'),
         multiple: booleanProperty(element, 'multiple', false),
+        name: stringProperty(element, 'name', 'files'),
         url: serverUrl,
     }), [element, handler, mode, serverUrl, canUpload]);
 
@@ -59,19 +60,20 @@ export function PrimeFileUpload({ element, interactions }: RegisteredComponentPr
     };
 
     return (
-        <FileUpload.Root
-            data-scene-id={element.id}
-            {...configuration}
-            uploadHandler={uploaded}
-            onChange={changed}>
-            <FileUpload.Content aria-label='File upload drop zone'>
-                <p>{mode === FileUploadMode.Basic ? 'Choose a file to upload.' : 'Drop files here or choose files to upload.'}</p>
-                <FileUpload.Trigger>{mode === FileUploadMode.Basic ? 'Choose file' : 'Choose files'}</FileUpload.Trigger>
-                {mode === FileUploadMode.Advanced && <FileUpload.Upload disabled={!canUpload}>Upload selected files</FileUpload.Upload>}
-                {!canUpload && <p role='status'>Configure a server URL or provide an upload handler to upload files.</p>}
-                {message !== undefined && <p role='status'>{message}</p>}
-            </FileUpload.Content>
-        </FileUpload.Root>
+        <div data-scene-id={element.id} onClick={interactions?.onClick} onDoubleClick={interactions?.onDoubleClick}>
+            <FileUpload.Root
+                {...configuration}
+                uploadHandler={uploaded}
+                onChange={changed}>
+                <FileUpload.Content aria-label='File upload drop zone'>
+                    <p>{mode === FileUploadMode.Basic ? 'Choose a file to upload.' : 'Drop files here or choose files to upload.'}</p>
+                    <FileUpload.Trigger>{mode === FileUploadMode.Basic ? 'Choose file' : 'Choose files'}</FileUpload.Trigger>
+                    {mode === FileUploadMode.Advanced && <FileUpload.Upload disabled={!canUpload}>Upload selected files</FileUpload.Upload>}
+                    {!canUpload && <p role='status'>Configure a server URL or provide an upload handler to upload files.</p>}
+                    {message !== undefined && <p role='status'>{message}</p>}
+                </FileUpload.Content>
+            </FileUpload.Root>
+        </div>
     );
 }
 
