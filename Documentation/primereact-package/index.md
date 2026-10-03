@@ -69,17 +69,45 @@ supplies the layout and the templates themselves. See [Blueprints](../blueprints
 ## Charts and multi-state choices
 
 Legacy screens can use `chart` and `multiStateCheckbox` as bare component names once the profile includes
-`PrimeReact`. A chart passes its authored Chart.js `data` and `options` through unchanged. New documents
-use a stable string type such as `bar` or `doughnut`; the renderer also accepts the numeric chart-type values
-saved by the earlier .NET model, so migration does not need to rewrite them.
+`PrimeReact`. PrimeReact 11 removed both of the old widgets, so Scene supplies its own.
 
-PrimeReact 11 removed both of the old widgets. Scene mounts a Chart.js canvas for `chart` and implements
-`multiStateCheckbox` as a native accessible checkbox that cycles through its configured states, including its
-optional null state. Its options retain their authored ordering, values, and icon classes.
+A `chart` passes its authored Chart.js `data` and `options` through unchanged. New documents use a stable
+string type such as `bar` or `doughnut`. The renderer also accepts the numeric chart-type values saved by the
+earlier .NET model (`0` Bar, `1` Line, `2` Pie, `3` Doughnut, `4` PolarArea, `5` Radar, `6` Bubble,
+`7` Scatter) and the original Pascal case member names, so migration never rewrites a stored `type`. Any other
+value, such as `8`, `'3'` or `'polararea'`, is reported on the chart as an unsupported type; a bar chart is
+never drawn in its place. The descriptor lists both the names and the numeric values as choices, so a migrated
+chart stays editable with its original value.
 
-Install the optional `chart.js@^4.5.1` peer in any web host that renders charts. The adapter imports it only
-after a canvas mounts, so a server-rendered screen remains safe; it destroys and recreates the chart when its
-configuration changes.
+A chart with no data points says so (`emptyLabel`, "No chart data" by default) instead of drawing a blank
+canvas, and a chart Chart.js cannot draw reports why. The chart fills its authored size;
+`options.maintainAspectRatio` can ask for a fixed ratio. It rebuilds only when its type, data or options change
+in content, so editing something else in the document does not redraw it.
+
+:::caution[Hosts must install chart.js]
+`chart.js@^4.5.1` is an optional peer dependency, so an application that renders charts has to install it.
+A bundler that cannot resolve `chart.js/auto` fails the build, or the chart reports that it could not be
+drawn. The adapter imports Chart.js only after the canvas mounts, so server rendering is safe.
+:::
+
+`multiStateCheckbox` cycles through its `options` in authored order. Option values keep their type: strings,
+numbers, booleans, `null` and objects are all valid, and an option is never dropped for lacking a text label.
+As in the original control, `optionLabel` and `optionValue` name the fields to use, and an option with no value
+field is its own value. An option whose value is `null` is the empty state when `empty` is on; the control
+adds its own empty state only when none is authored. Options that share a value are all reachable. The control
+follows the document: a changed `value` or `options` is shown immediately.
+
+It is a native button, not a checkbox, because a cycle has more than two states. Its name is the authored
+`ariaLabel`, the current state is its description and is announced politely as it changes, and it never
+claims to be checked. `readOnly` keeps it focusable but fixed; `disabled` takes it out of the tab order. The box
+follows the PrimeReact checkbox tokens (`--p-checkbox-*`), so it takes on the active theme. Chart colors are
+Chart.js defaults unless the authored options set them.
+
+State icons are PrimeIcons class names, kept for legacy documents, or qualified icon references drawn through
+the Scene icon system. The `emptyIcon` property is a regular icon property, so icon library diagnostics
+cover it. Icons written inside the free-form `options` and `icons` JSON are drawn but are not tracked by
+those diagnostics. Scene's interaction handlers carry no value, so behaviors are told that the selection
+changed but not what it changed to.
 
 ## The two halves of theming
 

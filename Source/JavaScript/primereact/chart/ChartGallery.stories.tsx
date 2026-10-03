@@ -32,6 +32,24 @@ export const Bar: Story = {
     },
 };
 
+/** A migrated chart that has no data yet. It says so instead of drawing a blank canvas or inventing values. */
+export const MigratedWithoutData: Story = {
+    args: {
+        element: sceneComponent('legacy-empty', 'chart', { type: 0, style: { height: 72 }, ariaLabel: 'Migrated chart without data', legacyType: 'PrimeReact.Chart' }),
+        registry: primeReactComponents,
+        resolveBinding: () => undefined,
+    },
+};
+
+/** A chart type the renderer does not know is reported rather than drawn as a bar chart. */
+export const UnsupportedType: Story = {
+    args: {
+        element: sceneComponent('unsupported', 'chart', { type: 8, data: salesData }),
+        registry: primeReactComponents,
+        resolveBinding: () => undefined,
+    },
+};
+
 /** A migrated element that retains the original numeric ChartType enum value in its own properties. */
 export const MigratedLegacyBar: Story = {
     args: {
