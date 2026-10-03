@@ -13,3 +13,6 @@ export * from './PrimePaginator';
 export * from './PrimeOrderList';
 export * from './PrimePickList';
 export * from './PrimeOrganizationChart';
+export * from './PrimeDataScroller';
+export * from './PrimeTreeTable';
+export * from './TreeTableSelectionMode';

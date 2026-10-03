@@ -35,6 +35,8 @@ export function toTreeNodes(entries: unknown[], parentKey = ''): TreeNode[] {
         if (typeof record.icon === 'string') node.icon = record.icon;
         if (typeof record.className === 'string') node.className = record.className;
         if (typeof record.leaf === 'boolean') node.leaf = record.leaf;
+        if (typeof record.expanded === 'boolean') node.expanded = record.expanded;
+        if (typeof record.selectable === 'boolean') node.selectable = record.selectable;
         if (typeof record.data === 'object' && record.data !== null) node.data = record.data;
         if (Array.isArray(record.children)) node.children = toTreeNodes(record.children, node.key as string);
         nodes.push(node);
