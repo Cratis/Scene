@@ -39,19 +39,28 @@ describe('when registering legacy controls', () => {
         });
 
         it('should provide the legacy ordinals as numbers, in the order of the original enum', () => {
-            type.choices!.slice(8).map(choice => choice.value).should.deep.equal([0, 1, 2, 3, 4, 5, 6, 7]);
+            type.choices!.slice(8, 16).map(choice => choice.value).should.deep.equal([0, 1, 2, 3, 4, 5, 6, 7]);
+        });
+
+        it('should provide the Pascal case member names of the original enum after the ordinals', () => {
+            type.choices!.slice(16).map(choice => choice.value).should.deep.equal(['Bar', 'Line', 'Pie', 'Doughnut', 'PolarArea', 'Radar', 'Bubble', 'Scatter']);
+        });
+
+        it('should offer exactly the values the renderer accepts, so a stored value always has a choice', () => {
+            const accepted = ['bar', 'line', 'pie', 'doughnut', 'polarArea', 'radar', 'bubble', 'scatter', 0, 1, 2, 3, 4, 5, 6, 7, 'Bar', 'Line', 'Pie', 'Doughnut', 'PolarArea', 'Radar', 'Bubble', 'Scatter'];
+            accepted.map(value => type.choices!.some(choice => choice.value === value)).should.not.include(false);
         });
 
         it('should label each legacy ordinal with the type it stands for', () => {
-            type.choices!.slice(8).map(choice => choice.label).should.deep.equal([
+            type.choices!.slice(8, 16).map(choice => choice.label).should.deep.equal([
                 'Bar (legacy 0)', 'Line (legacy 1)', 'Pie (legacy 2)', 'Doughnut (legacy 3)',
                 'Polar area (legacy 4)', 'Radar (legacy 5)', 'Bubble (legacy 6)', 'Scatter (legacy 7)',
             ]);
         });
 
         it('should accept a stored legacy ordinal and a canonical name, and refuse anything else', () => {
-            [validateValue(type, 4), validateValue(type, 'polarArea'), validateValue(type, 8), validateValue(type, '4'), validateValue(type, 'PolarArea')]
-                .should.deep.equal([undefined, undefined, 'not one of the allowed choices', 'not one of the allowed choices', 'not one of the allowed choices']);
+            [validateValue(type, 4), validateValue(type, 'polarArea'), validateValue(type, 'PolarArea'), validateValue(type, 8), validateValue(type, '4'), validateValue(type, 'polararea')]
+                .should.deep.equal([undefined, undefined, undefined, 'not one of the allowed choices', 'not one of the allowed choices', 'not one of the allowed choices']);
         });
 
         it('should have no two choices with the same value', () => {
