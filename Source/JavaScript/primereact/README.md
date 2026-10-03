@@ -109,16 +109,9 @@ twenty-fifth theme cannot be added without it. The full attribution table is in
 components - through the semantic token layer `SceneThemeProvider` applies to the whole subtree, though
 not through the `--p-*` properties, which only PrimeReact's own components read.
 
-## Not covered
+## Optional peers
 
-| Component | Why |
-| --- | --- |
-| `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
-
-The editor is a deliberate omission, not an oversight. A profile needing it should activate a package
-that owns its dependency.
-
-## Chart.js peer dependency
+### Chart.js peer dependency
 
 PrimeReact 11 removed its former Chart.js wrapper, so the Scene `chart` adapter mounts a Chart.js canvas
 itself. `chart.js@^4.5.1` is an optional peer dependency of `@cratis/scene.primereact`, optional only in that
@@ -133,6 +126,23 @@ the type, data or options change in content, not when a document edit hands it e
 `scatter`), the numeric values `0` to `7` of the old .NET enum, and that enum's Pascal case names, without
 rewriting the stored element. Any other type is reported instead of drawn as a bar chart. A chart without data
 points shows its `emptyLabel`.
+
+### Quill peer dependency
+
+`quill` is not imported by the package root, so a host that renders no rich text needs neither `quill` nor its
+stylesheet to build. A host that wants editable rich text installs `quill@^2.0.3` and opts in explicitly:
+
+```tsx
+import 'quill/dist/quill.snow.css';
+import { QuillLoaderProvider } from '@cratis/scene.primereact';
+import { loadQuill } from '@cratis/scene.primereact/quill';
+
+<QuillLoaderProvider loader={loadQuill}>{screen}</QuillLoaderProvider>
+```
+
+`@cratis/scene.primereact/quill` (sources in `loadQuill/`) is the only module that names `quill`. Without a
+loader the editor shows its content read-only and says so. Authored HTML always passes an allowlist first; see
+the [component reference](../../../Documentation/primereact-package/component-reference.md#rich-text-and-quill).
 
 ## Browser specifications
 
@@ -162,9 +172,9 @@ The short version for a contributor:
   compiles cleanly and silently swaps an overlay for a static shell.
 - **v11 ships zero CSS.** There is no `primereact/resources` directory. A look comes from a preset handed
   to `PrimeReactProvider`; `usePrimeReactTheme` returns that configuration for a Scene theme.
-- **14 abstract names are now backed by Cratis-owned components** built here because v11 removed theirs,
-  2 are expressed over `@primereact/headless` hooks, and 4 were dropped from the manifest
-  (`cascadeSelect`, `inputMask`, `treeTable`, `virtualScroller`).
+- **16 abstract names are now backed by Cratis-owned components** built here because v11 removed theirs,
+  2 are expressed over `@primereact/headless` hooks, and 3 were dropped from the manifest
+  (`cascadeSelect`, `inputMask`, `virtualScroller`).
 - **`MenuItem` and `TreeNode` are Scene's types now** - `primereact/menuitem` and `primereact/treenode`
   were removed. Import them from this package, never from `primereact/*`.
 

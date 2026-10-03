@@ -37,7 +37,13 @@ export const Gallery: Story = {
             ),
             sceneComponent('dataTable', 'dataTable', { rows: [{ id: 1, title: 'Inferred columns' }] }),
             sceneComponent('dataView', 'dataView', { rows: [{ title: 'Kickoff', description: 'Agree the scope' }] }),
+            sceneComponent('dataScroller', 'dataScroller', { items: ['First', 'Second', 'Third'], rows: 2, inline: true, scrollHeight: 96 }),
             sceneComponent('tree', 'tree', { nodes: [{ label: 'Documents', children: ['Work', 'Home'] }] }),
+            sceneComponent('treeTable', 'treeTable', {
+                columns: [{ field: 'name', header: 'Name' }, { field: 'type', header: 'Type' }],
+                items: [{ label: 'Documents', data: { name: 'Documents', type: 'Folder' }, children: [{ label: 'Plan', data: { name: 'Plan', type: 'File' } }] }],
+                selectionMode: 'checkbox', paginator: true, rows: 1,
+            }),
             sceneComponent('timeline', 'timeline', {
                 events: [{ title: 'Ordered', description: 'Order placed', date: '09:00' }, { title: 'Shipped', description: 'Left the depot', date: '14:20' }],
             }),

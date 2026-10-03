@@ -10,6 +10,8 @@ export * from './menuItems';
 export * from './treeNodes';
 export * from './button';
 export * from './form';
+export * from './editor';
+export * from './file';
 export * from './chart';
 export * from './data';
 export * from './panel';

@@ -7,7 +7,7 @@ A screen written in Screenplay says `button`. It does not say `PrimeReact.Button
 anything. Something has to turn that name into a real React component — and that something is a package.
 
 `@cratis/scene.primereact` is the package that turns Scene's abstract names into PrimeReact 11 components.
-Add `PrimeReact` to a `ui profile` and 85 names become resolvable, 24 themes become selectable, and every
+Add `PrimeReact` to a `ui profile` and 89 names become resolvable, 24 themes become selectable, and every
 screen you have already written renders through a real, themed component library without a single edit.
 
 ## Without it, and with it
@@ -50,7 +50,7 @@ primeReactPackageManifest.name;         // 'PrimeReact'
 primeReactPackageManifest.version;      // '11.1.0'
 primeReactPackageManifest.kind;         // PackageKind.ComponentLibrary
 primeReactPackageManifest.dependencies; // [{ name: 'Tailwind' }]
-primeReactPackageManifest.components;   // 85 abstract names
+primeReactPackageManifest.components;   // 89 abstract names
 primeReactPackageManifest.themes;       // 24 theme names
 ```
 

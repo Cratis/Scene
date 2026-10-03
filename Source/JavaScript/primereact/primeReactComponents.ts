@@ -6,6 +6,7 @@ import { PrimeButton, PrimeButtonGroup, PrimeSpeedDial, PrimeSplitButton } from 
 import { PrimeChart } from './chart';
 import {
     PrimeColumn,
+    PrimeDataScroller,
     PrimeDataTable,
     PrimeDataView,
     PrimeOrderList,
@@ -14,6 +15,7 @@ import {
     PrimePickList,
     PrimeTimeline,
     PrimeTree,
+    PrimeTreeTable,
 } from './data';
 import {
     PrimeAutoComplete,
@@ -39,6 +41,8 @@ import {
     PrimeToggleSwitch,
     PrimeTreeSelect,
 } from './form';
+import { PrimeEditor } from './editor';
+import { PrimeFileUpload } from './file';
 import { PrimeCarousel, PrimeGalleria, PrimeImage } from './media';
 import {
     PrimeBreadcrumb,
@@ -121,6 +125,8 @@ export const primeReactComponents: ComponentRegistry = {
     [componentRegistryKey('PrimeReact', 'chips')]: PrimeChips,
     [componentRegistryKey('PrimeReact', 'autoComplete')]: PrimeAutoComplete,
     [componentRegistryKey('PrimeReact', 'treeSelect')]: PrimeTreeSelect,
+    [componentRegistryKey('PrimeReact', 'editor')]: PrimeEditor,
+    [componentRegistryKey('PrimeReact', 'fileUpload')]: PrimeFileUpload,
 
     [componentRegistryKey('PrimeReact', 'button')]: PrimeButton,
     [componentRegistryKey('PrimeReact', 'splitButton')]: PrimeSplitButton,
@@ -131,7 +137,9 @@ export const primeReactComponents: ComponentRegistry = {
     [componentRegistryKey('PrimeReact', 'table')]: PrimeDataTable,
     [componentRegistryKey('PrimeReact', 'column')]: PrimeColumn,
     [componentRegistryKey('PrimeReact', 'dataView')]: PrimeDataView,
+    [componentRegistryKey('PrimeReact', 'dataScroller')]: PrimeDataScroller,
     [componentRegistryKey('PrimeReact', 'tree')]: PrimeTree,
+    [componentRegistryKey('PrimeReact', 'treeTable')]: PrimeTreeTable,
     [componentRegistryKey('PrimeReact', 'timeline')]: PrimeTimeline,
     [componentRegistryKey('PrimeReact', 'paginator')]: PrimePaginator,
     [componentRegistryKey('PrimeReact', 'orderList')]: PrimeOrderList,

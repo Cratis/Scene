@@ -38,6 +38,11 @@
             "require": "./dist/cjs/index.js",
             "import": "./dist/esm/index.js"
         },
+        "./quill": {
+            "types": "./dist/esm/loadQuill/index.d.ts",
+            "require": "./dist/cjs/loadQuill/index.js",
+            "import": "./dist/esm/loadQuill/index.js"
+        },
         "./primeReactTheme.css": "./primeReactTheme.css"
     },
     "scripts": {
@@ -74,6 +79,7 @@
         "playwright-core": "1.63.0",
         "primeicons": "8.0.2",
         "primereact": "11.2.0",
+        "quill": "2.0.3",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
         "storybook": "^10.6.1"
@@ -84,11 +90,15 @@
         "chart.js": "^4.5.1",
         "primeicons": "^8.0.0",
         "primereact": "^11.0.0",
+        "quill": "^2.0.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
     "peerDependenciesMeta": {
         "chart.js": {
+            "optional": true
+        },
+        "quill": {
             "optional": true
         }
     }
