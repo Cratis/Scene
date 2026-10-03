@@ -73,16 +73,27 @@ export function validateValue(descriptor: PropertyDescriptor, value: unknown): s
     }
 }
 
+/**
+ * The deepest nesting a JSON value may have. Authored configuration (chart datasets, option lists) is shallow;
+ * the limit turns a runaway or hostile structure into a validation message instead of a stack overflow.
+ */
+const maximumJsonDepth = 64;
+
+/**
+ * Whether a value is JSON: `null`, a string, a boolean, a finite number, or an array or plain object of those.
+ * The value is only inspected, never serialized, so what an editor stores is exactly what was passed in.
+ */
 function isJsonValue(value: unknown, parents = new Set<object>()): boolean {
     if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
     if (typeof value === 'number') return Number.isFinite(value);
-    if (typeof value !== 'object' || parents.has(value)) return false;
+    if (typeof value !== 'object' || parents.has(value) || parents.size >= maximumJsonDepth) return false;
 
+    const isArray = Array.isArray(value);
     const prototype = Object.getPrototypeOf(value);
-    if (!Array.isArray(value) && prototype !== Object.prototype && prototype !== null) return false;
+    if (isArray ? prototype !== Array.prototype : prototype !== Object.prototype && prototype !== null) return false;
 
     parents.add(value);
-    const values = Array.isArray(value) ? value : Object.values(value);
+    const values = isArray ? Array.from({ length: value.length }, (_, index) => (index in value ? value[index] : undefined)) : Object.values(value);
     const valid = values.every(candidate => isJsonValue(candidate, parents));
     parents.delete(value);
     return valid;
