@@ -127,18 +127,29 @@ the type, data or options change in content, not when a document edit hands it e
 rewriting the stored element. Any other type is reported instead of drawn as a bar chart. A chart without data
 points shows its `emptyLabel`.
 
+### Quill peer dependency
+
+`quill` is not imported by the package root, so a host that renders no rich text needs neither `quill` nor its
+stylesheet to build. A host that wants editable rich text installs `quill@^2.0.3` and opts in explicitly:
+
+```tsx
+import 'quill/dist/quill.snow.css';
+import { QuillLoaderProvider } from '@cratis/scene.primereact';
+import { loadQuill } from '@cratis/scene.primereact/quill';
+
+<QuillLoaderProvider loader={loadQuill}>{screen}</QuillLoaderProvider>
+```
+
+`@cratis/scene.primereact/quill` (sources in `loadQuill/`) is the only module that names `quill`. Without a
+loader the editor shows its content read-only and says so. Authored HTML always passes an allowlist first; see
+the [component reference](../../../Documentation/primereact-package/component-reference.md#rich-text-and-quill).
+
 ## Browser specifications
 
 Most specifications run under jsdom with `yarn test`. Painted pixels, keyboard behavior and computed theme
 styles need a real browser, so `yarn test:browser` bundles the controls and drives headless Chromium through
 `playwright-core`. Install the browser once with `yarn playwright-core install chromium`. These specifications
 are not part of `yarn test` and fail, rather than skip, when Chromium is missing.
-
-### Quill peer dependency
-
-`editor` loads `quill@^2.0.3` only after the editor mounts in a browser, so server rendering remains safe.
-Install the optional peer in hosts that render editable rich text. Without it, Scene keeps the authored HTML
-visible and reports that rich-text editing is unavailable instead of replacing it with a text-area substitute.
 
 Also worth knowing: `column` renders nothing on its own, and since PrimeReact 11 that is *our* semantics
 rather than PrimeReact's. v11 removed `primereact/column`, so `data/Column.tsx` is a Cratis-owned

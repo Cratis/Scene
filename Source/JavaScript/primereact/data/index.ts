@@ -16,3 +16,4 @@ export * from './PrimeOrganizationChart';
 export * from './PrimeDataScroller';
 export * from './PrimeTreeTable';
 export * from './TreeTableSelectionMode';
+export * from './readableValue';

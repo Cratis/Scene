@@ -109,3 +109,72 @@
     background: var(--scene-surface-background);
     color: var(--scene-text-color);
 }
+
+/*
+ * The Cratis-owned controls that have no PrimeReact component behind them. They read the Scene tokens and
+ * carry a literal fallback, so they stay legible in a host that has not loaded a preset.
+ */
+
+[data-scene-component='editor'] .ql-editor {
+    min-height: 8rem;
+}
+
+[data-scene-component='dataScroller'] ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+[data-scene-component='dataScroller'] li {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--scene-surface-border, #d4d4d8);
+}
+
+[data-scene-component='dataScroller'] dl {
+    margin: 0.25rem 0 0;
+    color: var(--scene-text-muted-color, inherit);
+}
+
+[data-scene-component='dataScroller'] dl > div {
+    display: flex;
+    gap: 0.5rem;
+}
+
+[data-scene-component='dataScroller'] dt {
+    font-weight: 600;
+}
+
+[data-scene-component='dataScroller'] dd {
+    margin: 0;
+}
+
+[data-scene-component='treeTable'] table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+[data-scene-component='treeTable'] th,
+[data-scene-component='treeTable'] td {
+    padding: 0.5rem 0.75rem;
+    text-align: start;
+    border-bottom: 1px solid var(--scene-surface-border, #d4d4d8);
+}
+
+[data-scene-component='treeTable'] tbody tr:hover {
+    background: var(--scene-surface-hover, #f4f4f5);
+}
+
+[data-scene-component='treeTable'] tbody tr[aria-selected='true'] {
+    background: var(--scene-highlight-background, #e0e7ff);
+    color: var(--scene-highlight-color, inherit);
+}
+
+[data-scene-component='treeTable'] tbody tr:focus-visible {
+    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline-offset: -2px;
+}
+
+[data-scene-component='dataScroller'] li:focus-visible {
+    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline-offset: -2px;
+}

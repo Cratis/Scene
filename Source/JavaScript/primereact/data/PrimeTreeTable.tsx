@@ -1,182 +1,145 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { TreeNode } from '../TreeNode';
-import { booleanProperty, numberProperty, recordArrayProperty, stringProperty } from '../properties';
-import { treeNodesProperty } from '../treeNodes';
+import { arrayProperty, booleanProperty, numberProperty, stringProperty } from '../properties';
+import { resolveEnumeration } from '../resolveEnumeration';
+import { countUnreadableEntries, toTreeNodes } from '../treeNodes';
+import { useResettingState } from '../useResettingState';
+import { useStructuralValue } from '../useStructuralValue';
 import { ColumnDefinition } from './ColumnDefinition';
+import { TreeTableRow } from './TreeTableRow';
+import { TreeTableRowView } from './TreeTableRowView';
 import { TreeTableSelectionMode } from './TreeTableSelectionMode';
+import { columnDefinitions } from './columnDefinitions';
+import { SettledSelection, settleSelection, toggleCheckbox } from './checkboxSelection';
+import { isSerializedLegacyElement, legacyElementMessage } from './isSerializedLegacyElement';
+import { selectionKeysOf } from './selectionKeysOf';
+import { expandedKeysOf, visibleRows } from './treeTableRows';
+import { useTreeGridNavigation } from './useTreeGridNavigation';
 
-/** The `PrimeReact:treeTable` component, rendered from the canonical Scene tree and column properties. */
+const labelColumn: ColumnDefinition[] = [{ field: 'label', header: 'Label', sortable: false }];
+
+/**
+ * The `PrimeReact:treeTable` component, an ARIA tree grid over the canonical Scene node and column properties.
+ *
+ * `items` is an array of nodes - strings, numbers, or records with `key`, `label`, `data`, `children`,
+ * `expanded` and `selectable` - and the columns come from nested `column` elements, a `columns` property or the
+ * fields of the first row's `data`, in that order (see `columnDefinitions`). Serialized legacy UI elements in
+ * `items` or `columns` are refused with a visible message; see the package documentation for how they map to
+ * canonical slots.
+ *
+ * - Selection follows the authored `selection` (keys, numbers, `{ key }` objects or PrimeReact's key map) and
+ *   starts over when it changes; expansion starts from the authored `expanded` flags the same way. An unrelated
+ *   property edit leaves what the user did alone.
+ * - In checkbox mode a parent checks and unchecks its subtree and shows a partial state when only some of it is
+ *   checked.
+ * - The rows form a `treegrid` with a roving tab index and the usual arrow-key navigation.
+ * - Object cell values are shown readably, never as `[object Object]`.
+ */
 export function PrimeTreeTable({ element, interactions }: RegisteredComponentProps) {
-    const nodes = treeNodesProperty(element, 'items');
-    const columns = columnsOf(element);
-    const pageSize = Math.max(numberProperty(element, 'rows', 10), 1);
+    const authoredItems = useStructuralValue(arrayProperty(element, 'items'));
+    const items = useMemo(() => authoredItems.filter(entry => !isSerializedLegacyElement(entry)), [authoredItems]);
+    const nodes = useMemo(() => toTreeNodes(items), [items]);
+    const modeResolution = resolveEnumeration('selectionMode', element.properties.selectionMode, TreeTableSelectionMode, TreeTableSelectionMode.None);
+    const mode = modeResolution.isValid ? modeResolution.value : TreeTableSelectionMode.None;
+    const enabled = element.isEnabled;
+    const pageSize = Math.max(Math.floor(numberProperty(element, 'rows', 10)), 1);
     const paginator = booleanProperty(element, 'paginator', false);
-    const mode = selectionModeOf(element.properties.selectionMode);
-    const [expanded, setExpanded] = useState(() => expandedKeys(nodes));
-    const [selected, setSelected] = useState(() => selectedKeysOf(element.properties.selection));
+    const [expanded, setExpanded] = useResettingState(expandedKeysOf(nodes), () => new Set(expandedKeysOf(nodes)));
+    const [requested, setRequested] = useResettingState(element.properties.selection, () => selectionKeysOf(element.properties.selection));
     const [page, setPage] = useState(0);
     const pageCount = Math.max(Math.ceil(nodes.length / pageSize), 1);
-    const pageNodes = paginator ? nodes.slice(page * pageSize, (page + 1) * pageSize) : nodes;
-    const visible = visibleRows(pageNodes, expanded);
+    const currentPage = Math.min(page, pageCount - 1);
+    const rows = useMemo(() => visibleRows(paginator ? nodes.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : nodes, expanded), [nodes, paginator, currentPage, pageSize, expanded]);
+    const settled = useMemo<SettledSelection>(
+        () => mode === TreeTableSelectionMode.Checkbox ? settleSelection(nodes, requested) : { checked: requested, states: new Map() },
+        [mode, nodes, requested]
+    );
+    const columns = useMemo(() => {
+        const first = rows.find(row => typeof row.node.data === 'object' && row.node.data !== null && !Array.isArray(row.node.data))?.node.data as Record<string, unknown> | undefined;
+        const defined = columnDefinitions(element, first === undefined ? [] : [first]);
+        return defined.length > 0 ? defined : labelColumn;
+    }, [element, rows]);
 
     useEffect(() => setPage(current => Math.min(current, pageCount - 1)), [pageCount]);
 
     const toggle = (key: string) => {
-        if (element.isEnabled) setExpanded(current => toggleKey(current, key));
+        if (enabled) setExpanded(current => {
+            const next = new Set(current);
+            if (next.has(key)) next.delete(key); else next.add(key);
+            return next;
+        });
     };
-    const select = (key: string) => {
-        if (mode === TreeTableSelectionMode.None || !element.isEnabled) return;
-        setSelected(current => selectedKeysFor(mode, current, key));
+
+    const select = (row: TreeTableRow) => {
+        if (mode === TreeTableSelectionMode.None || !enabled || row.node.selectable === false) return;
+        if (mode === TreeTableSelectionMode.Checkbox) {
+            setRequested(toggleCheckbox(nodes, settled, row.node));
+        } else if (mode === TreeTableSelectionMode.Single) {
+            setRequested(new Set([row.key]));
+        } else {
+            const next = new Set(settled.checked);
+            if (next.has(row.key)) next.delete(row.key); else next.add(row.key);
+            setRequested(next);
+        }
+
         interactions?.onSelect?.();
         interactions?.onChange?.();
     };
 
+    const navigation = useTreeGridNavigation({ rows, expanded, enabled, toggle, select });
+    const changePage = (target: number) => { if (enabled && target >= 0 && target < pageCount) setPage(target); };
+    const refusals = [
+        modeResolution.isValid ? undefined : modeResolution.message,
+        legacyElementMessage(authoredItems, 'items', 'columns'),
+        legacyElementMessage(arrayProperty(element, 'columns'), 'columns', 'columns'),
+    ].filter((message): message is string => message !== undefined);
+    const skipped = countUnreadableEntries(items);
+
     return (
-        <div data-scene-id={element.id} onClick={interactions?.onClick} onDoubleClick={interactions?.onDoubleClick}>
-            <table aria-label={stringProperty(element, 'ariaLabel', 'Hierarchical data')}>
+        <div data-scene-id={element.id} data-scene-component='treeTable' aria-disabled={!enabled} onClick={interactions?.onClick} onDoubleClick={interactions?.onDoubleClick}>
+            <table
+                role='treegrid'
+                aria-label={stringProperty(element, 'ariaLabel', 'Hierarchical data')}
+                aria-multiselectable={mode === TreeTableSelectionMode.Multiple || mode === TreeTableSelectionMode.Checkbox ? true : undefined}>
                 <thead>
-                    <tr>{columns.map(column => <th key={column.field}>{column.header}</th>)}</tr>
+                    <tr role='row'>{columns.map((column, index) => <th key={index} role='columnheader'>{column.header}</th>)}</tr>
                 </thead>
                 <tbody>
-                    {visible.map(row => (
-                        <tr key={row.node.key} aria-selected={selected.has(row.node.key ?? '')}>
-                            {columns.map((column, index) => (
-                                <td key={column.field} style={index === 0 ? { paddingInlineStart: `${row.depth * 1.25}rem` } : undefined}>
-                                    {index === 0 && row.node.children?.length ? (
-                                        <button type='button' disabled={!element.isEnabled} aria-expanded={expanded.has(row.node.key ?? '')} onClick={() => toggle(row.node.key ?? '')}>
-                                            {expanded.has(row.node.key ?? '') ? 'Collapse' : 'Expand'}
-                                        </button>
-                                    ) : null}
-                                    {index === 0 && mode === TreeTableSelectionMode.Checkbox ? (
-                                        <input
-                                            type='checkbox'
-                                            checked={selected.has(row.node.key ?? '')}
-                                            disabled={!element.isEnabled || row.node.selectable === false}
-                                            aria-label={`Select ${cellValue(row.node, column.field, true)}`}
-                                            onChange={() => select(row.node.key ?? '')}
-                                        />
-                                    ) : index === 0 && mode !== TreeTableSelectionMode.None ? (
-                                        <button
-                                            type='button'
-                                            disabled={!element.isEnabled || row.node.selectable === false}
-                                            aria-pressed={selected.has(row.node.key ?? '')}
-                                            onClick={() => select(row.node.key ?? '')}>
-                                            {cellValue(row.node, column.field, true)}
-                                        </button>
-                                    ) : cellValue(row.node, column.field, index === 0)}
-                                </td>
-                            ))}
-                        </tr>
+                    {rows.map(row => (
+                        <TreeTableRowView
+                            key={row.key}
+                            row={row}
+                            columns={columns}
+                            mode={mode}
+                            enabled={enabled}
+                            expanded={expanded.has(row.key)}
+                            selected={settled.checked.has(row.key)}
+                            checkState={settled.states.get(row.key)}
+                            tabStop={navigation.tabStopKey === row.key}
+                            register={navigation.register}
+                            onActivate={() => navigation.activate(row.key)}
+                            onToggle={() => toggle(row.key)}
+                            onSelect={() => select(row)}
+                            onKeyDown={event => navigation.onKeyDown(row, event)}
+                        />
                     ))}
+                    {rows.length === 0 && (
+                        <tr role='row'><td role='gridcell' colSpan={columns.length}>{stringProperty(element, 'emptyLabel', 'No records found')}</td></tr>
+                    )}
                 </tbody>
             </table>
             {paginator && (
                 <nav aria-label='Tree table pages'>
-                    <button type='button' disabled={!element.isEnabled || page === 0} onClick={() => setPage(current => current - 1)}>Previous</button>
-                    <span>{page + 1} / {pageCount}</span>
-                    <button type='button' disabled={!element.isEnabled || page + 1 >= pageCount} onClick={() => setPage(current => current + 1)}>Next</button>
+                    <button type='button' aria-disabled={!enabled || currentPage === 0} onClick={() => changePage(currentPage - 1)}>Previous</button>
+                    <span>{currentPage + 1} / {pageCount}</span>
+                    <button type='button' aria-disabled={!enabled || currentPage + 1 >= pageCount} onClick={() => changePage(currentPage + 1)}>Next</button>
                 </nav>
             )}
+            {refusals.map(message => <p key={message} role='alert' data-scene-state='refused'>{message}</p>)}
+            {skipped > 0 && <p role='status'>{`${skipped} entr${skipped === 1 ? 'y' : 'ies'} of items could not be read as a node and ${skipped === 1 ? 'was' : 'were'} skipped.`}</p>}
         </div>
     );
-}
-
-function columnsOf(element: RegisteredComponentProps['element']): ColumnDefinition[] {
-    const declared = [...(element.slots.columns ?? []), ...(element.slots.content ?? [])]
-        .map(column => columnOf(column.properties))
-        .filter((column): column is ColumnDefinition => column !== undefined);
-    if (declared.length > 0) return declared;
-
-    const configured = recordArrayProperty(element, 'columns')
-        .map(column => columnOf(column))
-        .filter((column): column is ColumnDefinition => column !== undefined);
-    if (configured.length > 0) return configured;
-
-    const first = firstNode(nodesOf(element))?.data;
-    const inferred = Object.keys(recordOf(first) ?? {}).map(field => ({ field, header: field, sortable: false }));
-    return inferred.length > 0 ? inferred : [{ field: 'label', header: 'Label', sortable: false }];
-}
-
-function columnOf(column: Record<string, unknown>): ColumnDefinition | undefined {
-    const properties = recordOf(column.properties);
-    const field = stringOf(column.field) ?? stringOf(properties?.field) ?? stringOf(column.name);
-    const header = stringOf(column.header) ?? stringOf(properties?.header) ?? stringOf(column.label) ?? stringOf(properties?.label) ?? field;
-    return field === undefined || header === undefined ? undefined : { field, header, sortable: false };
-}
-
-function nodesOf(element: RegisteredComponentProps['element']): TreeNode[] {
-    return treeNodesProperty(element, 'items');
-}
-
-function visibleRows(nodes: TreeNode[], expanded: Set<string>, depth = 0): { node: TreeNode; depth: number }[] {
-    return nodes.flatMap(node => [
-        { node, depth },
-        ...(node.children && expanded.has(node.key ?? '') ? visibleRows(node.children, expanded, depth + 1) : []),
-    ]);
-}
-
-function firstNode(nodes: TreeNode[]): TreeNode | undefined {
-    for (const node of nodes) {
-        if (node.data !== undefined) return node;
-        const child = firstNode(node.children ?? []);
-        if (child !== undefined) return child;
-    }
-    return undefined;
-}
-
-function cellValue(node: TreeNode, field: string, firstColumn: boolean): string {
-    const data = recordOf(node.data);
-    const value = data?.[field] ?? (firstColumn ? node.label : undefined);
-    return value === undefined || value === null ? '' : String(value);
-}
-
-function selectionModeOf(value: unknown): TreeTableSelectionMode {
-    if (value === 1 || value === TreeTableSelectionMode.Single) return TreeTableSelectionMode.Single;
-    if (value === 2 || value === TreeTableSelectionMode.Multiple) return TreeTableSelectionMode.Multiple;
-    if (value === 3 || value === TreeTableSelectionMode.Checkbox) return TreeTableSelectionMode.Checkbox;
-    return TreeTableSelectionMode.None;
-}
-
-function selectedKeysOf(value: unknown): Set<string> {
-    if (typeof value === 'string') return new Set([value]);
-    if (Array.isArray(value)) return new Set(value.flatMap(selectionKeyOf));
-    return new Set(selectionKeyOf(value));
-}
-
-function selectionKeyOf(value: unknown): string[] {
-    if (typeof value === 'string') return [value];
-    const record = recordOf(value);
-    return typeof record?.key === 'string' ? [record.key] : [];
-}
-
-function selectedKeysFor(mode: TreeTableSelectionMode, current: Set<string>, key: string): Set<string> {
-    if (mode === TreeTableSelectionMode.Single) return new Set([key]);
-    const next = new Set(current);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    return next;
-}
-
-function expandedKeys(nodes: TreeNode[]): Set<string> {
-    return new Set(nodes.flatMap(node => [
-        ...(node.expanded === true && node.key !== undefined ? [node.key] : []),
-        ...expandedKeys(node.children ?? []),
-    ]));
-}
-
-function toggleKey(keys: Set<string>, key: string): Set<string> {
-    const next = new Set(keys);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    return next;
-}
-
-function recordOf(value: unknown): Record<string, unknown> | undefined {
-    return typeof value === 'object' && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : undefined;
-}
-
-function stringOf(value: unknown): string | undefined {
-    return typeof value === 'string' ? value : undefined;
 }

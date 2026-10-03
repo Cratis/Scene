@@ -38,6 +38,11 @@
             "require": "./dist/cjs/index.js",
             "import": "./dist/esm/index.js"
         },
+        "./quill": {
+            "types": "./dist/esm/loadQuill/index.d.ts",
+            "require": "./dist/cjs/loadQuill/index.js",
+            "import": "./dist/esm/loadQuill/index.js"
+        },
         "./primeReactTheme.css": "./primeReactTheme.css"
     },
     "scripts": {

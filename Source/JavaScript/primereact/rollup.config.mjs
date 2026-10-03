@@ -13,6 +13,11 @@ const tsconfigPath = path.join(import.meta.dirname, "tsconfig.json");
 
 const config = rollup(cjsPath, esmPath, tsconfigPath, pkg);
 
+// `loadQuill/index.ts` is a second entry point (published as `./quill`): it is the only module that names
+// `quill`, and nothing in the root entry imports it, so a host that renders no rich text never resolves
+// `quill`. It cannot live in a folder called `quill`: the peer-dependency plugin would treat the entry as external.
+config.input = ['index.ts', 'loadQuill/index.ts'];
+
 // The shared config externalizes the exact ids in `dependencies` and `peerDependencies`, but every
 // adapter here imports a PrimeReact *subpath* (`primereact/button`, `primereact/datatable`, ...), and a
 // bare string in Rollup's `external` does not cover a package's submodules. Without these patterns the

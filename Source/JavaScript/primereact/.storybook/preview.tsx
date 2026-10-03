@@ -3,6 +3,8 @@
 
 import type { Decorator, Preview } from '@storybook/react';
 import { PrimeReactProvider } from '@primereact/core';
+import { QuillLoaderProvider } from '../editor';
+import { loadQuill } from '../loadQuill';
 import { primeReactTheme, usePrimeReactTheme } from '../theme';
 import '../primeReactTheme.css';
 import './preview.css';
@@ -11,6 +13,9 @@ import './preview.css';
 // stylesheet imports that used to sit here (the compiled theme and the structural sheet) have nothing to
 // resolve to. Only the icon font is still a stylesheet.
 import 'primeicons/primeicons.css';
+
+// A host that wants editable rich text installs Quill and its stylesheet, and provides the loader.
+import 'quill/dist/quill.snow.css';
 
 /**
  * Puts every story inside a `PrimeReactProvider` carrying a real Scene theme.
@@ -29,7 +34,9 @@ const withTheme: Decorator = (Story) => {
 
     return (
         <PrimeReactProvider value={configuration}>
-            <Story />
+            <QuillLoaderProvider loader={loadQuill}>
+                <Story />
+            </QuillLoaderProvider>
         </PrimeReactProvider>
     );
 };

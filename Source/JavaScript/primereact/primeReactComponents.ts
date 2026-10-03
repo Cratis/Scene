@@ -24,7 +24,6 @@ import {
     PrimeChips,
     PrimeColorPicker,
     PrimeDropdown,
-    PrimeEditor,
     PrimeFloatLabel,
     PrimeIconField,
     PrimeInputNumber,
@@ -42,6 +41,7 @@ import {
     PrimeToggleSwitch,
     PrimeTreeSelect,
 } from './form';
+import { PrimeEditor } from './editor';
 import { PrimeFileUpload } from './file';
 import { PrimeCarousel, PrimeGalleria, PrimeImage } from './media';
 import {
