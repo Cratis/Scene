@@ -35,6 +35,14 @@ export const Gallery: Story = {
             sceneComponent('listBox', 'listBox', { options: ['Daily', 'Weekly', 'Monthly'] }),
             sceneComponent('selectButton', 'selectButton', { options: ['Day', 'Week', 'Month'], value: 'Week' }),
             sceneComponent('checkbox', 'checkbox', { label: 'Notify me', checked: true }),
+            sceneComponent('multiStateCheckbox', 'multiStateCheckbox', {
+                value: null,
+                options: [
+                    { label: 'Approved', value: 'approved', icon: 'pi pi-check' },
+                    { label: 'Rejected', value: 'rejected', icon: 'pi pi-times' },
+                ],
+                ariaLabel: 'Review state',
+            }),
             sceneComponent('radioButton', 'radioButton', { options: ['Email', 'SMS'], value: 'Email' }),
             sceneComponent('toggleSwitch', 'toggleSwitch', { label: 'Enabled', checked: true }),
             sceneComponent('slider', 'slider', { value: 35 }),

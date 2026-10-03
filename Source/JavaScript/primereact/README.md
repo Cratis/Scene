@@ -113,11 +113,20 @@ not through the `--p-*` properties, which only PrimeReact's own components read.
 
 | Component | Why |
 | --- | --- |
-| `chart` | PrimeReact's `Chart` is a thin wrapper over Chart.js and does nothing without `chart.js` installed and a full Chart.js configuration object. Adding a charting library as a dependency of a component-mapping package is out of scope; charting deserves its own Scene package with its own vocabulary. |
 | `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
 
-Both are genuinely useful and both are deliberate omissions, not oversights. A profile needing them
-should activate a package that owns that dependency.
+The editor is a deliberate omission, not an oversight. A profile needing it should activate a package
+that owns its dependency.
+
+## Chart.js peer dependency
+
+PrimeReact 11 removed its former Chart.js wrapper, so the Scene `chart` adapter mounts a Chart.js canvas
+itself. `chart.js@^4.5.1` is an optional peer dependency of `@cratis/scene.primereact`: install it in a
+host that renders charts. The adapter only imports Chart.js after its canvas mounts, which keeps SSR safe;
+it destroys and recreates the Chart.js instance whenever data, options, type, or responsiveness changes.
+
+`chart` accepts canonical string types (`bar`, `line`, `pie`, `doughnut`, `polarArea`, `radar`, `bubble`,
+`scatter`) and also renders the old numeric .NET enum values without rewriting the stored element.
 
 Also worth knowing: `column` renders nothing on its own, and since PrimeReact 11 that is *our* semantics
 rather than PrimeReact's. v11 removed `primereact/column`, so `data/Column.tsx` is a Cratis-owned

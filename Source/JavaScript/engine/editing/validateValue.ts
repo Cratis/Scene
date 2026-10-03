@@ -65,9 +65,27 @@ export function validateValue(descriptor: PropertyDescriptor, value: unknown): s
         case PropertyValueType.Collection:
             return validateCollection(descriptor, value);
 
+        case PropertyValueType.Json:
+            return isJsonValue(value) ? undefined : 'expected a JSON value';
+
         default:
             return isRecord(value) || Array.isArray(value) ? undefined : 'expected a structured value';
     }
+}
+
+function isJsonValue(value: unknown, parents = new Set<object>()): boolean {
+    if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
+    if (typeof value === 'number') return Number.isFinite(value);
+    if (typeof value !== 'object' || parents.has(value)) return false;
+
+    const prototype = Object.getPrototypeOf(value);
+    if (!Array.isArray(value) && prototype !== Object.prototype && prototype !== null) return false;
+
+    parents.add(value);
+    const values = Array.isArray(value) ? value : Object.values(value);
+    const valid = values.every(candidate => isJsonValue(candidate, parents));
+    parents.delete(value);
+    return valid;
 }
 
 function validateCollection(descriptor: PropertyDescriptor, value: unknown): string | undefined {
