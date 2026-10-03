@@ -5,7 +5,8 @@ import { PropertyChoice } from '@cratis/scene.model';
 
 /**
  * The choices for an enumeration property: the stable values new documents use, then the ordinals migrated
- * documents carry.
+ * documents carry, then the Pascal case member names a serialized .NET enum produces. These are the same forms
+ * the renderer accepts, so a stored value the control draws is never flagged invalid by descriptor validation.
  *
  * A migrated control stores the original numeric value. Offering those ordinals keeps the stored value valid
  * against the descriptor (so an inspector shows it as the current choice) without rewriting it behind the
@@ -13,16 +14,22 @@ import { PropertyChoice } from '@cratis/scene.model';
  *
  * @param members The enum object.
  * @param labels The label of each member, by canonical value.
- * @returns The canonical choices followed by one legacy choice per ordinal.
+ * @returns The canonical choices, then one legacy choice per ordinal, then one per Pascal case member name.
  */
 export function legacyEnumerationChoices<TMember extends string>(members: Record<string, TMember>, labels: Record<TMember, string>): PropertyChoice[] {
     const canonical = Object.values(members);
+    const names = Object.keys(members);
     return [
         ...canonical.map(member => ({ value: member, label: labels[member] })),
         ...canonical.map((member, ordinal) => ({
             value: ordinal,
             label: `${labels[member]} (legacy ${ordinal})`,
             description: `The ordinal ${ordinal} of the original enum, as stored by migrated documents.`,
+        })),
+        ...names.map(name => ({
+            value: name,
+            label: `${labels[members[name]]} (legacy name ${name})`,
+            description: `The member name ${name} of the original enum, as a serialized enum stores it.`,
         })),
     ];
 }

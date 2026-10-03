@@ -20,11 +20,11 @@ export function isSerializedLegacyElement(entry: unknown): boolean {
  *
  * @param entries The authored entries.
  * @param property The property they came from.
- * @param slot The slot authored child elements belong in.
+ * @param guidance What the author should do instead, finishing the sentence "Author them ..." or similar.
  */
-export function legacyElementMessage(entries: unknown[], property: string, slot: string): string | undefined {
+export function legacyElementMessage(entries: unknown[], property: string, guidance: string): string | undefined {
     const refused = entries.filter(isSerializedLegacyElement).length;
     return refused === 0
         ? undefined
-        : `${refused} entr${refused === 1 ? 'y' : 'ies'} of ${property} ${refused === 1 ? 'is a' : 'are'} serialized legacy UI element${refused === 1 ? '' : 's'}, which this control does not read. Author them as child elements in the '${slot}' slot, or as data.`;
+        : `${refused} entr${refused === 1 ? 'y' : 'ies'} of ${property} ${refused === 1 ? 'is a' : 'are'} serialized legacy UI element${refused === 1 ? '' : 's'}, which this control does not read. ${guidance}`;
 }

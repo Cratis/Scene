@@ -45,6 +45,8 @@ describe('when reading nodes', () => {
         const alerts = screen.getAllByRole('alert').map(alert => alert.textContent);
         alerts.should.have.lengthOf(2);
         alerts[0]!.should.contain("1 entry of items is a serialized legacy UI element");
+        alerts[0]!.should.contain('Provide items as node data');
+        alerts[0]!.should.not.contain('slot');
         alerts[1]!.should.contain("1 entry of columns is a serialized legacy UI element");
         rowTexts(container).should.deep.equal(['Kept']);
         container.textContent!.should.not.contain('Click');

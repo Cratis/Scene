@@ -30,7 +30,7 @@ const defaultScrollHeight = 320;
 export function PrimeDataScroller({ element, slots, interactions }: RegisteredComponentProps) {
     const authored = useStructuralValue(arrayProperty(element, 'items'));
     const data = useMemo(() => authored.filter(entry => !isSerializedLegacyElement(entry) && entry !== null && entry !== undefined), [authored]);
-    const refusal = legacyElementMessage(authored, 'items', 'items');
+    const refusal = legacyElementMessage(authored, 'items', "Author them as child elements in the 'items' slot, or as data.");
     const slotted = slots.items ?? slots.content ?? [];
     const rows = useMemo<ReactNode[]>(() => [...data.map((value, index) => <DataScrollerRow key={index} value={value} />), ...slotted], [data, slotted]);
     const chunk = Math.max(Math.floor(numberProperty(element, 'rows', 10)), 1);

@@ -93,8 +93,8 @@ export function PrimeTreeTable({ element, interactions }: RegisteredComponentPro
     const changePage = (target: number) => { if (enabled && target >= 0 && target < pageCount) setPage(target); };
     const refusals = [
         modeResolution.isValid ? undefined : modeResolution.message,
-        legacyElementMessage(authoredItems, 'items', 'columns'),
-        legacyElementMessage(arrayProperty(element, 'columns'), 'columns', 'columns'),
+        legacyElementMessage(authoredItems, 'items', 'Provide items as node data: strings, numbers, or records with key, label, data and children.'),
+        legacyElementMessage(arrayProperty(element, 'columns'), 'columns', "Author them as child elements in the 'columns' slot, or as column definitions."),
     ].filter((message): message is string => message !== undefined);
     const skipped = countUnreadableEntries(items);
 

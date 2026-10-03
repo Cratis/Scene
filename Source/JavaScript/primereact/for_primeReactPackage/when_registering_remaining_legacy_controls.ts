@@ -24,12 +24,12 @@ describe('when registering remaining legacy controls', () => {
 
     it('should offer the canonical string choices, then the original ordinals that migrated documents store', () => {
         findComponentDescriptor(catalog, 'PrimeReact:fileUpload')!.properties.find(property => property.path === 'mode')!.choices!
-            .map(choice => choice.value).should.deep.equal(['advanced', 'basic', 'auto', 0, 1, 2]);
+            .map(choice => choice.value).should.deep.equal(['advanced', 'basic', 'auto', 0, 1, 2, 'Advanced', 'Basic', 'Auto']);
         findComponentDescriptor(catalog, 'PrimeReact:treeTable')!.properties.find(property => property.path === 'selectionMode')!.choices!
-            .map(choice => choice.value).should.deep.equal(['none', 'single', 'multiple', 'checkbox', 0, 1, 2, 3]);
+            .map(choice => choice.value).should.deep.equal(['none', 'single', 'multiple', 'checkbox', 0, 1, 2, 3, 'None', 'Single', 'Multiple', 'Checkbox']);
     });
 
-    for (const [component, path, stored] of [['fileUpload', 'mode', [0, 1, 2, 'advanced']], ['treeTable', 'selectionMode', [0, 1, 2, 3, 'checkbox']]] as const) {
+    for (const [component, path, stored] of [['fileUpload', 'mode', [0, 1, 2, 'advanced', 'Advanced', 'Auto']], ['treeTable', 'selectionMode', [0, 1, 2, 3, 'checkbox', 'Single', 'Checkbox']]] as const) {
         it(`should accept every stored ${component} ${path} as valid, so an inspector shows it as the current choice`, () => {
             const descriptor = findComponentDescriptor(catalog, `PrimeReact:${component}`)!.properties.find(property => property.path === path)!;
             stored.map(value => validateValue(descriptor, value)).should.deep.equal(stored.map(() => undefined));

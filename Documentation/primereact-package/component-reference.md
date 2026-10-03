@@ -237,7 +237,7 @@ Nothing is requested when the control mounts. `multiple: false` is enforced for 
 drop before any file is accepted. One upload runs at a time, a failure is shown and the selection is kept so it
 can be retried, and a disabled element disables the picker, the upload button and the drop zone. `mode` accepts
 `advanced`, `basic` and `auto`, the ordinals `0` to `2` and the Pascal case names of the original enum; anything
-else is reported.
+else is reported. The descriptor lists the same three forms as choices, so a stored value is never flagged invalid while it still draws.
 
 ## Data scroller and tree table
 
