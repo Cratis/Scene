@@ -7,7 +7,7 @@ A screen written in Screenplay says `button`. It does not say `PrimeReact.Button
 anything. Something has to turn that name into a real React component — and that something is a package.
 
 `@cratis/scene.primereact` is the package that turns Scene's abstract names into PrimeReact 11 components.
-Add `PrimeReact` to a `ui profile` and 87 names become resolvable, 25 themes become selectable, and every
+Add `PrimeReact` to a `ui profile` and 85 names become resolvable, 24 themes become selectable, and every
 screen you have already written renders through a real, themed component library without a single edit.
 
 ## Without it, and with it
@@ -50,8 +50,8 @@ primeReactPackageManifest.name;         // 'PrimeReact'
 primeReactPackageManifest.version;      // '11.1.0'
 primeReactPackageManifest.kind;         // PackageKind.ComponentLibrary
 primeReactPackageManifest.dependencies; // [{ name: 'Tailwind' }]
-primeReactPackageManifest.components;   // 87 abstract names
-primeReactPackageManifest.themes;       // 25 theme names
+primeReactPackageManifest.components;   // 85 abstract names
+primeReactPackageManifest.themes;       // 24 theme names
 ```
 
 The Tailwind dependency is worth explaining, because it surprises people. PrimeReact's own components need
@@ -65,6 +65,21 @@ screen.
 The manifest declares no layouts, screen templates or dialog templates, and that is deliberate rather than
 unfinished. A component library supplies the vocabulary a template is built *from*; a **blueprint** package
 supplies the layout and the templates themselves. See [Blueprints](../blueprints/index.md).
+
+## Charts and multi-state choices
+
+Legacy screens can use `chart` and `multiStateCheckbox` as bare component names once the profile includes
+`PrimeReact`. A chart passes its authored Chart.js `data` and `options` through unchanged. New documents
+use a stable string type such as `bar` or `doughnut`; the renderer also accepts the numeric chart-type values
+saved by the earlier .NET model, so migration does not need to rewrite them.
+
+PrimeReact 11 removed both of the old widgets. Scene mounts a Chart.js canvas for `chart` and implements
+`multiStateCheckbox` as a native accessible checkbox that cycles through its configured states, including its
+optional null state. Its options retain their authored ordering, values, and icon classes.
+
+Install the optional `chart.js@^4.5.1` peer in any web host that renders charts. The adapter imports it only
+after a canvas mounts, so a server-rendered screen remains safe; it destroys and recreates the chart when its
+configuration changes.
 
 ## The two halves of theming
 

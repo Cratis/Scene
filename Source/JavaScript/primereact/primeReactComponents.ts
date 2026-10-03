@@ -3,6 +3,7 @@
 
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { PrimeButton, PrimeButtonGroup, PrimeSpeedDial, PrimeSplitButton } from './button';
+import { PrimeChart } from './chart';
 import {
     PrimeColumn,
     PrimeDataTable,
@@ -33,6 +34,7 @@ import {
     PrimeRadioButton,
     PrimeRating,
     PrimeSelectButton,
+    PrimeMultiStateCheckbox,
     PrimeSlider,
     PrimeToggleSwitch,
     PrimeTreeSelect,
@@ -108,6 +110,7 @@ export const primeReactComponents: ComponentRegistry = {
     [componentRegistryKey('PrimeReact', 'listBox')]: PrimeListBox,
     [componentRegistryKey('PrimeReact', 'selectButton')]: PrimeSelectButton,
     [componentRegistryKey('PrimeReact', 'checkbox')]: PrimeCheckbox,
+    [componentRegistryKey('PrimeReact', 'multiStateCheckbox')]: PrimeMultiStateCheckbox,
     [componentRegistryKey('PrimeReact', 'radioButton')]: PrimeRadioButton,
     [componentRegistryKey('PrimeReact', 'toggleSwitch')]: PrimeToggleSwitch,
     [componentRegistryKey('PrimeReact', 'slider')]: PrimeSlider,
@@ -134,6 +137,7 @@ export const primeReactComponents: ComponentRegistry = {
     [componentRegistryKey('PrimeReact', 'orderList')]: PrimeOrderList,
     [componentRegistryKey('PrimeReact', 'pickList')]: PrimePickList,
     [componentRegistryKey('PrimeReact', 'organizationChart')]: PrimeOrganizationChart,
+    [componentRegistryKey('PrimeReact', 'chart')]: PrimeChart,
 
     [componentRegistryKey('PrimeReact', 'card')]: PrimeCard,
     [componentRegistryKey('PrimeReact', 'panel')]: PrimePanel,

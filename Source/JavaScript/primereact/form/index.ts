@@ -12,6 +12,7 @@ export * from './PrimeMultiSelect';
 export * from './PrimeListBox';
 export * from './PrimeSelectButton';
 export * from './PrimeCheckbox';
+export * from './PrimeMultiStateCheckbox';
 export * from './PrimeRadioButton';
 export * from './PrimeToggleSwitch';
 export * from './PrimeSlider';

@@ -27,4 +27,7 @@ export enum PropertyValueType {
 
     /** A structured value the descriptor's own `editorKind` knows how to edit. */
     Object = 'object',
+
+    /** Any JSON value: a primitive, array, or structured object preserved without reshaping. */
+    Json = 'json',
 }
