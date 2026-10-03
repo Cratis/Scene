@@ -47,7 +47,7 @@
         "lint": "yarn g:lint",
         "lint:ci": "yarn g:lint:ci",
         "test": "yarn g:test",
-        "test:browser": "cd $INIT_CWD && vitest run --config ./vitest.browser.config.mts",
+        "test:browser": "yarn g:test --config ./vitest.browser.config.mts",
         "ci": "yarn g:ci",
         "up": "yarn g:up",
         "dev": "storybook dev -p 6006",
