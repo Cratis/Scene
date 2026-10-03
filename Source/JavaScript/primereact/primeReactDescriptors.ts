@@ -93,7 +93,7 @@ export const primeReactDescriptors: ComponentDescriptor[] = [
     {
         component: key('multiStateCheckbox'),
         displayName: 'Multi-state checkbox',
-        description: 'An accessible checkbox that cycles through its authored states in order.',
+        description: 'An accessible button that cycles through its authored states in order, showing the current state as a checkbox-style glyph.',
         properties: [
             { path: 'value', label: 'Value', group: 'State', valueType: PropertyValueType.Json, description: 'The selected value. It may be null when the empty state is enabled.' },
             { path: 'options', label: 'Options', group: 'State', valueType: PropertyValueType.Json, description: 'The ordered state options. Each may provide label, value, and icon fields.' },

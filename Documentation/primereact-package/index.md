@@ -76,7 +76,7 @@ string type such as `bar` or `doughnut`. The renderer also accepts the numeric c
 earlier .NET model (`0` Bar, `1` Line, `2` Pie, `3` Doughnut, `4` PolarArea, `5` Radar, `6` Bubble,
 `7` Scatter) and the original Pascal case member names, so migration never rewrites a stored `type`. Any other
 value, such as `8`, `'3'` or `'polararea'`, is reported on the chart as an unsupported type; a bar chart is
-never drawn in its place. The descriptor lists both the names and the numeric values as choices, so a migrated
+never drawn in its place. The descriptor lists the stable names, the numeric values and the Pascal case names as choices, so a migrated
 chart stays editable with its original value.
 
 A chart with no data points says so (`emptyLabel`, "No chart data" by default) instead of drawing a blank
@@ -94,7 +94,9 @@ drawn. The adapter imports Chart.js only after the canvas mounts, so server rend
 numbers, booleans, `null` and objects are all valid, and an option is never dropped for lacking a text label.
 As in the original control, `optionLabel` and `optionValue` name the fields to use, and an option with no value
 field is its own value. An option whose value is `null` is the empty state when `empty` is on; the control
-adds its own empty state only when none is authored. Options that share a value are all reachable. The control
+adds its own empty state only when none is authored. Options that share a value are all reachable, and values
+that look alike (`1`, `'1'`, `true`, `'true'`, `0`, `false`, `''`) are separate states: nothing is coerced. An
+option with an empty text value and no label is shown as `""`. The control
 follows the document: a changed `value` or `options` is shown immediately.
 
 It is a native button, not a checkbox, because a cycle has more than two states. Its name is the authored

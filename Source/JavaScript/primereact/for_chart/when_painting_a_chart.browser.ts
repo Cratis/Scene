@@ -142,6 +142,51 @@ describe('when painting a chart in Chromium', () => {
         [state.alert!.startsWith("Unsupported chart type 'PolarArea '"), state.canvases].should.deep.equal([true, 0]);
     });
 
+    describe('and the options are invalid and then corrected', () => {
+        const data = { labels: ['A'], datasets: [{ data: [10], backgroundColor: red }] };
+        const valid = { type: 0, data, options: { animation: false, scales: { y: { min: 0, max: 10 } } } };
+        const invalid = { type: 0, data, options: { animation: false, scales: { x: { type: 'nonexistentScale' } } } };
+        const show = (properties: unknown) => chromium.page.evaluate(([chartProperties]) => (window as unknown as { show(c: string, p: unknown, s: unknown): void }).show('chart', chartProperties, { width: 300, height: 200 }), [properties] as const);
+        const state = () => chromium.page.evaluate(() => {
+            const canvas = document.querySelector('canvas');
+            const pixels = canvas === null || canvas.hidden ? [] : canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
+            let painted = 0;
+            for (let index = 3; index < pixels.length; index += 4) if (pixels[index] > 0) painted++;
+            return { alerts: [...document.querySelectorAll('[role="alert"]')].map(alert => alert.textContent ?? ''), hidden: canvas?.hidden, painted };
+        });
+
+        it('should report the real reason, then paint and report nothing once the options are valid', async () => {
+            await chromium.page.evaluate(() => (window as unknown as { hide(): void }).hide());
+            await show(invalid);
+            await chromium.page.waitForSelector('[role="alert"]', { timeout: 10000 });
+            const failed = await state();
+            [failed.alerts.length, failed.alerts[0].includes('nonexistentScale'), failed.alerts[0].includes('already in use'), failed.hidden, failed.painted].should.deep.equal([1, true, false, true, 0]);
+
+            const repaired = await paint(chromium.page, valid, { width: 300, height: 200 }, false);
+            const after = await state();
+            [repaired.red > repaired.total * 0.05, after.alerts, after.hidden].should.deep.equal([true, [], false]);
+        });
+
+        it('should keep reporting the real reason, not a leftover canvas, while the options stay invalid', async () => {
+            await chromium.page.evaluate(() => (window as unknown as { hide(): void }).hide());
+            await show(invalid);
+            await chromium.page.waitForSelector('[role="alert"]', { timeout: 10000 });
+            await show({ ...invalid, data: { labels: ['A'], datasets: [{ data: [11], backgroundColor: red }] } });
+            await new Promise(resolve => setTimeout(resolve, 200));
+            const failed = await state();
+            [failed.alerts.length, failed.alerts[0].includes('nonexistentScale')].should.deep.equal([1, true]);
+        });
+
+        it('should paint after a corrected chart type as well', async () => {
+            await chromium.page.evaluate(() => (window as unknown as { hide(): void }).hide());
+            await show(invalid);
+            await chromium.page.waitForSelector('[role="alert"]', { timeout: 10000 });
+            const repaired = await paint(chromium.page, { ...valid, type: 'bar' }, { width: 300, height: 200 }, false);
+            (await state()).alerts.should.deep.equal([]);
+            (repaired.red > 100).should.be.true;
+        });
+    });
+
     it('should paint new data when the document edits it', async () => {
         await paint(chromium.page, { type: 0, data: { labels: ['A'], datasets: [{ data: [10], backgroundColor: red }] }, options: { animation: false } });
         const painted = await paint(chromium.page, { type: 0, data: { labels: ['A'], datasets: [{ data: [10], backgroundColor: blue }] }, options: { animation: false } }, { width: 300, height: 200 }, false);

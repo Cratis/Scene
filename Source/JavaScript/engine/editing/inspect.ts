@@ -45,6 +45,16 @@ function toInspectedItems(raw: unknown, local: boolean): InspectedCollectionItem
     });
 }
 
+/**
+ * The value a property takes when nothing configures it. A stored `null` is a real value for a `json` property
+ * (it is valid JSON, and clearing it to the default would hide it), so only that type keeps it; every other
+ * type falls back to its default for `null` and `undefined` alike.
+ */
+function effectiveValueOf(descriptor: PropertyDescriptor, currentValue: unknown): unknown {
+    if (currentValue === null && descriptor.valueType === PropertyValueType.Json) return null;
+    return currentValue ?? descriptor.default;
+}
+
 function inspectProperty(
     descriptor: PropertyDescriptor,
     record: NodeRecord,
@@ -61,7 +71,7 @@ function inspectProperty(
     const inspected: InspectedProperty = {
         descriptor,
         currentValue,
-        effectiveValue: configured ? configured.value : (currentValue ?? descriptor.default),
+        effectiveValue: configured ? configured.value : effectiveValueOf(descriptor, currentValue),
         source: (configured?.source ?? (currentValue === undefined ? ValueSource.Default : ValueSource.Local)) as ValueSource,
         editable: false,
     };

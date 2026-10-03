@@ -17,12 +17,16 @@ const chartTypeLabels: Record<ChartType, string> = {
 };
 
 /**
- * The chart type choices: the stable names new documents use, then the ordinals migrated documents carry.
- * A migrated chart stores its original numeric `type`; offering those values keeps that stored value valid
- * (and its type visible and re-selectable) without rewriting it to a string behind the author's back.
+ * The chart type choices: the stable names new documents use, then the ordinals migrated documents carry,
+ * then the Pascal case member names of the original .NET enum that a serialized enum produces.
+ * A migrated chart stores its original `type`; offering every form the renderer accepts keeps that stored
+ * value valid (and its type visible and re-selectable) without rewriting it to another form behind the
+ * author's back. The choices are the same set `resolveChartType` accepts, so what the renderer draws is
+ * exactly what the descriptor allows.
  */
 export const chartTypeChoices: PropertyChoice[] = [
     ...Object.values(ChartType).map(type => ({ value: type, label: chartTypeLabels[type] })),
     ...legacyChartTypes.map((type, ordinal) => ({ value: ordinal, label: `${chartTypeLabels[type]} (legacy ${ordinal})`, description: `The ordinal ${ordinal} of the original chart type enum, as stored by migrated documents.` })),
+    ...(Object.keys(ChartType) as (keyof typeof ChartType)[]).map(name => ({ value: name, label: `${chartTypeLabels[ChartType[name]]} (legacy name ${name})`, description: `The member name ${name} of the original chart type enum, as a serialized enum stores it.` })),
 ];
 

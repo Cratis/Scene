@@ -50,13 +50,14 @@ function resolvePath(record: Record<string, unknown>, path: string): unknown {
 }
 
 function labelText(label: unknown, value: unknown, emptyLabel: string): string {
-    if (typeof label === 'string') return label;
-    if (label !== undefined && label !== null) return display(label);
+    if (typeof label === 'string' && label.length > 0) return label;
+    if (label !== undefined && label !== null && label !== '') return display(label);
     return value === null ? emptyLabel : display(value);
 }
 
 function display(value: unknown): string {
-    return typeof value === 'string' ? value : JSON.stringify(value) ?? String(value);
+    const text = typeof value === 'string' ? value : JSON.stringify(value) ?? String(value);
+    return text === '' ? '""' : text;
 }
 
 function toIcon(candidate: unknown): MultiStateOption['icon'] {
