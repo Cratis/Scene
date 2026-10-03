@@ -107,6 +107,20 @@ export function recordArrayProperty(element: SceneElement, name: string): Record
 }
 
 /**
+ * Reads one structured value off a Scene element.
+ *
+ * Chart data and options intentionally stay as authored objects: these adapters pass their vocabulary to
+ * their underlying library instead of choosing a partial Scene-owned chart schema that would discard
+ * future Chart.js fields during a legacy migration.
+ */
+export function recordProperty(element: SceneElement, name: string): Record<string, unknown> | undefined {
+    const value = element.properties[name];
+    return typeof value === 'object' && value !== undefined && value !== null && !Array.isArray(value)
+        ? value as Record<string, unknown>
+        : undefined;
+}
+
+/**
  * Reads a selection component's options off a Scene element, normalizing both shapes a screen may use.
  *
  * A screen written by hand tends to say `options: ['Draft', 'Published']`; one generated from a model

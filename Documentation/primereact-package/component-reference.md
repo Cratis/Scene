@@ -3,7 +3,7 @@ title: Component reference
 description: Every abstract component name the PrimeReact package declares, the adapter that implements it, and what backs it in PrimeReact 11.
 ---
 
-**83** abstract names across ten families. Every name is `lowerCamelCase`; every registry key is
+**85** abstract names across eleven families. Every name is `lowerCamelCase`; every registry key is
 `PrimeReact:<name>`.
 
 The **Backed by** column is generated from the adapters' own imports — followed one level into a sibling
@@ -33,6 +33,7 @@ code does. Three kinds of entry appear:
 | `listBox` | `form/PrimeListBox.tsx` | `primereact/listbox` |
 | `selectButton` | `form/PrimeSelectButton.tsx` | `primereact/togglebutton`, `primereact/togglebuttongroup` |
 | `checkbox` | `form/PrimeCheckbox.tsx` | `primereact/checkbox` |
+| `multiStateCheckbox` | `form/PrimeMultiStateCheckbox.tsx` | **Cratis-owned** native accessible control |
 | `radioButton` | `form/PrimeRadioButton.tsx` | `primereact/radiobutton` |
 | `toggleSwitch` | `form/PrimeToggleSwitch.tsx` | `primereact/toggleswitch` |
 | `slider` | `form/PrimeSlider.tsx` | `primereact/slider` |
@@ -67,6 +68,16 @@ code does. Three kinds of entry appear:
 | `orderList` | `data/PrimeOrderList.tsx` | `@primereact/headless/orderlist` (headless) |
 | `pickList` | `data/PrimePickList.tsx` | `@primereact/headless/picklist` (headless) |
 | `organizationChart` | `data/PrimeOrganizationChart.tsx` | `primereact/organizationchart` |
+
+## Chart
+
+| Name | Adapter | Backed by |
+| --- | --- | --- |
+| `chart` | `chart/PrimeChart.tsx` | `chart.js` optional peer + **Cratis-owned** lifecycle adapter |
+
+Hosts that render `chart` must install `chart.js@^4.5.1`; it is an optional peer only for hosts that never
+render one. The component accepts the canonical string Chart.js types, the numeric values and Pascal case names
+from the earlier .NET chart enum, and reports any other type instead of drawing a different chart.
 
 ## Panel
 
@@ -168,13 +179,12 @@ removed from the manifest and the registry together.
 
 | Component | Why |
 | --- | --- |
-| `chart` | PrimeReact's `Chart` is a thin wrapper over Chart.js and does nothing without `chart.js` installed and a full Chart.js configuration object. Adding a charting library as a dependency of a component-mapping package is out of scope; charting deserves its own Scene package with its own vocabulary. |
 | `editor` | `Editor` wraps Quill and needs `quill` installed. Same reasoning — a rich-text editor is a product decision, not a mapping. |
 
-Both are genuinely useful and both are deliberate omissions, not oversights. A profile needing them should
-activate a package that owns that dependency.
+The editor is a deliberate omission, not an oversight. A profile needing it should activate a package that
+owns that dependency.
 
 Also worth knowing: `column` renders nothing on its own. That is deliberate — since PrimeReact 11 removed
 `primereact/column`, `column` is a Cratis-owned declaration component that returns `null`, and the table
-reads its `field`/`header`/`sortable` off the *model* (`element.slots`) rather than the rendered node.
+reads its `field`/`header`/`sortable` off the _model_ (`element.slots`) rather than the rendered node.
 Nesting a `column` element under `dataTable` or `table` is what gives it meaning.

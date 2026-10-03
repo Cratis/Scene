@@ -47,6 +47,7 @@
         "lint": "yarn g:lint",
         "lint:ci": "yarn g:lint:ci",
         "test": "yarn g:test",
+        "test:browser": "yarn g:test --config ./vitest.browser.config.mts",
         "ci": "yarn g:ci",
         "up": "yarn g:up",
         "dev": "storybook dev -p 6006",
@@ -68,6 +69,9 @@
         "@storybook/addon-links": "^10.6.1",
         "@storybook/react": "^10.6.1",
         "@storybook/react-vite": "^10.6.1",
+        "chart.js": "4.5.1",
+        "esbuild": "0.28.2",
+        "playwright-core": "1.63.0",
         "primeicons": "8.0.2",
         "primereact": "11.2.0",
         "react": "^19.3.0",
@@ -77,9 +81,15 @@
     "peerDependencies": {
         "@primereact/core": "^11.0.0",
         "@primereact/headless": "^11.0.0",
+        "chart.js": "^4.5.1",
         "primeicons": "^8.0.0",
         "primereact": "^11.0.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
+    },
+    "peerDependenciesMeta": {
+        "chart.js": {
+            "optional": true
+        }
     }
 }

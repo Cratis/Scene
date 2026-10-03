@@ -4,6 +4,7 @@
 import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle } from '@cratis/scene.react';
 import { primeReactComponents } from './primeReactComponents';
+import { primeReactDescriptors } from './primeReactDescriptors';
 import { primeReactThemeNames, primeReactThemes } from './theme';
 
 /**
@@ -34,9 +35,9 @@ export const primeReactPackageManifest: ScenePackage = {
 
     components: [
         'inputText', 'inputTextarea', 'inputNumber', 'password', 'floatLabel', 'iconField', 'dropdown', 'multiSelect',
-        'listBox', 'selectButton', 'checkbox', 'radioButton', 'toggleSwitch', 'slider', 'rating', 'knob', 'calendar', 'colorPicker',
+        'listBox', 'selectButton', 'checkbox', 'multiStateCheckbox', 'radioButton', 'toggleSwitch', 'slider', 'rating', 'knob', 'calendar', 'colorPicker',
         'chips', 'autoComplete', 'treeSelect', 'button', 'splitButton', 'speedDial', 'buttonGroup', 'dataTable', 'table',
-        'column', 'dataView', 'tree', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart',
+        'column', 'dataView', 'tree', 'timeline', 'paginator', 'orderList', 'pickList', 'organizationChart', 'chart',
         'card', 'panel', 'accordion', 'fieldset', 'divider', 'splitter', 'scrollPanel', 'tabView', 'toolbar', 'stepper', 'dialog',
         'confirmDialog', 'overlayPanel', 'sidebar', 'tooltip', 'menu', 'menubar', 'breadcrumb', 'tabMenu', 'steps', 'tieredMenu',
         'panelMenu', 'contextMenu', 'megaMenu', 'dock', 'message', 'inlineMessage', 'toast', 'image', 'galleria', 'carousel', 'avatar',
@@ -85,5 +86,6 @@ export const primeReactPackageManifest: ScenePackage = {
 export const primeReactPackage: ScenePackageBundle = {
     manifest: primeReactPackageManifest,
     components: primeReactComponents,
+    descriptors: primeReactDescriptors,
     themes: primeReactThemes,
 };

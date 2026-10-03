@@ -21,7 +21,7 @@ const pageSize: PropertyDescriptor = {
 | --- | --- |
 | `path` | Where the value lives: a key (or dotted path) in an `ExternalComponent`'s `properties` bag, or the node's own property name for model-native nodes such as a flow container |
 | `label`, `group`, `description` | What an inspector shows |
-| `valueType` | `string`, `number`, `boolean`, `enum`, `icon`, `destination`, `queryReference`, `collection`, `object` |
+| `valueType` | `string`, `number`, `boolean`, `enum`, `icon`, `destination`, `queryReference`, `collection`, `object`, `json` |
 | `choices` | The allowed values of an `enum` |
 | `default` | The value in effect when none is stored |
 | `constraints` | `required`, `minimum`, `maximum`, `integer`, `minimumLength`, `maximumLength`, `pattern`, `minimumItems`, `maximumItems`, `resultShapes` |
@@ -40,6 +40,15 @@ const pageSize: PropertyDescriptor = {
   before bindings existed - is still accepted.
 - **collection** holds an array of items. Every item has a string `id` that is unique within the collection and
   is assigned by whoever creates the item; position is never identity.
+- **json** holds any JSON value - `null`, a string, a boolean, a finite number, or an array or plain object of
+  those, nested up to 64 levels - and stores it exactly as given, without reshaping or serializing it. It is
+  for free-form configuration such as a chart's data. `NaN`, infinities, `undefined`, functions, class
+  instances and cycles are rejected. A host editor needs a JSON-aware control for it: the generic text editor
+  would stringify the value. Icons nested inside a `json` value are not found by the icon library diagnostics;
+  use an `icon` property where tracking matters.
+- **enum** choices may be numbers as well as strings. A stored value must equal a choice exactly, so a document
+  that stores `4` needs a `4` choice; a host choice control must keep the choice's own type rather than reading
+  it back as text.
 
 ## Shipping descriptors
 
