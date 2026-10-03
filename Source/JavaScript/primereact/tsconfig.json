@@ -25,6 +25,7 @@
     "exclude": [
         "dist",
         "vite.config.mts",
+        "vitest.browser.config.mts",
         ".storybook"
     ]
 }
