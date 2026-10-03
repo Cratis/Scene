@@ -121,12 +121,25 @@ that owns its dependency.
 ## Chart.js peer dependency
 
 PrimeReact 11 removed its former Chart.js wrapper, so the Scene `chart` adapter mounts a Chart.js canvas
-itself. `chart.js@^4.5.1` is an optional peer dependency of `@cratis/scene.primereact`: install it in a
-host that renders charts. The adapter only imports Chart.js after its canvas mounts, which keeps SSR safe;
-it destroys and recreates the Chart.js instance whenever data, options, type, or responsiveness changes.
+itself. `chart.js@^4.5.1` is an optional peer dependency of `@cratis/scene.primereact`, optional only in that
+a host that never renders a chart can omit it. **A host that renders charts must install `chart.js`**,
+including when a bundler resolves imports statically: without it the build can fail to resolve
+`chart.js/auto`, or the chart reports that it could not be drawn.
+
+The adapter only imports Chart.js after its canvas mounts, which keeps SSR safe. It rebuilds the chart when
+the type, data or options change in content, not when a document edit hands it equal data in a new object.
 
 `chart` accepts canonical string types (`bar`, `line`, `pie`, `doughnut`, `polarArea`, `radar`, `bubble`,
-`scatter`) and also renders the old numeric .NET enum values without rewriting the stored element.
+`scatter`), the numeric values `0` to `7` of the old .NET enum, and that enum's Pascal case names, without
+rewriting the stored element. Any other type is reported instead of drawn as a bar chart. A chart without data
+points shows its `emptyLabel`.
+
+## Browser specifications
+
+Most specifications run under jsdom with `yarn test`. Painted pixels, keyboard behavior and computed theme
+styles need a real browser, so `yarn test:browser` bundles the controls and drives headless Chromium through
+`playwright-core`. Install the browser once with `yarn playwright-core install chromium`. These specifications
+are not part of `yarn test` and fail, rather than skip, when Chromium is missing.
 
 Also worth knowing: `column` renders nothing on its own, and since PrimeReact 11 that is *our* semantics
 rather than PrimeReact's. v11 removed `primereact/column`, so `data/Column.tsx` is a Cratis-owned

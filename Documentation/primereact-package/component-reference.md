@@ -75,8 +75,9 @@ code does. Three kinds of entry appear:
 | --- | --- | --- |
 | `chart` | `chart/PrimeChart.tsx` | `chart.js` optional peer + **Cratis-owned** lifecycle adapter |
 
-`chart.js@^4.5.1` is required by hosts that render `chart`. The component accepts the canonical string
-Chart.js types and the numeric values from the earlier .NET chart enum.
+Hosts that render `chart` must install `chart.js@^4.5.1`; it is an optional peer only for hosts that never
+render one. The component accepts the canonical string Chart.js types, the numeric values and Pascal case names
+from the earlier .NET chart enum, and reports any other type instead of drawing a different chart.
 
 ## Panel
 
