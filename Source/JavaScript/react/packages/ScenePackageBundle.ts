@@ -5,6 +5,7 @@ import { ComponentDescriptor, DialogTemplate, Layout, PackageKind, PropertyValue
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
+import { ComponentsUiLibraryContract, validateComponentsUiLibraryContract } from './ComponentsUiLibraryContract';
 
 /**
  * What a package actually ships to a React renderer, as opposed to what it *declares*.
@@ -70,6 +71,12 @@ export interface ScenePackageBundle {
      * manifest declares an icon library.
      */
     iconLibrary?: IconLibraryBundle;
+
+    /**
+     * Optional web-renderer mapping to a Components UiLibrary. Scene's catalog remains independently
+     * authored; hosts check the loaded export with validateComponentsUiLibraryMapping before rendering.
+     */
+    componentsUiLibrary?: ComponentsUiLibraryContract;
 }
 
 /**
@@ -138,6 +145,13 @@ export function validatePackageBundle(bundle: ScenePackageBundle): string[] {
         if (!providedThemes.has(name)) {
             problems.push(`declares the theme '${name}' but provides no definition for it`);
         }
+    }
+
+    if (bundle.componentsUiLibrary) {
+        if (manifest.kind !== PackageKind.ComponentLibrary) {
+            problems.push('declares a Components UI library mapping but is not of kind ComponentLibrary');
+        }
+        problems.push(...validateComponentsUiLibraryContract(bundle.componentsUiLibrary));
     }
 
     problems.push(...validateIconLibrary(bundle));
