@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
+import { ScreenTemplate, TemplateScope, WidthSizeClass } from '@cratis/scene.model';
 import { SlotName, TemplateSlotName, column, row, slotLeaf } from '@cratis/scene.blueprint.default';
 import { dataPage, invoiceColumns, invoiceTableOptions, observableDataTable } from './dataElements';
 import { objectContentEditor, objectNavigationalBar, timeMachine } from './editorElements';
@@ -55,6 +55,7 @@ export const dataListPageTemplate: ScreenTemplate = {
         ],
         [TemplateSlotName.Body]: [dataPage('data-list-body', SampleBindingName.AllInvoices, invoiceTableOptions, invoiceColumns)],
     },
+    metadata: { type: 'List', category: 'Business / List', scopes: [TemplateScope.Slice] },
     displayName: 'Data list page',
     description: 'A dataPage bound to one query, under a header that states the binding - the whole list screen in two elements.',
 };
@@ -87,6 +88,7 @@ export const observableDataListPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
+    metadata: { type: 'List', category: 'Business / Live operations', scopes: [TemplateScope.Slice] },
     displayName: 'Observable data list page',
     description: 'A live list over an observable query, which re-renders when the read model changes on the server.',
 };
@@ -134,6 +136,7 @@ export const dataListWithDetailPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
+    metadata: { type: 'Detail', category: 'Business / Master detail', scopes: [TemplateScope.Slice] },
     displayName: 'Data list with detail page',
     description: 'A dataPage beside a detail region showing the selected record document and its history.',
 };

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScreenTemplate } from '@cratis/scene.model';
+import { ScreenTemplate, TemplateScope } from '@cratis/scene.model';
 import { SlotName, TemplateSlotName, column, slotLeaf } from '@cratis/scene.blueprint.default';
 import { arcPageHeader, page, toolbar, toolbarButton, toolbarSeparator } from './elements';
 import { commandForm } from './formElements';
@@ -51,6 +51,7 @@ export const commandFormPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
+    metadata: { type: 'Form', category: 'Business / Command', scopes: [TemplateScope.Slice] },
     displayName: 'Command form page',
     description: 'A generated command form under a header that states the command, with its own action bar.',
 };

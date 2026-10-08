@@ -4,12 +4,15 @@
 import { useMemo } from 'react';
 import { applyEffectiveConfiguration, renderElement, BindingResolver } from '@cratis/scene.engine';
 import { EffectiveConfiguration, SceneElement } from '@cratis/scene.model';
-import { BindingOutputProvider, ComponentRegistry, createReactRenderer } from './renderer';
+import { ComponentRegistry, RenderBindingScopeProvider, createReactRenderer, useRenderBindingResolver } from './renderer';
 
 export interface SceneElementViewProps {
     element: SceneElement;
     registry: ComponentRegistry;
-    resolveBinding: BindingResolver;
+    resolveBinding?: BindingResolver;
+    dataContext?: unknown;
+    queryResults?: Record<string, unknown>;
+    componentOutputs?: Record<string, Record<string, unknown>>;
 
     /**
      * The resolved configuration of the template chain the element sits in, from `resolveEffectiveConfiguration`.
@@ -27,12 +30,31 @@ export interface SceneElementViewProps {
  * Renders a Scene element tree with the real `Scene.React` renderer - the WYSIWYG building block Studio's
  * preview surface and Stage's shipped web bundle both consume unmodified.
  */
-export function SceneElementView({ element, registry, resolveBinding, configuration, onComponentOutputsChanged }: SceneElementViewProps) {
-    const renderer = useMemo(() => createReactRenderer(registry), [registry]);
+export function SceneElementView({
+    element,
+    registry,
+    resolveBinding,
+    configuration,
+    onComponentOutputsChanged,
+    dataContext,
+    queryResults,
+    componentOutputs,
+}: SceneElementViewProps) {
     const configured = useMemo(() => configuration ? applyEffectiveConfiguration(element, configuration) : element, [element, configuration]);
     return (
-        <BindingOutputProvider onOutputsChanged={onComponentOutputsChanged}>
-            {renderElement(configured, renderer, resolveBinding)}
-        </BindingOutputProvider>
+        <RenderBindingScopeProvider
+            dataContext={dataContext}
+            queryResults={queryResults}
+            componentOutputs={componentOutputs}
+            resolveBinding={resolveBinding}
+            onComponentOutputsChanged={onComponentOutputsChanged}>
+            <RenderedElement element={configured} registry={registry} />
+        </RenderBindingScopeProvider>
     );
+}
+
+function RenderedElement({ element, registry }: { element: SceneElement; registry: ComponentRegistry }) {
+    const renderer = useMemo(() => createReactRenderer(registry), [registry]);
+    const resolveBinding = useRenderBindingResolver();
+    return <>{renderElement(element, renderer, resolveBinding)}</>;
 }

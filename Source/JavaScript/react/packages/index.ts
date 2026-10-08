@@ -3,6 +3,12 @@
 
 export * from './DesignTimeAction';
 export * from './DesignTimeBundle';
+export * from './DesignTimeComponentProps';
+export * from './DesignTimeContext';
+export * from './DesignTimePropertyDisplayProps';
+export * from './DesignTimePropertyEditorProps';
+export * from './DesignTimeProvider';
+export * from '../navigation';
 export * from './PackageHostConfiguration';
 export * from './ScenePackageBundle';
 export * from './ComponentsUiLibraryContract';

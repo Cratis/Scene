@@ -1,11 +1,10 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, DesignTimeActionDescriptor, ExternalComponent, SceneEdit } from '@cratis/scene.model';
+import { DesignTimeActionDescriptor, SceneEdit } from '@cratis/scene.model';
+import { DesignTimeContext } from './DesignTimeContext';
 
-export interface DesignTimeActionContext {
-    element: ExternalComponent;
-    descriptor: ComponentDescriptor;
+export interface DesignTimeActionContext extends DesignTimeContext {
     commandMetadata?: { properties: { name: string; type: string; label?: string }[] };
 }
 

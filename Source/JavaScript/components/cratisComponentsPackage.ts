@@ -5,6 +5,8 @@ import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle } from '@cratis/scene.react';
 import { cratisComponents, cratisComponentsPackageName } from './cratisComponents';
 import { cratisComponentsDescriptors } from './cratisComponentsDescriptors';
+import { CommandFieldPropertyEditor } from './forms/CommandFieldPropertyEditor';
+import { CommandFormDesigner } from './forms/CommandFormDesigner';
 import { generateCommandFieldsAction } from './forms/generateCommandFieldsAction';
 
 /**
@@ -119,6 +121,12 @@ export const cratisComponentsPackage: ScenePackageBundle = {
     components: cratisComponents,
     descriptors: cratisComponentsDescriptors,
     designTime: {
+        designers: {
+            commandFormDesigner: CommandFormDesigner,
+        },
+        propertyEditors: {
+            commandBinding: CommandFieldPropertyEditor,
+        },
         actions: {
             [generateCommandFieldsAction.descriptor.id]: generateCommandFieldsAction,
         },
