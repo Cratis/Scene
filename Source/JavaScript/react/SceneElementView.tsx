@@ -4,7 +4,7 @@
 import { useMemo } from 'react';
 import { applyEffectiveConfiguration, renderElement, BindingResolver } from '@cratis/scene.engine';
 import { EffectiveConfiguration, SceneElement } from '@cratis/scene.model';
-import { ComponentRegistry, createReactRenderer } from './renderer';
+import { BindingOutputProvider, ComponentRegistry, createReactRenderer } from './renderer';
 
 export interface SceneElementViewProps {
     element: SceneElement;
@@ -18,14 +18,21 @@ export interface SceneElementViewProps {
      * being edited or played: there is no design-time mode.
      */
     configuration?: EffectiveConfiguration;
+
+    /** Called when rendered components publish or clear output properties for typed bindings. */
+    onComponentOutputsChanged?: (outputs: Record<string, Record<string, unknown>>) => void;
 }
 
 /**
  * Renders a Scene element tree with the real `Scene.React` renderer - the WYSIWYG building block Studio's
  * preview surface and Stage's shipped web bundle both consume unmodified.
  */
-export function SceneElementView({ element, registry, resolveBinding, configuration }: SceneElementViewProps) {
+export function SceneElementView({ element, registry, resolveBinding, configuration, onComponentOutputsChanged }: SceneElementViewProps) {
     const renderer = useMemo(() => createReactRenderer(registry), [registry]);
     const configured = useMemo(() => configuration ? applyEffectiveConfiguration(element, configuration) : element, [element, configuration]);
-    return <>{renderElement(configured, renderer, resolveBinding)}</>;
+    return (
+        <BindingOutputProvider onOutputsChanged={onComponentOutputsChanged}>
+            {renderElement(configured, renderer, resolveBinding)}
+        </BindingOutputProvider>
+    );
 }

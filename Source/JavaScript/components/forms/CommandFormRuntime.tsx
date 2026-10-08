@@ -15,6 +15,7 @@ interface CommandFormRuntimeProps {
     inputs?: CommandInput[];
     exclude?: string[];
     submitLabel: string;
+    columns?: number;
 }
 
 // Runtime bindings erase the proxy's keys; the optional footer is a Components >=4.13 contract.
@@ -59,12 +60,14 @@ function capability(command: BoundConstructor, inputs?: CommandInput[], exclude?
 }
 
 /** Private lazy entry point: importing the Scene registry must not import Arc. */
-export default function CommandFormRuntime({ command, inputs, exclude, submitLabel }: CommandFormRuntimeProps) {
+export default function CommandFormRuntime({ command, inputs, exclude, submitLabel, columns = 1 }: CommandFormRuntimeProps) {
     const error = capability(command, inputs, exclude);
     if (error) return <div role='alert'>{error}</div>;
     // The registry's never-argument constructor is erased; Arc creates this checked proxy with no args.
     if (inputs) return <CommandForm command={command as unknown as new () => object} showTitles={false}>
-        {inputs.map(input => <ExplicitCommandField key={input.property} input={input} />)}
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.max(1, columns)}, minmax(0, 1fr))`, gap: '1rem' }}>
+            {inputs.map(input => <ExplicitCommandField key={input.property} input={input} />)}
+        </div>
         <CommandFormSubmit label={submitLabel} />
     </CommandForm>;
     return <NativeAutoCommandForm command={command} exclude={exclude} footer={<CommandFormSubmit label={submitLabel} />} />;

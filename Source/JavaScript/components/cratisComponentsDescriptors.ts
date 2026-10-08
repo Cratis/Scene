@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, PropertyDescriptor, PropertyValueType, QueryResultShape } from '@cratis/scene.model';
+import { BindingMode, BindingSourceKind, ComponentDescriptor, DesignTimeActionPlacement, PropertyDescriptor, PropertyValueType, QueryResultShape } from '@cratis/scene.model';
 import { componentRegistryKey } from '@cratis/scene.react';
 
 // The package name, spelled out so describing components does not pull every adapter (and its UI dependencies) in
@@ -32,6 +32,45 @@ const dataTableProperties: PropertyDescriptor[] = [
         path: 'globalFilterFields', label: 'Searchable fields', group: 'Data', valueType: PropertyValueType.Object, editorKind: 'resultFieldList',
         description: 'The result fields the table\'s search box looks in.',
     },
+    {
+        path: 'selectedItem', label: 'Selected item', group: 'Outputs', valueType: PropertyValueType.Object, readOnly: true,
+        output: true, bindingMode: BindingMode.OneWay,
+        description: 'The currently selected row, or null after selection is cleared.',
+    },
+];
+
+const commandFormProperties: PropertyDescriptor[] = [
+    {
+        path: 'command', label: 'Command', group: 'Command', valueType: PropertyValueType.String, editorKind: 'commandBinding',
+        constraints: { required: true },
+        description: 'The Arc command proxy rendered through the native command form runtime.',
+    },
+    {
+        path: 'mode', label: 'Mode', group: 'Layout', valueType: PropertyValueType.Enum,
+        choices: [{ value: 'auto', label: 'Auto' }, { value: 'manual', label: 'Manual' }], default: 'auto',
+        description: 'Auto follows command metadata; manual renders explicit inputs inside the same native form boundary.',
+    },
+    { path: 'columns', label: 'Columns', group: 'Layout', valueType: PropertyValueType.Number, default: 1 },
+    { path: 'fieldWidths', label: 'Field widths', group: 'Layout', valueType: PropertyValueType.Object, editorKind: 'fieldWidths' },
+    {
+        path: 'inputs', label: 'Fields', group: 'Layout', valueType: PropertyValueType.Collection, editorKind: 'commandFields',
+        acceptedBindingKinds: [BindingSourceKind.DataContext, BindingSourceKind.ComponentProperty],
+        item: {
+            label: 'Field',
+            properties: [
+                { path: 'property', label: 'Property', group: 'Field', valueType: PropertyValueType.String },
+                { path: 'type', label: 'Type', group: 'Field', valueType: PropertyValueType.Enum, choices: [{ value: 'string', label: 'String' }, { value: 'guid', label: 'Guid' }] },
+                { path: 'label', label: 'Label', group: 'Field', valueType: PropertyValueType.String },
+                { path: 'column', label: 'Column', group: 'Layout', valueType: PropertyValueType.Number },
+                { path: 'width', label: 'Width', group: 'Layout', valueType: PropertyValueType.String },
+            ],
+        },
+    },
+    {
+        path: 'exclude', label: 'Excluded fields', group: 'Command', valueType: PropertyValueType.Collection,
+        item: { label: 'Excluded field', properties: [{ path: 'property', label: 'Property', group: 'Field', valueType: PropertyValueType.String }] },
+    },
+    { path: 'submitLabel', label: 'Submit label', group: 'Content', valueType: PropertyValueType.String, default: 'Submit' },
 ];
 
 /**
@@ -45,4 +84,17 @@ export const cratisComponentsDescriptors: ComponentDescriptor[] = [
     { component: key('dataTable'), displayName: 'Data table', properties: dataTableProperties },
     { component: key('table'), displayName: 'Table', properties: dataTableProperties },
     { component: key('observableDataTable'), displayName: 'Live data table', properties: dataTableProperties },
+    {
+        component: key('commandForm'),
+        displayName: 'Command form',
+        editorKind: 'commandFormDesigner',
+        properties: commandFormProperties,
+        actions: [{
+            id: 'Cratis.Components.commandForm.generateFields',
+            label: 'Generate fields',
+            placement: DesignTimeActionPlacement.Toolbar,
+            availability: 'commandForm.canGenerateFields',
+            description: 'Creates a deterministic editable field layout from the selected command metadata.',
+        }],
+    },
 ];

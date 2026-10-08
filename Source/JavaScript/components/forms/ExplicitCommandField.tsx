@@ -81,6 +81,8 @@ const NativeTextField = asCommandFormField<TextProps>(TextControl, { defaultValu
 
 /** Opaque child is self-bound by Arc's native runtime binding, with an exact fieldName. */
 export function ExplicitCommandField({ input }: { input: CommandInput }) {
-    return <NativeTextField fieldName={input.property} value={(command: Record<string, unknown>) => command[input.property]}
-        property={input.property} guid={input.type === 'guid'} label={input.label} title={input.label} />;
+    return <div style={{ gridColumn: input.column === undefined ? undefined : `${input.column}`, width: input.width }}>
+        <NativeTextField fieldName={input.property} value={(command: Record<string, unknown>) => command[input.property]}
+            property={input.property} guid={input.type === 'guid'} label={input.label} title={input.label} />
+    </div>;
 }

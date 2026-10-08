@@ -4,6 +4,7 @@
 import { Arrangement } from './Arrangement';
 import { Slot } from './Slot';
 import { Behavior } from '../interactions';
+import { Outlet } from '../screens/Outlet';
 import { TemplateMetadata } from '../screens/TemplateMetadata';
 
 /**
@@ -29,8 +30,11 @@ export interface Layout {
      */
     behaviors?: Behavior[];
 
+    /** Named routed replacement surfaces this layout owns. Static slots remain template composition surfaces. */
+    outlets?: Outlet[];
+
     /** Optional browse metadata; ApplicationShell retains this existing Layout role. */
     metadata?: TemplateMetadata;
 }
 
-export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors', 'metadata'];
+export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors', 'outlets', 'metadata'];

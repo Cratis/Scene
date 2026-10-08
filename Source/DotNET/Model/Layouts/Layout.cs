@@ -35,6 +35,11 @@ public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrang
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
 
     /// <summary>
+    /// Gets named routed replacement surfaces this layout owns. Static slots remain template composition surfaces.
+    /// </summary>
+    public IReadOnlyList<Outlet>? Outlets { get; init; }
+
+    /// <summary>
     /// Gets optional browse metadata. ApplicationShell retains this existing Layout role.
     /// </summary>
     public TemplateMetadata? Metadata { get; init; }

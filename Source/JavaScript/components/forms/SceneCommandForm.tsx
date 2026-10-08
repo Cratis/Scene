@@ -5,7 +5,7 @@ import { lazy } from 'react';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import type { BoundConstructor } from '../bindings';
-import { stringArrayProperty, stringProperty } from '../properties';
+import { numberProperty, stringArrayProperty, stringProperty, unionProperty } from '../properties';
 import { commandInputs } from './commandInputs';
 
 const CommandFormRuntime = lazy(() => import('./CommandFormRuntime'));
@@ -31,8 +31,9 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
     const { name, target } = resolveElementBinding(element, BindingKind.Command);
     if (!target) return <MissingBinding element={element} kind={BindingKind.Command} name={name} />;
 
-    const inputs = Object.hasOwn(element.properties, 'inputs') ? commandInputs(element.properties) : undefined;
-    if (Object.hasOwn(element.properties, 'inputs') && !inputs) return <div role='alert'>Invalid command form inputs declaration</div>;
+    const mode = unionProperty(element.properties, 'mode', ['auto', 'manual'] as const) ?? (Object.hasOwn(element.properties, 'inputs') ? 'manual' : 'auto');
+    const inputs = mode === 'manual' ? commandInputs(element.properties) : undefined;
+    if (mode === 'manual' && !inputs) return <div role='alert'>Invalid command form inputs declaration</div>;
 
     return (
         <ArcRuntimeBoundary>
@@ -42,6 +43,7 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
                 inputs={inputs}
                 exclude={stringArrayProperty(element.properties, 'exclude')}
                 submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}
+                {...(numberProperty(element.properties, 'columns') === undefined ? {} : { columns: numberProperty(element.properties, 'columns') })}
             />
         </ArcRuntimeBoundary>
     );

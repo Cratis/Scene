@@ -18,7 +18,15 @@
       "bottom"
     ],
     "BindingExpression": [
-      "path"
+      "kind",
+      "path",
+      "query",
+      "componentId",
+      "componentPropertyPath",
+      "mode",
+      "nullBehavior",
+      "expectedValueType",
+      "value"
     ],
     "SizeClass": [
       "width",
@@ -76,6 +84,7 @@
       "slots",
       "arrangement",
       "behaviors",
+      "outlets",
       "metadata"
     ],
     "Slot": [
@@ -176,9 +185,13 @@
       "order"
     ],
     "NavigationItem": [
+      "id",
       "label",
+      "icon",
+      "presentation",
       "targetScreen",
       "routeParameterBindings",
+      "destination",
       "order",
       "group"
     ],
@@ -220,7 +233,10 @@
       "module",
       "license",
       "licenseUrl",
-      "iconLibrary"
+      "iconLibrary",
+      "designTime",
+      "assets",
+      "runtimeSingletons"
     ],
     "IconReference": [
       "library",
@@ -266,6 +282,7 @@
       "displayName",
       "description",
       "behaviors",
+      "outlets",
       "metadata"
     ],
     "DialogTemplate": [
@@ -419,6 +436,28 @@
       "kind",
       "name",
       "layout"
+    ],
+    "DestinationReference": [
+      "screen",
+      "module",
+      "feature",
+      "slice",
+      "outlet",
+      "route",
+      "kind",
+      "dialog",
+      "routeParameterBindings"
+    ],
+    "Outlet": [
+      "name",
+      "description"
+    ],
+    "PackageDesignTimeMetadata": [
+      "previews",
+      "designers",
+      "propertyEditors",
+      "propertyDisplays",
+      "actions"
     ]
   },
   "enums": {
@@ -524,6 +563,26 @@
       "ScreenTemplate",
       "DialogTemplate",
       "Layout"
+    ],
+    "BindingSourceKind": [
+      "DataContext",
+      "QueryResult",
+      "ComponentProperty",
+      "Literal"
+    ],
+    "BindingMode": [
+      "OneWay",
+      "TwoWay"
+    ],
+    "BindingNullBehavior": [
+      "Propagate",
+      "Clear",
+      "Preserve"
+    ],
+    "DestinationKind": [
+      "Outlet",
+      "Dialog",
+      "External"
     ]
   }
 }

@@ -1,9 +1,10 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentType, ReactNode, createElement } from 'react';
+import { ComponentType, ReactNode, createElement, useEffect } from 'react';
 import { ExternalComponent } from '@cratis/scene.model';
 import { useInteractions } from '../interactions';
+import { useBindingOutputs } from './BindingOutputContext';
 import { RegisteredComponentProps } from './ComponentRegistry';
 
 export interface InteractiveComponentProps {
@@ -21,5 +22,7 @@ export interface InteractiveComponentProps {
  */
 export function InteractiveComponent({ component, element, slots }: InteractiveComponentProps) {
     const interactions = useInteractions(element.id, element.behaviors);
-    return createElement(component, { element, slots, interactions });
+    const bindingOutputs = useBindingOutputs(element.id);
+    useEffect(() => () => bindingOutputs.clearAll(), [element.id]);
+    return createElement(component, { element, slots, interactions, bindingOutputs });
 }

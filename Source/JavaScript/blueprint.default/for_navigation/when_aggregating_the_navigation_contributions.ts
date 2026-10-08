@@ -33,11 +33,11 @@ describe('when aggregating the navigation contributions', () => {
 
     it('should point every entry at a screen template this blueprint provides', () => {
         const provided = new Set(galleryScreenTemplates.map(template => template.name));
-        items.filter(item => !provided.has(item.targetScreen)).map(item => item.targetScreen).should.be.empty;
+        items.filter(item => !provided.has(item.targetScreen ?? '')).map(item => item.targetScreen).should.be.empty;
     });
 
     it('should point every entry at a screen the gallery actually ships', () => {
-        items.filter(item => galleryScreen(item.targetScreen) === undefined).map(item => item.targetScreen).should.be.empty;
+        items.filter(item => galleryScreen(item.targetScreen ?? '') === undefined).map(item => item.targetScreen).should.be.empty;
     });
 
     it('should carry the contributions on every application-shell screen', () => {
