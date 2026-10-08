@@ -3,6 +3,10 @@
 
 export * from './Renderer';
 export * from './BindingResolver';
+export * from './BindingScope';
+export * from './BindingDiagnostic';
+export * from './resolveBindingExpression';
+export * from './validateBindingExpression';
 export * from './renderElement';
 export * from './elementKind';
 export * from './panelKind';
@@ -28,4 +32,5 @@ export * from './ActionDispatcher';
 export * from './runActions';
 export * from './resolveBehaviors';
 export * from './resolveStrings';
+export * from './validateNavigationDestinations';
 export * from './editing';

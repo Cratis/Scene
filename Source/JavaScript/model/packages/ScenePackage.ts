@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { PackageDesignTimeMetadata } from '../descriptors';
 import { IconLibrary } from '../icons';
 import { PackageDependency } from './PackageDependency';
 import { PackageKind } from './PackageKind';
@@ -92,6 +93,15 @@ export interface ScenePackage {
      * What the package declares about its icons. Present exactly for a {@link PackageKind.IconLibrary}.
      */
     iconLibrary?: IconLibrary;
+
+    /** Optional design-time extensions carried as metadata; runtime hosts do not load them unless approved. */
+    designTime?: PackageDesignTimeMetadata;
+
+    /** Asset URLs or package-relative asset entries (CSS, fonts, images) required by a web renderer. */
+    assets?: string[];
+
+    /** Runtime singleton dependency names that must not be duplicated across approved bundles. */
+    runtimeSingletons?: string[];
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -110,4 +120,7 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'license',
     'licenseUrl',
     'iconLibrary',
+    'designTime',
+    'assets',
+    'runtimeSingletons',
 ];

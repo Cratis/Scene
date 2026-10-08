@@ -34,6 +34,9 @@ namespace Cratis.Scene.Model.Packages;
 /// standard license - a name alone tells an author nothing about eligibility or obligations.
 /// </param>
 /// <param name="IconLibrary">What the package declares about its icons. Present exactly for a <see cref="PackageKind.IconLibrary"/>.</param>
+/// <param name="DesignTime">Optional design-time extensions carried as metadata; runtime hosts do not load them unless approved.</param>
+/// <param name="Assets">Asset URLs or package-relative asset entries required by a web renderer.</param>
+/// <param name="RuntimeSingletons">Runtime singleton dependency names that must not be duplicated across approved bundles.</param>
 public record ScenePackage(
     string Name,
     string Version,
@@ -49,4 +52,7 @@ public record ScenePackage(
     string? Module = null,
     string? License = null,
     string? LicenseUrl = null,
-    Icons.IconLibrary? IconLibrary = null);
+    Icons.IconLibrary? IconLibrary = null,
+    PackageDesignTimeMetadata? DesignTime = null,
+    IReadOnlyList<string>? Assets = null,
+    IReadOnlyList<string>? RuntimeSingletons = null);

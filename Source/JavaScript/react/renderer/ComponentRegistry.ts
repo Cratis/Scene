@@ -4,6 +4,7 @@
 import { ComponentType, ReactNode } from 'react';
 import { ExternalComponent } from '@cratis/scene.model';
 import { InteractionHandlers } from '../interactions';
+import { ComponentBindingOutputs } from './BindingOutputContext';
 
 /**
  * The props every registered component receives.
@@ -21,6 +22,9 @@ export interface RegisteredComponentProps {
      * specification, or a gallery. Spreading it is safe either way.
      */
     interactions?: InteractionHandlers;
+
+    /** Component output property writer for typed element-to-element bindings. */
+    bindingOutputs?: ComponentBindingOutputs;
 }
 
 /**

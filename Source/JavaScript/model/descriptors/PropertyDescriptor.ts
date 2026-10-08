@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { BindingMode, BindingSourceKind } from '../common';
 import { CollectionItemDescriptor } from './CollectionItemDescriptor';
 import { PropertyChoice } from './PropertyChoice';
 import { PropertyConstraints } from './PropertyConstraints';
@@ -48,8 +49,18 @@ export interface PropertyDescriptor {
 
     /** The value is shown but never edited. */
     readOnly?: boolean;
+
+    /** This property is emitted by the component and may be bound by other elements. */
+    output?: boolean;
+
+    /** Which binding source kinds may be assigned to this property. */
+    acceptedBindingKinds?: BindingSourceKind[];
+
+    /** The strongest binding mode the property supports. */
+    bindingMode?: BindingMode;
 }
 
 export const PropertyDescriptorPropertyNames: (keyof PropertyDescriptor)[] = [
     'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'readOnly',
+    'output', 'acceptedBindingKinds', 'bindingMode',
 ];

@@ -5,6 +5,7 @@ import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle } from '@cratis/scene.react';
 import { cratisComponents, cratisComponentsPackageName } from './cratisComponents';
 import { cratisComponentsDescriptors } from './cratisComponentsDescriptors';
+import { generateCommandFieldsAction } from './forms/generateCommandFieldsAction';
 
 /**
  * The `Cratis.Components` package's declaration - what a profile gets when it lists this package.
@@ -95,6 +96,15 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     module: '@cratis/scene.components',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
+    designTime: {
+        previews: [],
+        designers: ['commandFormDesigner'],
+        propertyEditors: ['commandBinding', 'commandFields', 'fieldWidths'],
+        propertyDisplays: [],
+        actions: ['Cratis.Components.commandForm.generateFields'],
+    },
+    assets: ['@cratis/components/styles', '@cratis/components/tokens'],
+    runtimeSingletons: ['react', '@cratis/arc', '@cratis/components'],
 };
 
 /**
@@ -108,4 +118,9 @@ export const cratisComponentsPackage: ScenePackageBundle = {
     manifest: cratisComponentsPackageManifest,
     components: cratisComponents,
     descriptors: cratisComponentsDescriptors,
+    designTime: {
+        actions: {
+            [generateCommandFieldsAction.descriptor.id]: generateCommandFieldsAction,
+        },
+    },
 };

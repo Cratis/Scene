@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { DesignTimeActionDescriptor } from './DesignTimeActionDescriptor';
 import { PropertyDescriptor } from './PropertyDescriptor';
 
 /**
@@ -26,8 +27,17 @@ export interface ComponentDescriptor {
     editorKind?: string;
 
     properties: PropertyDescriptor[];
+
+    /** Package-provided design-time actions for this component. */
+    actions?: DesignTimeActionDescriptor[];
+
+    /** Names an optional package-provided preview renderer. */
+    previewKind?: string;
+
+    /** Names an optional package-provided property display renderer set. */
+    propertyDisplayKind?: string;
 }
 
 export const ComponentDescriptorPropertyNames: (keyof ComponentDescriptor)[] = [
-    'component', 'displayName', 'description', 'editorKind', 'properties',
+    'component', 'displayName', 'description', 'editorKind', 'properties', 'actions', 'previewKind', 'propertyDisplayKind',
 ];

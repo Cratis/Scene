@@ -6,6 +6,7 @@ import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAda
 import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
 import { ComponentsUiLibraryContract, validateComponentsUiLibraryContract } from './ComponentsUiLibraryContract';
+import { DesignTimeBundle, validateDesignTimeBundle } from './DesignTimeBundle';
 
 /**
  * What a package actually ships to a React renderer, as opposed to what it *declares*.
@@ -77,6 +78,9 @@ export interface ScenePackageBundle {
      * authored; hosts check the loaded export with validateComponentsUiLibraryMapping before rendering.
      */
     componentsUiLibrary?: ComponentsUiLibraryContract;
+
+    /** Optional React-only design-time tooling. Runtime hosts can omit it entirely. */
+    designTime?: DesignTimeBundle;
 }
 
 /**
@@ -156,6 +160,7 @@ export function validatePackageBundle(bundle: ScenePackageBundle): string[] {
 
     problems.push(...validateIconLibrary(bundle));
     problems.push(...validateDescriptors(bundle));
+    problems.push(...validateDesignTimeBundle(bundle.designTime));
 
     return problems;
 }
