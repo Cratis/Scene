@@ -4,6 +4,7 @@
 import { Arrangement } from './Arrangement';
 import { Slot } from './Slot';
 import { Behavior } from '../interactions';
+import { TemplateMetadata } from '../screens/TemplateMetadata';
 
 /**
  * A named template of slots that a {@link Screen} fills with content. Mirrors Screenplay's `layout`
@@ -27,6 +28,9 @@ export interface Layout {
      * attached further out or further in.
      */
     behaviors?: Behavior[];
+
+    /** Optional browse metadata; ApplicationShell retains this existing Layout role. */
+    metadata?: TemplateMetadata;
 }
 
-export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors'];
+export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors', 'metadata'];

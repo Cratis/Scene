@@ -1,0 +1,170 @@
+{
+  "cases": [
+    {
+      "name": "legacy application layout",
+      "kind": "Layout",
+      "scope": "Application",
+      "definition": { "name": "shell", "slots": [] },
+      "expectedProblems": []
+    },
+    {
+      "name": "application shell remains a Layout",
+      "kind": "Layout",
+      "scope": "Application",
+      "definition": { "name": "shell", "slots": [], "metadata": { "type": "ApplicationShell", "category": "Navigation" } },
+      "expectedProblems": []
+    },
+    {
+      "name": "layout cannot become a slice template",
+      "kind": "Layout",
+      "scope": "Slice",
+      "definition": { "name": "shell", "slots": [], "metadata": { "scopes": ["Slice"] } },
+      "expectedProblems": ["Template 'shell' of kind 'Layout' cannot be applied at scope 'Slice'"]
+    },
+    {
+      "name": "module workspace fits application content",
+      "kind": "ScreenTemplate",
+      "scope": "Module",
+      "definition": { "name": "workspace", "fitsSlot": "shell.body", "slots": [], "metadata": { "type": "Workspace", "scopes": ["Module", "Feature", "Subfeature"] } },
+      "container": { "name": "shell", "slots": [{ "name": "body" }] },
+      "expectedProblems": []
+    },
+    {
+      "name": "feature fits a module slot",
+      "kind": "ScreenTemplate",
+      "scope": "Feature",
+      "definition": { "name": "feature", "fitsSlot": "body", "slots": [] },
+      "container": { "name": "module", "slots": [{ "name": "body" }] },
+      "expectedProblems": []
+    },
+    {
+      "name": "nested feature fits its immediate feature",
+      "kind": "ScreenTemplate",
+      "scope": "Subfeature",
+      "definition": { "name": "nested", "fitsSlot": "parent.body", "slots": [], "metadata": { "type": "Workspace" } },
+      "container": { "name": "parent", "slots": [{ "name": "body" }] },
+      "expectedProblems": []
+    },
+    {
+      "name": "list template at slice scope",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "list", "slots": [], "metadata": { "type": "List", "category": "Work queues", "scopes": ["Slice"] } },
+      "expectedProblems": []
+    },
+    {
+      "name": "scope restrictions are not inferred from category",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "workspace", "slots": [], "metadata": { "type": "Workspace", "category": "Forms", "scopes": ["Module"] } },
+      "expectedProblems": ["Template 'workspace' does not declare scope 'Slice'"]
+    },
+    {
+      "name": "custom type and category remain applicable",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "custom", "slots": [], "metadata": { "type": "Acme.Dispatch", "category": "Acme/Operations" } },
+      "expectedProblems": []
+    },
+    {
+      "name": "empty explicit scope list disables selection",
+      "kind": "ScreenTemplate",
+      "scope": "Feature",
+      "definition": { "name": "disabled", "slots": [], "metadata": { "scopes": [] } },
+      "expectedProblems": ["Template 'disabled' does not declare scope 'Feature'"]
+    },
+    {
+      "name": "application shell cannot masquerade as a slice template",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "invalid", "slots": [], "metadata": { "type": "ApplicationShell", "scopes": ["Slice"] } },
+      "expectedProblems": ["Template 'invalid' of type 'ApplicationShell' must be a Layout"]
+    },
+    {
+      "name": "screens do not replace application layouts",
+      "kind": "ScreenTemplate",
+      "scope": "Application",
+      "definition": { "name": "invalid", "slots": [] },
+      "expectedProblems": ["Template 'invalid' of kind 'ScreenTemplate' cannot be applied at scope 'Application'"]
+    },
+    {
+      "name": "bare missing slot is diagnosed",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "detail", "fitsSlot": "detail", "slots": [], "metadata": { "type": "Detail" } },
+      "container": { "name": "feature", "slots": [{ "name": "body" }] },
+      "expectedProblems": ["Template 'detail' does not fit slot 'detail' on 'feature'"]
+    },
+    {
+      "name": "qualified slot cannot select another parent",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "detail", "fitsSlot": "other.body", "slots": [] },
+      "container": { "name": "feature", "slots": [{ "name": "body" }] },
+      "expectedProblems": ["Template 'detail' does not fit slot 'other.body' on 'feature'"]
+    },
+    {
+      "name": "qualified names support dots in the parent name",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "detail", "fitsSlot": "Acme.feature.body", "slots": [] },
+      "container": { "name": "Acme.feature", "slots": [{ "name": "body" }] },
+      "expectedProblems": []
+    },
+    {
+      "name": "slot compatibility needs a container",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "detail", "fitsSlot": "body", "slots": [] },
+      "expectedProblems": ["Template 'detail' does not fit slot 'body' on '(no container)'"]
+    },
+    {
+      "name": "dialog is an overlay not a screen slot",
+      "kind": "DialogTemplate",
+      "scope": "Slice",
+      "definition": { "name": "edit", "slots": [], "metadata": { "type": "Dialog", "category": "Forms" } },
+      "expectedProblems": []
+    },
+    {
+      "name": "dialog semantic type cannot be a screen template",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "edit", "slots": [], "metadata": { "type": "Dialog" } },
+      "expectedProblems": ["Template 'edit' of type 'Dialog' must be a DialogTemplate"]
+    },
+    {
+      "name": "a list cannot be relabeled as an application shell",
+      "kind": "Layout",
+      "scope": "Application",
+      "definition": { "name": "list", "slots": [], "metadata": { "type": "List" } },
+      "expectedProblems": ["Template 'list' of type 'List' must not be a Layout"]
+    },
+    {
+      "name": "templates are optional with outlet composition",
+      "kind": "ScreenTemplate",
+      "scope": "Feature",
+      "expectedProblems": []
+    },
+    {
+      "name": "dialogs do not replace the shell",
+      "kind": "DialogTemplate",
+      "scope": "Application",
+      "definition": { "name": "edit", "slots": [] },
+      "expectedProblems": ["Template 'edit' of kind 'DialogTemplate' cannot be applied at scope 'Application'"]
+    },
+    {
+      "name": "an unknown declared scope is preserved and diagnosed",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "custom", "slots": [], "metadata": { "scopes": ["Slice", 99] } },
+      "expectedProblems": ["Template 'custom' declares unknown scope '99'"]
+    },
+    {
+      "name": "an unknown target scope is diagnosed",
+      "kind": "ScreenTemplate",
+      "scope": 99,
+      "definition": { "name": "custom", "slots": [] },
+      "expectedProblems": ["Template 'custom' has unknown target scope '99'"]
+    }
+  ]
+}

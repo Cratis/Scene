@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Cratis.Scene.Model.Interactions;
+using Cratis.Scene.Model.Screens;
 
 namespace Cratis.Scene.Model.Layouts;
 
@@ -32,4 +33,9 @@ public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrang
     /// Gets the behaviors attached to the layout. Additive with whatever is attached further out or further in.
     /// </summary>
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+
+    /// <summary>
+    /// Gets optional browse metadata. ApplicationShell retains this existing Layout role.
+    /// </summary>
+    public TemplateMetadata? Metadata { get; init; }
 }

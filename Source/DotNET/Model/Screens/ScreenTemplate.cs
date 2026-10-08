@@ -58,4 +58,9 @@ public record ScreenTemplate(
     /// Gets the behaviors attached to the screen template. Additive with whatever is attached further out or further in.
     /// </summary>
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+
+    /// <summary>
+    /// Gets optional semantic type, browse category and scope restrictions.
+    /// </summary>
+    public TemplateMetadata? Metadata { get; init; }
 }

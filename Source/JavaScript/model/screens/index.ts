@@ -4,3 +4,4 @@
 export * from './Screen';
 export * from './ScreenTemplate';
 export * from './DialogTemplate';
+export * from './TemplateMetadata';

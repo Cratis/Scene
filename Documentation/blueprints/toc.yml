@@ -4,6 +4,8 @@
   href: layouts.md
 - name: Screen and dialog templates
   href: screen-templates.md
+- name: Types, categories and applicability
+  href: template-applicability.md
 
 - name: Getting started
   items:

@@ -4,6 +4,7 @@
 import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
 import { Behavior } from '../interactions';
+import { TemplateMetadata } from './TemplateMetadata';
 
 /**
  * A reusable screen structure that fills a named slot on whatever contains it, and offers slots of its
@@ -63,6 +64,9 @@ export interface ScreenTemplate {
      * attached further out or further in.
      */
     behaviors?: Behavior[];
+
+    /** Optional semantic type, browse category and scope restrictions. */
+    metadata?: TemplateMetadata;
 }
 
 export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
@@ -74,4 +78,5 @@ export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
     'displayName',
     'description',
     'behaviors',
+    'metadata',
 ];

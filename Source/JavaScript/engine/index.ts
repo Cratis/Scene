@@ -21,6 +21,7 @@ export * from './packageVersionRange';
 export * from './resolvePackageDependencies';
 export * from './packageCatalog';
 export * from './resolveScreenTemplates';
+export * from './templateApplicability';
 export * from './buildStarterProfile';
 export * from './incompatibleStarterThemes';
 export * from './ActionDispatcher';

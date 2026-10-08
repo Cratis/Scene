@@ -4,6 +4,7 @@
 import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
 import { Behavior } from '../interactions';
+import { TemplateMetadata } from './TemplateMetadata';
 
 /**
  * A reusable dialog structure — the same idea as a {@link ScreenTemplate}, for content that opens over an
@@ -51,6 +52,9 @@ export interface DialogTemplate {
      * attached further out or further in.
      */
     behaviors?: Behavior[];
+
+    /** Optional semantic type, browse category and scope restrictions. */
+    metadata?: TemplateMetadata;
 }
 
 export const DialogTemplatePropertyNames: (keyof DialogTemplate)[] = [
@@ -61,4 +65,5 @@ export const DialogTemplatePropertyNames: (keyof DialogTemplate)[] = [
     'displayName',
     'description',
     'behaviors',
+    'metadata',
 ];
