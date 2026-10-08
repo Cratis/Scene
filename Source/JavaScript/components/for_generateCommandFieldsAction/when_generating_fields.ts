@@ -1,17 +1,29 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ExternalComponent, SceneEditKind } from '@cratis/scene.model';
+import { ComponentDescriptor, ExternalComponent, SceneEditKind } from '@cratis/scene.model';
+import { DesignTimeActionContext } from '@cratis/scene.react';
 import { generateCommandFieldsAction } from '../forms/generateCommandFieldsAction';
 
 describe('when generating fields', () => {
-    const descriptor = { component: 'Cratis.Components:commandForm', properties: [] };
+    const descriptor = { component: 'Cratis.Components:commandForm', properties: [] } as ComponentDescriptor;
     const element = { id: 'form', componentName: 'Cratis.Components:commandForm', properties: { command: 'RegisterInvoice' }, slots: {} } as unknown as ExternalComponent;
+    const contextFor = (component: ExternalComponent): DesignTimeActionContext => ({
+        element: component,
+        root: component,
+        descriptor,
+        profile: { name: 'web', targetPlatform: 'web', packages: ['Cratis.Components'] },
+        bundles: [],
+        permissions: { edit: true },
+        capabilities: {},
+        diagnostics: [],
+        submitEdits: () => undefined,
+        submitAction: () => undefined,
+    });
 
     it('should produce a deterministic set-property edit without overwriting authored fields', () => {
         const result = generateCommandFieldsAction.execute({
-            descriptor,
-            element,
+            ...contextFor(element),
             commandMetadata: { properties: [{ name: 'invoiceId', type: 'Guid' }, { name: 'customerName', type: 'String', label: 'Customer' }] },
         });
 
@@ -24,8 +36,7 @@ describe('when generating fields', () => {
 
     it('should refuse to overwrite authored manual fields', () => {
         const result = generateCommandFieldsAction.execute({
-            descriptor,
-            element: { ...element, properties: { inputs: [] } } as unknown as ExternalComponent,
+            ...contextFor({ ...element, properties: { inputs: [] } } as unknown as ExternalComponent),
             commandMetadata: { properties: [{ name: 'invoiceId', type: 'Guid' }] },
         });
 

@@ -40,4 +40,41 @@ describe('when resolving a host profile', () => {
 
         result.diagnostics.length.should.equal(2);
     });
+
+    it('should reject duplicate bundle names, forbidden design-time imports, network assets and dependency version conflicts', () => {
+        const result = resolvePackageHost({
+            profile: { name: 'web', targetPlatform: 'web', packages: ['App'] },
+            policy: { allowExecutableImports: false, allowNetworkAssets: false },
+            bundles: [
+                {
+                    manifest: {
+                        name: 'App', version: '1.0.0', kind: PackageKind.ComponentLibrary,
+                        dependencies: [{ name: 'Base', versionRange: '^2.0.0' }], components: [], layouts: [], screenTemplates: [],
+                        dialogTemplates: [], themes: [], assets: ['https://cdn.example.com/app.css'],
+                    },
+                    components: {},
+                    designTime: { actions: {} },
+                },
+                {
+                    manifest: {
+                        name: 'Base', version: '1.0.0', kind: PackageKind.ComponentLibrary, dependencies: [], components: [],
+                        layouts: [], screenTemplates: [], dialogTemplates: [], themes: [],
+                    },
+                    components: {},
+                },
+                {
+                    manifest: {
+                        name: 'Base', version: '1.0.0', kind: PackageKind.ComponentLibrary, dependencies: [], components: [],
+                        layouts: [], screenTemplates: [], dialogTemplates: [], themes: [],
+                    },
+                    components: {},
+                },
+            ],
+        });
+
+        result.diagnostics.some(diagnostic => diagnostic.includes('duplicate bundles')).should.be.true;
+        result.diagnostics.some(diagnostic => diagnostic.includes('forbids them')).should.be.true;
+        result.diagnostics.some(diagnostic => diagnostic.includes('network assets')).should.be.true;
+        result.diagnostics.some(diagnostic => diagnostic.includes('requires')).should.be.true;
+    });
 });
