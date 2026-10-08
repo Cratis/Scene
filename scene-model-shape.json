@@ -75,7 +75,8 @@
       "name",
       "slots",
       "arrangement",
-      "behaviors"
+      "behaviors",
+      "metadata"
     ],
     "Slot": [
       "name",
@@ -264,7 +265,8 @@
       "content",
       "displayName",
       "description",
-      "behaviors"
+      "behaviors",
+      "metadata"
     ],
     "DialogTemplate": [
       "name",
@@ -273,7 +275,13 @@
       "content",
       "displayName",
       "description",
-      "behaviors"
+      "behaviors",
+      "metadata"
+    ],
+    "TemplateMetadata": [
+      "type",
+      "category",
+      "scopes"
     ],
     "GridLength": [
       "value",
@@ -414,6 +422,13 @@
     ]
   },
   "enums": {
+    "TemplateScope": [
+      "Application",
+      "Module",
+      "Feature",
+      "Subfeature",
+      "Slice"
+    ],
     "PackageKind": [
       "ComponentLibrary",
       "Styling",

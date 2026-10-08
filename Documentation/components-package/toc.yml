@@ -1,5 +1,7 @@
 - name: Overview
   href: index.md
+- name: Manifest authority
+  href: manifest-authority.md
 - name: The binding registry
   href: binding-registry.md
 - name: Naming and shadowing
