@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DialogTemplate, Layout, ScreenTemplate, Theme, UiProfile } from '@cratis/scene.model';
-import { resolvePackageDependencies } from '@cratis/scene.engine';
+import { TemplateCatalogEntry, describeTemplateCatalog, resolvePackageDependencies } from '@cratis/scene.engine';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { ScenePackageBundle, mergePackageRegistries, validatePackageBundle } from './ScenePackageBundle';
 
@@ -18,6 +18,9 @@ export interface PackageHostConfiguration {
     bundles: ScenePackageBundle[];
     profile: UiProfile;
     policy: PackageHostPolicy;
+
+    /** The Scene version the host runs, checked against each template's compatibility range when given. */
+    sceneVersion?: string;
 }
 
 export interface ResolvedPackageHost {
@@ -27,6 +30,12 @@ export interface ResolvedPackageHost {
     screenTemplates: ScreenTemplate[];
     dialogTemplates: DialogTemplate[];
     themes: Theme[];
+
+    /**
+     * Every template the approved packages provide, with compatibility, attribution and license metadata and
+     * whether it can be used with this package set. Template browsers read this rather than the raw lists.
+     */
+    templates: TemplateCatalogEntry[];
     icons: IconAdapterRegistry;
     assets: string[];
     fonts: string[];
@@ -100,6 +109,7 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         screenTemplates: approved.flatMap(bundle => bundle.screenTemplates ?? []),
         dialogTemplates: approved.flatMap(bundle => bundle.dialogTemplates ?? []),
         themes: approved.flatMap(bundle => bundle.themes ?? []),
+        templates: describeTemplateCatalog(approved, configuration.sceneVersion),
         icons: createIconAdapterRegistry(approved.map(bundle => bundle.iconLibrary?.adapter).filter(adapter => adapter !== undefined)),
         assets: approvedAssets,
         fonts: approvedAssets.filter(isFontAsset),

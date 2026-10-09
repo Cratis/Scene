@@ -42,6 +42,24 @@ export function isVersionSatisfiedBy(version: string, range: string | undefined)
     }
 }
 
+/**
+ * Whether a range is one {@link isVersionSatisfiedBy} understands. An empty range or `*` is valid and means
+ * "any version"; anything the parser cannot read is invalid, so declarations can be rejected up front
+ * instead of surfacing later as a conflict nobody can satisfy.
+ */
+export function isValidVersionRange(range: string | undefined): boolean {
+    const trimmed = range?.trim();
+    if (!trimmed || trimmed === '*') return true;
+    return parseVersion(splitRange(trimmed)[1]) !== undefined;
+}
+
+/**
+ * Whether a value is a `major.minor.patch` version, optionally with a pre-release or build suffix.
+ */
+export function isValidVersion(version: string | undefined): boolean {
+    return version !== undefined && version.trim().length > 0 && parseVersion(version) !== undefined;
+}
+
 type Version = [number, number, number];
 
 function splitRange(range: string): [string, string] {

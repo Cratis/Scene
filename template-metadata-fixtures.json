@@ -1,0 +1,138 @@
+{
+  "description": "Shared template metadata corpus. Both the TypeScript engine (engine/for_templateMetadata) and the C# engine (Engine.Specs/for_TemplateMetadata) validate every metadata case and describe every catalog case, and must report exactly these problems in this order.",
+  "validation": [
+    {
+      "name": "complete metadata",
+      "template": "Dashboard",
+      "metadata": {
+        "type": "Workspace",
+        "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "PrimeReact", "versionRange": "^11.0.0" }, { "name": "Cratis.Components" }] },
+        "attribution": { "author": "Cratis", "url": "https://github.com/Cratis/Scene", "notice": "Arrangement follows a published template." },
+        "license": "MIT",
+        "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE"
+      },
+      "expectedProblems": []
+    },
+    {
+      "name": "compound SPDX expression",
+      "template": "Dual",
+      "metadata": { "compatibility": { "scene": ">=4.13.0" }, "attribution": { "author": "Acme" }, "license": "Apache-2.0 OR MIT" },
+      "expectedProblems": []
+    },
+    {
+      "name": "no metadata at all",
+      "template": "Bare",
+      "expectedProblems": [
+        "Template 'Bare' declares no compatibility",
+        "Template 'Bare' declares no author",
+        "Template 'Bare' declares no license"
+      ]
+    },
+    {
+      "name": "browse metadata without provenance",
+      "template": "List",
+      "metadata": { "type": "List", "category": "Business / List" },
+      "expectedProblems": [
+        "Template 'List' declares no compatibility",
+        "Template 'List' declares no author",
+        "Template 'List' declares no license"
+      ]
+    },
+    {
+      "name": "invalid compatibility ranges",
+      "template": "Broken",
+      "metadata": {
+        "compatibility": { "scene": "four point thirteen", "packages": [{ "name": "PrimeReact", "versionRange": "^eleven" }, { "name": " " }] },
+        "attribution": { "author": "Cratis" },
+        "license": "MIT"
+      },
+      "expectedProblems": [
+        "Template 'Broken' declares an invalid Scene version range 'four point thirteen'",
+        "Template 'Broken' declares an invalid version range '^eleven' for package 'PrimeReact'",
+        "Template 'Broken' declares a package requirement without a name"
+      ]
+    },
+    {
+      "name": "empty Scene range",
+      "template": "Unranged",
+      "metadata": { "compatibility": { "scene": "" }, "attribution": { "author": "Cratis" }, "license": "MIT" },
+      "expectedProblems": ["Template 'Unranged' declares no Scene version range"]
+    },
+    {
+      "name": "invalid attribution and license",
+      "template": "Copied",
+      "metadata": {
+        "compatibility": { "scene": "^4.13.0" },
+        "attribution": { "author": "  ", "url": "http://example.com/template" },
+        "license": "All rights reserved",
+        "licenseUrl": "https:///no-host"
+      },
+      "expectedProblems": [
+        "Template 'Copied' declares no author",
+        "Template 'Copied' declares an attribution URL 'http://example.com/template' that is not an absolute https URL",
+        "Template 'Copied' declares 'All rights reserved', which is not an SPDX license expression",
+        "Template 'Copied' declares a license URL 'https:///no-host' that is not an absolute https URL"
+      ]
+    }
+  ],
+  "catalog": [
+    {
+      "name": "a blueprint and the packages its templates require",
+      "sceneVersion": "4.13.2",
+      "sources": [
+        {
+          "manifest": { "name": "PrimeReact", "version": "11.1.0", "kind": "ComponentLibrary", "dependencies": [], "components": [], "layouts": [], "screenTemplates": [], "dialogTemplates": [], "themes": [] }
+        },
+        {
+          "manifest": { "name": "Acme.Blueprint", "version": "2.0.0", "kind": "Blueprint", "dependencies": [{ "name": "PrimeReact" }], "components": [], "layouts": ["Shell"], "screenTemplates": ["Orders", "Legacy", "Future", "Foreign", "Pinned"], "dialogTemplates": ["Confirm"], "themes": [] },
+          "layouts": [
+            { "name": "Shell", "slots": [], "metadata": { "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "PrimeReact", "versionRange": "^11.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+          ],
+          "screenTemplates": [
+            { "name": "Orders", "slots": [], "displayName": "Orders", "description": "A list of orders.", "metadata": { "type": "List", "category": "Sales", "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "Acme.Blueprint" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
+            { "name": "Legacy", "slots": [], "metadata": { "type": "List" } },
+            { "name": "Future", "slots": [], "metadata": { "compatibility": { "scene": "^5.0.0", "packages": [{ "name": "PrimeReact", "versionRange": "^12.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
+            { "name": "Foreign", "slots": [], "metadata": { "compatibility": { "scene": "^4.0.0", "packages": [{ "name": "Tailwind" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
+            { "name": "Pinned", "slots": [], "metadata": { "compatibility": { "scene": "*", "packages": [{ "name": "PrimeReact", "versionRange": "11.1.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+          ],
+          "dialogTemplates": [
+            { "name": "Confirm", "slots": [], "metadata": { "type": "Dialog", "compatibility": { "scene": "^4.13.0" }, "attribution": { "author": "Acme", "url": "https://acme.example/templates" }, "license": "Apache-2.0", "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0" } }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        { "package": "Acme.Blueprint", "kind": "Layout", "name": "Shell", "compatible": true, "problems": [] },
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Orders", "compatible": true, "problems": [] },
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Legacy", "compatible": false, "problems": [
+          "Template 'Legacy' declares no compatibility",
+          "Template 'Legacy' declares no author",
+          "Template 'Legacy' declares no license"
+        ] },
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Future", "compatible": false, "problems": [
+          "Template 'Future' requires Scene ^5.0.0 but the host runs 4.13.2",
+          "Template 'Future' requires package 'PrimeReact' ^12.0.0 but version 11.1.0 is available"
+        ] },
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Foreign", "compatible": false, "problems": [
+          "Template 'Foreign' requires package 'Tailwind', which its package 'Acme.Blueprint' does not depend on",
+          "Template 'Foreign' requires package 'Tailwind', which is not available"
+        ] },
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Pinned", "compatible": true, "problems": [] },
+        { "package": "Acme.Blueprint", "kind": "DialogTemplate", "name": "Confirm", "compatible": true, "problems": [] }
+      ]
+    },
+    {
+      "name": "the Scene version is not checked when the host does not state it",
+      "sources": [
+        {
+          "manifest": { "name": "Acme.Blueprint", "version": "2.0.0", "kind": "Blueprint", "dependencies": [], "components": [], "layouts": [], "screenTemplates": ["Future"], "dialogTemplates": [], "themes": [] },
+          "screenTemplates": [
+            { "name": "Future", "slots": [], "metadata": { "compatibility": { "scene": "^5.0.0" }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Future", "compatible": true, "problems": [] }
+      ]
+    }
+  ]
+}
