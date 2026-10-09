@@ -22,9 +22,15 @@ import { columnDefinitions } from './columnDefinitions';
  * otherwise from the element's model - nested `column` children, a `columns` property, or the shape of
  * the first row; see `columnDefinitions`. The model is the path a screen takes, and it is checked second
  * only because an explicitly composed declaration is the more specific statement of the two.
+ *
+ * A host that is still loading the rows sets `loading`, and one whose query failed sets `error` to the
+ * message to show. Both replace the rows with one announced row - a status while loading, an alert on
+ * error - and keep the column headers, so the table keeps its shape and the reader knows why it is empty.
  */
 export function PrimeDataTable({ element, slots }: RegisteredComponentProps) {
-    const rows = recordArrayProperty(element, 'rows');
+    const loading = booleanProperty(element, 'loading', false);
+    const error = stringProperty(element, 'error');
+    const rows = loading || error !== undefined ? [] : recordArrayProperty(element, 'rows');
     const declared = declaredColumns(slots);
     const columns: ColumnProps[] = declared.length > 0 ? declared : columnDefinitions(element, rows);
     const pageSize = numberProperty(element, 'pageSize');
@@ -33,6 +39,7 @@ export function PrimeDataTable({ element, slots }: RegisteredComponentProps) {
     return (
         <DataTable.Root
             data-scene-id={element.id}
+            aria-busy={loading}
             data={rows}
             removableSort
             paginator={pageSize !== undefined}
@@ -83,7 +90,11 @@ export function PrimeDataTable({ element, slots }: RegisteredComponentProps) {
                     <DataTable.EmptyTBody>
                         <DataTable.Row>
                             <DataTable.Cell colSpan={Math.max(columns.length, 1)}>
-                                {stringProperty(element, 'emptyMessage', 'No records found')}
+                                {error !== undefined
+                                    ? <span role='alert'>{error}</span>
+                                    : loading
+                                        ? <span role='status'>{stringProperty(element, 'loadingMessage', 'Loading…')}</span>
+                                        : stringProperty(element, 'emptyMessage', 'No records found')}
                             </DataTable.Cell>
                         </DataTable.Row>
                     </DataTable.EmptyTBody>

@@ -24,6 +24,7 @@ export function PrimeCheckbox({ element }: RegisteredComponentProps) {
         <div data-scene-id={element.id} className='flex items-center gap-2'>
             <Checkbox.Root
                 inputId={element.id}
+                aria-label={label === undefined ? stringProperty(element, 'ariaLabel') : undefined}
                 checked={checked}
                 onCheckedChange={(event) => setChecked(event.checked)}
                 disabled={booleanProperty(element, 'disabled', false)}>

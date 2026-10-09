@@ -70,7 +70,7 @@ export function PrimeCalendar({ element }: RegisteredComponentProps) {
                 <DatePicker.Panel>{calendar}</DatePicker.Panel>
             ) : (
                 <>
-                    <DatePicker.Input as={InputText} placeholder={stringProperty(element, 'placeholder')} />
+                    <DatePicker.Input as={InputText} placeholder={stringProperty(element, 'placeholder')} aria-label={stringProperty(element, 'ariaLabel')} />
                     {booleanProperty(element, 'showIcon', true) && (
                         <DatePicker.Trigger>
                             <i className='pi pi-calendar' />
