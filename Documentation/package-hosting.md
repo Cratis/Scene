@@ -29,3 +29,7 @@ if (host.diagnostics.length) {
 ```
 
 The resolver reports missing packages, forbidden network assets and duplicate runtime singletons before rendering starts. Runtime hosts can omit optional design-time bundles; designer hosts may load them only after their own policy approves executable imports.
+
+## Templates and design-time contributions
+
+The resolved host also lists every template the approved bundles provide in `templates`, with compatibility, attribution and license metadata. See [Template compatibility, attribution and license](blueprints/template-provenance.md). A designer host loads package previews, designers, property editors, property displays and actions through `resolveDesignTimeHost`. See [Package design-time extensions](editing/design-time-extensions.md).
