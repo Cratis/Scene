@@ -39,6 +39,7 @@ function resolveProperties(properties: Record<string, unknown>, resolveBinding: 
 
 function resolveValue(value: unknown, resolveBinding: (binding: BindingExpression) => unknown): unknown {
     if (isBindingExpression(value)) return resolveBinding(value);
+    if (isDestinationReference(value)) return value;
     if (Array.isArray(value)) return value.map(entry => resolveValue(entry, resolveBinding));
     if (value !== null && typeof value === 'object') {
         return Object.fromEntries(Object.entries(value as Record<string, unknown>).map(([name, entry]) => [name, resolveValue(entry, resolveBinding)]));
@@ -49,4 +50,8 @@ function resolveValue(value: unknown, resolveBinding: (binding: BindingExpressio
 
 function isBindingExpression(value: unknown): value is BindingExpression {
     return value !== null && typeof value === 'object' && !Array.isArray(value) && typeof (value as Record<string, unknown>).path === 'string';
+}
+
+function isDestinationReference(value: unknown): boolean {
+    return value !== null && typeof value === 'object' && !Array.isArray(value) && 'routeParameterBindings' in value;
 }
