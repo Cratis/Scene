@@ -6,6 +6,7 @@ import { SlotName } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, text } from './elements';
 import { field, formActions, pageHeader, table, widget } from './widgets';
+import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The five shapes an application needs that are not the CRUD loop: documentation, the signed-in user's own
@@ -40,6 +41,7 @@ export const documentationTemplate: ScreenTemplate = {
     },
     displayName: 'Documentation',
     description: 'Prose with a table of contents beside it.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Profile settings: the signed-in user editing their own account. */
@@ -67,6 +69,7 @@ export const profileSettingsTemplate: ScreenTemplate = {
     },
     displayName: 'Profile settings',
     description: 'The signed-in user editing their own name, photo, password and notifications.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** User management: administering everybody else. */
@@ -99,6 +102,7 @@ export const userManagementTemplate: ScreenTemplate = {
     },
     displayName: 'User management',
     description: 'The people table, with roles, status and an invitation action.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Invoice: a printable document, which is a different shape from a screen. */
@@ -135,6 +139,7 @@ export const invoiceTemplate: ScreenTemplate = {
     },
     displayName: 'Invoice',
     description: 'A printable document: parties, line items and totals.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Help: the answers, and a way to ask when they are not there. */
@@ -158,6 +163,7 @@ export const helpTemplate: ScreenTemplate = {
     },
     displayName: 'Help',
     description: 'Searchable answers with a route to a human.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The five support templates. */

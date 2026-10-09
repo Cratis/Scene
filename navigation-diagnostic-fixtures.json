@@ -1,0 +1,175 @@
+{
+  "description": "Shared navigation diagnostic corpus. Both the TypeScript engine (engine/for_diagnoseNavigation) and the C# engine (Engine.Specs/for_NavigationDiagnostics) diagnose every graph and must report exactly these codes, entries and messages, in this order.",
+  "cases": [
+    {
+      "name": "shell, master detail and dialog destinations that fit together",
+      "graph": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "body" }], "outlets": [{ "name": "content" }] }],
+        "screenTemplates": [
+          { "name": "MasterDetail", "slots": [], "metadata": { "type": "Workspace" }, "outlets": [{ "name": "detail", "accepts": ["Detail", "Form"] }] },
+          { "name": "DetailPane", "slots": [], "metadata": { "type": "Detail" } }
+        ],
+        "dialogTemplates": [{ "name": "ConfirmDialog", "slots": [] }],
+        "screens": [
+          { "name": "Invoices", "layout": "AppShell", "screenTemplate": "MasterDetail", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "InvoiceDetails", "layout": "AppShell", "screenTemplate": "DetailPane", "slotContent": {}, "forms": [], "contributions": [] }
+        ],
+        "entries": [
+          { "id": "nav.invoices", "destination": { "screen": "Invoices", "outlet": "content", "route": "invoices" } },
+          { "id": "toolbar.invoices", "destination": { "screen": "Invoices", "outlet": "content", "route": "/invoices/" } },
+          { "id": "row.details", "destination": { "screen": "InvoiceDetails", "outlet": "detail", "route": "invoices/{id}" } },
+          { "id": "toolbar.confirm", "destination": { "kind": "dialog", "dialog": "ConfirmDialog" } },
+          { "id": "help", "destination": { "kind": "external", "route": "invoices" } }
+        ]
+      },
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "unknown catalogs are not reported as unavailable",
+      "graph": {
+        "entries": [
+          { "id": "nav.reports", "destination": { "screen": "Reports" } },
+          { "id": "nav.slice", "destination": { "module": "Sales", "feature": "Invoices", "slice": "Register" } },
+          { "id": "open.dialog", "destination": { "dialog": "AnyDialog" } }
+        ]
+      },
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "duplicate authored routes",
+      "graph": {
+        "entries": [
+          { "id": "invoice", "destination": { "screen": "InvoiceDetails", "route": "invoices/{id}" } },
+          { "id": "credit-note", "destination": { "screen": "CreditNoteDetails", "route": "invoices/{id}" } },
+          { "id": "list", "destination": { "screen": "Invoices", "outlet": "content", "route": "invoices" } },
+          { "id": "list-again", "destination": { "screen": "Invoices", "outlet": "content", "route": " invoices " } },
+          { "id": "list-in-detail", "destination": { "screen": "Invoices", "outlet": "detail", "route": "invoices" } },
+          { "id": "derived", "destination": { "module": "Sales", "feature": "Invoices" } },
+          { "id": "also-derived", "destination": { "module": "Sales", "feature": "CreditNotes" } }
+        ]
+      },
+      "expectedDiagnostics": [
+        { "code": "duplicateRoute", "entry": "credit-note", "message": "Route 'invoices/{id}' is used by destinations 'invoice' and 'credit-note', which open different targets." },
+        { "code": "missingOutlet", "entry": "list", "message": "Destination 'list' targets missing outlet 'content'." },
+        { "code": "missingOutlet", "entry": "list-again", "message": "Destination 'list-again' targets missing outlet 'content'." },
+        { "code": "missingOutlet", "entry": "list-in-detail", "message": "Destination 'list-in-detail' targets missing outlet 'detail'." },
+        { "code": "duplicateRoute", "entry": "list-in-detail", "message": "Route 'invoices' is used by destinations 'list' and 'list-in-detail', which open different targets." }
+      ]
+    },
+    {
+      "name": "duplicate outlets across a layout and a nested template",
+      "graph": {
+        "layouts": [{ "name": "AppShell", "slots": [], "outlets": [{ "name": "content" }] }],
+        "screenTemplates": [{ "name": "Workspace", "slots": [], "outlets": [{ "name": "content" }, { "name": "detail" }] }],
+        "entries": [{ "id": "nav.home", "destination": { "screen": "Home", "outlet": "content" } }]
+      },
+      "expectedDiagnostics": [
+        { "code": "duplicateOutlet", "message": "Outlet 'content' is declared by both 'AppShell' and 'Workspace'; destinations cannot tell them apart." }
+      ]
+    },
+    {
+      "name": "missing outlet",
+      "graph": {
+        "layouts": [{ "name": "AppShell", "slots": [], "outlets": [{ "name": "content" }] }],
+        "entries": [{ "id": "nav.reports", "destination": { "screen": "Reports", "outlet": "sidebar" } }]
+      },
+      "expectedDiagnostics": [
+        { "code": "missingOutlet", "entry": "nav.reports", "message": "Destination 'nav.reports' targets missing outlet 'sidebar'." }
+      ]
+    },
+    {
+      "name": "incompatible outlets",
+      "graph": {
+        "layouts": [
+          { "name": "AppShell", "slots": [], "outlets": [{ "name": "content" }] },
+          { "name": "FullPage", "slots": [] }
+        ],
+        "screenTemplates": [
+          { "name": "MasterDetail", "slots": [], "metadata": { "type": "Workspace" }, "outlets": [{ "name": "detail", "accepts": ["Detail"] }] },
+          { "name": "EditForm", "slots": [], "metadata": { "type": "Form" } },
+          { "name": "Plain", "slots": [] }
+        ],
+        "dialogTemplates": [{ "name": "ConfirmDialog", "slots": [] }],
+        "screens": [
+          { "name": "Invoices", "layout": "AppShell", "screenTemplate": "MasterDetail", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "EditInvoice", "layout": "AppShell", "screenTemplate": "EditForm", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "Notes", "layout": "AppShell", "screenTemplate": "Plain", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "SignIn", "layout": "FullPage", "slotContent": {}, "forms": [], "contributions": [] }
+        ],
+        "entries": [
+          { "id": "edit", "destination": { "screen": "EditInvoice", "outlet": "detail" } },
+          { "id": "notes", "destination": { "screen": "Notes", "outlet": "detail" } },
+          { "id": "sign-in", "destination": { "screen": "SignIn", "outlet": "content" } },
+          { "id": "confirm", "destination": { "kind": "dialog", "dialog": "ConfirmDialog", "outlet": "content" } },
+          { "id": "docs", "destination": { "kind": "external", "route": "https://docs.example.com", "outlet": "content" } }
+        ]
+      },
+      "expectedDiagnostics": [
+        { "code": "incompatibleOutlet", "entry": "edit", "message": "Outlet 'detail' accepts Detail screens, but destination 'edit' places 'EditInvoice' of type 'Form'." },
+        { "code": "incompatibleOutlet", "entry": "notes", "message": "Outlet 'detail' accepts Detail screens, but destination 'notes' places 'Notes' of type 'untyped'." },
+        { "code": "incompatibleOutlet", "entry": "sign-in", "message": "Outlet 'content' belongs to layout 'AppShell', but destination 'sign-in' places 'SignIn', which renders in layout 'FullPage'." },
+        { "code": "incompatibleOutlet", "entry": "confirm", "message": "Destination 'confirm' opens a dialog but names outlet 'content'; only outlet destinations render in outlets." },
+        { "code": "incompatibleOutlet", "entry": "docs", "message": "Destination 'docs' opens an external target but names outlet 'content'; only outlet destinations render in outlets." }
+      ]
+    },
+    {
+      "name": "a screen placed in an outlet its own template owns",
+      "graph": {
+        "screenTemplates": [{ "name": "MasterDetail", "slots": [], "outlets": [{ "name": "detail" }] }],
+        "screens": [
+          { "name": "Invoices", "layout": "AppShell", "screenTemplate": "MasterDetail", "slotContent": {}, "forms": [], "contributions": [] }
+        ],
+        "entries": [{ "id": "row.open", "destination": { "screen": "Invoices", "outlet": "detail" } }]
+      },
+      "expectedDiagnostics": [
+        { "code": "navigationCycle", "message": "Navigation cycle Invoices -> Invoices: each screen is placed in an outlet owned by the next, so composition never terminates." }
+      ]
+    },
+    {
+      "name": "screens hosting each other through nested outlets",
+      "graph": {
+        "screenTemplates": [
+          { "name": "CustomerWorkspace", "slots": [], "outlets": [{ "name": "customer.detail" }] },
+          { "name": "OrderWorkspace", "slots": [], "outlets": [{ "name": "order.detail" }] },
+          { "name": "ProductWorkspace", "slots": [], "outlets": [{ "name": "product.detail" }] }
+        ],
+        "screens": [
+          { "name": "Customers", "layout": "AppShell", "screenTemplate": "CustomerWorkspace", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "Orders", "layout": "AppShell", "screenTemplate": "OrderWorkspace", "slotContent": {}, "forms": [], "contributions": [] },
+          { "name": "Products", "layout": "AppShell", "screenTemplate": "ProductWorkspace", "slotContent": {}, "forms": [], "contributions": [] }
+        ],
+        "entries": [
+          { "id": "customer.orders", "destination": { "screen": "Orders", "outlet": "customer.detail" } },
+          { "id": "order.products", "destination": { "screen": "Products", "outlet": "order.detail" } },
+          { "id": "product.customers", "destination": { "screen": "Customers", "outlet": "product.detail" } }
+        ]
+      },
+      "expectedDiagnostics": [
+        { "code": "navigationCycle", "message": "Navigation cycle Customers -> Products -> Orders -> Customers: each screen is placed in an outlet owned by the next, so composition never terminates." }
+      ]
+    },
+    {
+      "name": "unavailable targets",
+      "graph": {
+        "dialogTemplates": [{ "name": "ConfirmDialog", "slots": [] }],
+        "screens": [
+          { "name": "Invoices", "layout": "AppShell", "slotContent": {}, "forms": [], "contributions": [] }
+        ],
+        "entries": [
+          { "id": "nav.reports", "destination": { "screen": "Reports" } },
+          { "id": "delete", "destination": { "kind": "dialog", "dialog": "DeleteDialog" } },
+          { "id": "unnamed-dialog", "destination": { "kind": "dialog", "route": "confirm" } },
+          { "id": "empty", "destination": { "outlet": "content" } },
+          { "destination": { "feature": "Invoices" } }
+        ]
+      },
+      "expectedDiagnostics": [
+        { "code": "unavailableTarget", "entry": "nav.reports", "message": "Destination 'nav.reports' opens screen 'Reports', which does not exist." },
+        { "code": "unavailableTarget", "entry": "delete", "message": "Destination 'delete' opens dialog 'DeleteDialog', which no dialog template provides." },
+        { "code": "unavailableTarget", "entry": "unnamed-dialog", "message": "Dialog destination 'unnamed-dialog' names no dialog." },
+        { "code": "unavailableTarget", "entry": "empty", "message": "Destination 'empty' names no screen, stable identity, route or dialog." },
+        { "code": "unavailableTarget", "entry": "#5", "message": "Destination '#5' names no screen, stable identity, route or dialog." }
+      ]
+    }
+  ]
+}

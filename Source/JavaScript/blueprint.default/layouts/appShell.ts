@@ -5,6 +5,7 @@ import { FlowArrangement, HeightSizeClass, Layout, WidthSizeClass } from '@crati
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
+import { sakaiCompositionProvenance } from '../templateProvenance';
 
 /**
  * The tree at a regular width and height: a topbar across the top, the sidebar column beside the main
@@ -103,4 +104,5 @@ export const appShellLayout: Layout = {
         { name: SlotName.ConfigPanel },
     ],
     arrangement: appShellArrangement,
+    metadata: { ...sakaiCompositionProvenance },
 };

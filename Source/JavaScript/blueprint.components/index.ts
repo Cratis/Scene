@@ -10,3 +10,4 @@ export * from './templates';
 export * from './gallery';
 export * from './componentsBlueprintComponents';
 export * from './componentsBlueprint';
+export * from './templateProvenance';

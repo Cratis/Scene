@@ -5,3 +5,6 @@ export * from './DestinationResolution';
 export * from './SceneNavigationContext';
 export * from './SceneNavigationHost';
 export * from './resolveDestination';
+export * from './diagnoseRenderedNavigation';
+export * from './identityRoute';
+export * from './navigationRouteKey';

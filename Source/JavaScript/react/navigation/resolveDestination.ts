@@ -4,6 +4,7 @@
 import { BindingScope, resolveBindingExpression } from '@cratis/scene.engine';
 import { DestinationKind, DestinationReference } from '@cratis/scene.model';
 import { DestinationResolution } from './DestinationResolution';
+import { identityRoute } from './identityRoute';
 
 /**
  * Resolves a destination into a renderer-neutral navigation action, deep link and target outlet/dialog.
@@ -25,12 +26,6 @@ export function resolveDestination(destination: DestinationReference, scope: Bin
         action: kind === DestinationKind.Dialog ? 'openDialog' : kind === DestinationKind.External ? 'openExternal' : 'navigate',
         diagnostics,
     };
-}
-
-function identityRoute(destination: DestinationReference): string | undefined {
-    if (destination.screen) return destination.screen;
-    const parts = [destination.module, destination.feature, destination.slice].filter((part): part is string => typeof part === 'string' && part.length > 0);
-    return parts.length ? parts.join('/') : undefined;
 }
 
 function appendParameters(route: string, parameters: readonly (readonly [string, string])[]): string {

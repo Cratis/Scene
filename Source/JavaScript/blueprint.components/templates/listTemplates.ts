@@ -7,6 +7,7 @@ import { dataPage, invoiceColumns, invoiceTableOptions, observableDataTable } fr
 import { objectContentEditor, objectNavigationalBar, timeMachine } from './editorElements';
 import { arcPageHeader, page, toolbar, toolbarButton, toolbarGroup, toolbarSeparator } from './elements';
 import { SampleBindingName } from './SampleBindingName';
+import { componentsBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The three list shapes an Arc application repeats: a list, a live list, and a list with the selected
@@ -55,7 +56,7 @@ export const dataListPageTemplate: ScreenTemplate = {
         ],
         [TemplateSlotName.Body]: [dataPage('data-list-body', SampleBindingName.AllInvoices, invoiceTableOptions, invoiceColumns)],
     },
-    metadata: { type: 'List', category: 'Business / List', scopes: [TemplateScope.Slice] },
+    metadata: { ...componentsBlueprintTemplateProvenance, type: 'List', category: 'Business / List', scopes: [TemplateScope.Slice] },
     displayName: 'Data list page',
     description: 'A dataPage bound to one query, under a header that states the binding - the whole list screen in two elements.',
 };
@@ -88,7 +89,7 @@ export const observableDataListPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
-    metadata: { type: 'List', category: 'Business / Live operations', scopes: [TemplateScope.Slice] },
+    metadata: { ...componentsBlueprintTemplateProvenance, type: 'List', category: 'Business / Live operations', scopes: [TemplateScope.Slice] },
     displayName: 'Observable data list page',
     description: 'A live list over an observable query, which re-renders when the read model changes on the server.',
 };
@@ -136,7 +137,7 @@ export const dataListWithDetailPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
-    metadata: { type: 'Detail', category: 'Business / Master detail', scopes: [TemplateScope.Slice] },
+    metadata: { ...componentsBlueprintTemplateProvenance, type: 'Detail', category: 'Business / Master detail', scopes: [TemplateScope.Slice] },
     displayName: 'Data list with detail page',
     description: 'A dataPage beside a detail region showing the selected record document and its history.',
 };

@@ -5,6 +5,7 @@ import { FlowArrangement, Layout, WidthSizeClass } from '@cratis/scene.model';
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
+import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The tree at a regular width: the branding aside beside the content, with the configurator over both.
@@ -45,4 +46,5 @@ export const fullPageLayout: Layout = {
     name: LayoutName.FullPage,
     slots: [{ name: SlotName.Aside }, { name: SlotName.Content }, { name: SlotName.ConfigPanel }],
     arrangement: fullPageArrangement,
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };

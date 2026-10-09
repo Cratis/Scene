@@ -1,43 +1,23 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DestinationReference, Layout, ScreenTemplate } from '@cratis/scene.model';
-
-export interface NavigationDestinationDiagnostic {
-    code: string;
-    message: string;
-}
+import { DestinationReference, DialogTemplate, Layout, Screen, ScreenTemplate } from '@cratis/scene.model';
+import { NavigationDiagnostic, diagnoseNavigation } from './navigation';
 
 /**
- * Validates destinations against the outlet/route declarations owned by layouts and templates.
+ * A navigation problem as {@link validateNavigationDestinations} reports it.
+ */
+export type NavigationDestinationDiagnostic = NavigationDiagnostic;
+
+/**
+ * Validates destinations against the outlet/route declarations owned by layouts and templates, and - when
+ * the screens and dialog templates are given - against the targets that actually exist.
+ *
+ * A shorthand for {@link diagnoseNavigation} over destinations without entry identities.
  */
 export function validateNavigationDestinations(
     destinations: DestinationReference[],
-    surfaces: { layouts?: Layout[]; screenTemplates?: ScreenTemplate[] } = {},
+    surfaces: { layouts?: Layout[]; screenTemplates?: ScreenTemplate[]; screens?: Screen[]; dialogTemplates?: DialogTemplate[] } = {},
 ): NavigationDestinationDiagnostic[] {
-    const diagnostics: NavigationDestinationDiagnostic[] = [];
-    const outlets = new Set<string>();
-    const routes = new Set<string>();
-
-    for (const surface of [...(surfaces.layouts ?? []), ...(surfaces.screenTemplates ?? [])]) {
-        for (const outlet of surface.outlets ?? []) {
-            if (outlets.has(outlet.name)) diagnostics.push({ code: 'duplicateOutlet', message: `Outlet '${outlet.name}' is declared more than once.` });
-            outlets.add(outlet.name);
-        }
-    }
-
-    for (const destination of destinations) {
-        if (destination.outlet && !outlets.has(destination.outlet)) {
-            diagnostics.push({ code: 'missingOutlet', message: `Destination targets missing outlet '${destination.outlet}'.` });
-        }
-        if (destination.route) {
-            if (routes.has(destination.route)) diagnostics.push({ code: 'duplicateRoute', message: `Route '${destination.route}' is used by more than one destination.` });
-            routes.add(destination.route);
-        }
-        if (!destination.screen && !destination.module && !destination.route && !destination.dialog) {
-            diagnostics.push({ code: 'unavailableTarget', message: 'Destination must name a screen, stable identity, route or dialog.' });
-        }
-    }
-
-    return diagnostics;
+    return diagnoseNavigation({ entries: destinations.map(destination => ({ destination })), ...surfaces });
 }

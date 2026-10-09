@@ -58,6 +58,26 @@ public static class PackageVersionRange
         };
     }
 
+    /// <summary>
+    /// Whether a range is one <see cref="IsSatisfiedBy"/> understands. An empty range or <c language="csharp">*</c> is valid and
+    /// means "any version"; anything the parser cannot read is invalid.
+    /// </summary>
+    /// <param name="range">The range to check.</param>
+    /// <returns><see langword="true"/> when the range can be evaluated.</returns>
+    public static bool IsValidRange(string? range)
+    {
+        var trimmed = range?.Trim();
+        return string.IsNullOrEmpty(trimmed) || trimmed == "*" || TryParse(Split(trimmed).Literal, out _);
+    }
+
+    /// <summary>
+    /// Whether a value is a <c language="csharp">major.minor.patch</c> version, optionally with a pre-release or build suffix.
+    /// </summary>
+    /// <param name="version">The version to check.</param>
+    /// <returns><see langword="true"/> when the version can be compared.</returns>
+    public static bool IsValidVersion(string? version) =>
+        !string.IsNullOrWhiteSpace(version) && TryParse(version, out _);
+
     static (string Operator, string Literal) Split(string range)
     {
         foreach (var op in (string[])[">=", "<=", "^", "~", ">", "<", "="])

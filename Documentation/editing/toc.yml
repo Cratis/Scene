@@ -4,6 +4,10 @@
   href: descriptors.md
 - name: Inspecting and editing
   href: inspection-and-editing.md
+- name: Package design-time extensions
+  href: design-time-extensions.md
+- name: Designer patterns from WinForms and ASP.NET
+  href: designer-patterns.md
 - name: Exposing a template to its screens
   href: exposure-and-configuration.md
 - name: Binding queries

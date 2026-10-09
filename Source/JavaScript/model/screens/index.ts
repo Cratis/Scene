@@ -5,4 +5,6 @@ export * from './Outlet';
 export * from './Screen';
 export * from './ScreenTemplate';
 export * from './DialogTemplate';
+export * from './TemplateAttribution';
+export * from './TemplateCompatibility';
 export * from './TemplateMetadata';

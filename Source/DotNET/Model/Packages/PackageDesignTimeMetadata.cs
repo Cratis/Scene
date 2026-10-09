@@ -11,9 +11,14 @@ namespace Cratis.Scene.Model.Packages;
 /// <param name="PropertyEditors">Named property editors available in the package's design-time bundle.</param>
 /// <param name="PropertyDisplays">Named property display renderers available in the package's design-time bundle.</param>
 /// <param name="Actions">Named design-time action handlers available in the package's design-time bundle.</param>
+/// <param name="ContractVersion">
+/// The design-time extension contract version (<c language="csharp">major.minor</c>) the bundle was written against. Hosts load
+/// contributions only when the major version matches the one they implement; <see langword="null"/> means <c language="csharp">1.0</c>.
+/// </param>
 public record PackageDesignTimeMetadata(
     IReadOnlyList<string> Previews,
     IReadOnlyList<string> Designers,
     IReadOnlyList<string> PropertyEditors,
     IReadOnlyList<string> PropertyDisplays,
-    IReadOnlyList<string> Actions);
+    IReadOnlyList<string> Actions,
+    string? ContractVersion = null);

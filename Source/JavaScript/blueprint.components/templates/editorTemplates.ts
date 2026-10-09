@@ -6,6 +6,7 @@ import { SlotName, TemplateSlotName, column, row, slotLeaf } from '@cratis/scene
 import { filterPanel, objectContentEditor, objectNavigationalBar, schemaEditor, timeMachine } from './editorElements';
 import { arcPageHeader, errorBoundary, page, toolbar, toolbarButton, toolbarSeparator } from './elements';
 import { SampleBindingName } from './SampleBindingName';
+import { componentsBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The two inspection pages: one for a type's shape, one for an instance's content.
@@ -61,6 +62,7 @@ export const schemaEditorPageTemplate: ScreenTemplate = {
     },
     displayName: 'Schema editor page',
     description: "An event type's schema edited as a typed property tree, with the actions that evolve it.",
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /**
@@ -123,6 +125,7 @@ export const objectEditorPageTemplate: ScreenTemplate = {
     },
     displayName: 'Object editor page',
     description: 'One document edited against its schema, with its navigation trail and its version history.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /** The two editor-shaped templates. */
