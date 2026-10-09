@@ -1,0 +1,24 @@
+{
+    "name": "@acme/scene.inspections",
+    "version": "2.4.0",
+    "private": true,
+    "description": "A third-party Scene package fixture. It is authored only against the public Scene packages, exactly as a package outside the Cratis organization would be, and supplies every versioned design-time extension point. Never published.",
+    "license": "Apache-2.0",
+    "scripts": {
+        "clean": "yarn g:clean",
+        "build": "tsc -b",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "ci": "yarn g:ci"
+    },
+    "dependencies": {
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0",
+        "@cratis/scene.react": "1.0.0"
+    },
+    "peerDependencies": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    }
+}

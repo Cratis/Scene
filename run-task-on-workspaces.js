@@ -97,7 +97,8 @@ for (const workspaceName in workspaces) {
     if (fs.existsSync(packageJsonFile)) {
         const file = editJsonFile(packageJsonFile, { stringify_width: 4 });
         const packageJson = file.toObject();
-        if (packageJson.private === true) {
+        // A private workspace is a fixture that is never published, but it is still built, linted and tested.
+        if (packageJson.private === true && task === 'publish-version') {
             console.log(`Workspace private '${workspaceName}' at '${workspaceRelativeLocation}'`);
             continue;
         }
