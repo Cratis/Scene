@@ -8,4 +8,8 @@ namespace Cratis.Scene.Model.Screens;
 /// </summary>
 /// <param name="Name">Stable outlet name used by destinations.</param>
 /// <param name="Description">Optional description for designers.</param>
-public record Outlet(string Name, string? Description = null);
+/// <param name="Accepts">
+/// The semantic template types (<see cref="TemplateMetadata.Type"/>) a screen must have to be placed in this
+/// outlet. <see langword="null"/> accepts any screen.
+/// </param>
+public record Outlet(string Name, string? Description = null, IReadOnlyList<string>? Accepts = null);

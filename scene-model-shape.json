@@ -301,7 +301,11 @@
     "TemplateMetadata": [
       "type",
       "category",
-      "scopes"
+      "scopes",
+      "compatibility",
+      "attribution",
+      "license",
+      "licenseUrl"
     ],
     "GridLength": [
       "value",
@@ -453,14 +457,16 @@
     ],
     "Outlet": [
       "name",
-      "description"
+      "description",
+      "accepts"
     ],
     "PackageDesignTimeMetadata": [
       "previews",
       "designers",
       "propertyEditors",
       "propertyDisplays",
-      "actions"
+      "actions",
+      "contractVersion"
     ],
     "CommandFormLayout": [
       "columns",
@@ -485,6 +491,15 @@
     "FormWidth": [
       "unit",
       "value"
+    ],
+    "TemplateCompatibility": [
+      "scene",
+      "packages"
+    ],
+    "TemplateAttribution": [
+      "author",
+      "url",
+      "notice"
     ]
   },
   "enums": {

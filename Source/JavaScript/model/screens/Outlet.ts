@@ -10,6 +10,13 @@ export interface Outlet {
 
     /** Optional description for designers. */
     description?: string;
+
+    /**
+     * The semantic template types (`TemplateMetadata.type`) a screen must have to be placed in this outlet,
+     * such as `Detail` or `Form`. Absent accepts any screen. A destination that places a screen of another
+     * type here is diagnosed as an incompatible outlet rather than rendered somewhere it was not designed for.
+     */
+    accepts?: string[];
 }
 
-export const OutletPropertyNames: (keyof Outlet)[] = ['name', 'description'];
+export const OutletPropertyNames: (keyof Outlet)[] = ['name', 'description', 'accepts'];

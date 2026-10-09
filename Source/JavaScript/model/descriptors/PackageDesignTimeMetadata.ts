@@ -19,8 +19,14 @@ export interface PackageDesignTimeMetadata {
 
     /** Named design-time action handlers available in the package's design-time bundle. */
     actions: string[];
+
+    /**
+     * The design-time extension contract version (`major.minor`) the bundle was written against. Hosts load
+     * contributions only when the major version matches the one they implement; absent means `1.0`.
+     */
+    contractVersion?: string;
 }
 
 export const PackageDesignTimeMetadataPropertyNames: (keyof PackageDesignTimeMetadata)[] = [
-    'previews', 'designers', 'propertyEditors', 'propertyDisplays', 'actions',
+    'previews', 'designers', 'propertyEditors', 'propertyDisplays', 'actions', 'contractVersion',
 ];
