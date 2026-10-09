@@ -3,13 +3,14 @@
 
 import { ExternalComponent, SceneEdit } from '@cratis/scene.model';
 import { DesignTimeActionContext, PackageHostConfiguration, ScenePackageBundle } from '@cratis/scene.react';
+import { brandPackage } from '../../brandPackage';
 import { inspectionChecklistDescriptor } from '../../inspectionsDescriptors';
 import { inspectionChecklistComponent, inspectionsPackageName } from '../../packageName';
 
-/** A host configuration that approves exactly the given bundles for a design-time session. */
+/** A host configuration that approves the given bundles, and the brand package they depend on, for a design-time session. */
 export function designTimeConfiguration(bundles: ScenePackageBundle[], loadDesignTime = true): PackageHostConfiguration {
     return {
-        bundles,
+        bundles: [brandPackage, ...bundles],
         profile: { name: 'studio', targetPlatform: 'web', packages: bundles.map(bundle => bundle.manifest.name) },
         policy: { allowExecutableImports: true, allowNetworkAssets: false, loadDesignTime },
     };

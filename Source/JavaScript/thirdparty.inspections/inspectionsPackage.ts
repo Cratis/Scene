@@ -6,6 +6,7 @@ import { ScenePackageBundle, componentRegistryKey } from '@cratis/scene.react';
 import { InspectionChecklist } from './InspectionChecklist';
 import { generateChecklistItemsActionId, inspectionChecklistDescriptor } from './inspectionsDescriptors';
 import { inspectionChecklistName, inspectionsPackageName } from './packageName';
+import { brandPackageName } from './brandPackage';
 
 /**
  * The package's declaration. The `designTime` block names every extension this package's optional design-time
@@ -16,7 +17,7 @@ export const inspectionsPackageManifest: ScenePackage = {
     name: inspectionsPackageName,
     version: '2.4.0',
     kind: PackageKind.ComponentLibrary,
-    dependencies: [],
+    dependencies: [{ name: brandPackageName, versionRange: '^1.0.0' }],
     components: [inspectionChecklistName],
     layouts: [],
     screenTemplates: [],
@@ -35,6 +36,7 @@ export const inspectionsPackageManifest: ScenePackage = {
         propertyDisplays: ['severityBadge'],
         actions: [generateChecklistItemsActionId],
     },
+    runtimeSingletons: ['@acme/inspections-store'],
 };
 
 /**
