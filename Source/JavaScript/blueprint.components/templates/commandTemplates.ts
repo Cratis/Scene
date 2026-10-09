@@ -6,6 +6,7 @@ import { SlotName, TemplateSlotName, column, slotLeaf } from '@cratis/scene.blue
 import { arcPageHeader, page, toolbar, toolbarButton, toolbarSeparator } from './elements';
 import { commandForm } from './formElements';
 import { SampleBindingName } from './SampleBindingName';
+import { componentsBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The write side: a page whose body is one command, and whose action bar submits it.
@@ -51,7 +52,7 @@ export const commandFormPageTemplate: ScreenTemplate = {
             ]),
         ],
     },
-    metadata: { type: 'Form', category: 'Business / Command', scopes: [TemplateScope.Slice] },
+    metadata: { ...componentsBlueprintTemplateProvenance, type: 'Form', category: 'Business / Command', scopes: [TemplateScope.Slice] },
     displayName: 'Command form page',
     description: 'A generated command form under a header that states the command, with its own action bar.',
 };

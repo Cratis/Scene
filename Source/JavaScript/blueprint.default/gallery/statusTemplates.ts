@@ -7,6 +7,7 @@ import { SlotName } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, panel, text } from './elements';
 import { widget } from './widgets';
+import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The four screens that are not part of anyone's plan: a server error, a refusal, a wrong address, and the
@@ -37,6 +38,7 @@ export const errorTemplate: ScreenTemplate = {
     },
     displayName: 'Error',
     description: 'A server-side failure, said plainly, with a way onward.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Signed in, and still not allowed. */
@@ -59,6 +61,7 @@ export const accessDeniedTemplate: ScreenTemplate = {
     },
     displayName: 'Access denied',
     description: 'A refusal that distinguishes "not signed in" from "not allowed".',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** No such address. */
@@ -79,6 +82,7 @@ export const notFoundTemplate: ScreenTemplate = {
     },
     displayName: 'Not found',
     description: 'A wrong address, with a search box rather than a dead end.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The page that has to do the selling. */
@@ -112,6 +116,7 @@ export const landingTemplate: ScreenTemplate = {
     },
     displayName: 'Landing',
     description: 'The marketing front door, with its own navigation because it has no application chrome.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The four status and marketing templates. */

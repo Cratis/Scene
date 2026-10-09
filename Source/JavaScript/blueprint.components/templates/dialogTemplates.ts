@@ -7,6 +7,7 @@ import { busyIndicatorDialog, commandDialog, dialog } from './dialogElements';
 import { icon } from './elements';
 import { calendarField, inputTextField, numberField, textAreaField } from './formElements';
 import { SampleBindingName } from './SampleBindingName';
+import { componentsBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The three dialog shapes an Arc application repeats: submit a command, confirm something destructive, and
@@ -53,6 +54,7 @@ export const commandDialogTemplate: DialogTemplate = {
     },
     displayName: 'Command dialog',
     description: 'A short capture whose confirm button submits the command and only closes when it succeeded.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /**
@@ -79,6 +81,7 @@ export const confirmDialogTemplate: DialogTemplate = {
     },
     displayName: 'Confirmation dialog',
     description: 'One question with the consequence spelled out, answered through Arc dialog context.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /**
@@ -99,6 +102,7 @@ export const busyDialogTemplate: DialogTemplate = {
     },
     displayName: 'Busy dialog',
     description: 'The blocking spinner shown while a long-running command is in flight, with wording chosen up front.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /** The dialog templates this blueprint provides. */

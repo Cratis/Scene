@@ -5,6 +5,7 @@ import { DialogTemplate } from '@cratis/scene.model';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, panel, text } from './elements';
 import { field } from './widgets';
+import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The three dialog shapes an application repeats: confirm something destructive, capture a short form, and
@@ -32,6 +33,7 @@ export const confirmDialogTemplate: DialogTemplate = {
     },
     displayName: 'Confirmation dialog',
     description: 'One question with the consequence spelled out, and a way back.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Form: a short capture that does not deserve a page of its own. */
@@ -51,6 +53,7 @@ export const formDialogTemplate: DialogTemplate = {
     },
     displayName: 'Form dialog',
     description: 'A handful of fields captured without leaving the page underneath.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** Detail: a record shown over the list it came from. */
@@ -73,6 +76,7 @@ export const detailDialogTemplate: DialogTemplate = {
     },
     displayName: 'Detail dialog',
     description: 'A record over the list it came from, with a route to the full page.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The dialog templates this blueprint provides. */

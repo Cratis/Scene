@@ -6,6 +6,10 @@
   href: screen-templates.md
 - name: Types, categories and applicability
   href: template-applicability.md
+- name: Template compatibility, attribution and license
+  href: template-provenance.md
+- name: Navigation diagnostics
+  href: navigation-diagnostics.md
 
 - name: Getting started
   items:

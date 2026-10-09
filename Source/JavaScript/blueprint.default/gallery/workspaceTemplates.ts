@@ -6,6 +6,7 @@ import { SlotName, column, grid, slotLeaf } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, text } from './elements';
 import { emptyState, field, formActions, pageHeader, statCard, table, widget } from './widgets';
+import { defaultBlueprintTemplateProvenance, sakaiCompositionProvenance } from '../templateProvenance';
 
 /**
  * The five workhorse shapes inside an application shell: a dashboard, a list, a detail, a form and the
@@ -88,6 +89,7 @@ export const dashboardTemplate: ScreenTemplate = {
     },
     displayName: 'Dashboard',
     description: 'Four stat cards over two columns of widgets - the composition every template line opens with.',
+    metadata: { ...sakaiCompositionProvenance },
 };
 
 /** The list: a filter toolbar, a real table, and the row actions a list needs. */
@@ -125,6 +127,7 @@ export const crudListTemplate: ScreenTemplate = {
     },
     displayName: 'List',
     description: 'A searchable table with a header, primary action and row data.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The detail: a summary panel beside the record's own sections. */
@@ -155,6 +158,7 @@ export const detailViewTemplate: ScreenTemplate = {
     },
     displayName: 'Detail',
     description: 'One record: a header with actions, its sections, and a summary panel.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The form: fields, grouped, with the actions that close them. */
@@ -178,6 +182,7 @@ export const formPageTemplate: ScreenTemplate = {
     },
     displayName: 'Form',
     description: 'A grouped form with the field types an application actually uses.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The empty state: what a list looks like before anything exists, designed rather than apologized for. */
@@ -192,6 +197,7 @@ export const emptyTemplate: ScreenTemplate = {
     },
     displayName: 'Empty state',
     description: 'The designed empty state for a list that has nothing in it yet.',
+    metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
 /** The five workspace templates. */

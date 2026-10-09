@@ -10,3 +10,4 @@ export * from './shell';
 export * from './themes';
 export * from './defaultBlueprintComponents';
 export * from './defaultBlueprint';
+export * from './templateProvenance';

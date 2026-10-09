@@ -7,6 +7,7 @@ import { invoiceColumns, invoiceTableOptions, observableDataTable } from './data
 import { filterPanel } from './editorElements';
 import { arcPageHeader, page, toolbar, toolbarButton, toolbarSeparator } from './elements';
 import { SampleBindingName } from './SampleBindingName';
+import { componentsBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * A worked three-level chain, from the application layout down to one behavior.
@@ -50,6 +51,7 @@ export const dataModulePageTemplate: ScreenTemplate = {
     },
     displayName: 'Data module page',
     description: 'Module level: fits the application layout content slot and offers a body for one feature.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /**
@@ -80,6 +82,7 @@ export const dataFeatureSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Data feature section',
     description: 'Feature level: fits a module page body slot, brings the action toolbar and a live view.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /**
@@ -112,6 +115,7 @@ export const commandSliceSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Command slice section',
     description: 'Slice level: fits a feature section primary slot and hosts one command behavior.',
+    metadata: { ...componentsBlueprintTemplateProvenance },
 };
 
 /** The chain, outermost first - what a spec walks to prove `fitsSlot` resolves at every level. */
