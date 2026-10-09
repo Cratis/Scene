@@ -7,7 +7,8 @@ import { SceneElement } from '@cratis/scene.model';
 import { SceneElementView } from '@cratis/scene.react';
 import { clearBindings, registerQuery } from '@cratis/scene.components';
 import { composeScreenElement, resolveElementComponentNames } from '@cratis/scene.blueprint.default';
-import { componentsBlueprintCatalog, componentsBlueprintProfile, componentsGalleryScreen, componentsPreviewRegistry } from '../gallery';
+import { componentsBlueprintCatalog, componentsBlueprintProfile, componentsGalleryScreen } from '../gallery';
+import { componentsPreviewRegistry } from '../gallery/GalleryScreenPreview';
 import { SampleBindingName, arcPageHeader } from '../templates';
 
 class AllInvoices {}

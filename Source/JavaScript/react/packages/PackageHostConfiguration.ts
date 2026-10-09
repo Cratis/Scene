@@ -9,6 +9,9 @@ import { ScenePackageBundle, mergePackageRegistries, validatePackageBundle } fro
 export interface PackageHostPolicy {
     allowExecutableImports: boolean;
     allowNetworkAssets: boolean;
+
+    /** Whether this host is resolving optional design-time bundles in addition to runtime contributions. */
+    loadDesignTime?: boolean;
 }
 
 export interface PackageHostConfiguration {
@@ -26,6 +29,8 @@ export interface ResolvedPackageHost {
     themes: Theme[];
     icons: IconAdapterRegistry;
     assets: string[];
+    fonts: string[];
+    blocked: boolean;
     diagnostics: string[];
 }
 
@@ -63,7 +68,7 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         }
 
         diagnostics.push(...validatePackageBundle(bundle).map(problem => `${packageName}: ${problem}`));
-        if (!configuration.policy.allowExecutableImports && bundle.designTime) {
+        if (configuration.policy.loadDesignTime === true && !configuration.policy.allowExecutableImports && bundle.designTime) {
             diagnostics.push(`Package '${packageName}' provides executable design-time contributions, but host policy forbids them`);
         }
 
@@ -84,15 +89,25 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         bundles.push(bundle);
     }
 
+    const blocked = diagnostics.length > 0;
+    const approved = blocked ? [] : bundles;
+    const approvedAssets = blocked ? [] : assets;
+
     return {
-        bundles,
-        components: mergePackageRegistries(bundles),
-        layouts: bundles.flatMap(bundle => bundle.layouts ?? []),
-        screenTemplates: bundles.flatMap(bundle => bundle.screenTemplates ?? []),
-        dialogTemplates: bundles.flatMap(bundle => bundle.dialogTemplates ?? []),
-        themes: bundles.flatMap(bundle => bundle.themes ?? []),
-        icons: createIconAdapterRegistry(bundles.map(bundle => bundle.iconLibrary?.adapter).filter(adapter => adapter !== undefined)),
-        assets,
+        bundles: approved,
+        components: mergePackageRegistries(approved),
+        layouts: approved.flatMap(bundle => bundle.layouts ?? []),
+        screenTemplates: approved.flatMap(bundle => bundle.screenTemplates ?? []),
+        dialogTemplates: approved.flatMap(bundle => bundle.dialogTemplates ?? []),
+        themes: approved.flatMap(bundle => bundle.themes ?? []),
+        icons: createIconAdapterRegistry(approved.map(bundle => bundle.iconLibrary?.adapter).filter(adapter => adapter !== undefined)),
+        assets: approvedAssets,
+        fonts: approvedAssets.filter(isFontAsset),
+        blocked,
         diagnostics,
     };
+}
+
+function isFontAsset(asset: string): boolean {
+    return /\.(woff2?|otf|ttf)(\?|$)/.test(asset) || asset.includes('/fonts/');
 }

@@ -38,13 +38,15 @@ describe('when resolving a host profile', () => {
             })),
         });
 
+        result.blocked.should.be.true;
         result.diagnostics.length.should.equal(2);
+        Object.keys(result.components).should.be.empty;
     });
 
     it('should reject duplicate bundle names, forbidden design-time imports, network assets and dependency version conflicts', () => {
         const result = resolvePackageHost({
             profile: { name: 'web', targetPlatform: 'web', packages: ['App'] },
-            policy: { allowExecutableImports: false, allowNetworkAssets: false },
+            policy: { allowExecutableImports: false, allowNetworkAssets: false, loadDesignTime: true },
             bundles: [
                 {
                     manifest: {
@@ -76,5 +78,34 @@ describe('when resolving a host profile', () => {
         result.diagnostics.some(diagnostic => diagnostic.includes('forbids them')).should.be.true;
         result.diagnostics.some(diagnostic => diagnostic.includes('network assets')).should.be.true;
         result.diagnostics.some(diagnostic => diagnostic.includes('requires')).should.be.true;
+        result.blocked.should.be.true;
+        result.bundles.should.be.empty;
+        result.assets.should.be.empty;
+    });
+
+    it('should expose approved contributions and font assets when diagnostics are clean', () => {
+        const result = resolvePackageHost({
+            profile: { name: 'web', targetPlatform: 'web', packages: ['Approved'] },
+            policy: { allowExecutableImports: true, allowNetworkAssets: false },
+            bundles: [{
+                manifest: {
+                    name: 'Approved', version: '1.0.0', kind: PackageKind.ComponentLibrary, dependencies: [], components: ['button'],
+                    layouts: ['Shell'], screenTemplates: ['List'], dialogTemplates: ['Confirm'], themes: ['Light'],
+                    assets: ['styles/app.css', 'fonts/app.woff2'],
+                },
+                components: { [componentRegistryKey('Approved', 'button')]: component },
+                layouts: [{ name: 'Shell', slots: [] }],
+                screenTemplates: [{ name: 'List', fitsSlot: 'content', slots: [], content: {} }],
+                dialogTemplates: [{ name: 'Confirm', slots: [], content: {} }],
+                themes: [{ name: 'Light', compatibleWith: ['Approved'], tokens: {} }],
+            }],
+        });
+
+        result.blocked.should.be.false;
+        result.layouts.map(layout => layout.name).should.deep.equal(['Shell']);
+        result.screenTemplates.map(template => template.name).should.deep.equal(['List']);
+        result.dialogTemplates.map(template => template.name).should.deep.equal(['Confirm']);
+        result.themes.map(theme => theme.name).should.deep.equal(['Light']);
+        result.fonts.should.deep.equal(['fonts/app.woff2']);
     });
 });

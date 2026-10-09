@@ -2,12 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { useMemo } from 'react';
-import { ComponentRegistry, SceneElementView, coreComponents } from '@cratis/scene.react';
-import { cratisComponents } from '@cratis/scene.components';
-import { LayoutConfigProvider, LayoutConfigState, LayoutThemeProvider, composeScreenElement, defaultBlueprintComponents, defaultBlueprintThemes, resolveElementComponentNames } from '@cratis/scene.blueprint.default';
+import { PrimeReactProvider } from '@primereact/core';
+import { PackageKind } from '@cratis/scene.model';
+import { ComponentRegistry, PackageHostView, RegisteredComponentProps, ScenePackageBundle, corePackage, resolvePackageHost } from '@cratis/scene.react';
+import { cratisComponentsPackage } from '@cratis/scene.components';
+import { defaultBlueprint, LayoutConfigProvider, LayoutConfigState, LayoutThemeProvider, composeScreenElement, defaultBlueprintThemes, resolveElementComponentNames } from '@cratis/scene.blueprint.default';
 import { componentsBlueprintComponents } from '../componentsBlueprintComponents';
-import { componentsBlueprintCatalog, componentsBlueprintProfile } from './previewProfile';
-import { componentsGalleryScreen } from './screens';
+import { componentsBlueprintName } from '../packageName';
+import { componentsDialogTemplates, componentsScreenTemplates } from '../templates';
+import { componentsBlueprintCatalog, componentsBlueprintProfile, primeReactComponentNames } from './previewProfile';
+import { componentsGalleryScreen, componentsGalleryScreens } from './screens';
 
 /**
  * The registry a preview resolves against: `core`, `Cratis.Components`, the default blueprint, and this one.
@@ -20,12 +24,66 @@ import { componentsGalleryScreen } from './screens';
  * table comes out unresolved - and it never reaches the DOM, because the table it belongs to is a
  * placeholder until a host registers its query.
  */
-export const componentsPreviewRegistry: ComponentRegistry = {
-    ...coreComponents,
-    ...cratisComponents,
-    ...defaultBlueprintComponents,
-    ...componentsBlueprintComponents,
-};
+const previewComponent = ({ element }: RegisteredComponentProps) => <span data-preview-component={element.componentName}>{String(element.properties.label ?? element.componentName)}</span>;
+
+export const componentsPreviewBundles: ScenePackageBundle[] = [
+    corePackage,
+    {
+        manifest: {
+            name: 'Tailwind',
+            version: '4.0.0',
+            kind: PackageKind.Styling,
+            dependencies: [],
+            components: [],
+            layouts: [],
+            screenTemplates: [],
+            dialogTemplates: [],
+            themes: [],
+            assets: ['styles/tailwind.css', 'fonts/inter.woff2'],
+        },
+        components: {},
+    },
+    {
+        manifest: {
+            name: 'PrimeReact',
+            version: '11.1.0',
+            kind: PackageKind.ComponentLibrary,
+            dependencies: [{ name: 'Tailwind' }],
+            components: primeReactComponentNames,
+            layouts: [],
+            screenTemplates: [],
+            dialogTemplates: [],
+            themes: [],
+        },
+        components: Object.fromEntries(primeReactComponentNames.map(name => [`PrimeReact:${name}`, previewComponent])),
+    },
+    cratisComponentsPackage,
+    defaultBlueprint,
+    {
+        manifest: {
+            name: componentsBlueprintName,
+            version: '1.0.0',
+            kind: PackageKind.Blueprint,
+            dependencies: [{ name: 'Cratis.Blueprint.Default' }, { name: 'Cratis.Components' }],
+            components: Object.keys(componentsBlueprintComponents).map(name => name.slice(`${componentsBlueprintName}:`.length)),
+            layouts: [],
+            screenTemplates: componentsScreenTemplates.map(template => template.name),
+            dialogTemplates: componentsDialogTemplates.map(template => template.name),
+            themes: [],
+        },
+        components: componentsBlueprintComponents,
+        screenTemplates: componentsScreenTemplates,
+        dialogTemplates: componentsDialogTemplates,
+        screens: componentsGalleryScreens,
+    },
+];
+
+/** Compatibility registry for callers that render individual gallery elements directly. */
+export const componentsPreviewRegistry: ComponentRegistry = resolvePackageHost({
+    profile: componentsBlueprintProfile,
+    bundles: componentsPreviewBundles,
+    policy: { allowExecutableImports: false, allowNetworkAssets: false },
+}).components;
 
 export interface GalleryScreenPreviewProps {
     /** The name of the gallery screen to boot. */
@@ -34,8 +92,8 @@ export interface GalleryScreenPreviewProps {
     /** Configuration to start from - a story pinning a layout mode, or a host restoring a session. */
     initialConfig?: Partial<LayoutConfigState>;
 
-    /** The component registry to render against. Defaults to {@link componentsPreviewRegistry}. */
-    registry?: ComponentRegistry;
+    /** The approved package set to render against. Defaults to {@link componentsPreviewBundles}. */
+    bundles?: ScenePackageBundle[];
 }
 
 /**
@@ -50,7 +108,7 @@ export interface GalleryScreenPreviewProps {
  * previewed is the default blueprint's shell. This package provides Arc-bound pages to put inside it, and
  * previewing them without the thing they were designed to sit in would prove the wrong thing.
  */
-export function GalleryScreenPreview({ screenName, initialConfig, registry = componentsPreviewRegistry }: GalleryScreenPreviewProps) {
+export function GalleryScreenPreview({ screenName, initialConfig, bundles = componentsPreviewBundles }: GalleryScreenPreviewProps) {
     const element = useMemo(() => {
         const screen = componentsGalleryScreen(screenName);
         if (!screen) {
@@ -61,10 +119,18 @@ export function GalleryScreenPreview({ screenName, initialConfig, registry = com
     }, [screenName]);
 
     return (
-        <LayoutConfigProvider initialConfig={initialConfig} storage={null}>
-            <LayoutThemeProvider themes={defaultBlueprintThemes}>
-                <SceneElementView element={element} registry={registry} resolveBinding={() => undefined} />
-            </LayoutThemeProvider>
-        </LayoutConfigProvider>
+        <PrimeReactProvider>
+            <LayoutConfigProvider initialConfig={initialConfig} storage={null}>
+                <LayoutThemeProvider themes={defaultBlueprintThemes}>
+                    <PackageHostView
+                        configuration={{
+                            profile: componentsBlueprintProfile,
+                            bundles,
+                            policy: { allowExecutableImports: false, allowNetworkAssets: false },
+                        }}
+                        element={element} />
+                </LayoutThemeProvider>
+            </LayoutConfigProvider>
+        </PrimeReactProvider>
     );
 }
