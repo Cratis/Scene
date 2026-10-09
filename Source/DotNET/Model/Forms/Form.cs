@@ -12,7 +12,15 @@ namespace Cratis.Scene.Model.Forms;
 /// <param name="ForCommand">The resolved name of the command the form builds.</param>
 /// <param name="PopulateSource">Where the form's initial values come from, if any.</param>
 /// <param name="Fields">The form's fields.</param>
-public record Form(string Name, string ForCommand, PopulateSource? PopulateSource, IReadOnlyList<FormField> Fields)
+/// <param name="GenerationMode">How the form's fields are generated.</param>
+/// <param name="Layout">The platform-neutral geometry for authored fields.</param>
+public record Form(
+    string Name,
+    string ForCommand,
+    PopulateSource? PopulateSource,
+    IReadOnlyList<FormField> Fields,
+    FormGenerationMode? GenerationMode = null,
+    CommandFormLayout? Layout = null)
 {
     /// <summary>
     /// Gets the behaviors attached to the form. Additive with whatever is attached further out or further in.

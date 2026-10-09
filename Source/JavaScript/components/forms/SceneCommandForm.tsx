@@ -6,6 +6,7 @@ import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import type { BoundConstructor } from '../bindings';
 import { numberProperty, stringArrayProperty, stringProperty, unionProperty } from '../properties';
+import { commandFormLayout } from './commandFormLayout';
 import { commandInputs } from './commandInputs';
 
 const CommandFormRuntime = lazy(() => import('./CommandFormRuntime'));
@@ -44,6 +45,7 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
                 exclude={stringArrayProperty(element.properties, 'exclude')}
                 submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}
                 {...(numberProperty(element.properties, 'columns') === undefined ? {} : { columns: numberProperty(element.properties, 'columns') })}
+                {...(commandFormLayout(element.properties) === undefined ? {} : { layout: commandFormLayout(element.properties) })}
             />
         </ArcRuntimeBoundary>
     );

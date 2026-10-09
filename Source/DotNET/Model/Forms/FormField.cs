@@ -13,4 +13,5 @@ namespace Cratis.Scene.Model.Forms;
 /// <param name="SourceProperty">The source property to map from, when it differs from <paramref name="Name"/>.</param>
 /// <param name="ComposeUsing">The resolved name of a callback that computes this field's value.</param>
 /// <param name="Label">The field's label — plain text, or the literal <c language="csharp">$strings.&lt;key&gt;</c> reference.</param>
-public record FormField(string Name, string? SourceProperty = null, string? ComposeUsing = null, string? Label = null);
+/// <param name="Placement">The field's authored placement in the form geometry.</param>
+public record FormField(string Name, string? SourceProperty = null, string? ComposeUsing = null, string? Label = null, FormFieldPlacement? Placement = null);
