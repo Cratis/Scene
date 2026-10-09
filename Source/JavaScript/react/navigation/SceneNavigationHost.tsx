@@ -1,13 +1,17 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BindingScope } from '@cratis/scene.engine';
-import { DestinationKind, DestinationReference, SceneElement } from '@cratis/scene.model';
+import { DestinationReference, SceneElement } from '@cratis/scene.model';
 import { SceneElementView } from '../SceneElementView';
 import { ComponentRegistry } from '../renderer';
-import { SceneNavigationContextValue, SceneNavigationProvider } from './SceneNavigationContext';
-import { resolveDestination } from './resolveDestination';
+import { createMemorySceneHistory } from './createMemorySceneHistory';
+import { SceneHistory } from './SceneHistory';
+import { SceneNavigationProvider } from './SceneNavigationContext';
+import { SceneRoute } from './SceneRoute';
+import { sceneRoutesFrom } from './sceneRoutesFrom';
+import { useSceneHistoryNavigation } from './useSceneHistoryNavigation';
 
 export interface SceneNavigationHostProps {
     screens: Record<string, SceneElement>;
@@ -15,52 +19,38 @@ export interface SceneNavigationHostProps {
     initialScreen: string;
     registry: ComponentRegistry;
     bindingScope?: BindingScope;
+
+    /**
+     * Where entries are recorded. `createBrowserSceneHistory()` drives the address bar, so deep links,
+     * refresh and back/forward work; the default is an in-memory history for embedded hosts.
+     */
+    history?: SceneHistory;
+
+    /** The destinations the application navigates to, so their route overrides can be deep linked. */
+    destinations?: DestinationReference[];
+
+    /** An explicit route table, used instead of the one derived from `screens` and `destinations`. */
+    routes?: SceneRoute[];
 }
 
 /**
  * Executes Scene destinations against an in-memory rendered hierarchy: screen routes replace outlets,
- * dialog destinations render dialog content, and external destinations only report their resolved action.
+ * dialog destinations render dialog content over the screen that opened them, and external destinations
+ * only report their resolved action. Every navigation is a history entry.
  */
-export function SceneNavigationHost({ screens, dialogs = {}, initialScreen, registry, bindingScope = {} }: SceneNavigationHostProps) {
-    const [currentScreen, setCurrentScreen] = useState(initialScreen);
-    const [currentUrl, setCurrentUrl] = useState<string | undefined>(initialScreen);
-    const [currentOutlet, setCurrentOutlet] = useState<string | undefined>();
-    const [currentDialog, setCurrentDialog] = useState<string | undefined>();
+export function SceneNavigationHost({ screens, dialogs = {}, initialScreen, registry, bindingScope = {}, history, destinations, routes }: SceneNavigationHostProps) {
+    const [memoryHistory] = useState(() => createMemorySceneHistory());
+    const routeTable = useMemo(() => routes ?? sceneRoutesFrom(Object.keys(screens), destinations), [destinations, routes, screens]);
+    const value = useSceneHistoryNavigation(history ?? memoryHistory, routeTable, initialScreen, bindingScope);
 
-    const navigate = useCallback((destination: DestinationReference) => {
-        const resolution = resolveDestination(destination, bindingScope);
-        if (resolution.kind === DestinationKind.Dialog) {
-            setCurrentDialog(resolution.dialog);
-            return resolution;
-        }
-
-        if (resolution.kind !== DestinationKind.External) {
-            setCurrentScreen(destination.screen ?? destination.slice ?? currentScreen);
-            setCurrentOutlet(resolution.outlet);
-        }
-
-        setCurrentUrl(resolution.url);
-        return resolution;
-    }, [bindingScope, currentScreen]);
-
-    const value = useMemo<SceneNavigationContextValue>(() => ({
-        currentScreen,
-        currentUrl,
-        currentOutlet,
-        currentDialog,
-        bindingScope,
-        navigate,
-        closeDialog: () => setCurrentDialog(undefined),
-    }), [bindingScope, currentDialog, currentOutlet, currentScreen, currentUrl, navigate]);
-
-    const screen = screens[currentScreen];
-    const dialog = currentDialog ? dialogs[currentDialog] : undefined;
+    const screen = screens[value.currentScreen];
+    const dialog = value.currentDialog ? dialogs[value.currentDialog] : undefined;
 
     return <SceneNavigationProvider value={value}>
-        <div data-scene-outlet={currentOutlet ?? 'primary'} data-scene-url={currentUrl}>
+        <div data-scene-outlet={value.currentOutlet ?? 'primary'} data-scene-url={value.currentUrl}>
             {screen && <SceneElementView element={screen} registry={registry} dataContext={bindingScope.dataContext} queryResults={bindingScope.queryResults} componentOutputs={bindingScope.componentOutputs} />}
         </div>
-        {dialog && <div role='dialog' data-scene-dialog={currentDialog}>
+        {dialog && <div role='dialog' aria-modal='true' aria-label={value.currentDialog} data-scene-dialog={value.currentDialog}>
             <SceneElementView element={dialog} registry={registry} dataContext={bindingScope.dataContext} queryResults={bindingScope.queryResults} componentOutputs={bindingScope.componentOutputs} />
         </div>}
     </SceneNavigationProvider>;

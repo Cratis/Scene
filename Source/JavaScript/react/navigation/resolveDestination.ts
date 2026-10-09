@@ -23,6 +23,7 @@ export function resolveDestination(destination: DestinationReference, scope: Bin
         url,
         outlet: destination.outlet,
         dialog: destination.dialog,
+        parameters: Object.fromEntries(parameters),
         action: kind === DestinationKind.Dialog ? 'openDialog' : kind === DestinationKind.External ? 'openExternal' : 'navigate',
         diagnostics,
     };

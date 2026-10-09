@@ -8,6 +8,9 @@ export interface DestinationResolution {
     url?: string;
     outlet?: string;
     dialog?: string;
+
+    /** The resolved route parameters, by name, before they are written into the URL. */
+    parameters: Record<string, string>;
     action: 'navigate' | 'openDialog' | 'openExternal';
     diagnostics: string[];
 }
