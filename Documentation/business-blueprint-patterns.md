@@ -11,13 +11,15 @@ Representative React application templates repeatedly converge on the same busin
 | --- | --- | --- | --- |
 | Application shell and navigation | MUI admin/dashboard templates, Limitless/MaterialPro, Creative Tim dashboards | `blueprint.default` AppShell, NavBar, layouts and navigation contributions | Keep as first-class blueprint shell pattern. |
 | Searchable list/table | MUI CRUD dashboard, ThemeForest data-table-heavy admin templates | `DataListPage`, `ObservableDataListPage`, `Cratis.Components:dataTable` | Keep package-backed query tables and expose row identity/filter properties. |
-| Master/detail | Admin CRUD starters pair a table with a details/edit region | `DataListWithDetailPage` plus typed `componentProperty` bindings | Use DataTable `selectedItem` as the canonical selection output. |
+| Master/detail | Admin CRUD starters pair a table with a details/edit region | `MasterDetail`, `DataListWithDetailPage` plus typed `componentProperty` bindings | Use DataTable `selectedItem` as the canonical selection output. |
 | CRUD command forms | MUI CRUD dashboard, Berry/uifort forms, ThemeForest validation/form wizard examples | `CommandForm` templates and `Cratis.Components:commandForm` | Use one native Arc form boundary for auto and manual fields. |
 | Dialog/confirmation | Admin kits include destructive confirmation and editor dialogs | Dialog templates and `DestinationReference.kind = dialog` | Keep dialogs as destinations, not ad-hoc host calls. |
 | Settings pages | Admin kits include account/app settings as forms in nested layouts | Workspace/editor templates | Treat as configurable workspace/editor variants. |
 | Nested workspaces | Sidebar + module + feature regions are common in admin templates | hierarchical screen templates, named outlets | Model route identity separately from labels/URLs. |
 
 No source or asset was copied from commercial templates. The research was used only to choose patterns and coverage priorities.
+
+The full matrix, with the marketplaces compared, links to every implementing template and the deferred patterns, is [Business pattern coverage](blueprints/pattern-coverage.md).
 
 ## Blueprint decisions
 

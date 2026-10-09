@@ -36,5 +36,7 @@
         href: layout-modes.md
       - name: The template set
         href: template-set.md
+      - name: Business pattern coverage
+        href: pattern-coverage.md
       - name: Theme tokens
         href: theme-tokens.md
