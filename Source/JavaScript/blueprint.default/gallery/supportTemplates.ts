@@ -150,7 +150,7 @@ export const helpTemplate: ScreenTemplate = {
     content: {
         [TemplateSlotName.Header]: [pageHeader('help-header', 'Help', 'Search the answers, or ask us directly')],
         [TemplateSlotName.Body]: [
-            externalComponent('help-search', 'inputText', { placeholder: 'Search help' }),
+            externalComponent('help-search', 'inputText', { placeholder: 'Search help', ariaLabel: 'Search help' }),
             widget('help-popular', 'Popular answers', [
                 text('help-1', 'How do I invite someone to the workspace?'),
                 text('help-2', 'Why can I not see the sidebar on my phone?'),

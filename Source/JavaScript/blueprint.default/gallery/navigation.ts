@@ -21,6 +21,7 @@ export const navigationEntries: NavigationEntry[] = [
     { label: 'Dashboard', targetScreen: 'Dashboard', icon: 'pi pi-home', group: 'Workspace', order: 10 },
     { label: 'Products', targetScreen: 'CrudList', icon: 'pi pi-box', group: 'Workspace', order: 20 },
     { label: 'Product detail', targetScreen: 'DetailView', icon: 'pi pi-file', group: 'Workspace', order: 30 },
+    { label: 'Customers', targetScreen: 'MasterDetail', icon: 'pi pi-users', group: 'Workspace', order: 35 },
     { label: 'New product', targetScreen: 'FormPage', icon: 'pi pi-plus-circle', group: 'Workspace', order: 40 },
     { label: 'Invoices', targetScreen: 'Invoice', icon: 'pi pi-receipt', group: 'Workspace', order: 50 },
     { label: 'Nothing yet', targetScreen: 'Empty', icon: 'pi pi-inbox', group: 'Workspace', order: 60 },

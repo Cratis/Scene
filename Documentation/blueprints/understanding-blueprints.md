@@ -68,7 +68,7 @@ the page.
 
 ## Why the gallery is real screens
 
-The default blueprint ships twenty-three `Screen` instances alongside its templates. They are not
+The default blueprint ships twenty-four `Screen` instances alongside its templates. They are not
 screenshots and not fixtures for a bespoke preview pipeline - they are the same `Screen` shape a real
 application produces, put through the same engine and the same React renderer.
 

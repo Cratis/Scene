@@ -53,7 +53,7 @@ then resolvable by name, exactly as its components are.
 
 ## The default blueprint
 
-`@cratis/scene.blueprint.default` is the one you get for free: two layouts, eight menu modes, twenty-three
+`@cratis/scene.blueprint.default` is the one you get for free: two layouts, eight menu modes, twenty-four
 screen templates, three dialog templates and two themes.
 
 - **[Use the default blueprint](getting-started.md)** — render a screen, switch its mode, switch its theme.

@@ -9,8 +9,8 @@ import { emptyState, field, formActions, pageHeader, statCard, table, widget } f
 import { defaultBlueprintTemplateProvenance, sakaiCompositionProvenance } from '../templateProvenance';
 
 /**
- * The five workhorse shapes inside an application shell: a dashboard, a list, a detail, a form and the
- * designed empty state.
+ * The six workhorse shapes inside an application shell: a dashboard, a list, master/detail, a detail, a
+ * form and the designed empty state.
  *
  * Every one fits the layout's `content` slot, and every one carries realistic seeded content rather than
  * placeholder text. A gallery whose dashboard shows four boxes labeled "Card" proves the renderer runs; a
@@ -103,7 +103,7 @@ export const crudListTemplate: ScreenTemplate = {
                 button('crud-new', 'New product', { severity: 'primary', icon: 'pi pi-plus' }),
                 button('crud-import', 'Import', { severity: 'secondary', icon: 'pi pi-upload' }),
             ]),
-            externalComponent('crud-search', 'inputText', { placeholder: 'Search products' }),
+            externalComponent('crud-search', 'inputText', { placeholder: 'Search products', ariaLabel: 'Search products' }),
         ],
         [TemplateSlotName.Body]: [
             table(
@@ -161,6 +161,60 @@ export const detailViewTemplate: ScreenTemplate = {
     metadata: { ...defaultBlueprintTemplateProvenance },
 };
 
+/**
+ * Master/detail: the list and the selected record side by side, so working through records does not mean
+ * leaving the list. The detail region is an outlet that accepts detail screens, which is what lets a row's
+ * destination open a full detail screen in place.
+ *
+ * At a compact width the two stack, list first, because side-by-side on a phone is two unreadable halves.
+ */
+export const masterDetailTemplate: ScreenTemplate = {
+    name: 'MasterDetail',
+    fitsSlot: SlotName.Content,
+    slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Primary }, { name: TemplateSlotName.SidePanel }],
+    outlets: [{ name: 'master-detail.detail', description: 'The selected record.', accepts: ['Detail'] }],
+    arrangement: {
+        root: column([slotLeaf(TemplateSlotName.Header), grid([slotLeaf(TemplateSlotName.Primary), slotLeaf(TemplateSlotName.SidePanel)], 2, 16)], 16),
+        overrides: [
+            {
+                width: WidthSizeClass.Compact,
+                root: column([slotLeaf(TemplateSlotName.Header), slotLeaf(TemplateSlotName.Primary), slotLeaf(TemplateSlotName.SidePanel)], 16),
+            },
+        ],
+    },
+    content: {
+        [TemplateSlotName.Header]: [pageHeader('master-header', 'Customers', '1,204 customers, 38 with overdue invoices')],
+        [TemplateSlotName.Primary]: [
+            table(
+                'customers-table',
+                [
+                    { field: 'name', header: 'Customer' },
+                    { field: 'city', header: 'City' },
+                    { field: 'balance', header: 'Balance' },
+                ],
+                [
+                    { name: 'Northwind Traders', city: 'Seattle', balance: '$4,200.00' },
+                    { name: 'Contoso Ltd', city: 'Oslo', balance: '$0.00' },
+                    { name: 'Fabrikam', city: 'Lyon', balance: '$12,940.50' },
+                    { name: 'Adventure Works', city: 'Denver', balance: '$318.20' },
+                ],
+                'No customers match the search',
+            ),
+        ],
+        [TemplateSlotName.SidePanel]: [
+            widget('customer-detail', 'Northwind Traders', [
+                text('customer-contact', 'Contact: Amelia Nyquist'),
+                text('customer-terms', 'Payment terms: 30 days'),
+                externalComponent('customer-status', 'tag', { value: 'Overdue', severity: 'warning' }),
+                button('customer-open', 'Open customer', { severity: 'primary' }),
+            ]),
+        ],
+    },
+    displayName: 'Master/detail',
+    description: 'A list beside the selected record, stacking on narrow screens.',
+    metadata: { ...defaultBlueprintTemplateProvenance, type: 'Workspace' },
+};
+
 /** The form: fields, grouped, with the actions that close them. */
 export const formPageTemplate: ScreenTemplate = {
     name: 'FormPage',
@@ -201,4 +255,4 @@ export const emptyTemplate: ScreenTemplate = {
 };
 
 /** The five workspace templates. */
-export const workspaceTemplates: ScreenTemplate[] = [dashboardTemplate, crudListTemplate, detailViewTemplate, formPageTemplate, emptyTemplate];
+export const workspaceTemplates: ScreenTemplate[] = [dashboardTemplate, crudListTemplate, masterDetailTemplate, detailViewTemplate, formPageTemplate, emptyTemplate];

@@ -104,4 +104,4 @@ about the arrangement, and the shell's [layout modes](./layout-modes.md) are wha
 ## Next
 
 - [Regions and slots](./regions-and-slots.md) — the region vocabulary this is arranging.
-- [The template set](./template-set.md) — the twenty-three templates, including the three-level chain.
+- [The template set](./template-set.md) — the twenty-four templates, including the three-level chain.
