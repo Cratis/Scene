@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { CommandFormLayout } from './CommandFormLayout';
+import { FormGenerationMode } from './FormGenerationMode';
 import { PopulateSource } from './PopulateSource';
 import { FormField } from './FormField';
 import { Behavior } from '../interactions';
@@ -12,6 +14,8 @@ export interface Form {
     name: string;
     forCommand: string;
     populateSource?: PopulateSource;
+    generationMode?: FormGenerationMode;
+    layout?: CommandFormLayout;
     fields: FormField[];
     /**
      * The behaviors attached here - what happens when someone interacts with it. Additive with whatever is
@@ -20,4 +24,4 @@ export interface Form {
     behaviors?: Behavior[];
 }
 
-export const FormPropertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'fields', 'behaviors'];
+export const FormPropertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'generationMode', 'layout', 'fields', 'behaviors'];

@@ -8,6 +8,7 @@ export * from './BindingDiagnostic';
 export * from './resolveBindingExpression';
 export * from './validateBindingExpression';
 export * from './renderElement';
+export * from './forms';
 export * from './elementKind';
 export * from './panelKind';
 export * from './flowNodeKind';

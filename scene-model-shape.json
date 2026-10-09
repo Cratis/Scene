@@ -167,12 +167,15 @@
       "name",
       "sourceProperty",
       "composeUsing",
-      "label"
+      "label",
+      "placement"
     ],
     "Form": [
       "name",
       "forCommand",
       "populateSource",
+      "generationMode",
+      "layout",
       "fields",
       "behaviors"
     ],
@@ -458,6 +461,30 @@
       "propertyEditors",
       "propertyDisplays",
       "actions"
+    ],
+    "CommandFormLayout": [
+      "columns",
+      "placements",
+      "columnGap",
+      "rowGap"
+    ],
+    "FormColumn": [
+      "index",
+      "width",
+      "minWidth",
+      "maxWidth"
+    ],
+    "FormFieldPlacement": [
+      "field",
+      "row",
+      "column",
+      "rowSpan",
+      "columnSpan",
+      "width"
+    ],
+    "FormWidth": [
+      "unit",
+      "value"
     ]
   },
   "enums": {
@@ -583,6 +610,16 @@
       "Outlet",
       "Dialog",
       "External"
+    ],
+    "FormGenerationMode": [
+      "Auto",
+      "Manual"
+    ],
+    "FormWidthUnit": [
+      "Fraction",
+      "Pixels",
+      "Percent",
+      "Auto"
     ]
   }
 }

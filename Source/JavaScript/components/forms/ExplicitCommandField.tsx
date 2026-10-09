@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { formWidthToCss } from '@cratis/scene.engine';
+import { FormFieldPlacement } from '@cratis/scene.model';
 import { asCommandFormField, useCommandFormContext } from '@cratis/arc.react/commands';
 import { Guid } from '@cratis/fundamentals';
 import type { CommandInput } from './commandInputs';
@@ -80,8 +82,14 @@ function TextControl({ value, onChange, onBlur, invalid, required, errors, label
 const NativeTextField = asCommandFormField<TextProps>(TextControl, { defaultValue: '' });
 
 /** Opaque child is self-bound by Arc's native runtime binding, with an exact fieldName. */
-export function ExplicitCommandField({ input }: { input: CommandInput }) {
-    return <div style={{ gridColumn: input.column === undefined ? undefined : `${input.column}`, width: input.width }}>
+export function ExplicitCommandField({ input, placement }: { input: CommandInput; placement?: FormFieldPlacement }) {
+    const effectivePlacement = placement ?? input.placement;
+    const columnSpan = effectivePlacement?.columnSpan ?? 1;
+    return <div style={{
+        gridColumn: effectivePlacement ? `${effectivePlacement.column} / span ${columnSpan}` : undefined,
+        gridRow: effectivePlacement ? `${effectivePlacement.row} / span ${effectivePlacement.rowSpan ?? 1}` : undefined,
+        width: formWidthToCss(effectivePlacement?.width),
+    }}>
         <NativeTextField fieldName={input.property} value={(command: Record<string, unknown>) => command[input.property]}
             property={input.property} guid={input.type === 'guid'} label={input.label} title={input.label} />
     </div>;

@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { FormFieldPlacement } from '@cratis/scene.model';
+import { parseFormWidth } from '@cratis/scene.engine';
 import { arrayProperty, numberProperty, objectProperty, stringProperty } from '../properties';
 
 /** Exact, case-sensitive names from a generated command's propertyDescriptors. */
@@ -8,8 +10,7 @@ export interface CommandInput {
     property: string;
     type: 'string' | 'guid';
     label: string;
-    column?: number;
-    width?: string;
+    placement?: FormFieldPlacement;
 }
 
 /** An absent declaration selects legacy auto mode; a present but invalid declaration never does. */
@@ -27,7 +28,9 @@ export function commandInputs(properties: Record<string, unknown>): CommandInput
         seen.add(property);
         const column = numberProperty(input, 'column');
         const width = stringProperty(input, 'width');
-        inputs.push({ property, type: input.type, label, column, width });
+        inputs.push({ property, type: input.type, label, ...(column === undefined && width === undefined ? {} : {
+            placement: { field: property, row: inputs.length + 1, column: column ?? 1, ...(parseFormWidth(width) ? { width: parseFormWidth(width) } : {}) },
+        }) });
     }
     return inputs;
 }
