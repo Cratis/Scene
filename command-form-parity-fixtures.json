@@ -1,0 +1,119 @@
+{
+  "description": "Shared command form parity corpus for the Scene runtime (components/forms/for_SceneCommandForm/when_running_the_shared_form_parity_corpus) and a generated app such as Stage's StageCommandForm. Each case declares a command schema, how the form is authored, what the user enters, and what a user and the server observe: the field labels in render order, the validation messages after submitting an empty form (sorted; Arc's native required validation names the command property), whether a request was sent, and the submitted payload. Auto layout labels are the property names in title case, as @cratis/components AutoCommandForm renders them.",
+  "cases": [
+    {
+      "name": "auto layout",
+      "command": {
+        "name": "RegisterCustomer",
+        "route": "/api/customers/register",
+        "properties": [
+          {
+            "name": "customerName",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "email",
+            "type": "text",
+            "required": true
+          }
+        ]
+      },
+      "form": {
+        "generationMode": "auto"
+      },
+      "input": {
+        "customerName": "Northwind Traders",
+        "email": "orders@northwind.example"
+      },
+      "expected": {
+        "labels": [
+          "Customer Name",
+          "Email"
+        ],
+        "emptySubmitMessages": [
+          "customerName is required",
+          "email is required"
+        ],
+        "requestsOnEmptySubmit": 0,
+        "payload": {
+          "customerName": "Northwind Traders",
+          "email": "orders@northwind.example"
+        }
+      }
+    },
+    {
+      "name": "manual layout",
+      "command": {
+        "name": "RegisterCustomer",
+        "route": "/api/customers/register",
+        "properties": [
+          {
+            "name": "customerName",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "email",
+            "type": "text",
+            "required": true
+          }
+        ]
+      },
+      "form": {
+        "generationMode": "manual",
+        "fields": [
+          {
+            "name": "email",
+            "label": "Email address"
+          },
+          {
+            "name": "customerName",
+            "label": "Customer"
+          }
+        ],
+        "layout": {
+          "columns": [
+            {
+              "index": 1
+            },
+            {
+              "index": 2
+            }
+          ],
+          "placements": [
+            {
+              "field": "email",
+              "row": 1,
+              "column": 1
+            },
+            {
+              "field": "customerName",
+              "row": 1,
+              "column": 2
+            }
+          ]
+        }
+      },
+      "input": {
+        "customerName": "Contoso Ltd",
+        "email": "buyers@contoso.example"
+      },
+      "expected": {
+        "labels": [
+          "Email address",
+          "Customer"
+        ],
+        "emptySubmitMessages": [
+          "customerName is required",
+          "email is required"
+        ],
+        "requestsOnEmptySubmit": 0,
+        "payload": {
+          "customerName": "Contoso Ltd",
+          "email": "buyers@contoso.example"
+        }
+      }
+    }
+  ]
+}
