@@ -7,6 +7,7 @@ import { CoreText } from './CoreText';
 import { CoreButton } from './CoreButton';
 import { CoreCard } from './CoreCard';
 import { CoreNavigationBar } from './CoreNavigationBar';
+import { CoreOutlet } from '../navigation/CoreOutlet';
 import {
     CoreAction,
     CoreCode,
@@ -41,4 +42,5 @@ export const coreComponents: ComponentRegistry = {
     [componentRegistryKey('core', 'code')]: CoreCode,
     [componentRegistryKey('core', 'file')]: CoreFile,
     [componentRegistryKey('core', 'navigationBar')]: CoreNavigationBar,
+    [componentRegistryKey('core', 'outlet')]: CoreOutlet,
 };

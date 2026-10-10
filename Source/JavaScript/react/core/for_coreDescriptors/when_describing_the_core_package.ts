@@ -14,7 +14,7 @@ describe('when describing the core package', () => {
     });
 
     it('should describe every layout-free component an author configures', () => {
-        coreDescriptors.map(descriptor => descriptor.component).should.have.members(['core:button', 'core:action', 'core:column', 'core:navigationBar']);
+        coreDescriptors.map(descriptor => descriptor.component).should.have.members(['core:button', 'core:action', 'core:column', 'core:outlet', 'core:navigationBar']);
     });
 
     it('should describe the navigation bar as an ordered collection of label, icon and destination', () => {

@@ -51,3 +51,7 @@ A host served as a single file or from a path it does not control - a generated 
 - **Refresh.** Each entry stores its screen, outlet, parameters and open dialog, so a reload restores exactly that entry.
 - **Back and forward.** The browser's buttons step through entries, and `back()` does the same from a screen.
 - **Dialogs.** A dialog destination opens as its own entry over the screen that opened it. `closeDialog(result)` returns to that screen and exposes the result as `dialogResult`; the browser's back button also closes the dialog.
+
+## Nested outlets
+
+A screen declares a nested outlet with a `core:outlet` element and a `name`. A destination whose `outlet` names it places its screen there and keeps the declaring screen on the page. The placed screen may declare outlets of its own, so composition nests to any depth. When the declaring screen is not on the page yet, as with a deep link to the innermost level, the host places it first, through the destination that opens it. Back closes the innermost level, and a destination into an outlet no screen declares replaces the whole composition. The host stops after 32 levels, so a model whose screens host each other cannot loop; navigation diagnostics report such a model as `navigationCycle`.
