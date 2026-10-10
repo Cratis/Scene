@@ -31,7 +31,7 @@ marketplace pages listed when they were compared.
 | Master/detail | 1 | MUI Store (Devias Kit Pro customers and orders), ThemeForest | [`MasterDetail`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/workspaceTemplates.ts), [`DetailView`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/workspaceTemplates.ts) | [`MasterDetailPage`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/workspaceTemplates.ts), [`DataListWithDetailPage`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/listTemplates.ts) | Added `MasterDetail` with a detail outlet that accepts only `Detail` screens; stacks at a compact width. Selection flows through the table's `selectedItem` output. |
 | CRUD and command forms | 1 | MUI Store, ThemeForest (form wizards and validation) | [`FormPage`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/workspaceTemplates.ts) | [`CommandFormPage`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/commandTemplates.ts) | One native form boundary for automatic and manual fields; every field carries an accessible name. |
 | Confirmation and dialogs | 1 | MUI Store, ThemeForest | [`ConfirmDialog`, `FormDialog`, `DetailDialog`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/dialogTemplates.ts) | [`CommandDialog`, `ConfirmDialog`, `BusyDialog`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/dialogTemplates.ts) | Dialogs are destinations that return a result to the screen that opened them, not ad hoc host calls. |
-| Settings and account | 1 | MUI Store (Devias Kit Pro account settings; Mantis and Minimal profile) | [`ProfileSettings`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/supportTemplates.ts) | Uses the default template | Keep as a form workspace; it loads nothing, so it looks the same in every preview state. |
+| Settings and account | 1 | MUI Store (Devias Kit Pro account settings; Mantis and Minimal profile) | [`ProfileSettings`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/supportTemplates.ts) | [`SettingsPage`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/commandTemplates.ts) | Keep as a form workspace in the default blueprint, where it loads nothing and looks the same in every preview state; the components blueprint generates it from a settings command. |
 | Nested workspaces | 1 | MUI Store (Devias Kit Pro client and admin areas), ThemeForest | [`ModuleWorkspace`, `FeatureSection`, `SliceSection`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/nesting.ts) | [`DataModulePage`, `DataFeatureSection`, `CommandSliceSection`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.components/templates/nesting.ts) | Module, feature and slice levels compose through `fitsSlot`; route identity stays separate from labels. |
 | Authentication | 2 | MUI Store (Mantis sign-in and registration) | [`Login`, `Register`, `ForgotPassword`, `NewPassword`, `Verification`, `LockScreen`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/authTemplates.ts) | Uses the default templates | Ship in the full-page shell; the identity provider stays the application's choice. |
 | Error and status pages | 2 | MUI Store (404 and 500 pages) | [`Error`, `AccessDenied`, `NotFound`, `Landing`](https://github.com/Cratis/Scene/blob/main/Source/JavaScript/blueprint.default/gallery/statusTemplates.ts) | Uses the default templates | Ship; navigation diagnostics prevent most links to a page that does not exist. |
@@ -43,6 +43,24 @@ marketplace pages listed when they were compared.
 | Mail, chat and file manager | Deferred | MUI Store (Minimal, Devias Kit Pro, Mantis chat) | None | None | Deferred: these are products in their own right rather than screens of a business application. |
 | E-commerce, checkout and pricing | Deferred | MUI Store (Bazaar Pro, checkout and pricing pages), Creative Tim, React Themes categories | None | None | Out of scope for business-application blueprints; a storefront blueprint can add them. |
 | Landing and marketing pages | Deferred | Creative Tim (Material Kit Pro), React Themes | `Landing` covers the signed-out entry page | None | Marketing sites are outside the application blueprints. |
+
+## Decisions
+
+These are the decisions the matrix records, in priority order. Each is a commitment the blueprints keep, and each
+is backed by a specification that fails when the commitment is broken.
+
+1. **Ship every priority 1 pattern in both blueprints.** Shell, dashboard, list, master/detail, CRUD form,
+   dialogs, settings and nested workspaces exist as templates in the default blueprint and the components
+   blueprint. Evidence: `blueprint.default/for_templatePreviewStates` and
+   `blueprint.components/for_templateKinds` render each one through the real renderer.
+2. **Preview every data template in all four data states.** Populated, empty, loading and error, through the
+   real package components. Evidence: `blueprint.default/for_templatePreviewStates`.
+3. **Carry compatibility, attribution and license on every template.** Evidence: the `describing_its_template_catalog`
+   specs in both blueprints.
+4. **Ship priority 2 patterns in the default blueprint only.** Authentication, status pages, empty state, invoice
+   and help are presentational and gain nothing from query or command binding.
+5. **Defer kanban, calendar, mail, chat, file manager, e-commerce and marketing pages.** They are recorded in the
+   matrix with the reason, and are not implemented as placeholders.
 
 ## Previews
 

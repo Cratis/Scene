@@ -21,7 +21,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    'The eight Arc-bound page templates plus the three-level nesting chain, each booted as a screen inside the default ' +
+                    'The nine Arc-bound page templates plus the three-level nesting chain, each booted as a screen inside the default ' +
                     "blueprint's application shell. Nothing is registered in the binding registry, so every Arc-bound region names the " +
                     'binding it wanted and every page header says which query or command a host still has to wire. That is the normal ' +
                     'design-time state - see the *Bindings* stories for what changes when a host registers one.',
@@ -52,6 +52,9 @@ export const DashboardPage: Story = { args: { screenName: 'DashboardPage' } };
 
 /** A generated command form with its own action bar. */
 export const CommandFormPage: Story = { args: { screenName: 'CommandFormPage' } };
+
+/** A module's settings as a generated command form, with save and discard. */
+export const SettingsPage: Story = { args: { screenName: 'SettingsPage' } };
 
 /** An event type's schema, edited as a typed property tree - and fully rendered, because nothing on it is Arc-bound. */
 export const SchemaEditorPage: Story = { args: { screenName: 'SchemaEditorPage' } };
