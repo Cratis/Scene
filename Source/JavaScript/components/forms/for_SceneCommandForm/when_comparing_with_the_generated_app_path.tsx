@@ -45,7 +45,7 @@ async function observe(view: ReactElement): Promise<Observation> {
     const subject = await screen.findByRole<HTMLInputElement>('textbox', { name: 'Subject' });
     const save = screen.getByRole<HTMLButtonElement>('button', { name: 'Save' });
     // Every editable field, by the accessible name a user and assistive technology know it by.
-    const fields = screen.getAllByRole('textbox').map(box => (box.labels?.[0]?.textContent ?? box.getAttribute('aria-label') ?? '').trim());
+    const fields = screen.getAllByRole<HTMLInputElement>('textbox').map(box => (box.labels?.[0]?.textContent ?? box.getAttribute('aria-label') ?? '').trim());
 
     await act(async () => { fireEvent.submit(save.form!); });
     const rejected = (await screen.findAllByText('Subject is required')).map(message => message.textContent!).slice(0, 1);
