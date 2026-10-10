@@ -312,5 +312,6 @@ vite*.map
 
 .playwright-mcp
 dist-minified
+dist-webview
 # Local AI work artifacts (plans, handovers, session notes) — never tracked
 .ai-work/
