@@ -11,4 +11,10 @@ const cjsPath = path.dirname(pkg.main);
 const esmPath = path.dirname(pkg.module);
 const tsconfigPath = path.join(import.meta.dirname, "tsconfig.json");
 
-export default rollup(cjsPath, esmPath, tsconfigPath, pkg);
+const config = rollup(cjsPath, esmPath, tsconfigPath, pkg);
+
+// `runtime.ts` is a second entry point (published as `./runtime`) that reaches no design-time module, so a
+// runtime host can load the package without its designers, editors and actions.
+config.input = ['index.ts', 'runtime.ts'];
+
+export default config;
