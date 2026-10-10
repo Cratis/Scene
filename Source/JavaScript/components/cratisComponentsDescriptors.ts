@@ -87,6 +87,21 @@ const commandFormProperties: PropertyDescriptor[] = [
  * Arc proxy classes by name and are configured through their own tooling. A package adds a descriptor here the
  * same way it adds a component to the manifest.
  */
+const toolbarButtonProperties: PropertyDescriptor[] = [
+    { path: 'title', label: 'Label', group: 'Content', valueType: PropertyValueType.String, description: 'The accessible name and tooltip.' },
+    { path: 'icon', label: 'Icon', group: 'Content', valueType: PropertyValueType.Icon, editorKind: 'icon' },
+    { path: 'text', label: 'Text', group: 'Content', valueType: PropertyValueType.String, description: 'Short text shown instead of the icon.' },
+    { path: 'active', label: 'Active', group: 'Presentation', valueType: PropertyValueType.Boolean, default: false },
+    {
+        path: 'tooltipPosition', label: 'Tooltip position', group: 'Presentation', valueType: PropertyValueType.Enum, default: 'right',
+        choices: [{ value: 'top', label: 'Top' }, { value: 'right', label: 'Right' }, { value: 'bottom', label: 'Bottom' }, { value: 'left', label: 'Left' }],
+    },
+    {
+        path: 'destination', label: 'Destination', group: 'Navigation', valueType: PropertyValueType.Destination,
+        description: 'The screen, slice or dialog the button opens - executed by the enclosing navigation host.',
+    },
+];
+
 export const cratisComponentsDescriptors: ComponentDescriptor[] = [
     { component: key('dataTable'), displayName: 'Data table', properties: dataTableProperties },
     { component: key('table'), displayName: 'Table', properties: dataTableProperties },
@@ -104,4 +119,5 @@ export const cratisComponentsDescriptors: ComponentDescriptor[] = [
             description: 'Creates a deterministic editable field layout from the selected command metadata.',
         }],
     },
+    { component: key('toolbarButton'), displayName: 'Toolbar button', properties: toolbarButtonProperties },
 ];

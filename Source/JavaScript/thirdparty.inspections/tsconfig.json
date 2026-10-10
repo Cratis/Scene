@@ -24,6 +24,8 @@
     ],
     "exclude": [
         "dist",
-        "vite.config.mts"
+        "dist-webview",
+        "vite.config.mts",
+        "vite.webview.config.mts"
     ]
 }

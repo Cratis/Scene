@@ -13,6 +13,7 @@
     "scripts": {
         "g:clean": "cd $INIT_CWD && tsc -b --clean",
         "g:build": "cd $INIT_CWD && tsc -b && rollup -c ./rollup.config.mjs",
+        "g:build:webview": "cd $INIT_CWD && tsc -b && vite build -c vite.webview.config.mts --logLevel warn",
         "g:lint": "cd $INIT_CWD && eslint --cache --quiet --fix",
         "g:lint:ci": "cd $INIT_CWD && eslint --cache --quiet",
         "g:test": "cd $INIT_CWD && vitest run",

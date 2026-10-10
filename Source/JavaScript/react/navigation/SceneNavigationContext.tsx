@@ -8,7 +8,14 @@ import { DestinationResolution } from './DestinationResolution';
 import { DialogResult } from './DialogResult';
 
 export interface SceneNavigationContextValue {
+    /** The screen the last navigation opened. */
     currentScreen: string;
+
+    /** The screen in the primary region. */
+    primaryScreen: string;
+
+    /** Which screen each nested outlet shows, by outlet name. */
+    outlets: Record<string, string>;
     currentUrl?: string;
     currentOutlet?: string;
     currentDialog?: string;
@@ -32,6 +39,9 @@ export interface SceneNavigationContextValue {
 }
 
 const Context = createContext<SceneNavigationContextValue | undefined>(undefined);
+
+/** The navigation context itself, for components that render outside a host as well as inside one. */
+export const SceneNavigationContextInternal = Context;
 
 export interface SceneNavigationProviderProps {
     value: SceneNavigationContextValue;

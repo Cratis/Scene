@@ -57,5 +57,43 @@ export const commandFormPageTemplate: ScreenTemplate = {
     description: 'A generated command form under a header that states the command, with its own action bar.',
 };
 
+/**
+ * A settings page - the same generated-form shape as `CommandFormPage`, for the command that changes how a
+ * module behaves rather than one that records something. The header says what the settings govern, the
+ * form follows the settings command, and the bar saves or discards.
+ *
+ * Settings are a page of their own rather than a dialog because they are visited, read and left; a dialog
+ * would hide the module the reader is configuring.
+ */
+export const settingsPageTemplate: ScreenTemplate = {
+    name: 'SettingsPage',
+    fitsSlot: SlotName.Content,
+    slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Body }, { name: TemplateSlotName.Actions }],
+    arrangement: {
+        root: column([slotLeaf(TemplateSlotName.Header), slotLeaf(TemplateSlotName.Body, { grow: 1 }), slotLeaf(TemplateSlotName.Actions)], 16),
+    },
+    content: {
+        [TemplateSlotName.Header]: [
+            arcPageHeader('settings-header', {
+                title: 'Billing settings',
+                subtitle: 'Payment terms, reminders and numbering for every invoice the module registers',
+                section: 'Billing',
+                command: SampleBindingName.ChangeBillingSettings,
+            }),
+        ],
+        [TemplateSlotName.Body]: [page('settings-body', '', [commandForm('settings-form', SampleBindingName.ChangeBillingSettings, ['billingId'])])],
+        [TemplateSlotName.Actions]: [
+            toolbar('settings-actions', [
+                toolbarButton('settings-save', 'Save the settings', 'pi pi-save', 'Save'),
+                toolbarSeparator('settings-separator'),
+                toolbarButton('settings-discard', 'Discard changes', 'pi pi-undo', 'Discard'),
+            ]),
+        ],
+    },
+    metadata: { ...componentsBlueprintTemplateProvenance, type: 'Form', category: 'Business / Settings', scopes: [TemplateScope.Module] },
+    displayName: 'Settings page',
+    description: "A module's settings as a generated command form, with save and discard.",
+};
+
 /** The command-shaped templates. */
-export const commandTemplates: ScreenTemplate[] = [commandFormPageTemplate];
+export const commandTemplates: ScreenTemplate[] = [commandFormPageTemplate, settingsPageTemplate];

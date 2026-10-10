@@ -47,7 +47,7 @@ function screenFor(template: ScreenTemplate): Screen {
 /**
  * The chain of templates a screen renders through, outermost first.
  *
- * The eight page templates fit the layout's own `content` slot, so each one's chain is just itself. The
+ * The nine page templates fit the layout's own `content` slot, so each one's chain is just itself. The
  * three nesting-chain templates are the exception and the only ones that need the walk - which is the
  * honest version of the story: nesting exists for the applications that need it, and costs nothing for the
  * ones that do not.

@@ -47,4 +47,7 @@ export enum SampleBindingName {
 
     /** Records an adjustment against an invoice - the command a dialog submits. */
     RecordAdjustment = 'RecordAdjustment',
+
+    /** Changes how the billing module behaves - the command a settings page submits. */
+    ChangeBillingSettings = 'ChangeBillingSettings',
 }

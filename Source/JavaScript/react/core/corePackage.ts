@@ -34,6 +34,7 @@ export const corePackageManifest: ScenePackage = {
         'code',
         'file',
         'navigationBar',
+        'outlet',
     ],
     layouts: [],
     screenTemplates: [],

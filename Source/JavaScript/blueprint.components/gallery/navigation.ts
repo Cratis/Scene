@@ -24,6 +24,7 @@ export const componentsNavigationEntries: NavigationEntry[] = [
     { label: 'Invoices and detail', targetScreen: 'DataListWithDetailPage', icon: 'pi pi-window-maximize', group: 'Billing', order: 40 },
     { label: 'Master and detail', targetScreen: 'MasterDetailPage', icon: 'pi pi-table', group: 'Billing', order: 50 },
     { label: 'Register an invoice', targetScreen: 'CommandFormPage', icon: 'pi pi-plus-circle', group: 'Billing', order: 60 },
+    { label: 'Settings', targetScreen: 'SettingsPage', icon: 'pi pi-cog', group: 'Billing', order: 70 },
     { label: 'Event type schema', targetScreen: 'SchemaEditorPage', icon: 'pi pi-sitemap', group: 'Inspect', order: 10 },
     { label: 'Invoice document', targetScreen: 'ObjectEditorPage', icon: 'pi pi-file-edit', group: 'Inspect', order: 20 },
     { label: 'Billing module', targetScreen: 'DataModulePage', icon: 'pi pi-th-large', group: 'Nesting', order: 10 },

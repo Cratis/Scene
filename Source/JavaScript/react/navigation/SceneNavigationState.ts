@@ -7,7 +7,20 @@
  * and refresh restore exactly this.
  */
 export interface SceneNavigationState {
+    /** The screen the last navigation opened - in the primary region or in a nested outlet. */
     screen: string;
+
+    /**
+     * The screen in the primary region. Absent means `screen`: a navigation into an outlet no rendered screen
+     * declares replaces the primary region, as before nested outlets existed.
+     */
+    primary?: string;
+
+    /**
+     * Which screen each nested outlet shows, by outlet name. An outlet is nested when a screen declares it with
+     * a `core:outlet` element; placing a screen there keeps every screen above it on the page.
+     */
+    outlets?: Record<string, string>;
 
     /** The URL relative to the host's base path, as `resolveDestination` builds it. */
     url?: string;

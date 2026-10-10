@@ -24,12 +24,12 @@ export const componentsScreenTemplates: ScreenTemplate[] = [
 ];
 
 /**
- * The eight templates that fill the application layout's own `content` slot directly.
+ * The nine templates that fill the application layout's own `content` slot directly.
  *
  * Kept apart from the nesting chain because `fitsSlot` is resolved against *the containers in scope*, and
  * these two groups are never in scope together. Each of these is a whole page an application places on its
  * own; the chain's three are one page assembled from three levels. Resolving them as one set would ask
- * `resolveScreenTemplates` which of eight `body`-declaring templates the feature section belongs to, and it
+ * `resolveScreenTemplates` which of nine `body`-declaring templates the feature section belongs to, and it
  * would rightly answer that it cannot tell.
  */
 export const componentsPageTemplates: ScreenTemplate[] = [...listTemplates, ...workspaceTemplates, ...commandTemplates, ...editorTemplates];

@@ -54,6 +54,12 @@ export const coreDescriptors: ComponentDescriptor[] = [
         ],
     },
     {
+        component: key('outlet'),
+        displayName: 'Outlet',
+        description: 'A named region another screen opens into. Placing a screen here keeps this screen on the page, and the placed screen may declare outlets of its own.',
+        properties: [{ path: 'name', label: 'Name', group: 'Navigation', valueType: PropertyValueType.String, constraints: { required: true } }],
+    },
+    {
         component: key('navigationBar'),
         displayName: 'Navigation bar',
         description: 'A list of navigation items. A template author fixes the first item (Home) and can expose the list so that screens add their own.',

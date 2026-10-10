@@ -6,7 +6,7 @@
     "license": "Apache-2.0",
     "scripts": {
         "clean": "yarn g:clean",
-        "build": "tsc -b",
+        "build": "yarn g:build:webview",
         "lint": "yarn g:lint",
         "lint:ci": "yarn g:lint:ci",
         "test": "yarn g:test",

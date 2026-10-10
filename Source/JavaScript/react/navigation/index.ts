@@ -18,3 +18,7 @@ export * from './navigationRouteKey';
 export * from './resolveDestination';
 export * from './sceneRoutesFrom';
 export * from './useSceneHistoryNavigation';
+export * from './CoreOutlet';
+export * from './SceneOutletContext';
+export * from './collectOutletOwners';
+export * from './placeInOutlet';

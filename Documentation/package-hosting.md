@@ -44,3 +44,9 @@ A host is blocked, with a diagnostic, when:
 - the profile's theme is not compatible with every package the profile lists;
 - the policy forbids network assets and a package declares one: any absolute URL other than `data:` or `blob:`, or a protocol-relative `//host/...` reference (`isNetworkAsset`);
 - the policy forbids executable imports while loading design time, and a package brings design-time code.
+
+## Embedded host example
+
+`Source/JavaScript/thirdparty.inspections/webview` is a runnable embedded-host example: one custom package set rendered by `WebViewPackageHost`, the way a VS Code or Event Models webview embeds Scene. The build turns it into `dist-webview/index.html`, a single file whose inline script loads nothing from the network, under a content security policy of `default-src 'none'`. It needs no Studio global. Rendered content reaches the embedder only through the `cratis.scene.command` and `cratis.scene.navigate` events, which the example forwards to VS Code's `acquireVsCodeApi().postMessage`, or to the parent frame when that API is absent.
+
+The `for_webviewExample` specification loads the built page the way VS Code does, with only `acquireVsCodeApi` provided. It requires the page to render the package set, report `ready`, and send the command with its resolved arguments.
