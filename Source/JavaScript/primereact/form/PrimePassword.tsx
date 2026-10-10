@@ -25,6 +25,7 @@ export function PrimePassword({ element }: RegisteredComponentProps) {
             onValueChange={(event) => setValue(event.value ?? '')}
             mask={booleanProperty(element, 'mask', true)}
             placeholder={stringProperty(element, 'placeholder')}
+            aria-label={stringProperty(element, 'ariaLabel')}
             disabled={booleanProperty(element, 'disabled', false)}
         />
     );

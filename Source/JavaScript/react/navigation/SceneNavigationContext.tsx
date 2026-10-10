@@ -5,15 +5,30 @@ import { ReactNode, createContext, useContext } from 'react';
 import { BindingScope } from '@cratis/scene.engine';
 import { DestinationReference } from '@cratis/scene.model';
 import { DestinationResolution } from './DestinationResolution';
+import { DialogResult } from './DialogResult';
 
 export interface SceneNavigationContextValue {
     currentScreen: string;
     currentUrl?: string;
     currentOutlet?: string;
     currentDialog?: string;
+
+    /** The route parameters of the current entry - from the destination that opened it, or the deep link. */
+    currentParameters: Record<string, string>;
+
+    /** What the last dialog returned when it closed. */
+    dialogResult?: DialogResult;
+
+    /** A deep link that matched no route; the host fell back to its initial screen. */
+    unresolvedUrl?: string;
     bindingScope: BindingScope;
     navigate(destination: DestinationReference): DestinationResolution;
-    closeDialog(): void;
+
+    /** Closes the open dialog, returning to the entry that opened it, and records its result. */
+    closeDialog(result?: unknown): void;
+
+    /** Goes back one history entry. */
+    back(): void;
 }
 
 const Context = createContext<SceneNavigationContextValue | undefined>(undefined);

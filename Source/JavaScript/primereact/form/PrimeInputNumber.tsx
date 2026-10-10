@@ -30,7 +30,7 @@ export function PrimeInputNumber({ element }: RegisteredComponentProps) {
             min={numberProperty(element, 'min')}
             max={numberProperty(element, 'max')}
             disabled={booleanProperty(element, 'disabled', false)}>
-            <InputNumber.Input placeholder={stringProperty(element, 'placeholder')} />
+            <InputNumber.Input placeholder={stringProperty(element, 'placeholder')} aria-label={stringProperty(element, 'ariaLabel')} />
             {booleanProperty(element, 'showButtons', false) && (
                 <InputNumber.Group>
                     <InputNumber.Increment>

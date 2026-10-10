@@ -15,7 +15,7 @@ import { workspaceTemplates } from './workspaceTemplates';
 /**
  * The screen templates this blueprint provides.
  *
- * Ten shapes for inside the application shell, ten for the full-page shell, and the three-level nesting
+ * Eleven shapes for inside the application shell, ten for the full-page shell, and the three-level nesting
  * chain that demonstrates how `fitsSlot` composes. The list is what the manifest's `screenTemplates` names
  * and what the bundle provides; `validatePackageBundle` proves the two agree.
  */
@@ -34,6 +34,7 @@ const fullPageTemplateNames = new Set([...authTemplates, ...statusTemplates].map
 const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     Dashboard: [{ label: 'Dashboard' }],
     CrudList: [{ label: 'Catalog', targetScreen: 'Dashboard' }, { label: 'Products' }],
+    MasterDetail: [{ label: 'Sales', targetScreen: 'Dashboard' }, { label: 'Customers' }],
     DetailView: [{ label: 'Catalog', targetScreen: 'Dashboard' }, { label: 'Products', targetScreen: 'CrudList' }, { label: 'Bamboo Watch' }],
     FormPage: [{ label: 'Catalog', targetScreen: 'Dashboard' }, { label: 'Products', targetScreen: 'CrudList' }, { label: 'New product' }],
     Empty: [{ label: 'Catalog', targetScreen: 'Dashboard' }, { label: 'Products' }],

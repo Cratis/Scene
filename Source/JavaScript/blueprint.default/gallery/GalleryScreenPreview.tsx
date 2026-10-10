@@ -11,6 +11,8 @@ import { composeScreenElement } from './composeScreen';
 import { galleryComponentCatalog, galleryPreviewProfile } from './previewProfile';
 import { resolveElementComponentNames } from './resolveElementNames';
 import { galleryScreen } from './screens';
+import { TemplatePreviewState } from './TemplatePreviewState';
+import { applyTemplatePreviewState } from './applyTemplatePreviewState';
 
 /**
  * The registry a preview resolves against when a host does not supply one: `core` plus this blueprint.
@@ -33,6 +35,9 @@ export interface GalleryScreenPreviewProps {
 
     /** The component registry to render against. Defaults to `core` plus this blueprint's own components. */
     registry?: ComponentRegistry;
+
+    /** The data state to show. Defaults to the seeded, populated records. */
+    state?: TemplatePreviewState;
 }
 
 /**
@@ -48,15 +53,15 @@ export interface GalleryScreenPreviewProps {
  * a preview of a blueprint against half a profile should look visibly incomplete rather than quietly
  * wrong.
  */
-export function GalleryScreenPreview({ screenName, initialConfig, themes = defaultBlueprintThemes, registry = galleryPreviewRegistry }: GalleryScreenPreviewProps) {
+export function GalleryScreenPreview({ screenName, initialConfig, themes = defaultBlueprintThemes, registry = galleryPreviewRegistry, state = TemplatePreviewState.Populated }: GalleryScreenPreviewProps) {
     const element = useMemo(() => {
         const screen = galleryScreen(screenName);
         if (!screen) {
             throw new Error(`The gallery has no screen named '${screenName}'.`);
         }
 
-        return resolveElementComponentNames(composeScreenElement(screen), galleryPreviewProfile, galleryComponentCatalog);
-    }, [screenName]);
+        return applyTemplatePreviewState(resolveElementComponentNames(composeScreenElement(screen), galleryPreviewProfile, galleryComponentCatalog), state);
+    }, [screenName, state]);
 
     return (
         <LayoutConfigProvider initialConfig={initialConfig} storage={null}>

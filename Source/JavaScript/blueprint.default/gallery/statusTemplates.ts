@@ -75,7 +75,7 @@ export const notFoundTemplate: ScreenTemplate = {
                 externalComponent('not-found-tag', 'tag', { value: '404', severity: 'info' }),
                 text('not-found-title', 'That page is not here'),
                 text('not-found-message', 'The link may be old, or the thing it pointed at may have been removed.'),
-                externalComponent('not-found-search', 'inputText', { placeholder: 'Search instead' }),
+                externalComponent('not-found-search', 'inputText', { placeholder: 'Search instead', ariaLabel: 'Search' }),
                 button('not-found-home', 'Back to the dashboard', { severity: 'secondary', targetScreen: 'Dashboard' }),
             ]),
         ],

@@ -3,17 +3,18 @@ title: The template set
 description: Every screen template and dialog template the default blueprint ships, what each is for, and which layout it renders in.
 ---
 
-The default blueprint ships twenty-three screen templates and three dialog templates. Each screen template
+The default blueprint ships twenty-four screen templates and three dialog templates. Each screen template
 has a matching `Screen` in the gallery, so every row below is something you can boot and look at.
 
 ## In the application shell
 
-Ten shapes, each fitting the `AppShell` layout's `content` slot.
+Eleven shapes, each fitting the `AppShell` layout's `content` slot.
 
 | Template | For | Its own slots |
 | --- | --- | --- |
 | `Dashboard` | Four stat cards over two columns of widgets | `stats`, `primary`, `secondary` |
 | `CrudList` | A searchable table with a header and a primary action | `toolbar`, `body` |
+| `MasterDetail` | A list beside the selected record, with a `master-detail.detail` outlet that accepts `Detail` screens | `header`, `primary`, `sidePanel` |
 | `DetailView` | One record: header with actions, its sections, a summary panel | `header`, `body`, `sidePanel` |
 | `FormPage` | A grouped form with the field types applications actually use | `header`, `body`, `actions` |
 | `Empty` | The designed empty state for a list with nothing in it | `body` |
@@ -24,7 +25,8 @@ Ten shapes, each fitting the `AppShell` layout's `content` slot.
 | `Help` | Searchable answers with a route to a human | `header`, `body`, `sidePanel` |
 
 `Dashboard` follows Sakai's composition - a row of four figures, then two columns of larger widgets - and
-carries its own arrangement that collapses the two columns into one at a compact width.
+carries its own arrangement that collapses the two columns into one at a compact width. `MasterDetail` does
+the same with its list and record: side by side at a regular width, stacked at a compact one.
 
 The last five are in the set because leaving them out is what makes a template line feel thin. Every real
 application grows documentation, settings, user administration, a printable document and a help page, and
@@ -118,3 +120,18 @@ import { GalleryScreenPreview } from '@cratis/scene.blueprint.default';
 
 <GalleryScreenPreview screenName='CrudList' />;
 ```
+
+## Preview states
+
+`GalleryScreenPreview` takes a `state`: `populated` (the seeded records, the default), `empty`, `loading` or
+`error`. The state is applied with `applyTemplatePreviewState`, which changes only data-bearing elements -
+those whose `rows` are records - and leaves the shell, headers and actions as authored. Each table then shows
+its own state in its own vocabulary: no rows and its `emptyMessage`, an announced `Loading…` status with
+`aria-busy`, or an announced error in place of the rows. Templates that load nothing, such as
+`ProfileSettings`, look the same in every state.
+
+Rendered against `core`, PrimeReact and this blueprint, every data template shows real rows when populated
+and each state otherwise, with no unresolved components. The specs in `for_templatePreviewStates` render the
+dashboard, list, master/detail, user administration, nested workspace, settings and dialog templates that way.
+Form fields carry their label as an accessible name.
+

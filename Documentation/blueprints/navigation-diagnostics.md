@@ -39,3 +39,13 @@ A destination that places a screen of another type there, or a screen with no te
 ## Routes in the engine and in the renderer
 
 The engine constructs no URLs, so by default it compares only authored route overrides, trimmed. A renderer that derives routes passes its own route key. `diagnoseRenderedNavigation(graph)` in `@cratis/scene.react` uses the same base `resolveDestination` builds URLs from. It includes routes derived from a screen name or module, feature and slice identity, ignores surrounding slashes, and treats `{id}` and `:id` placeholders as the same segment. A C# host passes its derivation as the `routeKey` argument.
+
+## History, deep links and dialogs in the navigation host
+
+`SceneNavigationHost` records every navigation as a history entry. Pass `history={createBrowserSceneHistory(window, '/app/')}` to drive the address bar; without it the host keeps an in-memory history (`createMemorySceneHistory`) for embedded and design-time hosts.
+
+- **URL overrides and parameters.** A destination's `route` override, with its path and query parameters resolved from `routeParameterBindings`, is the URL written for the entry. `currentParameters` exposes the resolved values.
+- **Deep links.** On start, the host matches the current URL against its routes: every screen at its own name, plus each `destinations` entry at its route override or identity route. `{name}` segments become parameters, the query string adds the rest, and literal segments win over parameters. A URL that matches nothing falls back to `initialScreen` and is reported as `unresolvedUrl`.
+- **Refresh.** Each entry stores its screen, outlet, parameters and open dialog, so a reload restores exactly that entry.
+- **Back and forward.** The browser's buttons step through entries, and `back()` does the same from a screen.
+- **Dialogs.** A dialog destination opens as its own entry over the screen that opened it. `closeDialog(result)` returns to that screen and exposes the result as `dialogResult`; the browser's back button also closes the dialog.

@@ -56,7 +56,7 @@ bindings it names.
 They are both blueprints, and they do opposite halves of the job.
 
 The default blueprint answers **"what does this application look like"**. It ships two layouts, sixteen
-shell components, twenty-three screen templates and two themes, and its templates are built from
+shell components, twenty-four screen templates and two themes, and its templates are built from
 primitives — a `dataTable` handed rows, a form of `inputText` fields, a dialog assembled from a title, a
 message and two buttons. Those templates are about *shape*. They render fully with no backend at all,
 because there is no backend in them.

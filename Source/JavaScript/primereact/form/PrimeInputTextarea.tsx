@@ -24,6 +24,7 @@ export function PrimeInputTextarea({ element }: RegisteredComponentProps) {
             cols={numberProperty(element, 'cols')}
             autoResize={booleanProperty(element, 'autoResize', false)}
             placeholder={stringProperty(element, 'placeholder')}
+            aria-label={stringProperty(element, 'ariaLabel')}
             disabled={booleanProperty(element, 'disabled', false)}
         />
     );

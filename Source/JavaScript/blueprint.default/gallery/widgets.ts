@@ -32,19 +32,28 @@ export function widget(id: string, title: string, content: SceneElement[]): Scen
     return card(id, [text(`${id}-title`, title), ...content], { title });
 }
 
-/** A table with real columns and real rows, so a list template looks like a list. */
-export function table(id: string, columns: { field: string; header: string }[], rows: Record<string, unknown>[]): SceneElement {
+/**
+ * A table with real columns and real rows, so a list template looks like a list.
+ *
+ * The properties are the table's own vocabulary - `rows` for the records and `pageSize` to page them - so
+ * a host with the real table loaded shows the rows rather than an empty grid. `emptyMessage` is what the
+ * same table says once the rows are gone, which is how a preview shows a template's empty state.
+ */
+export function table(id: string, columns: { field: string; header: string }[], rows: Record<string, unknown>[], emptyMessage = 'Nothing to show yet'): SceneElement {
     return externalComponent(
         id,
         'dataTable',
-        { value: rows, dataKey: columns[0]?.field ?? 'id', paginator: rows.length > 8, rows: 8 },
+        { rows, dataKey: columns[0]?.field ?? 'id', emptyMessage, ...(rows.length > 8 ? { pageSize: 8 } : {}) },
         { columns: columns.map(column => externalComponent(`${id}-${column.field}`, 'column', { field: column.field, header: column.header, sortable: true })) },
     );
 }
 
-/** One labeled input in a form template. */
+/**
+ * One labeled input in a form template. The visible label is a separate text element, so the input carries
+ * the same words as its accessible name - otherwise a screen reader announces an unnamed field.
+ */
 export function field(id: string, label: string, componentName: string, properties: Record<string, unknown> = {}): SceneElement {
-    return panel(id, [text(`${id}-label`, label), externalComponent(`${id}-input`, componentName, properties)]);
+    return panel(id, [text(`${id}-label`, label), externalComponent(`${id}-input`, componentName, { ariaLabel: label, ...properties })]);
 }
 
 /** A row of buttons closing a form. */

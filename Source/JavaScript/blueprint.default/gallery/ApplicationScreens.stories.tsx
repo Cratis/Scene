@@ -19,7 +19,7 @@ const meta = {
         layout: 'fullscreen',
         docs: {
             description: {
-                component: 'The ten in-application screen templates plus the three-level nesting chain, each booted through the real engine as a screen.',
+                component: 'The eleven in-application screen templates plus the three-level nesting chain, each booted through the real engine as a screen.',
             },
         },
     },
@@ -35,6 +35,9 @@ export const Dashboard: Story = { args: { screenName: 'Dashboard' } };
 
 /** A searchable product table with a header and a primary action. */
 export const List: Story = { args: { screenName: 'CrudList' } };
+
+/** A list beside the selected record, stacking on narrow screens. */
+export const MasterDetail: Story = { args: { screenName: 'MasterDetail' } };
 
 /** One record: header, sections and a summary panel. */
 export const Detail: Story = { args: { screenName: 'DetailView' } };

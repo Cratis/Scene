@@ -34,7 +34,7 @@ export function PrimeDropdown({ element }: RegisteredComponentProps) {
             optionValue='value'
             filter={filter}
             disabled={booleanProperty(element, 'disabled', false)}>
-            <Select.Trigger>
+            <Select.Trigger aria-label={stringProperty(element, 'ariaLabel')}>
                 <Select.Value placeholder={placeholder} />
                 {showClear && <Select.Clear />}
                 <Select.Arrow />

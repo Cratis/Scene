@@ -23,6 +23,7 @@ export function PrimeInputText({ element }: RegisteredComponentProps) {
             value={value}
             onChange={(event) => setValue(event.target.value)}
             placeholder={stringProperty(element, 'placeholder')}
+            aria-label={stringProperty(element, 'ariaLabel')}
             disabled={booleanProperty(element, 'disabled', false)}
             readOnly={booleanProperty(element, 'readOnly', false)}
             invalid={booleanProperty(element, 'invalid', false)}

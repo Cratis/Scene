@@ -6,7 +6,8 @@
         "paths": {
             "@cratis/scene.model/*": ["../model/dist/esm/*"],
             "@cratis/scene.engine/*": ["../engine/dist/esm/*"],
-            "@cratis/scene.react/*": ["../react/dist/esm/*"]
+            "@cratis/scene.react/*": ["../react/dist/esm/*"],
+            "@cratis/scene.primereact/*": ["../primereact/dist/esm/*"]
         }
     },
     "files": [
@@ -20,7 +21,8 @@
     "references": [
         { "path": "../model" },
         { "path": "../engine" },
-        { "path": "../react" }
+        { "path": "../react" },
+        { "path": "../primereact" }
     ],
     "exclude": [
         "dist",

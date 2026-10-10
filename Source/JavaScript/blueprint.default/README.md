@@ -27,9 +27,9 @@ blueprint.default/
 | Concept | What it is | How many |
 | --- | --- | --- |
 | **Layout** | the application's base navigational look | one per application, chosen from two |
-| **Screen template** | a reusable shape *inside* a layout, at module / feature / slice level | twenty-three |
+| **Screen template** | a reusable shape *inside* a layout, at module / feature / slice level | twenty-four |
 | **Dialog template** | the same, for overlays - no `fitsSlot`, because a dialog occupies no parent slot | three |
-| **Screen** | an instance: names its layout and template, and provides the content | twenty-three |
+| **Screen** | an instance: names its layout and template, and provides the content | twenty-four |
 
 A screen template states where it belongs, in `fitsSlot`, rather than being told by whatever hosts it.
 That one rule composes at every depth: a module's template fits the layout's `content`, a feature's fits a
