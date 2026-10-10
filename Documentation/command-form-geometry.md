@@ -33,3 +33,9 @@ Invalid draft state is separate from committed metadata so Studio can show resiz
 ## Downstream use
 
 Screenplay should render authored form placement and width units into `CommandFormLayout`. Stage and Studio should consume `layout` for geometry and keep `mode`/`generationMode` for field generation. Studio resize interactions should call the draft helpers and apply canonical `SceneEdit` operations only after validation succeeds.
+
+## Compact widths and keyboard arrangement
+
+A host that evaluates the width size class passes it as the form's `widthSizeClass` property. At `Compact` a manual form stacks its fields in one full-width column in reading order (`stackCommandFormLayout`): row, then column, then authored order. The authored layout is not changed, so the form returns to its columns at `Regular`.
+
+The `commandFormLayout` property editor arranges fields from the keyboard. Each placed field is a focusable cell whose accessible name states its row, column and spans. An arrow key moves the field one cell, and Shift with an arrow key narrows or widens its column span (Left, Right) or its row span (Up, Down). Each valid change is one canonical `SetProperty` edit of `layout`. A change that would leave the declared columns is announced and not applied (`applyCommandFormLayoutKey`).

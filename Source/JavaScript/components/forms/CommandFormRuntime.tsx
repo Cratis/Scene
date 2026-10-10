@@ -4,7 +4,7 @@
 import type { ComponentType, ReactNode } from 'react';
 import { AutoCommandForm } from '@cratis/components/CommandForm';
 import { CommandForm } from '@cratis/arc.react/commands';
-import { formWidthToCss, normalizeCommandFormLayout, validateCommandFormLayout } from '@cratis/scene.engine';
+import { formWidthToCss, normalizeCommandFormLayout, stackCommandFormLayout, validateCommandFormLayout } from '@cratis/scene.engine';
 import { Guid } from '@cratis/fundamentals';
 import type { BoundConstructor } from '../bindings';
 import type { CommandInput } from './commandInputs';
@@ -19,6 +19,9 @@ interface CommandFormRuntimeProps {
     submitLabel: string;
     columns?: number;
     layout?: CommandFormLayout;
+
+    /** At a compact width the fields stack in one column, in reading order. */
+    compact?: boolean;
 }
 
 // Runtime bindings erase the proxy's keys; the optional footer is a Components >=4.13 contract.
@@ -63,17 +66,18 @@ function capability(command: BoundConstructor, inputs?: CommandInput[], exclude?
 }
 
 /** Private lazy entry point: importing the Scene registry must not import Arc. */
-export default function CommandFormRuntime({ command, inputs, exclude, submitLabel, columns = 1, layout }: CommandFormRuntimeProps) {
+export default function CommandFormRuntime({ command, inputs, exclude, submitLabel, columns = 1, layout, compact = false }: CommandFormRuntimeProps) {
     const error = capability(command, inputs, exclude);
     if (error) return <div role='alert'>{error}</div>;
     // The registry's never-argument constructor is erased; Arc creates this checked proxy with no args.
     if (inputs) {
-        const formLayout = normalizeCommandFormLayout(layout, inputs);
-        const diagnostics = validateCommandFormLayout(formLayout, inputs.map(input => input.property));
+        const authoredLayout = normalizeCommandFormLayout(layout, inputs);
+        const diagnostics = validateCommandFormLayout(authoredLayout, inputs.map(input => input.property));
         if (diagnostics.length) return <div role='alert'>{diagnostics[0].message}</div>;
+        const formLayout = compact ? stackCommandFormLayout(authoredLayout) : authoredLayout;
         const columnsCss = formLayout.columns.map(column => formWidthToCss(column.width) ?? 'minmax(0, 1fr)').join(' ') || `repeat(${Math.max(1, columns)}, minmax(0, 1fr))`;
         return <CommandForm command={command as unknown as new () => object} showTitles={false}>
-            <div style={{ display: 'grid', gridTemplateColumns: columnsCss, columnGap: formWidthToCss(formLayout.columnGap) ?? '1rem', rowGap: formWidthToCss(formLayout.rowGap) ?? '1rem' }}>
+            <div data-scene-form-columns={formLayout.columns.length} style={{ display: 'grid', gridTemplateColumns: columnsCss, columnGap: formWidthToCss(formLayout.columnGap) ?? '1rem', rowGap: formWidthToCss(formLayout.rowGap) ?? '1rem' }}>
                 {inputs.map(input => <ExplicitCommandField key={input.property} input={input} placement={formLayout.placements.find(placement => placement.field === input.property) ?? input.placement} />)}
             </div>
             <CommandFormSubmit label={submitLabel} />

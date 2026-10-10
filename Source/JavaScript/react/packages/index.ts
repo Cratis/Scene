@@ -16,6 +16,7 @@ export * from './DesignTimeResolution';
 export * from '../navigation';
 export * from './EmbeddedPackageHost';
 export * from './loadDesignTimeContributions';
+export * from './isNetworkAsset';
 export * from './PackageHostAssets';
 export * from './PackageHostConfiguration';
 export * from './PackageHostRenderMode';

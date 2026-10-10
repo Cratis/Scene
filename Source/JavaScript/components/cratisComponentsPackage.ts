@@ -7,6 +7,7 @@ import { cratisComponents, cratisComponentsPackageName } from './cratisComponent
 import { cratisComponentsDescriptors } from './cratisComponentsDescriptors';
 import { CommandFieldPropertyEditor } from './forms/CommandFieldPropertyEditor';
 import { CommandFormDesigner } from './forms/CommandFormDesigner';
+import { CommandFormLayoutEditor } from './forms/CommandFormLayoutEditor';
 import { generateCommandFieldsAction } from './forms/generateCommandFieldsAction';
 
 /**
@@ -101,7 +102,7 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     designTime: {
         previews: [],
         designers: ['commandFormDesigner'],
-        propertyEditors: ['commandBinding', 'commandFields', 'fieldWidths'],
+        propertyEditors: ['commandBinding', 'commandFields', 'fieldWidths', 'commandFormLayout'],
         propertyDisplays: [],
         actions: ['Cratis.Components.commandForm.generateFields'],
     },
@@ -126,6 +127,7 @@ export const cratisComponentsPackage: ScenePackageBundle = {
         },
         propertyEditors: {
             commandBinding: CommandFieldPropertyEditor,
+            commandFormLayout: CommandFormLayoutEditor,
         },
         actions: {
             [generateCommandFieldsAction.descriptor.id]: generateCommandFieldsAction,

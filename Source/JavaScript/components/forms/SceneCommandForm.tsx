@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { lazy } from 'react';
+import { WidthSizeClass } from '@cratis/scene.model';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import type { BoundConstructor } from '../bindings';
@@ -46,6 +47,7 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
                 submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}
                 {...(numberProperty(element.properties, 'columns') === undefined ? {} : { columns: numberProperty(element.properties, 'columns') })}
                 {...(commandFormLayout(element.properties) === undefined ? {} : { layout: commandFormLayout(element.properties) })}
+                {...(stringProperty(element.properties, 'widthSizeClass') === WidthSizeClass.Compact ? { compact: true } : {})}
             />
         </ArcRuntimeBoundary>
     );

@@ -1,0 +1,200 @@
+{
+  "description": "Shared binding resolution corpus. The TypeScript engine (engine/for_bindingConformance) and the C# engine (Engine.Specs/for_BindingConformance) run every scenario's steps in order against the same scope and must produce exactly these values, diagnostics and query outcomes. A resolve step expects either `expected` (any JSON value, including null) or `expectedAbsent` (the value is undefined in TypeScript and BindingValue.Absent in C#).",
+  "scenarios": [
+    {
+      "name": "data context paths",
+      "scope": { "dataContext": { "selected": { "id": "invoice-1", "total": 0, "paid": false, "note": null, "lines": [{ "sku": "A" }, { "sku": "B" }] } } },
+      "steps": [
+        { "resolve": { "path": "selected.id" }, "expected": "invoice-1" },
+        { "resolve": { "kind": "dataContext", "path": "selected.id" }, "expected": "invoice-1" },
+        { "resolve": { "path": "" }, "expected": { "selected": { "id": "invoice-1", "total": 0, "paid": false, "note": null, "lines": [{ "sku": "A" }, { "sku": "B" }] } } },
+        { "resolve": { "path": "selected.total" }, "expected": 0 },
+        { "resolve": { "path": "selected.paid" }, "expected": false },
+        { "resolve": { "path": "selected.lines.1.sku" }, "expected": "B" },
+        { "resolve": { "path": "selected.lines.2.sku" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.lines.length" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.lines.01" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.constructor" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.id.length" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.missing" }, "expectedAbsent": true }
+      ]
+    },
+    {
+      "name": "null behavior",
+      "scope": { "dataContext": { "selected": { "note": null } } },
+      "steps": [
+        { "resolve": { "path": "selected.note" }, "expected": null },
+        { "resolve": { "path": "selected.note", "nullBehavior": "propagate" }, "expected": null },
+        { "resolve": { "path": "selected.note", "nullBehavior": "clear" }, "expected": null },
+        { "resolve": { "path": "selected.note", "nullBehavior": "preserve" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.missing", "nullBehavior": "propagate" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.missing", "nullBehavior": "clear" }, "expected": null },
+        { "resolve": { "path": "selected.missing", "nullBehavior": "preserve" }, "expectedAbsent": true },
+        { "resolve": { "path": "selected.note.deeper", "nullBehavior": "clear" }, "expected": null }
+      ]
+    },
+    {
+      "name": "query results",
+      "scope": { "queryResults": { "invoices": { "current": { "id": "invoice-2" } }, "nothing": null } },
+      "steps": [
+        { "resolve": { "kind": "queryResult", "query": "invoices", "path": "current.id" }, "expected": "invoice-2" },
+        { "resolve": { "kind": "queryResult", "query": "nothing", "path": "" }, "expected": null },
+        { "resolve": { "kind": "queryResult", "query": "unknown", "path": "current.id" }, "expectedAbsent": true },
+        { "resolve": { "kind": "queryResult", "path": "current.id" }, "expectedAbsent": true },
+        { "resolve": { "kind": "queryResult", "query": "unknown", "path": "current.id", "nullBehavior": "clear" }, "expected": null }
+      ]
+    },
+    {
+      "name": "component outputs",
+      "scope": { "componentOutputs": { "table": { "selectedItem": { "id": "invoice-3" }, "cleared": null } } },
+      "steps": [
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id" }, "expected": "invoice-3" },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "ignored", "componentPropertyPath": "selectedItem.id" }, "expected": "invoice-3" },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "cleared" }, "expected": null },
+        { "resolve": { "kind": "componentProperty", "componentId": "chart", "path": "selectedItem" }, "expectedAbsent": true },
+        { "resolve": { "kind": "componentProperty", "path": "selectedItem" }, "expectedAbsent": true }
+      ]
+    },
+    {
+      "name": "literals",
+      "scope": {},
+      "steps": [
+        { "resolve": { "kind": "literal", "path": "", "value": "lines" }, "expected": "lines" },
+        { "resolve": { "kind": "literal", "path": "ignored", "value": 0 }, "expected": 0 },
+        { "resolve": { "kind": "literal", "path": "", "value": { "page": 1, "tags": ["a"] } }, "expected": { "page": 1, "tags": ["a"] } },
+        { "resolve": { "kind": "literal", "path": "" }, "expectedAbsent": true },
+        { "resolve": { "kind": "literal", "path": "", "value": null }, "expectedAbsent": true },
+        { "resolve": { "kind": "literal", "path": "", "nullBehavior": "clear" }, "expected": null }
+      ]
+    },
+    {
+      "name": "validation of sources, two-way bindings and cycles",
+      "scope": { "dataContext": { "name": "Northwind" }, "componentOutputs": { "table": { "selectedItem": { "id": "invoice-3" } }, "detail": {} } },
+      "steps": [
+        { "validate": { "path": "name" }, "expectedDiagnostics": [] },
+        { "validate": { "kind": "queryResult", "path": "current" }, "expectedDiagnostics": [
+          { "code": "missingQuery", "message": "Query result bindings must name the query they read from.", "path": "query" }
+        ] },
+        { "validate": { "kind": "componentProperty", "path": "selectedItem" }, "expectedDiagnostics": [
+          { "code": "missingComponent", "message": "Component property bindings must name the source component id.", "path": "componentId" }
+        ] },
+        { "validate": { "kind": "componentProperty", "componentId": "detail", "path": "selectedItem" }, "expectedDiagnostics": [] },
+        { "validate": { "kind": "componentProperty", "componentId": "chart", "path": "selectedItem" }, "expectedDiagnostics": [
+          { "code": "unknownComponent", "message": "No component output scope exists for 'chart'.", "path": "componentId" }
+        ] },
+        { "validate": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem" }, "targetElementId": "table", "expectedDiagnostics": [
+          { "code": "bindingCycle", "message": "Component 'table' cannot bind to its own output.", "path": "componentId" }
+        ] },
+        { "validate": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem" }, "targetElementId": "detail", "resolvingElementIds": ["table", "detail"], "expectedDiagnostics": [
+          { "code": "bindingCycle", "message": "Binding to 'table' would create a component binding cycle.", "path": "componentId" }
+        ] },
+        { "validate": { "kind": "componentProperty", "componentId": "chart", "path": "selectedItem" }, "targetElementId": "chart", "resolvingElementIds": ["chart"], "expectedDiagnostics": [
+          { "code": "unknownComponent", "message": "No component output scope exists for 'chart'.", "path": "componentId" },
+          { "code": "bindingCycle", "message": "Component 'chart' cannot bind to its own output.", "path": "componentId" },
+          { "code": "bindingCycle", "message": "Binding to 'chart' would create a component binding cycle.", "path": "componentId" }
+        ] },
+        { "validate": { "path": "name", "mode": "twoWay" }, "expectedDiagnostics": [
+          { "code": "unsupportedTwoWayBinding", "message": "Two-way bindings require a component output source.", "path": "mode" }
+        ] },
+        { "validate": { "kind": "literal", "path": "", "value": "x", "mode": "twoWay" }, "expectedDiagnostics": [
+          { "code": "unsupportedTwoWayBinding", "message": "Two-way bindings require a component output source.", "path": "mode" }
+        ] },
+        { "validate": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem", "mode": "twoWay" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "name", "mode": "oneWay" }, "expectedDiagnostics": [] }
+      ]
+    },
+    {
+      "name": "validation of expected value types",
+      "scope": { "dataContext": { "name": "Northwind", "count": 3, "active": false, "tags": ["a"], "owner": { "id": "u-1" }, "nothing": null } },
+      "steps": [
+        { "validate": { "path": "name", "expectedValueType": "string" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "owner", "expectedValueType": "string" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "tags", "expectedValueType": "string" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected string.", "path": "expectedValueType" }
+        ] },
+        { "validate": { "path": "name", "expectedValueType": "enum" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "count", "expectedValueType": "number" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "name", "expectedValueType": "number" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected number.", "path": "expectedValueType" }
+        ] },
+        { "validate": { "path": "active", "expectedValueType": "boolean" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "count", "expectedValueType": "boolean" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected boolean.", "path": "expectedValueType" }
+        ] },
+        { "validate": { "path": "tags", "expectedValueType": "collection" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "owner", "expectedValueType": "collection" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected collection.", "path": "expectedValueType" }
+        ] },
+        { "validate": { "path": "owner", "expectedValueType": "object" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "tags", "expectedValueType": "object" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected object.", "path": "expectedValueType" }
+        ] },
+        { "validate": { "path": "tags", "expectedValueType": "json" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "nothing", "expectedValueType": "number" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "missing", "expectedValueType": "number" }, "expectedDiagnostics": [] },
+        { "validate": { "path": "name", "expectedValueType": "date" }, "expectedDiagnostics": [
+          { "code": "bindingTypeMismatch", "message": "Binding value does not match expected date.", "path": "expectedValueType" }
+        ] }
+      ]
+    },
+    {
+      "name": "nested template scope",
+      "scope": {
+        "dataContext": { "customer": { "name": "Northwind" } },
+        "queryResults": { "invoices": [{ "id": "invoice-1" }], "notes": ["screen note"] },
+        "componentOutputs": { "table": { "selectedItem": { "id": "invoice-1" } } }
+      },
+      "steps": [
+        { "nest": { "dataContext": { "id": "invoice-1", "total": 120 }, "queryResults": { "notes": ["detail note"] } } },
+        { "resolve": { "path": "total" }, "expected": 120 },
+        { "resolve": { "path": "customer.name" }, "expectedAbsent": true },
+        { "resolve": { "kind": "queryResult", "query": "invoices", "path": "0.id" }, "expected": "invoice-1" },
+        { "resolve": { "kind": "queryResult", "query": "notes", "path": "0" }, "expected": "detail note" },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id" }, "expected": "invoice-1" },
+        { "nest": { "componentOutputs": { "lines": { "selectedItem": { "sku": "A" } } } } },
+        { "resolve": { "path": "id" }, "expected": "invoice-1" },
+        { "resolve": { "kind": "componentProperty", "componentId": "lines", "path": "selectedItem.sku" }, "expected": "A" },
+        { "validate": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem" }, "expectedDiagnostics": [] }
+      ]
+    },
+    {
+      "name": "lifecycle cleanup of removed and renamed elements",
+      "scope": { "componentOutputs": { "table": { "selectedItem": { "id": "invoice-1" } }, "detail": { "dirty": true } } },
+      "steps": [
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id" }, "expected": "invoice-1" },
+        { "remove": ["table"] },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id" }, "expectedAbsent": true },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id", "nullBehavior": "clear" }, "expected": null },
+        { "validate": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem" }, "expectedDiagnostics": [
+          { "code": "unknownComponent", "message": "No component output scope exists for 'table'.", "path": "componentId" }
+        ] },
+        { "resolve": { "kind": "componentProperty", "componentId": "detail", "path": "dirty" }, "expected": true },
+        { "nest": { "componentOutputs": { "invoice-table": { "selectedItem": { "id": "invoice-2" } } } } },
+        { "resolve": { "kind": "componentProperty", "componentId": "invoice-table", "path": "selectedItem.id" }, "expected": "invoice-2" },
+        { "resolve": { "kind": "componentProperty", "componentId": "table", "path": "selectedItem.id" }, "expectedAbsent": true }
+      ]
+    },
+    {
+      "name": "query rebind discards stale results",
+      "scope": { "componentOutputs": { "table": { "selectedItem": { "id": "invoice-1" } } } },
+      "steps": [
+        { "begin": "comments", "as": "first" },
+        { "begin": "comments", "as": "second" },
+        { "complete": "second", "result": [{ "text": "about invoice-2" }], "accepted": true },
+        { "complete": "first", "result": [{ "text": "about invoice-1" }], "accepted": false },
+        { "resolve": { "kind": "queryResult", "query": "comments", "path": "0.text" }, "expected": "about invoice-2" },
+        { "begin": "comments", "as": "third" },
+        { "resolve": { "kind": "queryResult", "query": "comments", "path": "0.text" }, "expected": "about invoice-2" },
+        { "clear": "comments" },
+        { "complete": "third", "result": [{ "text": "about invoice-3" }], "accepted": false },
+        { "resolve": { "kind": "queryResult", "query": "comments", "path": "0.text" }, "expectedAbsent": true },
+        { "begin": "comments", "as": "fourth" },
+        { "begin": "history", "as": "other" },
+        { "complete": "other", "result": { "count": 2 }, "accepted": true },
+        { "complete": "fourth", "result": [], "accepted": true },
+        { "resolve": { "kind": "queryResult", "query": "comments", "path": "" }, "expected": [] },
+        { "resolve": { "kind": "queryResult", "query": "history", "path": "count" }, "expected": 2 }
+      ]
+    }
+  ]
+}
