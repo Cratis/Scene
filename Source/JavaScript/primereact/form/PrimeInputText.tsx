@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, stringProperty } from '../properties';
 
 /**
@@ -15,8 +15,9 @@ import { booleanProperty, stringProperty } from '../properties';
  * a preview is genuinely typeable instead of frozen, and the typed value is local to the rendered
  * component rather than pushed back into the model.
  */
-export function PrimeInputText({ element }: RegisteredComponentProps) {
+export function PrimeInputText({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState(stringProperty(element, 'value', ''));
+    useValueOutput(bindingOutputs, value);
     return (
         <InputText
             data-scene-id={element.id}

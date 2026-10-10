@@ -8,11 +8,13 @@ import { legacyEnumerationChoices } from './legacyEnumerationChoices';
 import { ChartType } from './chart';
 import { TreeTableSelectionMode } from './data';
 import { FileUploadMode } from './file';
+import { primeReactInputDescriptors } from './inputDescriptors';
 
 const key = (name: string) => componentRegistryKey('PrimeReact', name);
 
 /** Design-time descriptors for PrimeReact controls whose authored data has structured configuration. */
 export const primeReactDescriptors: ComponentDescriptor[] = [
+    ...primeReactInputDescriptors,
     {
         component: key('chart'),
         displayName: 'Chart',

@@ -13,15 +13,19 @@ export const generateCommandFieldsAction: DesignTimeAction = {
         description: 'Creates a deterministic editable field layout from the selected command metadata.',
     },
     isVisible: context => context.element.componentName.endsWith(':commandForm'),
-    isEnabled: context => Array.isArray(context.commandMetadata?.properties) && !Array.isArray(context.element.properties.inputs),
+    isEnabled: context => Array.isArray(context.commandMetadata?.properties) && context.element.properties.inputs === undefined,
     execute: context => generateCommandFields(context),
 };
 
 function generateCommandFields(context: DesignTimeActionContext): DesignTimeActionResult {
     const properties = context.commandMetadata?.properties ?? [];
     if (!properties.length) return { edits: [], diagnostics: ['No command metadata was supplied.'] };
+    // Authored fields, or a binding that supplies them, are never overwritten.
     if (Array.isArray(context.element.properties.inputs)) {
         return { edits: [], diagnostics: ['The form already has authored fields; Generate fields will not overwrite them.'] };
+    }
+    if (context.element.properties.inputs !== undefined) {
+        return { edits: [], diagnostics: ['The form\'s fields come from a binding; Generate fields will not overwrite it.'] };
     }
 
     return {

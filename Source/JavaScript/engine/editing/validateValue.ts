@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CollectionItemDescriptor, PropertyDescriptor, PropertyValueType } from '@cratis/scene.model';
+import { BindingSourceKind, CollectionItemDescriptor, PropertyDescriptor, PropertyValueType } from '@cratis/scene.model';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -22,6 +22,13 @@ export function validateValue(descriptor: PropertyDescriptor, value: unknown): s
     const constraints = descriptor.constraints ?? {};
     if (value === undefined || value === null) {
         return constraints.required ? 'a value is required' : undefined;
+    }
+
+    const binding = bindingKindOf(value);
+    if (binding !== undefined && descriptor.acceptedBindingKinds !== undefined) {
+        return descriptor.acceptedBindingKinds.includes(binding.kind)
+            ? undefined
+            : `a ${binding.kind} binding is not accepted here; use ${descriptor.acceptedBindingKinds.join(' or ')}`;
     }
 
     switch (descriptor.valueType) {
@@ -77,6 +84,19 @@ export function validateValue(descriptor: PropertyDescriptor, value: unknown): s
  * The deepest nesting a JSON value may have. Authored configuration (chart datasets, option lists) is shallow;
  * the limit turns a runaway or hostile structure into a validation message instead of a stack overflow.
  */
+const bindingKinds = new Set<string>(Object.values(BindingSourceKind));
+
+/**
+ * The source kind of a value that is a typed binding expression - an object with a known `kind` and a
+ * string `path` - rather than a value of the property's own type. Only consulted for properties that declare
+ * `acceptedBindingKinds`, so a collection property such as a command form's `inputs` can be bound to a
+ * table's `selectedItem` instead of listing its items.
+ */
+function bindingKindOf(value: unknown): { kind: BindingSourceKind } | undefined {
+    if (!isRecord(value) || typeof value.kind !== 'string' || !bindingKinds.has(value.kind) || typeof value.path !== 'string') return undefined;
+    return { kind: value.kind as BindingSourceKind };
+}
+
 const maximumJsonDepth = 64;
 
 /**

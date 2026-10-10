@@ -44,6 +44,8 @@ The engine constructs no URLs, so by default it compares only authored route ove
 
 `SceneNavigationHost` records every navigation as a history entry. Pass `history={createBrowserSceneHistory(window, '/app/')}` to drive the address bar; without it the host keeps an in-memory history (`createMemorySceneHistory`) for embedded and design-time hosts.
 
+A host served as a single file or from a path it does not control - a generated runtime, a webview - passes `createHashSceneHistory(window)` instead. Entries then live in the fragment, such as `index.html#/WorkItemDetails?workItemId=B`, the page path is kept, and a fragment changed by hand is followed as well.
+
 - **URL overrides and parameters.** A destination's `route` override, with its path and query parameters resolved from `routeParameterBindings`, is the URL written for the entry. `currentParameters` exposes the resolved values.
 - **Deep links.** On start, the host matches the current URL against its routes: every screen at its own name, plus each `destinations` entry at its route override or identity route. `{name}` segments become parameters, the query string adds the rest, and literal segments win over parameters. A URL that matches nothing falls back to `initialScreen` and is reported as `unresolvedUrl`.
 - **Refresh.** Each entry stores its screen, outlet, parameters and open dialog, so a reload restores exactly that entry.

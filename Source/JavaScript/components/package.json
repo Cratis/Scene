@@ -39,6 +39,11 @@
             "require": "./dist/cjs/index.js",
             "import": "./dist/esm/index.js"
         },
+        "./runtime": {
+            "types": "./dist/esm/runtime.d.ts",
+            "require": "./dist/cjs/runtime.js",
+            "import": "./dist/esm/runtime.js"
+        },
         "./styles": "./theme/sceneTokenBridge.css"
     },
     "scripts": {

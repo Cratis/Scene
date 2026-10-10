@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { RadioButton } from 'primereact/radiobutton';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, optionsProperty, stringProperty } from '../properties';
 
 /**
@@ -19,8 +19,9 @@ import { booleanProperty, optionsProperty, stringProperty } from '../properties'
  * on: the browser also fires the sibling losing its check, and treating that as a selection would clear
  * the value a moment after the user set it.
  */
-export function PrimeRadioButton({ element }: RegisteredComponentProps) {
+export function PrimeRadioButton({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState<string | undefined>(stringProperty(element, 'value'));
+    useValueOutput(bindingOutputs, value);
     const options = optionsProperty(element, 'options');
     const choices = options.length > 0 ? options : [{ label: stringProperty(element, 'label', 'Option'), value: element.id }];
     const disabled = booleanProperty(element, 'disabled', false);

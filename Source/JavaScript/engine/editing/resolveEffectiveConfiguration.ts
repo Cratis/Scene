@@ -162,6 +162,17 @@ export function resolveEffectiveConfiguration(
             }
         }
 
+        const maximumItems = grant.descriptor.constraints?.maximumItems;
+        if (isCollection && maximumItems !== undefined && items.length > maximumItems) {
+            // Saved items that no longer fit - the owner lowered the limit after they were added - are left out of
+            // the result in order and kept in the saved data, like any other saved value that no longer fits.
+            const dropped = items.splice(maximumItems);
+            diagnostics.push(errorDiagnostic(
+                DiagnosticCode.ContributionTypeMismatch,
+                `'${grant.path}' on '${grant.component}' allows at most ${maximumItems} items; ${dropped.map(item => `'${item.id}'`).join(', ')} ${dropped.length === 1 ? 'is' : 'are'} ignored and kept.`,
+                { instance: current.contributedBy ?? owner.instance, component: grant.component, path: grant.path }));
+        }
+
         if (isCollection) {
             current.items = items;
             current.inheritedValue = baseItems.map(toFlatItem);

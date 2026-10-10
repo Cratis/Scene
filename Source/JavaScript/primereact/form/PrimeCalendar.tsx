@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { DatePicker } from 'primereact/datepicker';
 import { InputText } from 'primereact/inputtext';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, stringProperty } from '../properties';
 
 /**
@@ -21,13 +21,14 @@ import { booleanProperty, stringProperty } from '../properties';
  * prop: either inside a `Panel`, which simply renders where it stands, or behind a `Portal` and a
  * `Positioner`, which anchors it to the field and escapes any clipping ancestor.
  */
-export function PrimeCalendar({ element }: RegisteredComponentProps) {
+export function PrimeCalendar({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState<Date | undefined>(() => {
         const seed = stringProperty(element, 'value');
         if (seed === undefined) return undefined;
         const parsed = new Date(seed);
         return Number.isNaN(parsed.getTime()) ? undefined : parsed;
     });
+    useValueOutput(bindingOutputs, value);
 
     const inline = booleanProperty(element, 'inline', false);
     const showTime = booleanProperty(element, 'showTime', false);

@@ -7,5 +7,7 @@ export * from './ComponentRegistry';
 export * from './RenderBindingScopeContext';
 export * from './UnresolvedComponent';
 export * from './useBoundQuery';
+export * from './useValueOutput';
+export * from './valueOutputProperty';
 export * from './createReactRenderer';
 export * from './InteractiveComponent';

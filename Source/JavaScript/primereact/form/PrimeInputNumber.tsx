@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { InputNumber } from 'primereact/inputnumber';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, numberProperty, stringProperty } from '../properties';
 
 /**
@@ -17,8 +17,9 @@ import { booleanProperty, numberProperty, stringProperty } from '../properties';
  * is no longer a flag the component interprets - the spinner is a `Group` of `Increment` and `Decrement`
  * you either render or do not - so the property now decides whether that group exists at all.
  */
-export function PrimeInputNumber({ element }: RegisteredComponentProps) {
+export function PrimeInputNumber({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState<number | undefined>(numberProperty(element, 'value'));
+    useValueOutput(bindingOutputs, value);
     const currency = stringProperty(element, 'currency');
     return (
         <InputNumber.Root

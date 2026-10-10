@@ -7,6 +7,7 @@ export * from './BindingScope';
 export * from './BindingDiagnostic';
 export * from './resolveBindingExpression';
 export * from './nestBindingScope';
+export * from './resolveArgumentSource';
 export * from './removeComponentOutputs';
 export * from './QueryBindingState';
 export * from './QueryBindingTicket';
