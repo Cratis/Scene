@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { RegisteredComponentProps } from '../renderer';
+import { resolveArgumentSource } from '@cratis/scene.engine';
+import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
 
 function textProperty(properties: Record<string, unknown>, name: string, fallback = ''): string {
     return typeof properties[name] === 'string' ? properties[name] : fallback;
@@ -12,11 +13,31 @@ export function CoreData({ element }: RegisteredComponentProps) {
     return <span hidden data-scene-id={element.id} data-scene-data={textProperty(element.properties, 'typeName')} />;
 }
 
-/** Renders a modeled command action and emits a host-neutral command event when invoked. */
+/** One entry of a command action's argument mapping. */
+interface ArgumentMapping {
+    name?: unknown;
+    source?: unknown;
+}
+
+/**
+ * Renders a modeled command action and emits a host-neutral command event when invoked.
+ *
+ * The event carries the resolved `arguments`, by name, read when the action is invoked: a
+ * `component.<id>.<output>` source reads what another element publishes - such as what the user typed into
+ * an input - and any other source is a data-context path. Hosts that read the mapping from `element`
+ * themselves keep working.
+ */
 export function CoreAction({ element }: RegisteredComponentProps) {
     const command = textProperty(element.properties, 'command');
     const label = textProperty(element.properties, 'label', command);
-    const invoke = () => globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command, element } }));
+    const scope = useRenderBindingScope();
+    const invoke = () => {
+        const mapping = Array.isArray(element.properties.arguments) ? element.properties.arguments as ArgumentMapping[] : [];
+        const args = Object.fromEntries(mapping
+            .filter((argument): argument is { name: string; source: string } => typeof argument.name === 'string' && typeof argument.source === 'string')
+            .map(argument => [argument.name, resolveArgumentSource(argument.source, scope)]));
+        globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command, element, arguments: args } }));
+    };
     return <button type='button' data-scene-id={element.id} onClick={invoke}>{label}</button>;
 }
 

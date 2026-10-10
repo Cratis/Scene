@@ -1,0 +1,35 @@
+{
+  "description": "Shared command argument source corpus. The TypeScript engine (engine/for_resolveArgumentSource) and the C# engine (Engine.Specs/for_ArgumentSources) resolve every source against the scope and must produce exactly these values. `expectedAbsent` means undefined in TypeScript and BindingValue.Absent in C#.",
+  "scope": {
+    "dataContext": { "project": { "id": "p-1" } },
+    "componentOutputs": {
+      "name": { "value": "Atlas" },
+      "budget": { "value": 0 },
+      "notify": { "value": false },
+      "due": { "value": "2026-10-10T00:00:00.000Z" },
+      "tags": { "value": ["a", "b"] },
+      "table": { "selectedItem": { "id": "row-2" } },
+      "order": { "value": "outer" },
+      "order.lines": { "value": "inner" },
+      "cleared": { "value": null }
+    }
+  },
+  "cases": [
+    { "source": "component.name.value", "expected": "Atlas" },
+    { "source": "component.budget.value", "expected": 0 },
+    { "source": "component.notify.value", "expected": false },
+    { "source": "component.due.value", "expected": "2026-10-10T00:00:00.000Z" },
+    { "source": "component.tags.value", "expected": ["a", "b"] },
+    { "source": "component.table.selectedItem.id", "expected": "row-2" },
+    { "source": "component.order.lines.value", "expected": "inner" },
+    { "source": "component.order.value", "expected": "outer" },
+    { "source": "component.cleared.value", "expected": null },
+    { "source": "component.table", "expected": { "selectedItem": { "id": "row-2" } } },
+    { "source": "component.missing.value", "expectedAbsent": true },
+    { "source": "component.name.label", "expectedAbsent": true },
+    { "source": "component.", "expectedAbsent": true },
+    { "source": "project.id", "expected": "p-1" },
+    { "source": "project.missing", "expectedAbsent": true },
+    { "source": "", "expectedAbsent": true }
+  ]
+}
