@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DialogTemplate, Layout, ScreenTemplate, Theme, UiProfile } from '@cratis/scene.model';
-import { TemplateCatalogEntry, describeTemplateCatalog, resolvePackageDependencies } from '@cratis/scene.engine';
+import { TemplateCatalogEntry, describeTemplateCatalog, incompatiblePackages, resolvePackageDependencies } from '@cratis/scene.engine';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { ScenePackageBundle, mergePackageRegistries, validatePackageBundle } from './ScenePackageBundle';
+import { isNetworkAsset } from './isNetworkAsset';
 
 export interface PackageHostPolicy {
     allowExecutableImports: boolean;
@@ -30,6 +31,12 @@ export interface ResolvedPackageHost {
     screenTemplates: ScreenTemplate[];
     dialogTemplates: DialogTemplate[];
     themes: Theme[];
+
+    /** The layout the UI profile names, from the approved packages. Absent when the profile names none. */
+    layout?: Layout;
+
+    /** The theme the UI profile names, from the approved packages. Absent when the profile names none. */
+    theme?: Theme;
 
     /**
      * Every template the approved packages provide, with compatibility, attribution and license metadata and
@@ -82,8 +89,9 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         }
 
         const packageAssets = bundle.manifest.assets ?? [];
-        if (!configuration.policy.allowNetworkAssets && packageAssets.some(asset => /^https?:\/\//.test(asset))) {
-            diagnostics.push(`Package '${packageName}' declares network assets, but host policy forbids them`);
+        const networkAssets = packageAssets.filter(isNetworkAsset);
+        if (!configuration.policy.allowNetworkAssets && networkAssets.length > 0) {
+            diagnostics.push(`Package '${packageName}' declares network assets (${networkAssets.join(', ')}), but host policy forbids them`);
         }
         assets.push(...packageAssets);
 
@@ -98,6 +106,19 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         bundles.push(bundle);
     }
 
+    const layouts = bundles.flatMap(bundle => bundle.layouts ?? []);
+    const themes = bundles.flatMap(bundle => bundle.themes ?? []);
+    const layout = configuration.profile.layout ? layouts.find(candidate => candidate.name === configuration.profile.layout) : undefined;
+    const theme = configuration.profile.theme ? themes.find(candidate => candidate.name === configuration.profile.theme) : undefined;
+    if (configuration.profile.layout && !layout) {
+        diagnostics.push(`UI profile '${configuration.profile.name}' uses layout '${configuration.profile.layout}', which no approved package provides`);
+    }
+    if (configuration.profile.theme && !theme) {
+        diagnostics.push(`UI profile '${configuration.profile.name}' uses theme '${configuration.profile.theme}', which no approved package provides`);
+    } else if (theme && incompatiblePackages(theme, configuration.profile).length > 0) {
+        diagnostics.push(`Theme '${theme.name}' is not compatible with ${incompatiblePackages(theme, configuration.profile).join(', ')} in UI profile '${configuration.profile.name}'`);
+    }
+
     const blocked = diagnostics.length > 0;
     const approved = blocked ? [] : bundles;
     const approvedAssets = blocked ? [] : assets;
@@ -109,6 +130,8 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         screenTemplates: approved.flatMap(bundle => bundle.screenTemplates ?? []),
         dialogTemplates: approved.flatMap(bundle => bundle.dialogTemplates ?? []),
         themes: approved.flatMap(bundle => bundle.themes ?? []),
+        layout: blocked ? undefined : layout,
+        theme: blocked ? undefined : theme,
         templates: describeTemplateCatalog(approved, configuration.sceneVersion),
         icons: createIconAdapterRegistry(approved.map(bundle => bundle.iconLibrary?.adapter).filter(adapter => adapter !== undefined)),
         assets: approvedAssets,
