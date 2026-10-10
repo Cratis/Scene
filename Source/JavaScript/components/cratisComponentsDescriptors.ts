@@ -52,6 +52,11 @@ const commandFormProperties: PropertyDescriptor[] = [
     },
     { path: 'columns', label: 'Legacy columns', group: 'Layout', valueType: PropertyValueType.Number, default: 1, description: 'Backward-compatible column count used when no typed layout metadata is authored.' },
     { path: 'layout', label: 'Layout', group: 'Layout', valueType: PropertyValueType.Object, editorKind: 'commandFormLayout', description: 'Typed command-form geometry: columns, gaps and field placements. Independent of auto/manual field generation.' },
+    {
+        path: 'widthSizeClass', label: 'Width size class', group: 'Layout', valueType: PropertyValueType.Enum, default: 'Regular',
+        choices: [{ value: 'Regular', label: 'Regular' }, { value: 'Compact', label: 'Compact' }],
+        description: 'The width size class the host evaluated. At Compact the fields of a manual form stack in one column in reading order.',
+    },
     { path: 'fieldWidths', label: 'Legacy field widths', group: 'Layout', valueType: PropertyValueType.Object, editorKind: 'fieldWidths' },
     {
         path: 'inputs', label: 'Fields', group: 'Layout', valueType: PropertyValueType.Collection, editorKind: 'commandFields',
