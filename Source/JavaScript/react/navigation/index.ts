@@ -9,6 +9,7 @@ export * from './SceneNavigationHost';
 export * from './SceneNavigationState';
 export * from './SceneRoute';
 export * from './createBrowserSceneHistory';
+export * from './createHashSceneHistory';
 export * from './createMemorySceneHistory';
 export * from './diagnoseRenderedNavigation';
 export * from './identityRoute';
