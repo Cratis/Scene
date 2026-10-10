@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { ToggleSwitch } from 'primereact/toggleswitch';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, stringProperty } from '../properties';
 
 /**
@@ -18,14 +18,16 @@ import { booleanProperty, stringProperty } from '../properties';
  * switch is `Control` plus the `Handle` that slides inside it. That is why `inputId` and not `id` is what
  * the label points at: the label has to reach the input, not the wrapper.
  */
-export function PrimeToggleSwitch({ element }: RegisteredComponentProps) {
+export function PrimeToggleSwitch({ element, bindingOutputs }: RegisteredComponentProps) {
     const [checked, setChecked] = useState(booleanProperty(element, 'checked', false));
+    useValueOutput(bindingOutputs, checked);
     const label = stringProperty(element, 'label');
     return (
         <div data-scene-id={element.id} className='flex items-center gap-2'>
             <ToggleSwitch.Root
                 inputId={element.id}
                 checked={checked}
+                ariaLabel={stringProperty(element, 'ariaLabel')}
                 onCheckedChange={(event) => setChecked(event.checked)}
                 disabled={booleanProperty(element, 'disabled', false)}>
                 <ToggleSwitch.Control>

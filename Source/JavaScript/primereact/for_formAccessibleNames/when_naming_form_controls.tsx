@@ -30,5 +30,5 @@ describe('when naming form controls', () => {
 
     it('should name the password field', () => Boolean(screen.getByLabelText('Password')).should.equal(true));
     it('should name the dropdown trigger', () => Boolean(screen.getByLabelText('Category')).should.equal(true));
-    it('should name a checkbox that has no visible label', () => Boolean(screen.getByLabelText('Notify me')).should.equal(true));
+    it('should name a checkbox that has no visible label', () => Boolean(screen.getByRole('checkbox', { name: 'Notify me' })).should.equal(true));
 });

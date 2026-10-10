@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Checkbox } from 'primereact/checkbox';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, stringProperty } from '../properties';
 
 /**
@@ -17,14 +17,15 @@ import { booleanProperty, stringProperty } from '../properties';
  * now arrives as `onCheckedChange` with a boolean rather than a change event whose `checked` might be
  * `undefined`, so the defensive `=== true` the v10 adapter needed is gone.
  */
-export function PrimeCheckbox({ element }: RegisteredComponentProps) {
+export function PrimeCheckbox({ element, bindingOutputs }: RegisteredComponentProps) {
     const [checked, setChecked] = useState(booleanProperty(element, 'checked', false));
+    useValueOutput(bindingOutputs, checked);
     const label = stringProperty(element, 'label');
     return (
         <div data-scene-id={element.id} className='flex items-center gap-2'>
             <Checkbox.Root
                 inputId={element.id}
-                aria-label={label === undefined ? stringProperty(element, 'ariaLabel') : undefined}
+                ariaLabel={label === undefined ? stringProperty(element, 'ariaLabel') : undefined}
                 checked={checked}
                 onCheckedChange={(event) => setChecked(event.checked)}
                 disabled={booleanProperty(element, 'disabled', false)}>

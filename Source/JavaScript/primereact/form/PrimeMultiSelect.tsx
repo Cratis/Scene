@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Select } from 'primereact/select';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, optionsProperty, stringArrayProperty, stringProperty } from '../properties';
 
 /**
@@ -21,8 +21,9 @@ import { booleanProperty, optionsProperty, stringArrayProperty, stringProperty }
  * offers no chip mode and no collapse threshold, so honoring either property would mean reimplementing
  * the value slot rather than configuring it.
  */
-export function PrimeMultiSelect({ element }: RegisteredComponentProps) {
+export function PrimeMultiSelect({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState<unknown>(stringArrayProperty(element, 'value'));
+    useValueOutput(bindingOutputs, value);
     const placeholder = stringProperty(element, 'placeholder', 'Select');
     const filter = booleanProperty(element, 'filter', false);
     return (

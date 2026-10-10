@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Select } from 'primereact/select';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, optionsProperty, stringProperty } from '../properties';
 
 /**
@@ -19,8 +19,9 @@ import { booleanProperty, optionsProperty, stringProperty } from '../properties'
  * and z-index juggling a dropdown inside a dialog used to need is gone with it: the portal stacks
  * correctly on its own.
  */
-export function PrimeDropdown({ element }: RegisteredComponentProps) {
+export function PrimeDropdown({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState<unknown>(stringProperty(element, 'value'));
+    useValueOutput(bindingOutputs, value);
     const placeholder = stringProperty(element, 'placeholder', 'Select');
     const filter = booleanProperty(element, 'filter', false);
     const showClear = booleanProperty(element, 'showClear', false);

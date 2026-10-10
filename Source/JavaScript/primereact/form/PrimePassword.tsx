@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { InputPassword } from 'primereact/inputpassword';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, stringProperty } from '../properties';
 
 /**
@@ -16,8 +16,9 @@ import { booleanProperty, stringProperty } from '../properties';
  * knob that survived and the one an authored screen can actually mean: a preview that starts revealed.
  * A screen that needs a reveal button now owns that button, because only the screen knows where it goes.
  */
-export function PrimePassword({ element }: RegisteredComponentProps) {
+export function PrimePassword({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState(stringProperty(element, 'value', ''));
+    useValueOutput(bindingOutputs, value);
     return (
         <InputPassword
             data-scene-id={element.id}

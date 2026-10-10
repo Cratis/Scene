@@ -3,7 +3,7 @@
 
 import { ChangeEvent, useState } from 'react';
 import { Textarea } from 'primereact/textarea';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { booleanProperty, numberProperty, stringProperty } from '../properties';
 
 /**
@@ -13,8 +13,9 @@ import { booleanProperty, numberProperty, stringProperty } from '../properties';
  * rather than a composition, and `rows`, `cols` and `placeholder` still reach the underlying `<textarea>`
  * untouched. Holds the typed value locally for the same reason {@link PrimeInputText} does.
  */
-export function PrimeInputTextarea({ element }: RegisteredComponentProps) {
+export function PrimeInputTextarea({ element, bindingOutputs }: RegisteredComponentProps) {
     const [value, setValue] = useState(stringProperty(element, 'value', ''));
+    useValueOutput(bindingOutputs, value);
     return (
         <Textarea
             data-scene-id={element.id}
