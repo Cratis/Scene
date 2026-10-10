@@ -96,7 +96,8 @@ export const cratisComponentsPackageManifest: ScenePackage = {
     designTime: {
         previews: [],
         designers: ['commandFormDesigner'],
-        propertyEditors: ['commandBinding', 'commandFields', 'fieldWidths', 'commandFormLayout'],
+        // `commandFields` and `fieldWidths` are host editor kinds (Studio implements them); the package does not ship them.
+        propertyEditors: ['commandBinding', 'commandFormLayout'],
         propertyDisplays: [],
         actions: ['Cratis.Components.commandForm.generateFields'],
     },
