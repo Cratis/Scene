@@ -1,0 +1,414 @@
+{
+  "description": "Shared exposed template configuration corpus. engine/for_templateExposure resolves each case's template chain and instance contributions with resolveEffectiveConfiguration and must report exactly these effective values and diagnostic codes. A three-level chain - the Module template owns a navigation bar, the Feature template re-exposes part of it, and screens instantiate Feature - shows which parameters a consuming screen may change.",
+  "descriptors": [
+    {
+      "component": "test:navigationBar",
+      "displayName": "Navigation bar",
+      "properties": [
+        {
+          "path": "items",
+          "label": "Items",
+          "group": "Content",
+          "valueType": "collection",
+          "constraints": {
+            "maximumItems": 4
+          },
+          "item": {
+            "label": "Item",
+            "properties": [
+              {
+                "path": "label",
+                "label": "Label",
+                "group": "Content",
+                "valueType": "string",
+                "constraints": {
+                  "required": true
+                }
+              },
+              {
+                "path": "icon",
+                "label": "Icon",
+                "group": "Content",
+                "valueType": "icon"
+              }
+            ]
+          }
+        },
+        {
+          "path": "title",
+          "label": "Title",
+          "group": "Content",
+          "valueType": "string",
+          "default": "Menu"
+        },
+        {
+          "path": "density",
+          "label": "Density",
+          "group": "Look",
+          "valueType": "enum",
+          "choices": [
+            {
+              "value": "compact",
+              "label": "Compact"
+            },
+            {
+              "value": "roomy",
+              "label": "Roomy"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "document": {
+    "layouts": [
+      {
+        "name": "Shell",
+        "slots": [
+          {
+            "name": "content"
+          }
+        ]
+      }
+    ],
+    "screenTemplates": [
+      {
+        "name": "Module",
+        "fitsSlot": "content",
+        "slots": [
+          {
+            "name": "chrome"
+          },
+          {
+            "name": "body"
+          }
+        ],
+        "content": {
+          "chrome": [
+            {
+              "id": "navbar",
+              "componentName": "test:navigationBar",
+              "properties": {
+                "items": [
+                  {
+                    "id": "home",
+                    "label": "Home"
+                  }
+                ],
+                "density": "compact"
+              }
+            }
+          ],
+          "body": []
+        }
+      },
+      {
+        "name": "Feature",
+        "fitsSlot": "Module.body",
+        "slots": [
+          {
+            "name": "main"
+          }
+        ],
+        "content": {
+          "main": []
+        }
+      }
+    ],
+    "screens": [
+      {
+        "name": "Invoices",
+        "layout": "Shell",
+        "screenTemplate": "Feature",
+        "slotContent": {
+          "main": []
+        },
+        "forms": [],
+        "contributions": []
+      }
+    ],
+    "exposures": [
+      {
+        "owner": "Module",
+        "properties": [
+          {
+            "component": "navbar",
+            "path": "items",
+            "operations": [
+              "add",
+              "remove",
+              "reorder",
+              "editFields"
+            ],
+            "editableFields": [
+              "label",
+              "icon"
+            ]
+          },
+          {
+            "component": "navbar",
+            "path": "title"
+          }
+        ]
+      },
+      {
+        "owner": "Feature",
+        "properties": [
+          {
+            "component": "navbar",
+            "path": "items",
+            "reExposes": "Module",
+            "operations": [
+              "add"
+            ]
+          },
+          {
+            "component": "navbar",
+            "path": "title",
+            "reExposes": "Module"
+          }
+        ]
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "nothing contributed",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home"
+          ],
+          "navbar.title": "Menu"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "the feature and the screen contribute",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "template:Feature",
+          "component": "navbar",
+          "path": "title",
+          "value": "Billing"
+        },
+        {
+          "instance": "template:Feature",
+          "component": "navbar",
+          "path": "items",
+          "items": [
+            {
+              "id": "reports",
+              "values": {
+                "label": "Reports"
+              }
+            }
+          ]
+        },
+        {
+          "instance": "screen:Invoices",
+          "component": "navbar",
+          "path": "title",
+          "value": "Invoices"
+        },
+        {
+          "instance": "screen:Invoices",
+          "component": "navbar",
+          "path": "items",
+          "items": [
+            {
+              "id": "overdue",
+              "values": {
+                "label": "Overdue"
+              }
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home",
+            "reports",
+            "overdue"
+          ],
+          "navbar.title": "Invoices"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a screen sets a property nobody exposed",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "screen:Invoices",
+          "component": "navbar",
+          "path": "density",
+          "value": "roomy"
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home"
+          ],
+          "navbar.title": "Menu"
+        },
+        "diagnostics": [
+          "contributionNotExposed"
+        ]
+      }
+    },
+    {
+      "name": "a saved value no longer fits the property",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "screen:Invoices",
+          "component": "navbar",
+          "path": "title",
+          "value": 42
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home"
+          ],
+          "navbar.title": "Menu"
+        },
+        "diagnostics": [
+          "contributionTypeMismatch"
+        ]
+      }
+    },
+    {
+      "name": "contributions to a component that is gone",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "screen:Invoices",
+          "component": "sidebar",
+          "path": "title",
+          "value": "Side"
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home"
+          ],
+          "navbar.title": "Menu"
+        },
+        "diagnostics": [
+          "contributionTargetMissing"
+        ]
+      }
+    },
+    {
+      "name": "the feature template configures what the module exposes",
+      "scope": {
+        "kind": "screenTemplate",
+        "name": "Feature",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "template:Feature",
+          "component": "navbar",
+          "path": "title",
+          "value": "Billing"
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home"
+          ],
+          "navbar.title": "Billing"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a screen exceeds the item limit the module set",
+      "scope": {
+        "kind": "screen",
+        "name": "Invoices",
+        "layout": "Shell"
+      },
+      "contributions": [
+        {
+          "instance": "screen:Invoices",
+          "component": "navbar",
+          "path": "items",
+          "items": [
+            {
+              "id": "extra-1",
+              "values": {
+                "label": "Extra 1"
+              }
+            },
+            {
+              "id": "extra-2",
+              "values": {
+                "label": "Extra 2"
+              }
+            },
+            {
+              "id": "extra-3",
+              "values": {
+                "label": "Extra 3"
+              }
+            },
+            {
+              "id": "extra-4",
+              "values": {
+                "label": "Extra 4"
+              }
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "values": {
+          "navbar.items": [
+            "home",
+            "extra-1",
+            "extra-2",
+            "extra-3"
+          ],
+          "navbar.title": "Menu"
+        },
+        "diagnostics": [
+          "contributionTypeMismatch"
+        ]
+      }
+    }
+  ]
+}

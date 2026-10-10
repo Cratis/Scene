@@ -81,3 +81,16 @@ they refer to changes, nothing is deleted:
 `core:navigationBar` is the first component built for this. Its `items` property is a collection of
 `{ id, label, icon?, destination }`, where `icon` is an `IconReference` and `destination` a
 `DestinationReference`. Activating an item dispatches the same `cratis.scene.navigate` event as `core:navigate`.
+
+## What a consuming screen may change
+
+A screen or nested template may change exactly the properties the templates above it expose to it, and nothing else:
+
+- a scalar it was exposed, such as a title - the innermost level that sets it wins;
+- a collection it was exposed, with only the operations (`add`, `remove`, `reorder`, `editFields`) and fields it was granted - items are appended in nesting order, owner first;
+- never more than the owner allows: a re-exposure only narrows, and a collection never grows past its `maximumItems`.
+
+A saved value that does not fit is reported and left out of the result, but stays in the saved data:
+`contributionNotExposed` for a property nobody exposed, `contributionTypeMismatch` for a value of the wrong type or items past the limit, and `contributionTargetMissing` for a component that is no longer there.
+
+The shared `template-exposure-fixtures.json` corpus exercises a three-level chain - a module template that owns a navigation bar, a feature template that re-exposes part of it, and a screen - and the engine's specs require exactly these results.
