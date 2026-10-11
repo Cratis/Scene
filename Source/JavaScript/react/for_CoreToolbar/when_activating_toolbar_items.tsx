@@ -15,7 +15,8 @@ const element = (id: string, componentName: string, properties: Record<string, u
 const toolbar = element('toolbar', 'core:toolbar', { name: 'main' }, {
     items: [
         element('edit', 'core:toolbarItem', { name: 'edit', kind: 'Action', target: 'EditInvoice', label: 'Edit', icon: 'edit', parameters: { invoiceId: { path: 'invoice.id' } }, presentation: { placement: 'primary' } }),
-        element('details', 'core:toolbarItem', { name: 'details', kind: 'Navigate', target: 'InvoiceDetails', label: 'Details', presentation: { mode: 'icon' }, icon: 'info' }),
+        element('details', 'core:toolbarItem', { name: 'details', kind: 'Navigate', target: 'InvoiceDetails', label: 'Details', presentation: { mode: 'icon' }, icon: 'info', parameters: { invoiceId: { path: 'invoice.id' } } }),
+        element('open', 'core:toolbarItem', { name: 'open', kind: 'Navigate', target: 'InvoiceDetails', label: 'Open', destination: { screen: 'InvoiceDetails', outlet: 'detail', kind: 'outlet', routeParameterBindings: { id: { path: 'invoice.id' } } } }),
         element('help', 'core:toolbarItem', { name: 'help', kind: 'Dialog', target: 'HelpDialog', label: 'Help' }),
     ],
 });
@@ -25,7 +26,7 @@ describe('when activating toolbar items', () => {
 
     describe('outside a navigation host', () => {
         let commands: { command: string; arguments: Record<string, unknown> }[];
-        let navigations: { targetScreen: string; dialog?: string }[];
+        let navigations: { targetScreen: string; dialog?: string; destination: { routeParameterBindings?: Record<string, { value?: unknown }> } }[];
         const onCommand = (event: Event) => commands.push((event as CustomEvent).detail);
         const onNavigate = (event: Event) => navigations.push((event as CustomEvent).detail);
 
@@ -42,7 +43,7 @@ describe('when activating toolbar items', () => {
             globalThis.removeEventListener('cratis.scene.navigate', onNavigate);
         });
 
-        it('should render a toolbar of its items', () => screen.getByRole('toolbar', { name: 'main' }).querySelectorAll('button').length.should.equal(3));
+        it('should render a toolbar of its items', () => screen.getByRole('toolbar', { name: 'main' }).querySelectorAll('button').length.should.equal(4));
 
         it('should announce an action with its resolved parameters', () => {
             fireEvent.click(screen.getByText('Edit'));
@@ -52,6 +53,16 @@ describe('when activating toolbar items', () => {
         it('should announce a navigation to its screen', () => {
             fireEvent.click(screen.getByRole('button', { name: 'Details' }));
             navigations[0].targetScreen.should.equal('InvoiceDetails');
+        });
+
+        it('should resolve the route parameters it was given against the scope it renders in', () => {
+            fireEvent.click(screen.getByRole('button', { name: 'Details' }));
+            navigations[0].destination.routeParameterBindings!.invoiceId.value!.should.equal('i-7');
+        });
+
+        it('should resolve the bindings of an authored destination against the scope it renders in', () => {
+            fireEvent.click(screen.getByText('Open'));
+            [navigations[0].destination.routeParameterBindings!.id.value, (navigations[0].destination as { outlet?: string }).outlet].should.deep.equal(['i-7', 'detail']);
         });
 
         it('should announce a dialog', () => {

@@ -3,7 +3,7 @@
 
 import { useContext } from 'react';
 import { BindingScope, resolveBindingExpression } from '@cratis/scene.engine';
-import { BindingExpression, DestinationKind, DestinationReference } from '@cratis/scene.model';
+import { BindingExpression, BindingSourceKind, DestinationKind, DestinationReference } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
 import { SceneNavigationContextInternal } from '../navigation/SceneNavigationContext';
 
@@ -28,9 +28,30 @@ function isBinding(value: unknown): value is BindingExpression {
     return value !== null && typeof value === 'object' && typeof (value as BindingExpression).path === 'string';
 }
 
+function literal(value: unknown): BindingExpression {
+    return { kind: BindingSourceKind.Literal, path: '', value } as BindingExpression;
+}
+
 function resolveParameters(parameters: Record<string, unknown>, scope: BindingScope): Record<string, unknown> {
     return Object.fromEntries(Object.entries(parameters).map(([name, binding]) =>
         [name, isBinding(binding) ? resolveBindingExpression(binding, scope) : binding]));
+}
+
+/**
+ * An authored destination with its route parameters read now, against the scope the item renders in.
+ *
+ * A navigation host resolves a destination against its own scope, which cannot see what the screen's components
+ * publish - a table's selected row, an input's value - so the item resolves them where it is, and hands the host
+ * literals. (The renderer leaves a destination's bindings alone, unlike the rest of an element's properties.)
+ */
+function withResolvedParameters(destination: DestinationReference, scope: BindingScope): DestinationReference {
+    const bindings = destination.routeParameterBindings;
+    if (!bindings) return destination;
+    return {
+        ...destination,
+        routeParameterBindings: Object.fromEntries(Object.entries(bindings).map(([name, binding]) =>
+            [name, literal(resolveBindingExpression(binding, scope))])),
+    };
 }
 
 /** The mode the item's authored presentation asks for; anything it does not name shows both. */
@@ -50,7 +71,9 @@ export function toolbarItemDestination(properties: Record<string, unknown>): Des
     const kind = textProperty(properties, 'kind')?.toLowerCase();
     const target = textProperty(properties, 'target');
     if (!target) return undefined;
-    const routeParameterBindings = Object.fromEntries(Object.entries(recordProperty(properties, 'parameters')).filter(([, binding]) => isBinding(binding))) as Record<string, BindingExpression>;
+    // The renderer has already read each parameter's binding by the time the item sees it, so a parameter is a value.
+    const routeParameterBindings = Object.fromEntries(Object.entries(recordProperty(properties, 'parameters'))
+        .map(([name, value]) => [name, literal(value)])) as Record<string, BindingExpression>;
     if (kind === 'navigate') return { screen: target, routeParameterBindings };
     if (kind === 'dialog') return { kind: DestinationKind.Dialog, dialog: target, routeParameterBindings };
     return undefined;
@@ -100,11 +123,12 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
         }
 
         if (!destination) return;
+        const resolved = withResolvedParameters(destination, scope);
         if (navigation) {
-            navigation.navigate(destination);
+            navigation.navigate(resolved);
         } else {
             globalThis.dispatchEvent(new CustomEvent('cratis.scene.navigate', {
-                detail: { targetScreen: destination.screen ?? '', dialog: destination.dialog, destination, element },
+                detail: { targetScreen: destination.screen ?? '', dialog: destination.dialog, destination: resolved, element },
             }));
         }
     };
