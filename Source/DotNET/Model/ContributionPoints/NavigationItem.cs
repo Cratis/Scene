@@ -19,6 +19,7 @@ namespace Cratis.Scene.Model.ContributionPoints;
 /// <param name="Destination">The typed destination this item activates.</param>
 /// <param name="Order">Where this item sorts relative to its siblings.</param>
 /// <param name="Group">The group this item belongs to, if the NavBar widget organizes items into groups.</param>
+/// <param name="Hierarchy">The modules and features, outermost first, the item was declared in; a host lays navigation out as that hierarchy.</param>
 public record NavigationItem(
     string Label,
     string TargetScreen,
@@ -28,4 +29,5 @@ public record NavigationItem(
     string? Presentation = null,
     DestinationReference? Destination = null,
     int? Order = null,
-    string? Group = null);
+    string? Group = null,
+    IReadOnlyList<string>? Hierarchy = null);

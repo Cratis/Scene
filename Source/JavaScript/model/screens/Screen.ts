@@ -51,6 +51,14 @@ export interface Screen {
      * attached further out or further in.
      */
     behaviors?: Behavior[];
+
+    /**
+     * The modules and features, outermost first, the screen was declared in - its place in the application
+     * hierarchy. It is what a destination's `module`/`feature` identity resolves against, and what a host
+     * groups an unlisted screen under, so the hierarchy no longer has to be reconstructed from the
+     * contributions that happen to list it. Absent or empty for a screen that sits outside any module.
+     */
+    path?: string[];
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors', 'path'];

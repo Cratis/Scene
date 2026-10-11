@@ -5,6 +5,7 @@ export * from './CoreText';
 export * from './CoreButton';
 export * from './CoreCard';
 export * from './CoreNavigationBar';
+export * from './CoreToolbar';
 export * from './coreDescriptors';
 export * from './ScreenplayCoreComponents';
 export * from './coreComponents';

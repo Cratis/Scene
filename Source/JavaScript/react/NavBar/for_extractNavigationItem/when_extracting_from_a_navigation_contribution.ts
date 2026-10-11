@@ -39,6 +39,28 @@ describe('when extracting from a navigation contribution', () => {
         it('should fall back to the contribution order when the properties bag has none', () => result!.order!.should.equal(10));
     });
 
+    describe('and the item carries the rest of its authored metadata', () => {
+        let result: NavigationItem | undefined;
+
+        beforeEach(() => {
+            result = extractNavigationItem(navigationContribution({
+                id: 'nav:invoices',
+                label: 'Invoices',
+                icon: 'receipt',
+                presentation: 'primary',
+                targetScreen: 'InvoiceList',
+                destination: { screen: 'InvoiceList', outlet: 'main', kind: 'outlet' },
+                hierarchy: ['Billing', 'Invoices', 42],
+            }));
+        });
+
+        it('should extract the stable id', () => result!.id!.should.equal('nav:invoices'));
+        it('should extract the icon', () => result!.icon!.should.equal('receipt'));
+        it('should extract the presentation', () => result!.presentation!.should.equal('primary'));
+        it('should extract the destination', () => result!.destination!.outlet!.should.equal('main'));
+        it('should extract the hierarchy it was declared in, outermost first', () => result!.hierarchy!.should.deep.equal(['Billing', 'Invoices']));
+    });
+
     describe('and the label is missing', () => {
         it('should return undefined', () => {
             (extractNavigationItem(navigationContribution({ targetScreen: 'InvoiceList' })) === undefined).should.be.true;

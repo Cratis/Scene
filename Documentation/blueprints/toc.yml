@@ -10,6 +10,8 @@
   href: template-provenance.md
 - name: Navigation diagnostics
   href: navigation-diagnostics.md
+- name: The application hierarchy and toolbars
+  href: application-hierarchy.md
 
 - name: Getting started
   items:
