@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, DialogTemplate, Layout, PackageKind, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { ComponentDescriptor, DialogTemplate, Layout, PackageKind, PropertyDescriptor, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
@@ -203,6 +203,34 @@ function validateIconLibrary(bundle: ScenePackageBundle): string[] {
     return problems;
 }
 
+function validateProperties(component: string, properties: PropertyDescriptor[], parent: string, problems: string[]): void {
+    const paths = new Set<string>();
+    for (const property of properties) {
+        const path = `${parent}${property.path}`;
+        if (paths.has(property.path)) {
+            problems.push(`'${component}' describes the property '${path}' more than once`);
+        }
+
+        paths.add(property.path);
+
+        if (property.valueType === PropertyValueType.Collection && property.item === undefined) {
+            problems.push(`'${component}' describes the collection '${path}' without describing its items`);
+        }
+
+        if (property.valueType === PropertyValueType.Collection && property.item !== undefined) {
+            validateProperties(component, property.item.properties, `${path}[].`, problems);
+        }
+
+        if (property.valueType === PropertyValueType.Object && property.properties !== undefined) {
+            validateProperties(component, property.properties, `${path}.`, problems);
+        }
+
+        if (property.valueType === PropertyValueType.Enum && (property.choices ?? []).length === 0) {
+            problems.push(`'${component}' describes the enum '${path}' without choices`);
+        }
+    }
+}
+
 function validateDescriptors(bundle: ScenePackageBundle): string[] {
     const problems: string[] = [];
     const declared = new Set(bundle.manifest.components.map((name) => componentRegistryKey(bundle.manifest.name, name)));
@@ -219,22 +247,7 @@ function validateDescriptors(bundle: ScenePackageBundle): string[] {
 
         described.add(descriptor.component);
 
-        const paths = new Set<string>();
-        for (const property of descriptor.properties) {
-            if (paths.has(property.path)) {
-                problems.push(`'${descriptor.component}' describes the property '${property.path}' more than once`);
-            }
-
-            paths.add(property.path);
-
-            if (property.valueType === PropertyValueType.Collection && property.item === undefined) {
-                problems.push(`'${descriptor.component}' describes the collection '${property.path}' without describing its items`);
-            }
-
-            if (property.valueType === PropertyValueType.Enum && (property.choices ?? []).length === 0) {
-                problems.push(`'${descriptor.component}' describes the enum '${property.path}' without choices`);
-            }
-        }
+        validateProperties(descriptor.component, descriptor.properties, '', problems);
     }
 
     return problems;

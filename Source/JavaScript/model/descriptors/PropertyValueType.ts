@@ -25,7 +25,10 @@ export enum PropertyValueType {
     /** An ordered list of items, each described by the descriptor's `item`. */
     Collection = 'collection',
 
-    /** A structured value the descriptor's own `editorKind` knows how to edit. */
+    /**
+     * A structured record. The descriptor's `properties` describe its fields, so a host can edit it generically;
+     * without them only the descriptor's own `editorKind` knows how to edit it.
+     */
     Object = 'object',
 
     /** Any JSON value: a primitive, array, or structured object preserved without reshaping. */

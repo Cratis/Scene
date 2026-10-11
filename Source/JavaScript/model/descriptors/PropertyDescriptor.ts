@@ -47,6 +47,13 @@ export interface PropertyDescriptor {
     /** Describes the items of a `Collection` property. Required when `valueType` is `Collection`. */
     item?: CollectionItemDescriptor;
 
+    /**
+     * Describes the fields of an `Object` property. A field's `path` is a single name relative to the object, and
+     * a field may itself be an `Object` or a `Collection`, so a structured value of any depth can be described.
+     * Without it an `Object` value is only editable through a specialised `editorKind`.
+     */
+    properties?: PropertyDescriptor[];
+
     /** The value is shown but never edited. */
     readOnly?: boolean;
 
@@ -61,6 +68,6 @@ export interface PropertyDescriptor {
 }
 
 export const PropertyDescriptorPropertyNames: (keyof PropertyDescriptor)[] = [
-    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'readOnly',
+    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'properties', 'readOnly',
     'output', 'acceptedBindingKinds', 'bindingMode',
 ];
