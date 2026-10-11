@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "packages": [
+    {
+      "manifest": {
+        "name": "Acme.Charts",
+        "version": "1.2.0",
+        "kind": "ComponentLibrary",
+        "dependencies": [
+          {
+            "name": "Cratis.Components",
+            "versionRange": ">=4.0.0"
+          }
+        ],
+        "components": [
+          "chart",
+          "spark"
+        ],
+        "layouts": [],
+        "screenTemplates": [],
+        "dialogTemplates": [],
+        "themes": [],
+        "displayName": "Acme charts",
+        "assets": [],
+        "runtimeSingletons": []
+      },
+      "module": {
+        "npm": "@acme/scene.charts",
+        "version": "1.2.0",
+        "export": "acmeChartsRuntimePackage",
+        "styles": []
+      }
+    },
+    {
+      "manifest": {
+        "name": "Zeta.Widgets",
+        "version": "2.0.0",
+        "kind": "ComponentLibrary",
+        "dependencies": [],
+        "components": [
+          "gauge"
+        ],
+        "layouts": [],
+        "screenTemplates": [],
+        "dialogTemplates": [],
+        "themes": [],
+        "assets": [],
+        "runtimeSingletons": []
+      },
+      "module": {
+        "npm": "@zeta/widgets",
+        "version": "^2.0.0",
+        "export": "zetaWidgets",
+        "styles": [
+          "@zeta/widgets/styles.css"
+        ]
+      }
+    }
+  ]
+}

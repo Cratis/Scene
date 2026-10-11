@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+export * from './ApprovedPackageSet';
 export * from './DesignTimeAction';
 export * from './DesignTimeActionOutcome';
 export * from './DesignTimeActionState';
@@ -15,6 +16,7 @@ export * from './DesignTimeProvider';
 export * from './DesignTimeResolution';
 export * from '../navigation';
 export * from './EmbeddedPackageHost';
+export * from './loadApprovedPackages';
 export * from './loadDesignTimeContributions';
 export * from './isNetworkAsset';
 export * from './PackageHostAssets';
