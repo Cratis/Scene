@@ -84,7 +84,7 @@ export const dashboardTemplate: ScreenTemplate = {
         ],
         [TemplateSlotName.Secondary]: [
             widget('widget-activity', 'Activity', [externalComponent('activity-timeline', 'timeline', { align: 'left' })]),
-            widget('widget-capacity', 'Warehouse capacity', [externalComponent('capacity-bar', 'progressBar', { value: 68 })]),
+            widget('widget-capacity', 'Warehouse capacity', [externalComponent('capacity-bar', 'progressBar', { value: 68, label: 'Warehouse capacity' })]),
         ],
     },
     displayName: 'Dashboard',
