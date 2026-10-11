@@ -3,7 +3,7 @@
 
 import { ProgressBar } from 'primereact/progressbar';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { booleanProperty, numberProperty } from '../properties';
+import { booleanProperty, numberProperty, stringProperty } from '../properties';
 
 /**
  * The `PrimeReact:progressBar` component - determinate or indeterminate progress.
@@ -16,12 +16,15 @@ import { booleanProperty, numberProperty } from '../properties';
  * height belong there rather than on `Root`. `Indicator` renders its children only in determinate mode,
  * which is why the value label can be handed to it unconditionally: an indeterminate bar has no
  * percentage to print and drops it on its own.
+ *
+ * A progress bar with no accessible name is announced as just "progress bar", so the element's `label` names
+ * what is progressing (`Progress` when it says nothing), and screen readers read it with the value.
  */
 export function PrimeProgressBar({ element }: RegisteredComponentProps) {
     const value = numberProperty(element, 'value');
     return (
         <ProgressBar.Root value={value} mode={value === undefined ? 'indeterminate' : 'determinate'}>
-            <ProgressBar.Track data-scene-id={element.id} style={{ height: '1rem' }}>
+            <ProgressBar.Track data-scene-id={element.id} aria-label={stringProperty(element, 'label', 'Progress')} style={{ height: '1rem' }}>
                 <ProgressBar.Indicator>{booleanProperty(element, 'showValue', true) && <ProgressBar.Value />}</ProgressBar.Indicator>
             </ProgressBar.Track>
         </ProgressBar.Root>

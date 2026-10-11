@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactElement, ReactNode, isValidElement } from 'react';
-import { DataTable, type DataTableFilterInstance, type DataTablePaginationInstance, type DataTableTBodyItemOptions } from 'primereact/datatable';
+import { DataTable, useDataTableContext, type DataTableFilterInstance, type DataTablePaginationInstance, type DataTableTBodyItemOptions } from 'primereact/datatable';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { booleanProperty, numberProperty, recordArrayProperty, stringProperty } from '../properties';
 import { Column, ColumnProps } from './Column';
@@ -52,9 +52,9 @@ export function PrimeDataTable({ element, slots }: RegisteredComponentProps) {
                     <DataTable.THead>
                         <DataTable.THeadRow>
                             {columns.map((column, index) => (
-                                <DataTable.THeadCell key={column.field ?? index}>
+                                <SortAwareHeadCell key={column.field ?? index} sortField={column.sortable ? column.field : undefined}>
                                     {column.sortable && column.field ? (
-                                        <DataTable.Sort field={column.field}>
+                                        <DataTable.Sort field={column.field} aria-sort={undefined} aria-label={`Sort by ${headerOf(column)}`}>
                                             {headerOf(column)}
                                             <DataTable.SortIndicator match='asc'> ▲</DataTable.SortIndicator>
                                             <DataTable.SortIndicator match='desc'> ▼</DataTable.SortIndicator>
@@ -74,7 +74,7 @@ export function PrimeDataTable({ element, slots }: RegisteredComponentProps) {
                                             )}
                                         </DataTable.Filter>
                                     )}
-                                </DataTable.THeadCell>
+                                </SortAwareHeadCell>
                             ))}
                         </DataTable.THeadRow>
                     </DataTable.THead>
@@ -139,4 +139,18 @@ function cellOf(column: ColumnProps, row: Record<string, unknown>): ReactNode {
     if (column.body !== undefined) return column.body(row);
     if (column.field === undefined) return '';
     return String(row[column.field] ?? '');
+}
+
+/**
+ * A header cell that carries the table's sort state for assistive technology.
+ *
+ * `aria-sort` is a property of a column header, not of the button inside it - PrimeReact's sort trigger puts it
+ * on the button, where WAI-ARIA does not allow it and a screen reader never reads it as the column's order. So
+ * the trigger is rendered without it and the cell, which owns the `columnheader` role, states the order here.
+ */
+function SortAwareHeadCell({ sortField, children }: { sortField?: string; children: ReactNode }) {
+    const table = useDataTableContext() as { getSortOrder?: (field: string) => number } | undefined;
+    const order = sortField === undefined ? undefined : table?.getSortOrder?.(sortField) ?? 0;
+    const ariaSort = order === undefined ? undefined : order > 0 ? 'ascending' : order < 0 ? 'descending' : 'none';
+    return <DataTable.THeadCell aria-sort={ariaSort}>{children}</DataTable.THeadCell>;
 }

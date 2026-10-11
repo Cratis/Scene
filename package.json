@@ -53,6 +53,7 @@
         "@typescript-eslint/parser": "8.59.4",
         "@vitejs/plugin-react": "^6.1.2",
         "@vitest/coverage-v8": "5.0.3",
+        "axe-core": "^4",
         "chai": "6.3.0",
         "chai-as-promised": "8.0.2",
         "edit-json-file": "1.8.1",

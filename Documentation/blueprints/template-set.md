@@ -135,3 +135,12 @@ and each state otherwise, with no unresolved components. The specs in `for_templ
 dashboard, list, master/detail, user administration, nested workspace, settings and dialog templates that way.
 Form fields carry their label as an accessible name.
 
+### Accessibility audit
+
+`for_templateAccessibility` in both blueprints audits each template preview with axe-core's WCAG 2.0 and 2.1 A and
+AA rules, in every data state for the default blueprint. The audit found, and the packages now fix, two real
+defects: PrimeReact's sort trigger put `aria-sort` on the button, where WAI-ARIA does not allow it (the column
+header now carries it), and a progress bar had no accessible name (it takes a `label`). Colour contrast and
+page-level landmark rules need a real layout and a whole page, so jsdom cannot judge them; they are not asserted
+here and need a browser run.
+
