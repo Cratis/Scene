@@ -86,5 +86,11 @@ export function iconProblemsOfProperty(catalog: EffectiveIconCatalog, descriptor
         return iconProblemsOfItems(catalog, descriptor.item, items, severity, { ...context, path: descriptor.path });
     }
 
+    if (descriptor.valueType === PropertyValueType.Object && descriptor.properties !== undefined && value !== null && typeof value === 'object' && !Array.isArray(value)) {
+        const record = value as Record<string, unknown>;
+        return descriptor.properties.flatMap((field) =>
+            iconProblemsOfProperty(catalog, { ...field, path: `${descriptor.path}.${field.path}` }, record[field.path], severity, context));
+    }
+
     return [];
 }

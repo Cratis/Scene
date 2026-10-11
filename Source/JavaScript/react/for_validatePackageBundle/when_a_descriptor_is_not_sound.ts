@@ -44,3 +44,26 @@ describe('when a descriptor is not sound', () => {
         validatePackageBundle(bundleWith([text([{ path: 'size', label: 'Size', group: 'Look', valueType: PropertyValueType.Enum }])])).should.have.lengthOf(1);
     });
 });
+
+describe('when an object descriptor describes its fields', () => {
+    const object = (properties: ComponentDescriptor['properties']): ComponentDescriptor['properties'] =>
+        [{ path: 'pager', label: 'Pager', group: 'Data', valueType: PropertyValueType.Object, properties }];
+
+    it('should accept fields that are sound', () => {
+        validatePackageBundle(bundleWith([text(object([{ path: 'size', label: 'Size', group: 'Data', valueType: PropertyValueType.Number }]))])).should.be.empty;
+    });
+
+    it('should report a field described twice', () => {
+        const field = { path: 'size', label: 'Size', group: 'Data', valueType: PropertyValueType.Number };
+        validatePackageBundle(bundleWith([text(object([field, field]))])).should.have.lengthOf(1);
+    });
+
+    it('should report an enum field without choices, however deeply it is nested', () => {
+        const inner = { path: 'inner', label: 'Inner', group: 'Data', valueType: PropertyValueType.Object, properties: [{ path: 'kind', label: 'Kind', group: 'Data', valueType: PropertyValueType.Enum }] };
+        validatePackageBundle(bundleWith([text(object([inner]))])).should.have.lengthOf(1);
+    });
+
+    it('should report a collection field without item descriptors', () => {
+        validatePackageBundle(bundleWith([text(object([{ path: 'steps', label: 'Steps', group: 'Data', valueType: PropertyValueType.Collection }]))])).should.have.lengthOf(1);
+    });
+});

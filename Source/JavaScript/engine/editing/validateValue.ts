@@ -72,6 +72,9 @@ export function validateValue(descriptor: PropertyDescriptor, value: unknown): s
         case PropertyValueType.Collection:
             return validateCollection(descriptor, value);
 
+        case PropertyValueType.Object:
+            return validateObject(descriptor, value);
+
         case PropertyValueType.Json:
             return isJsonValue(value) ? undefined : 'expected a JSON value';
 
@@ -119,6 +122,14 @@ function isJsonValue(value: unknown, parents = new Set<object>()): boolean {
     return valid;
 }
 
+function validateObject(descriptor: PropertyDescriptor, value: unknown): string | undefined {
+    if (descriptor.properties === undefined) return isRecord(value) || Array.isArray(value) ? undefined : 'expected a structured value';
+    if (!isRecord(value)) return 'expected a structured value';
+
+    const problem = validateFields(descriptor.properties, value, 'this object').at(0);
+    return problem ? `${problem.field} ${problem.problem}` : undefined;
+}
+
 function validateCollection(descriptor: PropertyDescriptor, value: unknown): string | undefined {
     if (!Array.isArray(value)) return 'expected a list';
     const constraints = descriptor.constraints ?? {};
@@ -155,13 +166,16 @@ export interface ItemFieldProblem {
  * @returns Every field that is unknown or has an unacceptable value.
  */
 export function validateItemValues(itemDescriptor: CollectionItemDescriptor | undefined, values: Record<string, unknown>): ItemFieldProblem[] {
-    const fields = itemDescriptor?.properties ?? [];
+    return validateFields(itemDescriptor?.properties ?? [], values, 'this collection\'s items');
+}
+
+function validateFields(fields: PropertyDescriptor[], values: Record<string, unknown>, owner: string): ItemFieldProblem[] {
     const problems: ItemFieldProblem[] = [];
 
     for (const [field, fieldValue] of Object.entries(values)) {
         const fieldDescriptor = fields.find(candidate => candidate.path === field);
         if (!fieldDescriptor) {
-            problems.push({ field, problem: 'is not a field of this collection\'s items' });
+            problems.push({ field, problem: `is not a field of ${owner}` });
             continue;
         }
 
