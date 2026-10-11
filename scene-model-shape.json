@@ -196,7 +196,8 @@
       "routeParameterBindings",
       "destination",
       "order",
-      "group"
+      "group",
+      "hierarchy"
     ],
     "UiProfile": [
       "name",
@@ -268,7 +269,8 @@
       "forms",
       "contributions",
       "screenTemplate",
-      "behaviors"
+      "behaviors",
+      "path"
     ],
     "UiStarter": [
       "name",

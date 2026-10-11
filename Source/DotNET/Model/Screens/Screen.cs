@@ -41,4 +41,12 @@ public record Screen(
     /// Gets the behaviors attached to the screen. Additive with whatever is attached further out or further in.
     /// </summary>
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+
+    /// <summary>
+    /// Gets the modules and features, outermost first, the screen was declared in - its place in the application
+    /// hierarchy. It is what a destination's <c language="csharp">module</c>/<c language="csharp">feature</c> identity resolves against, and what a
+    /// host groups an unlisted screen under, so the hierarchy no longer has to be reconstructed from the
+    /// contributions that happen to list it. Empty for a screen that sits outside any module.
+    /// </summary>
+    public IReadOnlyList<string> Path { get; init; } = [];
 }

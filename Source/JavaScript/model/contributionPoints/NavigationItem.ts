@@ -31,8 +31,14 @@ export interface NavigationItem {
 
     order?: number;
     group?: string;
+
+    /**
+     * The modules and features, outermost first, the item was declared in. A host lays navigation out as that
+     * hierarchy - a group per module and per feature - instead of one flat list.
+     */
+    hierarchy?: string[];
 }
 
 export const NavigationItemPropertyNames: (keyof NavigationItem)[] = [
-    'id', 'label', 'icon', 'presentation', 'targetScreen', 'routeParameterBindings', 'destination', 'order', 'group',
+    'id', 'label', 'icon', 'presentation', 'targetScreen', 'routeParameterBindings', 'destination', 'order', 'group', 'hierarchy',
 ];
