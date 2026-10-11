@@ -54,6 +54,13 @@ export interface PropertyDescriptor {
      */
     properties?: PropertyDescriptor[];
 
+    /**
+     * An `Object` property's value may carry fields `properties` does not describe. They are kept as they are and never
+     * edited. Without it a field the descriptor does not describe is refused. Use it when `properties` lists the fields an
+     * editor offers but the stored value may legitimately have more - a chart dataset, a record read from a sample.
+     */
+    open?: boolean;
+
     /** The value is shown but never edited. */
     readOnly?: boolean;
 
@@ -68,6 +75,6 @@ export interface PropertyDescriptor {
 }
 
 export const PropertyDescriptorPropertyNames: (keyof PropertyDescriptor)[] = [
-    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'properties', 'readOnly',
+    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'properties', 'open', 'readOnly',
     'output', 'acceptedBindingKinds', 'bindingMode',
 ];

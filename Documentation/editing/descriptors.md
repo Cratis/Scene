@@ -43,7 +43,8 @@ const pageSize: PropertyDescriptor = {
   is assigned by whoever creates the item; position is never identity.
 - **object** holds a plain record. When `properties` describes its fields - each a single name relative to the
   object, and each free to be an `object` or `collection` itself - the value is checked field by field: a field
-  the descriptor does not describe is refused, a described field must fit its descriptor, and `required` fields
+  the descriptor does not describe is refused unless the descriptor is `open` (its `open` flag, or the `open` flag of a
+  collection's `item`, keeps undescribed fields as they are without editing them), a described field must fit its descriptor, and `required` fields
   must be present. A host edits it with a nested form built from `properties`, and icons in described fields are
   checked against the icon catalog. Without `properties` the value is any record or array and only the
   descriptor's `editorKind` knows how to edit it. Prefer an `object` with `properties` (or a `collection`) over
