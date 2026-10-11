@@ -50,4 +50,19 @@ describe('when validating an object property', () => {
         const opaque: PropertyDescriptor = { path: 'x', label: 'X', group: 'Data', valueType: PropertyValueType.Object, editorKind: 'size' };
         [validateValue(opaque, { width: 1 }), validateValue(opaque, [1]), validateValue(opaque, 'text')].should.deep.equal([undefined, undefined, 'expected a structured value']);
     });
+
+    it('should keep a field the descriptor does not describe when the object is open', () => {
+        (validateValue({ ...described, open: true }, { colour: 'red', size: 3 }) === undefined).should.equal(true);
+    });
+
+    it('should still check the described fields of an open object', () => {
+        validateValue({ ...described, open: true }, { colour: 'red', size: 'ten' })!.should.equal('size expected a number');
+    });
+
+    it('should keep a field of an item the descriptor does not describe when the items are open', () => {
+        const open: PropertyDescriptor = { ...described.properties![3], item: { properties: [text('title')], open: true } };
+        const closed: PropertyDescriptor = { ...described.properties![3] };
+        [validateValue(open, [{ id: 'a', title: 'First', fill: true }]), validateValue(closed, [{ id: 'a', title: 'First', fill: true }])]
+            .should.deep.equal([undefined, 'item \'a\': fill is not a field of this collection\'s items']);
+    });
 });

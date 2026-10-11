@@ -126,7 +126,7 @@ function validateObject(descriptor: PropertyDescriptor, value: unknown): string 
     if (descriptor.properties === undefined) return isRecord(value) || Array.isArray(value) ? undefined : 'expected a structured value';
     if (!isRecord(value)) return 'expected a structured value';
 
-    const problem = validateFields(descriptor.properties, value, 'this object').at(0);
+    const problem = validateFields(descriptor.properties, value, 'this object', descriptor.open === true).at(0);
     return problem ? `${problem.field} ${problem.problem}` : undefined;
 }
 
@@ -166,16 +166,16 @@ export interface ItemFieldProblem {
  * @returns Every field that is unknown or has an unacceptable value.
  */
 export function validateItemValues(itemDescriptor: CollectionItemDescriptor | undefined, values: Record<string, unknown>): ItemFieldProblem[] {
-    return validateFields(itemDescriptor?.properties ?? [], values, 'this collection\'s items');
+    return validateFields(itemDescriptor?.properties ?? [], values, 'this collection\'s items', itemDescriptor?.open === true);
 }
 
-function validateFields(fields: PropertyDescriptor[], values: Record<string, unknown>, owner: string): ItemFieldProblem[] {
+function validateFields(fields: PropertyDescriptor[], values: Record<string, unknown>, owner: string, open: boolean): ItemFieldProblem[] {
     const problems: ItemFieldProblem[] = [];
 
     for (const [field, fieldValue] of Object.entries(values)) {
         const fieldDescriptor = fields.find(candidate => candidate.path === field);
         if (!fieldDescriptor) {
-            problems.push({ field, problem: `is not a field of ${owner}` });
+            if (!open) problems.push({ field, problem: `is not a field of ${owner}` });
             continue;
         }
 

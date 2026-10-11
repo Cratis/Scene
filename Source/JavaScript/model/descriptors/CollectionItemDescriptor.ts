@@ -15,6 +15,12 @@ export interface CollectionItemDescriptor {
 
     /** The fields of one item. */
     properties: PropertyDescriptor[];
+
+    /**
+     * An item may carry fields `properties` does not describe. They are kept as they are and never edited. Without it a
+     * field the descriptor does not describe is refused.
+     */
+    open?: boolean;
 }
 
-export const CollectionItemDescriptorPropertyNames: (keyof CollectionItemDescriptor)[] = ['label', 'properties'];
+export const CollectionItemDescriptorPropertyNames: (keyof CollectionItemDescriptor)[] = ['label', 'properties', 'open'];
