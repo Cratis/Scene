@@ -26,7 +26,7 @@ const pageSize: PropertyDescriptor = {
 | `default` | The value in effect when none is stored |
 | `constraints` | `required`, `minimum`, `maximum`, `integer`, `minimumLength`, `maximumLength`, `pattern`, `minimumItems`, `maximumItems`, `resultShapes` |
 | `editorKind` | Names a specialised editor (`iconPicker`, `queryBinding`, `screenPicker`). A host that does not know the name falls back to the default editor for `valueType` |
-| `item` | For a `collection`: the descriptors of an item's fields |
+| `item` | For a `collection`: the descriptors of an item's fields. `open` keeps fields it does not list; `positional` makes `id` optional for authored data such as chart datasets or tree nodes, which are told apart by position |
 | `properties` | For an `object`: the descriptors of its fields, so a host can edit it without a specialised editor |
 | `readOnly` | Shown, never edited |
 
@@ -49,11 +49,15 @@ const pageSize: PropertyDescriptor = {
   checked against the icon catalog. Without `properties` the value is any record or array and only the
   descriptor's `editorKind` knows how to edit it. Prefer an `object` with `properties` (or a `collection`) over
   `json` whenever the shape is known.
+- A **list of plain values** (words, numbers) or a **record of values under the author's own names** has no fields to
+  describe. It is a `json` (list) or `object` (record, no `properties`) property whose `editorKind` is one of
+  `PropertyEditorKind`: `stringList`, `numberList`, `stringOrList`, `scalar` or `stringMap`. A host draws a control per
+  entry for these, so none of them is edited as JSON text.
 - **json** holds any JSON value - `null`, a string, a boolean, a finite number, or an array or plain object of
   those, nested up to 64 levels - and stores it exactly as given, without reshaping or serializing it. It is
   for free-form configuration such as a chart's data. `NaN`, infinities, `undefined`, functions, class
-  instances and cycles are rejected. A host editor needs a JSON-aware control for it: the generic text editor
-  would stringify the value. Icons nested inside a `json` value are not found by the icon library diagnostics;
+  instances and cycles are rejected. A host edits it through the `editorKind` that says what it holds (see above); a
+  `json` property with no `editorKind` has no editor a host can draw, so describe it. Icons nested inside a `json` value are not found by the icon library diagnostics;
   use an `icon` property where tracking matters.
 - **enum** choices may be numbers as well as strings. A stored value must equal a choice exactly, so a document
   that stores `4` needs a `4` choice; a host choice control must keep the choice's own type rather than reading

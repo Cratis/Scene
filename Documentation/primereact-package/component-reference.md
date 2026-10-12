@@ -256,6 +256,16 @@ else is reported. The descriptor lists the same three forms as choices, so a sto
   mode a parent checks and unchecks its subtree and shows a partial state. The table is an ARIA `treegrid` with
   arrow-key navigation.
 
+The descriptors of these controls - and of `chart` and `multiStateCheckbox` - describe every structured value, so a host edits
+them by their fields and never as JSON text: a chart's `data` (`labels`, and `datasets` with their `label`, `data`,
+colours, `borderWidth`, `fill` and `tension`), `options` (responsive, aspect ratio, index axis, legend and title) and `style`
+(CSS sizes); a tree table's `columns` and `items` (nodes down four levels, a node's `data` a map of values by field name);
+a data scroller's `items` as a list of words; `selection` as a key or a list of keys; a multi-state checkbox's `options` (label,
+value, icon), `icons` and scalar `value`. Collections of authored data are `positional` (items need no `id`) and `open`
+(fields a descriptor does not list are kept), and may still be bound to a query result or a data context. The runtime reads
+more than the descriptors edit - plain strings as tree nodes, a key map as a selection - and that stays valid in a stored document;
+a host reports a value its editor cannot draw rather than rewriting it.
+
 Both follow their authored properties: a changed `selection`, `rows` or `items` is applied, while an unrelated edit
 leaves what the user did alone. Both show an empty-state message (`emptyLabel`).
 
