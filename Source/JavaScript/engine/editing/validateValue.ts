@@ -137,7 +137,16 @@ function validateCollection(descriptor: PropertyDescriptor, value: unknown): str
     if (constraints.maximumItems !== undefined && value.length > constraints.maximumItems) return `allows at most ${constraints.maximumItems} items`;
 
     const identities = new Set<string>();
-    for (const item of value) {
+    const positional = descriptor.item?.positional === true;
+    for (const [index, item] of value.entries()) {
+        if (positional) {
+            if (!isRecord(item)) return `item ${index + 1} is not a record`;
+            const { id: _identity, ...values } = item;
+            const problem = validateItemValues(descriptor.item, values).at(0);
+            if (problem) return `item ${index + 1}: ${problem.field} ${problem.problem}`;
+            continue;
+        }
+
         if (!isRecord(item) || !isNonEmptyString(item.id)) return 'every item needs an id';
         if (identities.has(item.id)) return `the item id '${item.id}' is used twice`;
         identities.add(item.id);

@@ -21,6 +21,13 @@ export interface CollectionItemDescriptor {
      * field the descriptor does not describe is refused.
      */
     open?: boolean;
+
+    /**
+     * The items are plain records that carry no `id`: they are the authored data of a control - a chart's datasets, a tree's nodes -
+     * and are told apart by their position, as they are wherever else that data is written. Without it every item needs a unique
+     * `id` of its own. An item that has an `id` keeps it.
+     */
+    positional?: boolean;
 }
 
-export const CollectionItemDescriptorPropertyNames: (keyof CollectionItemDescriptor)[] = ['label', 'properties', 'open'];
+export const CollectionItemDescriptorPropertyNames: (keyof CollectionItemDescriptor)[] = ['label', 'properties', 'open', 'positional'];
