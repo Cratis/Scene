@@ -637,6 +637,12 @@
         box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
     }
 
+    /* The menu toggle's open state. It has to out-rank the parked sidebar above, which has the same specificity and
+       comes first: without this the toggle changed its label and nothing opened. */
+    .layout-wrapper.layout-mobile-active .layout-sidebar {
+        transform: translateX(0);
+    }
+
     .layout-wrapper .layout-menu-label,
     .layout-wrapper .layout-sidebar-title {
         display: block;
