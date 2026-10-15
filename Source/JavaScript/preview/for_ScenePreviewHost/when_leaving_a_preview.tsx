@@ -12,7 +12,7 @@ describe('when leaving a preview', () => {
         it('should ask the host to exit', () => {
             let exits = 0;
             render(preview({ onExit: () => exits++ }));
-            fireEvent.keyDown(globalThis, { key: 'Escape' });
+            fireEvent.keyDown(window, { key: 'Escape' });
             exits.should.equal(1);
         });
     });
@@ -28,7 +28,7 @@ describe('when leaving a preview', () => {
         it('should close the dialog and not exit', () => [screen.queryByRole('dialog'), exits].should.deep.equal([null, 0]));
 
         describe('and Escape is pressed again', () => {
-            beforeEach(() => { fireEvent.keyDown(globalThis, { key: 'Escape' }); });
+            beforeEach(() => { fireEvent.keyDown(window, { key: 'Escape' }); });
 
             it('should exit', () => exits.should.equal(1));
         });
@@ -37,7 +37,7 @@ describe('when leaving a preview', () => {
     describe('and the host gives no way out', () => {
         it('should do nothing on Escape', () => {
             render(preview());
-            fireEvent.keyDown(globalThis, { key: 'Escape' });
+            fireEvent.keyDown(window, { key: 'Escape' });
             (document.querySelector('.layout-topbar') !== null).should.equal(true);
         });
     });
