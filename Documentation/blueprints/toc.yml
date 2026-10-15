@@ -18,6 +18,8 @@
   href: application-structure.md
 - name: Navigation regions
   href: navigation-regions.md
+- name: Preview host
+  href: preview-host.md
 
 - name: Getting started
   items:
