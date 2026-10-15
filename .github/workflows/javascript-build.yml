@@ -66,6 +66,8 @@ jobs:
       # The generator all domain blueprints start from must keep producing a package that is done, without edits.
       - name: Scaffold a blueprint and verify it
         run: |
+          # The cache holds every node_modules folder, including one a previous run left in the scaffold's folder.
+          rm -rf Source/JavaScript/blueprint.ci-scaffold
           node ./new-blueprint.js ci-scaffold "CI scaffold" "Proves the blueprint scaffold produces a package that is done."
           yarn
           yarn workspace @cratis/scene.blueprint.ci-scaffold build
@@ -73,6 +75,9 @@ jobs:
           UPDATE_BLUEPRINT_CATALOG=1 yarn workspace @cratis/scene.blueprint.ci-scaffold test
           node ./verify-blueprints.js --write
           grep -q '"domain": "ci-scaffold"' blueprintCatalog.json
+          # Leave the checkout as it was found: the scaffold is a proof, not part of the repository (or of the cache).
+          rm -rf Source/JavaScript/blueprint.ci-scaffold
+          git checkout -- blueprintCatalog.json
 
       - name: Build Storybook
         run: yarn build-storybook
