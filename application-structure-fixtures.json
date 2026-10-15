@@ -1,0 +1,895 @@
+{
+  "description": "Shared application-structure lookup corpus asserted by both the C# engine (Engine.Specs/for_ApplicationStructureIndex) and the TypeScript engine (engine/for_applicationStructureIndex). Each query names an index operation, its argument and the expected result: a node's display name, a slice kind, a qualified id, a list of qualified ids, or null.",
+  "cases": [
+    {
+      "name": "qualified lookup of modules, features and slices",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [
+                  {
+                    "id": "returns",
+                    "name": "Returns",
+                    "features": [],
+                    "slices": [
+                      {
+                        "id": "CreateReturn",
+                        "name": "Create return",
+                        "kind": "StateChange"
+                      }
+                    ]
+                  }
+                ],
+                "slices": [
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "CancelOrder",
+                    "name": "Cancel order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OrderSummary",
+                    "name": "Order summary",
+                    "kind": "StateView"
+                  },
+                  {
+                    "id": "SendReminder",
+                    "name": "Send reminder",
+                    "kind": "Automation"
+                  }
+                ]
+              },
+              {
+                "id": "customers",
+                "name": "Customers",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "CreateCustomer",
+                    "name": "Create customer",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "support",
+            "name": "Support",
+            "features": [
+              {
+                "id": "tickets",
+                "name": "Tickets",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "AssignTicket",
+                    "name": "Assign ticket",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OpenTicketsView",
+                    "name": "Open tickets",
+                    "kind": "StateView"
+                  }
+                ]
+              },
+              {
+                "id": "kb",
+                "name": "Knowledge base",
+                "features": [],
+                "slices": []
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findModule",
+          "arg": "sales",
+          "expected": "Sales"
+        },
+        {
+          "op": "findModule",
+          "arg": "support",
+          "expected": "Support"
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales.orders",
+          "expected": "Orders"
+        },
+        {
+          "op": "findFeature",
+          "arg": "support.tickets",
+          "expected": "Tickets"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.PlaceOrder",
+          "expected": "Place order"
+        },
+        {
+          "op": "findSlice",
+          "arg": "support.tickets.AssignTicket",
+          "expected": "Assign ticket"
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.PlaceOrder",
+          "expected": "StateChange"
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.OrderSummary",
+          "expected": "StateView"
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.SendReminder",
+          "expected": "Automation"
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "nested features carry their own slices",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [
+                  {
+                    "id": "returns",
+                    "name": "Returns",
+                    "features": [],
+                    "slices": [
+                      {
+                        "id": "CreateReturn",
+                        "name": "Create return",
+                        "kind": "StateChange"
+                      }
+                    ]
+                  }
+                ],
+                "slices": [
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "CancelOrder",
+                    "name": "Cancel order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OrderSummary",
+                    "name": "Order summary",
+                    "kind": "StateView"
+                  },
+                  {
+                    "id": "SendReminder",
+                    "name": "Send reminder",
+                    "kind": "Automation"
+                  }
+                ]
+              },
+              {
+                "id": "customers",
+                "name": "Customers",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "CreateCustomer",
+                    "name": "Create customer",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findFeature",
+          "arg": "sales.orders.returns",
+          "expected": "Returns"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.returns.CreateReturn",
+          "expected": "Create return"
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.returns.CreateReturn",
+          "expected": "StateChange"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.CreateReturn",
+          "expected": null
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales.returns",
+          "expected": null
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "first feature of a module is its first declared top-level feature",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [
+                  {
+                    "id": "returns",
+                    "name": "Returns",
+                    "features": [],
+                    "slices": [
+                      {
+                        "id": "CreateReturn",
+                        "name": "Create return",
+                        "kind": "StateChange"
+                      }
+                    ]
+                  }
+                ],
+                "slices": [
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "CancelOrder",
+                    "name": "Cancel order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OrderSummary",
+                    "name": "Order summary",
+                    "kind": "StateView"
+                  },
+                  {
+                    "id": "SendReminder",
+                    "name": "Send reminder",
+                    "kind": "Automation"
+                  }
+                ]
+              },
+              {
+                "id": "customers",
+                "name": "Customers",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "CreateCustomer",
+                    "name": "Create customer",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "support",
+            "name": "Support",
+            "features": [
+              {
+                "id": "tickets",
+                "name": "Tickets",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "AssignTicket",
+                    "name": "Assign ticket",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OpenTicketsView",
+                    "name": "Open tickets",
+                    "kind": "StateView"
+                  }
+                ]
+              },
+              {
+                "id": "kb",
+                "name": "Knowledge base",
+                "features": [],
+                "slices": []
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "firstFeature",
+          "arg": "sales",
+          "expected": "Orders"
+        },
+        {
+          "op": "firstFeature",
+          "arg": "support",
+          "expected": "Tickets"
+        },
+        {
+          "op": "firstFeatureId",
+          "arg": "sales",
+          "expected": "sales.orders"
+        },
+        {
+          "op": "firstFeatureId",
+          "arg": "support",
+          "expected": "support.tickets"
+        },
+        {
+          "op": "firstFeature",
+          "arg": "unknown",
+          "expected": null
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "module without features has no first feature",
+      "structure": {
+        "modules": [
+          {
+            "id": "empty",
+            "name": "Empty",
+            "features": []
+          },
+          {
+            "id": "tools",
+            "name": "Tools",
+            "features": [],
+            "slices": [
+              {
+                "id": "Reindex",
+                "name": "Reindex",
+                "kind": "StateChange"
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findModule",
+          "arg": "empty",
+          "expected": "Empty"
+        },
+        {
+          "op": "firstFeature",
+          "arg": "empty",
+          "expected": null
+        },
+        {
+          "op": "firstFeatureId",
+          "arg": "empty",
+          "expected": null
+        },
+        {
+          "op": "firstFeature",
+          "arg": "tools",
+          "expected": null
+        },
+        {
+          "op": "findSlice",
+          "arg": "tools.Reindex",
+          "expected": "Reindex"
+        },
+        {
+          "op": "kindOf",
+          "arg": "tools.Reindex",
+          "expected": "StateChange"
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "unknown and wrongly typed ids resolve to nothing",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [
+                  {
+                    "id": "returns",
+                    "name": "Returns",
+                    "features": [],
+                    "slices": [
+                      {
+                        "id": "CreateReturn",
+                        "name": "Create return",
+                        "kind": "StateChange"
+                      }
+                    ]
+                  }
+                ],
+                "slices": [
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "CancelOrder",
+                    "name": "Cancel order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "OrderSummary",
+                    "name": "Order summary",
+                    "kind": "StateView"
+                  },
+                  {
+                    "id": "SendReminder",
+                    "name": "Send reminder",
+                    "kind": "Automation"
+                  }
+                ]
+              },
+              {
+                "id": "customers",
+                "name": "Customers",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "CreateCustomer",
+                    "name": "Create customer",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findModule",
+          "arg": "billing",
+          "expected": null
+        },
+        {
+          "op": "findModule",
+          "arg": "sales.orders",
+          "expected": null
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales",
+          "expected": null
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales.orders.PlaceOrder",
+          "expected": null
+        },
+        {
+          "op": "findFeature",
+          "arg": "billing.orders",
+          "expected": null
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders",
+          "expected": null
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.Missing",
+          "expected": null
+        },
+        {
+          "op": "findSlice",
+          "arg": "PlaceOrder",
+          "expected": null
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.Missing",
+          "expected": null
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders",
+          "expected": null
+        },
+        {
+          "op": "findModule",
+          "arg": "Sales",
+          "expected": null
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "same-named features in different modules are told apart by their qualified id",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "overview",
+                "name": "Overview",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "Refresh",
+                    "name": "Refresh",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "support",
+            "name": "Support",
+            "features": [
+              {
+                "id": "overview",
+                "name": "Overview",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "Refresh",
+                    "name": "Refresh",
+                    "kind": "Automation"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findFeature",
+          "arg": "sales.overview",
+          "expected": "Overview"
+        },
+        {
+          "op": "findFeature",
+          "arg": "support.overview",
+          "expected": "Overview"
+        },
+        {
+          "op": "featuresByName",
+          "arg": "Overview",
+          "expected": [
+            "sales.overview",
+            "support.overview"
+          ]
+        },
+        {
+          "op": "featuresByName",
+          "arg": "overview",
+          "expected": [
+            "sales.overview",
+            "support.overview"
+          ]
+        },
+        {
+          "op": "featuresByName",
+          "arg": "Missing",
+          "expected": []
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.overview.Refresh",
+          "expected": "StateChange"
+        },
+        {
+          "op": "kindOf",
+          "arg": "support.overview.Refresh",
+          "expected": "Automation"
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "duplicate ids keep the first declaration and are reported",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "PlaceOrder",
+                    "name": "Place order again",
+                    "kind": "StateView"
+                  }
+                ]
+              },
+              {
+                "id": "orders",
+                "name": "Orders again",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "Hidden",
+                    "name": "Hidden",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sales",
+            "name": "Sales again",
+            "features": [
+              {
+                "id": "x",
+                "name": "X",
+                "features": [],
+                "slices": []
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findModule",
+          "arg": "sales",
+          "expected": "Sales"
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales.orders",
+          "expected": "Orders"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.PlaceOrder",
+          "expected": "Place order"
+        },
+        {
+          "op": "kindOf",
+          "arg": "sales.orders.PlaceOrder",
+          "expected": "StateChange"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.Hidden",
+          "expected": null
+        },
+        {
+          "op": "findFeature",
+          "arg": "sales.x",
+          "expected": null
+        }
+      ],
+      "expectedDiagnostics": [
+        {
+          "code": "structureDuplicateId",
+          "message": "Id 'sales.orders.PlaceOrder' is declared more than once; the first slice wins.",
+          "id": "sales.orders.PlaceOrder"
+        },
+        {
+          "code": "structureDuplicateId",
+          "message": "Id 'sales.orders' is declared more than once; the first feature wins.",
+          "id": "sales.orders"
+        },
+        {
+          "code": "structureDuplicateId",
+          "message": "Id 'sales' is declared more than once; the first module wins.",
+          "id": "sales"
+        }
+      ]
+    },
+    {
+      "name": "a feature id and a slice id may coincide in different containers",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "Details",
+                    "name": "Details",
+                    "kind": "StateView"
+                  }
+                ]
+              },
+              {
+                "id": "Details",
+                "name": "Details",
+                "features": [],
+                "slices": []
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findFeature",
+          "arg": "sales.Details",
+          "expected": "Details"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.Details",
+          "expected": "Details"
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a feature and a slice of the same container that share an id are reported",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [
+                  {
+                    "id": "Place",
+                    "name": "Place",
+                    "features": [],
+                    "slices": []
+                  }
+                ],
+                "slices": [
+                  {
+                    "id": "Place",
+                    "name": "Place order",
+                    "kind": "StateChange"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "findFeature",
+          "arg": "sales.orders.Place",
+          "expected": "Place"
+        },
+        {
+          "op": "findSlice",
+          "arg": "sales.orders.Place",
+          "expected": null
+        }
+      ],
+      "expectedDiagnostics": [
+        {
+          "code": "structureDuplicateId",
+          "message": "Id 'sales.orders.Place' is declared more than once; the first feature wins.",
+          "id": "sales.orders.Place"
+        }
+      ]
+    },
+    {
+      "name": "siblings that share a display name are ambiguous",
+      "structure": {
+        "modules": [
+          {
+            "id": "sales",
+            "name": "Sales",
+            "features": [
+              {
+                "id": "orders",
+                "name": "Orders",
+                "features": [],
+                "slices": [
+                  {
+                    "id": "A",
+                    "name": "Do it",
+                    "kind": "StateChange"
+                  },
+                  {
+                    "id": "B",
+                    "name": "do it",
+                    "kind": "StateChange"
+                  }
+                ]
+              },
+              {
+                "id": "order-list",
+                "name": "orders",
+                "features": [],
+                "slices": []
+              }
+            ]
+          },
+          {
+            "id": "crm",
+            "name": "sales",
+            "features": []
+          }
+        ]
+      },
+      "queries": [
+        {
+          "op": "featuresByName",
+          "arg": "ORDERS",
+          "expected": [
+            "sales.orders",
+            "sales.order-list"
+          ]
+        }
+      ],
+      "expectedDiagnostics": [
+        {
+          "code": "structureAmbiguousName",
+          "message": "The slice name 'do it' is used by both 'sales.orders.A' and 'sales.orders.B'.",
+          "id": "sales.orders.B"
+        },
+        {
+          "code": "structureAmbiguousName",
+          "message": "The feature name 'orders' is used by both 'sales.orders' and 'sales.order-list'.",
+          "id": "sales.order-list"
+        },
+        {
+          "code": "structureAmbiguousName",
+          "message": "The module name 'sales' is used by both 'sales' and 'crm'.",
+          "id": "crm"
+        }
+      ]
+    }
+  ]
+}
