@@ -69,4 +69,16 @@ export enum ComponentName {
 
     /** A status as a semantic color, an icon and its text. */
     StatusChip = 'statusChip',
+
+    /** One chart - line, bar, stacked, donut or funnel - with its legend and a table of the same data. */
+    ChartWrapper = 'chartWrapper',
+
+    /** Conditions on fields, joined by AND or OR in nested groups. */
+    FilterBuilder = 'filterBuilder',
+
+    /** Which columns a table shows, and in what order. */
+    ColumnChooser = 'columnChooser',
+
+    /** A list's saved views as a menu button. */
+    SavedViewsMenu = 'savedViewsMenu',
 }

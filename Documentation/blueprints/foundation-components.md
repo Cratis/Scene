@@ -14,6 +14,10 @@ component, so a component picker shows them and a screen places them like any ot
 | `statCard` | Data display | One key figure with its label, trend and the period compared to |
 | `trendChip` | Data display | A change as direction, magnitude and whether it is good |
 | `statusChip` | Data display | A status as a semantic color, an icon and its text |
+| `chartWrapper` | Data display | One chart - `line`, `bar`, `stacked`, `donut` or `funnel` - as scalable graphics with a legend and a table of the same data |
+| `filterBuilder` | Input | Field, operator and value conditions joined by AND or OR in groups nested three deep; publishes the filter as its `value` |
+| `columnChooser` | Actions | Which columns a table shows and in what order, with locked columns; publishes the visible ids as its `value` |
+| `savedViewsMenu` | Actions | A list's saved views as a menu button, with save and manage commands that honour permission rules |
 
 ## The five standard states
 
@@ -54,6 +58,21 @@ that already reports `loading` and `error` needs nothing more.
 - `yarn test:browser` (in the package) drives Chromium at desktop, tablet and phone widths in both themes with colour
   contrast enabled, and asserts no page overflow;
 - a stylesheet specification enforces tokens only.
+
+## Charts
+
+`chartWrapper` takes `categories` and `series` (a named list of values per category). A donut and a funnel draw the first series, one
+slice or stage per category. The drawing is hidden from assistive technology and a table of the same numbers follows it ("Chart data").
+Series are told apart by marker shape, dash and hatch as well as by color, so no chart relies on color alone (WCAG 1.4.1). The chart
+draws at the width it is shown at, so its labels keep their size on a phone.
+
+## Controls that publish a value
+
+`filterBuilder`, `columnChooser` and `savedViewsMenu` do not change data themselves: each publishes what the user chose as its `value`
+output - the filter `{ operator, conditions, groups }`, the ordered visible column ids, the chosen view id - which a list screen binds
+its query and table to with a component-property binding, the same way the input widgets do. `savedViewsMenu` also publishes `save` or
+`manage` on its `action` output when the user asks for those commands. A filter bound in through `filter` is read back as the user left
+it, and conditions on fields that no longer exist are dropped rather than shown broken.
 
 ## Data, not values
 

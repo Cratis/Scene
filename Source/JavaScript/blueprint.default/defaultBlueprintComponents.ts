@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { EmptyState, StatCard, StatusChip, TrendChip } from './foundation';
+import { ChartWrapper, ColumnChooser, EmptyState, FilterBuilder, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -53,4 +53,8 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.StatCard)]: StatCard,
     [componentRegistryKey(defaultBlueprintName, ComponentName.TrendChip)]: TrendChip,
     [componentRegistryKey(defaultBlueprintName, ComponentName.StatusChip)]: StatusChip,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ChartWrapper)]: ChartWrapper,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.FilterBuilder)]: FilterBuilder,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ColumnChooser)]: ColumnChooser,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.SavedViewsMenu)]: SavedViewsMenu,
 };

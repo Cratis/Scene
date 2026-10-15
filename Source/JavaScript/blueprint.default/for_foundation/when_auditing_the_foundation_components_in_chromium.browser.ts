@@ -26,6 +26,13 @@ describe('when auditing the foundation components in Chromium', () => {
         }
     }
 
+    for (const name of foundationNames) {
+        it(`should leave ${name} without violations with every disclosure open, in both themes on a phone`, async () => {
+            await chromium.page.setViewportSize(viewports.phone);
+            for (const theme of ['light', 'dark'] as const) (await chromium.audit(name, theme, undefined, false, true)).should.deep.equal([]);
+        });
+    }
+
     it('should leave a right-to-left page without violations or overflow on a phone', async () => {
         await chromium.page.setViewportSize(viewports.phone);
         (await chromium.audit('statCard', 'light', { label: 'خط الأنابيب', locale: 'ar-EG' }, true)).should.deep.equal([]);
