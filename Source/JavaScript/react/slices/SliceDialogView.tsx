@@ -44,6 +44,17 @@ function inputTypeOf(field: SliceCommandField): string {
     }
 }
 
+/** What the form starts with: the fields that carry an initial value, as the strings and booleans the inputs hold. */
+function initialValuesOf(fields: SliceCommandField[]): Record<string, string | boolean> {
+    const values: Record<string, string | boolean> = {};
+    for (const field of fields) {
+        if (field.initialValue === undefined) continue;
+        values[field.name] = typeof field.initialValue === 'boolean' && inputTypeOf(field) === 'checkbox' ? field.initialValue : String(field.initialValue);
+    }
+
+    return values;
+}
+
 /** The payload a form's values make: numbers and booleans as such, an empty number left out. */
 export function slicePayload(fields: SliceCommandField[], values: Record<string, string | boolean>): Record<string, unknown> {
     const payload: Record<string, unknown> = {};
@@ -88,7 +99,7 @@ export function SliceDialogView({ slice: sliceProp, command: commandProp, title:
         return index.findSlice(slice)?.id ?? slice.split('.').pop() ?? slice;
     }, [model, slice]);
 
-    const [values, setValues] = useState<Record<string, string | boolean>>({});
+    const [values, setValues] = useState<Record<string, string | boolean>>(() => initialValuesOf(fields));
     const [errors, setErrors] = useState<InvocationValidationError[]>([]);
     const [submitting, setSubmitting] = useState(false);
     const form = useRef<HTMLFormElement>(null);
