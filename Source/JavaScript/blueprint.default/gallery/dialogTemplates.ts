@@ -33,7 +33,7 @@ export const confirmDialogTemplate: DialogTemplate = {
     },
     displayName: 'Confirmation dialog',
     description: 'One question with the consequence spelled out, and a way back.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
 };
 
 /** Form: a short capture that does not deserve a page of its own. */
@@ -53,7 +53,7 @@ export const formDialogTemplate: DialogTemplate = {
     },
     displayName: 'Form dialog',
     description: 'A handful of fields captured without leaving the page underneath.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
 };
 
 /** Detail: a record shown over the list it came from. */
@@ -76,7 +76,7 @@ export const detailDialogTemplate: DialogTemplate = {
     },
     displayName: 'Detail dialog',
     description: 'A record over the list it came from, with a route to the full page.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
 };
 
 /** The dialog templates this blueprint provides. */

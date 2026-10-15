@@ -14,6 +14,21 @@ namespace Cratis.Scene.Engine.Templates;
 public static class TemplateMetadataValidation
 {
     /// <summary>
+    /// The diagnostic code reported for a template without a category. Category is required for blueprint templates (an error)
+    /// and recommended for own templates (a warning).
+    /// </summary>
+    public const string CategoryMissingCode = "templateCategoryMissing";
+
+    /// <summary>
+    /// Checks that a template declares a browse category.
+    /// </summary>
+    /// <param name="name">The template's name.</param>
+    /// <param name="metadata">The template's metadata, if any.</param>
+    /// <returns>The problem, or <see langword="null"/> when the template has a category.</returns>
+    public static string? ValidateCategory(string name, TemplateMetadata? metadata) =>
+        string.IsNullOrWhiteSpace(metadata?.Category) ? $"Template '{name}' declares no category" : null;
+
+    /// <summary>
     /// Validates one template's metadata.
     /// </summary>
     /// <param name="name">The template's name.</param>

@@ -30,9 +30,41 @@ metadata: {
 }
 ```
 
+## Template references and the version pin
+
+A module, feature or slice refers to a template with a `TemplateReference`:
+
+```typescript
+{ source: TemplateReferenceSource.Own, id: 'Module Workspace' }
+{ source: TemplateReferenceSource.Blueprint, blueprint: 'crm', id: 'CRM Workspace', version: '^1.4.2' }
+```
+
+| Field | Meaning |
+| --- | --- |
+| `source` | `Own` for a template the user created, `Blueprint` for one a blueprint package ships. |
+| `id` | The template's name - in the workspace, or within the blueprint. |
+| `blueprint` | The blueprint package name; required for `Blueprint`, forbidden for `Own`. |
+| `version` | A semver range of the blueprint the reference accepts. The `reference` an applicable template carries defaults to `^<installed version>`; absent means any version. Forbidden for `Own`. |
+
+`resolveTemplateReference(reference, library)` (C# `TemplateReferenceResolver.Resolve`) returns a status and, when the reference does not resolve, a message:
+
+| Status | Meaning |
+| --- | --- |
+| `Resolved` | The template exists at an accepted version. The resolution carries the package, its installed version and the template kind. |
+| `Malformed` | Not well formed: an own reference with a blueprint or version, a blueprint reference without a blueprint, an empty id or an invalid range. |
+| `UnknownBlueprint` | No blueprint package of that name is available. |
+| `VersionNotSatisfied` | The installed blueprint is outside the pinned range - the blueprint has drifted since the template was chosen. |
+| `UnknownTemplate` | The blueprint or workspace has no template of that name. |
+
+Copying a blueprint template into the user's own templates is expressed by creating an own template and referencing it with `source: Own`.
+
+## Category
+
+Every template declares a `category`. A blueprint template without one is a problem in its catalog entry; an own template without one is a warning. See [Category is required](template-applicability.md#category-is-required).
+
 ## Validate and describe
 
-`validateTemplateMetadata(name, metadata)` returns every missing or invalid field. `describeTemplateCatalog(sources, sceneVersion)` returns one `TemplateCatalogEntry` per template, in package then layout, screen template and dialog template order. Each entry carries the package and its version, the template's display fields, its compatibility, attribution and license, a `compatible` flag and the `problems` behind it.
+`validateTemplateMetadata(name, metadata)` returns every missing or invalid field. `describeTemplateCatalog(sources, sceneVersion)` returns one `TemplateCatalogEntry` per template, in package then layout, screen template and dialog template order. Each entry carries the package and its version, the template's display fields, its compatibility, attribution and license, a `compatible` flag, the `problems` behind it and non-blocking `warnings`.
 
 An entry is compatible when its metadata is valid, the Scene version (when given) satisfies `compatibility.scene`, and every required package is present at a satisfying version. Nothing is filtered out: a browser shows an incompatible template with its reasons.
 

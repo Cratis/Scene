@@ -46,5 +46,5 @@ export const fullPageLayout: Layout = {
     name: LayoutName.FullPage,
     slots: [{ name: SlotName.Aside }, { name: SlotName.Content }, { name: SlotName.ConfigPanel }],
     arrangement: fullPageArrangement,
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Shell' },
 };

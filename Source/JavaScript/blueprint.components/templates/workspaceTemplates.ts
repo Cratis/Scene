@@ -83,7 +83,7 @@ export const masterDetailPageTemplate: ScreenTemplate = {
     },
     displayName: 'Master-detail page',
     description: 'A queried list in the larger column with the selected record and its history in the narrower one.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Master detail' },
 };
 
 /**
@@ -159,7 +159,7 @@ export const dashboardPageTemplate: ScreenTemplate = {
     },
     displayName: 'Dashboard page',
     description: 'A row of query-backed widgets over a wide and a narrow column, each bound to its own query.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Dashboard' },
 };
 
 /** The two workspace-shaped templates. */

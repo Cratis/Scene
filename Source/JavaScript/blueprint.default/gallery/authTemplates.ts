@@ -48,7 +48,7 @@ export const loginTemplate: ScreenTemplate = {
     },
     displayName: 'Sign in',
     description: 'Email and password beside the branding panel.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** Register. */
@@ -71,7 +71,7 @@ export const registerTemplate: ScreenTemplate = {
     },
     displayName: 'Register',
     description: 'Account creation with a password strength meter and the terms checkbox.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** Forgotten password: ask for the address. */
@@ -91,7 +91,7 @@ export const forgotPasswordTemplate: ScreenTemplate = {
     },
     displayName: 'Forgotten password',
     description: 'One field and one button - the whole point is that it asks for nothing else.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** New password: the other end of the link. */
@@ -112,7 +112,7 @@ export const newPasswordTemplate: ScreenTemplate = {
     },
     displayName: 'New password',
     description: 'Where a reset link lands: choose it, confirm it, done.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** Verification: the code from the email. */
@@ -133,7 +133,7 @@ export const verificationTemplate: ScreenTemplate = {
     },
     displayName: 'Verification',
     description: 'The code step, with the progress indicator that tells you how much is left.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** Lock screen: the session is still there, the person has to prove they are. */
@@ -154,7 +154,7 @@ export const lockScreenTemplate: ScreenTemplate = {
     },
     displayName: 'Lock screen',
     description: 'One person, one password, and no way to lose what was open.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Auth' },
 };
 
 /** The six authentication templates. */
