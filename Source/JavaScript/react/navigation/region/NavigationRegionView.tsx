@@ -98,7 +98,7 @@ export function NavigationRegionView({ region, module, application = false, mode
 
     const sidebar = region === NavigationRegionKind.Sidebar;
     const placement = useMemo(() => ({ primaryScreen: navigation?.primaryScreen, outlets: navigation?.outlets ?? {} }), [navigation?.outlets, navigation?.primaryScreen]);
-    const scope = application ? undefined : module ?? currentModuleOf(index, placement.primaryScreen);
+    const scope = application ? undefined : module ?? (model.moduleOf ? model.moduleOf(placement.primaryScreen) : currentModuleOf(index, placement.primaryScreen));
     const resolved: EffectiveNavigationRegion = useMemo(() => effectiveNavigation(index, model.navigation, scope, region), [index, model.navigation, scope, region]);
 
     const isActive = (item: EffectiveNavItem) => placement.primaryScreen !== undefined && navigationItemActive(item, { primaryScreen: placement.primaryScreen, outlets: placement.outlets }, screenFor, !sidebar);

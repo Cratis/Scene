@@ -154,7 +154,7 @@ so nothing about inheritance or hierarchy is re-implemented in a renderer (spec 
   the primary region for `content`, the nested outlet of that name otherwise (`core:outlet`). Items that render into different slots are
   active at once, and closing a slot's screen clears its item. A topbar item that targets a module is also active on any screen of that module.
 - **Render-into-slot.** Activating an item calls `navigate` with `navigationItemDestination(item)`: the module/feature identity, the screen
-  (by default the qualified feature id, `sales.orders`; `screenFor` overrides it) and the slot as `outlet`. A module target opens its first
+  (by default the qualified feature id, `sales.orders`; `screenFor` overrides it, and `moduleOf` says which module a screen not named by a qualified id belongs to, so the right sidebar is shown) and the slot as `outlet`. A module target opens its first
   feature. `navigationDestinations(...)` lists every destination so deep links resolve; the host derives them from `navigationModel`.
   Outside a host the item announces `cratis.scene.navigate`.
 - **Authorization.** `isVisible(item)` hides an item (and its sub-items); it never disables it.
