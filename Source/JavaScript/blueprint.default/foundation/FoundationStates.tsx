@@ -35,7 +35,7 @@ export function FoundationStates({ component, theme, properties, rightToLeft }: 
         <SceneThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
             <div dir={rightToLeft ? 'rtl' : 'ltr'} className='foundation-states' style={{ display: 'grid', gap: '1rem', padding: '1rem', gridTemplateColumns: 'repeat(auto-fill, minmax(18rem, 1fr))', background: 'var(--scene-surface-background)', color: 'var(--scene-text-color)' }}>
                 {states.map(state => (
-                    <figure key={state} style={{ margin: 0 }}>
+                    <figure key={state} style={{ margin: 0, minInlineSize: 0 }}>
                         <figcaption style={{ fontSize: '0.75rem', textTransform: 'uppercase', marginBlockEnd: '0.5rem' }}>{state}</figcaption>
                         <Component element={foundationElement(component, { ...sample?.properties, ...properties }, state === ComponentState.Ready ? undefined : state)} slots={{}} />
                     </figure>

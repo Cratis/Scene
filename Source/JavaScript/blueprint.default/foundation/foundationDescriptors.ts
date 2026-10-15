@@ -7,6 +7,8 @@ import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
 import { ActivityKind } from './activityModel';
 import { ApprovalState } from './approvalModel';
+import { CellKind, ListVariant } from './listModel';
+import { FormFieldType, FormMode } from './formModel';
 import { ChartKind } from './chartGeometry';
 import { ComponentState } from './ComponentState';
 import { FilterFieldType } from './filterModel';
@@ -350,6 +352,199 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             },
             rule('editPermission', 'Edit permission', 'Enabled lets the user change grants; otherwise the matrix is read-only.'),
             valueOutputProperty(PropertyValueType.Json, 'The grants as the user has changed them: rows of role and permission, published as they change.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.DataList),
+        displayName: 'Data list',
+        description: 'The records of a collection as a table, as cards or grouped with subtotals, with search, sort, paging and selection that live in the address. On a phone a table becomes cards.',
+        properties: [
+            { path: 'rows', label: 'Rows', group: 'Data', valueType: PropertyValueType.Json, acceptedBindingKinds: bindable, default: [], description: 'The records; bind to a query result.' },
+            {
+                ...list('columns', 'Columns', 'Data', 'Column', [
+                    text('field', 'Field', 'Data', 'The result field the column shows.', { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
+                    text('header', 'Header', 'Content'),
+                    choice('kind', 'Kind', 'Appearance', { [CellKind.Text]: 'Text', [CellKind.Number]: 'Number', [CellKind.Currency]: 'Currency', [CellKind.Date]: 'Date', [CellKind.Status]: 'Status' }, CellKind.Text),
+                    flag('sortable', 'Sortable', 'Behavior', undefined, { default: true }),
+                    text('currency', 'Currency', 'Appearance'),
+                    { path: 'tones', label: 'Status tones', group: 'Appearance', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap, description: 'The tone (success, warning, danger, info, neutral) of each status value.' },
+                ], 'What is shown.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('variant', 'Layout', 'Appearance', { [ListVariant.Table]: 'Table', [ListVariant.Cards]: 'Cards', [ListVariant.Grouped]: 'Grouped' }, ListVariant.Table),
+            flag('collapse', 'Cards on a phone', 'Appearance', 'A table becomes cards on a phone-wide screen; nothing is hidden.', { default: true }),
+            text('idField', 'Id field', 'Data', undefined, { default: 'id', editorKind: PropertyEditorKind.Field }),
+            text('titleField', 'Title field', 'Data', 'The field that names a row for assistive technology and a card.', { editorKind: PropertyEditorKind.Field }),
+            text('groupBy', 'Group by', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
+            text('totalField', 'Subtotal field', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
+            number('pageSize', 'Rows per page', 'Behavior', '0 shows every row.', { default: 0, constraints: { minimum: 0, integer: true } }),
+            choice('selectionMode', 'Selection', 'Behavior', { none: 'None', single: 'One row', multiple: 'Many rows' }, 'none'),
+            { path: 'rowActions', label: 'Row actions', group: 'Behavior', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], description: 'The actions in each row\'s menu; each is the action output.' },
+            rule('actionPermission', 'Row action permission', 'Whether row actions work, refuse with a reason or are not shown.'),
+            text('search', 'Search', 'Data', 'The search text; bind to the search box output.', { acceptedBindingKinds: bindable }),
+            { path: 'filter', label: 'Filter', group: 'Data', valueType: PropertyValueType.Object, acceptedBindingKinds: bindable, description: 'The filter builder\'s value.' },
+            text('sort', 'Sort', 'Data', 'The sorted field; a leading - is descending.'),
+            text('urlKey', 'Address prefix', 'Behavior', 'Keeps search, sort, page and selection in the address under this prefix.'),
+            valueOutputProperty(PropertyValueType.Json, 'The selected row id (single) or ids (many).'),
+            { path: 'action', label: 'Requested action', group: 'Outputs', valueType: PropertyValueType.Json, readOnly: true, output: true, description: 'The row action the user chose, with its row id.' },
+            ...standardStateProperties.filter(property => property.path !== 'actionPermission'),
+        ],
+    },
+    {
+        component: key(ComponentName.TabSet),
+        displayName: 'Tab set',
+        description: 'Tabs with a panel for each: the content of tab `overview` is the slot `overview`. The active tab is kept in the address.',
+        properties: [
+            {
+                ...list('tabs', 'Tabs', 'Data', 'Tab', [
+                    text('id', 'Id', 'Data', 'Also the name of the slot that holds the tab\'s content.', { constraints: { required: true } }),
+                    text('label', 'Label', 'Content'),
+                    text('badge', 'Count', 'Content'),
+                    flag('disabled', 'Disabled', 'Behavior'),
+                ], 'The tabs a record page offers.'),
+                acceptedBindingKinds: bindable,
+            },
+            text('activeTab', 'Active tab', 'Behavior'),
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the active tab in the address under this name.'),
+            text('label', 'Label', 'Accessibility'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the active tab.'),
+            ...standardStateProperties.filter(property => property.path !== 'label'),
+        ],
+    },
+    {
+        component: key(ComponentName.SubNavigation),
+        displayName: 'Sub-navigation',
+        description: 'A module\'s own sections as a tab bar or a left rail. Choosing one changes only the section.',
+        properties: [
+            {
+                ...list('items', 'Sections', 'Data', 'Section', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('label', 'Label', 'Content'),
+                    text('badge', 'Count', 'Content'),
+                    flag('disabled', 'Disabled', 'Behavior'),
+                ], 'The sections.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('orientation', 'Orientation', 'Appearance', { horizontal: 'Tabs', vertical: 'Left rail' }, 'horizontal'),
+            text('activeItem', 'Active section', 'Behavior'),
+            text('urlKey', 'Address parameter', 'Behavior'),
+            text('label', 'Label', 'Accessibility'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the active section.'),
+            ...standardStateProperties.filter(property => property.path !== 'label'),
+        ],
+    },
+    {
+        component: key(ComponentName.BulkBar),
+        displayName: 'Bulk bar',
+        description: 'Appears when records are selected, says how many, offers the bulk actions and clears the selection.',
+        properties: [
+            { path: 'selection', label: 'Selection', group: 'Data', valueType: PropertyValueType.Json, acceptedBindingKinds: bindable, description: 'The selected records or their count; bind to the list\'s value.' },
+            { path: 'actions', label: 'Actions', group: 'Behavior', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [] },
+            rule('actionPermission', 'Action permission', 'Whether the bulk actions work, refuse with a reason or are not shown.'),
+            text('locale', 'Locale', 'Content'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
+        component: key(ComponentName.GlobalSearch),
+        displayName: 'Search',
+        description: 'A search box for the topbar or a list\'s toolbar. The text is the value output and can live in the address.',
+        properties: [
+            text('text', 'Initial text', 'Data'),
+            text('placeholder', 'Placeholder', 'Content'),
+            text('label', 'Label', 'Accessibility'),
+            text('urlKey', 'Address parameter', 'Behavior'),
+            valueOutputProperty(PropertyValueType.String, 'The search text.'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
+        component: key(ComponentName.NotificationsButton),
+        displayName: 'Notifications button',
+        description: 'The bell of the topbar with the unread count, said in words as well as in the badge.',
+        properties: [
+            number('count', 'Unread', 'Data', 'Bind to a query result.', { constraints: { minimum: 0, integer: true } }),
+            text('locale', 'Locale', 'Content'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
+        component: key(ComponentName.KanbanBoard),
+        displayName: 'Kanban board',
+        description: 'Columns mapped to a status, with cards that move by dragging or by their own Move-to menu. The new arrangement is the value output.',
+        properties: [
+            {
+                ...list('columns', 'Columns', 'Data', 'Column', [
+                    text('id', 'Id', 'Data', 'The status or stage value.', { constraints: { required: true } }),
+                    text('label', 'Label', 'Content'),
+                    number('limit', 'Limit', 'Behavior', 'The most cards the stage should hold; 0 is no limit.', { constraints: { minimum: 0, integer: true } }),
+                ], 'The stages.'),
+                acceptedBindingKinds: bindable,
+            },
+            {
+                ...list('cards', 'Cards', 'Data', 'Card', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('title', 'Title', 'Data', undefined, { constraints: { required: true } }),
+                    text('column', 'Column', 'Data', 'The id of the column the card is in.'),
+                    text('assignee', 'Assignee', 'Data'),
+                    { path: 'badges', label: 'Badges', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [] },
+                ], 'The cards, from a query.'),
+                acceptedBindingKinds: bindable,
+            },
+            rule('editPermission', 'Move permission', 'Enabled lets cards move; otherwise the board is read-only.'),
+            valueOutputProperty(PropertyValueType.Json, 'Each card\'s id and column, published as cards move.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.WizardProgress),
+        displayName: 'Wizard',
+        description: 'A linear wizard: the steps, back/next/finish and the draft save. The content of step `details` is the slot `details`; the last step is the review.',
+        properties: [
+            {
+                ...list('steps', 'Steps', 'Data', 'Step', [
+                    text('id', 'Id', 'Data', 'Also the name of the slot that holds the step\'s content.', { constraints: { required: true } }),
+                    text('label', 'Label', 'Content'),
+                    flag('valid', 'Valid', 'Data', 'Whether the step\'s fields are valid; an invalid step blocks Next.', { default: true, acceptedBindingKinds: bindable }),
+                ], 'The steps in order.'),
+                acceptedBindingKinds: bindable,
+            },
+            text('currentStep', 'Current step', 'Behavior'),
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the current step in the address so a refresh resumes.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the current step.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.FormScreenBody),
+        displayName: 'Form',
+        description: 'Titled sections of fields in a one-to-three column grid, with inline validation, a save bar, the unsaved-changes guard and four modes.',
+        properties: [
+            {
+                ...list('sections', 'Sections', 'Data', 'Section', [
+                    text('id', 'Id', 'Data'),
+                    text('title', 'Title', 'Content'),
+                    number('columns', 'Columns', 'Appearance', undefined, { default: 1, constraints: { minimum: 1, maximum: 3, integer: true } }),
+                    list('fields', 'Fields', 'Data', 'Field', [
+                        text('name', 'Name', 'Data', undefined, { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
+                        text('label', 'Label', 'Content'),
+                        choice('type', 'Type', 'Data', Object.fromEntries(Object.values(FormFieldType).map(type => [type, type])), FormFieldType.Text),
+                        flag('required', 'Required', 'Data'),
+                        { path: 'options', label: 'Options', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [] },
+                        number('span', 'Columns spanned', 'Appearance', undefined, { default: 1, constraints: { minimum: 1, maximum: 3, integer: true } }),
+                        text('placeholder', 'Placeholder', 'Content'),
+                        text('help', 'Help text', 'Content'),
+                    ]),
+                ], 'The groups of fields.'),
+                acceptedBindingKinds: bindable,
+            },
+            { path: 'values', label: 'Values', group: 'Data', valueType: PropertyValueType.Object, acceptedBindingKinds: bindable, description: 'The record being edited; empty when creating.' },
+            { path: 'errors', label: 'Server errors', group: 'Data', valueType: PropertyValueType.Json, acceptedBindingKinds: bindable, description: 'Field errors from the server, as { field: message }; one for an unknown field is shown as a general error.' },
+            choice('mode', 'Mode', 'Behavior', { [FormMode.Create]: 'Create', [FormMode.Edit]: 'Edit', [FormMode.ReadOnly]: 'Read-only', [FormMode.Settings]: 'Settings (a save for each section)' }, FormMode.Create),
+            rule('editPermission', 'Edit permission', 'Enabled lets the user change fields; otherwise the form is read-only.'),
+            rule('savePermission', 'Save permission', 'Whether Save works, refuses with a reason or is not shown.'),
+            valueOutputProperty(PropertyValueType.Object, 'The values as the user has edited them.'),
             ...standardStateProperties,
         ],
     },

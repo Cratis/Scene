@@ -108,6 +108,62 @@ export const foundationSamples: Record<string, FoundationSample> = {
         },
         data: ['Edit deals', 'Manage users'], stateful: true,
     },
+    [ComponentName.DataList]: {
+        properties: {
+            locale: 'en-US', idField: 'id', titleField: 'name', selectionMode: 'multiple', pageSize: 5, rowActions: ['Open', 'Archive'],
+            columns: [
+                { field: 'name', header: 'Account' }, { field: 'owner', header: 'Owner' }, { field: 'value', header: 'Value', kind: 'currency', currency: 'USD' },
+                { field: 'status', header: 'Status', kind: 'status', tones: { Open: 'info', Won: 'success', Lost: 'danger' } }, { field: 'closes', header: 'Closes', kind: 'date' },
+            ],
+            rows: [
+                { id: '1', name: 'Northgate Ltd', owner: 'Ada', value: 12000, status: 'Open', closes: '2026-04-01' },
+                { id: '2', name: 'Harbour & Sons', owner: 'Grace', value: 8400.5, status: 'Won', closes: '2026-03-12' },
+                { id: '3', name: 'Fjord Supply', owner: 'Linus', value: 560, status: 'Lost', closes: '2026-02-20' },
+            ],
+        },
+        data: ['Northgate Ltd', '3 items'], stateful: true,
+    },
+    [ComponentName.TabSet]: {
+        properties: { tabs: [{ id: 'overview', label: 'Overview' }, { id: 'related', label: 'Related', badge: '4' }, { id: 'files', label: 'Files' }, { id: 'history', label: 'History', disabled: true }] },
+        data: ['Overview', 'Related'], stateful: true,
+    },
+    [ComponentName.SubNavigation]: {
+        properties: { items: [{ id: 'accounts', label: 'Accounts' }, { id: 'contacts', label: 'Contacts', badge: '12' }, { id: 'deals', label: 'Deals' }] },
+        data: ['Accounts', 'Contacts'], stateful: true,
+    },
+    [ComponentName.BulkBar]: { properties: { selection: ['1', '2'], actions: ['Assign', 'Archive'] }, data: [], stateful: false },
+    [ComponentName.GlobalSearch]: { properties: { placeholder: 'Search accounts', label: 'Search accounts' }, data: [], stateful: false },
+    [ComponentName.NotificationsButton]: { properties: { count: 3 }, data: [], stateful: false },
+    [ComponentName.KanbanBoard]: {
+        properties: {
+            columns: [{ id: 'new', label: 'New', limit: 2 }, { id: 'qualified', label: 'Qualified' }, { id: 'won', label: 'Won' }],
+            cards: [
+                { id: 'c1', title: 'Acme renewal', column: 'new', assignee: 'Ada', fields: [{ label: 'Value', value: '$12,000' }], badges: ['Hot'] },
+                { id: 'c2', title: 'Globex rollout', column: 'new', assignee: 'Grace' },
+                { id: 'c3', title: 'Initech pilot', column: 'new' },
+                { id: 'c4', title: 'Umbrella upgrade', column: 'qualified' },
+            ],
+        },
+        data: ['Acme renewal'], stateful: true,
+    },
+    [ComponentName.WizardProgress]: {
+        properties: { steps: [{ id: 'details', label: 'Details' }, { id: 'people', label: 'People' }, { id: 'review', label: 'Review' }] },
+        data: ['Details', 'People'], stateful: true,
+    },
+    [ComponentName.FormScreenBody]: {
+        properties: {
+            mode: 'create', locale: 'en-US',
+            sections: [
+                { title: 'Account details', columns: 2, fields: [
+                    { name: 'name', label: 'Name', required: true }, { name: 'industry', label: 'Industry', type: 'select', options: ['Software', 'Retail'] },
+                    { name: 'revenue', label: 'Revenue', type: 'currency' }, { name: 'since', label: 'Customer since', type: 'date' },
+                    { name: 'notes', label: 'Notes', type: 'richText', span: 2 },
+                ] },
+                { title: 'Preferences', fields: [{ name: 'tags', label: 'Tags', type: 'multiSelect', options: ['VIP', 'Partner'] }, { name: 'active', label: 'Active', type: 'toggle' }] },
+            ],
+        },
+        data: ['Account details'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */
