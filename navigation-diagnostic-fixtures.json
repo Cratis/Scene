@@ -170,6 +170,22 @@
         { "code": "unavailableTarget", "entry": "empty", "message": "Destination 'empty' names no screen, stable identity, route or dialog." },
         { "code": "unavailableTarget", "entry": "#5", "message": "Destination '#5' names no screen, stable identity, route or dialog." }
       ]
+    },
+    {
+      "name": "navigation regions that fit the application structure",
+      "graph": {"entries":[],"structure":{"modules":[{"id":"sales","name":"Sales","features":[{"id":"orders","name":"Orders","features":[],"slices":[]}]},{"id":"support","name":"Support","features":[{"id":"tickets","name":"Tickets","features":[],"slices":[]}]},{"id":"empty","name":"Empty","features":[]}]},"navigation":{"application":{"regions":[{"region":"topbar","items":[{"id":"sales","title":"sales","target":{"module":"sales"}},{"id":"support","title":"support","target":{"module":"support"}}]}]},"modules":[{"module":"sales","regions":[{"region":"topbar","mode":"extend","items":[{"id":"orders","title":"orders","target":{"module":"sales"}}]}]}]}},
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "navigation regions with missing targets, unknown slots, duplicate ids and out-of-scope targets",
+      "graph": {"entries":[],"structure":{"modules":[{"id":"sales","name":"Sales","features":[{"id":"orders","name":"Orders","features":[],"slices":[]}]},{"id":"support","name":"Support","features":[{"id":"tickets","name":"Tickets","features":[],"slices":[]}]},{"id":"empty","name":"Empty","features":[]}]},"slots":["content"],"navigation":{"application":{"regions":[{"region":"topbar","items":[{"id":"missing","title":"missing","target":{"module":"billing"}},{"id":"nofeatures","title":"nofeatures","target":{"module":"empty"}},{"id":"drawer","title":"drawer","target":{"module":"sales"},"slot":"drawer"},{"id":"drawer","title":"drawer","target":{"module":"sales"}}]}]},"modules":[{"module":"support","regions":[{"region":"topbar","mode":"override","items":[{"id":"orders","title":"orders","target":{"module":"sales"}}]}]}]}},
+      "expectedDiagnostics": [
+        {"code": "navTargetMissing", "entry": "application:topbar:missing", "message": "Navigation item 'missing' targets module 'billing', which does not exist."},
+        {"code": "navModuleWithoutFeatures", "entry": "application:topbar:nofeatures", "message": "Navigation item 'nofeatures' targets module 'empty', which has no features to go to."},
+        {"code": "navSlotUnknown", "entry": "application:topbar:drawer", "message": "Navigation item 'drawer' renders into slot 'drawer', which the layout does not declare."},
+        {"code": "navDuplicateId", "entry": "application:topbar:drawer", "message": "Navigation item 'drawer' is used more than once in the application topbar."},
+        {"code": "navTargetOutOfScope", "entry": "support:topbar:orders", "message": "Navigation item 'orders' of module 'support' targets module 'sales'; a module's own items may only target that module."}
+      ]
     }
   ]
 }

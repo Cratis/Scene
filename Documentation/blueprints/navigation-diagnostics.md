@@ -23,6 +23,15 @@ The C# twin is `NavigationDiagnostics.Diagnose`. Both engines run the shared `na
 | `incompatibleOutlet` | A dialog or external destination names an outlet; a screen is placed in a layout's outlet but renders in another layout; or the outlet's `accepts` list does not include the screen's template type. |
 | `navigationCycle` | Screens are placed in outlets owned by each other's templates, including a screen placed in an outlet its own template owns, so composition never terminates. |
 | `unavailableTarget` | A destination names nothing to open, a dialog destination names no dialog, or it opens a screen or dialog template that does not exist. |
+| `navTargetMissing` | A navigation region item has no target (and no sub-items), or targets a module or feature the application structure does not have. |
+| `navSlotUnknown` | A navigation region item renders into a slot the layout does not declare. |
+| `navDuplicateId` | Two items of one navigation region share an id - within a level, or between an extending module and the application. |
+| `navModuleWithoutFeatures` | A navigation region item targets a module that has no feature to go to. |
+| `navTargetOutOfScope` | A module's own navigation region item targets a different module. |
+
+The last five check the application's navigation regions against its [application structure](application-structure.md):
+give the graph a `structure` and `navigation` (and `slots`, `content` only when absent) and `diagnoseNavigation` reports
+them after the others. `diagnoseNavigationRegions` runs just that check. See [Navigation regions](navigation-regions.md).
 
 Each diagnostic carries the `entry` it was found on, either its `id` or `#<position>`. Outlet duplicates and cycles concern the whole model and carry no entry.
 

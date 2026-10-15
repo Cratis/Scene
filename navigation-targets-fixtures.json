@@ -1,0 +1,91 @@
+{
+  "description": "Shared navigation target resolution corpus asserted by both the C# engine (Engine.Specs/for_EffectiveNavigation) and the TypeScript engine (engine/for_effectiveNavigation): a module target resolves to the module's first feature, a feature target to that feature, and targets that lead nowhere or out of the owning module are diagnosed. Same format as navigation-inheritance-fixtures.json.",
+  "structure": {"modules":[{"id":"dashboard","name":"Dashboard","features":[{"id":"overview","name":"Overview","features":[],"slices":[]}]},{"id":"sales","name":"Sales","features":[{"id":"orders","name":"Orders","features":[{"id":"returns","name":"Returns","features":[],"slices":[]}],"slices":[{"id":"PlaceOrder","name":"Place order","kind":"StateChange"}]},{"id":"customers","name":"Customers","features":[],"slices":[]},{"id":"pipeline","name":"Pipeline","features":[],"slices":[]}]},{"id":"support","name":"Support","features":[{"id":"tickets","name":"Tickets","features":[],"slices":[]},{"id":"kb","name":"Knowledge base","features":[],"slices":[]}]},{"id":"empty","name":"Empty","features":[]}]},
+  "cases": [
+    {
+      "name": "a module target goes to the module's first feature",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["dashboard|application|editable|dashboard.overview|content|lucide:home|Defined here.", "sales|application|editable|sales.orders|content|-|Defined here.", "support|application|editable|support.tickets|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a feature target goes to that feature, at any depth",
+      "navigation": {"application":{"regions":[{"region":"sidebar","items":[{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"returns","title":"Returns","target":{"module":"sales","feature":"orders.returns"}},{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]},"modules":[]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "definedHere|defined here", "items": ["customers|application|editable|sales.customers|content|-|Defined here.", "returns|application|editable|sales.orders.returns|content|-|Defined here.", "kb|application|editable|support.kb|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a module without features cannot be navigated to",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"empty","title":"Empty","target":{"module":"empty"}},{"id":"sales","title":"Sales","target":{"module":"sales"}}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["empty|application|editable|-|content|-|Defined here.", "sales|application|editable|sales.orders|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navModuleWithoutFeatures", "message": "Navigation item 'empty' targets module 'empty', which has no features to go to.", "entry": "application:topbar:empty"}
+      ]
+    },
+    {
+      "name": "a module's own item may not target a different module",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[{"region":"sidebar","mode":"override","items":[{"id":"tickets","title":"Tickets","target":{"module":"support","feature":"tickets"}},{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}}]}]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "overridden|Support only", "items": ["tickets|module|editable|support.tickets|content|-|Defined in Support.", "orders|module|editable|sales.orders|content|-|Defined in Support."], "mode": "override"}, "module": "support"}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navTargetOutOfScope", "message": "Navigation item 'orders' of module 'support' targets module 'sales'; a module's own items may only target that module.", "entry": "support:sidebar:orders"}
+      ]
+    },
+    {
+      "name": "an application item may target any module",
+      "navigation": {"application":{"regions":[{"region":"sidebar","items":[{"id":"a","title":"A","target":{"module":"sales","feature":"orders"}},{"id":"b","title":"B","target":{"module":"support","feature":"kb"}}]}]},"modules":[]},
+      "views": [
+
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a target module that does not exist is missing",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"billing","title":"Billing","target":{"module":"billing"}},{"id":"billing-feature","title":"Invoices","target":{"module":"billing","feature":"invoices"}}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["billing|application|editable|-|content|-|Defined here.", "billing-feature|application|editable|-|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navTargetMissing", "message": "Navigation item 'billing' targets module 'billing', which does not exist.", "entry": "application:topbar:billing"},
+        {"code": "navTargetMissing", "message": "Navigation item 'billing-feature' targets module 'billing', which does not exist.", "entry": "application:topbar:billing-feature"}
+      ]
+    },
+    {
+      "name": "a target feature that does not exist is missing",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"x","title":"X","target":{"module":"sales","feature":"invoices"}},{"id":"y","title":"Y","target":{"module":"sales","feature":"orders.exchanges"}}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["x|application|editable|-|content|-|Defined here.", "y|application|editable|-|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navTargetMissing", "message": "Navigation item 'x' targets feature 'sales.invoices', which does not exist.", "entry": "application:topbar:x"},
+        {"code": "navTargetMissing", "message": "Navigation item 'y' targets feature 'sales.orders.exchanges', which does not exist.", "entry": "application:topbar:y"}
+      ]
+    },
+    {
+      "name": "an item with no target and no sub-items is missing its target",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"lonely","title":"Lonely"}]},{"region":"sidebar","items":[{"id":"group","title":"Group","children":[{"id":"kb","title":"KB","target":{"module":"support","feature":"kb"}},{"id":"empty-leaf","title":"Leaf"}]}]}]},"modules":[]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "definedHere|defined here", "items": ["group|application|editable|-|content|-|Defined here.", "  kb|application|editable|support.kb|content|-|Defined here.", "  empty-leaf|application|editable|-|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navTargetMissing", "message": "Navigation item 'lonely' has no target.", "entry": "application:topbar:lonely"},
+        {"code": "navTargetMissing", "message": "Navigation item 'empty-leaf' has no target.", "entry": "application:sidebar:empty-leaf"}
+      ]
+    },
+    {
+      "name": "a module item that targets its own feature is in scope",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"topbar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"home","title":"Home","target":{"module":"sales"}}]}]}]},
+      "views": [
+
+      ],
+      "expectedDiagnostics": []
+    }
+  ]
+}

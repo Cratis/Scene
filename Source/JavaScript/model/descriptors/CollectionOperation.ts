@@ -17,4 +17,10 @@ export enum CollectionOperation {
 
     /** Change the field values of an item the consumer added. */
     EditFields = 'edit-fields',
+
+    /**
+     * Hide the items the owner (and every level above) put in the collection, so the consumer's own items are all there is.
+     * An instance says so with `replaceOwnerItems`; the owner's items stay in the owner and come back when it stops.
+     */
+    Replace = 'replace',
 }

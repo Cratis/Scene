@@ -16,7 +16,8 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../na
 describe('when diagnosing the shared navigation corpus', () => {
     it('should carry negative vectors for every diagnostic code', () => {
         const codes = new Set(corpus.cases.flatMap(fixture => fixture.expectedDiagnostics.map(diagnostic => diagnostic.code)));
-        [...codes].should.have.members(['duplicateRoute', 'duplicateOutlet', 'missingOutlet', 'incompatibleOutlet', 'navigationCycle', 'unavailableTarget']);
+        [...codes].should.have.members(['duplicateRoute', 'duplicateOutlet', 'missingOutlet', 'incompatibleOutlet', 'navigationCycle', 'unavailableTarget',
+            'navTargetMissing', 'navSlotUnknown', 'navDuplicateId', 'navModuleWithoutFeatures', 'navTargetOutOfScope']);
     });
 });
 

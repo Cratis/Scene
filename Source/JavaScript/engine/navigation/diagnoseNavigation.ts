@@ -3,6 +3,7 @@
 
 import { DestinationKind, DestinationReference, Screen } from '@cratis/scene.model';
 import { collectOutlets } from './collectOutlets';
+import { diagnoseNavigationRegions } from './diagnoseNavigationRegions';
 import { findHostingCycles } from './findHostingCycles';
 import { NavigationDiagnostic } from './NavigationDiagnostic';
 import { NavigationDiagnosticCode } from './NavigationDiagnosticCode';
@@ -16,7 +17,8 @@ import { OutletOwner } from './OutletOwner';
  *
  * Routes are compared by `routeKey` - by default the authored route override, since the engine constructs no
  * URLs. Nothing is rewritten. The C# engine (`NavigationDiagnostics.Diagnose`) reports the same codes and
- * messages in the same order for the same model; both are asserted against `navigation-diagnostic-fixtures.json`.
+ * messages in the same order for the same model; both are asserted against `navigation-diagnostic-fixtures.json`. When the graph carries
+an application `structure` and `navigation` regions, the regions are checked too ({@link diagnoseNavigationRegions}).
  */
 export function diagnoseNavigation(graph: NavigationGraph, routeKey: NavigationRouteKey = authoredRouteKey): NavigationDiagnostic[] {
     const diagnostics: NavigationDiagnostic[] = [];
@@ -60,6 +62,10 @@ export function diagnoseNavigation(graph: NavigationGraph, routeKey: NavigationR
             code: NavigationDiagnosticCode.NavigationCycle,
             message: `Navigation cycle ${[...cycle, cycle[0]].join(' -> ')}: each screen is placed in an outlet owned by the next, so composition never terminates.`,
         });
+    }
+
+    if (graph.structure && graph.navigation) {
+        diagnostics.push(...diagnoseNavigationRegions(graph.structure, graph.navigation, { slots: graph.slots }));
     }
 
     return diagnostics;
