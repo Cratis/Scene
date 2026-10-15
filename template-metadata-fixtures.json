@@ -86,17 +86,17 @@
         {
           "manifest": { "name": "Acme.Blueprint", "version": "2.0.0", "kind": "Blueprint", "dependencies": [{ "name": "PrimeReact" }], "components": [], "layouts": ["Shell"], "screenTemplates": ["Orders", "Legacy", "Future", "Foreign", "Pinned"], "dialogTemplates": ["Confirm"], "themes": [] },
           "layouts": [
-            { "name": "Shell", "slots": [], "metadata": { "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "PrimeReact", "versionRange": "^11.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+            { "name": "Shell", "slots": [], "metadata": { "category": "Foundation / Shell", "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "PrimeReact", "versionRange": "^11.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
           ],
           "screenTemplates": [
             { "name": "Orders", "slots": [], "displayName": "Orders", "description": "A list of orders.", "metadata": { "type": "List", "category": "Sales", "compatibility": { "scene": "^4.13.0", "packages": [{ "name": "Acme.Blueprint" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
             { "name": "Legacy", "slots": [], "metadata": { "type": "List" } },
-            { "name": "Future", "slots": [], "metadata": { "compatibility": { "scene": "^5.0.0", "packages": [{ "name": "PrimeReact", "versionRange": "^12.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
-            { "name": "Foreign", "slots": [], "metadata": { "compatibility": { "scene": "^4.0.0", "packages": [{ "name": "Tailwind" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
-            { "name": "Pinned", "slots": [], "metadata": { "compatibility": { "scene": "*", "packages": [{ "name": "PrimeReact", "versionRange": "11.1.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+            { "name": "Future", "slots": [], "metadata": { "category": "Sales", "compatibility": { "scene": "^5.0.0", "packages": [{ "name": "PrimeReact", "versionRange": "^12.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
+            { "name": "Foreign", "slots": [], "metadata": { "category": "Sales", "compatibility": { "scene": "^4.0.0", "packages": [{ "name": "Tailwind" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } },
+            { "name": "Pinned", "slots": [], "metadata": { "category": "Sales", "compatibility": { "scene": "*", "packages": [{ "name": "PrimeReact", "versionRange": "11.1.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
           ],
           "dialogTemplates": [
-            { "name": "Confirm", "slots": [], "metadata": { "type": "Dialog", "compatibility": { "scene": "^4.13.0" }, "attribution": { "author": "Acme", "url": "https://acme.example/templates" }, "license": "Apache-2.0", "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0" } }
+            { "name": "Confirm", "slots": [], "metadata": { "type": "Dialog", "category": "Dialog", "compatibility": { "scene": "^4.13.0" }, "attribution": { "author": "Acme", "url": "https://acme.example/templates" }, "license": "Apache-2.0", "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0" } }
           ]
         }
       ],
@@ -106,7 +106,8 @@
         { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Legacy", "compatible": false, "problems": [
           "Template 'Legacy' declares no compatibility",
           "Template 'Legacy' declares no author",
-          "Template 'Legacy' declares no license"
+          "Template 'Legacy' declares no license",
+          "Template 'Legacy' declares no category"
         ] },
         { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Future", "compatible": false, "problems": [
           "Template 'Future' requires Scene ^5.0.0 but the host runs 4.13.2",
@@ -126,7 +127,7 @@
         {
           "manifest": { "name": "Acme.Blueprint", "version": "2.0.0", "kind": "Blueprint", "dependencies": [], "components": [], "layouts": [], "screenTemplates": ["Future"], "dialogTemplates": [], "themes": [] },
           "screenTemplates": [
-            { "name": "Future", "slots": [], "metadata": { "compatibility": { "scene": "^5.0.0" }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+            { "name": "Future", "slots": [], "metadata": { "category": "Sales", "compatibility": { "scene": "^5.0.0" }, "attribution": { "author": "Acme" }, "license": "MIT" } }
           ]
         }
       ],

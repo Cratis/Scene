@@ -9,7 +9,7 @@ namespace Cratis.Scene.Engine.Templates;
 
 /// <summary>
 /// Describes every template a set of packages provides, with its compatibility, attribution and license metadata
-/// and whether it can be used. The TypeScript engine (<c language="csharp">describeTemplateCatalog</c>) produces the same entries.
+/// and whether it can be used. A blueprint template without a category is a problem; an own template without one is a warning. The TypeScript engine (<c language="csharp">describeTemplateCatalog</c>) produces the same entries.
 /// </summary>
 public static class TemplateCatalog
 {
@@ -33,8 +33,15 @@ public static class TemplateCatalog
 
             foreach (var (kind, name, displayName, description, metadata) in templates)
             {
-                var problems = TemplateMetadataValidation.Validate(name, metadata).Concat(RequirementProblems(name, metadata, source.Manifest, versions, sceneVersion)).ToList();
-                entries.Add(new(source.Manifest.Name, source.Manifest.Version, kind, name, displayName, description, metadata, problems.Count == 0, problems));
+                var problems = TemplateMetadataValidation.Validate(name, metadata).ToList();
+                var warnings = new List<string>();
+                if (TemplateMetadataValidation.ValidateCategory(name, metadata) is { } missingCategory)
+                {
+                    (source.Manifest.Kind == PackageKind.Blueprint ? problems : warnings).Add(missingCategory);
+                }
+
+                problems.AddRange(RequirementProblems(name, metadata, source.Manifest, versions, sceneVersion));
+                entries.Add(new(source.Manifest.Name, source.Manifest.Version, kind, name, displayName, description, metadata, problems.Count == 0, problems, warnings));
             }
         }
 

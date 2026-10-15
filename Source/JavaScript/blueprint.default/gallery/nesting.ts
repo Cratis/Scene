@@ -37,7 +37,7 @@ export const moduleWorkspaceTemplate: ScreenTemplate = {
     },
     displayName: 'Module workspace',
     description: 'Module level: fits the application layout content slot and offers a body for one feature.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Workspace' },
 };
 
 /**
@@ -58,7 +58,7 @@ export const featureSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Feature section',
     description: 'Feature level: fits a module workspace body slot and brings the action toolbar.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /**
@@ -79,7 +79,7 @@ export const sliceSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Slice section',
     description: 'Slice level: fits a feature section body slot and hosts one behavior.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /** The chain, outermost first - what a spec walks to prove `fitsSlot` resolves at every level. */

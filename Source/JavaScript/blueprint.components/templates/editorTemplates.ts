@@ -62,7 +62,7 @@ export const schemaEditorPageTemplate: ScreenTemplate = {
     },
     displayName: 'Schema editor page',
     description: "An event type's schema edited as a typed property tree, with the actions that evolve it.",
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Editor' },
 };
 
 /**
@@ -125,7 +125,7 @@ export const objectEditorPageTemplate: ScreenTemplate = {
     },
     displayName: 'Object editor page',
     description: 'One document edited against its schema, with its navigation trail and its version history.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Editor' },
 };
 
 /** The two editor-shaped templates. */

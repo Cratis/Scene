@@ -4,7 +4,8 @@
 import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateScope } from '@cratis/scene.model';
 
 type TemplateKind = 'Layout' | 'ScreenTemplate' | 'DialogTemplate';
-type TemplateContainer = Pick<Layout, 'name' | 'slots'>;
+/** The containing layout or screen template against which a fitsSlot selection is checked. */
+export type TemplateContainer = Pick<Layout, 'name' | 'slots'>;
 
 /** Validates application-shell selection without introducing a competing shell model. */
 export function validateLayoutApplicability(layout: Layout | undefined, scope: TemplateScope): string[] {
