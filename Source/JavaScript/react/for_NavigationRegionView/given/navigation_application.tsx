@@ -73,13 +73,16 @@ export interface NavigationApplicationProps {
     regions?: Partial<NavigationRegionViewProps>[];
     outlets?: Record<string, string[]>;
     isVisible?(item: EffectiveNavItem): boolean;
+    screenFor?(item: EffectiveNavItem): string | undefined;
+    moduleOf?(screen: string | undefined): string | undefined;
+    screens?: Record<string, SceneElement>;
     frame?(content: ReactNode): ReactNode;
 }
 
 /** An application host: every feature a screen, the regions of `regions` as its chrome, the content in the primary outlet. */
-export function NavigationApplication({ structure, navigation, initialScreen, regions = [{ region: NavigationRegionKind.Topbar }, { region: NavigationRegionKind.Sidebar }], outlets, isVisible }: NavigationApplicationProps) {
-    const model: SceneNavigationModel = { structure: new ApplicationStructureIndex(structure), navigation, ...(isVisible ? { isVisible } : {}) };
-    return <SceneNavigationHost navigationModel={model} screens={screensOf(structure, outlets)} initialScreen={initialScreen} registry={registry}
+export function NavigationApplication({ structure, navigation, initialScreen, regions = [{ region: NavigationRegionKind.Topbar }, { region: NavigationRegionKind.Sidebar }], outlets, isVisible, screenFor, moduleOf, screens }: NavigationApplicationProps) {
+    const model: SceneNavigationModel = { structure: new ApplicationStructureIndex(structure), navigation, ...(isVisible ? { isVisible } : {}), ...(screenFor ? { screenFor } : {}), ...(moduleOf ? { moduleOf } : {}) };
+    return <SceneNavigationHost navigationModel={model} screens={screens ?? screensOf(structure, outlets)} initialScreen={initialScreen} registry={registry}
         frame={content => <div data-frame>
             {regions.map((props, position) => <NavigationRegionView key={position} {...props as NavigationRegionViewProps} />)}
             <main>{content}</main>

@@ -22,6 +22,13 @@ export interface SceneNavigationModel {
     screenFor?(item: EffectiveNavItem): string | undefined;
 
     /**
+     * The module the screen on the page belongs to, which decides whose sidebar - the module's effective navigation - is shown.
+     * Defaults to the first segment of the screen's qualified id (`sales.orders` is in `sales`); a host whose screens are named
+     * otherwise tells it where they were declared. Undefined for a screen outside every module.
+     */
+    moduleOf?(screen: string | undefined): string | undefined;
+
+    /**
      * Whether an item is shown. An item for which this answers false is hidden, not disabled - Stage plugs permissions
      * here. Applies to every level of a hierarchical region; hiding a parent hides its children.
      */
