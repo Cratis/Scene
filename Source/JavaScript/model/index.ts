@@ -20,3 +20,4 @@ export * from './exposure';
 export * from './editing';
 export * from './structure';
 export * from './navigation';
+export * from './toolbar';

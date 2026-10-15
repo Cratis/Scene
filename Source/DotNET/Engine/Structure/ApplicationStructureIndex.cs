@@ -106,6 +106,14 @@ public class ApplicationStructureIndex
     public IReadOnlyList<string> FindFeaturesByName(string name) =>
         _featuresByName.TryGetValue(name.ToLowerInvariant(), out var found) ? found : [];
 
+    /// <summary>
+    /// Finds the state change slices that accept a command, so a command named by hand can be turned into the slice that owns it.
+    /// </summary>
+    /// <param name="command">A command name - the slice'"'"'s <see cref="SliceNode.Command"/>, or its id when it names none - or a slice'"'"'s qualified id.</param>
+    /// <returns>The qualified ids of the matching state change slices, in declaration order.</returns>
+    public IReadOnlyList<string> FindSlicesByCommand(string command) =>
+        [.. _slices.Where(entry => entry.Value.Kind == SliceKind.StateChange && (entry.Key == command || (entry.Value.Command ?? entry.Value.Id) == command)).Select(entry => entry.Key)];
+
     void IndexContainer(string path, IReadOnlyList<FeatureNode> features, IReadOnlyList<SliceNode> slices)
     {
         var seen = new Dictionary<string, string>(StringComparer.Ordinal);

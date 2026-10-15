@@ -15,6 +15,12 @@ export interface SliceNode {
 
     /** Whether the slice is a state change, a state view or an automation. */
     kind: SliceKind;
+
+    /** The command a state change slice accepts; the slice `id` when absent. */
+    command?: string;
+
+    /** The dialog template the slice opens as a task dialog; the host's default form dialog when absent. */
+    dialogTemplate?: string;
 }
 
-export const SliceNodePropertyNames: (keyof SliceNode)[] = ['id', 'name', 'kind'];
+export const SliceNodePropertyNames: (keyof SliceNode)[] = ['id', 'name', 'kind', 'command', 'dialogTemplate'];

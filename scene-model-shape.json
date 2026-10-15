@@ -574,7 +574,9 @@
     "SliceNode": [
       "id",
       "name",
-      "kind"
+      "kind",
+      "command",
+      "dialogTemplate"
     ],
     "NavItem": [
       "id",
@@ -604,6 +606,17 @@
     "NavigationModel": [
       "application",
       "modules"
+    ],
+    "ToolbarButton": [
+      "id",
+      "title",
+      "slice",
+      "emphasis",
+      "icon",
+      "target"
+    ],
+    "Toolbar": [
+      "buttons"
     ]
   },
   "enums": {
@@ -773,6 +786,11 @@
       "Inherit",
       "Extend",
       "Override"
+    ],
+    "ToolbarEmphasis": [
+      "Primary",
+      "Secondary",
+      "Quiet"
     ]
   }
 }
