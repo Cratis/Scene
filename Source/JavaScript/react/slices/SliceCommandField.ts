@@ -16,4 +16,7 @@ export interface SliceCommandField {
 
     /** Whether the field must have a value. */
     required?: boolean;
+
+    /** The value the field starts with - a preview fills it from the active sample data pack; a running application leaves it out. */
+    initialValue?: string | number | boolean;
 }
