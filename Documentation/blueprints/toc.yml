@@ -14,6 +14,8 @@
   href: navigation-diagnostics.md
 - name: The application hierarchy and toolbars
   href: application-hierarchy.md
+- name: The application structure reference
+  href: application-structure.md
 
 - name: Getting started
   items:

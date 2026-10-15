@@ -547,6 +547,26 @@
       "activePack",
       "mappings",
       "bindings"
+    ],
+    "ApplicationStructure": [
+      "modules"
+    ],
+    "ModuleNode": [
+      "id",
+      "name",
+      "features",
+      "slices"
+    ],
+    "FeatureNode": [
+      "id",
+      "name",
+      "features",
+      "slices"
+    ],
+    "SliceNode": [
+      "id",
+      "name",
+      "kind"
     ]
   },
   "enums": {
@@ -697,6 +717,11 @@
       "Date",
       "DateTime",
       "Enum"
+    ],
+    "SliceKind": [
+      "StateChange",
+      "StateView",
+      "Automation"
     ]
   }
 }

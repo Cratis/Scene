@@ -43,3 +43,4 @@ export * from './navigation';
 export * from './validateNavigationDestinations';
 export * from './editing';
 export * from './sampleData';
+export * from './structure';
