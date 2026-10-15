@@ -68,6 +68,12 @@ export interface ApplicationHostProps {
      */
     scope?(navigation: SceneNavigationContextValue, children: ReactNode): ReactNode;
 
+    /**
+     * Where the shell keeps its layout configuration - the sidebar's state, the chosen theme. A preview keeps none (null, the default);
+     * a running application passes its storage so what a user chose is still chosen on the next visit.
+     */
+    layoutConfigStorage?: Storage | null;
+
     /** Rendered inside the host's providers, after the application. */
     children?: ReactNode;
 }
@@ -79,7 +85,7 @@ export interface ApplicationHostProps {
  * button or a dialog destination opened shown over it - one place for all of it (spec PRV9), so a behaviour that differs between
  * the two hosts is a bug in the host, not a second implementation.
  */
-export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, children }: ApplicationHostProps) {
+export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, layoutConfigStorage = null, children }: ApplicationHostProps) {
     const [memoryHistory] = useState(() => createMemorySceneHistory());
     const registry = useMemo(() => ({ ...previewComponents, ...hostRegistry }), [hostRegistry]);
     const hostHistory = history ?? memoryHistory;
@@ -132,8 +138,8 @@ export function ApplicationHost({ application, composition = {}, navigationModel
         <SceneNavigationProvider value={navigation}>
             <SceneOutletContext.Provider value={outletContext}>
                 <SceneNavigationModelProvider model={navigationModel}>
-                    {/* The shell reads its layout configuration from a provider; nothing is saved from a hosted application's own. */}
-                    <LayoutConfigProvider storage={null}>
+                    {/* The shell reads its layout configuration from a provider; nothing is saved unless the host gives it somewhere to. */}
+                    <LayoutConfigProvider storage={layoutConfigStorage}>
                         {scope ? scope(navigation, body) : body}
                         {children}
                     </LayoutConfigProvider>
