@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="ListScreen">
+    <rect width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="0" y="0" width="320" height="22" fill="#4f46e5"/>
+    <rect x="0" y="22" width="56" height="178" fill="#e3e5ea"/>
+    <rect x="64" y="28" width="248" height="16" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="50" width="248" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5"/>
+    <rect x="64" y="70" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="84" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="98" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="112" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="126" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="140" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="154" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="168" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="184" width="248" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+</svg>

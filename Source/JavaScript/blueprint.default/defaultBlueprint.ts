@@ -46,6 +46,7 @@ export const defaultBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.default',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
+    sampleData: [{ id: 'foundation-en', title: 'Foundation · English', locale: 'en-GB', path: 'sampleData/foundation-en.json' }],
 };
 
 /**

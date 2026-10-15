@@ -23,6 +23,8 @@
     },
     "files": [
         "dist",
+        "sampleData",
+        "thumbnails",
         "**/*.ts",
         "**/*.tsx",
         "shell/layout.css",

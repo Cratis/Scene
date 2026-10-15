@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="FormScreen">
+    <rect width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="0" y="0" width="320" height="22" fill="#4f46e5"/>
+    <rect x="0" y="22" width="56" height="178" fill="#e3e5ea"/>
+    <rect x="64" y="28" width="248" height="16" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="50" width="248" height="140" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="72" y="60" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="192" y="60" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="72" y="90" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="192" y="90" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="72" y="120" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="192" y="120" width="112" height="20" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="240" y="174" width="62" height="12" rx="3" fill="#4f46e5" stroke="#4f46e5"/>
+</svg>

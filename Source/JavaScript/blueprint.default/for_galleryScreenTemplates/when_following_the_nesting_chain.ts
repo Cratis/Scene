@@ -5,8 +5,9 @@ import { Slot } from '@cratis/scene.model';
 import { appShellLayout, fullPageLayout } from '../layouts';
 import { featureSectionTemplate, galleryScreenTemplates, moduleWorkspaceTemplate, sliceSectionTemplate } from '../gallery';
 
+/** Whether a slot of the given container list has the name; a container-qualified name (`WorkspaceScreen.moduleContent`) is compared by the slot it ends in. */
 function declares(slots: Slot[], name: string | undefined): boolean {
-    return name !== undefined && slots.some(slot => slot.name === name);
+    return name !== undefined && slots.some(slot => slot.name === name.substring(name.lastIndexOf('.') + 1));
 }
 
 describe('when following the nesting chain', () => {

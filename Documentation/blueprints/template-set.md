@@ -3,8 +3,12 @@ title: The template set
 description: Every screen template and dialog template the default blueprint ships, what each is for, and which layout it renders in.
 ---
 
-The default blueprint ships twenty-four screen templates and three dialog templates. Each screen template
+The default blueprint ships thirty-two screen templates (the eight [foundation templates](./foundation-templates.md) and twenty-four earlier ones) and three dialog templates. Each screen template
 has a matching `Screen` in the gallery, so every row below is something you can boot and look at.
+
+## The foundation set
+
+`WorkspaceScreen`, `DashboardScreen`, `ListScreen`, `BoardScreen`, `MasterDetailScreen`, `RecordPage`, `FormScreen` and `WizardScreen` are the templates a new blueprint starts from. They are described, with their slots, states and responsive rules, in [foundation screen templates](./foundation-templates.md). The earlier templates below keep their names.
 
 ## In the application shell
 

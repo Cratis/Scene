@@ -1,0 +1,512 @@
+{
+  "id": "foundation-en",
+  "title": "Foundation · English",
+  "locale": "en-GB",
+  "owner": "blueprint:Cratis.Blueprint.Default",
+  "sets": [
+    {
+      "shape": "ModuleSections",
+      "rows": [
+        {
+          "id": "accounts",
+          "label": "Accounts"
+        },
+        {
+          "id": "contacts",
+          "label": "Contacts",
+          "badge": "12"
+        },
+        {
+          "id": "deals",
+          "label": "Deals"
+        }
+      ]
+    },
+    {
+      "shape": "NotificationCount",
+      "rows": [
+        {
+          "count": 3
+        }
+      ]
+    },
+    {
+      "shape": "Kpis",
+      "rows": [
+        {
+          "value": 1234567,
+          "change": 12.5
+        },
+        {
+          "value": 48,
+          "change": 4
+        },
+        {
+          "value": 6.5,
+          "change": -8.2
+        }
+      ]
+    },
+    {
+      "shape": "RevenueChart",
+      "rows": [
+        {
+          "categories": [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4"
+          ],
+          "series": [
+            {
+              "name": "Revenue",
+              "values": [
+                120,
+                180,
+                150,
+                240
+              ]
+            },
+            {
+              "name": "Target",
+              "values": [
+                100,
+                150,
+                200,
+                220
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "StageChart",
+      "rows": [
+        {
+          "categories": [
+            "Leads",
+            "Qualified",
+            "Proposal",
+            "Won"
+          ],
+          "series": [
+            {
+              "name": "Deals",
+              "values": [
+                400,
+                220,
+                90,
+                40
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Account"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "value",
+          "header": "Value",
+          "kind": "currency",
+          "currency": "USD"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Open": "info",
+            "Won": "success",
+            "Lost": "danger"
+          }
+        },
+        {
+          "field": "closes",
+          "header": "Closes",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "Deals",
+      "rows": [
+        {
+          "id": "1",
+          "name": "Northgate Ltd",
+          "owner": "Ada Lovelace",
+          "value": 12000,
+          "status": "Open",
+          "closes": "2026-04-01"
+        },
+        {
+          "id": "2",
+          "name": "Harbour & Sons",
+          "owner": "Grace Hopper",
+          "value": 8400.5,
+          "status": "Won",
+          "closes": "2026-03-12"
+        },
+        {
+          "id": "3",
+          "name": "Fjord Supply",
+          "owner": "Linus Torvalds",
+          "value": 560,
+          "status": "Lost",
+          "closes": "2026-02-20"
+        },
+        {
+          "id": "4",
+          "name": "Bluebird Studio",
+          "owner": "Margaret Hamilton",
+          "value": 23100,
+          "status": "Open",
+          "closes": "2026-05-08"
+        },
+        {
+          "id": "5",
+          "name": "Cedar & Pine",
+          "owner": "Alan Turing",
+          "value": 4300,
+          "status": "Won",
+          "closes": "2026-03-30"
+        }
+      ]
+    },
+    {
+      "shape": "DealViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All deals"
+        },
+        {
+          "id": "mine",
+          "label": "My deals"
+        },
+        {
+          "id": "closing",
+          "label": "Closing this month"
+        }
+      ]
+    },
+    {
+      "shape": "DealColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Account",
+          "locked": true
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "value",
+          "label": "Value"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "closes",
+          "label": "Closes",
+          "visible": false
+        }
+      ]
+    },
+    {
+      "shape": "DealFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "text"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Open",
+            "Won",
+            "Lost"
+          ]
+        },
+        {
+          "name": "value",
+          "label": "Value",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "shape": "DealSelection",
+      "rows": []
+    },
+    {
+      "shape": "Activity",
+      "rows": [
+        {
+          "id": "a1",
+          "actor": "Ada Lovelace",
+          "action": "commented",
+          "kind": "comment",
+          "at": "2026-03-10T09:30:00Z",
+          "body": "Sent the revised quote."
+        },
+        {
+          "id": "a2",
+          "actor": "Grace Hopper",
+          "action": "changed the owner to Linus",
+          "kind": "change",
+          "at": "2026-03-09T16:00:00Z"
+        },
+        {
+          "id": "a3",
+          "actor": "System",
+          "action": "marked the deal as qualified",
+          "kind": "status",
+          "at": "2026-03-09T08:00:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineColumns",
+      "rows": [
+        {
+          "id": "new",
+          "label": "New",
+          "limit": 3
+        },
+        {
+          "id": "qualified",
+          "label": "Qualified"
+        },
+        {
+          "id": "proposal",
+          "label": "Proposal"
+        },
+        {
+          "id": "won",
+          "label": "Won"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineCards",
+      "rows": [
+        {
+          "id": "c1",
+          "title": "Acme renewal",
+          "column": "new",
+          "assignee": "Ada",
+          "fields": [
+            {
+              "label": "Value",
+              "value": "$12,000"
+            }
+          ],
+          "badges": [
+            "Hot"
+          ]
+        },
+        {
+          "id": "c2",
+          "title": "Globex rollout",
+          "column": "new",
+          "assignee": "Grace"
+        },
+        {
+          "id": "c3",
+          "title": "Initech pilot",
+          "column": "qualified"
+        },
+        {
+          "id": "c4",
+          "title": "Umbrella upgrade",
+          "column": "proposal",
+          "assignee": "Linus"
+        }
+      ]
+    },
+    {
+      "shape": "RecordTabs",
+      "rows": [
+        {
+          "id": "overview",
+          "label": "Overview"
+        },
+        {
+          "id": "related",
+          "label": "Related",
+          "badge": "4"
+        },
+        {
+          "id": "files",
+          "label": "Files"
+        },
+        {
+          "id": "history",
+          "label": "History"
+        }
+      ]
+    },
+    {
+      "shape": "People",
+      "rows": [
+        {
+          "name": "Ada Lovelace"
+        },
+        {
+          "name": "Grace Hopper"
+        },
+        {
+          "name": "Linus Torvalds"
+        },
+        {
+          "name": "Margaret Hamilton"
+        },
+        {
+          "name": "Alan Turing"
+        }
+      ]
+    },
+    {
+      "shape": "Checklist",
+      "rows": [
+        {
+          "title": "Onboarding",
+          "items": [
+            {
+              "id": "t1",
+              "label": "Send the contract",
+              "owner": "Grace",
+              "due": "2026-03-01",
+              "done": true
+            },
+            {
+              "id": "t2",
+              "label": "Order a laptop",
+              "owner": "Linus",
+              "due": "2026-03-05"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RecordSections",
+      "rows": [
+        {
+          "id": "details",
+          "title": "Account details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "industry",
+              "label": "Industry",
+              "type": "select",
+              "options": [
+                "Software",
+                "Retail"
+              ]
+            },
+            {
+              "name": "revenue",
+              "label": "Revenue",
+              "type": "currency"
+            },
+            {
+              "name": "since",
+              "label": "Customer since",
+              "type": "date"
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        },
+        {
+          "id": "preferences",
+          "title": "Preferences",
+          "fields": [
+            {
+              "name": "tags",
+              "label": "Tags",
+              "type": "multiSelect",
+              "options": [
+                "VIP",
+                "Partner"
+              ]
+            },
+            {
+              "name": "active",
+              "label": "Active",
+              "type": "toggle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RecordValues",
+      "rows": [
+        {
+          "name": "Northgate Ltd",
+          "industry": "Software",
+          "revenue": 1234567,
+          "since": "2019-06-01",
+          "notes": "Long-standing customer.",
+          "tags": [
+            "VIP"
+          ],
+          "active": true
+        }
+      ]
+    },
+    {
+      "shape": "FormErrors",
+      "rows": [
+        {}
+      ]
+    },
+    {
+      "shape": "WizardSteps",
+      "rows": [
+        {
+          "id": "details",
+          "label": "Details"
+        },
+        {
+          "id": "people",
+          "label": "People"
+        },
+        {
+          "id": "review",
+          "label": "Review"
+        }
+      ]
+    }
+  ]
+}

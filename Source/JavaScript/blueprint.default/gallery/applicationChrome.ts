@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SceneElement } from '@cratis/scene.model';
+import { BindingSourceKind, SceneElement } from '@cratis/scene.model';
 import { ComponentName } from '../ComponentName';
 import { SlotName } from '../layouts';
 import { defaultBlueprintThemes } from '../themes';
@@ -71,6 +71,11 @@ export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEn
                 {
                     logo: [logo('topbar-logo')],
                     end: [
+                        // The topbar of Part B 2.1: logo, search, notifications, the environment, and the user. The search and the bell are the foundation
+                        // components, so they work everywhere the shell does; the unread count is a query result, never a value.
+                        externalComponent('topbar-search', ComponentName.GlobalSearch, { placeholder: 'Search', label: 'Search the application' }),
+                        externalComponent('topbar-notifications', ComponentName.NotificationsButton, { count: { kind: BindingSourceKind.QueryResult, query: 'NotificationCount', path: '0.count' } }),
+                        externalComponent('topbar-environment', ComponentName.StatusChip, { status: 'Production', tone: 'info' }),
                         externalComponent('topbar-user', ComponentName.UserMenu, {
                             name: 'Amelia Nyquist',
                             role: 'Owner',
