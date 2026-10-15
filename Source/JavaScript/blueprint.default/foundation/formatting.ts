@@ -67,3 +67,12 @@ export function formatDate(value: unknown, locale: string, withTime = false): st
         return date.toISOString();
     }
 }
+
+/** Formats a calendar day (`YYYY-MM-DD`) for a locale, as that day and never shifted by the reader's time zone. */
+export function formatDay(day: string, locale: string): string {
+    try {
+        return new Intl.DateTimeFormat(locale, { dateStyle: 'full', timeZone: 'UTC' }).format(new Date(`${day}T12:00:00Z`));
+    } catch {
+        return day;
+    }
+}

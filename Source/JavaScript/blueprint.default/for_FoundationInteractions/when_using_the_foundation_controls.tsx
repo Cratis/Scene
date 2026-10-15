@@ -4,7 +4,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import sinon from 'sinon';
 import { afterEach } from 'vitest';
-import { ChartWrapper, ColumnChooser, FilterBuilder, SavedViewsMenu, foundationElement, foundationSamples } from '../foundation';
+import { ActivityFeed, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, FileUploaderHandlerProvider, FilterBuilder, SavedViewsMenu, foundationElement, foundationSamples } from '../foundation';
 import { ComponentName } from '../ComponentName';
 import { violationsIn } from '../for_foundation/given';
 
@@ -200,4 +200,148 @@ describe('when using the foundation controls', () => {
             }
         });
     });
+
+    describe('and ticking tasks', () => {
+        const mount = (properties?: Record<string, unknown>) => {
+            const { published, bindingOutputs } = outputs();
+            const onChange = sinon.spy();
+            const view = render(<ChecklistSection element={foundationElement(ComponentName.ChecklistSection, { ...foundationSamples[ComponentName.ChecklistSection].properties, ...properties })} slots={{}} bindingOutputs={bindingOutputs} interactions={{ onChange }} />);
+            return { published, onChange, ...view };
+        };
+
+        it('should publish the done tasks and report each progress bar in words', () => {
+            const { published } = mount();
+            (published.value as string[]).should.deep.equal(['t1']);
+            screen.getByRole('progressbar', { name: 'Progress of Before day one' }).getAttribute('aria-valuetext')!.should.equal('1 of 2 complete');
+        });
+
+        it('should say overdue in words for an open task past its day, and for no other', () => {
+            const { container } = mount();
+            container.querySelectorAll('.foundation-overdue').length.should.equal(1);
+            container.querySelector('[data-overdue="true"]')!.textContent!.should.contain('Order a laptop');
+            container.querySelector('[data-overdue="true"]')!.textContent!.should.contain('Overdue');
+        });
+
+        it('should tick a task, publish it, and move the progress', () => {
+            const { published, onChange } = mount();
+            fireEvent.click(screen.getByLabelText('Order a laptop'));
+            (published.value as string[]).should.deep.equal(['t1', 't2']);
+            screen.getByRole('progressbar', { name: 'Progress of Before day one' }).getAttribute('aria-valuenow')!.should.equal('2');
+            onChange.callCount.should.equal(1);
+        });
+
+        it('should not let a read-only checklist be ticked', () => {
+            mount({ editPermission: 'disabled' });
+            (screen.getByLabelText('Order a laptop') as HTMLInputElement).disabled.should.equal(true);
+        });
+
+        it('should format due dates for the locale', () => {
+            const { container } = mount({ locale: 'de-DE' });
+            container.querySelector('time')!.textContent!.should.equal('01.03.2026');
+        });
+    });
+
+    describe('and reading the activity of a record', () => {
+        const feed = (properties?: Record<string, unknown>) => render(<ActivityFeed element={foundationElement(ComponentName.ActivityFeed, { ...foundationSamples[ComponentName.ActivityFeed].properties, ...properties })} slots={{}} />);
+
+        it('should group entries under a heading for each day, newest first', () => {
+            const { container } = feed();
+            Array.from(container.querySelectorAll('.foundation-activity-heading')).map(heading => heading.textContent).should.deep.equal(['Tuesday, March 10, 2026', 'Monday, March 9, 2026']);
+            container.querySelector('.foundation-activity-entry')!.textContent!.should.contain('Ada Lovelace');
+        });
+
+        it('should name the kind of an entry in words', () => {
+            const { container } = feed();
+            container.querySelector('[data-kind="comment"]')!.textContent!.should.contain('Comment: ');
+        });
+
+        it('should read oldest first when asked', () => {
+            const { container } = feed({ order: 'ascending' });
+            container.querySelector('.foundation-activity-entry')!.textContent!.should.contain('marked the deal as qualified');
+        });
+
+        it('should say there is no activity in its own words when empty', () => {
+            const { container } = feed({ entries: [] });
+            container.querySelector('.foundation-empty-headline')!.textContent!.should.equal('No activity yet');
+        });
+    });
+
+    describe('and stacking avatars', () => {
+        it('should show the maximum, fold the rest into a count in words, and label the group', () => {
+            const { container } = render(<AvatarStack element={foundationElement(ComponentName.AvatarStack)} slots={{}} />);
+            screen.getByRole('group', { name: '6 people' });
+            container.querySelectorAll('.foundation-avatar').length.should.equal(5);
+            screen.getByRole('img', { name: '2 more' });
+            screen.getByRole('img', { name: 'Ada Lovelace' }).textContent!.should.equal('AL');
+        });
+
+        it('should draw a picture when there is one', () => {
+            const { container } = render(<AvatarStack element={foundationElement(ComponentName.AvatarStack, { people: [{ name: 'Ada', imageUrl: 'ada.png' }] })} slots={{}} />);
+            container.querySelector('img')!.getAttribute('src')!.should.equal('ada.png');
+        });
+    });
+
+    describe('and uploading files', () => {
+        const pdf = (name: string, size = 10) => new File([new Uint8Array(size)], name, { type: 'application/pdf' });
+        const mount = (handler?: (files: File[], url?: string) => Promise<void>, properties?: Record<string, unknown>) => {
+            const { published, bindingOutputs } = outputs();
+            const view = render(<FileUploaderHandlerProvider handler={handler}><FileUploader element={foundationElement(ComponentName.FileUploader, { ...foundationSamples[ComponentName.FileUploader].properties, ...properties })} slots={{}} bindingOutputs={bindingOutputs} /></FileUploaderHandlerProvider>);
+            return { published, ...view, input: view.container.querySelector('input[type="file"]') as HTMLInputElement };
+        };
+
+        it('should publish what was chosen and list it with a status in words', () => {
+            const { published, input } = mount();
+            fireEvent.change(input, { target: { files: [pdf('a.pdf')] } });
+            (published.value as { name: string; status: string }[]).should.deep.equal([{ name: 'a.pdf', size: 10, type: 'application/pdf', status: 'queued' }]);
+            screen.getByText('Ready to upload');
+        });
+
+        it('should refuse a file of the wrong type or too large and say so', () => {
+            const { published, input } = mount(undefined, { maxSizeMb: 0.00001 });
+            fireEvent.change(input, { target: { files: [new File(['x'], 'notes.txt', { type: 'text/plain' }), pdf('big.pdf', 1000)] } });
+            screen.getByText('notes.txt is not an accepted file type');
+            screen.getByText(/^big\.pdf is larger than 10 B$/);
+            (published.value as unknown[]).length.should.equal(0);
+        });
+
+        it('should refuse a second file when only one is allowed', () => {
+            const { input } = mount(undefined, { multiple: false });
+            fireEvent.change(input, { target: { files: [pdf('a.pdf'), pdf('b.pdf')] } });
+            screen.getByText('Only one file can be uploaded at a time');
+            screen.getAllByRole('listitem').length.should.equal(1);
+        });
+
+        it('should send the files through the handler and mark them done, or failed with a retry', async () => {
+            let attempts = 0;
+            const { input } = mount(async () => { attempts++; if (attempts === 1) throw new Error('no'); }, { serverUrl: '/uploads' });
+            fireEvent.change(input, { target: { files: [pdf('a.pdf')] } });
+            await screen.findByText('Upload failed');
+            fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+            await screen.findByText('Uploaded');
+            attempts.should.equal(2);
+        });
+
+        it('should accept a drop the way it accepts a choice, and remove a file from the list', () => {
+            const { container, published } = mount();
+            fireEvent.drop(container.querySelector('.foundation-dropzone')!, { dataTransfer: { files: [pdf('dropped.pdf')] } });
+            screen.getByText('dropped.pdf');
+            fireEvent.click(screen.getByRole('button', { name: 'Remove dropped.pdf' }));
+            (published.value as unknown[]).length.should.equal(0);
+        });
+
+        it('should ignore a drop when the permission rule is not enabled', () => {
+            const { container } = mount(undefined, { actionPermission: 'disabled' });
+            fireEvent.drop(container.querySelector('.foundation-dropzone')!, { dataTransfer: { files: [pdf('dropped.pdf')] } });
+            (screen.queryByText('dropped.pdf') === null).should.equal(true);
+            (input_(container).disabled).should.equal(true);
+        });
+
+        it('should leave the uploader with a selection and a refusal without accessibility violations', async () => {
+            const { container, input } = mount();
+            fireEvent.change(input, { target: { files: [pdf('a.pdf'), new File(['x'], 'b.txt', { type: 'text/plain' })] } });
+            (await violationsIn(container)).should.deep.equal([]);
+        });
+    });
 });
+
+const input_ = (container: HTMLElement) => container.querySelector('input[type="file"]') as HTMLInputElement;

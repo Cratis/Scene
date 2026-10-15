@@ -81,4 +81,16 @@ export enum ComponentName {
 
     /** A list's saved views as a menu button. */
     SavedViewsMenu = 'savedViewsMenu',
+
+    /** Sections of tasks with owner, due date and progress. */
+    ChecklistSection = 'checklistSection',
+
+    /** What happened to a record, grouped by day. */
+    ActivityFeed = 'activityFeed',
+
+    /** Overlapping avatars for the people on a record. */
+    AvatarStack = 'avatarStack',
+
+    /** A drop zone and file picker with type and size checks. */
+    FileUploader = 'fileUploader',
 }

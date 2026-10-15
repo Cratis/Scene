@@ -18,4 +18,8 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.FilterBuilder]: m('Filter builder', ComponentCategory.Input, 'list-filter', ['filter', 'query', 'conditions', 'and or', 'search']),
     [ComponentName.ColumnChooser]: m('Column chooser', ComponentCategory.Actions, 'columns-3', ['columns', 'fields', 'show hide', 'table']),
     [ComponentName.SavedViewsMenu]: m('Saved views menu', ComponentCategory.Actions, 'bookmark', ['views', 'presets', 'saved filters']),
+    [ComponentName.ChecklistSection]: m('Checklist', ComponentCategory.DataDisplay, 'list-checks', ['tasks', 'todo', 'onboarding', 'progress', 'steps']),
+    [ComponentName.ActivityFeed]: m('Activity feed', ComponentCategory.DataDisplay, 'activity', ['timeline', 'history', 'comments', 'audit', 'log']),
+    [ComponentName.AvatarStack]: m('Avatar stack', ComponentCategory.DataDisplay, 'users', ['people', 'members', 'assignees', 'team']),
+    [ComponentName.FileUploader]: m('File uploader', ComponentCategory.Input, 'upload', ['attachments', 'files', 'drop zone', 'documents']),
 };
