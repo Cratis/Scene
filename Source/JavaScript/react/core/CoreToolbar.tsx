@@ -1,11 +1,14 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useContext } from 'react';
-import { BindingScope, resolveBindingExpression } from '@cratis/scene.engine';
-import { BindingExpression, BindingSourceKind, DestinationKind, DestinationReference } from '@cratis/scene.model';
+import { useContext, useMemo } from 'react';
+import { ApplicationStructureIndex, BindingScope, resolveBindingExpression, resolveToolbarButton, toolbarButtonFromItem } from '@cratis/scene.engine';
+import { BindingExpression, BindingSourceKind, DestinationKind, DestinationReference, ToolbarEmphasis } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
 import { SceneNavigationContextInternal } from '../navigation/SceneNavigationContext';
+import { useSceneNavigationModel } from '../navigation/region/SceneNavigationModelContext';
+import { sliceDialogDestination } from '../slices/sliceDialogDestination';
+import { useWarnEmptySlices } from '../slices/SliceInvokerContext';
 
 /** How a toolbar item shows its icon and label - the `mode` an item's presentation hint can name. */
 export type ToolbarItemMode = 'icon' | 'text' | 'both';
@@ -52,6 +55,12 @@ function withResolvedParameters(destination: DestinationReference, scope: Bindin
         routeParameterBindings: Object.fromEntries(Object.entries(bindings).map(([name, binding]) =>
             [name, literal(resolveBindingExpression(binding, scope))])),
     };
+}
+
+/** How prominent the item is: its authored emphasis, else `secondary`. */
+function emphasisOf(properties: Record<string, unknown>): ToolbarEmphasis {
+    const emphasis = textProperty(properties, 'emphasis')?.toLowerCase();
+    return emphasis === ToolbarEmphasis.Primary || emphasis === ToolbarEmphasis.Quiet ? emphasis : ToolbarEmphasis.Secondary;
 }
 
 /** The mode the item's authored presentation asks for; anything it does not name shows both. */
@@ -111,14 +120,30 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
     const presentation = recordProperty(element.properties, 'presentation');
     const mode = toolbarItemMode(presentation);
     const destination = toolbarItemDestination(element.properties);
+    const model = useSceneNavigationModel();
+    const warnEmptySlices = useWarnEmptySlices();
+    const button = useMemo(() => toolbarButtonFromItem(element.id, element.properties), [element.id, element.properties]);
+    const resolved = useMemo(() => {
+        if (!button || !model) return undefined;
+        const index = model.structure instanceof ApplicationStructureIndex ? model.structure : new ApplicationStructureIndex(model.structure);
+        return resolveToolbarButton(index, button);
+    }, [button, model]);
+    const dialog = resolved ? sliceDialogDestination(resolved) : undefined;
+    const emphasis = resolved?.emphasis ?? button?.emphasis ?? emphasisOf(element.properties);
+    const empty = button !== undefined && button.slice === undefined && button.target === undefined;
     const attributes = Object.fromEntries(Object.entries(presentation)
         .filter(([key]) => /^[A-Za-z][A-Za-z0-9-]*$/.test(key))
         .map(([key, value]) => [`data-scene-presentation-${key.toLowerCase()}`, String(value)]));
 
     const activate = () => {
-        if (kind === 'action') {
+        if (dialog && navigation) {
+            navigation.navigate(dialog);
+            return;
+        }
+
+        if (kind === 'action' || button !== undefined) {
             const args = resolveParameters(recordProperty(element.properties, 'parameters'), scope);
-            globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command: target, element, arguments: args } }));
+            globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command: target || button?.slice || '', element, arguments: args } }));
             return;
         }
 
@@ -142,12 +167,18 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
             data-scene-mode={mode}
             aria-label={mode === 'icon' ? label : undefined}
             title={mode === 'icon' ? label : undefined}
-            disabled={kind !== 'action' && !destination}
+            disabled={kind !== 'action' && button === undefined && !destination}
+            aria-haspopup={dialog ? 'dialog' : undefined}
+            data-scene-emphasis={emphasis}
+            data-scene-slice={resolved?.slice ?? button?.slice}
+            data-scene-warning={warnEmptySlices && empty ? 'emptySlice' : undefined}
+            className={`scene-toolbar-button scene-toolbar-button-${emphasis}`}
             onClick={activate}
             {...attributes}
         >
             {mode !== 'text' && icon && <span aria-hidden='true' data-scene-icon-name={icon} />}
             {mode !== 'icon' && label}
+            {warnEmptySlices && empty && <span role='img' aria-label='No slice is linked to this button' title='No slice is linked to this button' data-scene-badge='warning'>!</span>}
         </button>
     );
 }

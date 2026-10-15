@@ -81,3 +81,33 @@ state view - stays a legacy button and raises no diagnostic. `core:toolbarItem` 
 Both engines are asserted against `toolbar-slice-fixtures.json` (state change ok, state view and automation rejected, missing
 slice, empty slice warning, dialog template resolution, conversion from a `target` command, and reading buttons from items):
 `Engine.Specs/for_ToolbarButtonValidation` and `engine/for_validateToolbarButtons`.
+
+### Running a slice button: the task dialog and the `sliceInvoker`
+
+`core:toolbarItem` renders every button with its `emphasis` - `data-scene-emphasis` and the class `scene-toolbar-button-<emphasis>`
+(`primary` solid accent, `secondary` outlined, `quiet` frameless; `blueprint.default` styles them) - and an icon according to
+`presentation.mode`. When a navigation model is in scope (`SceneNavigationHost` `navigationModel`), a button that resolves to a state
+change slice **opens its dialog** instead of announcing the command:
+
+- The button navigates to the dialog destination `sliceDialogDestination(resolved)` - the template `sliceDialogFor` picked, with the
+  `slice`, `command` and `title` as parameters. The host renders `dialogs[template]` when the application authors one (the
+  `core:sliceDialog` component, or its own element, reading `currentDialogParameters`), and the built-in **`SliceDialogView`** otherwise.
+- The dialog is a centred modal card: the button title, the subtitle `State Change · <Slice>`, a labelled field per command property,
+  and `Cancel` with a submit button labelled with the title. The first field takes focus, Tab stays inside, Escape cancels, and focus
+  goes back to the button. Required fields are checked before anything is invoked.
+- The fields come from the command, through `SliceCommandFieldsProvider` (`fieldsFor(command, slice)` returns `{ name, type, label?, required? }`
+  per property): Stage reads them from the generated command schemas, Studio from the model. `@cratis/scene.react` imports no Arc or
+  transport code (seam rules I3/I4).
+- Submit calls the **`SliceInvoker`** in scope - `invoke(sliceId, payload, command)` returning an `InvocationResult` (`succeeded`,
+  `validationErrors` by field, `message`, `payload`, `dryRun`). Success closes the dialog and signals the result (`dialogResult`);
+  validation errors are shown against their fields (`aria-invalid`, `aria-describedby`) or for the whole form.
+
+| Invoker | Provided by | Does |
+| --- | --- | --- |
+| announcing (default, no provider) | `createAnnouncingInvoker()` | Announces `cratis.scene.command` with the payload and reports success - what a toolbar action has always done |
+| real | Stage, through `SliceInvokerProvider` | Sends the command and returns its validation result |
+| dry run | `createDryRunInvoker({ onInvoked, validate })` | Validates, sends nothing, returns a result carrying the would-be payload for the toast (spec PRV5) |
+
+A button with no slice shows a warning badge only when the host asks for it - `SliceInvokerProvider warnEmptySlices` (a dry-run invoker
+implies it) - so design and preview hosts flag it (TB5) and a running application never does. Without a navigation model a slice button
+announces the command exactly as before.

@@ -74,6 +74,19 @@ const describedCore: ComponentDescriptor[] = [
         ],
     },
     {
+        component: key('sliceDialog'),
+        displayName: 'Slice dialog',
+        description: 'The task dialog of a state change slice: the form of its command with Cancel and a submit button. Opened from a toolbar button it takes the slice, command and title from the button; set them to fix the dialog to one slice.',
+        properties: [
+            {
+                path: 'slice', label: 'Slice', group: 'Behavior', valueType: PropertyValueType.String,
+                editorKind: PropertyEditorKind.Slice, editorOptions: { kinds: ['StateChange'] },
+                description: 'The State Change slice the dialog submits; empty to take it from the toolbar button that opens the dialog.',
+            },
+            { path: 'title', label: 'Title', group: 'Content', valueType: PropertyValueType.String, description: 'The dialog title and submit label; empty to take the toolbar button title.' },
+        ],
+    },
+    {
         component: key('column'),
         displayName: 'Table column',
         properties: [

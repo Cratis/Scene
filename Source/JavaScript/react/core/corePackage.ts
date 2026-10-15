@@ -37,6 +37,7 @@ export const corePackageManifest: ScenePackage = {
         'outlet',
         'toolbar',
         'toolbarItem',
+        'sliceDialog',
     ],
     layouts: [],
     screenTemplates: [],
