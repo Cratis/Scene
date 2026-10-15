@@ -51,6 +51,19 @@ function collectionValue(grant: ExposureGrant, matching: InstanceContribution[],
             continue;
         }
 
+        if (contribution.replaceOwnerItems === true) {
+            if (!grant.operations.includes(CollectionOperation.Replace)) {
+                diagnostics.push(errorDiagnostic(
+                    DiagnosticCode.ContributionOperationNotPermitted,
+                    `'${instance}' replaces the items it inherits in '${grant.path}', but replacing items is not exposed. It is ignored and kept.`,
+                    context));
+                continue;
+            }
+
+            items.splice(0, items.length);
+            contributed = true;
+        }
+
         if (contribution.items.length > 0 && !grant.operations.includes(CollectionOperation.Add)) {
             diagnostics.push(errorDiagnostic(
                 DiagnosticCode.ContributionOperationNotPermitted,

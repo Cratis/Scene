@@ -55,7 +55,14 @@ static class ContributionChecker
                 continue;
             }
 
-            CollectionChange.Check(context, grant, now?.Contribution?.Items ?? [], before?.Contribution?.Items ?? [], OwnedItemIds(chain, grant));
+            CollectionChange.Check(
+                context,
+                grant,
+                now?.Contribution?.Items ?? [],
+                before?.Contribution?.Items ?? [],
+                OwnedItemIds(chain, grant),
+                now?.Contribution?.ReplaceOwnerItems == true,
+                before?.Contribution?.ReplaceOwnerItems == true);
         }
     }
 

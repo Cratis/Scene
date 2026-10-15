@@ -20,7 +20,9 @@ static class CollectionChange
     /// <param name="now">The items the scope holds in it now.</param>
     /// <param name="before">The items it held before.</param>
     /// <param name="ownerItemIds">The ids of the items the owner put in the collection itself.</param>
-    public static void Check(ChangeContext context, ExposureGrant grant, IReadOnlyList<ContributedItem> now, IReadOnlyList<ContributedItem> before, HashSet<string> ownerItemIds)
+    /// <param name="replacesNow">Whether the scope hides the items it inherits in the collection now.</param>
+    /// <param name="replacedBefore">Whether it hid them before.</param>
+    public static void Check(ChangeContext context, ExposureGrant grant, IReadOnlyList<ContributedItem> now, IReadOnlyList<ContributedItem> before, HashSet<string> ownerItemIds, bool replacesNow = false, bool replacedBefore = false)
     {
         var scope = context.Scope.Describe();
         var subject = context.Scope.Instance();
@@ -41,6 +43,8 @@ static class CollectionChange
 
         Require(context, grant, CollectionOperation.Add, added.Count > 0, $"{scope} added items to {where}, but adding items is not exposed.");
         Require(context, grant, CollectionOperation.Remove, removed.Count > 0, $"{scope} removed items from {where}, but removing items is not exposed.");
+
+        Require(context, grant, CollectionOperation.Replace, replacesNow && !replacedBefore, $"{scope} replaced the items it inherits in {where}, but replacing items is not exposed.");
 
         var edited = kept.FindAll(item => ChangedFields(item, beforeById[item.Id]).Count != 0);
         Require(context, grant, CollectionOperation.EditFields, edited.Count > 0, $"{scope} changed the fields of items in {where}, but editing fields is not exposed.");

@@ -17,9 +17,11 @@ namespace Cratis.Scene.Model.Exposure;
 /// <param name="Path">The path of the property.</param>
 /// <param name="Value">The value of a scalar property.</param>
 /// <param name="Items">The items the instance added to a collection property.</param>
+/// <param name="ReplaceOwnerItems">Whether the instance hides the items the owner and the levels above put in the collection, so only its own items remain. Needs the <see cref="CollectionOperation.Replace"/> operation.</param>
 public record InstanceContribution(
     string Instance,
     string Component,
     string Path,
     JsonElement? Value = null,
-    IReadOnlyList<ContributedItem>? Items = null);
+    IReadOnlyList<ContributedItem>? Items = null,
+    bool? ReplaceOwnerItems = null);

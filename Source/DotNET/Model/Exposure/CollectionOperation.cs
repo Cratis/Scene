@@ -26,5 +26,11 @@ public enum CollectionOperation
     /// <summary>
     /// Change the fields of items it added.
     /// </summary>
-    EditFields = 3
+    EditFields = 3,
+
+    /// <summary>
+    /// Hide the items the owner, and every level above, put in the collection, so the instance's own items are all there is.
+    /// The hidden items stay where they are and come back when the instance stops replacing.
+    /// </summary>
+    Replace = 4
 }

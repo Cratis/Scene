@@ -205,7 +205,8 @@
       "packages",
       "defaultSizeClass",
       "layout",
-      "theme"
+      "theme",
+      "sampleData"
     ],
     "Theme": [
       "name",
@@ -240,7 +241,8 @@
       "iconLibrary",
       "designTime",
       "assets",
-      "runtimeSingletons"
+      "runtimeSingletons",
+      "sampleData"
     ],
     "IconReference": [
       "library",
@@ -440,7 +442,8 @@
       "component",
       "path",
       "value",
-      "items"
+      "items",
+      "replaceOwnerItems"
     ],
     "EditingScope": [
       "kind",
@@ -504,6 +507,49 @@
       "url",
       "notice"
     ],
+    "SampleShapeField": [
+      "name",
+      "type",
+      "kind",
+      "nullable",
+      "enumValues",
+      "min",
+      "max"
+    ],
+    "SampleShape": [
+      "name",
+      "fields"
+    ],
+    "SampleDataSet": [
+      "shape",
+      "rows"
+    ],
+    "SampleDataPack": [
+      "id",
+      "title",
+      "locale",
+      "owner",
+      "sets"
+    ],
+    "SampleDataPackReference": [
+      "id",
+      "title",
+      "locale",
+      "path"
+    ],
+    "SampleDataMapping": [
+      "shape",
+      "readModel"
+    ],
+    "SampleDataBinding": [
+      "target",
+      "pack"
+    ],
+    "SampleDataSelection": [
+      "activePack",
+      "mappings",
+      "bindings"
+    ],
     "TemplateReference": [
       "source",
       "id",
@@ -531,6 +577,35 @@
       "kind",
       "command",
       "dialogTemplate"
+    ],
+    "NavItem": [
+      "id",
+      "title",
+      "icon",
+      "target",
+      "slot",
+      "children"
+    ],
+    "NavigationRegion": [
+      "region",
+      "mode",
+      "items"
+    ],
+    "ApplicationLogo": [
+      "image",
+      "title"
+    ],
+    "ApplicationNavigation": [
+      "regions",
+      "logo"
+    ],
+    "ModuleNavigation": [
+      "module",
+      "regions"
+    ],
+    "NavigationModel": [
+      "application",
+      "modules"
     ],
     "ToolbarButton": [
       "id",
@@ -640,7 +715,8 @@
       "Add",
       "Remove",
       "Reorder",
-      "EditFields"
+      "EditFields",
+      "Replace"
     ],
     "EditingScopeKind": [
       "Screen",
@@ -678,6 +754,21 @@
       "Percent",
       "Auto"
     ],
+    "SampleFieldKind": [
+      "Id",
+      "Name",
+      "Company",
+      "Email",
+      "Phone",
+      "City",
+      "Text",
+      "WholeNumber",
+      "Amount",
+      "Boolean",
+      "Date",
+      "DateTime",
+      "Enum"
+    ],
     "TemplateReferenceSource": [
       "Own",
       "Blueprint"
@@ -686,6 +777,15 @@
       "StateChange",
       "StateView",
       "Automation"
+    ],
+    "NavigationRegionKind": [
+      "Topbar",
+      "Sidebar"
+    ],
+    "NavigationRegionMode": [
+      "Inherit",
+      "Extend",
+      "Override"
     ],
     "ToolbarEmphasis": [
       "Primary",

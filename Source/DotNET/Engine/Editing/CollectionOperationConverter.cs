@@ -9,8 +9,8 @@ namespace Cratis.Scene.Engine.Editing;
 
 /// <summary>
 /// Reads and writes a <see cref="CollectionOperation"/> as the name a Scene document stores it under:
-/// <c language="csharp">add</c>, <c language="csharp">remove</c>, <c language="csharp">reorder</c> or
-/// <c language="csharp">edit-fields</c>.
+/// <c language="csharp">add</c>, <c language="csharp">remove</c>, <c language="csharp">reorder</c>,
+/// <c language="csharp">edit-fields</c> or <c language="csharp">replace</c>.
 /// </summary>
 sealed class CollectionOperationConverter : JsonConverter<CollectionOperation>
 {
@@ -19,7 +19,8 @@ sealed class CollectionOperationConverter : JsonConverter<CollectionOperation>
         ("add", CollectionOperation.Add),
         ("remove", CollectionOperation.Remove),
         ("reorder", CollectionOperation.Reorder),
-        ("edit-fields", CollectionOperation.EditFields)
+        ("edit-fields", CollectionOperation.EditFields),
+        ("replace", CollectionOperation.Replace)
     ];
 
     /// <inheritdoc/>

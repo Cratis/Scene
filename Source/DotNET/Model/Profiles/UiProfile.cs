@@ -26,6 +26,12 @@ namespace Cratis.Scene.Model.Profiles;
 /// none. A theme is only meaningful relative to a set of packages, which is why it is chosen here rather
 /// than by a screen.
 /// </param>
+/// <param name="SampleData">
+/// Which sample data the application previews with at design and preview time: the active pack, chosen once here for the whole
+/// application (own or from a blueprint), plus the rare shape-to-read-model mappings and per-read-model pack bindings. Never
+/// stated by a screen, slice or component, and never part of a production build. <see langword="null"/> selects the blueprint's
+/// default pack, then generated data.
+/// </param>
 /// <remarks>
 /// A profile is where the choices that make a description concrete are made: which component vocabulary,
 /// which shell, which theme. Deliberately none of them are stated by a <see cref="Screens.Screen"/> - that
@@ -38,4 +44,5 @@ public record UiProfile(
     IReadOnlyList<string> Packages,
     TargetSizeClass? DefaultSizeClass = null,
     string? Layout = null,
-    string? Theme = null);
+    string? Theme = null,
+    SampleData.SampleDataSelection? SampleData = null);

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, Screen, ScreenTemplate } from '@cratis/scene.model';
+import { ApplicationStructure, DialogTemplate, Layout, NavigationModel, Screen, ScreenTemplate } from '@cratis/scene.model';
 import { NavigationEntry } from './NavigationEntry';
 
 /**
@@ -23,4 +23,13 @@ export interface NavigationGraph {
 
     /** The dialog templates dialog destinations may open. */
     dialogTemplates?: DialogTemplate[];
+
+    /** The modules, features and slices of the application; with `navigation`, the navigation regions are checked against them. */
+    structure?: ApplicationStructure;
+
+    /** The application and module navigation regions to check against `structure`. */
+    navigation?: NavigationModel;
+
+    /** The rendering slots navigation items may render into; `content` only when absent. */
+    slots?: string[];
 }

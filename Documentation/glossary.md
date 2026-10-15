@@ -24,7 +24,8 @@ These arrive from the model. Scene does not reinterpret them.
 | **Contribution point** | A named many-to-one extension point declared on a slot. | `Model/ContributionPoints/ContributionPoint` |
 | **Contribution** | One piece of content targeting a contribution point. | `Model/ContributionPoints/Contribution` |
 | **Form** | A command or query input surface with its fields and how they populate. | `Model/Forms/Form` |
-| **UI profile** | A build's selections: platform, size, layout, theme, packages, blueprint, start screen. Names artifacts; never contains them. | `Model/Profiles/UiProfile` |
+| **UI profile** | A build's selections: platform, size, layout, theme, packages, blueprint, start screen, and the application's active sample-data pack. Names artifacts; never contains them. | `Model/Profiles/UiProfile` |
+| **Sample-data pack** | Demo rows per shape, in one locale, that a design surface or preview shows instead of a backend. Chosen once on the UI profile; never part of a production build. | `Model/SampleData/SampleDataPack` |
 
 ## Interaction
 

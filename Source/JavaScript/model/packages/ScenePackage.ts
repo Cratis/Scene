@@ -4,6 +4,7 @@
 import { PackageDesignTimeMetadata } from '../descriptors';
 import { IconLibrary } from '../icons';
 import { PackageDependency } from './PackageDependency';
+import { SampleDataPackReference } from '../sampleData';
 import { PackageKind } from './PackageKind';
 
 /**
@@ -102,6 +103,12 @@ export interface ScenePackage {
 
     /** Runtime singleton dependency names that must not be duplicated across approved bundles. */
     runtimeSingletons?: string[];
+
+    /**
+     * The sample-data packs this package ships (`sampleData/*.json`). Design and preview time only: a
+     * Stage production build never includes or resolves them.
+     */
+    sampleData?: SampleDataPackReference[];
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -123,4 +130,5 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'designTime',
     'assets',
     'runtimeSingletons',
+    'sampleData',
 ];

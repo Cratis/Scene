@@ -1,0 +1,240 @@
+{
+  "description": "Shared navigation region corpus asserted by both the C# engine (Engine.Specs/for_EffectiveNavigation) and the TypeScript engine (engine/for_effectiveNavigation). structure is the default application structure; a case may carry its own. A view resolves one region for the application (no module) or for one module and lists the effective items as id|origin|locked or editable|resolved feature|slot|icon|reason, sub-items indented by two spaces. editCases run an edit helper, then apply the edits it returned. Diagnostics are the shared codes, messages and entries of diagnoseNavigationRegions.",
+  "structure": {"modules":[{"id":"dashboard","name":"Dashboard","features":[{"id":"overview","name":"Overview","features":[],"slices":[]}]},{"id":"sales","name":"Sales","features":[{"id":"orders","name":"Orders","features":[{"id":"returns","name":"Returns","features":[],"slices":[]}],"slices":[{"id":"PlaceOrder","name":"Place order","kind":"StateChange"}]},{"id":"customers","name":"Customers","features":[],"slices":[]},{"id":"pipeline","name":"Pipeline","features":[],"slices":[]}]},{"id":"support","name":"Support","features":[{"id":"tickets","name":"Tickets","features":[],"slices":[]},{"id":"kb","name":"Knowledge base","features":[],"slices":[]}]},{"id":"empty","name":"Empty","features":[]}]},
+  "cases": [
+    {
+      "name": "application level shows its own items, editable, defined here",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["dashboard|application|editable|dashboard.overview|content|lucide:home|Defined here.", "sales|application|editable|sales.orders|content|-|Defined here.", "support|application|editable|support.tickets|content|-|Defined here."]}},
+        {"region": "sidebar", "expected": {"sources": "definedHere|defined here", "items": ["dashboard|application|editable|dashboard.overview|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "inherit shows the application items read-only",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"topbar","mode":"inherit","items":[]}]}]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "sales"},
+        {"region": "sidebar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "sales"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "inherit clears the module items it still holds",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"inherit","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "sales"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a module that declares nothing inherits every region",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "support"},
+        {"region": "sidebar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "support"},
+        {"region": "topbar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "empty"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a region without a mode at a module inherits",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"topbar","items":[{"id":"x","title":"X","target":{"module":"sales"}}]}]}]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "sales"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "extend shows the application items then the module items",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "extended|Application + Sales", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there.", "orders|module|editable|sales.orders|content|-|Defined in Sales.", "customers|module|editable|sales.customers|content|-|Defined in Sales.", "pipeline|module|editable|sales.orders|content|-|Defined in Sales."], "mode": "extend"}, "module": "sales"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "override shows the module items only",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[{"region":"topbar","mode":"extend","items":[{"id":"help","title":"Help center","target":{"module":"support"}}]},{"region":"sidebar","mode":"override","items":[{"id":"tickets","title":"Tickets","target":{"module":"support","feature":"tickets"}},{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "overridden|Support only", "items": ["tickets|module|editable|support.tickets|content|-|Defined in Support.", "kb|module|editable|support.kb|content|-|Defined in Support."], "mode": "override"}, "module": "support"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "each region of a module has its own mode",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[{"region":"topbar","mode":"extend","items":[{"id":"help","title":"Help center","target":{"module":"support"}}]},{"region":"sidebar","mode":"override","items":[{"id":"tickets","title":"Tickets","target":{"module":"support","feature":"tickets"}},{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]}]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "extended|Application + Support", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there.", "help|module|editable|support.tickets|content|-|Defined in Support."], "mode": "extend"}, "module": "support"},
+        {"region": "sidebar", "expected": {"sources": "overridden|Support only", "items": ["tickets|module|editable|support.tickets|content|-|Defined in Support.", "kb|module|editable|support.kb|content|-|Defined in Support."], "mode": "override"}, "module": "support"},
+        {"region": "topbar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|lucide:home|Inherited from the application; edit it there.", "sales|application|locked|sales.orders|content|-|Inherited from the application; edit it there.", "support|application|locked|support.tickets|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "sales"}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "hierarchical sidebar items carry resolved children",
+      "navigation": {"application":{"regions":[{"region":"sidebar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"children":[{"id":"orders","title":"Orders","icon":"lucide:receipt","target":{"module":"sales","feature":"orders"},"slot":"side"},{"id":"returns","title":"Returns","target":{"module":"sales","feature":"orders.returns"}}]},{"id":"group","title":"Group","children":[{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]}]},"modules":[]},
+      "slots": ["content","side"],
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "definedHere|defined here", "items": ["sales|application|editable|sales.orders|content|-|Defined here.", "  orders|application|editable|sales.orders|side|lucide:receipt|Defined here.", "  returns|application|editable|sales.orders.returns|content|-|Defined here.", "group|application|editable|-|content|-|Defined here.", "  kb|application|editable|support.kb|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a topbar is flat so its sub-items are ignored",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"children":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}}]}]}]},"modules":[]},
+      "views": [
+        {"region": "topbar", "expected": {"sources": "definedHere|defined here", "items": ["sales|application|editable|sales.orders|content|-|Defined here."]}}
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a module that is not in the structure falls back to its id",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"ghost","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"a","title":"A","target":{"module":"sales","feature":"orders"}}]}]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "extended|Application + ghost", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there.", "a|module|editable|sales.orders|content|-|Defined in ghost."], "mode": "extend"}, "module": "ghost"}
+      ],
+      "expectedDiagnostics": [
+        {"code": "navTargetOutOfScope", "message": "Navigation item 'a' of module 'ghost' targets module 'sales'; a module's own items may only target that module.", "entry": "ghost:sidebar:a"}
+      ]
+    },
+    {
+      "name": "duplicate ids are reported within a region and against extended application items",
+      "navigation": {"application":{"regions":[{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}},{"id":"dashboard","title":"Dashboard again","target":{"module":"dashboard"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"orders","title":"Orders again","target":{"module":"sales","feature":"customers"},"children":[{"id":"dashboard","title":"Dashboard","target":{"module":"sales"}}]}]}]},{"module":"support","regions":[{"region":"sidebar","mode":"override","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"support"}}]}]}]},
+      "views": [
+
+      ],
+      "expectedDiagnostics": [
+        {"code": "navDuplicateId", "message": "Navigation item 'dashboard' is used more than once in the application sidebar.", "entry": "application:sidebar:dashboard"},
+        {"code": "navDuplicateId", "message": "Navigation item 'orders' is used more than once in module 'sales' sidebar.", "entry": "sales:sidebar:orders"},
+        {"code": "navDuplicateId", "message": "Navigation item 'dashboard' in module 'sales' sidebar is also used by an application item, and the region extends the application.", "entry": "sales:sidebar:dashboard"}
+      ]
+    },
+    {
+      "name": "an unknown slot is reported",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"slot":"drawer"},{"id":"support","title":"Support","target":{"module":"support"},"slot":"content"}]}]},"modules":[]},
+      "views": [
+
+      ],
+      "expectedDiagnostics": [
+        {"code": "navSlotUnknown", "message": "Navigation item 'sales' renders into slot 'drawer', which the layout does not declare.", "entry": "application:topbar:sales"}
+      ]
+    },
+    {
+      "name": "a declared slot is accepted",
+      "slots": ["content","side"],
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"slot":"side"}]}]},"modules":[]},
+      "views": [
+
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a module navigation block without regions is harmless",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[]}]},
+      "views": [
+        {"region": "sidebar", "expected": {"sources": "inherited|inherited", "items": ["dashboard|application|locked|dashboard.overview|content|-|Inherited from the application; edit it there."], "mode": "inherit"}, "module": "support"}
+      ],
+      "expectedDiagnostics": []
+    }
+  ],
+  "editCases": [
+    {
+      "name": "switching an inheriting region to override with copy starts from the application items",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"switchRegionMode","module":"sales","region":"sidebar","mode":"override","copy":true},
+      "expected": {"edits":[{"kind":"setRegionItems","module":"sales","region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]},{"kind":"setRegionMode","module":"sales","region":"sidebar","mode":"override"}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"override","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]}]}}
+    },
+    {
+      "name": "switching an inheriting region to override without copy starts empty",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"switchRegionMode","module":"sales","region":"sidebar","mode":"override"},
+      "expected": {"edits":[{"kind":"setRegionMode","module":"sales","region":"sidebar","mode":"override"}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"override","items":[]}]}]}}
+    },
+    {
+      "name": "switching an extending region to override with copy keeps the module items",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "call": {"op":"switchRegionMode","module":"sales","region":"sidebar","mode":"override","copy":true},
+      "expected": {"edits":[{"kind":"setRegionMode","module":"sales","region":"sidebar","mode":"override"}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"override","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]}}
+    },
+    {
+      "name": "switching to inherit clears the module items",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "call": {"op":"switchRegionMode","module":"sales","region":"sidebar","mode":"inherit"},
+      "expected": {"edits":[{"kind":"setRegionItems","module":"sales","region":"sidebar","items":[]},{"kind":"setRegionMode","module":"sales","region":"sidebar","mode":"inherit"}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"inherit","items":[]}]}]}}
+    },
+    {
+      "name": "switching to the mode a region already has changes nothing",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "call": {"op":"switchRegionMode","module":"sales","region":"sidebar","mode":"extend"},
+      "expected": {"edits":[],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]}}
+    },
+    {
+      "name": "a region another region's mode does not touch stays as it was",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[{"region":"topbar","mode":"extend","items":[{"id":"help","title":"Help center","target":{"module":"support"}}]}]}]},
+      "call": {"op":"switchRegionMode","module":"support","region":"sidebar","mode":"extend"},
+      "expected": {"edits":[{"kind":"setRegionMode","module":"support","region":"sidebar","mode":"extend"}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"support","regions":[{"region":"topbar","mode":"extend","items":[{"id":"help","title":"Help center","target":{"module":"support"}}]},{"region":"sidebar","mode":"extend","items":[]}]}]}}
+    },
+    {
+      "name": "the application has no region mode",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"switchRegionMode","region":"sidebar","mode":"override"},
+      "expected": {"rejected":"The application is the base of the navigation and has no region mode."}
+    },
+    {
+      "name": "adding an item to an inheriting region switches it to extend first",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"addNavItem","module":"sales","region":"topbar","item":{"id":"new","title":"New item"}},
+      "expected": {"edits":[{"kind":"setRegionMode","module":"sales","region":"topbar","mode":"extend"},{"kind":"addItem","module":"sales","region":"topbar","item":{"id":"new","title":"New item"}}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"topbar","mode":"extend","items":[{"id":"new","title":"New item"}]}]}]}}
+    },
+    {
+      "name": "adding an item to an extending region just adds it",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "call": {"op":"addNavItem","module":"sales","region":"sidebar","item":{"id":"new","title":"New item"}},
+      "expected": {"edits":[{"kind":"addItem","module":"sales","region":"sidebar","item":{"id":"new","title":"New item"}}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}},{"id":"new","title":"New item"}]}]}]}}
+    },
+    {
+      "name": "adding an item to the application adds it after the existing ones",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"addNavItem","region":"sidebar","item":{"id":"new","title":"New item"}},
+      "expected": {"edits":[{"kind":"addItem","region":"sidebar","item":{"id":"new","title":"New item"}}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}},{"id":"new","title":"New item"}]}]},"modules":[]}}
+    },
+    {
+      "name": "a sub-item is added under its parent in a sidebar",
+      "navigation": {"application":{"regions":[{"region":"sidebar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"children":[{"id":"orders","title":"Orders","icon":"lucide:receipt","target":{"module":"sales","feature":"orders"},"slot":"side"},{"id":"returns","title":"Returns","target":{"module":"sales","feature":"orders.returns"}}]},{"id":"group","title":"Group","children":[{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]}]},"modules":[]},
+      "call": {"op":"addNavItem","region":"sidebar","item":{"id":"new","title":"New item"},"parent":"orders"},
+      "expected": {"edits":[{"kind":"addItem","region":"sidebar","item":{"id":"new","title":"New item"},"parent":"orders"}],"model":{"application":{"regions":[{"region":"sidebar","items":[{"id":"sales","title":"Sales","target":{"module":"sales"},"children":[{"id":"orders","title":"Orders","icon":"lucide:receipt","target":{"module":"sales","feature":"orders"},"slot":"side","children":[{"id":"new","title":"New item"}]},{"id":"returns","title":"Returns","target":{"module":"sales","feature":"orders.returns"}}]},{"id":"group","title":"Group","children":[{"id":"kb","title":"Knowledge base","target":{"module":"support","feature":"kb"}}]}]}]},"modules":[]}}
+    },
+    {
+      "name": "a topbar item cannot have sub-items",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"addNavItem","region":"topbar","item":{"id":"new","title":"New item"},"parent":"sales"},
+      "expected": {"rejected":"A topbar is flat; only a sidebar item has sub-items."}
+    },
+    {
+      "name": "a sub-item needs an existing parent",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"addNavItem","region":"sidebar","item":{"id":"new","title":"New item"},"parent":"missing"},
+      "expected": {"rejected":"There is no item 'missing' to add a sub-item to."}
+    },
+    {
+      "name": "an item id already used in the region is refused",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[{"module":"sales","regions":[{"region":"sidebar","mode":"extend","items":[{"id":"orders","title":"Orders","target":{"module":"sales","feature":"orders"}},{"id":"customers","title":"Customers","target":{"module":"sales","feature":"customers"}},{"id":"pipeline","title":"Pipeline","target":{"module":"sales"}}]}]}]},
+      "call": {"op":"addNavItem","module":"sales","region":"sidebar","item":{"id":"orders","title":"Again"}},
+      "expected": {"rejected":"Navigation item id 'orders' is already used in this region."}
+    },
+    {
+      "name": "the application sets its logo",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"setApplicationLogo","logo":{"image":"acme.svg","title":"Acme"}},
+      "expected": {"edits":[{"kind":"setLogo","logo":{"image":"acme.svg","title":"Acme"}}],"model":{"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}],"logo":{"image":"acme.svg","title":"Acme"}},"modules":[]}}
+    },
+    {
+      "name": "a module cannot set the logo",
+      "navigation": {"application":{"regions":[{"region":"topbar","items":[{"id":"dashboard","title":"Dashboard","icon":"lucide:home","target":{"module":"dashboard"}},{"id":"sales","title":"Sales","target":{"module":"sales"}},{"id":"support","title":"Support","target":{"module":"support"}}]},{"region":"sidebar","items":[{"id":"dashboard","title":"Dashboard","target":{"module":"dashboard","feature":"overview"}}]}]},"modules":[]},
+      "call": {"op":"setApplicationLogo","module":"sales","logo":{"image":"acme.svg","title":"Acme"}},
+      "expected": {"rejected":"The logo is defined at the application level only."}
+    }
+  ]
+}

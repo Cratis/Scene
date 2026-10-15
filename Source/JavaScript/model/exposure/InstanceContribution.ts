@@ -31,6 +31,13 @@ export interface InstanceContribution {
 
     /** The items a collection property gets from this instance, in order. */
     items?: ContributedItem[];
+
+    /**
+     * For a collection: hide the items the owner and the levels above put in it, so only this instance's own items
+     * remain. The hidden items stay where they are and come back when this is cleared. It needs the `replace`
+     * operation to be exposed.
+     */
+    replaceOwnerItems?: boolean;
 }
 
-export const InstanceContributionPropertyNames: (keyof InstanceContribution)[] = ['instance', 'component', 'path', 'value', 'items'];
+export const InstanceContributionPropertyNames: (keyof InstanceContribution)[] = ['instance', 'component', 'path', 'value', 'items', 'replaceOwnerItems'];
