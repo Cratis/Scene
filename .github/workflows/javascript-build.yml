@@ -60,3 +60,11 @@ jobs:
 
       - name: Build Storybook
         run: yarn build-storybook
+
+      # The foundation components are audited in a real Chromium at desktop, tablet and phone widths in both themes,
+      # with colour contrast, which jsdom cannot judge (spec Part B 6). A regression fails the build.
+      - name: Install Chromium
+        run: npx playwright-core install --with-deps chromium
+
+      - name: Browser specifications
+        run: yarn workspace @cratis/scene.blueprint.default test:browser
