@@ -3,7 +3,8 @@
 
 import type { UiProfile } from '@cratis/scene.model';
 import type { PackageCatalog } from '@cratis/scene.engine';
-import { ComponentName, defaultBlueprintName } from '@cratis/scene.blueprint.default';
+import { ComponentName } from '../ComponentName';
+import { defaultBlueprintName } from '../packageName';
 import { coreComponents } from '@cratis/scene.react';
 
 /** The packages every preview and Stage application resolves bare component names against, in ascending priority. */

@@ -3,12 +3,11 @@ title: Preview host
 description: Render the effective application - shell, navigation, a module's first feature, a feature or a slice dialog - from an in-memory Scene document with sample data and a dry-run invoker, through the same composition Stage runs.
 ---
 
-`@cratis/scene.preview` is the one host a design tool mounts to let an author click around the application as an end user would, and the one place the composition of an application lives. `ScenePreviewHost` renders from an in-memory document - unsaved edits included - with no build and no deploy. Stage composes and hosts its screens through the same functions, so a behaviour that differs between a preview and a running application is a bug, not a second implementation.
+The preview host in `@cratis/scene.blueprint.default` is the one host a design tool mounts to let an author click around the application as an end user would, and the one place the composition of an application lives. `ScenePreviewHost` renders from an in-memory document - unsaved edits included - with no build and no deploy. Stage composes and hosts its screens through the same functions, so a behaviour that differs between a preview and a running application is a bug, not a second implementation.
 
 ```tsx
-import { ScenePreviewHost } from '@cratis/scene.preview';
+import { ScenePreviewHost } from '@cratis/scene.blueprint.default';
 import '@cratis/scene.blueprint.default/styles.css';
-import '@cratis/scene.preview/styles.css';
 
 <ScenePreviewHost
     document={document}              // layouts, screen templates, screens, profiles - what a designer edits
