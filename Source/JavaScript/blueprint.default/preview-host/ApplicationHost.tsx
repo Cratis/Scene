@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactNode, useMemo, useState } from 'react';
-import { SceneElement, type EffectiveConfiguration } from '@cratis/scene.model';
+import { DialogTemplate, SceneElement, type EffectiveConfiguration } from '@cratis/scene.model';
 import { BindingResolver, BindingScope } from '@cratis/scene.engine';
 import {
     ComponentRegistry, SceneElementView, SceneHistory, SceneNavigationContextValue, SceneNavigationModel, SceneNavigationModelProvider,
@@ -50,6 +50,24 @@ export interface ApplicationHostProps {
      */
     renderDialog?(navigation: SceneNavigationContextValue): ReactNode;
 
+    /**
+     * Draws a dialog the document declares, in place of the host's plain one - a host that wants its own backdrop, a close button
+     * and keyboard handling around the template's content. Called inside {@link scope}.
+     * @param template The dialog template that is open.
+     * @param content The template's composed content.
+     * @param navigation Where the user is.
+     */
+    renderDialogTemplate?(template: DialogTemplate, content: SceneElement, navigation: SceneNavigationContextValue): ReactNode;
+
+    /**
+     * What a host provides around everything that renders - the screen on the page and the dialog over it: its data, its command
+     * dispatcher, its chrome state. Inside the navigation providers, so it can read where the user is. Stage puts its data and
+     * interaction scope here, so the screen, a dialog template and a slice dialog all share them.
+     * @param navigation Where the user is.
+     * @param children The screen and the dialog.
+     */
+    scope?(navigation: SceneNavigationContextValue, children: ReactNode): ReactNode;
+
     /** Rendered inside the host's providers, after the application. */
     children?: ReactNode;
 }
@@ -61,7 +79,7 @@ export interface ApplicationHostProps {
  * button or a dialog destination opened shown over it - one place for all of it (spec PRV9), so a behaviour that differs between
  * the two hosts is a bug in the host, not a second implementation.
  */
-export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, resolveBinding, queryResults, renderScreen, renderDialog, children }: ApplicationHostProps) {
+export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, children }: ApplicationHostProps) {
     const [memoryHistory] = useState(() => createMemorySceneHistory());
     const registry = useMemo(() => ({ ...previewComponents, ...hostRegistry }), [hostRegistry]);
     const hostHistory = history ?? memoryHistory;
@@ -86,10 +104,29 @@ export function ApplicationHost({ application, composition = {}, navigationModel
     const sliceDialog = !dialogTemplate && navigation.currentDialog && sliceDialogParameters(navigation.currentDialogParameters) !== undefined;
     const dialogName = sliceDialogParameters(navigation.currentDialogParameters)?.title ?? navigation.currentDialog;
 
-    const drawn = composed
-        ? renderScreen?.(composed.element, composed.configuration, navigation)
-            ?? <SceneElementView element={composed.element} registry={registry} resolveBinding={resolveBinding} queryResults={queryResults} configuration={composed.configuration} />
-        : null;
+    const dialogContent = dialogTemplate ? composeDialog(application, dialogTemplate, composition) : undefined;
+
+    const body = (
+        <>
+            <div data-scene-outlet='primary' data-scene-url={navigation.currentUrl} data-scene-screen={navigation.primaryScreen}>
+                {composed && <Drawn>{renderScreen
+                    ? () => renderScreen(composed.element, composed.configuration, navigation)
+                    : () => <SceneElementView element={composed.element} registry={registry} resolveBinding={resolveBinding} queryResults={queryResults} configuration={composed.configuration} />}</Drawn>}
+            </div>
+            {dialogTemplate && dialogContent && (renderDialogTemplate
+                ? <Drawn>{() => renderDialogTemplate(dialogTemplate, dialogContent, navigation)}</Drawn>
+                : (
+                    <div role='dialog' aria-modal='true' aria-label={dialogName} data-scene-dialog={navigation.currentDialog}>
+                        <SceneElementView element={dialogContent} registry={registry} resolveBinding={resolveBinding} queryResults={queryResults} />
+                    </div>
+                ))}
+            {sliceDialog && (
+                <div role='dialog' aria-modal='true' aria-label={dialogName} data-scene-dialog={navigation.currentDialog}>
+                    {renderDialog?.(navigation) ?? <SliceDialogView />}
+                </div>
+            )}
+        </>
+    );
 
     return (
         <SceneNavigationProvider value={navigation}>
@@ -97,18 +134,16 @@ export function ApplicationHost({ application, composition = {}, navigationModel
                 <SceneNavigationModelProvider model={navigationModel}>
                     {/* The shell reads its layout configuration from a provider; nothing is saved from a hosted application's own. */}
                     <LayoutConfigProvider storage={null}>
-                        <div data-scene-outlet='primary' data-scene-url={navigation.currentUrl} data-scene-screen={navigation.primaryScreen}>{drawn}</div>
-                        {(dialogTemplate || sliceDialog) && (
-                            <div role='dialog' aria-modal='true' aria-label={dialogName} data-scene-dialog={navigation.currentDialog}>
-                                {dialogTemplate
-                                    ? <SceneElementView element={composeDialog(application, dialogTemplate, composition)} registry={registry} resolveBinding={resolveBinding} queryResults={queryResults} />
-                                    : renderDialog?.(navigation) ?? <SliceDialogView />}
-                            </div>
-                        )}
+                        {scope ? scope(navigation, body) : body}
                         {children}
                     </LayoutConfigProvider>
                 </SceneNavigationModelProvider>
             </SceneOutletContext.Provider>
         </SceneNavigationProvider>
     );
+}
+
+/** Calls what a host draws as part of this component, so a hook it uses runs under the providers the host put in scope. */
+function Drawn({ children }: { children(): ReactNode }) {
+    return <>{children()}</>;
 }
