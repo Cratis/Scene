@@ -5,7 +5,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cratis.Scene.Engine.Structure;
 using Cratis.Scene.Model.Structure;
-using Cratis.Scene.Model.Toolbar;
 
 namespace Cratis.Scene.Engine.Toolbar.for_ToolbarButtonValidation;
 
