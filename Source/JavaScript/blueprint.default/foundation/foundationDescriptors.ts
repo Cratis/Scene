@@ -5,6 +5,7 @@ import { BindingSourceKind, ComponentDescriptor, PropertyDescriptor, PropertyEdi
 import { componentRegistryKey, valueOutputProperty } from '@cratis/scene.react';
 import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
+import { ActivityKind } from './activityModel';
 import { ChartKind } from './chartGeometry';
 import { ComponentState } from './ComponentState';
 import { FilterFieldType } from './filterModel';
@@ -198,6 +199,84 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             valueOutputProperty(PropertyValueType.String, 'The id of the chosen view, published as the user chooses.'),
             { path: 'action', label: 'Requested action', group: 'Outputs', valueType: PropertyValueType.String, readOnly: true, output: true, description: '"save" or "manage" when the user asks for it; the host acts on it.' },
             ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.ChecklistSection),
+        displayName: 'Checklist',
+        description: 'Sections of tasks with an owner and due date each and a progress bar per section. Publishes the ids of the done tasks as the value output.',
+        properties: [
+            {
+                ...list('sections', 'Sections', 'Data', 'Section', [
+                    text('title', 'Title', 'Content', undefined, { constraints: { required: true } }),
+                    list('items', 'Tasks', 'Data', 'Task', [
+                        text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                        text('label', 'Task', 'Content', undefined, { constraints: { required: true } }),
+                        text('owner', 'Owner', 'Data'),
+                        text('due', 'Due date', 'Data', 'An ISO 8601 date.'),
+                        flag('done', 'Done', 'Data'),
+                    ]),
+                ], 'The groups of tasks.'),
+                acceptedBindingKinds: bindable,
+            },
+            text('today', 'Today', 'Content', 'The date overdue is judged against; empty is the current date.'),
+            rule('editPermission', 'Edit permission', 'Enabled lets the user tick tasks; otherwise they are shown read-only.'),
+            valueOutputProperty(PropertyValueType.Json, 'The ids of the done tasks, published as the user ticks them.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.ActivityFeed),
+        displayName: 'Activity feed',
+        description: 'What happened to a record, grouped by day. Content is supplied by the application; this lays it out.',
+        properties: [
+            {
+                ...list('entries', 'Entries', 'Data', 'Entry', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('actor', 'Who', 'Data'),
+                    text('action', 'What', 'Data'),
+                    choice('kind', 'Kind', 'Data', {
+                        [ActivityKind.Comment]: 'Comment', [ActivityKind.Change]: 'Change', [ActivityKind.Status]: 'Status', [ActivityKind.System]: 'System',
+                    }, ActivityKind.System),
+                    text('at', 'When', 'Data', 'An ISO 8601 date and time.', { constraints: { required: true } }),
+                    text('body', 'Text', 'Data', 'A comment\'s text or the detail of a change.', { editorOptions: { multiline: true } }),
+                ], 'What happened.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('order', 'Order', 'Appearance', { descending: 'Newest first', ascending: 'Oldest first' }, 'descending'),
+            text('timeZone', 'Time zone', 'Content', 'The IANA zone days are cut in; empty is the reader\'s.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.AvatarStack),
+        displayName: 'Avatar stack',
+        description: 'Overlapping avatars for the people on a record, with a "+N" chip for the rest.',
+        properties: [
+            {
+                ...list('people', 'People', 'Data', 'Person', [
+                    text('name', 'Name', 'Data', undefined, { constraints: { required: true } }),
+                    text('imageUrl', 'Picture', 'Data', 'Without one the initials are shown.'),
+                ], 'Who is shown.'),
+                acceptedBindingKinds: bindable,
+            },
+            number('max', 'Shown at most', 'Appearance', 'How many avatars before the rest fold into "+N".', { default: 4, constraints: { minimum: 1, integer: true } }),
+            choice('size', 'Size', 'Appearance', { small: 'Small', medium: 'Medium' }, 'medium'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.FileUploader),
+        displayName: 'File uploader',
+        description: 'A drop zone and a button to choose files, checked against type and size before anything is sent. Publishes the selection as the value output.',
+        properties: [
+            text('accept', 'Accepted types', 'Behavior', 'Extensions, MIME types and wildcards separated by commas, for example ".pdf, image/*".'),
+            number('maxSizeMb', 'Largest file (MB)', 'Behavior', undefined, { constraints: { minimum: 0 } }),
+            flag('multiple', 'Several files', 'Behavior', undefined, { default: true }),
+            text('serverUrl', 'Upload address', 'Behavior', 'Handed to the host\'s upload handler.'),
+            rule('actionPermission', 'Upload permission', 'Whether files can be chosen or dropped, refused with a reason, or the control is hidden.'),
+            valueOutputProperty(PropertyValueType.Json, 'The files chosen - name, size, type and status - published as they change.'),
+            ...standardStateProperties.filter(property => property.path !== 'actionPermission'),
         ],
     },
 ];

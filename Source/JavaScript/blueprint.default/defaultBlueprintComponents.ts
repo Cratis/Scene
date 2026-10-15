@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { ChartWrapper, ColumnChooser, EmptyState, FilterBuilder, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
+import { ActivityFeed, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -57,4 +57,8 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.FilterBuilder)]: FilterBuilder,
     [componentRegistryKey(defaultBlueprintName, ComponentName.ColumnChooser)]: ColumnChooser,
     [componentRegistryKey(defaultBlueprintName, ComponentName.SavedViewsMenu)]: SavedViewsMenu,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ChecklistSection)]: ChecklistSection,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ActivityFeed)]: ActivityFeed,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.AvatarStack)]: AvatarStack,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.FileUploader)]: FileUploader,
 };

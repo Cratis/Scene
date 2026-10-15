@@ -49,6 +49,35 @@ export const foundationSamples: Record<string, FoundationSample> = {
         properties: { views: [{ id: 'all', label: 'All leads' }, { id: 'mine', label: 'Mine' }, { id: 'overdue', label: 'Overdue' }], activeView: 'mine' },
         data: ['Mine'], stateful: true,
     },
+    [ComponentName.ChecklistSection]: {
+        properties: {
+            today: '2026-03-10', locale: 'en-US',
+            sections: [
+                { title: 'Before day one', items: [{ id: 't1', label: 'Send the contract', owner: 'Grace', due: '2026-03-01', done: true }, { id: 't2', label: 'Order a laptop', owner: 'Linus', due: '2026-03-05' }] },
+                { title: 'First week', items: [{ id: 't3', label: 'Security training', owner: 'Ada', due: '2026-03-20' }] },
+            ],
+        },
+        data: ['Send the contract', '1 of 2 complete'], stateful: true,
+    },
+    [ComponentName.ActivityFeed]: {
+        properties: {
+            locale: 'en-US', timeZone: 'UTC',
+            entries: [
+                { id: 'a1', actor: 'Ada Lovelace', action: 'commented', kind: 'comment', at: '2026-03-10T09:30:00Z', body: 'Sent the revised quote.' },
+                { id: 'a2', actor: 'Grace Hopper', action: 'changed the owner to Linus', kind: 'change', at: '2026-03-09T16:00:00Z' },
+                { id: 'a3', actor: 'System', action: 'marked the deal as qualified', kind: 'status', at: '2026-03-09T08:00:00Z' },
+            ],
+        },
+        data: ['Sent the revised quote.'], stateful: true,
+    },
+    [ComponentName.AvatarStack]: {
+        properties: { people: [{ name: 'Ada Lovelace' }, { name: 'Grace Hopper' }, { name: 'Linus Torvalds' }, { name: 'Margaret Hamilton' }, { name: 'Alan Turing' }, { name: 'Barbara Liskov' }], max: 4 },
+        data: ['+2'], stateful: true,
+    },
+    [ComponentName.FileUploader]: {
+        properties: { accept: '.pdf, image/*', maxSizeMb: 10, multiple: true },
+        data: [], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */
