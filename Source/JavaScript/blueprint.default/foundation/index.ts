@@ -56,3 +56,4 @@ export * from './foundationDescriptors';
 export * from './foundationComponentMetadata';
 export * from './foundationSamples';
 export * from './FoundationStates';
+export * from './templates';

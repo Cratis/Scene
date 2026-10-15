@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Layout, Screen, ScreenTemplate } from '@cratis/scene.model';
+import { foundationScreenTemplates } from '../foundation/templates';
 import { LayoutName, appShellLayout, fullPageLayout } from '../layouts';
 import { BreadcrumbEntry, applicationChrome, fullPageChrome } from './applicationChrome';
 import { nestScreenTemplates, templateContentInLayout } from './composeScreen';
@@ -20,6 +21,7 @@ import { workspaceTemplates } from './workspaceTemplates';
  * and what the bundle provides; `validatePackageBundle` proves the two agree.
  */
 export const galleryScreenTemplates: ScreenTemplate[] = [
+    ...foundationScreenTemplates,
     ...workspaceTemplates,
     ...supportTemplates,
     ...authTemplates,
@@ -43,6 +45,14 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     UserManagement: [{ label: 'Administration', targetScreen: 'Dashboard' }, { label: 'Users' }],
     Invoice: [{ label: 'Billing', targetScreen: 'Dashboard' }, { label: 'INV-2043' }],
     Help: [{ label: 'Support', targetScreen: 'Dashboard' }, { label: 'Help' }],
+    DashboardScreen: [{ label: 'Dashboard' }],
+    ListScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Deals' }],
+    BoardScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Pipeline' }],
+    WorkspaceScreen: [{ label: 'Sales' }],
+    MasterDetailScreen: [{ label: 'Sales', targetScreen: 'WorkspaceScreen' }, { label: 'Accounts' }],
+    RecordPage: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Accounts', targetScreen: 'ListScreen' }, { label: 'Account' }],
+    FormScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Accounts', targetScreen: 'ListScreen' }, { label: 'New account' }],
+    WizardScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'New account' }],
     ModuleWorkspace: [{ label: 'Operations' }],
     FeatureSection: [{ label: 'Operations', targetScreen: 'ModuleWorkspace' }, { label: 'Adjustments' }],
     SliceSection: [
@@ -85,7 +95,12 @@ function screenFor(template: ScreenTemplate): Screen {
  */
 function containmentChainFor(template: ScreenTemplate): ScreenTemplate[] {
     const depth = nestingChainTemplates.findIndex(candidate => candidate.name === template.name);
-    return depth < 0 ? [template] : nestingChainTemplates.slice(0, depth + 1);
+    if (depth >= 0) return nestingChainTemplates.slice(0, depth + 1);
+
+    // A template that fits a container-qualified slot (`WorkspaceScreen.moduleContent`) renders inside that container, which is what the qualifier is for.
+    const [container] = (template.fitsSlot ?? '').split('.');
+    const outer = container ? foundationScreenTemplates.find(candidate => candidate.name === container) : undefined;
+    return outer ? [outer, template] : [template];
 }
 
 function mergeSlotContent(chrome: Record<string, Screen['slotContent'][string]>, content: Record<string, Screen['slotContent'][string]>): Screen['slotContent'] {

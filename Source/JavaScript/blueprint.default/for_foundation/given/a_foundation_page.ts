@@ -14,8 +14,17 @@ const entry = `
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { FoundationStates } from './foundation/FoundationStates';
+import { GalleryScreenPreview } from './gallery/GalleryScreenPreview';
+import { defaultBlueprint } from './defaultBlueprint';
+import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
+import { PrimeReactProvider } from '@primereact/core';
 
 let root;
+const registry = mergePackageRegistries([corePackage, defaultBlueprint]);
+window.showScreen = (screen, pack, theme, forceState) => {
+    root ??= createRoot(document.getElementById('root'));
+    flushSync(() => root.render(<PrimeReactProvider><GalleryScreenPreview screenName={screen} registry={registry} pack={pack} forceState={forceState} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
+};
 window.show = (component, theme, properties, rightToLeft) => {
     root ??= createRoot(document.getElementById('root'));
     flushSync(() => root.render(<FoundationStates component={component} theme={theme} properties={properties} rightToLeft={rightToLeft} />));
@@ -52,6 +61,9 @@ export interface FoundationPage {
     /** The uncaught errors the page raised. */
     errors: string[];
 
+    /** Shows one gallery screen filled from a sample-data pack, and audits it the same way. */
+    auditScreen(screen: string, pack: unknown, theme: 'light' | 'dark', forceState?: unknown): Promise<string[]>;
+
     /** Shows every state of a component and runs axe-core (with colour contrast) over the page; returns the violations as readable lines. */
     audit(component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean, openDisclosures?: boolean): Promise<string[]>;
 }
@@ -79,5 +91,15 @@ export async function openFoundationPage(): Promise<FoundationPage> {
             return [...overflow, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
         }, [component, theme, properties, rightToLeft, openDisclosures] as const);
 
-    return { browser, context, page, errors, audit };
+    const auditScreen = (screen: string, pack: unknown, theme: 'light' | 'dark', forceState?: unknown) =>
+        page.evaluate(async ([name, data, themeName, forced]) => {
+            const window_ = window as unknown as { showScreen(...arguments_: unknown[]): void; axe: typeof axe };
+            window_.showScreen(name, data, themeName, forced);
+            await new Promise(resolve => setTimeout(resolve, 0));
+            const result = await window_.axe.run(document.body, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] }, rules: { region: { enabled: false } } });
+            const overflow = document.documentElement.scrollWidth > window.innerWidth ? [`overflow: the page is ${document.documentElement.scrollWidth}px wide in a ${window.innerWidth}px viewport`] : [];
+            return [...overflow, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
+        }, [screen, pack, theme, forceState] as const);
+
+    return { browser, context, page, errors, audit, auditScreen };
 }

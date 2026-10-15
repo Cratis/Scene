@@ -7,3 +7,4 @@ export * from './blueprintRules';
 export * from './verifyBlueprintPackage';
 export * from './describeBlueprintCatalog';
 export * from './evaluateBlueprintPin';
+export * from './verifyTemplateDefinitionOfDone';

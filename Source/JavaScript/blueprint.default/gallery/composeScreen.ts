@@ -64,12 +64,14 @@ function placeInside(outer: ScreenTemplate, inner: ScreenTemplate): ScreenTempla
         return outer;
     }
 
-    const innerContent = inner.slots.flatMap(slot => inner.content?.[slot.name] ?? []);
+    // A container-qualified name (`WorkspaceScreen.moduleContent`) says which container; the slot's own name is what the container's content is keyed by.
+    const slot = inner.fitsSlot.substring(inner.fitsSlot.lastIndexOf('.') + 1);
+    const innerContent = inner.slots.flatMap(innerSlot => inner.content?.[innerSlot.name] ?? []);
     return {
         ...outer,
         content: {
             ...outer.content,
-            [inner.fitsSlot]: [...(outer.content?.[inner.fitsSlot] ?? []), ...innerContent],
+            [slot]: [...(outer.content?.[slot] ?? []), ...innerContent],
         },
     };
 }
