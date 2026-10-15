@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateReference, TemplateReferenceSource, TemplateScope, TemplateSliceKind } from '@cratis/scene.model';
+import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateReference, TemplateReferenceSource, TemplateScope, SliceKind } from '@cratis/scene.model';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
 import { validateDialogTemplateApplicability, validateLayoutApplicability, validateScreenTemplateApplicability } from '../templateApplicability';
 import { ApplicableBlueprint, ApplicableTemplate, ApplicableTemplateGroup, ApplicableTemplateSet } from './ApplicableTemplateSet';
@@ -11,8 +11,8 @@ import { TemplateSource } from './TemplateSource';
 import { TemplateTarget } from './TemplateTarget';
 
 const screenScopes = [TemplateScope.Module, TemplateScope.Feature, TemplateScope.Subfeature];
-const dialogSliceKinds = [TemplateSliceKind.StateChange];
-const screenSliceKinds = [TemplateSliceKind.StateChange, TemplateSliceKind.StateView];
+const dialogSliceKinds = [SliceKind.StateChange];
+const screenSliceKinds = [SliceKind.StateChange, SliceKind.StateView];
 
 /**
  * Decides which templates a picker offers at a target, so no host re-implements the rules: own templates by
@@ -127,8 +127,8 @@ function withDefaults(problems: string[], name: string, kind: TemplateCatalogKin
 
     if (target.scope === TemplateScope.Slice && target.sliceKind !== undefined) {
         const sliceKind = target.sliceKind;
-        if (!Object.values(TemplateSliceKind).includes(sliceKind)) return [`Template '${name}' has unknown target slice kind '${sliceKind}'`];
-        if (sliceKind === TemplateSliceKind.Automation) return [`Template '${name}' cannot be applied to an Automation slice, which has no presentation`];
+        if (!Object.values(SliceKind).includes(sliceKind)) return [`Template '${name}' has unknown target slice kind '${sliceKind}'`];
+        if (sliceKind === SliceKind.Automation) return [`Template '${name}' cannot be applied to an Automation slice, which has no presentation`];
         const kinds = metadata?.sliceKinds ?? defaultSliceKinds(kind);
         if (!kinds.includes(sliceKind)) return [`Template '${name}' does not apply to slice kind '${sliceKind}'`];
     }
@@ -143,6 +143,6 @@ function defaultScopes(kind: TemplateCatalogKind, metadata: TemplateMetadata | u
     }
 }
 
-function defaultSliceKinds(kind: TemplateCatalogKind): TemplateSliceKind[] {
+function defaultSliceKinds(kind: TemplateCatalogKind): SliceKind[] {
     return kind === TemplateCatalogKind.DialogTemplate ? dialogSliceKinds : screenSliceKinds;
 }

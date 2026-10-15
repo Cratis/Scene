@@ -3,6 +3,7 @@
 
 using Cratis.Scene.Engine.Screens;
 using Cratis.Scene.Model.Screens;
+using Cratis.Scene.Model.Structure;
 
 namespace Cratis.Scene.Engine.Templates;
 
@@ -15,6 +16,6 @@ namespace Cratis.Scene.Engine.Templates;
 /// <param name="Chain">The names of the templates already chosen above the target, outermost first. A template in the chain is not offered again, because nesting it inside itself would loop.</param>
 public record TemplateTarget(
     TemplateScope Scope,
-    TemplateSliceKind? SliceKind = null,
+    SliceKind? SliceKind = null,
     TemplateContainer? Container = null,
     IReadOnlyList<string>? Chain = null);

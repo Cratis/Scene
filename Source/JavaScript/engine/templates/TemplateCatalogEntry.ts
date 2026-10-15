@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TemplateAttribution, TemplateCompatibility, TemplateScope, TemplateSliceKind } from '@cratis/scene.model';
+import { TemplateAttribution, TemplateCompatibility, TemplateScope, SliceKind } from '@cratis/scene.model';
 import { TemplateCatalogKind } from './TemplateCatalogKind';
 
 /**
@@ -22,7 +22,7 @@ export interface TemplateCatalogEntry {
     type?: string;
     category?: string;
     scopes?: TemplateScope[];
-    sliceKinds?: TemplateSliceKind[];
+    sliceKinds?: SliceKind[];
     compatibility?: TemplateCompatibility;
     attribution?: TemplateAttribution;
     license?: string;

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TemplateScope, TemplateSliceKind } from '@cratis/scene.model';
+import { TemplateScope, SliceKind } from '@cratis/scene.model';
 import { applicableTemplates } from '@cratis/scene.engine';
 import { defaultBlueprint } from '../defaultBlueprint';
 
@@ -24,11 +24,11 @@ describe('when choosing its templates for each level', () => {
     });
 
     it('should offer only dialogs on a state change slice', () => {
-        const [blueprint] = applicableTemplates(library, { scope: TemplateScope.Slice, sliceKind: TemplateSliceKind.StateChange }).blueprints;
+        const [blueprint] = applicableTemplates(library, { scope: TemplateScope.Slice, sliceKind: SliceKind.StateChange }).blueprints;
         blueprint.categories.map(group => group.category).should.deep.equal(['Foundation / Dialog']);
     });
 
     it('should hide the blueprint on a state view slice, where it ships no fragment', () => {
-        applicableTemplates(library, { scope: TemplateScope.Slice, sliceKind: TemplateSliceKind.StateView }).blueprints.should.deep.equal([]);
+        applicableTemplates(library, { scope: TemplateScope.Slice, sliceKind: SliceKind.StateView }).blueprints.should.deep.equal([]);
     });
 });

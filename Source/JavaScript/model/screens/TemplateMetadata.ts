@@ -3,7 +3,7 @@
 
 import { TemplateAttribution } from './TemplateAttribution';
 import { TemplateCompatibility } from './TemplateCompatibility';
-import { TemplateSliceKind } from './TemplateSliceKind';
+import { SliceKind } from '../structure';
 
 /** The application hierarchy at which a reusable template is selected. */
 export enum TemplateScope {
@@ -38,7 +38,7 @@ export interface TemplateMetadata {
      * structural default: a dialog template applies to state change slices, a screen template to every kind that
      * presents something. Declaring slice kinds without scopes makes the default scope Slice.
      */
-    sliceKinds?: TemplateSliceKind[];
+    sliceKinds?: SliceKind[];
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [

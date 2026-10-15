@@ -9,4 +9,3 @@ export * from './TemplateAttribution';
 export * from './TemplateCompatibility';
 export * from './TemplateMetadata';
 export * from './TemplateReference';
-export * from './TemplateSliceKind';

@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Model.Structure;
+
 namespace Cratis.Scene.Model.Screens;
 
 /// <summary>
@@ -27,4 +29,4 @@ public record TemplateMetadata(
     TemplateAttribution? Attribution = null,
     string? License = null,
     string? LicenseUrl = null,
-    IReadOnlyList<TemplateSliceKind>? SliceKinds = null);
+    IReadOnlyList<SliceKind>? SliceKinds = null);

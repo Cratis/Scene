@@ -49,7 +49,7 @@ An unknown category string is accepted and preserved. Both shipped blueprints ca
 
 ## Slice kinds
 
-`TemplateSliceKind` is `StateChange`, `StateView` or `Automation`. `metadata.sliceKinds` narrows which slice kinds a template applies to when the target scope is Slice. An Automation slice presents nothing, so no template applies to it. A target slice with no stated kind is filtered by scope only.
+`SliceKind` is `StateChange`, `StateView` or `Automation`. `metadata.sliceKinds` narrows which slice kinds a template applies to when the target scope is Slice. An Automation slice presents nothing, so no template applies to it. A target slice with no stated kind is filtered by scope only.
 
 ## Applicable templates for a target
 

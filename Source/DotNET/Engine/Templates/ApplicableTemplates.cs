@@ -4,6 +4,7 @@
 using Cratis.Scene.Engine.Screens;
 using Cratis.Scene.Model.Layouts;
 using Cratis.Scene.Model.Screens;
+using Cratis.Scene.Model.Structure;
 
 namespace Cratis.Scene.Engine.Templates;
 
@@ -31,8 +32,8 @@ namespace Cratis.Scene.Engine.Templates;
 public static class ApplicableTemplates
 {
     static readonly TemplateScope[] _screenScopes = [TemplateScope.Module, TemplateScope.Feature, TemplateScope.Subfeature];
-    static readonly TemplateSliceKind[] _dialogSliceKinds = [TemplateSliceKind.StateChange];
-    static readonly TemplateSliceKind[] _screenSliceKinds = [TemplateSliceKind.StateChange, TemplateSliceKind.StateView];
+    static readonly SliceKind[] _dialogSliceKinds = [SliceKind.StateChange];
+    static readonly SliceKind[] _screenSliceKinds = [SliceKind.StateChange, SliceKind.StateView];
 
     /// <summary>
     /// Computes what a picker offers at a target: own templates by category, then each blueprint that has at least one applicable template.
@@ -165,7 +166,7 @@ public static class ApplicableTemplates
                 return [$"Template '{name}' has unknown target slice kind '{sliceKind}'"];
             }
 
-            if (sliceKind == TemplateSliceKind.Automation)
+            if (sliceKind == SliceKind.Automation)
             {
                 return [$"Template '{name}' cannot be applied to an Automation slice, which has no presentation"];
             }
@@ -187,6 +188,6 @@ public static class ApplicableTemplates
         _ => metadata?.SliceKinds is null ? _screenScopes : [TemplateScope.Slice]
     };
 
-    static TemplateSliceKind[] DefaultSliceKinds(TemplateCatalogKind kind) =>
+    static SliceKind[] DefaultSliceKinds(TemplateCatalogKind kind) =>
         kind == TemplateCatalogKind.DialogTemplate ? _dialogSliceKinds : _screenSliceKinds;
 }
