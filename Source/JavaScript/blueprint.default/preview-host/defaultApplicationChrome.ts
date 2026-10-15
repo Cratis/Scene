@@ -3,7 +3,9 @@
 
 import type { ApplicationLogo } from '@cratis/scene.model';
 import type { SceneElement } from '@cratis/scene.model';
-import { ComponentName, SlotName, externalComponent } from '@cratis/scene.blueprint.default';
+import { ComponentName } from '../ComponentName';
+import { externalComponent } from '../gallery/elements';
+import { SlotName } from '../layouts';
 
 /**
  * The chrome the application shell wraps every screen in when the model supplies navigation: a topbar and a sidebar. Neither

@@ -6,7 +6,8 @@ import {
     ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SampleDataPack, SceneElement, Screen,
 } from '@cratis/scene.model';
 import { RegisteredComponentProps, coreComponents } from '@cratis/scene.react';
-import { defaultBlueprintComponents, defaultLayouts } from '@cratis/scene.blueprint.default';
+import { defaultBlueprintComponents } from '../../defaultBlueprintComponents';
+import { defaultLayouts } from '../../layouts';
 import { ApplicationDocument } from '../ApplicationDocument';
 import { previewProfile } from '../previewProfile';
 
