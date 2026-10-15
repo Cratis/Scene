@@ -37,5 +37,13 @@ export const lightTheme: Theme = {
         'highlight.color': '#3730a3',
         'content.borderRadius': '0.5rem',
         'focus.ring': '0 0 0 2px rgb(79 70 229 / 0.4)',
+        'status.successColor': '#166534',
+        'status.successBackground': '#dcfce7',
+        'status.warningColor': '#854d0e',
+        'status.warningBackground': '#fef3c7',
+        'status.dangerColor': '#991b1b',
+        'status.dangerBackground': '#fee2e2',
+        'status.infoColor': '#1e40af',
+        'status.infoBackground': '#dbeafe',
     },
 };

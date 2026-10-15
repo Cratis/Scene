@@ -48,3 +48,5 @@
         href: pattern-coverage.md
       - name: Theme tokens
         href: theme-tokens.md
+      - name: Foundation components
+        href: foundation-components.md

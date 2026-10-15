@@ -5,6 +5,7 @@ import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle, describeComponents } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintComponentMetadata } from './defaultBlueprintComponentMetadata';
+import { foundationDescriptors } from './foundation';
 import { defaultBlueprintComponents } from './defaultBlueprintComponents';
 import { galleryDialogTemplates, galleryScreenTemplates, galleryScreens } from './gallery';
 import { LayoutName, defaultLayouts } from './layouts';
@@ -66,5 +67,5 @@ export const defaultBlueprint: ScenePackageBundle = {
     dialogTemplates: galleryDialogTemplates,
     screens: galleryScreens,
     themes: defaultBlueprintThemes,
-    descriptors: describeComponents(defaultBlueprintManifest.name, [], defaultBlueprintComponentMetadata),
+    descriptors: describeComponents(defaultBlueprintManifest.name, foundationDescriptors, defaultBlueprintComponentMetadata),
 };
