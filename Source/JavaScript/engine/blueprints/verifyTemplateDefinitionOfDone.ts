@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FlowArrangement, FlowNode, SampleDataPack, ScreenTemplate } from '@cratis/scene.model';
+import { DialogTemplate, FlowArrangement, FlowNode, SampleDataPack, ScreenTemplate } from '@cratis/scene.model';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
 import { findTemplateSampleRowLiterals } from '../sampleData/findSampleRowLiterals';
 import { validateTemplateMetadata } from '../templates/validateTemplateMetadata';
@@ -28,13 +28,13 @@ interface ScannedElement { properties?: Record<string, unknown>; slots?: Record<
  * bound query answered by it. Verification of the whole package is {@link verifyBlueprintPackage}; this is the template-level
  * checklist a spec can assert for each template by name, so a failure says which template and which rule.
  *
- * @param template The screen template.
+ * @param template The screen template or dialog template. A dialog is summoned rather than placed, so it has no slot to resolve.
  * @param source The blueprint that provides it.
  * @param library The other packages available, so the template can be placed into their layouts.
  * @param options What else to hold it to.
  * @returns The problems; empty when the template is done.
  */
-export function verifyTemplateDefinitionOfDone(template: ScreenTemplate, source: BlueprintSource, library: readonly TemplateSource[] = [], options: TemplateDefinitionOfDoneOptions = {}): string[] {
+export function verifyTemplateDefinitionOfDone(template: ScreenTemplate | DialogTemplate, source: BlueprintSource, library: readonly TemplateSource[] = [], options: TemplateDefinitionOfDoneOptions = {}): string[] {
     const owner = `Template '${template.name}'`;
     const problems: string[] = [...validateTemplateMetadata(template.name, template.metadata)];
     const metadata = template.metadata;
@@ -71,7 +71,7 @@ export function verifyTemplateDefinitionOfDone(template: ScreenTemplate, source:
     return problems;
 }
 
-function slotProblems(template: ScreenTemplate, owner: string): string[] {
+function slotProblems(template: ScreenTemplate | DialogTemplate, owner: string): string[] {
     const declared = template.slots.map(slot => slot.name);
     const arranged = new Set<string>();
     const visit = (node: FlowNode | undefined) => {
@@ -86,24 +86,29 @@ function slotProblems(template: ScreenTemplate, owner: string): string[] {
     arrangement?.overrides?.forEach(override => visit(override.root));
 
     const problems: string[] = [];
-    for (const name of declared.filter(slot => !arranged.has(slot))) problems.push(`${owner} declares slot '${name}' but its arrangement never places it`);
-    for (const name of [...arranged].filter(slot => !declared.includes(slot))) problems.push(`${owner} arranges slot '${name}', which it does not declare`);
+    // A template with no arrangement stacks its slots in declaration order, which places every one of them.
+    if (template.arrangement !== undefined) {
+        for (const name of declared.filter(slot => !arranged.has(slot))) problems.push(`${owner} declares slot '${name}' but its arrangement never places it`);
+        for (const name of [...arranged].filter(slot => !declared.includes(slot))) problems.push(`${owner} arranges slot '${name}', which it does not declare`);
+    }
+
     for (const name of Object.keys(template.content ?? {}).filter(slot => !declared.includes(slot))) problems.push(`${owner} fills slot '${name}', which it does not declare`);
     return problems;
 }
 
-function placementProblems(template: ScreenTemplate, source: BlueprintSource, library: readonly TemplateSource[], owner: string): string[] {
-    if (template.fitsSlot === undefined) return [];
+function placementProblems(template: ScreenTemplate | DialogTemplate, source: BlueprintSource, library: readonly TemplateSource[], owner: string): string[] {
+    const fitsSlot = (template as ScreenTemplate).fitsSlot;
+    if (fitsSlot === undefined) return [];
     const layouts = [...(source.layouts ?? []), ...library.flatMap(other => other.layouts ?? [])];
     const everyTemplate = [...(source.screenTemplates ?? []), ...library.flatMap(other => other.screenTemplates ?? [])];
     const resolutions = layouts.map(layout => resolveScreenTemplates(layout, everyTemplate));
 
     if (resolutions.some(resolution => resolution.placements.some(placement => placement.template === template.name))) return [];
     if (resolutions.some(resolution => resolution.cycles.some(cycle => cycle.includes(template.name)))) return [`${owner} is nested inside itself`];
-    return [`${owner} is unplaced: no layout or template declares slot '${template.fitsSlot}'`];
+    return [`${owner} is unplaced: no layout or template declares slot '${fitsSlot}'`];
 }
 
-function queriesBoundBy(template: ScreenTemplate): string[] {
+function queriesBoundBy(template: ScreenTemplate | DialogTemplate): string[] {
     const queries = new Set<string>();
     const visitValue = (value: unknown) => {
         if (Array.isArray(value)) value.forEach(visitValue);

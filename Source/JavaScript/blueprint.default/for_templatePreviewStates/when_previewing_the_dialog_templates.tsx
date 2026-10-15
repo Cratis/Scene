@@ -4,7 +4,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { PrimeReactProvider } from '@primereact/core';
 import { SceneElementView } from '@cratis/scene.react';
-import { galleryComponentCatalog, galleryDialogTemplates, galleryPreviewProfile, resolveElementComponentNames } from '../gallery';
+import { galleryComponentCatalog, galleryDialogTemplates, galleryPreviewProfile, queryResultsOf, resolveElementComponentNames } from '../gallery';
+import { foundationPack } from '../for_foundationTemplates/given';
 import { packageBackedRegistry, provideBrowserApis } from './given';
 
 describe('when previewing the dialog templates', () => {
@@ -17,13 +18,13 @@ describe('when previewing the dialog templates', () => {
                 .map(element => resolveElementComponentNames(element, galleryPreviewProfile, galleryComponentCatalog));
             const { container } = render(<PrimeReactProvider>
                 <div role='dialog' aria-label={template.displayName}>
-                    {elements.map(element => <SceneElementView key={element.id} element={element} registry={packageBackedRegistry} resolveBinding={() => undefined} />)}
+                    {elements.map(element => <SceneElementView key={element.id} element={element} registry={packageBackedRegistry} resolveBinding={() => undefined} queryResults={queryResultsOf(foundationPack)} />)}
                 </div>
             </PrimeReactProvider>);
 
             (container.querySelector('[data-scene-unresolved-component]') === null).should.equal(true);
             screen.getAllByRole('button').length.should.be.greaterThan(1);
-            screen.queryAllByRole('textbox').every(box => (box.getAttribute('aria-label') ?? '').length > 0).should.equal(true);
+            screen.queryAllByRole('textbox').every(box => (box.getAttribute('aria-label') ?? '').length > 0 || ((box as HTMLInputElement).labels?.length ?? 0) > 0).should.equal(true);
         });
     }
 });

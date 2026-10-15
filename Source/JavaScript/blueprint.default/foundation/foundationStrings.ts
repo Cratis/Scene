@@ -203,6 +203,8 @@ export const foundationStrings = {
     matrixPermission: 'Permission',
     matrixScroll: 'Permission matrix, scrolls sideways',
     matrixGroupAll: 'Other',
+    dialogClose: 'Close {title}',
+    dialogConsequences: 'What will happen',
 } as const;
 
 /** The name of one of the foundation strings. */

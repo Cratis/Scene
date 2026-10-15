@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DialogTemplate } from '@cratis/scene.model';
+import { actionButton, closingDialog, dialogMetadata, foundationDialogTemplates } from '../foundation/templates/dialogTemplates';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, panel, text } from './elements';
 import { field } from './widgets';
-import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
 
 /**
  * The three dialog shapes an application repeats: confirm something destructive, capture a short form, and
@@ -17,23 +17,28 @@ import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
  * happens to be, so there is no parent slot for it to name.
  */
 
-/** Confirm: one question, two answers, and enough context to answer it. */
+/**
+ * Confirm: one question, two answers, and enough context to answer it - the consequences listed, and the confirming button naming what it does
+ * (`Archive product`, never `OK`). A destructive confirmation takes the danger tone: the heading and border are drawn in the danger colors and the
+ * confirming button is the danger button. The components blueprint has a `ConfirmDialog` of its own for a command; a reference names the blueprint
+ * (`resolveTemplateReference`), so the two never collide.
+ */
 export const confirmDialogTemplate: DialogTemplate = {
     name: 'ConfirmDialog',
     slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Body }, { name: TemplateSlotName.Actions }],
     content: {
-        [TemplateSlotName.Header]: [text('confirm-title', 'Archive this product?')],
-        [TemplateSlotName.Body]: [
-            text('confirm-message', 'Bamboo Watch will stop appearing in the catalog. Existing orders keep it.'),
-            externalComponent('confirm-note', 'message', { severity: 'warn', text: 'This can be undone from the archive.' }),
-        ],
+        [TemplateSlotName.Header]: [externalComponent('confirm-frame', 'dialogFrame', {
+            title: 'Archive this product?', message: 'Bamboo Watch will stop appearing in the catalog.', tone: 'danger',
+            consequences: ['Existing orders keep it', 'It can be restored from the archive'],
+        })],
+        [TemplateSlotName.Body]: [],
         [TemplateSlotName.Actions]: [
-            panel('confirm-actions', [button('confirm-yes', 'Archive', { severity: 'danger' }), button('confirm-no', 'Keep it', { severity: 'secondary' })]),
+            panel('confirm-actions', [closingDialog(actionButton('confirm-no', { label: 'Keep it', emphasis: 'secondary' })), actionButton('confirm-yes', { label: 'Archive product', emphasis: 'danger' })]),
         ],
     },
     displayName: 'Confirmation dialog',
     description: 'One question with the consequence spelled out, and a way back.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
+    metadata: dialogMetadata('ConfirmDialog'),
 };
 
 /** Form: a short capture that does not deserve a page of its own. */
@@ -41,19 +46,19 @@ export const formDialogTemplate: DialogTemplate = {
     name: 'FormDialog',
     slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Body }, { name: TemplateSlotName.Actions }],
     content: {
-        [TemplateSlotName.Header]: [text('form-dialog-title', 'Invite someone')],
+        [TemplateSlotName.Header]: [externalComponent('form-dialog-frame', 'dialogFrame', { title: 'Invite someone' })],
         [TemplateSlotName.Body]: [
             field('form-dialog-email', 'Email', 'inputText', { placeholder: 'them@contoso.com' }),
             field('form-dialog-role', 'Role', 'dropdown', { options: ['Viewer', 'Editor', 'Administrator'] }),
             field('form-dialog-message', 'Message', 'inputTextarea', { rows: 3 }),
         ],
         [TemplateSlotName.Actions]: [
-            panel('form-dialog-actions', [button('form-dialog-send', 'Send invitation', { severity: 'primary' }), button('form-dialog-cancel', 'Cancel', { severity: 'secondary' })]),
+            panel('form-dialog-actions', [closingDialog(button('form-dialog-cancel', 'Cancel', { severity: 'secondary' })), button('form-dialog-send', 'Send invitation', { severity: 'primary' })]),
         ],
     },
     displayName: 'Form dialog',
     description: 'A handful of fields captured without leaving the page underneath.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
+    metadata: dialogMetadata('FormDialog', true),
 };
 
 /** Detail: a record shown over the list it came from. */
@@ -61,7 +66,7 @@ export const detailDialogTemplate: DialogTemplate = {
     name: 'DetailDialog',
     slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Body }, { name: TemplateSlotName.SidePanel }, { name: TemplateSlotName.Actions }],
     content: {
-        [TemplateSlotName.Header]: [text('detail-dialog-title', 'ORD-4192')],
+        [TemplateSlotName.Header]: [externalComponent('detail-dialog-frame', 'dialogFrame', { title: 'ORD-4192' })],
         [TemplateSlotName.Body]: [
             card('detail-dialog-summary', [
                 text('detail-dialog-customer', 'Northwind Traders'),
@@ -71,13 +76,13 @@ export const detailDialogTemplate: DialogTemplate = {
         ],
         [TemplateSlotName.SidePanel]: [externalComponent('detail-dialog-timeline', 'timeline', { align: 'left' })],
         [TemplateSlotName.Actions]: [
-            panel('detail-dialog-actions', [button('detail-dialog-open', 'Open full record', { severity: 'primary', targetScreen: 'DetailView' }), button('detail-dialog-close', 'Close', { severity: 'secondary' })]),
+            panel('detail-dialog-actions', [closingDialog(button('detail-dialog-close', 'Close', { severity: 'secondary' })), button('detail-dialog-open', 'Open full record', { severity: 'primary', targetScreen: 'DetailView' })]),
         ],
     },
     displayName: 'Detail dialog',
     description: 'A record over the list it came from, with a route to the full page.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Dialog' },
+    metadata: dialogMetadata('DetailDialog', true),
 };
 
-/** The dialog templates this blueprint provides. */
-export const galleryDialogTemplates: DialogTemplate[] = [confirmDialogTemplate, formDialogTemplate, detailDialogTemplate];
+/** The dialog templates this blueprint provides: the three the gallery began with, and the foundation's quick create, lookup, side sheet and filter dialogs. */
+export const galleryDialogTemplates: DialogTemplate[] = [confirmDialogTemplate, formDialogTemplate, detailDialogTemplate, ...foundationDialogTemplates];

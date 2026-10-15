@@ -14,6 +14,7 @@ export enum FormFieldType {
     File = 'file',
     RichText = 'richText',
     Address = 'address',
+    Password = 'password',
 }
 
 /** One field of a form section. */

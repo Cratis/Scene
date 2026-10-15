@@ -11,6 +11,8 @@ import { wizardScreenTemplate } from './wizardScreenTemplate';
 import { workspaceScreenTemplate } from './workspaceScreenTemplate';
 
 export * from './templateParts';
+export * from './dialogTemplates';
+export * from './stateScreenTemplates';
 export * from './boardScreenTemplate';
 export * from './dashboardScreenTemplate';
 export * from './formScreenTemplate';

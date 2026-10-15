@@ -3,7 +3,7 @@ title: The template set
 description: Every screen template and dialog template the default blueprint ships, what each is for, and which layout it renders in.
 ---
 
-The default blueprint ships thirty-two screen templates (the eight [foundation templates](./foundation-templates.md) and twenty-four earlier ones) and three dialog templates. Each screen template
+The default blueprint ships thirty-six screen templates (the eight [foundation templates](./foundation-templates.md), the four [auth and state screens](./foundation-templates.md#auth-and-state-screens) and twenty-four earlier ones) and seven dialog templates (the three earlier ones and the four [foundation dialogs](./foundation-templates.md#dialogs)). Each screen template
 has a matching `Screen` in the gallery, so every row below is something you can boot and look at.
 
 ## The foundation set
@@ -74,13 +74,17 @@ placed.
 
 ## Dialog templates
 
-Three, and none has a `fitsSlot` - a dialog is summoned rather than placed, so it occupies no parent slot.
+Seven, and none has a `fitsSlot` - a dialog is summoned rather than placed, so it occupies no parent slot.
 
 | Template | For | Its own slots |
 | --- | --- | --- |
 | `ConfirmDialog` | One question with its consequence spelled out, and a way back | `header`, `body`, `actions` |
 | `FormDialog` | A handful of fields captured without leaving the page underneath | `header`, `body`, `actions` |
 | `DetailDialog` | A record over the list it came from, with a route to the full page | `header`, `body`, `sidePanel`, `actions` |
+| `QuickCreateDialog` | A short create form, six fields at most | `header`, `body`, `actions` |
+| `LookupDialog` | Search and a list to choose one or several records from | `header`, `body`, `actions` |
+| `SideSheet` | A drawer from the side hosting a record or a form | `header`, `body`, `actions` |
+| `FilterDialog` | The advanced filter builder, the phone's filter panel | `header`, `body`, `actions` |
 
 ## What the content is made of
 

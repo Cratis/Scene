@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PackageKind, SampleDataPack, ScreenTemplate } from '@cratis/scene.model';
+import { DialogTemplate, PackageKind, SampleDataPack, ScreenTemplate } from '@cratis/scene.model';
 import { BlueprintSource, verifyTemplateDefinitionOfDone } from '../index';
 
 const arrangement = (...slots: string[]) => ({ root: { kind: 'column', gap: 0, children: slots.map(slotName => ({ slotName })) } }) as unknown as ScreenTemplate['arrangement'];
@@ -54,6 +54,16 @@ describe('when verifying a template is done', () => {
     it('should report a query the pack does not answer', () =>
         verify({ ...done, content: { list: [{ id: 'l', componentName: 'dataList', properties: { rows: { kind: 'queryResult', query: 'Missing', path: '' } }, slots: {} }] } as unknown as ScreenTemplate['content'] })
             .should.deep.equal(["Template 'ListScreen' binds to query 'Missing', which sample-data pack 'p' does not answer"]));
+
+    it('should hold a dialog template to the same checklist, with no slot to place and no arrangement to stack', () => {
+        const dialog = { name: 'ConfirmDialog', slots: [{ name: 'header' }, { name: 'actions' }], displayName: 'Confirm', description: 'One question and its consequence.', metadata: { ...done.metadata!, type: 'Dialog', category: 'Foundation / Dialog', thumbnail: 'thumbnails/ListScreen.svg' } } as DialogTemplate;
+        verifyTemplateDefinitionOfDone(dialog, sourceOf(), [], { categoryPrefix: 'Foundation /' }).should.deep.equal([]);
+    });
+
+    it('should report content in a slot a dialog does not declare', () => {
+        const dialog = { name: 'ConfirmDialog', slots: [{ name: 'header' }], content: { body: [] }, displayName: 'Confirm', description: 'One question and its consequence.', metadata: { ...done.metadata!, type: 'Dialog', category: 'Foundation / Dialog' } } as unknown as DialogTemplate;
+        verifyTemplateDefinitionOfDone(dialog, sourceOf(), [], { categoryPrefix: 'Foundation /' }).should.deep.equal(["Template 'ConfirmDialog' fills slot 'body', which it does not declare"]);
+    });
 
     it('should not check the pack when none is given', () =>
         verify({ ...done, content: { list: [{ id: 'l', componentName: 'dataList', properties: { rows: { kind: 'queryResult', query: 'Missing', path: '' } }, slots: {} }] } as unknown as ScreenTemplate['content'] }, false).should.deep.equal([]));

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Layout, Screen, ScreenTemplate } from '@cratis/scene.model';
-import { foundationScreenTemplates } from '../foundation/templates';
+import { foundationScreenTemplates, stateScreenTemplates } from '../foundation/templates';
 import { LayoutName, appShellLayout, fullPageLayout } from '../layouts';
 import { BreadcrumbEntry, applicationChrome, fullPageChrome } from './applicationChrome';
 import { nestScreenTemplates, templateContentInLayout } from './composeScreen';
@@ -22,6 +22,7 @@ import { workspaceTemplates } from './workspaceTemplates';
  */
 export const galleryScreenTemplates: ScreenTemplate[] = [
     ...foundationScreenTemplates,
+    ...stateScreenTemplates,
     ...workspaceTemplates,
     ...supportTemplates,
     ...authTemplates,
@@ -30,7 +31,7 @@ export const galleryScreenTemplates: ScreenTemplate[] = [
 ];
 
 /** Which layout each template renders inside - the application shell unless it is one of the chrome-less screens. */
-const fullPageTemplateNames = new Set([...authTemplates, ...statusTemplates].map(template => template.name));
+const fullPageTemplateNames = new Set([...authTemplates, ...statusTemplates, ...stateScreenTemplates].map(template => template.name));
 
 /** The trail shown above each application-shell screen. */
 const breadcrumbs: Record<string, BreadcrumbEntry[]> = {

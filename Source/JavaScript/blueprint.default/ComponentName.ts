@@ -112,6 +112,15 @@ export enum ComponentName {
     /** A module's sections as tabs or a left rail. */
     SubNavigation = 'subNavigation',
 
+    /** The head of a dialog template: title, message, consequences and the close button, and the focus handling of the dialog it opens in. */
+    DialogFrame = 'dialogFrame',
+
+    /** One action of a screen or dialog, with the permission rule and the behaviors of the element. */
+    ActionButton = 'actionButton',
+
+    /** One message about the region it sits in, as a live region. */
+    Notice = 'notice',
+
     /** The bar that appears when records are selected, with the bulk actions. */
     BulkBar = 'bulkBar',
 
