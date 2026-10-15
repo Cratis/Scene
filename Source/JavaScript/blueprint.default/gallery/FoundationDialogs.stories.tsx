@@ -7,13 +7,14 @@ import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
 import { ComponentState } from '../foundation';
-import foundationPackText from '../sampleData/foundation-en.json?raw';
 import { GalleryDialogPreview } from './GalleryDialogPreview';
 import { GalleryScreenPreview } from './GalleryScreenPreview';
 import { TemplatePreviewState } from './TemplatePreviewState';
 
 const registry = mergePackageRegistries([corePackage, primeReactPackage, defaultBlueprint]);
-const pack = JSON.parse(foundationPackText) as SampleDataPack;
+/** The foundation sample-data pack, fetched from where the package ships it (`sampleData/`), as a host's loader would. */
+const packUrl = new URL('../sampleData/foundation-en.json', import.meta.url).href;
+const loadPack = async () => ({ pack: await (await fetch(packUrl)).json() as SampleDataPack });
 
 /**
  * The foundation dialogs and the auth and state screens (spec Part B 2.10 and 2.11) in each state, filled from the foundation sample-data pack: the data in the
@@ -24,7 +25,9 @@ const meta = {
     title: 'Blueprint/Foundation dialogs',
     component: GalleryDialogPreview,
     parameters: { layout: 'fullscreen' },
-    args: { registry, pack, dialogName: 'ConfirmDialog' },
+    loaders: [loadPack],
+    render: (args, { loaded }) => <GalleryDialogPreview {...args} pack={loaded.pack as SampleDataPack} />,
+    args: { registry, dialogName: 'ConfirmDialog' },
     tags: ['autodocs'],
 } satisfies Meta<typeof GalleryDialogPreview>;
 
@@ -64,7 +67,8 @@ export const Filter: Story = { args: { dialogName: 'FilterDialog' } };
 
 /** Every state screen, as a gallery screen: sign in, not found, forbidden and error. */
 export const StateScreens: StoryObj<typeof GalleryScreenPreview> = {
-    render: args => <GalleryScreenPreview {...args} registry={registry} pack={pack} />,
+    loaders: [loadPack],
+    render: (args, { loaded }) => <GalleryScreenPreview {...args} registry={registry} pack={loaded.pack as SampleDataPack} />,
     args: { screenName: 'LoginScreen' },
     argTypes: { screenName: { control: 'select', options: ['LoginScreen', 'NotFoundScreen', 'ForbiddenScreen', 'ErrorScreen'] } },
 };
