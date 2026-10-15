@@ -23,4 +23,19 @@ export enum NavigationDiagnosticCode {
 
     /** A destination opens a screen or dialog that does not exist, or names nothing to open. */
     UnavailableTarget = 'unavailableTarget',
+
+    /** A navigation item has no target, or targets a module or feature the application does not have. */
+    NavTargetMissing = 'navTargetMissing',
+
+    /** A navigation item renders into a slot the layout does not declare. */
+    NavSlotUnknown = 'navSlotUnknown',
+
+    /** Two navigation items of one region share an id. */
+    NavDuplicateId = 'navDuplicateId',
+
+    /** A navigation item targets a module that has no feature to go to. */
+    NavModuleWithoutFeatures = 'navModuleWithoutFeatures',
+
+    /** A module's own navigation item targets a different module. */
+    NavTargetOutOfScope = 'navTargetOutOfScope',
 }

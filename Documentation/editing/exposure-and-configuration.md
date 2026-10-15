@@ -31,6 +31,21 @@ A collection exposed without `operations` exposes nothing a consumer can change.
 one: `add`, `remove`, `reorder`, `edit-fields`. A consumer can only change items **it** added; the owner's
 items are fixed, and so are items another instance added.
 
+### Replacing the owner's items
+
+A fifth operation, `replace`, lets a consumer **hide** the items it inherits - the owner's, and those of the
+levels above it - so only its own items remain. The consumer says so on its contribution:
+
+```ts
+{ instance: 'template:Support', component: 'navigation', path: 'items', replaceOwnerItems: true, items: [...] }
+```
+
+Nothing is removed from the owner: the hidden items stay where they are and come back when the contribution stops
+replacing, and `inheritedValue` still reports them. Replacing is granted like any other operation - without
+`replace` in the exposure the contribution is ignored and kept, reported as `contributionOperationNotPermitted`
+(and a document that sets it anyway is refused by the server check). Navigation regions use it for their
+`override` mode; see [Navigation regions](../blueprints/navigation-regions.md).
+
 ## Nesting
 
 An owner's exposure reaches the instance directly inside it. It reaches further only when each template in

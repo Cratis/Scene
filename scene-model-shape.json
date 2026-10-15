@@ -442,7 +442,8 @@
       "component",
       "path",
       "value",
-      "items"
+      "items",
+      "replaceOwnerItems"
     ],
     "EditingScope": [
       "kind",
@@ -574,6 +575,35 @@
       "id",
       "name",
       "kind"
+    ],
+    "NavItem": [
+      "id",
+      "title",
+      "icon",
+      "target",
+      "slot",
+      "children"
+    ],
+    "NavigationRegion": [
+      "region",
+      "mode",
+      "items"
+    ],
+    "ApplicationLogo": [
+      "image",
+      "title"
+    ],
+    "ApplicationNavigation": [
+      "regions",
+      "logo"
+    ],
+    "ModuleNavigation": [
+      "module",
+      "regions"
+    ],
+    "NavigationModel": [
+      "application",
+      "modules"
     ]
   },
   "enums": {
@@ -672,7 +702,8 @@
       "Add",
       "Remove",
       "Reorder",
-      "EditFields"
+      "EditFields",
+      "Replace"
     ],
     "EditingScopeKind": [
       "Screen",
@@ -733,6 +764,15 @@
       "StateChange",
       "StateView",
       "Automation"
+    ],
+    "NavigationRegionKind": [
+      "Topbar",
+      "Sidebar"
+    ],
+    "NavigationRegionMode": [
+      "Inherit",
+      "Extend",
+      "Override"
     ]
   }
 }

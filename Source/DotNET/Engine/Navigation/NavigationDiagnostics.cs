@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Engine.Structure;
 using Cratis.Scene.Model.Common;
 using Cratis.Scene.Model.Screens;
 
@@ -8,7 +9,8 @@ namespace Cratis.Scene.Engine.Navigation;
 
 /// <summary>
 /// Diagnoses how destinations, outlets, routes and targets fit together: duplicate routes, duplicate, missing
-/// or incompatible outlets, hosting cycles and unavailable targets. Nothing is rewritten and no URL is constructed.
+/// or incompatible outlets, hosting cycles and unavailable targets - and, when the graph carries an application structure and
+/// navigation regions, the regions too. Nothing is rewritten and no URL is constructed.
 /// </summary>
 /// <remarks>
 /// The TypeScript engine (<c language="csharp">diagnoseNavigation</c>) reports the same codes and messages in the same order for
@@ -79,6 +81,11 @@ public static class NavigationDiagnostics
             diagnostics.Add(new(
                 NavigationDiagnosticCode.NavigationCycle,
                 $"Navigation cycle {string.Join(" -> ", cycle.Append(cycle[0]))}: each screen is placed in an outlet owned by the next, so composition never terminates."));
+        }
+
+        if (graph.Structure is not null && graph.Navigation is not null)
+        {
+            diagnostics.AddRange(NavigationRegionDiagnostics.Diagnose(new ApplicationStructureIndex(graph.Structure), graph.Navigation, graph.Slots));
         }
 
         return diagnostics;
