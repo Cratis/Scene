@@ -18,6 +18,10 @@ component, so a component picker shows them and a screen places them like any ot
 | `filterBuilder` | Input | Field, operator and value conditions joined by AND or OR in groups nested three deep; publishes the filter as its `value` |
 | `columnChooser` | Actions | Which columns a table shows and in what order, with locked columns; publishes the visible ids as its `value` |
 | `savedViewsMenu` | Actions | A list's saved views as a menu button, with save and manage commands that honour permission rules |
+| `checklistSection` | Data display | Sections of tasks with owner, due date and a progress bar each; publishes the done task ids |
+| `activityFeed` | Data display | What happened to a record, grouped by day, with the kind of each entry named in words |
+| `avatarStack` | Data display | Overlapping avatars for the people on a record with a "+N" chip for the rest |
+| `fileUploader` | Input | A drop zone and file picker checked for type and size; sends through a host handler when one is provided |
 
 ## The five standard states
 
@@ -73,6 +77,21 @@ output - the filter `{ operator, conditions, groups }`, the ordered visible colu
 its query and table to with a component-property binding, the same way the input widgets do. `savedViewsMenu` also publishes `save` or
 `manage` on its `action` output when the user asks for those commands. A filter bound in through `filter` is read back as the user left
 it, and conditions on fields that no longer exist are dropped rather than shown broken.
+
+## Lists of records
+
+`checklistSection` (`sections` of `items` with `id`, `label`, `owner`, `due`, `done`) shows progress as a labelled progress bar and says
+"Overdue" in words for an open task past its due day. `activityFeed` takes `entries` (`id`, `actor`, `action`, `kind`, `at`, `body`) and
+groups them by calendar day in `timeZone`, newest first unless `order` is `ascending`; the application supplies the content.
+`avatarStack` takes `people` (`name`, optional `imageUrl`) and folds those beyond `max` into a "+N" chip, announced as "N more".
+
+## Uploading files
+
+`fileUploader` checks a selection against `accept` (extensions, MIME types, wildcards), `maxSizeMb` and `multiple` before anything is
+sent, and says why a file was refused. Its input is a real file input behind a labelled button, so it works from the keyboard. The selection
+(name, size, type, status) is published as `value`. Sending is the host's: wrap the screen in `FileUploaderHandlerProvider` with a
+`(files, serverUrl) => Promise<void>` - the same signature `@cratis/scene.primereact` uses for its `fileUpload`, so one function serves
+both - and files are marked uploading, done, or failed with a retry. Without a handler the uploader only collects.
 
 ## Data, not values
 
