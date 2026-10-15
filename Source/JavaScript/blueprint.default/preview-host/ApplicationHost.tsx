@@ -9,7 +9,7 @@ import {
     SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, navigationDestinations,
     sceneRoutesFrom, sliceDialogParameters, useSceneHistoryNavigation,
 } from '@cratis/scene.react';
-import { LayoutConfigProvider } from '@cratis/scene.blueprint.default';
+import { LayoutConfigProvider } from '../configuration';
 import { ApplicationDocument } from './ApplicationDocument';
 import { previewComponents } from './PreviewTemplate';
 import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen } from './composeApplication';

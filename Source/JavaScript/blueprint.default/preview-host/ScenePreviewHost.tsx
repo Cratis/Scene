@@ -8,7 +8,9 @@ import {
     ComponentRegistry, SceneHistory, SceneThemeProvider, SliceCommandFieldsProvider, SliceCommandFieldsSource, SliceInvoker,
     SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, sliceDialogDestination, useSceneNavigation,
 } from '@cratis/scene.react';
-import { ComponentName, LayoutName, SlotName, externalComponent } from '@cratis/scene.blueprint.default';
+import { ComponentName } from '../ComponentName';
+import { externalComponent } from '../gallery/elements';
+import { LayoutName, SlotName } from '../layouts';
 import { previewProfile } from './previewProfile';
 import { ApplicationDocument } from './ApplicationDocument';
 import { ApplicationHost } from './ApplicationHost';

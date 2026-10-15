@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ExternalComponent, SceneElement, ScreenTemplate } from '@cratis/scene.model';
-import { ComponentName, defaultLayouts, galleryScreenTemplates } from '@cratis/scene.blueprint.default';
+import { ComponentName } from '../../ComponentName';
+import { galleryScreenTemplates } from '../../gallery/screens';
+import { defaultLayouts } from '../../layouts';
 import { ApplicationDocument } from '../ApplicationDocument';
 import { collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen, screenContent, templateChainOf } from '../composeApplication';
 import { previewTemplateComponent } from '../PreviewTemplate';
