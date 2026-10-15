@@ -4,7 +4,9 @@
 import { Button } from 'primereact/button';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { isPointerRevealMode, useLayoutConfig } from '../configuration';
-import { readString } from './elementProperties';
+import { NavigationRegionKind } from '@cratis/scene.model';
+import { readBoolean, readString } from './elementProperties';
+import { RegionNavigation, useHasRegionNavigation } from './RegionNavigation';
 
 /**
  * The sidebar's own chrome, inside the panel {@link AppShell} positions.
@@ -14,11 +16,15 @@ import { readString } from './elementProperties';
  * the shell; everything about *what is in it* belongs to the screen. A template can replace this header
  * wholesale without any of the mode CSS noticing.
  *
+ * When the application supplies a navigation model and the sidebar has no `content` of its own, the content is the effective
+ * navigation of the sidebar region for the module on the page (set `regionNavigation` to false to opt out).
+ *
  * The pin button only appears in `reveal` and `drawer`, the two modes where the sidebar answers to the
  * pointer and therefore needs a way to be made to stay.
  */
 export function Sidebar({ element, slots }: RegisteredComponentProps) {
     const { effectiveMode, config, toggleSidebarAnchor } = useLayoutConfig();
+    const hasRegion = useHasRegionNavigation();
     const title = readString(element, 'title');
     const isPinnable = isPointerRevealMode(effectiveMode);
 
@@ -40,7 +46,7 @@ export function Sidebar({ element, slots }: RegisteredComponentProps) {
                     </Button>
                 )}
             </div>
-            {slots.content}
+            {slots.content?.length ? slots.content : hasRegion && readBoolean(element, 'regionNavigation', true) ? <RegionNavigation region={NavigationRegionKind.Sidebar} label='Sidebar' /> : null}
         </>
     );
 }
