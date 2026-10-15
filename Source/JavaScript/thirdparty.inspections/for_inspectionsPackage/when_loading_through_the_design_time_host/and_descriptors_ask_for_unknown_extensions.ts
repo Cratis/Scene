@@ -10,6 +10,7 @@ import { designTimeConfiguration } from '../given/a_design_time_host';
 describe('when loading through the design-time host and descriptors ask for unknown extensions', () => {
     const descriptor: ComponentDescriptor = {
         ...inspectionChecklistDescriptor,
+        designMode: undefined,
         previewKind: 'heatmapPreview',
         editorKind: 'Other.Package:floorPlanDesigner',
         properties: [{ ...inspectionChecklistDescriptor.properties[0], editorKind: 'richText' }],

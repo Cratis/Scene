@@ -13,8 +13,13 @@ describe('when describing the core package', () => {
         (corePackage.descriptors === coreDescriptors).should.be.true;
     });
 
-    it('should describe every layout-free component an author configures', () => {
-        coreDescriptors.map(descriptor => descriptor.component).should.have.members(['core:button', 'core:action', 'core:column', 'core:outlet', 'core:navigationBar']);
+    it('should give every layout-free component an author configures properties to edit', () => {
+        coreDescriptors.filter(descriptor => descriptor.properties.length > 0).map(descriptor => descriptor.component)
+            .should.have.members(['core:button', 'core:action', 'core:column', 'core:outlet', 'core:navigationBar']);
+    });
+
+    it('should describe every component of the package, the structural ones with nothing to edit', () => {
+        coreDescriptors.map(descriptor => descriptor.component).should.have.members(corePackage.manifest.components.map(name => `core:${name}`));
     });
 
     it('should describe the navigation bar as an ordered collection of label, icon and destination', () => {

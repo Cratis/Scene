@@ -5,6 +5,7 @@ import { BindingMode, BindingSourceKind } from '../common';
 import { CollectionItemDescriptor } from './CollectionItemDescriptor';
 import { PropertyChoice } from './PropertyChoice';
 import { PropertyConstraints } from './PropertyConstraints';
+import { PropertyEditorOptions } from './PropertyEditorOptions';
 import { PropertyValueType } from './PropertyValueType';
 
 /**
@@ -41,6 +42,9 @@ export interface PropertyDescriptor {
      */
     editorKind?: string;
 
+    /** The parameters of the named editor - multi-line, placeholder, unit, step, slice kinds, the reference filter. */
+    editorOptions?: PropertyEditorOptions;
+
     /** A sentence of help for the editor. */
     description?: string;
 
@@ -75,6 +79,6 @@ export interface PropertyDescriptor {
 }
 
 export const PropertyDescriptorPropertyNames: (keyof PropertyDescriptor)[] = [
-    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'description', 'item', 'properties', 'open', 'readOnly',
+    'path', 'label', 'group', 'valueType', 'choices', 'default', 'constraints', 'editorKind', 'editorOptions', 'description', 'item', 'properties', 'open', 'readOnly',
     'output', 'acceptedBindingKinds', 'bindingMode',
 ];

@@ -63,4 +63,10 @@ export enum DiagnosticCode {
     IncompatibleIconLibrary = 'incompatibleIconLibrary',
     IconCatalogUnavailable = 'iconCatalogUnavailable',
     IconNotVerified = 'iconNotVerified',
+
+    // Component metadata
+    ComponentCategoryMissing = 'componentCategoryMissing',
+    ComponentCategoryUnknown = 'componentCategoryUnknown',
+    ComponentDesignModeInvalid = 'componentDesignModeInvalid',
+    PropertyEditorOptionsInvalid = 'propertyEditorOptionsInvalid',
 }
