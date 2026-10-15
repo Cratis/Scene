@@ -57,4 +57,16 @@ export enum ComponentName {
 
     /** Switches between the layout modes. */
     LayoutModeSwitcher = 'layoutModeSwitcher',
+
+    /** An icon, a headline, a hint and one primary action: what a region says when it has nothing to show. */
+    EmptyState = 'emptyState',
+
+    /** One key figure with its label, trend and comparison period. */
+    StatCard = 'statCard',
+
+    /** A change drawn as a direction, a magnitude and whether it is good. */
+    TrendChip = 'trendChip',
+
+    /** A status as a semantic color, an icon and its text. */
+    StatusChip = 'statusChip',
 }

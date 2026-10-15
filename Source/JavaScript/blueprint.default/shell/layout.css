@@ -1080,3 +1080,245 @@
 .scene-preview-toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 1300; max-width: 26rem; padding: 0.75rem 1rem; border-radius: 0.75rem; background: #161b22; color: #fff; box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.35); }
 .scene-preview-toast summary { cursor: pointer; margin-top: 0.25rem; color: #c9d1d9; }
 .scene-preview-toast pre { margin: 0.5rem 0 0; max-height: 14rem; overflow: auto; font-size: 0.75rem; }
+
+
+/*
+ * FOUNDATION COMPONENTS
+ * ---------------------
+ * The stat card, chips, empty state and the other composites of the foundation set (spec Part B 4). They may be placed
+ * anywhere - inside the shell, in a dialog, on a page with no shell at all - so they alias the Scene tokens themselves instead of
+ * relying on the `--layout-*` block above, which only exists under the shell. Colors and radii come from tokens only; the
+ * spacing is one scale (`--foundation-space-*`). Direction-sensitive rules use logical properties so right-to-left needs no
+ * second stylesheet.
+ */
+.foundation {
+    --foundation-text: var(--scene-text-color, #1f2430);
+    --foundation-muted: var(--scene-text-muted-color, #5b6472);
+    --foundation-surface: var(--scene-surface-card, #ffffff);
+    --foundation-background: var(--scene-surface-background, #f4f5f7);
+    --foundation-border: var(--scene-surface-border, #d5d9df);
+    --foundation-hover: var(--scene-surface-hover, #eceef1);
+    --foundation-primary: var(--scene-primary-color, #4f46e5);
+    --foundation-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
+    --foundation-highlight: var(--scene-highlight-background, #eef2ff);
+    --foundation-highlight-text: var(--scene-highlight-color, #3730a3);
+    --foundation-radius: var(--scene-content-border-radius, 0.5rem);
+    --foundation-focus: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.55));
+    --foundation-success: var(--scene-status-success-color, #166534);
+    --foundation-success-background: var(--scene-status-success-background, #dcfce7);
+    --foundation-warning: var(--scene-status-warning-color, #854d0e);
+    --foundation-warning-background: var(--scene-status-warning-background, #fef3c7);
+    --foundation-danger: var(--scene-status-danger-color, #991b1b);
+    --foundation-danger-background: var(--scene-status-danger-background, #fee2e2);
+    --foundation-info: var(--scene-status-info-color, #1e40af);
+    --foundation-info-background: var(--scene-status-info-background, #dbeafe);
+    --foundation-space-1: 0.25rem;
+    --foundation-space-2: 0.5rem;
+    --foundation-space-3: 0.75rem;
+    --foundation-space-4: 1rem;
+    --foundation-space-6: 1.5rem;
+    --foundation-row-height: 2.75rem;
+
+    box-sizing: border-box;
+    color: var(--foundation-text);
+    font-family: inherit;
+}
+
+.foundation[data-density='compact'] {
+    --foundation-row-height: 2rem;
+    --foundation-space-3: 0.5rem;
+}
+
+.foundation *,
+.foundation *::before,
+.foundation *::after {
+    box-sizing: border-box;
+}
+
+.foundation-visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+.foundation-icon {
+    flex: none;
+    inline-size: 1em;
+    block-size: 1em;
+}
+
+.foundation :focus-visible {
+    outline: 2px solid var(--foundation-primary);
+    outline-offset: 2px;
+    box-shadow: var(--foundation-focus);
+}
+
+.foundation-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--foundation-space-2);
+    min-block-size: 2.25rem;
+    padding-inline: var(--foundation-space-4);
+    border: 1px solid var(--foundation-primary);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-primary);
+    color: var(--foundation-primary-contrast);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.foundation-button[data-emphasis='secondary'] {
+    background: var(--foundation-surface);
+    color: var(--foundation-primary);
+}
+
+.foundation-button[data-emphasis='quiet'] {
+    border-color: transparent;
+    background: transparent;
+    color: var(--foundation-primary);
+}
+
+.foundation-button:hover:not([aria-disabled='true']) {
+    filter: brightness(0.95);
+}
+
+.foundation-button[aria-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Standard states: skeleton, empty, message (error / no permission / partial). */
+.foundation-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-3);
+    padding: var(--foundation-space-4);
+}
+
+.foundation-skeleton-block {
+    display: block;
+    block-size: 0.875rem;
+    border-radius: var(--foundation-radius);
+    background: linear-gradient(90deg, var(--foundation-hover) 25%, var(--foundation-border) 50%, var(--foundation-hover) 75%);
+    background-size: 200% 100%;
+    animation: foundation-shimmer 1.4s linear infinite;
+}
+
+@keyframes foundation-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .foundation-skeleton-block { animation: none; }
+}
+
+.foundation-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--foundation-space-2);
+    padding: var(--foundation-space-6);
+    text-align: center;
+}
+
+.foundation-empty-icon {
+    display: inline-flex;
+    padding: var(--foundation-space-3);
+    border-radius: 50%;
+    background: var(--foundation-highlight);
+    color: var(--foundation-highlight-text);
+    font-size: 1.5rem;
+}
+
+.foundation-empty-hint {
+    color: var(--foundation-muted);
+    max-inline-size: 36ch;
+}
+
+.foundation-message {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--foundation-space-3);
+    padding: var(--foundation-space-3) var(--foundation-space-4);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-message[data-tone='danger'] { border-color: var(--foundation-danger); color: var(--foundation-danger); background: var(--foundation-danger-background); }
+.foundation-message[data-tone='warning'] { border-color: var(--foundation-warning); color: var(--foundation-warning); background: var(--foundation-warning-background); }
+
+.foundation-message-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--foundation-space-1);
+}
+
+/* Chips: status and trend. Tone is color plus icon plus text, never color alone. */
+.foundation-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-1);
+    padding: var(--foundation-space-1) var(--foundation-space-2);
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.foundation-chip[data-tone='success'] { color: var(--foundation-success); background: var(--foundation-success-background); }
+.foundation-chip[data-tone='warning'] { color: var(--foundation-warning); background: var(--foundation-warning-background); }
+.foundation-chip[data-tone='danger'] { color: var(--foundation-danger); background: var(--foundation-danger-background); }
+.foundation-chip[data-tone='info'] { color: var(--foundation-info); background: var(--foundation-info-background); }
+.foundation-chip[data-tone='neutral'] { color: var(--foundation-muted); background: var(--foundation-hover); }
+
+.foundation-trend-comparison {
+    font-weight: 400;
+}
+
+.foundation-trend-chip { display: inline-flex; }
+
+/* Stat card. */
+.foundation-stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-2);
+    min-inline-size: 10rem;
+    padding: var(--foundation-space-4);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-stat-label {
+    margin: 0;
+    color: var(--foundation-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.foundation-stat-value {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.foundation-empty-state {
+    border: 1px dashed var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}

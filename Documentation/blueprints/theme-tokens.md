@@ -9,7 +9,7 @@ property, and a future native renderer could turn it into something else entirel
 
 ## The vocabulary
 
-Thirteen tokens, shared by every Scene package. A vocabulary that grows per package is one no package can
+Twenty-one tokens, shared by every Scene package. A vocabulary that grows per package is one no package can
 rely on.
 
 | Token | CSS custom property | Used for |
@@ -27,6 +27,15 @@ rely on.
 | `highlight.color` | `--scene-highlight-color` | the current menu item's text |
 | `content.borderRadius` | `--scene-content-border-radius` | every rounded corner |
 | `focus.ring` | `--scene-focus-ring` | the keyboard focus indicator |
+| `status.successColor`, `status.successBackground` | `--scene-status-success-color`, `--scene-status-success-background` | a good outcome: a positive trend, an approved step, a success chip |
+| `status.warningColor`, `status.warningBackground` | `--scene-status-warning-color`, `--scene-status-warning-background` | something needing attention: a partial load, a pending approval |
+| `status.dangerColor`, `status.dangerBackground` | `--scene-status-danger-color`, `--scene-status-danger-background` | a problem: an error, a negative trend, a rejection |
+| `status.infoColor`, `status.infoBackground` | `--scene-status-info-color`, `--scene-status-info-background` | neutral information |
+
+The status tokens are what the foundation components draw a status with. Each pair is a text color and its tinted
+background, and each is chosen to keep WCAG AA contrast against its partner in both shipped themes - the Chromium
+audit of the foundation components asserts that. A status is never told by color alone: every chip also carries an
+icon and its text.
 
 The name-to-property rule lives in one place, `themeTokenProperty`: dots become dashes and camelCase
 splits, so `text.mutedColor` becomes `--scene-text-muted-color`.

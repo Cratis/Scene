@@ -3,6 +3,7 @@
 
 import { resolveComponentName } from '@cratis/scene.engine';
 import { ComponentName } from '../ComponentName';
+import { foundationComponentMetadata } from '../foundation';
 import {
     composeScreenElement,
     distinctComponentNames,
@@ -54,6 +55,8 @@ describe('when resolving the component names they reference', () => {
         const placedByAHostRatherThanATemplate = [ComponentName.Mask, ComponentName.ThemeSwitcher, ComponentName.LayoutModeSwitcher, ComponentName.RightPanel];
         Object.values(ComponentName)
             .filter(name => !placedByAHostRatherThanATemplate.includes(name))
+            // The foundation composites are content a screen places, not shell; the foundation screen templates reference them.
+            .filter(name => !(name in foundationComponentMetadata))
             .filter(name => !referenced.has(name))
             .should.be.empty;
     });

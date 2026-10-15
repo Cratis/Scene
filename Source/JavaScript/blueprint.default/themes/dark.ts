@@ -34,5 +34,13 @@ export const darkTheme: Theme = {
         'highlight.color': '#c7ccff',
         'content.borderRadius': '0.5rem',
         'focus.ring': '0 0 0 2px rgb(129 140 248 / 0.45)',
+        'status.successColor': '#86efac',
+        'status.successBackground': '#14301f',
+        'status.warningColor': '#fcd34d',
+        'status.warningBackground': '#33290f',
+        'status.dangerColor': '#fca5a5',
+        'status.dangerBackground': '#3a1616',
+        'status.infoColor': '#93c5fd',
+        'status.infoBackground': '#162a4a',
     },
 };
