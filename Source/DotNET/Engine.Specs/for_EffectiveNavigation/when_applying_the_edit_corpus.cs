@@ -1,7 +1,6 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
 namespace Cratis.Scene.Engine.Navigation.for_EffectiveNavigation;
 
 public class when_applying_the_edit_corpus : Specification
