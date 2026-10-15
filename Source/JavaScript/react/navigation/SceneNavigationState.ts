@@ -27,6 +27,9 @@ export interface SceneNavigationState {
     outlet?: string;
     dialog?: string;
 
+    /** The parameters the open dialog was opened with, by name. */
+    dialogParameters?: Record<string, string>;
+
     /** Route parameters, from the path template and the query string. */
     parameters: Record<string, string>;
 }

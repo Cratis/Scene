@@ -9,6 +9,7 @@ import { CoreCard } from './CoreCard';
 import { CoreNavigationBar } from './CoreNavigationBar';
 import { CoreToolbar, CoreToolbarItem } from './CoreToolbar';
 import { CoreOutlet } from '../navigation/CoreOutlet';
+import { CoreSliceDialog } from '../slices/CoreSliceDialog';
 import {
     CoreAction,
     CoreCode,
@@ -46,4 +47,5 @@ export const coreComponents: ComponentRegistry = {
     [componentRegistryKey('core', 'outlet')]: CoreOutlet,
     [componentRegistryKey('core', 'toolbar')]: CoreToolbar,
     [componentRegistryKey('core', 'toolbarItem')]: CoreToolbarItem,
+    [componentRegistryKey('core', 'sliceDialog')]: CoreSliceDialog,
 };

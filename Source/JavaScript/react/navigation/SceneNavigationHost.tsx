@@ -17,6 +17,8 @@ import { useSceneHistoryNavigation } from './useSceneHistoryNavigation';
 import { SceneNavigationModel } from './region/SceneNavigationModel';
 import { SceneNavigationModelProvider } from './region/SceneNavigationModelContext';
 import { navigationDestinations } from './region/navigationDestinations';
+import { SliceDialogView } from '../slices/SliceDialogView';
+import { sliceDialogParameters } from '../slices/sliceDialogDestination';
 
 export interface SceneNavigationHostProps {
     screens: Record<string, SceneElement>;
@@ -54,7 +56,8 @@ export interface SceneNavigationHostProps {
  * Executes Scene destinations against an in-memory rendered hierarchy: a destination into a nested outlet -
  * one a screen declares with `core:outlet` - places its screen there and keeps the screens above it, to any
  * depth; any other screen route replaces the primary region,
- * dialog destinations render dialog content over the screen that opened them, and external destinations
+ * dialog destinations render dialog content over the screen that opened them - a toolbar slice button's dialog falls back to
+ * the built-in task dialog (`SliceDialogView`) when `dialogs` has no template of that name -, and external destinations
  * only report their resolved action. Every navigation is a history entry.
  */
 export function SceneNavigationHost({ screens, dialogs = {}, initialScreen, registry, bindingScope = {}, history, destinations: authoredDestinations, routes, navigationModel, frame }: SceneNavigationHostProps) {
@@ -69,14 +72,16 @@ export function SceneNavigationHost({ screens, dialogs = {}, initialScreen, regi
 
     const screen = screens[value.primaryScreen];
     const dialog = value.currentDialog ? dialogs[value.currentDialog] : undefined;
+    const sliceDialog = !dialog && value.currentDialog && sliceDialogParameters(value.currentDialogParameters) !== undefined;
+    const dialogName = sliceDialogParameters(value.currentDialogParameters)?.title ?? value.currentDialog;
 
     const outlet = <div data-scene-outlet={value.primaryScreen === value.currentScreen ? value.currentOutlet ?? 'primary' : 'primary'} data-scene-url={value.currentUrl}>
         {screen && <SceneElementView element={screen} registry={registry} dataContext={bindingScope.dataContext} queryResults={bindingScope.queryResults} componentOutputs={bindingScope.componentOutputs} />}
     </div>;
     const page = <SceneNavigationProvider value={value}><SceneOutletContext.Provider value={outletContext}>
         {frame ? frame(outlet) : outlet}
-        {dialog && <div role='dialog' aria-modal='true' aria-label={value.currentDialog} data-scene-dialog={value.currentDialog}>
-            <SceneElementView element={dialog} registry={registry} dataContext={bindingScope.dataContext} queryResults={bindingScope.queryResults} componentOutputs={bindingScope.componentOutputs} />
+        {(dialog || sliceDialog) && <div role='dialog' aria-modal='true' aria-label={dialogName} data-scene-dialog={value.currentDialog}>
+            {dialog ? <SceneElementView element={dialog} registry={registry} dataContext={bindingScope.dataContext} queryResults={bindingScope.queryResults} componentOutputs={bindingScope.componentOutputs} /> : <SliceDialogView />}
         </div>}
     </SceneOutletContext.Provider></SceneNavigationProvider>;
 

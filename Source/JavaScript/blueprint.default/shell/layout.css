@@ -886,3 +886,176 @@
     outline: none;
     box-shadow: var(--layout-focus-ring);
 }
+
+/* ---------------------------------------------------------------------------
+ * Toolbar slice buttons and their task dialog. The dialog is portalled by the
+ * navigation host outside the layout wrapper, so it reads the Scene tokens
+ * directly rather than the --layout-* aliases.
+ * ------------------------------------------------------------------------ */
+
+.scene-toolbar-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    color: var(--scene-text-color, #1f2430);
+    cursor: pointer;
+    background: var(--scene-surface-card, #ffffff);
+    border: 1px solid var(--scene-surface-border, #d4d8de);
+    border-radius: var(--scene-content-border-radius, 0.5rem);
+}
+
+.scene-toolbar-button:hover {
+    background: var(--scene-surface-hover, #eceef1);
+}
+
+.scene-toolbar-button:focus-visible {
+    outline: none;
+    box-shadow: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+}
+
+.scene-toolbar-button-primary {
+    color: var(--scene-primary-contrast-color, #ffffff);
+    background: var(--scene-primary-color, #4f46e5);
+    border-color: var(--scene-primary-color, #4f46e5);
+}
+
+.scene-toolbar-button-primary:hover {
+    background: color-mix(in srgb, var(--scene-primary-color, #4f46e5) 88%, black);
+}
+
+.scene-toolbar-button-quiet {
+    background: transparent;
+    border-color: transparent;
+}
+
+.scene-toolbar-button [data-scene-badge='warning'] {
+    display: inline-grid;
+    place-items: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #7a4b00;
+    background: #fcd34d;
+    border-radius: 999px;
+}
+
+[data-scene-dialog]:has(> .scene-slice-dialog) {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: grid;
+    place-items: center;
+    background: rgb(15 20 30 / 0.5);
+}
+
+.scene-slice-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(30rem, calc(100vw - 2rem));
+    padding: 1.5rem;
+    color: var(--scene-text-color, #1f2430);
+    background: var(--scene-surface-overlay, #ffffff);
+    border-radius: 1rem;
+    box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.3);
+}
+
+.scene-slice-dialog-title {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.scene-slice-dialog-subtitle {
+    margin: 0.25rem 0 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    color: var(--scene-text-muted-color, #6b7280);
+}
+
+.scene-slice-dialog-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.scene-slice-dialog-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.scene-slice-dialog-field label {
+    font-size: 0.875rem;
+    color: var(--scene-text-muted-color, #6b7280);
+}
+
+.scene-slice-dialog-field input:not([type='checkbox']) {
+    padding: 0.6rem 0.75rem;
+    font: inherit;
+    color: inherit;
+    background: var(--scene-surface-background, #f4f5f7);
+    border: 1px solid var(--scene-surface-border, #d4d8de);
+    border-radius: var(--scene-content-border-radius, 0.5rem);
+}
+
+.scene-slice-dialog-field input:focus-visible {
+    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline-offset: 1px;
+}
+
+.scene-slice-dialog-field input[aria-invalid='true'] {
+    border-color: #b42318;
+}
+
+.scene-slice-dialog-error {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #b42318;
+}
+
+.scene-slice-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.scene-slice-dialog-cancel,
+.scene-slice-dialog-submit {
+    padding: 0.55rem 1.1rem;
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid var(--scene-surface-border, #d4d8de);
+    border-radius: var(--scene-content-border-radius, 0.5rem);
+}
+
+.scene-slice-dialog-cancel {
+    color: inherit;
+    background: transparent;
+}
+
+.scene-slice-dialog-submit {
+    color: var(--scene-primary-contrast-color, #ffffff);
+    background: var(--scene-primary-color, #4f46e5);
+    border-color: var(--scene-primary-color, #4f46e5);
+}
+
+.scene-slice-dialog-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+.scene-slice-dialog-cancel:focus-visible,
+.scene-slice-dialog-submit:focus-visible {
+    outline: none;
+    box-shadow: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+}
+
+[data-scene-toolbar] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}

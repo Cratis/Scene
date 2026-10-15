@@ -23,5 +23,6 @@ export const coreComponentMetadata: Record<string, ComponentMetadata> = {
     navigationBar: m('Navigation bar', ComponentCategory.Navigation, 'navigation', ['menu', 'nav', 'links'], undefined, navigationDesignMode({ itemsPath: 'items' })),
     outlet: m('Outlet', ComponentCategory.Layout, 'panel-right', ['region', 'slot', 'side panel']),
     toolbar: m('Toolbar', ComponentCategory.Actions, 'wrench', ['actions', 'buttons', 'command bar'], 'Tl', toolbarDesignMode()),
+    sliceDialog: m('Slice dialog', ComponentCategory.Overlay, 'square-pen', ['task dialog', 'state change', 'form', 'command'], undefined),
     toolbarItem: m('Toolbar item', ComponentCategory.Actions, 'mouse-pointer-click', ['button', 'action']),
 };

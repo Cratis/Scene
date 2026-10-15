@@ -6,6 +6,7 @@ export * from './renderer';
 export * from './core';
 export * from './NavBar';
 export * from './navigation';
+export * from './slices';
 export * from './icons';
 export * from './packages';
 export * from './theme';

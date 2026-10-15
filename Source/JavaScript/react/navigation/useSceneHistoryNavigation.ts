@@ -61,7 +61,7 @@ export function useSceneHistoryNavigation(
     const navigate = useCallback((destination: DestinationReference) => {
         const resolution = resolveDestination(destination, bindingScope);
         if (resolution.kind === DestinationKind.Dialog) {
-            if (resolution.dialog) go({ ...state, dialog: resolution.dialog });
+            if (resolution.dialog) go({ ...state, dialog: resolution.dialog, dialogParameters: resolution.parameters });
         } else if (resolution.kind !== DestinationKind.External) {
             const screen = destination.screen ?? destination.slice ?? state.screen;
             const placement = placeInOutlet(state, screen, resolution.outlet, outletOwners, destinations);
@@ -84,6 +84,7 @@ export function useSceneHistoryNavigation(
         currentUrl: state.url,
         currentOutlet: state.outlet,
         currentDialog: state.dialog,
+        currentDialogParameters: state.dialogParameters,
         currentParameters: state.parameters,
         dialogResult,
         unresolvedUrl,

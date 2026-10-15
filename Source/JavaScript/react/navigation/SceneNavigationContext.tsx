@@ -20,6 +20,9 @@ export interface SceneNavigationContextValue {
     currentOutlet?: string;
     currentDialog?: string;
 
+    /** The parameters the open dialog was opened with - a slice dialog carries its slice, command and title. */
+    currentDialogParameters?: Record<string, string>;
+
     /** The route parameters of the current entry - from the destination that opened it, or the deep link. */
     currentParameters: Record<string, string>;
 
