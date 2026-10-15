@@ -307,7 +307,8 @@
       "compatibility",
       "attribution",
       "license",
-      "licenseUrl"
+      "licenseUrl",
+      "sliceKinds"
     ],
     "GridLength": [
       "value",
@@ -504,6 +505,12 @@
       "url",
       "notice"
     ],
+    "TemplateReference": [
+      "source",
+      "id",
+      "blueprint",
+      "version"
+    ],
     "ApplicationStructure": [
       "modules"
     ],
@@ -688,6 +695,10 @@
       "Pixels",
       "Percent",
       "Auto"
+    ],
+    "TemplateReferenceSource": [
+      "Own",
+      "Blueprint"
     ],
     "SliceKind": [
       "StateChange",

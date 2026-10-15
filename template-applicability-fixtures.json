@@ -166,5 +166,1221 @@
       "definition": { "name": "custom", "slots": [] },
       "expectedProblems": ["Template 'custom' has unknown target scope '99'"]
     }
+  ],
+  "library": {
+    "own": {
+      "manifest": {
+        "name": "Workspace",
+        "version": "1.0.0",
+        "kind": "ComponentLibrary",
+        "dependencies": [],
+        "components": [],
+        "layouts": [],
+        "screenTemplates": [],
+        "dialogTemplates": [],
+        "themes": []
+      },
+      "layouts": [
+        {
+          "name": "MyShell",
+          "slots": [
+            {
+              "name": "sidebar"
+            },
+            {
+              "name": "content"
+            }
+          ],
+          "metadata": {
+            "type": "ApplicationShell",
+            "category": "Shell"
+          }
+        }
+      ],
+      "screenTemplates": [
+        {
+          "name": "Module Workspace",
+          "slots": [
+            {
+              "name": "header"
+            },
+            {
+              "name": "body"
+            }
+          ],
+          "fitsSlot": "content",
+          "metadata": {
+            "category": "Workspace"
+          }
+        },
+        {
+          "name": "Executive Workspace",
+          "slots": [
+            {
+              "name": "body"
+            }
+          ],
+          "fitsSlot": "content",
+          "metadata": {
+            "category": "Dashboard"
+          }
+        },
+        {
+          "name": "Uncategorized Page",
+          "slots": [],
+          "fitsSlot": "content"
+        },
+        {
+          "name": "Feature List",
+          "slots": [],
+          "fitsSlot": "body",
+          "metadata": {
+            "category": "List"
+          }
+        },
+        {
+          "name": "Feature Detail",
+          "slots": [],
+          "fitsSlot": "body",
+          "metadata": {
+            "category": "Detail"
+          }
+        },
+        {
+          "name": "Orders Panel",
+          "slots": [],
+          "fitsSlot": "body",
+          "metadata": {
+            "category": "Panel",
+            "scopes": [
+              "Subfeature"
+            ]
+          }
+        },
+        {
+          "name": "Pinned Dashboard",
+          "slots": [],
+          "metadata": {
+            "category": "Dashboard",
+            "scopes": [
+              "Feature"
+            ]
+          }
+        },
+        {
+          "name": "Order Fragment List",
+          "slots": [],
+          "metadata": {
+            "category": "List",
+            "scopes": [
+              "Slice"
+            ],
+            "sliceKinds": [
+              "StateView"
+            ]
+          }
+        },
+        {
+          "name": "Custom Form",
+          "slots": [],
+          "metadata": {
+            "category": "Form",
+            "scopes": [
+              "Slice"
+            ],
+            "sliceKinds": [
+              "StateChange"
+            ]
+          }
+        }
+      ],
+      "dialogTemplates": [
+        {
+          "name": "Quick create dialog",
+          "slots": [
+            {
+              "name": "body"
+            }
+          ],
+          "metadata": {
+            "category": "Dialog"
+          }
+        },
+        {
+          "name": "Confirm dialog",
+          "slots": [
+            {
+              "name": "body"
+            }
+          ],
+          "metadata": {
+            "category": "Dialog"
+          }
+        }
+      ]
+    },
+    "blueprints": [
+      {
+        "manifest": {
+          "name": "crm",
+          "version": "1.4.2",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "CRM"
+        },
+        "layouts": [
+          {
+            "name": "CrmShell",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "category": "Shell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "CRM Workspace",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "category": "Workspace"
+            }
+          },
+          {
+            "name": "Sales Workspace",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "category": "Workspace"
+            }
+          },
+          {
+            "name": "Pipeline Board",
+            "slots": [],
+            "fitsSlot": "body",
+            "metadata": {
+              "category": "Board"
+            }
+          },
+          {
+            "name": "Customer Detail",
+            "slots": [],
+            "fitsSlot": "body",
+            "metadata": {
+              "category": "Detail"
+            }
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Customer Quick Create",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "metadata": {
+              "category": "Dialog"
+            }
+          }
+        ]
+      },
+      {
+        "manifest": {
+          "name": "helpdesk",
+          "version": "2.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Helpdesk"
+        },
+        "screenTemplates": [
+          {
+            "name": "Ticket Queue",
+            "slots": [],
+            "fitsSlot": "queue",
+            "metadata": {
+              "category": "List"
+            }
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Ticket Dialog",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "metadata": {
+              "category": "Dialog"
+            }
+          }
+        ]
+      },
+      {
+        "manifest": {
+          "name": "analytics",
+          "version": "0.3.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "AnalyticsShell",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "applicable": [
+    {
+      "name": "application level lists layouts and hides blueprints with none",
+      "target": {
+        "scope": "Application"
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "Shell",
+            "templates": [
+              "MyShell"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Shell",
+                "templates": [
+                  "CrmShell"
+                ]
+              }
+            ]
+          },
+          {
+            "blueprint": "analytics",
+            "version": "0.3.0",
+            "pin": "^0.3.0",
+            "categories": [
+              {
+                "category": null,
+                "templates": [
+                  "AnalyticsShell"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "module level lists workspace templates fitting the shell slots",
+      "target": {
+        "scope": "Module",
+        "container": {
+          "name": "AppShell",
+          "slots": [
+            {
+              "name": "sidebar"
+            },
+            {
+              "name": "content"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "Workspace",
+            "templates": [
+              "Module Workspace"
+            ]
+          },
+          {
+            "category": "Dashboard",
+            "templates": [
+              "Executive Workspace"
+            ]
+          },
+          {
+            "category": null,
+            "templates": [
+              "Uncategorized Page"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Workspace",
+                "templates": [
+                  "CRM Workspace",
+                  "Sales Workspace"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "feature level lists page templates fitting a slot of the parent and honours explicit scopes",
+      "target": {
+        "scope": "Feature",
+        "container": {
+          "name": "Module Workspace",
+          "slots": [
+            {
+              "name": "header"
+            },
+            {
+              "name": "body"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "List",
+            "templates": [
+              "Feature List"
+            ]
+          },
+          {
+            "category": "Detail",
+            "templates": [
+              "Feature Detail"
+            ]
+          },
+          {
+            "category": "Dashboard",
+            "templates": [
+              "Pinned Dashboard"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Board",
+                "templates": [
+                  "Pipeline Board"
+                ]
+              },
+              {
+                "category": "Detail",
+                "templates": [
+                  "Customer Detail"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "subfeature level lists pages and panels",
+      "target": {
+        "scope": "Subfeature",
+        "container": {
+          "name": "Module Workspace",
+          "slots": [
+            {
+              "name": "header"
+            },
+            {
+              "name": "body"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "List",
+            "templates": [
+              "Feature List"
+            ]
+          },
+          {
+            "category": "Detail",
+            "templates": [
+              "Feature Detail"
+            ]
+          },
+          {
+            "category": "Panel",
+            "templates": [
+              "Orders Panel"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Board",
+                "templates": [
+                  "Pipeline Board"
+                ]
+              },
+              {
+                "category": "Detail",
+                "templates": [
+                  "Customer Detail"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "a template chosen above the target is not offered again",
+      "target": {
+        "scope": "Subfeature",
+        "container": {
+          "name": "Module Workspace",
+          "slots": [
+            {
+              "name": "header"
+            },
+            {
+              "name": "body"
+            }
+          ]
+        },
+        "chain": [
+          "Feature List",
+          "Pipeline Board"
+        ]
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "Detail",
+            "templates": [
+              "Feature Detail"
+            ]
+          },
+          {
+            "category": "Panel",
+            "templates": [
+              "Orders Panel"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Detail",
+                "templates": [
+                  "Customer Detail"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "state change slice lists dialog and form templates only",
+      "target": {
+        "scope": "Slice",
+        "sliceKind": "StateChange"
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "Form",
+            "templates": [
+              "Custom Form"
+            ]
+          },
+          {
+            "category": "Dialog",
+            "templates": [
+              "Quick create dialog",
+              "Confirm dialog"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Dialog",
+                "templates": [
+                  "Customer Quick Create"
+                ]
+              }
+            ]
+          },
+          {
+            "blueprint": "helpdesk",
+            "version": "2.0.0",
+            "pin": "^2.0.0",
+            "categories": [
+              {
+                "category": "Dialog",
+                "templates": [
+                  "Ticket Dialog"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "state view slice lists data display fragments only",
+      "target": {
+        "scope": "Slice",
+        "sliceKind": "StateView"
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "List",
+            "templates": [
+              "Order Fragment List"
+            ]
+          }
+        ],
+        "blueprints": []
+      }
+    },
+    {
+      "name": "an automation slice has no presentation",
+      "target": {
+        "scope": "Slice",
+        "sliceKind": "Automation"
+      },
+      "expected": {
+        "own": [],
+        "blueprints": []
+      }
+    },
+    {
+      "name": "a slice of unknown kind is filtered by scope only",
+      "target": {
+        "scope": "Slice"
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "List",
+            "templates": [
+              "Order Fragment List"
+            ]
+          },
+          {
+            "category": "Form",
+            "templates": [
+              "Custom Form"
+            ]
+          },
+          {
+            "category": "Dialog",
+            "templates": [
+              "Quick create dialog",
+              "Confirm dialog"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "crm",
+            "version": "1.4.2",
+            "pin": "^1.4.2",
+            "categories": [
+              {
+                "category": "Dialog",
+                "templates": [
+                  "Customer Quick Create"
+                ]
+              }
+            ]
+          },
+          {
+            "blueprint": "helpdesk",
+            "version": "2.0.0",
+            "pin": "^2.0.0",
+            "categories": [
+              {
+                "category": "Dialog",
+                "templates": [
+                  "Ticket Dialog"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "slot nesting failure hides templates and the blueprints that only offer them",
+      "target": {
+        "scope": "Feature",
+        "container": {
+          "name": "Sidebar Page",
+          "slots": [
+            {
+              "name": "side"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "own": [
+          {
+            "category": "Dashboard",
+            "templates": [
+              "Pinned Dashboard"
+            ]
+          }
+        ],
+        "blueprints": []
+      }
+    },
+    {
+      "name": "without a container only unplaced templates apply",
+      "target": {
+        "scope": "Module"
+      },
+      "expected": {
+        "own": [],
+        "blueprints": []
+      }
+    }
+  ],
+  "categories": [
+    {
+      "name": "a categorised blueprint template passes",
+      "sources": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "screenTemplates": [
+            {
+              "name": "Workspace",
+              "slots": [],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.13.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Workspace"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "crm",
+          "kind": "ScreenTemplate",
+          "name": "Workspace",
+          "compatible": true,
+          "problems": [],
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "name": "a blueprint template without a category is an error",
+      "sources": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "screenTemplates": [
+            {
+              "name": "Workspace",
+              "slots": [],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.13.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "crm",
+          "kind": "ScreenTemplate",
+          "name": "Workspace",
+          "compatible": false,
+          "problems": [
+            "Template 'Workspace' declares no category"
+          ],
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "name": "an own template without a category is a warning",
+      "sources": [
+        {
+          "manifest": {
+            "name": "Workspace",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "screenTemplates": [
+            {
+              "name": "Mine",
+              "slots": [],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.13.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "Workspace",
+          "kind": "ScreenTemplate",
+          "name": "Mine",
+          "compatible": true,
+          "problems": [],
+          "warnings": [
+            "Template 'Mine' declares no category"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "a blank category counts as missing",
+      "sources": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "dialogTemplates": [
+            {
+              "name": "Confirm",
+              "slots": [],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.13.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "  "
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "crm",
+          "kind": "DialogTemplate",
+          "name": "Confirm",
+          "compatible": false,
+          "problems": [
+            "Template 'Confirm' declares no category"
+          ],
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "name": "an unknown category is preserved and accepted",
+      "sources": [
+        {
+          "manifest": {
+            "name": "acme",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "Shell",
+              "slots": [],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.13.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Acme / Operations"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "acme",
+          "kind": "Layout",
+          "name": "Shell",
+          "compatible": true,
+          "problems": [],
+          "warnings": []
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "name": "an own template resolves by name",
+      "reference": {
+        "source": "Own",
+        "id": "Module Workspace"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "Workspace",
+        "version": "1.0.0",
+        "kind": "ScreenTemplate"
+      }
+    },
+    {
+      "name": "an own dialog template resolves",
+      "reference": {
+        "source": "Own",
+        "id": "Confirm dialog"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "Workspace",
+        "version": "1.0.0",
+        "kind": "DialogTemplate"
+      }
+    },
+    {
+      "name": "an own layout resolves",
+      "reference": {
+        "source": "Own",
+        "id": "MyShell"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "Workspace",
+        "version": "1.0.0",
+        "kind": "Layout"
+      }
+    },
+    {
+      "name": "an unknown own template is diagnosed",
+      "reference": {
+        "source": "Own",
+        "id": "Missing"
+      },
+      "expected": {
+        "status": "UnknownTemplate",
+        "package": "Workspace",
+        "version": "1.0.0",
+        "message": "Own template 'Missing' does not exist"
+      }
+    },
+    {
+      "name": "an own reference must not carry a blueprint",
+      "reference": {
+        "source": "Own",
+        "id": "Module Workspace",
+        "blueprint": "crm"
+      },
+      "expected": {
+        "status": "Malformed",
+        "message": "Own template reference 'Module Workspace' must not name a blueprint or a version"
+      }
+    },
+    {
+      "name": "an own reference must not carry a version",
+      "reference": {
+        "source": "Own",
+        "id": "Module Workspace",
+        "version": "^1.0.0"
+      },
+      "expected": {
+        "status": "Malformed",
+        "message": "Own template reference 'Module Workspace' must not name a blueprint or a version"
+      }
+    },
+    {
+      "name": "a blueprint reference pinned to the installed caret range resolves",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm",
+        "version": "^1.4.2"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "crm",
+        "version": "1.4.2",
+        "kind": "ScreenTemplate"
+      }
+    },
+    {
+      "name": "a reference pinned to an older compatible range still resolves",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm",
+        "version": "^1.2.0"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "crm",
+        "version": "1.4.2",
+        "kind": "ScreenTemplate"
+      }
+    },
+    {
+      "name": "a tilde range pinned to the installed minor resolves",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm",
+        "version": "~1.4.0"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "crm",
+        "version": "1.4.2",
+        "kind": "ScreenTemplate"
+      }
+    },
+    {
+      "name": "a reference without a version accepts any installed version",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "crm",
+        "version": "1.4.2",
+        "kind": "ScreenTemplate"
+      }
+    },
+    {
+      "name": "a blueprint dialog template resolves",
+      "reference": {
+        "source": "Blueprint",
+        "id": "Customer Quick Create",
+        "blueprint": "crm",
+        "version": "^1.4.2"
+      },
+      "expected": {
+        "status": "Resolved",
+        "package": "crm",
+        "version": "1.4.2",
+        "kind": "DialogTemplate"
+      }
+    },
+    {
+      "name": "a blueprint that drifted past the pinned major is diagnosed",
+      "reference": {
+        "source": "Blueprint",
+        "id": "Ticket Dialog",
+        "blueprint": "helpdesk",
+        "version": "^1.0.0"
+      },
+      "expected": {
+        "status": "VersionNotSatisfied",
+        "package": "helpdesk",
+        "version": "2.0.0",
+        "message": "Template 'Ticket Dialog' was chosen from blueprint 'helpdesk' ^1.0.0 but version 2.0.0 is installed"
+      }
+    },
+    {
+      "name": "a blueprint older than the pinned minimum is diagnosed",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm",
+        "version": "^1.5.0"
+      },
+      "expected": {
+        "status": "VersionNotSatisfied",
+        "package": "crm",
+        "version": "1.4.2",
+        "message": "Template 'CRM Workspace' was chosen from blueprint 'crm' ^1.5.0 but version 1.4.2 is installed"
+      }
+    },
+    {
+      "name": "an invalid version range is malformed",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace",
+        "blueprint": "crm",
+        "version": "four point two"
+      },
+      "expected": {
+        "status": "Malformed",
+        "package": "crm",
+        "version": "1.4.2",
+        "message": "Template reference 'CRM Workspace' declares an invalid version range 'four point two'"
+      }
+    },
+    {
+      "name": "an unknown blueprint is diagnosed",
+      "reference": {
+        "source": "Blueprint",
+        "id": "Anything",
+        "blueprint": "ghost",
+        "version": "^1.0.0"
+      },
+      "expected": {
+        "status": "UnknownBlueprint",
+        "message": "Blueprint 'ghost' referenced by template 'Anything' is not available"
+      }
+    },
+    {
+      "name": "an unknown template in a known blueprint is diagnosed",
+      "reference": {
+        "source": "Blueprint",
+        "id": "Ghost Page",
+        "blueprint": "crm",
+        "version": "^1.4.2"
+      },
+      "expected": {
+        "status": "UnknownTemplate",
+        "package": "crm",
+        "version": "1.4.2",
+        "message": "Blueprint 'crm' has no template 'Ghost Page'"
+      }
+    },
+    {
+      "name": "a blueprint reference must name its blueprint",
+      "reference": {
+        "source": "Blueprint",
+        "id": "CRM Workspace"
+      },
+      "expected": {
+        "status": "Malformed",
+        "message": "Blueprint template reference 'CRM Workspace' must name its blueprint"
+      }
+    },
+    {
+      "name": "a reference must name a template",
+      "reference": {
+        "source": "Own",
+        "id": " "
+      },
+      "expected": {
+        "status": "Malformed",
+        "message": "A template reference must name a template"
+      }
+    }
   ]
 }

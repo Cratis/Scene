@@ -54,7 +54,7 @@ export const commandDialogTemplate: DialogTemplate = {
     },
     displayName: 'Command dialog',
     description: 'A short capture whose confirm button submits the command and only closes when it succeeded.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Dialog' },
 };
 
 /**
@@ -81,7 +81,7 @@ export const confirmDialogTemplate: DialogTemplate = {
     },
     displayName: 'Confirmation dialog',
     description: 'One question with the consequence spelled out, answered through Arc dialog context.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Dialog' },
 };
 
 /**
@@ -102,7 +102,7 @@ export const busyDialogTemplate: DialogTemplate = {
     },
     displayName: 'Busy dialog',
     description: 'The blocking spinner shown while a long-running command is in flight, with wording chosen up front.',
-    metadata: { ...componentsBlueprintTemplateProvenance },
+    metadata: { ...componentsBlueprintTemplateProvenance, category: 'Business / Dialog' },
 };
 
 /** The dialog templates this blueprint provides. */

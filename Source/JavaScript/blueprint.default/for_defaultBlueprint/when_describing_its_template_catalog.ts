@@ -39,6 +39,15 @@ describe('when describing its template catalog', () => {
         entries.filter(entry => !entry.compatible).map(entry => entry.problems).should.deep.equal([]);
     });
 
+    it('should give every template a category so it passes category validation', () => {
+        entries.filter(entry => !entry.category?.trim()).map(entry => entry.name).should.deep.equal([]);
+        entries.flatMap(entry => entry.problems.filter(problem => problem.includes('declares no category'))).should.deep.equal([]);
+    });
+
+    it('should categorise structural templates as Foundation', () => {
+        entries.every(entry => entry.category?.startsWith('Foundation / ')).should.be.true;
+    });
+
     it('should license every template under the package license', () => {
         entries.every(entry => entry.license === manifest.license && entry.licenseUrl === manifest.licenseUrl).should.be.true;
     });

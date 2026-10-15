@@ -53,3 +53,14 @@ export function validateTemplateMetadata(name: string, metadata: TemplateMetadat
 
     return problems;
 }
+
+/**
+ * The diagnostic code reported for a template without a category. Category is required for blueprint templates
+ * (an error) and recommended for own templates (a warning).
+ */
+export const templateCategoryMissingCode = 'templateCategoryMissing';
+
+/** Checks that a template declares a browse category; returns the problem, or undefined when it does. */
+export function validateTemplateCategory(name: string, metadata: TemplateMetadata | undefined): string | undefined {
+    return metadata?.category?.trim() ? undefined : `Template '${name}' declares no category`;
+}
