@@ -93,4 +93,13 @@ export enum ComponentName {
 
     /** A drop zone and file picker with type and size checks. */
     FileUploader = 'fileUploader',
+
+    /** The steps a request goes through, who decides each, and where it stands. */
+    ApprovalChainStepper = 'approvalChainStepper',
+
+    /** An organization as an expandable tree. */
+    OrgTree = 'orgTree',
+
+    /** Roles across, permissions down, a checkbox where they meet. */
+    PermissionMatrix = 'permissionMatrix',
 }

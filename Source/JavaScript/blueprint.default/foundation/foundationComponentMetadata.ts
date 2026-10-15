@@ -22,4 +22,7 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.ActivityFeed]: m('Activity feed', ComponentCategory.DataDisplay, 'activity', ['timeline', 'history', 'comments', 'audit', 'log']),
     [ComponentName.AvatarStack]: m('Avatar stack', ComponentCategory.DataDisplay, 'users', ['people', 'members', 'assignees', 'team']),
     [ComponentName.FileUploader]: m('File uploader', ComponentCategory.Input, 'upload', ['attachments', 'files', 'drop zone', 'documents']),
+    [ComponentName.ApprovalChainStepper]: m('Approval chain', ComponentCategory.Navigation, 'workflow', ['approvals', 'steps', 'workflow', 'sign off', 'stepper']),
+    [ComponentName.OrgTree]: m('Org tree', ComponentCategory.DataDisplay, 'network', ['organization', 'hierarchy', 'org chart', 'reports to', 'tree']),
+    [ComponentName.PermissionMatrix]: m('Permission matrix', ComponentCategory.Input, 'shield-check', ['roles', 'permissions', 'access', 'grants', 'rbac']),
 };

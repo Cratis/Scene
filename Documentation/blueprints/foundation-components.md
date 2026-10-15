@@ -22,6 +22,9 @@ component, so a component picker shows them and a screen places them like any ot
 | `activityFeed` | Data display | What happened to a record, grouped by day, with the kind of each entry named in words |
 | `avatarStack` | Data display | Overlapping avatars for the people on a record with a "+N" chip for the rest |
 | `fileUploader` | Input | A drop zone and file picker checked for type and size; sends through a host handler when one is provided |
+| `approvalChainStepper` | Navigation | The steps a request goes through and where it stands; a rejection stops the chain |
+| `orgTree` | Data display | An organization as an expandable ARIA tree built from rows of who reports to whom |
+| `permissionMatrix` | Input | Roles across, permissions down, a checkbox where they meet; publishes the grants |
 
 ## The five standard states
 
@@ -92,6 +95,20 @@ sent, and says why a file was refused. Its input is a real file input behind a l
 (name, size, type, status) is published as `value`. Sending is the host's: wrap the screen in `FileUploaderHandlerProvider` with a
 `(files, serverUrl) => Promise<void>` - the same signature `@cratis/scene.primereact` uses for its `fileUpload`, so one function serves
 both - and files are marked uploading, done, or failed with a retry. Without a handler the uploader only collects.
+
+## Approvals, organizations and permissions
+
+`approvalChainStepper` applies the chain's own rules so a request page needs none: a rejection stops the chain and the steps after it read
+"Not reached"; with no step marked current the first undecided step is the current one; only one step is ever current. The overall
+outcome (approved, rejected, waiting, not started) is stated above the steps, and the current step carries `aria-current="step"`.
+
+`orgTree` builds its tree from flat rows (`id`, `label`, `title`, `parentId`), as a query returns them. Someone whose manager is missing
+becomes a root, a reporting cycle is cut, and the first `expandedDepth` levels start open. It follows the ARIA tree pattern with one tab
+stop: Up and Down move, Right expands or enters, Left collapses or goes to the parent, Home and End jump, Enter or Space selects.
+
+`permissionMatrix` takes `roles`, `permissions` (optionally grouped) and `grants` (rows of `role` and `permission`); grants of something that
+does not exist are ignored. Every header is a real header cell and each box is named "Grant *permission* to *role*". Without the edit
+permission each cell says "Allowed" or "Not allowed" in words and by icon. Wide matrices scroll inside a keyboard-focusable region.
 
 ## Data, not values
 
