@@ -180,9 +180,118 @@ later.
 
 ## Style it against the tokens
 
-Reference the [thirteen shared tokens](./theme-tokens.md), aliased once into locals of your own, and never
+Reference the [shared tokens](./theme-tokens.md), aliased once into locals of your own, and never
 a component library's variables directly. That indirection is what lets one blueprint work across
 PrimeReact versions and lets a host override the look without editing your rules.
+
+## A domain blueprint
+
+Everything above is a *foundation* blueprint: it brings a shell and the shapes every application has. A **domain blueprint** is the other
+kind - a CRM, a project tracker, a ticketing desk - and it brings no shell at all. It depends on the foundation set, reuses its layouts, slots,
+components and themes, and adds what is particular to the domain: templates, a **ready-to-use screen set**, **sample-data packs** and
+**thumbnails**. All seven start from the same scaffold and are held to the same definition of done.
+
+### Scaffold it
+
+```bash
+yarn new-blueprint crm "CRM" "Leads, accounts and deals for a sales team."
+yarn
+cd Source/JavaScript/blueprint.crm && yarn build && UPDATE_BLUEPRINT_CATALOG=1 yarn test
+cd ../../.. && node ./verify-blueprints.js --write
+```
+
+The generator writes `Source/JavaScript/blueprint.<domain>` with the layout every domain blueprint shares:
+
+```
+blueprint.crm/
+  package.json            a workspace; "files" lists dist, sampleData, thumbnails and blueprintCatalog.json
+  packageName.ts          Cratis.Blueprint.Crm - the name a ui profile uses
+  manifest.ts             the ScenePackage, including its blueprint metadata
+  blueprint.ts            the ScenePackageBundle
+  templateProvenance.ts   compatibility, attribution and license every template carries
+  templates/              the screen templates (and dialog templates)
+  screens/                the ready-to-use Screen instances
+  sampleData/crm-en.json  a sample-data pack
+  thumbnails/             one thumbnail for the blueprint, one for each template
+  for_blueprint/          the specification that verifies the package
+  blueprintCatalog.json   the gallery catalog entry, written by the specification
+```
+
+What it generates is already *done*: replace the one template, the one screen, the one pack and the thumbnails, and keep the specification
+green. CI scaffolds a package on every build and verifies it unchanged, so the generator cannot rot.
+
+### The manifest
+
+A domain blueprint's manifest adds one block, `blueprint`:
+
+```ts
+blueprint: {
+    domain: 'crm',                                  // lower-case slug; categories are 'Business / crm'
+    description: 'Leads, accounts and deals for a sales team.',   // one sentence, at most 200 characters
+    thumbnail: 'thumbnails/crm.svg',                // thumbnails/<name>.png | .webp | .jpg | .svg
+    screenSet: [                                    // the ready-to-use screens, with their navigation
+        { name: 'Dashboard', title: 'Dashboard', order: 0 },
+        { name: 'Leads', title: 'Leads', template: 'LeadList', order: 1 },
+        { name: 'LeadDetail', title: 'Lead', template: 'LeadDetail', parent: 'Leads' },
+    ],
+    defaultSampleData: 'crm-en',                    // required when the package ships more than one pack
+},
+sampleData: [{ id: 'crm-en', title: 'CRM · English', locale: 'en-GB', path: 'sampleData/crm-en.json' }],
+```
+
+C# has the same shape (`ScenePackage.Blueprint`, `BlueprintMetadata`, `BlueprintScreen`) and `TemplateMetadata` gains a `thumbnail`; the
+shared `scene-model-shape.json` fails the build when the two drift. There is deliberately **no second version** on the blueprint: the
+package's `version` is the blueprint's version.
+
+### The definition of done
+
+`verifyBlueprintPackage` (C#: `BlueprintVerification.Verify`) is the one place the rules live, and reports the same problems in the same
+order in both engines - `blueprint-verification-fixtures.json` is asserted by both. A domain blueprint is done when:
+
+- the manifest is of kind Blueprint with a valid version, **depends on the foundation set** (`Cratis.Blueprint.Default`), and declares
+  its domain, description (200 characters at most) and thumbnail;
+- the **screen set** is not empty, names each screen once, gives each a title, points each template at one that exists, each parent at
+  a screen in the set (no cycles), and every screen is one the package actually provides;
+- **sample data** is present, every reference is valid and its file is in the package, every pack is valid, locale-tagged and owned by the
+  blueprint, and when there are several one is the declared default;
+- every **template** has a display name, a description, a type from the vocabulary (Shell, Workspace, Dashboard, List, Board, Detail, Form,
+  Wizard, Dialog, Auth, State), a `Business / <domain>` category and a thumbnail that is in the package, plus the complete provenance
+  `describeTemplateCatalog` already requires (compatibility, author, license);
+- every screen template is **placed** by the slot resolver: none unplaced, none ambiguous, none nested inside itself.
+
+A foundation blueprint declares no `blueprint` block and is held to the template, placement and sample-data rules only.
+
+Each blueprint runs the verification as its own specification (`for_blueprint/when_verifying_the_blueprint.ts`), because only a spec runner
+resolves a blueprint's dependencies the way a host's bundler does. `yarn verify-blueprints` then makes that impossible to skip: it
+fails when a blueprint package has no such specification, when the packed archive lacks `thumbnails/`, `sampleData/` or the catalog or
+carries a thumbnail outside `thumbnails/`, and when the root `blueprintCatalog.json` is out of date.
+
+### Version pins
+
+A template reference can pin the blueprint version it was chosen from (`TemplateReference.version`, a range). `evaluateBlueprintPin` (C#:
+`BlueprintVersionPin.Evaluate`) is what decides "update available":
+
+| Pin | Installed | Latest | Status |
+| --- | --- | --- | --- |
+| none (defaults to `^installed`) | 1.2.0 | 1.2.0 | `Current` |
+| none | 1.2.0 | 1.4.1 | `UpdateAvailable` |
+| none | 1.2.0 | 2.0.0 | `UpdateBlockedByPin` - a new major version is a deliberate move |
+| `^1.0.0` | 1.2.0 | 1.9.0 | `UpdateAvailable` |
+| `~1.2.0` | 1.2.3 | 1.3.0 | `UpdateBlockedByPin` |
+| `^2.0.0` | 1.2.0 | - | `NotSatisfied` - the reference was chosen from a version that is gone |
+| not a range / not a version | | | `Invalid` |
+
+A pin is a version range in the same dialect as a package dependency (`^`, `~`, `>=`, exact, `*`); a pre-release suffix is ignored; a
+blank pin is the default. The default pin is the caret range of the installed version - `defaultBlueprintPin`.
+
+### The gallery catalog
+
+`describeBlueprintCatalog` (C#: `BlueprintCatalog.Describe`) turns the domain blueprints into what a gallery and the CLI documentation
+read: for each, its description, thumbnail, version, license and dependencies, its **screen set in navigation order** (siblings by
+`order`, each screen directly followed by its children), its templates with type, category and thumbnail, and its sample-data packs with
+the default marked. Each blueprint package ships its own entry as `blueprintCatalog.json`; the repository root `blueprintCatalog.json`
+is all of them, in package-name order. A package that only provides foundation layouts and templates is not listed. The file's shape is
+`BlueprintCatalogFile` (`schema: 1`); a reader refuses a newer schema.
 
 ## Next
 

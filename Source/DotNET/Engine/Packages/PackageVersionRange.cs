@@ -78,6 +78,25 @@ public static class PackageVersionRange
     public static bool IsValidVersion(string? version) =>
         !string.IsNullOrWhiteSpace(version) && TryParse(version, out _);
 
+    /// <summary>
+    /// Compares two versions as <c language="csharp">major.minor.patch</c>, pre-release and build suffixes ignored. A value that is not a version
+    /// compares as older than every version, and equal to another that is not.
+    /// </summary>
+    /// <param name="left">The first version.</param>
+    /// <param name="right">The second version.</param>
+    /// <returns>Negative when <paramref name="left"/> is older, zero when equal, positive when newer.</returns>
+    public static int CompareVersions(string? left, string? right)
+    {
+        var leftValid = TryParse(left ?? string.Empty, out var leftVersion);
+        var rightValid = TryParse(right ?? string.Empty, out var rightVersion);
+        if (!leftValid)
+        {
+            return rightValid ? -1 : 0;
+        }
+
+        return !rightValid ? 1 : Compare(leftVersion, rightVersion);
+    }
+
     static (string Operator, string Literal) Split(string range)
     {
         foreach (var op in (string[])[">=", "<=", "^", "~", ">", "<", "="])

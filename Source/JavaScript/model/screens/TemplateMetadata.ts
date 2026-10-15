@@ -39,8 +39,11 @@ export interface TemplateMetadata {
      * presents something. Declaring slice kinds without scopes makes the default scope Slice.
      */
     sliceKinds?: SliceKind[];
+
+    /** The package-relative path of the template's gallery thumbnail (`thumbnails/<name>.png|webp|jpg|svg`); required of every template of a domain blueprint. */
+    thumbnail?: string;
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail',
 ];

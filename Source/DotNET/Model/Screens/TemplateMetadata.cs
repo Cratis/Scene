@@ -21,6 +21,7 @@ namespace Cratis.Scene.Model.Screens;
 /// structural default: a dialog template applies to state change slices, a screen template to every kind that presents something.
 /// Declaring slice kinds without scopes makes the default scope <see cref="TemplateScope.Slice"/>.
 /// </param>
+/// <param name="Thumbnail">The package-relative path of the template's gallery thumbnail (<c language="csharp">thumbnails/&lt;name&gt;.png|webp|jpg|svg</c>); required of every template of a domain blueprint.</param>
 public record TemplateMetadata(
     string? Type = null,
     string? Category = null,
@@ -29,4 +30,5 @@ public record TemplateMetadata(
     TemplateAttribution? Attribution = null,
     string? License = null,
     string? LicenseUrl = null,
-    IReadOnlyList<SliceKind>? SliceKinds = null);
+    IReadOnlyList<SliceKind>? SliceKinds = null,
+    string? Thumbnail = null);
