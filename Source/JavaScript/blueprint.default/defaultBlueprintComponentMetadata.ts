@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ComponentCategory } from '@cratis/scene.model';
+import { foundationComponentMetadata } from './foundation';
 import { ComponentMetadata, componentMetadata as m, navigationDesignMode } from '@cratis/scene.react';
 
 /** The category, icon, keywords and picker badge of every component of the package (CMP1), keyed by bare component name. */
 export const defaultBlueprintComponentMetadata: Record<string, ComponentMetadata> = {
+    ...foundationComponentMetadata,
     appShell: m('Application shell', ComponentCategory.Layout, 'app-window', ['layout', 'frame', 'chrome']),
     fullPageShell: m('Full page shell', ComponentCategory.Layout, 'maximize', ['layout', 'fullscreen', 'frame']),
     topbar: m('Topbar', ComponentCategory.Navigation, 'panel-top', ['header', 'top bar', 'navigation'], 'Tp', navigationDesignMode()),

@@ -7,6 +7,7 @@ export * from './configuration';
 export * from './layouts';
 export * from './gallery';
 export * from './shell';
+export * from './foundation';
 export * from './themes';
 export * from './defaultBlueprintComponents';
 export * from './defaultBlueprint';

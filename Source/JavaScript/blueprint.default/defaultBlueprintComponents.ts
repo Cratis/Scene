@@ -4,6 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
+import { EmptyState, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -48,4 +49,8 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.UserMenu)]: UserMenu,
     [componentRegistryKey(defaultBlueprintName, ComponentName.ThemeSwitcher)]: ThemeSwitcher,
     [componentRegistryKey(defaultBlueprintName, ComponentName.LayoutModeSwitcher)]: LayoutModeSwitcher,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.EmptyState)]: EmptyState,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.StatCard)]: StatCard,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.TrendChip)]: TrendChip,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.StatusChip)]: StatusChip,
 };
