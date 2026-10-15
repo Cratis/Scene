@@ -32,7 +32,7 @@ export const lightTheme: Theme = {
         'surface.hover': '#eceef1',
         'surface.overlay': '#ffffff',
         'text.color': '#1f2430',
-        'text.mutedColor': '#6b7280',
+        'text.mutedColor': '#5b6472',
         'highlight.background': '#eef2ff',
         'highlight.color': '#3730a3',
         'content.borderRadius': '0.5rem',
