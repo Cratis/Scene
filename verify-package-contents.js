@@ -19,6 +19,9 @@ const glob = require('glob').sync;
 
 const specificationFolder = /(^|\/)for_[^/]+\//;
 const testRunnerImport = /(?:\bfrom\s*|\brequire\(\s*|\bimport\(\s*)['"](?:vitest|chai|chai-as-promised|sinon|sinon-chai|@testing-library\/[^'"]+)['"]/;
+// Sample data is design and preview time only (spec SD6): a pack file may be packed only at the package's
+// `sampleData/` folder, never inside a runtime `dist/` bundle.
+const sampleDataFile = /(^|\/)sampleData\/[^/]+\.json$/;
 const runtimeScript = /\.(?:js|cjs|mjs)$/;
 
 function packedFiles(packageDirectory) {
@@ -59,7 +62,9 @@ for (const packageFile of packageFiles.sort()) {
     }
 
     for (const file of files) {
-        if (specificationFolder.test(file)) {
+        if (sampleDataFile.test(file) && !file.startsWith('sampleData/')) {
+            problems.push(`${packageJson.name}: '${file}' is sample data and may only be packed under 'sampleData/', never in a runtime bundle`);
+        } else if (specificationFolder.test(file)) {
             problems.push(`${packageJson.name}: '${file}' is a specification and must not be packed`);
         } else if (runtimeScript.test(file) && testRunnerImport.test(fs.readFileSync(path.join(packageDirectory, file), 'utf8'))) {
             problems.push(`${packageJson.name}: '${file}' imports a test runner`);
