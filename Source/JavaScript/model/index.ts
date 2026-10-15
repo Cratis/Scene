@@ -19,8 +19,5 @@ export * from './descriptors';
 export * from './exposure';
 export * from './editing';
 export * from './structure';
-<<<<<<< HEAD
-export * from './toolbar';
-=======
 export * from './navigation';
->>>>>>> origin/main
+export * from './toolbar';
