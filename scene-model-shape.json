@@ -521,7 +521,20 @@
     "SliceNode": [
       "id",
       "name",
-      "kind"
+      "kind",
+      "command",
+      "dialogTemplate"
+    ],
+    "ToolbarButton": [
+      "id",
+      "title",
+      "slice",
+      "emphasis",
+      "icon",
+      "target"
+    ],
+    "Toolbar": [
+      "buttons"
     ]
   },
   "enums": {
@@ -662,6 +675,11 @@
       "StateChange",
       "StateView",
       "Automation"
+    ],
+    "ToolbarEmphasis": [
+      "Primary",
+      "Secondary",
+      "Quiet"
     ]
   }
 }

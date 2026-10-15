@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, PropertyValueType } from '@cratis/scene.model';
+import { ComponentDescriptor, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { componentRegistryKey, describeComponents } from '../packages';
 import { coreComponentMetadata } from './coreComponentMetadata';
 
@@ -43,6 +43,33 @@ const describedCore: ComponentDescriptor[] = [
                         { path: 'source', label: 'Source', group: 'Behavior', valueType: PropertyValueType.String, editorKind: 'bindingPath', constraints: { required: true } },
                     ],
                 },
+            },
+        ],
+    },
+    {
+        component: key('toolbarItem'),
+        displayName: 'Toolbar button',
+        description: 'One toolbar button. An Action button invokes a state change slice and opens it as a task dialog over the page; a button with no slice is allowed while designing and is flagged.',
+        properties: [
+            { path: 'label', label: 'Title', group: 'Content', valueType: PropertyValueType.String, default: 'Button' },
+            {
+                path: 'slice', label: 'Slice to invoke', group: 'Behavior', valueType: PropertyValueType.String,
+                editorKind: PropertyEditorKind.Slice, editorOptions: { kinds: ['StateChange'] },
+                description: 'Only State Change slices can be picked. State Views and Automations never take user input, so they are listed as unavailable.',
+            },
+            {
+                path: 'emphasis', label: 'Emphasis', group: 'Appearance', valueType: PropertyValueType.Enum, default: ToolbarEmphasis.Secondary,
+                editorKind: PropertyEditorKind.Enum,
+                choices: [
+                    { value: ToolbarEmphasis.Primary, label: 'Primary' },
+                    { value: ToolbarEmphasis.Secondary, label: 'Secondary' },
+                    { value: ToolbarEmphasis.Quiet, label: 'Quiet' },
+                ],
+            },
+            { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
+            {
+                path: 'target', label: 'Command (legacy)', group: 'Behavior', valueType: PropertyValueType.String, editorKind: 'stateChangeReference',
+                description: 'A hand-typed command for a button that has no slice. It is converted to the slice that accepts the command when exactly one does; prefer a slice.',
             },
         ],
     },

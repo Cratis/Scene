@@ -1,0 +1,132 @@
+{
+  "description": "Shared toolbar slice corpus asserted by both the C# engine (Engine.Specs/for_ToolbarButtonValidation) and the TypeScript engine (engine/for_validateToolbarButtons). structure is the application structure. A case validates and resolves the buttons of a toolbar: resolved lines are id|slice|command|dialog template:source|emphasis|direct or converted, and diagnostics are code, severity, button and message in button order. itemCases read a button from the properties of a core:toolbarItem element; expected is the button, or null when the item is not one that invokes a command or slice.",
+  "structure": {"modules":[{"id":"sales","name":"Sales","features":[{"id":"orders","name":"Orders","features":[],"slices":[{"id":"PlaceOrder","name":"Place order","kind":"StateChange","command":"PlaceOrderCommand","dialogTemplate":"OrderDialog"},{"id":"CancelOrder","name":"Cancel order","kind":"StateChange","dialogTemplate":"ConfirmDialog"},{"id":"OrderSummary","name":"Order summary","kind":"StateView"},{"id":"SendReminder","name":"Send reminder","kind":"Automation"}]},{"id":"customers","name":"Customers","features":[],"slices":[{"id":"CreateCustomer","name":"Create customer","kind":"StateChange"}]}]},{"id":"support","name":"Support","features":[{"id":"tickets","name":"Tickets","features":[],"slices":[{"id":"AssignTicket","name":"Assign ticket","kind":"StateChange"},{"id":"CancelOrder","name":"Cancel ticket order","kind":"StateChange"},{"id":"OpenTicketsView","name":"Open tickets","kind":"StateView"}]}]}]},
+  "cases": [
+    {
+      "name": "a button that invokes a state change slice is valid and opens the slice's own dialog",
+      "toolbar": {"buttons":[{"id":"b1","title":"New order","slice":"sales.orders.PlaceOrder","emphasis":"primary","icon":"lucide:plus"},{"id":"b2","title":"Cancel order","slice":"sales.orders.CancelOrder","emphasis":"quiet"}]},
+      "resolved": [
+        "b1|sales.orders.PlaceOrder|PlaceOrderCommand|OrderDialog:slice|primary|direct",
+        "b2|sales.orders.CancelOrder|CancelOrder|ConfirmDialog:slice|quiet|direct"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a state change slice without a dialog template of its own opens the default form dialog",
+      "toolbar": {"buttons":[{"id":"b1","title":"New customer","slice":"sales.customers.CreateCustomer"}]},
+      "resolved": [
+        "b1|sales.customers.CreateCustomer|CreateCustomer|FormDialog:default|secondary|direct"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "the host may name another default dialog template",
+      "toolbar": {"buttons":[{"id":"b1","title":"New customer","slice":"sales.customers.CreateCustomer"},{"id":"b2","title":"Place","slice":"sales.orders.PlaceOrder"}]},
+      "defaultDialogTemplate": "CommandDialog",
+      "resolved": [
+        "b1|sales.customers.CreateCustomer|CreateCustomer|CommandDialog:default|secondary|direct",
+        "b2|sales.orders.PlaceOrder|PlaceOrderCommand|OrderDialog:slice|secondary|direct"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a state view cannot be invoked from a toolbar",
+      "toolbar": {"buttons":[{"id":"b1","title":"Summary","slice":"sales.orders.OrderSummary"}]},
+      "resolved": [
+        "b1|sales.orders.OrderSummary|-|-:-|secondary|direct"
+      ],
+      "expectedDiagnostics": [
+        {"code": "toolbarButtonSliceNotStateChange", "severity": "error", "button": "b1", "message": "Toolbar button 'b1' invokes slice 'sales.orders.OrderSummary', which is a state view; only a state change can be invoked from a toolbar."}
+      ]
+    },
+    {
+      "name": "an automation cannot be invoked from a toolbar",
+      "toolbar": {"buttons":[{"id":"b1","title":"Remind","slice":"sales.orders.SendReminder"}]},
+      "resolved": [
+        "b1|sales.orders.SendReminder|-|-:-|secondary|direct"
+      ],
+      "expectedDiagnostics": [
+        {"code": "toolbarButtonSliceNotStateChange", "severity": "error", "button": "b1", "message": "Toolbar button 'b1' invokes slice 'sales.orders.SendReminder', which is an automation; only a state change can be invoked from a toolbar."}
+      ]
+    },
+    {
+      "name": "a slice that does not exist is an error",
+      "toolbar": {"buttons":[{"id":"b1","title":"Ghost","slice":"sales.orders.Ghost"},{"id":"b2","title":"Module","slice":"sales"},{"id":"b3","title":"Feature","slice":"sales.orders"}]},
+      "resolved": [
+        "b1|sales.orders.Ghost|-|-:-|secondary|direct",
+        "b2|sales|-|-:-|secondary|direct",
+        "b3|sales.orders|-|-:-|secondary|direct"
+      ],
+      "expectedDiagnostics": [
+        {"code": "toolbarButtonSliceNotFound", "severity": "error", "button": "b1", "message": "Toolbar button 'b1' invokes slice 'sales.orders.Ghost', which does not exist."},
+        {"code": "toolbarButtonSliceNotFound", "severity": "error", "button": "b2", "message": "Toolbar button 'b2' invokes slice 'sales', which does not exist."},
+        {"code": "toolbarButtonSliceNotFound", "severity": "error", "button": "b3", "message": "Toolbar button 'b3' invokes slice 'sales.orders', which does not exist."}
+      ]
+    },
+    {
+      "name": "a button without a slice is a warning",
+      "toolbar": {"buttons":[{"id":"b1","title":"Button"},{"id":"b2","title":"Cancel order","slice":"sales.orders.CancelOrder"},{"id":"b3","title":"Button","emphasis":"primary"}]},
+      "resolved": [
+        "b1|-|-|-:-|secondary|direct",
+        "b2|sales.orders.CancelOrder|CancelOrder|ConfirmDialog:slice|secondary|direct",
+        "b3|-|-|-:-|primary|direct"
+      ],
+      "expectedDiagnostics": [
+        {"code": "toolbarButtonSliceEmpty", "severity": "warning", "button": "b1", "message": "Toolbar button 'b1' has no slice to invoke."},
+        {"code": "toolbarButtonSliceEmpty", "severity": "warning", "button": "b3", "message": "Toolbar button 'b3' has no slice to invoke."}
+      ]
+    },
+    {
+      "name": "a hand-authored command is converted to the one slice that accepts it",
+      "toolbar": {"buttons":[{"id":"b1","title":"Place","target":"PlaceOrderCommand"},{"id":"b2","title":"Assign","target":"AssignTicket"},{"id":"b3","title":"Customer","target":"sales.customers.CreateCustomer","icon":"lucide:user-plus"}]},
+      "resolved": [
+        "b1|sales.orders.PlaceOrder|PlaceOrderCommand|OrderDialog:slice|secondary|converted",
+        "b2|support.tickets.AssignTicket|AssignTicket|FormDialog:default|secondary|converted",
+        "b3|sales.customers.CreateCustomer|CreateCustomer|FormDialog:default|secondary|converted"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a command that no single slice accepts stays a legacy button and still validates",
+      "toolbar": {"buttons":[{"id":"b1","title":"Cancel","target":"CancelOrder"},{"id":"b2","title":"Unknown","target":"DoSomethingElse"},{"id":"b3","title":"Summary","target":"OrderSummary"}]},
+      "resolved": [
+        "b1|-|-|-:-|secondary|direct",
+        "b2|-|-|-:-|secondary|direct",
+        "b3|-|-|-:-|secondary|direct"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "an explicit slice wins over a target",
+      "toolbar": {"buttons":[{"id":"b1","title":"Place","slice":"sales.orders.CancelOrder","target":"PlaceOrderCommand"}]},
+      "resolved": [
+        "b1|sales.orders.CancelOrder|CancelOrder|ConfirmDialog:slice|secondary|direct"
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "every problem is reported in button order",
+      "toolbar": {"buttons":[{"id":"a","title":"a"},{"id":"b","title":"b","slice":"support.tickets.OpenTicketsView"},{"id":"c","title":"c","slice":"nope.nothing.Nope"},{"id":"d","title":"d","slice":"support.tickets.AssignTicket","emphasis":"primary"}]},
+      "resolved": [
+        "a|-|-|-:-|secondary|direct",
+        "b|support.tickets.OpenTicketsView|-|-:-|secondary|direct",
+        "c|nope.nothing.Nope|-|-:-|secondary|direct",
+        "d|support.tickets.AssignTicket|AssignTicket|FormDialog:default|primary|direct"
+      ],
+      "expectedDiagnostics": [
+        {"code": "toolbarButtonSliceEmpty", "severity": "warning", "button": "a", "message": "Toolbar button 'a' has no slice to invoke."},
+        {"code": "toolbarButtonSliceNotStateChange", "severity": "error", "button": "b", "message": "Toolbar button 'b' invokes slice 'support.tickets.OpenTicketsView', which is a state view; only a state change can be invoked from a toolbar."},
+        {"code": "toolbarButtonSliceNotFound", "severity": "error", "button": "c", "message": "Toolbar button 'c' invokes slice 'nope.nothing.Nope', which does not exist."}
+      ]
+    }
+  ],
+  "itemCases": [
+    {"name": "an action item with a slice and an emphasis is a slice button", "id": "b1", "properties": {"label": "New order", "kind": "Action", "slice": "sales.orders.PlaceOrder", "emphasis": "Primary", "icon": "lucide:plus"}, "expected": {"id": "b1", "title": "New order", "slice": "sales.orders.PlaceOrder", "emphasis": "primary", "icon": "lucide:plus"}},
+    {"name": "a hand-authored action item keeps its command as the target", "id": "b2", "properties": {"name": "place", "kind": "action", "target": "PlaceOrderCommand"}, "expected": {"id": "b2", "title": "place", "target": "PlaceOrderCommand"}},
+    {"name": "a new action item without a slice is a button without a slice", "id": "b3", "properties": {"label": "Button", "kind": "Action"}, "expected": {"id": "b3", "title": "Button"}},
+    {"name": "a slice implies an action even without a kind", "id": "b4", "properties": {"slice": "sales.customers.CreateCustomer"}, "expected": {"id": "b4", "title": "b4", "slice": "sales.customers.CreateCustomer"}},
+    {"name": "a navigate item is not a button", "id": "b5", "properties": {"label": "Home", "kind": "Navigate", "target": "Home"}, "expected": null},
+    {"name": "a dialog item is not a button", "id": "b6", "properties": {"label": "About", "kind": "Dialog", "target": "AboutDialog"}, "expected": null},
+    {"name": "an emphasis it does not know is ignored", "id": "b7", "properties": {"label": "X", "kind": "Action", "emphasis": "loud"}, "expected": {"id": "b7", "title": "X"}}
+  ]
+}

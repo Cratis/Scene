@@ -90,3 +90,9 @@ Both engines are asserted against `application-structure-fixtures.json`: qualifi
 feature, a module without features, duplicate ids, and same-named features in different modules. The C# spec is
 `Engine.Specs/for_ApplicationStructureIndex`, the TypeScript spec is `engine/for_applicationStructureIndex`. The
 shapes are mirrored in `scene-model-shape.json`.
+
+## Beyond lookups
+
+A `SliceNode` may also carry `command` (the command a state change slice accepts; its `id` when absent) and `dialogTemplate` (the
+dialog template the slice opens as a task dialog). `findSlicesByCommand` finds the state change slices that accept a command, which is how a
+hand-authored toolbar button is [converted to a slice](application-hierarchy.md).

@@ -1,6 +1,6 @@
 ---
 title: The application hierarchy and toolbars
-description: How a screen records the modules and features it was declared in, how navigation items carry that hierarchy, and how toolbar items execute destinations and honour their presentation.
+description: How a screen records the modules and features it was declared in, how navigation items carry that hierarchy, how toolbar items execute destinations and honour their presentation, and how toolbar buttons invoke state change slices.
 ---
 
 An application is a hierarchy - modules containing features containing slices - and a host that draws navigation
@@ -42,3 +42,42 @@ a toolbar on the screen rather than a placeholder.
 A destination executes through the enclosing navigation host - a screen in an outlet, or a dialog - and is announced with
 the host-neutral `cratis.scene.navigate` event (carrying `targetScreen`, `dialog` and `destination`) outside one. An
 icon-only item keeps its label as its accessible name.
+
+## Toolbar buttons that invoke state change slices
+
+A toolbar button of the screen editor is a `core:toolbarItem` with `kind: Action` plus a `slice` and an `emphasis`:
+
+| Property | Meaning |
+| --- | --- |
+| `label` | The title shown on the button (`Button` for a new one) |
+| `slice` | The qualified id of the **state change** slice the button invokes, for example `sales.orders.PlaceOrder`. Edited with the `slice` editor (`editorOptions.kinds: ['StateChange']`): the whole slice tree is listed, state changes are selectable, state views and automations are greyed |
+| `emphasis` | `primary`, `secondary` (the default) or `quiet`, edited as chips |
+| `icon` | Qualified icon reference |
+| `target` | The hand-typed command of a legacy button; kept for compatibility |
+
+`ToolbarButton` (`id`, `title`, `slice?`, `emphasis?`, `icon?`, `target?`) and `Toolbar` (`buttons`) are the model shapes in
+`@cratis/scene.model` and `Cratis.Scene.Model.Toolbar`; `toolbarButtonFromItem` / `ToolbarButtons.FromItem` read a button from
+the properties of a `core:toolbarItem` (a `Navigate` or `Dialog` item is not a slice button). The slice comes from the
+[application structure](application-structure.md).
+
+**Validation** - `validateToolbarButtons(structure, toolbar)` (`ToolbarButtonValidation.Validate`):
+
+| Code | Severity | Meaning |
+| --- | --- | --- |
+| `toolbarButtonSliceNotFound` | error | The slice does not exist in the application structure |
+| `toolbarButtonSliceNotStateChange` | error | The slice is a state view or an automation |
+| `toolbarButtonSliceEmpty` | warning | The button has no slice yet; it is allowed while designing and flagged |
+
+**Resolution** - `resolveToolbarButton(index, button)` (`ToolbarButtons.Resolve`) returns what a renderer needs without any React:
+the slice, its `command`, and the task `dialog` - `sliceDialogFor` (`SliceDialogs.For`) picks the slice's own `dialogTemplate` when
+its structure node names one, else the default `FormDialog` (a host may name another default). The dialog is decided once, here, so
+Stage, Studio preview and the renderers agree.
+
+**Compatibility** - a legacy button (`kind: Action` and a `target` command, no `slice`) still validates and renders. On read
+the engine converts it: when exactly one state change slice accepts the command (a slice's `command`, or its id when it names
+none; a qualified slice id also matches) the button names that slice. A command no single slice accepts - unknown, ambiguous, or a
+state view - stays a legacy button and raises no diagnostic. `core:toolbarItem` keeps rendering from `kind` and `target` as before.
+
+Both engines are asserted against `toolbar-slice-fixtures.json` (state change ok, state view and automation rejected, missing
+slice, empty slice warning, dialog template resolution, conversion from a `target` command, and reading buttons from items):
+`Engine.Specs/for_ToolbarButtonValidation` and `engine/for_validateToolbarButtons`.

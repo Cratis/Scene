@@ -104,6 +104,17 @@ export class ApplicationStructureIndex {
         return [...(this.featuresByName.get(name.toLowerCase()) ?? [])];
     }
 
+    /**
+     * Finds the state change slices that accept a command, so a command named by hand can be turned into the slice that owns it.
+     * @param command A command name - the slice's `command`, or its `id` when it names none - or a slice's qualified id.
+     * @returns The qualified ids of the matching state change slices, in declaration order.
+     */
+    findSlicesByCommand(command: string): string[] {
+        return [...this.slices.entries()]
+            .filter(([qualified, slice]) => slice.kind === SliceKind.StateChange && (qualified === command || (slice.command ?? slice.id) === command))
+            .map(([qualified]) => qualified);
+    }
+
     private indexContainer(path: string, features: FeatureNode[], slices: SliceNode[]): void {
         const seen = new Map<string, string>();
         const featureNames = new Map<string, string>();
