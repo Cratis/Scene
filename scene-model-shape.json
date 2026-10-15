@@ -309,7 +309,8 @@
       "compatibility",
       "attribution",
       "license",
-      "licenseUrl"
+      "licenseUrl",
+      "sliceKinds"
     ],
     "GridLength": [
       "value",
@@ -548,6 +549,12 @@
       "mappings",
       "bindings"
     ],
+    "TemplateReference": [
+      "source",
+      "id",
+      "blueprint",
+      "version"
+    ],
     "ApplicationStructure": [
       "modules"
     ],
@@ -717,6 +724,10 @@
       "Date",
       "DateTime",
       "Enum"
+    ],
+    "TemplateReferenceSource": [
+      "Own",
+      "Blueprint"
     ],
     "SliceKind": [
       "StateChange",

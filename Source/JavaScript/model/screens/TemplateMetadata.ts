@@ -3,6 +3,7 @@
 
 import { TemplateAttribution } from './TemplateAttribution';
 import { TemplateCompatibility } from './TemplateCompatibility';
+import { SliceKind } from '../structure';
 
 /** The application hierarchy at which a reusable template is selected. */
 export enum TemplateScope {
@@ -14,7 +15,7 @@ export enum TemplateScope {
 }
 
 /**
- * Optional semantic and browsing metadata. Type and category are open strings so packages can
+ * Semantic and browsing metadata. Category is required for blueprint templates and recommended for own templates. Type and category are open strings so packages can
  * introduce their own vocabulary without a Scene release. Category never determines applicability.
  */
 export interface TemplateMetadata {
@@ -32,8 +33,14 @@ export interface TemplateMetadata {
     license?: string;
     /** An absolute `https` URL to the license terms. */
     licenseUrl?: string;
+    /**
+     * For a template that applies at {@link TemplateScope.Slice}, the slice kinds it applies to. Absent uses the
+     * structural default: a dialog template applies to state change slices, a screen template to every kind that
+     * presents something. Declaring slice kinds without scopes makes the default scope Slice.
+     */
+    sliceKinds?: SliceKind[];
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds',
 ];

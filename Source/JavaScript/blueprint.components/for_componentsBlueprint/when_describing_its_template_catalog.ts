@@ -17,6 +17,12 @@ describe('when describing its template catalog', () => {
     it('should find every template compatible with the shipped package versions', () =>
         entries.filter(entry => !entry.compatible).map(entry => entry.problems).should.deep.equal([]));
 
+    it('should give every template a category so it passes category validation', () => {
+        entries.filter(entry => !entry.category?.trim()).map(entry => entry.name).should.deep.equal([]);
+        entries.flatMap(entry => entry.problems.filter(problem => problem.includes('declares no category'))).should.deep.equal([]);
+        entries.every(entry => entry.category?.startsWith('Business / ')).should.be.true;
+    });
+
     it('should attribute and license every template', () =>
         entries.every(entry => entry.attribution?.author === 'Cratis' && entry.license === 'MIT' && entry.licenseUrl === manifest.licenseUrl).should.be.true);
 

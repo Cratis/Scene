@@ -38,7 +38,7 @@ export const errorTemplate: ScreenTemplate = {
     },
     displayName: 'Error',
     description: 'A server-side failure, said plainly, with a way onward.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / State' },
 };
 
 /** Signed in, and still not allowed. */
@@ -61,7 +61,7 @@ export const accessDeniedTemplate: ScreenTemplate = {
     },
     displayName: 'Access denied',
     description: 'A refusal that distinguishes "not signed in" from "not allowed".',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / State' },
 };
 
 /** No such address. */
@@ -82,7 +82,7 @@ export const notFoundTemplate: ScreenTemplate = {
     },
     displayName: 'Not found',
     description: 'A wrong address, with a search box rather than a dead end.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / State' },
 };
 
 /** The page that has to do the selling. */
@@ -116,7 +116,7 @@ export const landingTemplate: ScreenTemplate = {
     },
     displayName: 'Landing',
     description: 'The marketing front door, with its own navigation because it has no application chrome.',
-    metadata: { ...defaultBlueprintTemplateProvenance },
+    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Landing' },
 };
 
 /** The four status and marketing templates. */
