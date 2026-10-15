@@ -4,7 +4,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import sinon from 'sinon';
 import { afterEach } from 'vitest';
-import { ActivityFeed, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, FileUploaderHandlerProvider, FilterBuilder, SavedViewsMenu, foundationElement, foundationSamples } from '../foundation';
+import { ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, FileUploaderHandlerProvider, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, foundationElement, foundationSamples } from '../foundation';
 import { ComponentName } from '../ComponentName';
 import { violationsIn } from '../for_foundation/given';
 
@@ -340,6 +340,128 @@ describe('when using the foundation controls', () => {
             const { container, input } = mount();
             fireEvent.change(input, { target: { files: [pdf('a.pdf'), new File(['x'], 'b.txt', { type: 'text/plain' })] } });
             (await violationsIn(container)).should.deep.equal([]);
+        });
+    });
+
+    describe('and following an approval chain', () => {
+        const chain = (steps: unknown[]) => render(<ApprovalChainStepper element={foundationElement(ComponentName.ApprovalChainStepper, { steps })} slots={{}} />);
+
+        it('should say the state of every step in words and mark the current one', () => {
+            const { container } = chain([{ label: 'Lead', state: 'approved' }, { label: 'Finance' }, { label: 'Director' }]);
+            Array.from(container.querySelectorAll('.foundation-approval-step')).map(step => step.getAttribute('data-state')).should.deep.equal(['approved', 'current', 'pending']);
+            container.querySelector('[aria-current="step"]')!.textContent!.should.contain('Finance');
+            container.querySelector('[aria-current="step"]')!.textContent!.should.contain('Awaiting decision');
+            screen.getByText('Waiting for a decision');
+        });
+
+        it('should stop at a rejection and say the rest were not reached', () => {
+            const { container } = chain([{ label: 'Lead', state: 'rejected' }, { label: 'Finance' }]);
+            screen.getByText('Rejected', { selector: '.foundation-approval-outcome' });
+            container.querySelectorAll('.foundation-approval-step')[1].textContent!.should.contain('Not reached');
+            (container.querySelector('[aria-current="step"]') === null).should.equal(true);
+        });
+
+        it('should number each step for assistive technology', () => {
+            const { container } = chain([{ label: 'Lead' }, { label: 'Finance' }]);
+            container.querySelectorAll('.foundation-approval-step')[1].textContent!.should.contain('Step 2 of 2');
+        });
+    });
+
+    describe('and walking an org tree', () => {
+        const mount = (properties?: Record<string, unknown>) => {
+            const { published, bindingOutputs } = outputs();
+            const view = render(<OrgTree element={foundationElement(ComponentName.OrgTree, { ...foundationSamples[ComponentName.OrgTree].properties, ...properties })} slots={{}} bindingOutputs={bindingOutputs} />);
+            return { published, ...view };
+        };
+        const item = (name: string) => screen.getByRole('treeitem', { name: new RegExp(name) });
+
+        it('should open the first levels and describe each item for assistive technology', () => {
+            mount();
+            screen.getAllByRole('treeitem').length.should.equal(3);
+            item('Ada Lovelace').getAttribute('aria-level')!.should.equal('1');
+            item('Ada Lovelace').getAttribute('aria-expanded')!.should.equal('true');
+            item('Grace Hopper').getAttribute('aria-expanded')!.should.equal('false');
+            item('Grace Hopper').getAttribute('aria-setsize')!.should.equal('2');
+            item('Linus Torvalds').getAttribute('aria-posinset')!.should.equal('2');
+            item('Ada Lovelace').textContent!.should.contain('3 reports');
+        });
+
+        it('should have one tab stop', () => {
+            mount();
+            screen.getAllByRole('treeitem').filter(node => node.getAttribute('tabindex') === '0').length.should.equal(1);
+        });
+
+        it('should expand and collapse with the arrow keys', () => {
+            mount();
+            fireEvent.keyDown(item('Grace Hopper'), { key: 'ArrowRight' });
+            screen.getAllByRole('treeitem').length.should.equal(4);
+            fireEvent.keyDown(item('Grace Hopper'), { key: 'ArrowLeft' });
+            screen.getAllByRole('treeitem').length.should.equal(3);
+        });
+
+        it('should select with enter and publish the id', () => {
+            const { published } = mount();
+            fireEvent.keyDown(item('Linus Torvalds'), { key: 'Enter' });
+            (published.value as string).should.equal('cfo');
+            item('Linus Torvalds').getAttribute('aria-selected')!.should.equal('true');
+        });
+
+        it('should say there is nobody when it has no rows', () => {
+            const { container } = mount({ nodes: [] });
+            container.querySelector('.foundation-empty-headline')!.textContent!.should.equal('There is nobody in the organization yet');
+        });
+
+        it('should leave the tree without accessibility violations', async () => {
+            const { container } = mount();
+            fireEvent.keyDown(item('Grace Hopper'), { key: 'ArrowRight' });
+            (await violationsIn(container)).should.deep.equal([]);
+        });
+    });
+
+    describe('and editing a permission matrix', () => {
+        const mount = (properties?: Record<string, unknown>) => {
+            const { published, bindingOutputs } = outputs();
+            const view = render(<PermissionMatrix element={foundationElement(ComponentName.PermissionMatrix, { ...foundationSamples[ComponentName.PermissionMatrix].properties, editPermission: 'enabled', ...properties })} slots={{}} bindingOutputs={bindingOutputs} />);
+            return { published, ...view };
+        };
+
+        it('should name each box by its permission and role, and announce row and column through real headers', () => {
+            const { container } = mount();
+            (screen.getByLabelText('Grant Edit deals to Sales') as HTMLInputElement).checked.should.equal(false);
+            (screen.getByLabelText('Grant Edit deals to Administrator') as HTMLInputElement).checked.should.equal(true);
+            container.querySelectorAll('thead th[scope="col"]').length.should.equal(3);
+            container.querySelectorAll('tbody th[scope="row"]').length.should.equal(3);
+            container.querySelectorAll('th[scope="colgroup"]').length.should.equal(2);
+        });
+
+        it('should publish a change as grants and keep the others', () => {
+            const { published } = mount();
+            fireEvent.click(screen.getByLabelText('Grant Edit deals to Sales'));
+            (published.value as unknown[]).length.should.equal(5);
+            fireEvent.click(screen.getByLabelText('Grant View deals to Sales'));
+            (published.value as unknown[]).length.should.equal(4);
+        });
+
+        it('should be read-only without the edit permission and say allowed or not allowed in words', () => {
+            const { container } = mount({ editPermission: 'disabled' });
+            container.querySelectorAll('input').length.should.equal(0);
+            container.querySelectorAll('td')[0].textContent!.should.equal('Allowed');
+            container.querySelectorAll('td')[3].textContent!.should.equal('Not allowed');
+        });
+
+        it('should scroll in a labelled, keyboard-focusable region', () => {
+            const { container } = mount();
+            const region = container.querySelector('.foundation-matrix-scroll')!;
+            region.getAttribute('tabindex')!.should.equal('0');
+            region.getAttribute('aria-label')!.should.equal('Permission matrix, scrolls sideways');
+        });
+
+        it('should leave the matrix without accessibility violations, editable and read-only', async () => {
+            const editable = mount();
+            (await violationsIn(editable.container)).should.deep.equal([]);
+            cleanup();
+            const readOnly = mount({ editPermission: 'disabled' });
+            (await violationsIn(readOnly.container)).should.deep.equal([]);
         });
     });
 });
