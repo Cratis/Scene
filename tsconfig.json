@@ -73,9 +73,6 @@
             "path": "./Source/JavaScript/blueprint.components"
         },
         {
-            "path": "./Source/JavaScript/preview"
-        },
-        {
             "path": "./Source/JavaScript/thirdparty.inspections"
         }
     ]

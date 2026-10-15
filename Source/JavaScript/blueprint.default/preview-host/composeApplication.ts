@@ -8,9 +8,11 @@ import {
 import {
     DescriptorCatalog, PackageCatalog, resolveEffectiveConfiguration, resolveScreenTemplates, resolveTemplateChain,
 } from '@cratis/scene.engine';
-import {
-    ComponentName, SlotName, defaultLayouts, externalComponent, galleryScreenTemplates, resolveElementComponentNames, shellComponentForLayout,
-} from '@cratis/scene.blueprint.default';
+import { ComponentName } from '../ComponentName';
+import { externalComponent } from '../gallery/elements';
+import { resolveElementComponentNames } from '../gallery/resolveElementNames';
+import { galleryScreenTemplates } from '../gallery/screens';
+import { SlotName, defaultLayouts, shellComponentForLayout } from '../layouts';
 import { ApplicationDocument, completeDocument } from './ApplicationDocument';
 import { defaultApplicationChrome } from './defaultApplicationChrome';
 import { previewTemplateComponent } from './PreviewTemplate';
