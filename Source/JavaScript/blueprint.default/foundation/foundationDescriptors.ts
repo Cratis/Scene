@@ -435,6 +435,46 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         ],
     },
     {
+        component: key(ComponentName.DialogFrame),
+        displayName: 'Dialog frame',
+        description: 'The head of a dialog: its title, a message and the consequences it states, and a close button. It makes the dialog it opens in keep focus inside, restore it, close on Escape and be drawn centered, as a side sheet or full height.',
+        properties: [
+            text('title', 'Title', 'Content', undefined, { constraints: { required: true } }),
+            text('subtitle', 'Subtitle', 'Content'),
+            text('message', 'Message', 'Content', 'What the dialog asks or says.'),
+            { path: 'consequences', label: 'Consequences', group: 'Content', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], description: 'What will happen if the person goes ahead, one line each.' },
+            choice('placement', 'Placement', 'Appearance', { center: 'Centered', side: 'Side sheet', full: 'Full height' }, 'center', 'Where the dialog is drawn; on a phone every dialog fills the page.'),
+            choice('tone', 'Tone', 'Appearance', { default: 'Default', danger: 'Destructive' }, 'default', 'A destructive dialog is drawn in the danger colors.'),
+            text('locale', 'Locale', 'Content'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
+        component: key(ComponentName.ActionButton),
+        displayName: 'Action button',
+        description: 'One action, drawn as every action of the foundation is, that is enabled, disabled with its reason, or hidden by the permission of the user.',
+        properties: [
+            text('label', 'Label', 'Content', 'What it does - a verb, never "OK".', { constraints: { required: true } }),
+            choice('emphasis', 'Emphasis', 'Appearance', { primary: 'Primary', secondary: 'Secondary', quiet: 'Quiet', danger: 'Destructive' }, 'primary'),
+            rule('permission', 'Permission', 'Whether the action works, refuses with a reason or is not shown.'),
+            text('disabledReason', 'Reason when disabled', 'Permissions'),
+            text('targetScreen', 'Go to screen', 'Behavior', 'The screen it goes to when no behavior is attached.'),
+            text('locale', 'Locale', 'Content'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
+        component: key(ComponentName.Notice),
+        displayName: 'Notice',
+        description: 'One message about the region it sits in, announced when it arrives. Empty until it has something to say.',
+        properties: [
+            text('text', 'Message', 'Data', 'Bind to the error or note to show; empty draws nothing.'),
+            text('title', 'Title', 'Content'),
+            choice('tone', 'Tone', 'Appearance', { danger: 'Error', warning: 'Warning', info: 'Information', success: 'Success', neutral: 'Neutral' }, 'danger'),
+            text('locale', 'Locale', 'Content'),
+        ],
+    },
+    {
         component: key(ComponentName.BulkBar),
         displayName: 'Bulk bar',
         description: 'Appears when records are selected, says how many, offers the bulk actions and clears the selection.',
@@ -521,6 +561,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         displayName: 'Form',
         description: 'Titled sections of fields in a one-to-three column grid, with inline validation, a save bar, the unsaved-changes guard and four modes.',
         properties: [
+            flag('saveAndNew', 'Offer Save and new', 'Behavior', 'Whether a create form offers Save and new next to Save; a dialog that creates one record leaves it out.', { default: true }),
             {
                 ...list('sections', 'Sections', 'Data', 'Section', [
                     text('id', 'Id', 'Data'),

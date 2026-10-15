@@ -15,7 +15,7 @@ export interface ActionButtonProps {
     onClick?: (event: { stopPropagation(): void }) => void;
 
     /** The emphasis of the button. */
-    emphasis?: 'primary' | 'secondary' | 'quiet';
+    emphasis?: 'primary' | 'secondary' | 'quiet' | 'danger';
 
     children: ReactNode;
 }

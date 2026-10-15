@@ -15,6 +15,7 @@ import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { FoundationStates } from './foundation/FoundationStates';
 import { GalleryScreenPreview } from './gallery/GalleryScreenPreview';
+import { GalleryDialogPreview } from './gallery/GalleryDialogPreview';
 import { defaultBlueprint } from './defaultBlueprint';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { PrimeReactProvider } from '@primereact/core';
@@ -24,6 +25,10 @@ const registry = mergePackageRegistries([corePackage, defaultBlueprint]);
 window.showScreen = (screen, pack, theme, forceState) => {
     root ??= createRoot(document.getElementById('root'));
     flushSync(() => root.render(<PrimeReactProvider><GalleryScreenPreview screenName={screen} registry={registry} pack={pack} forceState={forceState} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
+};
+window.showDialog = (dialog, pack, theme) => {
+    root ??= createRoot(document.getElementById('root'));
+    flushSync(() => root.render(<PrimeReactProvider><GalleryDialogPreview dialogName={dialog} registry={registry} pack={pack} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
 };
 window.show = (component, theme, properties, rightToLeft) => {
     root ??= createRoot(document.getElementById('root'));
@@ -64,6 +69,9 @@ export interface FoundationPage {
     /** Shows one gallery screen filled from a sample-data pack, and audits it the same way. */
     auditScreen(screen: string, pack: unknown, theme: 'light' | 'dark', forceState?: unknown): Promise<string[]>;
 
+    /** Opens one gallery dialog filled from a sample-data pack and audits it: axe-core with colour contrast, and the box staying inside the window. */
+    auditDialog(dialog: string, pack: unknown, theme: 'light' | 'dark'): Promise<string[]>;
+
     /** Shows every state of a component and runs axe-core (with colour contrast) over the page; returns the violations as readable lines. */
     audit(component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean, openDisclosures?: boolean): Promise<string[]>;
 }
@@ -101,5 +109,16 @@ export async function openFoundationPage(): Promise<FoundationPage> {
             return [...overflow, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
         }, [screen, pack, theme, forceState] as const);
 
-    return { browser, context, page, errors, audit, auditScreen };
+    const auditDialog = (dialog: string, pack: unknown, theme: 'light' | 'dark') =>
+        page.evaluate(async ([name, data, themeName]) => {
+            const window_ = window as unknown as { showDialog(...arguments_: unknown[]): void; axe: typeof axe };
+            window_.showDialog(name, data, themeName);
+            await new Promise(resolve => setTimeout(resolve, 50));
+            const result = await window_.axe.run(document.body, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] }, rules: { region: { enabled: false } } });
+            const box = document.querySelector<HTMLElement>('.foundation-dialog-host > .scene-template')?.getBoundingClientRect();
+            const outside = !box ? ['the dialog box was not drawn'] : box.left < -1 || box.top < -1 || box.right > window.innerWidth + 1 || box.bottom > window.innerHeight + 1 ? [`the dialog box is outside the ${window.innerWidth}x${window.innerHeight} window`] : [];
+            return [...outside, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
+        }, [dialog, pack, theme] as const);
+
+    return { browser, context, page, errors, audit, auditScreen, auditDialog };
 }

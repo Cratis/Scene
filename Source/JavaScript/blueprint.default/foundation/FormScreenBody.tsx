@@ -73,6 +73,9 @@ function FieldInput({ field, value, error, readOnly, locale, required, choose, s
         case FormFieldType.Currency:
             input = <input {...common} type='number' inputMode='decimal' value={text} placeholder={field.placeholder} onChange={event => set(event.target.value === '' ? '' : Number(event.target.value))} />;
             break;
+        case FormFieldType.Password:
+            input = <input {...common} type='password' autoComplete='current-password' value={text} placeholder={field.placeholder} onChange={event => set(event.target.value)} />;
+            break;
         case FormFieldType.Date:
             input = <input {...common} type='date' lang={locale} value={text} onChange={event => set(event.target.value)} />;
             break;
@@ -97,9 +100,9 @@ function FieldInput({ field, value, error, readOnly, locale, required, choose, s
  * unsaved-changes guard.
  *
  * `sections` (`title`, `columns`, `fields`) and `values` come from the screen; a field is `text`, `number`, `currency`, `date`, `select`, `multiSelect`, `lookup`,
- * `toggle`, `file`, `richText` or `address`. Validation is inline on blur and a summary on submit (an alert listing each field as a link back to it); a server's
+ * `toggle`, `file`, `richText`, `address` or `password`. Validation is inline on blur and a summary on submit (an alert listing each field as a link back to it); a server's
  * `errors` map onto the fields, and one for a field the form lacks is shown as a general error so it is never lost. Required fields are marked with an asterisk
- * *and* the word. `mode` is `create`, `edit`, `readOnly` or `settings` - settings has one Save for each section. The edited values are the `value` output; Save
+ * *and* the word. `saveAndNew` false leaves out "Save and new" (a dialog that creates one record). `mode` is `create`, `edit`, `readOnly` or `settings` - settings has one Save for each section. The edited values are the `value` output; Save
  * runs the behaviors attached to the element. While values differ from the saved ones the form says so, warns the browser before the page is left, and offers
  * "Discard changes". The action bar sticks to the bottom as the form scrolls.
  */
@@ -185,7 +188,7 @@ export function FormScreenBody({ element, interactions, bindingOutputs }: Regist
                             <span className='foundation-wizard-spacer' />
                             {dirty && <ActionButton emphasis='quiet' disabledReason={strings.disabledNoPermission} onClick={() => { setValues(saved); setTouched(new Set()); setSubmitted(false); }}>{strings.formDiscard}</ActionButton>}
                             <ActionButton emphasis='secondary' disabledReason={strings.disabledNoPermission} onClick={() => interactions?.onClick?.({ stopPropagation: () => undefined })}>{strings.formCancel}</ActionButton>
-                            {mode === FormMode.Create && <ActionButton rule={canSave} emphasis='secondary' disabledReason={strings.disabledNoPermission} onClick={() => { submit(); }}>{strings.formSaveAndNew}</ActionButton>}
+                            {mode === FormMode.Create && element.properties.saveAndNew !== false && <ActionButton rule={canSave} emphasis='secondary' disabledReason={strings.disabledNoPermission} onClick={() => { submit(); }}>{strings.formSaveAndNew}</ActionButton>}
                             <ActionButton rule={canSave} disabledReason={strings.disabledNoPermission} onClick={() => submit()}>{strings.formSave}</ActionButton>
                         </div>
                     )}

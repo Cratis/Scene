@@ -25,6 +25,9 @@ component, so a component picker shows them and a screen places them like any ot
 | `approvalChainStepper` | Navigation | The steps a request goes through and where it stands; a rejection stops the chain |
 | `orgTree` | Data display | An organization as an expandable ARIA tree built from rows of who reports to whom |
 | `permissionMatrix` | Input | Roles across, permissions down, a checkbox where they meet; publishes the grants |
+| `dialogFrame` | Feedback | The head of a dialog template: title, message, consequences and a close button - and the focus handling, placement and name of the dialog it opens in (see [foundation screen templates](./foundation-templates.md#dialogs)) |
+| `actionButton` | Actions | One action drawn as every foundation action is, enabled, disabled with its reason or hidden by the permission rule; runs the behaviors attached to it |
+| `notice` | Feedback | One message about a region as a live region - an alert for an error or warning, a status otherwise - present but empty until it has something to say |
 
 ## The five standard states
 

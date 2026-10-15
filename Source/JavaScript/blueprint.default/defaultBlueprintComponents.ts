@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
+import { ActionButtonControl, DialogFrame, Notice, BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -67,6 +67,9 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.DataList)]: DataList,
     [componentRegistryKey(defaultBlueprintName, ComponentName.TabSet)]: TabSet,
     [componentRegistryKey(defaultBlueprintName, ComponentName.SubNavigation)]: SubNavigation,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.DialogFrame)]: DialogFrame,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ActionButton)]: ActionButtonControl,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.Notice)]: Notice,
     [componentRegistryKey(defaultBlueprintName, ComponentName.BulkBar)]: BulkBar,
     [componentRegistryKey(defaultBlueprintName, ComponentName.GlobalSearch)]: GlobalSearch,
     [componentRegistryKey(defaultBlueprintName, ComponentName.NotificationsButton)]: NotificationsButton,

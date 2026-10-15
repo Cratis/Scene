@@ -1,6 +1,6 @@
 ---
 title: Foundation screen templates
-description: The eight foundation screen templates - workspace, dashboard, list, board, master/detail, record page, form and wizard - their slots, the shell they sit in, the states, responsive rules and the definition of done each is held to.
+description: The foundation screen templates - workspace, dashboard, list, board, master/detail, record page, form and wizard - the dialog templates, and the auth and state screens, with their slots, the states, responsive rules and the definition of done each is held to.
 ---
 
 The foundation screen templates are the screens most business applications are made of (Part B 2.1-2.9 of the Studio
@@ -26,6 +26,58 @@ sidebar left (the default), top navigation only (the `Horizontal` layout mode) a
 
 `MasterDetailScreen` names its container: the qualified slot `WorkspaceScreen.moduleContent` says which `content`-like
 slot it means, so it is placed only inside a workspace and never ambiguous with the shell's own `content`.
+
+## Dialogs
+
+A dialog is summoned rather than placed, so a dialog template has no `fitsSlot`: it is offered on a state change slice (spec 4.2) and a host opens it over the
+application. The five dialogs of Part B 2.10 are in the `Foundation / Dialog` category, built from the foundation components and the core `text` and `card`, and
+filled from the same sample-data pack.
+
+| Template | Slots | What it is |
+| --- | --- | --- |
+| `QuickCreateDialog` | `header`, `body`, `actions` | A short form of six fields at most with Cancel and Create, opened from a list's header or a lookup |
+| `ConfirmDialog` | `header`, `body`, `actions` | A question, an optional consequence list, Cancel and a confirm button naming its verb; `tone: danger` makes it a destructive confirmation |
+| `LookupDialog` | `header`, `body`, `actions` | Search and a list or table, single or multiple selection (`selectionMode`), Cancel and Select; any lookup field opens it |
+| `SideSheet` | `header`, `body`, `actions` | A drawer from the inline end with a header, a scrollable body and footer actions, hosting a form or a record |
+| `FilterDialog` | `header`, `body`, `actions` | The advanced filter builder in a dialog; on a phone it fills the page, which is the phone's alternative to the filter panel |
+
+`FormDialog` and `DetailDialog` stay as they were, and gain the same frame. The head of every dialog is a `dialogFrame`. The host draws a dialog's box - a
+`role="dialog" aria-modal="true"` element - and the frame takes that element on: it is named by the frame's heading, receives focus when it opens (the first
+field, else the primary action, else the close button), keeps Tab inside, closes on Escape and gives focus back to whatever opened it. `placement` is `center`,
+`side` or `full`, a right-to-left locale mirrors the side sheet, and on a phone every dialog fills the page with its footer actions kept in view while the body
+scrolls. Cancel and Close carry a `CloseDialog` action as data, so the same document closes the dialog in Scene, in Stage and in the preview; with no behavior
+attached the frame's close button and Escape close it themselves.
+
+Preview a dialog with `GalleryDialogPreview` (`dialogName`, `pack`, `state`, `forceState`), which opens the real template in a host box; the stories show each
+state.
+
+## Auth and state screens
+
+Four screens of Part B 2.11 fit the full-page layout's `content` slot, so they are chrome-less. They are categorised `Foundation / Auth` and `Foundation / State`.
+
+| Template | Slots | What it is |
+| --- | --- | --- |
+| `LoginScreen` | `logo`, `error`, `form`, `providers`, `help` | The logo, a sign-in form, a slot for the identity providers the application offers, an error area that is a live region, and a help link |
+| `NotFoundScreen` | `message`, `search`, `actions` | A wrong address explained, with a search and a link home |
+| `ForbiddenScreen` | `message`, `actions` | A refusal that offers to request access and binds no data at all, so it shows nothing of what was refused |
+| `ErrorScreen` | `message`, `reference`, `actions` | A generic failure with a retry and the support reference id to quote |
+
+The state screens use the `emptyState` component for their message, so an error page reads as every empty region does.
+
+## Aliases
+
+Nothing was renamed. The spec names are new templates beside the earlier ones, which keep working:
+
+| Spec name | Earlier template it stands beside |
+| --- | --- |
+| `LoginScreen` | `Login` |
+| `NotFoundScreen` | `NotFound` |
+| `ForbiddenScreen` | `AccessDenied` |
+| `ErrorScreen` | `Error` |
+| `QuickCreateDialog` | `FormDialog` |
+
+`foundationTemplateAliases` lists the mapping. The components blueprint ships a `ConfirmDialog` of its own for a command; a template reference names its
+blueprint (`resolveTemplateReference`), so the two never collide.
 
 ## Existing names keep working
 

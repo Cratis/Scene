@@ -507,6 +507,155 @@
           "label": "Review"
         }
       ]
+    },
+    {
+      "shape": "QuickCreateSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New contact",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Northgate Ltd",
+                "Harbour & Sons",
+                "Fjord Supply"
+              ]
+            },
+            {
+              "name": "phone",
+              "label": "Phone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "QuickCreateValues",
+      "rows": [
+        {}
+      ]
+    },
+    {
+      "shape": "LookupColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Account"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "city",
+          "header": "City"
+        }
+      ]
+    },
+    {
+      "shape": "LookupRows",
+      "rows": [
+        {
+          "id": "a1",
+          "name": "Northgate Ltd",
+          "owner": "Ada Lovelace",
+          "city": "Oslo"
+        },
+        {
+          "id": "a2",
+          "name": "Harbour & Sons",
+          "owner": "Grace Hopper",
+          "city": "Bergen"
+        },
+        {
+          "id": "a3",
+          "name": "Fjord Supply",
+          "owner": "Linus Torvalds",
+          "city": "Tromsø"
+        },
+        {
+          "id": "a4",
+          "name": "Globex",
+          "owner": "Ada Lovelace",
+          "city": "Stavanger"
+        }
+      ]
+    },
+    {
+      "shape": "SupportReference",
+      "rows": [
+        {
+          "id": "ERR-7F3A-92C1"
+        }
+      ]
+    },
+    {
+      "shape": "SignInSections",
+      "rows": [
+        {
+          "id": "credentials",
+          "title": "Sign in",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "password",
+              "label": "Password",
+              "type": "password",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "SignInError",
+      "rows": [
+        {
+          "message": "The email or password is not right."
+        }
+      ]
+    },
+    {
+      "shape": "SignInValues",
+      "rows": [
+        {}
+      ]
+    },
+    {
+      "shape": "DealFilter",
+      "rows": [
+        {
+          "operator": "and",
+          "conditions": [
+            {
+              "field": "status",
+              "operator": "is",
+              "value": "Open"
+            }
+          ],
+          "groups": []
+        }
+      ]
     }
   ]
 }

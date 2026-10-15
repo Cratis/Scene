@@ -20,5 +20,6 @@ export * from './componentNames';
 export * from './previewProfile';
 export * from './resolveElementNames';
 export * from './GalleryScreenPreview';
+export * from './GalleryDialogPreview';
 export * from './TemplatePreviewState';
 export * from './applyTemplatePreviewState';
