@@ -18,6 +18,7 @@ namespace Cratis.Scene.Engine.Templates;
 /// <param name="Metadata">The template's semantic, compatibility, attribution and license metadata.</param>
 /// <param name="Compatible">Whether the metadata is complete and every requirement is met.</param>
 /// <param name="Problems">Why it is not.</param>
+/// <param name="Warnings">Recommendations that do not make the template unusable, such as an own template without a category.</param>
 public record TemplateCatalogEntry(
     string Package,
     string PackageVersion,
@@ -27,4 +28,5 @@ public record TemplateCatalogEntry(
     string? Description,
     TemplateMetadata? Metadata,
     bool Compatible,
-    IReadOnlyList<string> Problems);
+    IReadOnlyList<string> Problems,
+    IReadOnlyList<string> Warnings);

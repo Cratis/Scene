@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TemplateAttribution, TemplateCompatibility, TemplateScope } from '@cratis/scene.model';
+import { TemplateAttribution, TemplateCompatibility, TemplateScope, SliceKind } from '@cratis/scene.model';
 import { TemplateCatalogKind } from './TemplateCatalogKind';
 
 /**
@@ -22,6 +22,7 @@ export interface TemplateCatalogEntry {
     type?: string;
     category?: string;
     scopes?: TemplateScope[];
+    sliceKinds?: SliceKind[];
     compatibility?: TemplateCompatibility;
     attribution?: TemplateAttribution;
     license?: string;
@@ -32,4 +33,7 @@ export interface TemplateCatalogEntry {
 
     /** Why it is not - missing or invalid metadata, or an unmet Scene or package requirement. */
     problems: string[];
+
+    /** Recommendations that do not make the template unusable, such as an own template without a category. */
+    warnings: string[];
 }
