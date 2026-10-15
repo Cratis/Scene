@@ -72,7 +72,7 @@ jobs:
           yarn workspace @cratis/scene.blueprint.ci-scaffold lint
           UPDATE_BLUEPRINT_CATALOG=1 yarn workspace @cratis/scene.blueprint.ci-scaffold test
           node ./verify-blueprints.js --write
-          grep -q '"@cratis/scene.blueprint.ci-scaffold"' blueprintCatalog.json
+          grep -q '"domain": "ci-scaffold"' blueprintCatalog.json
 
       - name: Build Storybook
         run: yarn build-storybook
