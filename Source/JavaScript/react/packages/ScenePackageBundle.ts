@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, DialogTemplate, Layout, PackageKind, PropertyDescriptor, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { validateComponentDescriptors } from '@cratis/scene.engine';
+import { ComponentDescriptor, DiagnosticCode, DialogTemplate, Layout, PackageKind, PropertyDescriptor, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
@@ -249,6 +250,11 @@ function validateDescriptors(bundle: ScenePackageBundle): string[] {
 
         validateProperties(descriptor.component, descriptor.properties, '', problems);
     }
+
+    // The category rule (CMP1) is not checked here - it gates a designer, not a host loading a package (see validateComponentMetadata) -
+    // but a design-mode descriptor or editor parameter that cannot work is as much a mistake as an enum without choices.
+    const structural: string[] = [DiagnosticCode.ComponentDesignModeInvalid, DiagnosticCode.PropertyEditorOptionsInvalid];
+    problems.push(...validateComponentDescriptors(bundle.descriptors ?? []).filter(diagnostic => structural.includes(diagnostic.code)).map(diagnostic => diagnostic.message));
 
     return problems;
 }

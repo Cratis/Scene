@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { BindingMode, BindingSourceKind, ComponentDescriptor, DesignTimeActionPlacement, PropertyDescriptor, PropertyValueType, QueryResultShape } from '@cratis/scene.model';
-import { componentRegistryKey } from '@cratis/scene.react';
+import { componentRegistryKey, describeComponents } from '@cratis/scene.react';
+import { cratisComponentsMetadata } from './cratisComponentsMetadata';
 
 // The package name, spelled out so describing components does not pull every adapter (and its UI dependencies) in
 // with it; the bundle's validation checks each key against the manifest.
@@ -102,7 +103,7 @@ const toolbarButtonProperties: PropertyDescriptor[] = [
     },
 ];
 
-export const cratisComponentsDescriptors: ComponentDescriptor[] = [
+const describedCratisComponents: ComponentDescriptor[] = [
     { component: key('dataTable'), displayName: 'Data table', properties: dataTableProperties },
     { component: key('table'), displayName: 'Table', properties: dataTableProperties },
     { component: key('observableDataTable'), displayName: 'Live data table', properties: dataTableProperties },
@@ -121,3 +122,6 @@ export const cratisComponentsDescriptors: ComponentDescriptor[] = [
     },
     { component: key('toolbarButton'), displayName: 'Toolbar button', properties: toolbarButtonProperties },
 ];
+
+/** The `Cratis.Components` descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
+export const cratisComponentsDescriptors: ComponentDescriptor[] = describeComponents('Cratis.Components', describedCratisComponents, cratisComponentsMetadata);

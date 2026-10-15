@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, DesignTimeActionPlacement, PropertyValueType } from '@cratis/scene.model';
+import { ComponentCategory, ComponentDescriptor, DesignTimeActionPlacement, PropertyValueType, componentIcon } from '@cratis/scene.model';
 import { inspectionChecklistComponent } from './packageName';
 
 /** The identity of the package's Generate fields action. */
@@ -14,6 +14,17 @@ export const generateChecklistItemsActionId = 'Acme.Inspections.checklist.genera
 export const inspectionChecklistDescriptor: ComponentDescriptor = {
     component: inspectionChecklistComponent,
     displayName: 'Inspection checklist',
+    // What a component picker shows (CMP1) and how the checklist is edited on the design surface - plain data, no code.
+    category: ComponentCategory.Forms,
+    icon: componentIcon('clipboard-check'),
+    keywords: ['inspection', 'audit', 'safety'],
+    designMode: {
+        itemsPath: 'items',
+        addActions: [{ id: 'Acme.Inspections.checklist.addItem', label: 'Add item', icon: componentIcon('plus'), collectionPath: 'items' }],
+        itemToolbar: [
+            { id: 'Acme.Inspections.checklist.delete', icon: componentIcon('trash'), title: 'Delete item', availability: 'item.editable', readOnlyReason: 'item.inherited' },
+        ],
+    },
     description: 'A checklist whose items mirror the properties of the command that records the inspection.',
     editorKind: 'checklistDesigner',
     previewKind: 'checklistPreview',

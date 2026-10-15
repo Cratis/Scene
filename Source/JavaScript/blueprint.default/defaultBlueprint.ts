@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { PackageKind, ScenePackage } from '@cratis/scene.model';
-import { ScenePackageBundle } from '@cratis/scene.react';
+import { ScenePackageBundle, describeComponents } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
+import { defaultBlueprintComponentMetadata } from './defaultBlueprintComponentMetadata';
 import { defaultBlueprintComponents } from './defaultBlueprintComponents';
 import { galleryDialogTemplates, galleryScreenTemplates, galleryScreens } from './gallery';
 import { LayoutName, defaultLayouts } from './layouts';
@@ -65,4 +66,5 @@ export const defaultBlueprint: ScenePackageBundle = {
     dialogTemplates: galleryDialogTemplates,
     screens: galleryScreens,
     themes: defaultBlueprintThemes,
+    descriptors: describeComponents(defaultBlueprintManifest.name, [], defaultBlueprintComponentMetadata),
 };
