@@ -17,3 +17,4 @@ export * from './queries';
 export * from './descriptors';
 export * from './exposure';
 export * from './editing';
+export * from './structure';
