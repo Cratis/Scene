@@ -23,5 +23,5 @@ export function isValidSampleDataOwner(owner: string | undefined): boolean {
 export function isValidSampleDataPath(path: string | undefined): boolean {
     if (path === undefined || path === null) return false;
     if (!path.startsWith('sampleData/') || !path.endsWith('.json') || path.length <= 'sampleData/.json'.length) return false;
-    return !path.includes('..') && !path.includes('\\') && !path.includes('/'.repeat(2));
+    return !path.includes('..') && !path.includes('\\') && !path.split('/').includes('');
 }
