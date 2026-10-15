@@ -8,6 +8,8 @@
   href: template-applicability.md
 - name: Template compatibility, attribution and license
   href: template-provenance.md
+- name: Sample data packs
+  href: sample-data.md
 - name: Navigation diagnostics
   href: navigation-diagnostics.md
 - name: The application hierarchy and toolbars

@@ -51,7 +51,9 @@ export function resolveSampleData(request: SampleDataRequest, context: SampleDat
         diagnostics.push({ code: 'shapeNotInPack', message: `The bound sample data pack '${bindingPack.id}' has no rows for '${target}'` });
     }
 
-    const activePackId = context.sessionActivePack !== undefined ? context.sessionActivePack : selection?.activePack;
+    const sessionPackId = context.sessionActivePack;
+    const chosenPackId = sessionPackId !== undefined ? sessionPackId : selection?.activePack;
+    const activePackId = chosenPackId === '' ? undefined : chosenPackId;
     const activePack = find(activePackId);
     if (activePackId !== undefined && activePackId !== null && activePack === undefined) {
         missing(activePackId, 'active');

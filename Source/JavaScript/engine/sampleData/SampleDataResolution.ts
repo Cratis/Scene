@@ -41,11 +41,11 @@ export interface SampleDataContext {
 
     /**
      * A session-only override of the profile's active pack, as the preview strip's selector sets it: a pack
-     * id replaces `profile.sampleData.activePack`, `null` means no active pack, and `undefined` (absent)
-     * leaves the profile's choice. It is never a second source of truth: it is not stored, and bindings and
+     * id replaces `profile.sampleData.activePack`, the empty string (the generated entry's id) means no
+     * active pack, and `undefined` (absent) leaves the profile's choice. It is never a second source of truth: it is not stored, and bindings and
      * mappings still come from the profile.
      */
-    sessionActivePack?: string | null;
+    sessionActivePack?: string;
 
     /** The default pack of the blueprint the template came from. */
     blueprintDefaultPack?: string;

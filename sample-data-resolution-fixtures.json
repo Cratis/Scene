@@ -6838,7 +6838,7 @@
           }
         ],
         "isDesignOrPreview": true,
-        "sessionActivePack": null,
+        "sessionActivePack": "",
         "blueprintDefaultPack": "crm-nordic-smb",
         "profile": {
           "name": "web",
