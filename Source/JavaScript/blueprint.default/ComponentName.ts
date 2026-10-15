@@ -102,4 +102,31 @@ export enum ComponentName {
 
     /** Roles across, permissions down, a checkbox where they meet. */
     PermissionMatrix = 'permissionMatrix',
+
+    /** List of records as table, cards or grouped, with search, sort, paging, selection and row actions. */
+    DataList = 'dataList',
+
+    /** Tabs with a panel for each, kept in the address. */
+    TabSet = 'tabSet',
+
+    /** A module's sections as tabs or a left rail. */
+    SubNavigation = 'subNavigation',
+
+    /** The bar that appears when records are selected, with the bulk actions. */
+    BulkBar = 'bulkBar',
+
+    /** A search box for the topbar or a toolbar. */
+    GlobalSearch = 'globalSearch',
+
+    /** The topbar bell with the unread count. */
+    NotificationsButton = 'notificationsButton',
+
+    /** Columns mapped to a status with cards that move between them. */
+    KanbanBoard = 'kanbanBoard',
+
+    /** The steps, back/next/finish and draft save of a linear wizard. */
+    WizardProgress = 'wizardProgress',
+
+    /** Sections of validated fields with the save bar and unsaved-changes guard. */
+    FormScreenBody = 'formScreenBody',
 }

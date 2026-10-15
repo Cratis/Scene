@@ -25,4 +25,13 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.ApprovalChainStepper]: m('Approval chain', ComponentCategory.Navigation, 'workflow', ['approvals', 'steps', 'workflow', 'sign off', 'stepper']),
     [ComponentName.OrgTree]: m('Org tree', ComponentCategory.DataDisplay, 'network', ['organization', 'hierarchy', 'org chart', 'reports to', 'tree']),
     [ComponentName.PermissionMatrix]: m('Permission matrix', ComponentCategory.Input, 'shield-check', ['roles', 'permissions', 'access', 'grants', 'rbac']),
+    [ComponentName.DataList]: m('Data list', ComponentCategory.DataDisplay, 'table', ['table', 'grid', 'records', 'cards', 'collection', 'list']),
+    [ComponentName.TabSet]: m('Tab set', ComponentCategory.Navigation, 'panel-top', ['tabs', 'sections', 'panels']),
+    [ComponentName.SubNavigation]: m('Sub-navigation', ComponentCategory.Navigation, 'panel-left', ['module', 'sections', 'rail', 'tabs']),
+    [ComponentName.BulkBar]: m('Bulk bar', ComponentCategory.Actions, 'check-check', ['selection', 'bulk', 'batch', 'actions']),
+    [ComponentName.GlobalSearch]: m('Search', ComponentCategory.Input, 'search', ['search', 'find', 'query']),
+    [ComponentName.NotificationsButton]: m('Notifications button', ComponentCategory.Actions, 'bell', ['bell', 'alerts', 'unread']),
+    [ComponentName.KanbanBoard]: m('Kanban board', ComponentCategory.DataDisplay, 'kanban', ['board', 'kanban', 'columns', 'pipeline', 'cards']),
+    [ComponentName.WizardProgress]: m('Wizard', ComponentCategory.Navigation, 'footprints', ['wizard', 'steps', 'stepper', 'multi-step']),
+    [ComponentName.FormScreenBody]: m('Form', ComponentCategory.Forms, 'text-cursor-input', ['form', 'fields', 'sections', 'validation']),
 };

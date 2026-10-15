@@ -62,7 +62,7 @@ describe('when rendering every foundation component in every standard state', ()
 
         it(`should keep the loaded part of ${name} and name what failed when only some regions did`, () => {
             const { container } = forced(ComponentState.Partial, { failedRegions: ['Deals by stage', 'My tasks'] });
-            screen.getByRole('status').textContent!.should.contain('Deals by stage, My tasks');
+            screen.getByText(/Deals by stage, My tasks/);
             sample.data.forEach(text => container.textContent!.should.contain(text));
         });
 

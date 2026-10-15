@@ -1120,6 +1120,12 @@
     --foundation-row-height: 2.75rem;
 
     box-sizing: border-box;
+    /*
+     * A component is often a grid or flex item of the slot it sits in, whose minimum size is its content's. Without this a wide table or board
+     * stretches its cell, and the page, instead of scrolling inside itself.
+     */
+    min-inline-size: 0;
+    max-inline-size: 100%;
     color: var(--foundation-text);
     font-family: inherit;
 }
@@ -1979,6 +1985,7 @@
 }
 
 .foundation-matrix-scroll {
+    position: relative; /* the containing block of the visually hidden text inside, so it scrolls with the content instead of widening the page */
     overflow-x: auto;
 }
 
@@ -2024,4 +2031,510 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Tabs, sub-navigation, bulk bar, search and notifications. */
+.foundation-tabs {
+    position: relative; /* the containing block of the visually hidden text inside, so it scrolls with the content instead of widening the page */
+    display: flex;
+    gap: var(--foundation-space-1);
+    overflow-x: auto;
+    border-block-end: 1px solid var(--foundation-border);
+}
+
+.foundation-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-2);
+    min-block-size: 2.75rem;
+    padding-inline: var(--foundation-space-3);
+    border: 0;
+    border-block-end: 3px solid transparent;
+    background: transparent;
+    color: var(--foundation-muted);
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.foundation-tab[aria-selected='true'] {
+    border-block-end-color: var(--foundation-primary);
+    color: var(--foundation-text);
+}
+
+.foundation-tab:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.foundation-tab-badge {
+    padding: 0 var(--foundation-space-2);
+    border-radius: 999px;
+    background: var(--foundation-hover);
+    color: var(--foundation-text);
+    font-size: 0.75rem;
+}
+
+.foundation-tab-panel {
+    padding-block: var(--foundation-space-3);
+}
+
+.foundation-tab-panel[hidden] {
+    display: none;
+}
+
+.foundation-subnav ul {
+    display: flex;
+    gap: var(--foundation-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.foundation-subnav[data-orientation='vertical'] ul {
+    flex-direction: column;
+}
+
+.foundation-subnav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--foundation-space-2);
+    min-block-size: 2.5rem;
+    padding-inline: var(--foundation-space-3);
+    border-radius: var(--foundation-radius);
+    color: var(--foundation-text);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.foundation-subnav-link:hover {
+    background: var(--foundation-hover);
+}
+
+.foundation-subnav-link[aria-current='page'] {
+    background: var(--foundation-highlight);
+    color: var(--foundation-highlight-text);
+}
+
+.foundation-bulk-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--foundation-space-3);
+    padding: var(--foundation-space-2) var(--foundation-space-4);
+    border: 1px solid var(--foundation-primary);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-highlight);
+    color: var(--foundation-highlight-text);
+}
+
+.foundation-bulk-bar[hidden] {
+    display: none;
+}
+
+.foundation-bulk-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--foundation-space-2);
+}
+
+.foundation-search {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-2);
+    padding-inline: var(--foundation-space-3);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-search input[type='search'] {
+    min-inline-size: 12rem;
+    border: 0;
+    background: transparent;
+}
+
+.foundation-notifications {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.5rem;
+    min-block-size: 2.5rem;
+    border: 0;
+    border-radius: var(--foundation-radius);
+    background: transparent;
+    color: var(--foundation-text);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.foundation-notifications:hover {
+    background: var(--foundation-hover);
+}
+
+.foundation-notifications-badge {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    min-inline-size: 1.25rem;
+    padding-inline: var(--foundation-space-1);
+    border-radius: 999px;
+    background: var(--foundation-danger);
+    color: var(--foundation-surface);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    text-align: center;
+}
+
+/* Data list: table, cards, groups, pager. */
+.foundation-data-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-3);
+}
+
+.foundation-table-scroll {
+    position: relative; /* the containing block of the visually hidden text inside, so it scrolls with the content instead of widening the page */
+    overflow-x: auto;
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+}
+
+.foundation-table th,
+.foundation-table td {
+    min-block-size: var(--foundation-row-height);
+    padding: var(--foundation-space-2) var(--foundation-space-3);
+    border-block-end: 1px solid var(--foundation-border);
+    text-align: start;
+    white-space: nowrap;
+}
+
+.foundation-table thead th {
+    background: var(--foundation-background);
+    color: var(--foundation-muted);
+    font-size: 0.875rem;
+}
+
+.foundation-table td[data-kind='number'],
+.foundation-table td[data-kind='currency'] {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+}
+
+.foundation-table tr[data-selected='true'] {
+    background: var(--foundation-highlight);
+}
+
+.foundation-table-select {
+    inline-size: 2.5rem;
+}
+
+.foundation-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-1);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.foundation-row-actions {
+    max-inline-size: 8rem;
+}
+
+.foundation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--foundation-space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.foundation-card-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-2);
+    padding: var(--foundation-space-3);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-card-row[data-selected='true'] {
+    border-color: var(--foundation-primary);
+}
+
+.foundation-card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--foundation-space-2);
+}
+
+.foundation-card-row dl {
+    display: grid;
+    gap: var(--foundation-space-1);
+    margin: 0;
+}
+
+.foundation-card-row dd {
+    margin: 0;
+}
+
+.foundation-list-group h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 var(--foundation-space-2);
+    font-size: 1rem;
+}
+
+.foundation-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--foundation-space-3);
+}
+
+/* Kanban board. */
+.foundation-board {
+    position: relative; /* the containing block of the visually hidden text inside, so it scrolls with the content instead of widening the page */
+    display: flex;
+    gap: var(--foundation-space-3);
+    overflow-x: auto;
+    padding-block-end: var(--foundation-space-2);
+}
+
+.foundation-board-column {
+    display: flex;
+    flex: 1 0 15rem;
+    flex-direction: column;
+    gap: var(--foundation-space-2);
+    max-inline-size: 22rem;
+    padding: var(--foundation-space-2);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-background);
+}
+
+.foundation-board-column[data-collapsed='true'] {
+    flex-basis: auto;
+}
+
+.foundation-board-column[data-over='true'] {
+    border-color: var(--foundation-danger);
+}
+
+.foundation-board-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--foundation-space-2);
+}
+
+.foundation-board-header h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.foundation-board-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.foundation-board-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-1);
+    padding: var(--foundation-space-3);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+}
+
+.foundation-board-card[draggable='true'] {
+    cursor: grab;
+}
+
+.foundation-board-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--foundation-space-1);
+}
+
+/* Wizard. */
+.foundation-wizard-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--foundation-space-3);
+    margin: 0 0 var(--foundation-space-4);
+    padding: 0;
+    list-style: none;
+}
+
+.foundation-wizard-step button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-2);
+    min-block-size: 2.5rem;
+    padding: 0 var(--foundation-space-2);
+    border: 0;
+    border-radius: var(--foundation-radius);
+    background: transparent;
+    color: var(--foundation-muted);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.foundation-wizard-step button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.foundation-wizard-step[data-status='current'] button {
+    color: var(--foundation-text);
+}
+
+.foundation-wizard-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-size: 0.875rem;
+}
+
+.foundation-wizard-step[data-status='current'] .foundation-wizard-marker {
+    background: var(--foundation-primary);
+    border-color: var(--foundation-primary);
+    color: var(--foundation-primary-contrast);
+}
+
+.foundation-wizard-step[data-status='completed'] .foundation-wizard-marker {
+    border-color: var(--foundation-success);
+    color: var(--foundation-success);
+}
+
+.foundation-wizard-body {
+    padding-block: var(--foundation-space-3);
+}
+
+.foundation-wizard-actions,
+.foundation-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--foundation-space-2);
+    padding-block: var(--foundation-space-3);
+    border-block-start: 1px solid var(--foundation-border);
+}
+
+.foundation-wizard-spacer {
+    flex: 1;
+}
+
+/* Form. */
+.foundation-form-section {
+    margin: 0 0 var(--foundation-space-4);
+    padding: var(--foundation-space-3) var(--foundation-space-4);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+}
+
+.foundation-form-section legend {
+    padding-inline: var(--foundation-space-2);
+    font-weight: 700;
+}
+
+.foundation-form-grid {
+    display: grid;
+    gap: var(--foundation-space-3);
+}
+
+.foundation-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--foundation-space-1);
+    min-inline-size: 0;
+}
+
+.foundation-field-label {
+    font-weight: 600;
+}
+
+.foundation-required {
+    color: var(--foundation-danger);
+}
+
+.foundation-field-error {
+    color: var(--foundation-danger);
+    font-size: 0.875rem;
+}
+
+.foundation-field[data-invalid] input,
+.foundation-field[data-invalid] select,
+.foundation-field[data-invalid] textarea {
+    border-color: var(--foundation-danger);
+}
+
+.foundation-field textarea,
+.foundation-field input[type='file'] {
+    padding: var(--foundation-space-2);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-surface);
+    color: var(--foundation-text);
+    font: inherit;
+}
+
+.foundation-fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--foundation-space-3);
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.foundation-address {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--foundation-space-2);
+}
+
+.foundation-form-actions {
+    position: sticky;
+    inset-block-end: 0;
+    background: var(--foundation-surface);
+}
+
+@media (max-width: 40rem) {
+    .foundation-form-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .foundation-field {
+        grid-column: auto !important;
+    }
 }

@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
+import { BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -64,4 +64,13 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.ApprovalChainStepper)]: ApprovalChainStepper,
     [componentRegistryKey(defaultBlueprintName, ComponentName.OrgTree)]: OrgTree,
     [componentRegistryKey(defaultBlueprintName, ComponentName.PermissionMatrix)]: PermissionMatrix,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.DataList)]: DataList,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.TabSet)]: TabSet,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.SubNavigation)]: SubNavigation,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.BulkBar)]: BulkBar,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.GlobalSearch)]: GlobalSearch,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.NotificationsButton)]: NotificationsButton,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.KanbanBoard)]: KanbanBoard,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.WizardProgress)]: WizardProgress,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.FormScreenBody)]: FormScreenBody,
 };
