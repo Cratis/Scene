@@ -2,13 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { BindingSourceKind, ComponentDescriptor, PropertyDescriptor, PropertyEditorKind, PropertyValueType } from '@cratis/scene.model';
-import { componentRegistryKey } from '@cratis/scene.react';
+import { componentRegistryKey, describeComponents } from '@cratis/scene.react';
 import { chartTypeChoices } from './chart/chartTypeChoices';
 import { legacyEnumerationChoices } from './legacyEnumerationChoices';
 import { ChartType } from './chart';
 import { TreeTableSelectionMode } from './data';
 import { FileUploadMode } from './file';
 import { primeReactInputDescriptors } from './inputDescriptors';
+import { primeReactComponentMetadata } from './primeReactComponentMetadata';
 
 const key = (name: string) => componentRegistryKey('PrimeReact', name);
 
@@ -89,7 +90,7 @@ function treeNode(depth: number): PropertyDescriptor[] {
 }
 
 /** Design-time descriptors for PrimeReact controls whose authored data has structured configuration. */
-export const primeReactDescriptors: ComponentDescriptor[] = [
+const describedPrimeReact: ComponentDescriptor[] = [
     ...primeReactInputDescriptors,
     {
         component: key('chart'),
@@ -193,3 +194,6 @@ export const primeReactDescriptors: ComponentDescriptor[] = [
         ],
     },
 ];
+
+/** The `PrimeReact` descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
+export const primeReactDescriptors: ComponentDescriptor[] = describeComponents('PrimeReact', describedPrimeReact, primeReactComponentMetadata);

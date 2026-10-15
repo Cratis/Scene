@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ComponentDescriptor, PropertyValueType } from '@cratis/scene.model';
-import { componentRegistryKey } from '../packages';
+import { componentRegistryKey, describeComponents } from '../packages';
+import { coreComponentMetadata } from './coreComponentMetadata';
 
 const key = (name: string) => componentRegistryKey('core', name);
 
@@ -13,7 +14,7 @@ const key = (name: string) => componentRegistryKey('core', name);
  * argument mapping, a column's heading, and the navigation bar. The Screenplay structural components - `data`,
  * `section`, `summary` - have nothing to edit that is not already a node in the tree.
  */
-export const coreDescriptors: ComponentDescriptor[] = [
+const describedCore: ComponentDescriptor[] = [
     {
         component: key('button'),
         displayName: 'Button',
@@ -79,3 +80,6 @@ export const coreDescriptors: ComponentDescriptor[] = [
         ],
     },
 ];
+
+/** The `core` package's descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
+export const coreDescriptors: ComponentDescriptor[] = describeComponents('core', describedCore, coreComponentMetadata);

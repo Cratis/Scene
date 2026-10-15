@@ -3,6 +3,7 @@
 
 export * from './PropertyValueType';
 export * from './PropertyEditorKind';
+export * from './PropertyEditorOptions';
 export * from './PropertyChoice';
 export * from './PropertyConstraints';
 export * from './CollectionItemDescriptor';
@@ -10,6 +11,9 @@ export * from './DesignTimeActionDescriptor';
 export * from './DesignTimeActionPlacement';
 export * from './PackageDesignTimeMetadata';
 export * from './PropertyDescriptor';
+export * from './ComponentCategory';
+export * from './ComponentDesignModeDescriptor';
+export * from './componentIcon';
 export * from './ComponentDescriptor';
 export * from './CollectionOperation';
 export * from './LayoutType';

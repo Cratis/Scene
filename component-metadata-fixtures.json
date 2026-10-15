@@ -1,0 +1,143 @@
+{
+  "description": "Shared component metadata corpus (spec CMP1, PICK2, PICK3, 3.4). It states the rules once as data: which component metadata is a problem, which badge a component gets, which components a picker filter finds and why, and which components 'Frequently used' lists. The TypeScript engine (engine/for_componentMetadata) asserts every case. There is no C# engine twin: component descriptors exist only in the TypeScript model, as the editing diagnostics do.",
+  "validation": [
+    {
+      "name": "a described component with a known category",
+      "descriptors": [{ "component": "Acme:button", "category": "Actions", "properties": [] }],
+      "registered": ["Acme:button"],
+      "expected": []
+    },
+    {
+      "name": "a registered component nobody described",
+      "descriptors": [],
+      "registered": ["Acme:ghost"],
+      "expected": [{ "code": "componentCategoryMissing", "severity": "error", "component": "Acme:ghost" }]
+    },
+    {
+      "name": "a descriptor without a category",
+      "descriptors": [{ "component": "Acme:button", "properties": [] }],
+      "registered": ["Acme:button"],
+      "expected": [{ "code": "componentCategoryMissing", "severity": "error", "component": "Acme:button" }]
+    },
+    {
+      "name": "a blank category",
+      "descriptors": [{ "component": "Acme:button", "category": "  ", "properties": [] }],
+      "expected": [{ "code": "componentCategoryMissing", "severity": "error", "component": "Acme:button" }]
+    },
+    {
+      "name": "a category of the package's own",
+      "descriptors": [{ "component": "Acme:gauge", "category": "Instruments", "properties": [] }],
+      "expected": [{ "code": "componentCategoryUnknown", "severity": "warning", "component": "Acme:gauge" }]
+    },
+    {
+      "name": "a category spelled differently from the shared one",
+      "descriptors": [{ "component": "Acme:table", "category": "data display", "properties": [] }],
+      "expected": [{ "code": "componentCategoryUnknown", "severity": "warning", "component": "Acme:table" }]
+    },
+    {
+      "name": "design mode over a collection property",
+      "descriptors": [{
+        "component": "Acme:tabs", "category": "Navigation",
+        "properties": [{ "path": "tabs", "label": "Tabs", "group": "Content", "valueType": "collection", "item": { "properties": [] } }],
+        "designMode": {
+          "itemsPath": "tabs",
+          "addActions": [{ "id": "add", "label": "Add tab", "collectionPath": "tabs" }],
+          "itemToolbar": [{ "id": "delete", "icon": { "library": "L", "key": "trash" }, "title": "Delete", "availability": "item.editable" }]
+        }
+      }],
+      "expected": []
+    },
+    {
+      "name": "design mode whose items are resolved by the host",
+      "descriptors": [{
+        "component": "Acme:topbar", "category": "Navigation", "properties": [],
+        "designMode": { "addActions": [{ "id": "add", "label": "Add item" }], "itemToolbar": [] }
+      }],
+      "expected": []
+    },
+    {
+      "name": "design mode items path that is not a collection",
+      "descriptors": [{
+        "component": "Acme:tabs", "category": "Navigation",
+        "properties": [{ "path": "title", "label": "Title", "group": "Content", "valueType": "string" }],
+        "designMode": { "itemsPath": "title", "addActions": [], "itemToolbar": [] }
+      }],
+      "expected": [{ "code": "componentDesignModeInvalid", "severity": "error", "component": "Acme:tabs" }]
+    },
+    {
+      "name": "design mode add action to a property that does not exist, and repeated action ids",
+      "descriptors": [{
+        "component": "Acme:tabs", "category": "Navigation", "properties": [],
+        "designMode": {
+          "addActions": [{ "id": "add", "label": "Add", "collectionPath": "tabs" }, { "id": "add", "label": "Add again" }],
+          "itemToolbar": [
+            { "id": "x", "icon": { "library": "L", "key": "x" }, "title": "X" },
+            { "id": "x", "icon": { "library": "L", "key": "x" }, "title": "X again" }
+          ]
+        }
+      }],
+      "expected": [
+        { "code": "componentDesignModeInvalid", "severity": "error", "component": "Acme:tabs" },
+        { "code": "componentDesignModeInvalid", "severity": "error", "component": "Acme:tabs" },
+        { "code": "componentDesignModeInvalid", "severity": "error", "component": "Acme:tabs" }
+      ]
+    },
+    {
+      "name": "a reference editor that does not say what it references",
+      "descriptors": [{
+        "component": "Acme:link", "category": "Navigation",
+        "properties": [
+          { "path": "target", "label": "Target", "group": "Content", "valueType": "string", "editorKind": "reference" },
+          { "path": "owner", "label": "Owner", "group": "Content", "valueType": "string", "editorKind": "reference", "editorOptions": { "reference": { "target": "screen" } } }
+        ]
+      }],
+      "expected": [{ "code": "propertyEditorOptionsInvalid", "severity": "error", "component": "Acme:link", "path": "target" }]
+    },
+    {
+      "name": "editor options that cannot work, however deeply they are nested",
+      "descriptors": [{
+        "component": "Acme:chart", "category": "Data display",
+        "properties": [
+          { "path": "size", "label": "Size", "group": "Look", "valueType": "number", "editorOptions": { "step": 0 } },
+          { "path": "slice", "label": "Slice", "group": "Look", "valueType": "string", "editorKind": "slice", "editorOptions": { "kinds": [] } },
+          {
+            "path": "series", "label": "Series", "group": "Data", "valueType": "collection",
+            "item": { "properties": [{ "path": "weight", "label": "Weight", "group": "Data", "valueType": "number", "editorOptions": { "step": -1, "unit": "%" } }] }
+          }
+        ]
+      }],
+      "expected": [
+        { "code": "propertyEditorOptionsInvalid", "severity": "error", "component": "Acme:chart", "path": "size" },
+        { "code": "propertyEditorOptionsInvalid", "severity": "error", "component": "Acme:chart", "path": "slice" },
+        { "code": "propertyEditorOptionsInvalid", "severity": "error", "component": "Acme:chart", "path": "series[].weight" }
+      ]
+    }
+  ],
+  "badges": [
+    { "name": "explicit badge wins and is capitalised", "component": "Acme:dataTable", "displayName": "Data table", "badge": "tb", "expected": "Tb" },
+    { "name": "two words take their initials", "component": "Acme:cardGrid", "displayName": "Card grid", "expected": "Cg" },
+    { "name": "one word takes its first consonant after the first letter", "component": "Acme:button", "displayName": "Button", "expected": "Bt" },
+    { "name": "one word with only vowels after the first letter takes the second letter", "component": "Acme:io", "displayName": "Ae", "expected": "Ae" },
+    { "name": "a camel-cased bare name is read as words", "component": "Acme:statCard", "expected": "Sc" },
+    { "name": "a single letter", "component": "Acme:x", "displayName": "X", "expected": "X" }
+  ],
+  "queries": [
+    { "name": "an empty filter matches everything", "component": { "component": "A:dataTable", "displayName": "Data table", "category": "Data display", "keywords": ["grid"] }, "query": "  ", "expected": { "matched": true, "ranges": [] } },
+    { "name": "the name matches by substring, case-insensitively, every occurrence", "component": { "component": "A:dataTable", "displayName": "Data table", "category": "Data display", "keywords": ["grid"] }, "query": "TA", "expected": { "matched": true, "via": "name", "ranges": [[2, 4], [5, 7]] } },
+    { "name": "the bare component name is used when there is no display name", "component": { "component": "A:tabs", "category": "Navigation" }, "query": "ta", "expected": { "matched": true, "via": "name", "ranges": [[0, 2]] } },
+    { "name": "the category matches by the start of a word", "component": { "component": "A:topbar", "displayName": "Topbar", "category": "Navigation", "keywords": [] }, "query": "nav", "expected": { "matched": true, "via": "category", "ranges": [] } },
+    { "name": "the category does not match in the middle of a word", "component": { "component": "A:list", "displayName": "List", "category": "Data display", "keywords": [] }, "query": "ta", "expected": { "matched": false, "ranges": [] } },
+    { "name": "the category matches a later word", "component": { "component": "A:list", "displayName": "List", "category": "Data display", "keywords": [] }, "query": "disp", "expected": { "matched": true, "via": "category", "ranges": [] } },
+    { "name": "a keyword brings a component in and is named as the hint", "component": { "component": "A:timeline", "displayName": "Timeline", "category": "Data display", "keywords": ["history", "stable"] }, "query": "ta", "expected": { "matched": true, "via": "keyword", "ranges": [], "keyword": "stable" } },
+    { "name": "the name wins over a keyword that also matches", "component": { "component": "A:tag", "displayName": "Tag input", "category": "Input", "keywords": ["table"] }, "query": "ta", "expected": { "matched": true, "via": "name", "ranges": [[0, 2]] } },
+    { "name": "nothing matches", "component": { "component": "A:button", "displayName": "Button", "category": "Actions", "keywords": ["click"] }, "query": "zzz", "expected": { "matched": false, "ranges": [] } }
+  ],
+  "frequentlyUsed": [
+    { "name": "nothing used", "usage": {}, "expected": [] },
+    { "name": "count descending, then most recent", "usage": { "Button": { "count": 3, "last": 10 }, "DataTable": { "count": 3, "last": 20 }, "Form": { "count": 5, "last": 1 } }, "expected": ["Form", "DataTable", "Button"] },
+    { "name": "never more than six", "usage": { "A": { "count": 1, "last": 1 }, "B": { "count": 2, "last": 1 }, "C": { "count": 3, "last": 1 }, "D": { "count": 4, "last": 1 }, "E": { "count": 5, "last": 1 }, "F": { "count": 6, "last": 1 }, "G": { "count": 7, "last": 1 } }, "expected": ["G", "F", "E", "D", "C", "B"] },
+    { "name": "a component without a positive count is not listed", "usage": { "A": { "count": 0, "last": 5 }, "B": { "count": -2, "last": 5 }, "C": { "count": 1, "last": 5 } }, "expected": ["C"] },
+    { "name": "a full tie falls back to the name", "usage": { "Zed": { "count": 1, "last": 7 }, "Alpha": { "count": 1, "last": 7 } }, "expected": ["Alpha", "Zed"] },
+    { "name": "a smaller limit", "limit": 2, "usage": { "A": { "count": 1, "last": 1 }, "B": { "count": 2, "last": 1 }, "C": { "count": 3, "last": 1 } }, "expected": ["C", "B"] }
+  ]
+}

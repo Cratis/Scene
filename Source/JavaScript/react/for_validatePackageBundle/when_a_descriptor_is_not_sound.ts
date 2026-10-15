@@ -67,3 +67,23 @@ describe('when an object descriptor describes its fields', () => {
         validatePackageBundle(bundleWith([text(object([{ path: 'steps', label: 'Steps', group: 'Data', valueType: PropertyValueType.Collection }]))])).should.have.lengthOf(1);
     });
 });
+
+describe('when a descriptor describes component metadata', () => {
+    const property = { path: 'items', label: 'Items', group: 'Content', valueType: PropertyValueType.Collection, item: { properties: [] } };
+
+    it('should accept a component without a category, so a package written before categories still loads', () => {
+        validatePackageBundle(bundleWith([text([])])).should.be.empty;
+    });
+
+    it('should accept a design mode over a collection property', () => {
+        validatePackageBundle(bundleWith([{ ...text([property]), designMode: { itemsPath: 'items', addActions: [], itemToolbar: [] } }])).should.be.empty;
+    });
+
+    it('should report a design mode whose items are not a collection property', () => {
+        validatePackageBundle(bundleWith([{ ...text([]), designMode: { itemsPath: 'items', addActions: [], itemToolbar: [] } }])).should.have.lengthOf(1);
+    });
+
+    it('should report a reference editor that does not say what it references', () => {
+        validatePackageBundle(bundleWith([text([{ path: 'owner', label: 'Owner', group: 'Content', valueType: PropertyValueType.String, editorKind: 'reference' }])])).should.have.lengthOf(1);
+    });
+});

@@ -90,3 +90,31 @@ A kind can name another package, as in `Other.Package:floorPlanDesigner`. It res
 
 - [Designer patterns from WinForms and ASP.NET](./designer-patterns.md) explains where these extension points come from.
 - [Describing what can be edited](./descriptors.md) covers component and property descriptors.
+
+## Design mode
+
+A component can declare how it is edited directly on the design surface - the "+ Add tab" button, the floating toolbar over a selected item - as data
+in its descriptor's `designMode`. Like `DesignTimeActionDescriptor`, it carries no functions: `availability` and `readOnlyReason` are rule *names* the
+package's design-time bundle interprets.
+
+```ts
+designMode: {
+    itemsPath: 'items',                       // the Collection property whose rows are the items
+    addActions: [{ id: 'addItem', label: 'Add item', icon: componentIcon('plus'), collectionPath: 'items' }],
+    itemToolbar: [
+        { id: 'delete', icon: componentIcon('trash'), title: 'Delete', availability: 'item.editable', readOnlyReason: 'item.inherited' },
+    ],
+}
+```
+
+Items are rows of a `Collection` property, so every edit a designer makes through them is an ordinary `AddCollectionItem`, `RemoveCollectionItem`,
+`ReorderCollectionItems` or `EditCollectionItem` edit: undo, redo and the dirty state need nothing of their own. `itemsPath` and `collectionPath` are
+optional for a component whose items are not a property - the navigation items of a topbar or sidebar, the buttons of a toolbar - because the host resolves
+them. `validateComponentDescriptors` reports a path that is not a `Collection` property and a repeated action id (`componentDesignModeInvalid`).
+
+`navigationDesignMode()` and `toolbarDesignMode()` build the actions of spec DM3 for a topbar, a sidebar, a navigation bar and a toolbar.
+
+### A third-party package
+
+`thirdparty.inspections` declares its checklist with a category (`Forms`), an icon, keywords and a design mode over its `items` collection, using nothing but the
+public packages; its specification loads it through the design-time host and runs the same CMP1 check as the in-repo packages.
