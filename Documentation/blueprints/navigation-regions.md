@@ -132,6 +132,43 @@ system:
 `diagnoseNavigation` runs the same check when its graph carries `structure` and `navigation`. See
 [Navigation diagnostics](navigation-diagnostics.md).
 
+## Rendering the regions: `NavigationRegionView`
+
+`@cratis/scene.react` renders a region's effective items; the same component serves Stage, the Studio preview and generated React,
+so nothing about inheritance or hierarchy is re-implemented in a renderer (spec REN2).
+
+```tsx
+<SceneNavigationHost
+    screens={screens} initialScreen='dashboard.overview' registry={registry}
+    navigationModel={{ structure, navigation, isVisible: item => allowed(item) }}
+    frame={content => <><Topbar /><Sidebar />{content}</>} />
+```
+
+- **Source.** `navigationModel` (the structure and the navigation) is provided to every `NavigationRegionView` below the host
+  (`SceneNavigationModelProvider` when there is no host). The region is `effectiveNavigation(...)` for the module of the screen on the
+  page, so navigating to another module recomputes the items in place - the `nav` node is not remounted. Pass `module` or
+  `application` to pin it.
+- **Hierarchy.** A topbar is flat. A sidebar nests: a parent has an expand/collapse button (`aria-expanded`), and the parents of the active
+  item are expanded (`expand='all'` shows everything for a design layer).
+- **Active state.** An item is active (`aria-current='page'`, `data-active`) when the screen it opens is shown in the slot it renders into:
+  the primary region for `content`, the nested outlet of that name otherwise (`core:outlet`). Items that render into different slots are
+  active at once, and closing a slot's screen clears its item. A topbar item that targets a module is also active on any screen of that module.
+- **Render-into-slot.** Activating an item calls `navigate` with `navigationItemDestination(item)`: the module/feature identity, the screen
+  (by default the qualified feature id, `sales.orders`; `screenFor` overrides it) and the slot as `outlet`. A module target opens its first
+  feature. `navigationDestinations(...)` lists every destination so deep links resolve; the host derives them from `navigationModel`.
+  Outside a host the item announces `cratis.scene.navigate`.
+- **Authorization.** `isVisible(item)` hides an item (and its sub-items); it never disables it.
+- **Read-only hook.** Each item carries `data-origin` and `data-read-only`, and `renderAdornment(item)` lets a host add content (Studio draws the
+  lock of an inherited item); Stage ignores it. The component draws no design chrome.
+- **Keyboard and landmarks.** Each region is a labelled `nav` with one roving tab stop; arrows (left/right in a topbar, up/down in a sidebar),
+  Home and End move between items; in a sidebar right expands and left collapses or goes to the parent.
+- **The default blueprint.** `blueprint.default` `Topbar` and `Sidebar` show the region as the shell menu (the `layout-menu` classes) when a
+  navigation model is in scope and the element has no `menu`/`content` slot of its own (`regionNavigation: false` opts out). The
+  `core:navigationBar` component and the `Navigation` contribution are unchanged.
+
+The specs render both shared corpora through the real navigation host (`react/for_NavigationRegionView`), audit the result with axe-core
+(`blueprint.default/for_templateAccessibility`), and `shell/RegionNavigation.stories.tsx` shows it in Storybook.
+
 ## Existing `Navigation` contributions
 
 The `Navigation` contribution point and the `core:navigation` component are unchanged: legacy and generated

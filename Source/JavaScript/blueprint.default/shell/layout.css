@@ -825,3 +825,64 @@
         padding: 2rem;
     }
 }
+
+/* ---------------------------------------------------------------------------
+ * Navigation regions - the effective topbar / sidebar items of a NavigationRegionView.
+ * The renderer carries no design chrome; state is on data attributes.
+ * ------------------------------------------------------------------------ */
+
+.layout-region-topbar .layout-menu {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.layout-region-topbar .layout-menu-item[data-active='true'] > .layout-menu-link {
+    background: transparent;
+    color: inherit;
+    font-weight: 700;
+    border-radius: var(--layout-radius) var(--layout-radius) 0.5rem 0.5rem;
+    box-shadow: inset 0 -0.2rem 0 var(--layout-primary);
+}
+
+.layout-region-sidebar .layout-menu-item {
+    position: relative;
+}
+
+.layout-region-sidebar .layout-menu-item[data-active-descendant='true'] > .layout-menu-link {
+    font-weight: 600;
+}
+
+.layout-menu-toggle {
+    position: absolute;
+    inset-block-start: 0.35rem;
+    inset-inline-end: 0.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: var(--layout-radius);
+}
+
+.layout-menu-toggle::before {
+    content: '\25B8';
+    display: inline-block;
+    transition: transform var(--layout-transition);
+}
+
+.layout-menu-toggle[aria-expanded='true']::before {
+    transform: rotate(90deg);
+}
+
+.layout-menu-toggle:hover {
+    background: var(--layout-sidebar-hover);
+}
+
+.layout-menu-toggle:focus-visible {
+    outline: none;
+    box-shadow: var(--layout-focus-ring);
+}
