@@ -4,3 +4,5 @@
 export * from './PackageKind';
 export * from './PackageDependency';
 export * from './ScenePackage';
+export * from './BlueprintScreen';
+export * from './BlueprintMetadata';

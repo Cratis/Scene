@@ -58,5 +58,21 @@ jobs:
       - name: Verify packed packages hold no specifications
         run: yarn verify-packages
 
+      # Every blueprint package must hold to the definition of done (spec Part B 6): verifyBlueprintPackage runs inside each package's own
+      # specification, and this checks what a specification cannot see - the real archive, and that blueprintCatalog.json is current.
+      - name: Verify blueprint packages
+        run: yarn verify-blueprints
+
+      # The generator all domain blueprints start from must keep producing a package that is done, without edits.
+      - name: Scaffold a blueprint and verify it
+        run: |
+          node ./new-blueprint.js ci-scaffold "CI scaffold" "Proves the blueprint scaffold produces a package that is done."
+          yarn
+          yarn workspace @cratis/scene.blueprint.ci-scaffold build
+          yarn workspace @cratis/scene.blueprint.ci-scaffold lint
+          UPDATE_BLUEPRINT_CATALOG=1 yarn workspace @cratis/scene.blueprint.ci-scaffold test
+          node ./verify-blueprints.js --write
+          grep -q '"@cratis/scene.blueprint.ci-scaffold"' blueprintCatalog.json
+
       - name: Build Storybook
         run: yarn build-storybook

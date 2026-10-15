@@ -5,6 +5,7 @@ import { PackageDesignTimeMetadata } from '../descriptors';
 import { IconLibrary } from '../icons';
 import { PackageDependency } from './PackageDependency';
 import { SampleDataPackReference } from '../sampleData';
+import { BlueprintMetadata } from './BlueprintMetadata';
 import { PackageKind } from './PackageKind';
 
 /**
@@ -109,6 +110,13 @@ export interface ScenePackage {
      * Stage production build never includes or resolves them.
      */
     sampleData?: SampleDataPackReference[];
+
+    /**
+     * What a domain blueprint declares about itself: its domain, gallery description and thumbnail, and its ready-to-use
+     * screen set. Present for a domain {@link PackageKind.Blueprint}; a blueprint that only provides foundation layouts
+     * and templates has none.
+     */
+    blueprint?: BlueprintMetadata;
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -131,4 +139,5 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'assets',
     'runtimeSingletons',
     'sampleData',
+    'blueprint',
 ];

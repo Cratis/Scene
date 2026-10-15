@@ -242,7 +242,8 @@
       "designTime",
       "assets",
       "runtimeSingletons",
-      "sampleData"
+      "sampleData",
+      "blueprint"
     ],
     "IconReference": [
       "library",
@@ -310,7 +311,8 @@
       "attribution",
       "license",
       "licenseUrl",
-      "sliceKinds"
+      "sliceKinds",
+      "thumbnail"
     ],
     "GridLength": [
       "value",
@@ -617,6 +619,22 @@
     ],
     "Toolbar": [
       "buttons"
+    ],
+    "BlueprintScreen": [
+      "name",
+      "title",
+      "description",
+      "template",
+      "parent",
+      "order",
+      "icon"
+    ],
+    "BlueprintMetadata": [
+      "domain",
+      "description",
+      "thumbnail",
+      "screenSet",
+      "defaultSampleData"
     ]
   },
   "enums": {

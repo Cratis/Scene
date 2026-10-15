@@ -60,6 +60,18 @@ export function isValidVersion(version: string | undefined): boolean {
     return version !== undefined && version.trim().length > 0 && parseVersion(version) !== undefined;
 }
 
+/**
+ * Compares two versions as `major.minor.patch`, pre-release and build suffixes ignored: negative when the first is older, zero when equal,
+ * positive when it is newer. A value that is not a version compares as older than every version, and equal to another that is not.
+ */
+export function compareVersions(left: string, right: string): number {
+    const first = parseVersion(left);
+    const second = parseVersion(right);
+    if (!first) return second ? -1 : 0;
+    if (!second) return 1;
+    return compare(first, second);
+}
+
 type Version = [number, number, number];
 
 function splitRange(range: string): [string, string] {
