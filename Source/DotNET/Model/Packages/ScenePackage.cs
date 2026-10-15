@@ -37,6 +37,7 @@ namespace Cratis.Scene.Model.Packages;
 /// <param name="DesignTime">Optional design-time extensions carried as metadata; runtime hosts do not load them unless approved.</param>
 /// <param name="Assets">Asset URLs or package-relative asset entries required by a web renderer.</param>
 /// <param name="RuntimeSingletons">Runtime singleton dependency names that must not be duplicated across approved bundles.</param>
+/// <param name="SampleData">The sample-data packs this package ships (<c language="csharp">sampleData/*.json</c>). Design and preview time only: a Stage production build never includes or resolves them.</param>
 public record ScenePackage(
     string Name,
     string Version,
@@ -55,4 +56,5 @@ public record ScenePackage(
     Icons.IconLibrary? IconLibrary = null,
     PackageDesignTimeMetadata? DesignTime = null,
     IReadOnlyList<string>? Assets = null,
-    IReadOnlyList<string>? RuntimeSingletons = null);
+    IReadOnlyList<string>? RuntimeSingletons = null,
+    IReadOnlyList<SampleData.SampleDataPackReference>? SampleData = null);

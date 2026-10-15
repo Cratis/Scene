@@ -205,7 +205,8 @@
       "packages",
       "defaultSizeClass",
       "layout",
-      "theme"
+      "theme",
+      "sampleData"
     ],
     "Theme": [
       "name",
@@ -240,7 +241,8 @@
       "iconLibrary",
       "designTime",
       "assets",
-      "runtimeSingletons"
+      "runtimeSingletons",
+      "sampleData"
     ],
     "IconReference": [
       "library",
@@ -502,6 +504,49 @@
       "author",
       "url",
       "notice"
+    ],
+    "SampleShapeField": [
+      "name",
+      "type",
+      "kind",
+      "nullable",
+      "enumValues",
+      "min",
+      "max"
+    ],
+    "SampleShape": [
+      "name",
+      "fields"
+    ],
+    "SampleDataSet": [
+      "shape",
+      "rows"
+    ],
+    "SampleDataPack": [
+      "id",
+      "title",
+      "locale",
+      "owner",
+      "sets"
+    ],
+    "SampleDataPackReference": [
+      "id",
+      "title",
+      "locale",
+      "path"
+    ],
+    "SampleDataMapping": [
+      "shape",
+      "readModel"
+    ],
+    "SampleDataBinding": [
+      "target",
+      "pack"
+    ],
+    "SampleDataSelection": [
+      "activePack",
+      "mappings",
+      "bindings"
     ]
   },
   "enums": {
@@ -637,6 +682,21 @@
       "Pixels",
       "Percent",
       "Auto"
+    ],
+    "SampleFieldKind": [
+      "Id",
+      "Name",
+      "Company",
+      "Email",
+      "Phone",
+      "City",
+      "Text",
+      "WholeNumber",
+      "Amount",
+      "Boolean",
+      "Date",
+      "DateTime",
+      "Enum"
     ]
   }
 }

@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { SampleDataSelection } from '../sampleData';
 import { TargetSizeClass } from '../sizeClasses';
 
 /**
@@ -46,6 +47,14 @@ export interface UiProfile {
      * meaningful relative to a set of packages, which is why it is chosen here rather than by a screen.
      */
     theme?: string;
+
+    /**
+     * Which sample data the application previews with at design and preview time: the active pack, chosen
+     * once here for the whole application (own or from a blueprint), plus the rare shape-to-read-model
+     * mappings and per-read-model pack bindings. Never stated by a screen, slice or component, and never
+     * part of a production build. Absent selects the blueprint's default pack, then generated data.
+     */
+    sampleData?: SampleDataSelection;
 }
 
 export const UiProfilePropertyNames: (keyof UiProfile)[] = [
@@ -55,4 +64,5 @@ export const UiProfilePropertyNames: (keyof UiProfile)[] = [
     'defaultSizeClass',
     'layout',
     'theme',
+    'sampleData',
 ];

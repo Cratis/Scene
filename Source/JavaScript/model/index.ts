@@ -10,6 +10,7 @@ export * from './contributionPoints';
 export * from './profiles';
 export * from './icons';
 export * from './packages';
+export * from './sampleData';
 export * from './interactions';
 export * from './screens';
 export * from './starters';
