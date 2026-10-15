@@ -24,7 +24,7 @@ const bundles: ScenePackageBundle[] = [
         components: {},
         screenTemplates: [
             { name: 'Orders', slots: [], displayName: 'Orders', metadata: { ...provenance, type: 'List', category: 'Sales' } },
-            { name: 'Unlicensed', slots: [], metadata: { compatibility: provenance.compatibility, attribution: provenance.attribution } },
+            { name: 'Unlicensed', slots: [], metadata: { category: 'Sales', compatibility: provenance.compatibility, attribution: provenance.attribution } },
         ],
     },
 ];
