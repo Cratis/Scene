@@ -6,6 +6,7 @@ import { componentRegistryKey, valueOutputProperty } from '@cratis/scene.react';
 import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
 import { ActivityKind } from './activityModel';
+import { ApprovalState } from './approvalModel';
 import { ChartKind } from './chartGeometry';
 import { ComponentState } from './ComponentState';
 import { FilterFieldType } from './filterModel';
@@ -277,6 +278,79 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             rule('actionPermission', 'Upload permission', 'Whether files can be chosen or dropped, refused with a reason, or the control is hidden.'),
             valueOutputProperty(PropertyValueType.Json, 'The files chosen - name, size, type and status - published as they change.'),
             ...standardStateProperties.filter(property => property.path !== 'actionPermission'),
+        ],
+    },
+    {
+        component: key(ComponentName.ApprovalChainStepper),
+        displayName: 'Approval chain',
+        description: 'The steps a request goes through, who decides each and where it stands. A rejection stops the chain; the first undecided step is the current one.',
+        properties: [
+            {
+                ...list('steps', 'Steps', 'Data', 'Step', [
+                    text('label', 'Step', 'Content', undefined, { constraints: { required: true } }),
+                    text('approver', 'Approver', 'Data'),
+                    choice('state', 'State', 'Data', {
+                        [ApprovalState.Pending]: 'Pending', [ApprovalState.Current]: 'Awaiting decision', [ApprovalState.Approved]: 'Approved', [ApprovalState.Rejected]: 'Rejected', [ApprovalState.Skipped]: 'Skipped',
+                    }, ApprovalState.Pending),
+                    text('at', 'Decided at', 'Data', 'An ISO 8601 date and time.'),
+                    text('comment', 'Comment', 'Data'),
+                ], 'The approvers in order.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('orientation', 'Orientation', 'Appearance', { horizontal: 'Horizontal', vertical: 'Vertical' }, 'horizontal', 'A phone always reads vertically.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.OrgTree),
+        displayName: 'Org tree',
+        description: 'An organization as an expandable tree built from rows of who reports to whom. Publishes the selected id as the value output.',
+        properties: [
+            {
+                ...list('nodes', 'People', 'Data', 'Person', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
+                    text('label', 'Name', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
+                    text('title', 'Title', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
+                    text('parentId', 'Reports to', 'Data', 'The id of the person above; empty for the top.', { editorKind: PropertyEditorKind.Field }),
+                ], 'One row per person or unit.'),
+                acceptedBindingKinds: bindable,
+            },
+            number('expandedDepth', 'Levels open at first', 'Appearance', undefined, { default: 2, constraints: { minimum: 1, integer: true } }),
+            text('selected', 'Selected', 'Data', 'The id of the selected node; bind it to start from one.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the selected node, published as the user selects.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.PermissionMatrix),
+        displayName: 'Permission matrix',
+        description: 'Roles across, permissions down, a checkbox where they meet. Publishes the grants as the value output.',
+        properties: [
+            {
+                ...list('roles', 'Roles', 'Data', 'Role', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('label', 'Name', 'Data'),
+                ], 'The columns.'),
+                acceptedBindingKinds: bindable,
+            },
+            {
+                ...list('permissions', 'Permissions', 'Data', 'Permission', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('label', 'Name', 'Data'),
+                    text('group', 'Group', 'Data', 'A heading the permission is listed under.'),
+                ], 'The rows.'),
+                acceptedBindingKinds: bindable,
+            },
+            {
+                ...list('grants', 'Grants', 'Data', 'Grant', [
+                    text('role', 'Role', 'Data', 'The id of a role.', { constraints: { required: true } }),
+                    text('permission', 'Permission', 'Data', 'The id of a permission.', { constraints: { required: true } }),
+                ], 'What each role holds.'),
+                acceptedBindingKinds: bindable,
+            },
+            rule('editPermission', 'Edit permission', 'Enabled lets the user change grants; otherwise the matrix is read-only.'),
+            valueOutputProperty(PropertyValueType.Json, 'The grants as the user has changed them: rows of role and permission, published as they change.'),
+            ...standardStateProperties,
         ],
     },
 ];

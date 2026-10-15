@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { ActivityFeed, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
+import { ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -61,4 +61,7 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.ActivityFeed)]: ActivityFeed,
     [componentRegistryKey(defaultBlueprintName, ComponentName.AvatarStack)]: AvatarStack,
     [componentRegistryKey(defaultBlueprintName, ComponentName.FileUploader)]: FileUploader,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.ApprovalChainStepper)]: ApprovalChainStepper,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.OrgTree)]: OrgTree,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.PermissionMatrix)]: PermissionMatrix,
 };

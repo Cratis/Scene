@@ -78,6 +78,36 @@ export const foundationSamples: Record<string, FoundationSample> = {
         properties: { accept: '.pdf, image/*', maxSizeMb: 10, multiple: true },
         data: [], stateful: true,
     },
+    [ComponentName.ApprovalChainStepper]: {
+        properties: {
+            locale: 'en-US',
+            steps: [
+                { label: 'Team lead', approver: 'Grace Hopper', state: 'approved', at: '2026-03-09T10:00:00Z', comment: 'Looks fine.' },
+                { label: 'Finance', approver: 'Linus Torvalds', state: 'current' },
+                { label: 'Director', approver: 'Ada Lovelace', state: 'pending' },
+            ],
+        },
+        data: ['Grace Hopper', 'Looks fine.'], stateful: true,
+    },
+    [ComponentName.OrgTree]: {
+        properties: {
+            nodes: [
+                { id: 'ceo', label: 'Ada Lovelace', title: 'Chief executive' },
+                { id: 'cto', label: 'Grace Hopper', title: 'Chief technology officer', parentId: 'ceo' },
+                { id: 'cfo', label: 'Linus Torvalds', title: 'Chief financial officer', parentId: 'ceo' },
+                { id: 'dev', label: 'Margaret Hamilton', title: 'Engineering manager', parentId: 'cto' },
+            ],
+        },
+        data: ['Chief technology officer'], stateful: true,
+    },
+    [ComponentName.PermissionMatrix]: {
+        properties: {
+            roles: [{ id: 'admin', label: 'Administrator' }, { id: 'sales', label: 'Sales' }],
+            permissions: [{ id: 'view', label: 'View deals', group: 'Deals' }, { id: 'edit', label: 'Edit deals', group: 'Deals' }, { id: 'users', label: 'Manage users', group: 'Administration' }],
+            grants: [{ role: 'admin', permission: 'view' }, { role: 'admin', permission: 'edit' }, { role: 'admin', permission: 'users' }, { role: 'sales', permission: 'view' }],
+        },
+        data: ['Edit deals', 'Manage users'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */
