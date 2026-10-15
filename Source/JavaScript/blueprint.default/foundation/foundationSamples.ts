@@ -30,6 +30,25 @@ export const foundationSamples: Record<string, FoundationSample> = {
     [ComponentName.StatCard]: { properties: { label: 'Open pipeline', value: 1234567, format: 'currency', currency: 'USD', change: 12.5, comparison: 'last month', locale: 'en-US' }, data: ['$1,234,567'], stateful: true },
     [ComponentName.TrendChip]: { properties: { change: -3.2, goodDirection: 'down', comparison: 'last week', locale: 'en-US' }, data: [], stateful: false },
     [ComponentName.StatusChip]: { properties: { status: 'Awaiting approval', tone: 'warning' }, data: [], stateful: false },
+    [ComponentName.ChartWrapper]: {
+        properties: { title: 'Revenue by quarter', kind: 'line', categories: ['Q1', 'Q2', 'Q3', 'Q4'], series: [{ name: 'Revenue', values: [120, 180, 150, 240] }, { name: 'Target', values: [100, 150, 200, 220] }], locale: 'en-US' },
+        data: ['Revenue by quarter'], stateful: true,
+    },
+    [ComponentName.FilterBuilder]: {
+        properties: {
+            fields: [{ name: 'owner', label: 'Owner', type: 'text' }, { name: 'status', label: 'Status', type: 'select', options: ['Open', 'Won', 'Lost'] }, { name: 'value', label: 'Value', type: 'number' }],
+            filter: { operator: 'and', conditions: [{ field: 'status', operator: 'is', value: 'Open' }, { field: 'owner', operator: 'contains', value: 'Ada' }], groups: [] },
+        },
+        data: ['2 active filters'], stateful: true,
+    },
+    [ComponentName.ColumnChooser]: {
+        properties: { columns: [{ id: 'name', label: 'Name', locked: true }, { id: 'owner', label: 'Owner' }, { id: 'status', label: 'Status', visible: false }] },
+        data: ['3 shown'], stateful: true,
+    },
+    [ComponentName.SavedViewsMenu]: {
+        properties: { views: [{ id: 'all', label: 'All leads' }, { id: 'mine', label: 'Mine' }, { id: 'overdue', label: 'Overdue' }], activeView: 'mine' },
+        data: ['Mine'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */

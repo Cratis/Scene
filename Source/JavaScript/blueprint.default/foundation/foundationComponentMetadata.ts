@@ -14,4 +14,8 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.StatCard]: m('Stat card', ComponentCategory.DataDisplay, 'gauge', ['kpi', 'metric', 'figure', 'number', 'dashboard']),
     [ComponentName.TrendChip]: m('Trend chip', ComponentCategory.DataDisplay, 'trending-up', ['delta', 'change', 'arrow', 'comparison']),
     [ComponentName.StatusChip]: m('Status chip', ComponentCategory.DataDisplay, 'badge-check', ['badge', 'state', 'tag', 'label']),
+    [ComponentName.ChartWrapper]: m('Chart', ComponentCategory.DataDisplay, 'chart-line', ['graph', 'line', 'bar', 'stacked', 'donut', 'pie', 'funnel', 'plot']),
+    [ComponentName.FilterBuilder]: m('Filter builder', ComponentCategory.Input, 'list-filter', ['filter', 'query', 'conditions', 'and or', 'search']),
+    [ComponentName.ColumnChooser]: m('Column chooser', ComponentCategory.Actions, 'columns-3', ['columns', 'fields', 'show hide', 'table']),
+    [ComponentName.SavedViewsMenu]: m('Saved views menu', ComponentCategory.Actions, 'bookmark', ['views', 'presets', 'saved filters']),
 };

@@ -53,7 +53,7 @@ export interface FoundationPage {
     errors: string[];
 
     /** Shows every state of a component and runs axe-core (with colour contrast) over the page; returns the violations as readable lines. */
-    audit(component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean): Promise<string[]>;
+    audit(component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean, openDisclosures?: boolean): Promise<string[]>;
 }
 
 /** Launches Chromium. It fails loudly when Chromium is not installed: a skipped browser specification proves nothing. */
@@ -68,14 +68,16 @@ export async function openFoundationPage(): Promise<FoundationPage> {
     await page.addScriptTag({ content: await bundled() });
     await page.addScriptTag({ content: axe.source });
 
-    const audit = (component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean) =>
-        page.evaluate(async ([name, themeName, props, rtl]) => {
+    const audit = (component: string, theme: 'light' | 'dark', properties?: Record<string, unknown>, rightToLeft?: boolean, openDisclosures = false) =>
+        page.evaluate(async ([name, themeName, props, rtl, open]) => {
             const window_ = window as unknown as { show(...arguments_: unknown[]): void; axe: typeof axe };
             window_.show(name, themeName, props, rtl);
+            if (open) document.querySelectorAll<HTMLElement>('button[aria-expanded="false"]').forEach(button => button.click());
+            await new Promise(resolve => setTimeout(resolve, 0));
             const result = await window_.axe.run(document.body, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] }, rules: { region: { enabled: false } } });
             const overflow = document.documentElement.scrollWidth > window.innerWidth ? [`overflow: the page is ${document.documentElement.scrollWidth}px wide in a ${window.innerWidth}px viewport`] : [];
             return [...overflow, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
-        }, [component, theme, properties, rightToLeft] as const);
+        }, [component, theme, properties, rightToLeft, openDisclosures] as const);
 
     return { browser, context, page, errors, audit };
 }

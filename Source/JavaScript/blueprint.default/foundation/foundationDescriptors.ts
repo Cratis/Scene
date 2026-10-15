@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { BindingSourceKind, ComponentDescriptor, PropertyDescriptor, PropertyEditorKind, PropertyValueType } from '@cratis/scene.model';
-import { componentRegistryKey } from '@cratis/scene.react';
+import { componentRegistryKey, valueOutputProperty } from '@cratis/scene.react';
 import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
+import { ChartKind } from './chartGeometry';
 import { ComponentState } from './ComponentState';
+import { FilterFieldType } from './filterModel';
 import { NumberFormat } from './formatting';
 import { PermissionRule } from './PermissionRule';
 import { StatusTone } from './StatusChip';
@@ -113,6 +115,89 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             choice('tone', 'Tone', 'Appearance', {
                 [StatusTone.Success]: 'Success', [StatusTone.Warning]: 'Warning', [StatusTone.Danger]: 'Danger', [StatusTone.Info]: 'Info', [StatusTone.Neutral]: 'Neutral',
             }, StatusTone.Neutral, 'The tone picks the icon and the theme color.'),
+        ],
+    },
+    {
+        component: key(ComponentName.ChartWrapper),
+        displayName: 'Chart',
+        description: 'One chart - line, bar, stacked, donut or funnel - with a legend and a table of the same data. A donut and a funnel draw the first series.',
+        properties: [
+            text('title', 'Title', 'Content'),
+            choice('kind', 'Chart type', 'Appearance', {
+                [ChartKind.Line]: 'Line', [ChartKind.Bar]: 'Bar', [ChartKind.Stacked]: 'Stacked bar', [ChartKind.Donut]: 'Donut', [ChartKind.Funnel]: 'Funnel',
+            }, ChartKind.Line),
+            { path: 'categories', label: 'Categories', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], acceptedBindingKinds: bindable, description: 'The label of each point, bar or slice, in order.' },
+            {
+                ...list('series', 'Series', 'Data', 'Series', [
+                    text('name', 'Name', 'Data', undefined, { constraints: { required: true } }),
+                    { path: 'values', label: 'Values', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.NumberList, default: [], description: 'One value for each category.' },
+                ], 'What is plotted: a named list of values, one per category.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('format', 'Value format', 'Appearance', formats, NumberFormat.Number),
+            text('currency', 'Currency', 'Appearance', 'The ISO 4217 code when the format is currency.'),
+            ...standardStateProperties.filter(property => property.path !== 'label'),
+        ],
+    },
+    {
+        component: key(ComponentName.FilterBuilder),
+        displayName: 'Filter builder',
+        description: 'Conditions on fields, joined by AND or OR in groups that nest three deep. The filter is published as the value output; the component filters nothing itself.',
+        properties: [
+            {
+                ...list('fields', 'Fields', 'Data', 'Field', [
+                    text('name', 'Name', 'Data', 'The result field the condition tests.', { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
+                    text('label', 'Label', 'Content'),
+                    choice('type', 'Type', 'Data', {
+                        [FilterFieldType.Text]: 'Text', [FilterFieldType.Number]: 'Number', [FilterFieldType.Date]: 'Date', [FilterFieldType.Select]: 'Select', [FilterFieldType.Boolean]: 'Yes / no',
+                    }, FilterFieldType.Text, 'Decides the operators offered.'),
+                    { path: 'options', label: 'Options', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], description: 'The choices of a select field.' },
+                ], 'What can be filtered.'),
+                acceptedBindingKinds: bindable,
+            },
+            { path: 'filter', label: 'Initial filter', group: 'Data', valueType: PropertyValueType.Object, acceptedBindingKinds: bindable, description: 'A filter to start from, usually bound to the active saved view.' },
+            rule('editPermission', 'Edit permission', 'Enabled lets the user change the filter; disabled shows it read-only.'),
+            valueOutputProperty(PropertyValueType.Object, 'The filter as the user has built it: { operator, conditions, groups }, published as it changes.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.ColumnChooser),
+        displayName: 'Column chooser',
+        description: 'Which columns a table shows, and in what order. Publishes the ordered ids of the visible columns as the value output.',
+        properties: [
+            {
+                ...list('columns', 'Columns', 'Data', 'Column', [
+                    text('id', 'Id', 'Data', 'The result field the column shows.', { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
+                    text('label', 'Label', 'Content'),
+                    flag('visible', 'Visible', 'Content', 'Whether the column starts shown.', { default: true }),
+                    flag('locked', 'Always shown', 'Content', 'A locked column cannot be hidden: the identifying column is.'),
+                ], 'What could be shown.'),
+                acceptedBindingKinds: bindable,
+            },
+            valueOutputProperty(PropertyValueType.Json, 'The ids of the visible columns, in order, published as the user changes them.'),
+            ...standardStateProperties,
+        ],
+    },
+    {
+        component: key(ComponentName.SavedViewsMenu),
+        displayName: 'Saved views menu',
+        description: 'A list\'s saved views as a menu button, with the current view as its label. Publishes the chosen view id as the value output.',
+        properties: [
+            {
+                ...list('views', 'Views', 'Data', 'View', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('label', 'Label', 'Content'),
+                    text('description', 'Description', 'Content'),
+                ], 'The choices.'),
+                acceptedBindingKinds: bindable,
+            },
+            text('activeView', 'Active view', 'Data', 'The id of the view in force; bind it to start from a view.'),
+            rule('savePermission', 'Save permission', 'Whether "Save current view" works, refuses with a reason, or is not shown.'),
+            rule('managePermission', 'Manage permission', 'Whether "Manage views" works, refuses with a reason, or is not shown.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the chosen view, published as the user chooses.'),
+            { path: 'action', label: 'Requested action', group: 'Outputs', valueType: PropertyValueType.String, readOnly: true, output: true, description: '"save" or "manage" when the user asks for it; the host acts on it.' },
+            ...standardStateProperties,
         ],
     },
 ];
