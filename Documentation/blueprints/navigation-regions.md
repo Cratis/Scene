@@ -157,6 +157,9 @@ so nothing about inheritance or hierarchy is re-implemented in a renderer (spec 
   (by default the qualified feature id, `sales.orders`; `screenFor` overrides it, and `moduleOf` says which module a screen not named by a qualified id belongs to, so the right sidebar is shown) and the slot as `outlet`. A module target opens its first
   feature. `navigationDestinations(...)` lists every destination so deep links resolve; the host derives them from `navigationModel`.
   Outside a host the item announces `cratis.scene.navigate`.
+- **Activation.** A click goes through `useNavigationActivation` (`@cratis/scene.react`): the host's `NavigationActivationProvider` policy decides
+  whether it navigates or only selects (`navigationMode`, Alt-click) and is told of it (`onActivate`, `onNavigate`). An item with no target is drawn with
+  `data-nav-problem="navTargetMissing"`; Enter on it reports a dead-target activation. See [the designer contract](ui-profile-designer-contract.md#navigation-rules).
 - **Authorization.** `isVisible(item)` hides an item (and its sub-items); it never disables it.
 - **Read-only hook.** Each item carries `data-origin` and `data-read-only`, and `renderAdornment(item)` lets a host add content (Studio draws the
   lock of an inherited item); Stage ignores it. The component draws no design chrome.
