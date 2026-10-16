@@ -20,3 +20,5 @@ export * from './Logo';
 export * from './UserMenu';
 export * from './ThemeSwitcher';
 export * from './LayoutModeSwitcher';
+export * from './locationTrail';
+export * from './useShellLink';
