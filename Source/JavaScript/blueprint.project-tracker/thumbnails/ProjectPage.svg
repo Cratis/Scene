@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="Project page">
+    <rect x="0" y="0" width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#ea580c"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="224" height="30" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="90" y="47" width="46" height="16" rx="3" fill="#d5d9df"/>
+    <rect x="144" y="47" width="46" height="16" rx="3" fill="#d5d9df"/>
+    <rect x="198" y="47" width="46" height="16" rx="3" fill="#d5d9df"/>
+    <rect x="252" y="47" width="46" height="16" rx="3" fill="#d5d9df"/>
+    <rect x="84" y="78" width="140" height="110" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="92" y="90" width="120" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="92" y="107" width="98" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="92" y="124" width="120" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="92" y="141" width="98" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="92" y="158" width="120" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="232" y="78" width="76" height="52" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="232" y="136" width="76" height="52" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+</svg>

@@ -1,0 +1,1347 @@
+{
+    "id": "project-tracker-en",
+    "title": "Projects · English",
+    "locale": "en-GB",
+    "owner": "blueprint:project-tracker",
+    "sets": [
+        {
+            "shape": "ProjectsSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP"
+                }
+            ]
+        },
+        {
+            "shape": "Projects",
+            "rows": [
+                {
+                    "id": "project-1",
+                    "name": "Website relaunch",
+                    "owner": "Amelia Hart",
+                    "progress": 72,
+                    "due": "2026-11-13",
+                    "status": "On track"
+                },
+                {
+                    "id": "project-2",
+                    "name": "Mobile app v2",
+                    "owner": "Oliver Reed",
+                    "progress": 38,
+                    "due": "2026-12-18",
+                    "status": "At risk"
+                },
+                {
+                    "id": "project-3",
+                    "name": "Data warehouse migration",
+                    "owner": "Priya Nair",
+                    "progress": 55,
+                    "due": "2026-10-30",
+                    "status": "On track"
+                },
+                {
+                    "id": "project-4",
+                    "name": "Brand refresh",
+                    "owner": "Daniel Cho",
+                    "progress": 100,
+                    "due": "2026-09-25",
+                    "status": "Done"
+                },
+                {
+                    "id": "project-5",
+                    "name": "Customer portal",
+                    "owner": "Leah Morgan",
+                    "progress": 21,
+                    "due": "2026-10-12",
+                    "status": "Late"
+                },
+                {
+                    "id": "project-6",
+                    "name": "Office move",
+                    "owner": "Amelia Hart",
+                    "progress": 64,
+                    "due": "2026-11-27",
+                    "status": "On track"
+                },
+                {
+                    "id": "project-7",
+                    "name": "Security audit",
+                    "owner": "Priya Nair",
+                    "progress": 83,
+                    "due": "2026-10-23",
+                    "status": "On track"
+                },
+                {
+                    "id": "project-8",
+                    "name": "Partner onboarding",
+                    "owner": "Oliver Reed",
+                    "progress": 12,
+                    "due": "2027-01-29",
+                    "status": "At risk"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Project"
+                },
+                {
+                    "field": "owner",
+                    "header": "Owner"
+                },
+                {
+                    "field": "progress",
+                    "header": "Progress",
+                    "kind": "progress"
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "On track": "success",
+                        "At risk": "warning",
+                        "Late": "danger",
+                        "Done": "info"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ProjectFilterFields",
+            "rows": [
+                {
+                    "name": "owner",
+                    "label": "Owner",
+                    "type": "select",
+                    "options": [
+                        "Amelia Hart",
+                        "Oliver Reed",
+                        "Priya Nair",
+                        "Daniel Cho",
+                        "Leah Morgan"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "On track",
+                        "At risk",
+                        "Late",
+                        "Done"
+                    ]
+                },
+                {
+                    "name": "due",
+                    "label": "Due",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All projects"
+                },
+                {
+                    "id": "mine",
+                    "label": "My projects"
+                },
+                {
+                    "id": "risk",
+                    "label": "At risk or late"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Project",
+                    "locked": true
+                },
+                {
+                    "id": "owner",
+                    "label": "Owner"
+                },
+                {
+                    "id": "progress",
+                    "label": "Progress"
+                },
+                {
+                    "id": "due",
+                    "label": "Due"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectSelection",
+            "rows": []
+        },
+        {
+            "shape": "MyTasks",
+            "rows": [
+                {
+                    "id": "task-1",
+                    "title": "Fix the checkout bug",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "In progress",
+                    "priority": "High",
+                    "due": "2026-10-14",
+                    "dueGroup": "Overdue"
+                },
+                {
+                    "id": "task-14",
+                    "title": "Order the furniture",
+                    "project": "Office move",
+                    "assignee": "Amelia Hart",
+                    "status": "In progress",
+                    "priority": "Medium",
+                    "due": "2026-10-15",
+                    "dueGroup": "Overdue"
+                },
+                {
+                    "id": "task-2",
+                    "title": "Write the launch announcement",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "Medium",
+                    "due": "2026-10-16",
+                    "dueGroup": "Today"
+                },
+                {
+                    "id": "task-3",
+                    "title": "Review the new navigation",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "Review",
+                    "priority": "Medium",
+                    "due": "2026-10-16",
+                    "dueGroup": "Today"
+                },
+                {
+                    "id": "task-10",
+                    "title": "Sign off the schema",
+                    "project": "Data warehouse migration",
+                    "assignee": "Amelia Hart",
+                    "status": "Review",
+                    "priority": "High",
+                    "due": "2026-10-19",
+                    "dueGroup": "This week"
+                },
+                {
+                    "id": "task-6",
+                    "title": "Approve the final copy",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "High",
+                    "due": "2026-10-20",
+                    "dueGroup": "This week"
+                },
+                {
+                    "id": "task-7",
+                    "title": "Plan the pilot group",
+                    "project": "Mobile app v2",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "Medium",
+                    "due": "2026-10-23",
+                    "dueGroup": "This week"
+                },
+                {
+                    "id": "task-19",
+                    "title": "Draft the partner pack",
+                    "project": "Partner onboarding",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "Medium",
+                    "due": "2026-11-30",
+                    "dueGroup": "Later"
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Task"
+                },
+                {
+                    "field": "project",
+                    "header": "Project"
+                },
+                {
+                    "field": "priority",
+                    "header": "Priority",
+                    "kind": "status",
+                    "tones": {
+                        "High": "danger",
+                        "Medium": "warning",
+                        "Low": "neutral"
+                    }
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "To do": "neutral",
+                        "In progress": "info",
+                        "Review": "warning",
+                        "Done": "success"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskFilterFields",
+            "rows": [
+                {
+                    "name": "project",
+                    "label": "Project",
+                    "type": "select",
+                    "options": [
+                        "Website relaunch",
+                        "Mobile app v2",
+                        "Data warehouse migration",
+                        "Brand refresh",
+                        "Customer portal",
+                        "Office move",
+                        "Security audit",
+                        "Partner onboarding"
+                    ]
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "type": "select",
+                    "options": [
+                        "High",
+                        "Medium",
+                        "Low"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "To do",
+                        "In progress",
+                        "Review",
+                        "Done"
+                    ]
+                },
+                {
+                    "name": "due",
+                    "label": "Due",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskViews",
+            "rows": [
+                {
+                    "id": "mine",
+                    "label": "Assigned to me"
+                },
+                {
+                    "id": "all",
+                    "label": "All tasks"
+                },
+                {
+                    "id": "overdue",
+                    "label": "Overdue"
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskColumnChoices",
+            "rows": [
+                {
+                    "id": "title",
+                    "label": "Task",
+                    "locked": true
+                },
+                {
+                    "id": "project",
+                    "label": "Project"
+                },
+                {
+                    "id": "priority",
+                    "label": "Priority"
+                },
+                {
+                    "id": "due",
+                    "label": "Due"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskSelection",
+            "rows": []
+        },
+        {
+            "shape": "ProjectQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New project",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name",
+                            "required": true
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Owner",
+                            "type": "select",
+                            "options": [
+                                "Amelia Hart",
+                                "Oliver Reed",
+                                "Priya Nair",
+                                "Daniel Cho",
+                                "Leah Morgan"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due date",
+                            "type": "date"
+                        },
+                        {
+                            "name": "status",
+                            "label": "Status",
+                            "type": "select",
+                            "options": [
+                                "On track",
+                                "At risk",
+                                "Late",
+                                "Done"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "MyTaskQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New task",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "Title",
+                            "required": true
+                        },
+                        {
+                            "name": "project",
+                            "label": "Project",
+                            "type": "select",
+                            "options": [
+                                "Website relaunch",
+                                "Mobile app v2",
+                                "Data warehouse migration",
+                                "Brand refresh",
+                                "Customer portal",
+                                "Office move",
+                                "Security audit",
+                                "Partner onboarding"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "assignee",
+                            "label": "Assignee",
+                            "type": "select",
+                            "options": [
+                                "Amelia Hart",
+                                "Oliver Reed",
+                                "Priya Nair",
+                                "Daniel Cho",
+                                "Leah Morgan"
+                            ]
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due date",
+                            "type": "date"
+                        },
+                        {
+                            "name": "priority",
+                            "label": "Priority",
+                            "type": "select",
+                            "options": [
+                                "High",
+                                "Medium",
+                                "Low"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ProjectRecord",
+            "rows": [
+                {
+                    "id": "project-1",
+                    "name": "Website relaunch",
+                    "owner": "Amelia Hart",
+                    "progress": 72,
+                    "due": "2026-11-13",
+                    "status": "On track",
+                    "summary": "Relaunch the public website on the new platform",
+                    "goal": "Launch the new website with a faster checkout and the new brand",
+                    "budget": 120000,
+                    "start": "2026-06-01"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectSections",
+            "rows": [
+                {
+                    "id": "project",
+                    "title": "Project details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name"
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Owner"
+                        },
+                        {
+                            "name": "start",
+                            "label": "Start",
+                            "type": "date"
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due",
+                            "type": "date"
+                        },
+                        {
+                            "name": "budget",
+                            "label": "Budget",
+                            "type": "currency"
+                        },
+                        {
+                            "name": "goal",
+                            "label": "Goal",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ProjectSummary",
+            "rows": [
+                {
+                    "status": "On track",
+                    "tone": "success",
+                    "progress": 0.72,
+                    "open": 6,
+                    "daysLeft": 28
+                }
+            ]
+        },
+        {
+            "shape": "ProjectTaskColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Task"
+                },
+                {
+                    "field": "assignee",
+                    "header": "Assignee"
+                },
+                {
+                    "field": "priority",
+                    "header": "Priority",
+                    "kind": "status",
+                    "tones": {
+                        "High": "danger",
+                        "Medium": "warning",
+                        "Low": "neutral"
+                    }
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "To do": "neutral",
+                        "In progress": "info",
+                        "Review": "warning",
+                        "Done": "success"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ProjectTasks",
+            "rows": [
+                {
+                    "id": "task-1",
+                    "title": "Fix the checkout bug",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "In progress",
+                    "priority": "High",
+                    "due": "2026-10-14",
+                    "dueGroup": "Overdue"
+                },
+                {
+                    "id": "task-2",
+                    "title": "Write the launch announcement",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "Medium",
+                    "due": "2026-10-16",
+                    "dueGroup": "Today"
+                },
+                {
+                    "id": "task-3",
+                    "title": "Review the new navigation",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "Review",
+                    "priority": "Medium",
+                    "due": "2026-10-16",
+                    "dueGroup": "Today"
+                },
+                {
+                    "id": "task-4",
+                    "title": "Migrate the blog",
+                    "project": "Website relaunch",
+                    "assignee": "Oliver Reed",
+                    "status": "In progress",
+                    "priority": "Low",
+                    "due": "2026-10-28",
+                    "dueGroup": "Later"
+                },
+                {
+                    "id": "task-5",
+                    "title": "Test on tablets",
+                    "project": "Website relaunch",
+                    "assignee": "Priya Nair",
+                    "status": "To do",
+                    "priority": "Medium",
+                    "due": "2026-10-21",
+                    "dueGroup": "This week"
+                },
+                {
+                    "id": "task-6",
+                    "title": "Approve the final copy",
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "status": "To do",
+                    "priority": "High",
+                    "due": "2026-10-20",
+                    "dueGroup": "This week"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectMemberColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Member"
+                },
+                {
+                    "field": "role",
+                    "header": "Role"
+                },
+                {
+                    "field": "open",
+                    "header": "Open",
+                    "kind": "number"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectMembers",
+            "rows": [
+                {
+                    "id": "m0",
+                    "name": "Amelia Hart",
+                    "role": "Project lead",
+                    "open": 3
+                },
+                {
+                    "id": "m1",
+                    "name": "Oliver Reed",
+                    "role": "Developer",
+                    "open": 1
+                },
+                {
+                    "id": "m2",
+                    "name": "Priya Nair",
+                    "role": "QA",
+                    "open": 1
+                }
+            ]
+        },
+        {
+            "shape": "ProjectActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Amelia Hart",
+                    "action": "moved a task to In progress",
+                    "kind": "status",
+                    "at": "2026-10-15T15:20:00Z",
+                    "body": "Fix the checkout bug"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Oliver Reed",
+                    "action": "commented",
+                    "kind": "comment",
+                    "at": "2026-10-14T09:10:00Z",
+                    "body": "The blog migration is waiting on the new template."
+                },
+                {
+                    "id": "a2",
+                    "actor": "Priya Nair",
+                    "action": "completed a task",
+                    "kind": "change",
+                    "at": "2026-10-13T16:40:00Z",
+                    "body": "Cross-browser pass"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectRecordTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "tasks",
+                    "label": "Tasks"
+                },
+                {
+                    "id": "members",
+                    "label": "Members"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "TaskBoardColumns",
+            "rows": [
+                {
+                    "id": "to-do",
+                    "label": "To do"
+                },
+                {
+                    "id": "in-progress",
+                    "label": "In progress",
+                    "limit": 6
+                },
+                {
+                    "id": "review",
+                    "label": "Review"
+                },
+                {
+                    "id": "done",
+                    "label": "Done"
+                }
+            ]
+        },
+        {
+            "shape": "TaskBoardCards",
+            "rows": [
+                {
+                    "id": "task-1",
+                    "title": "Fix the checkout bug",
+                    "column": "in-progress",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "14 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-2",
+                    "title": "Write the launch announcement",
+                    "column": "to-do",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "16 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-3",
+                    "title": "Review the new navigation",
+                    "column": "review",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "16 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-4",
+                    "title": "Migrate the blog",
+                    "column": "in-progress",
+                    "assignee": "Oliver Reed",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "28 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "task-5",
+                    "title": "Test on tablets",
+                    "column": "to-do",
+                    "assignee": "Priya Nair",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "21 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-6",
+                    "title": "Approve the final copy",
+                    "column": "to-do",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Website relaunch"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "20 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-7",
+                    "title": "Plan the pilot group",
+                    "column": "to-do",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Mobile app v2"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "23 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-8",
+                    "title": "Design the settings screen",
+                    "column": "in-progress",
+                    "assignee": "Daniel Cho",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Mobile app v2"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "22 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-9",
+                    "title": "Set up the beta channel",
+                    "column": "to-do",
+                    "assignee": "Oliver Reed",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Mobile app v2"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "5 Nov"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "task-10",
+                    "title": "Sign off the schema",
+                    "column": "review",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Data warehouse migration"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "19 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-11",
+                    "title": "Load the historical data",
+                    "column": "in-progress",
+                    "assignee": "Priya Nair",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Data warehouse migration"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "24 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-12",
+                    "title": "Retire the old reports",
+                    "column": "to-do",
+                    "assignee": "Leah Morgan",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Data warehouse migration"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "10 Nov"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "task-13",
+                    "title": "Pack the archive room",
+                    "column": "to-do",
+                    "assignee": "Daniel Cho",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Office move"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "20 Nov"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "task-14",
+                    "title": "Order the furniture",
+                    "column": "in-progress",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Office move"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "15 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-15",
+                    "title": "Fix the login redirect",
+                    "column": "in-progress",
+                    "assignee": "Oliver Reed",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Customer portal"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "9 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-16",
+                    "title": "Write the user guide",
+                    "column": "to-do",
+                    "assignee": "Leah Morgan",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Customer portal"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "26 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-17",
+                    "title": "Rotate the API keys",
+                    "column": "done",
+                    "assignee": "Priya Nair",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Security audit"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "8 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-18",
+                    "title": "Patch the staging servers",
+                    "column": "review",
+                    "assignee": "Priya Nair",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Security audit"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "17 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "task-19",
+                    "title": "Draft the partner pack",
+                    "column": "to-do",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Partner onboarding"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "30 Nov"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-20",
+                    "title": "Book the kick-off",
+                    "column": "done",
+                    "assignee": "Amelia Hart",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Partner onboarding"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "12 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "task-21",
+                    "title": "Publish the style guide",
+                    "column": "done",
+                    "assignee": "Leah Morgan",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Brand refresh"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "24 Sep"
+                        }
+                    ],
+                    "badges": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "id": "task-22",
+                    "title": "Archive the old logos",
+                    "column": "done",
+                    "assignee": "Daniel Cho",
+                    "fields": [
+                        {
+                            "label": "Project",
+                            "value": "Brand refresh"
+                        },
+                        {
+                            "label": "Due",
+                            "value": "25 Sep"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "TaskRecord",
+            "rows": [
+                {
+                    "id": "task-1",
+                    "title": "Fix the checkout bug",
+                    "status": "In progress",
+                    "tone": "info",
+                    "people": [
+                        {
+                            "name": "Amelia Hart"
+                        },
+                        {
+                            "name": "Oliver Reed"
+                        }
+                    ],
+                    "project": "Website relaunch",
+                    "assignee": "Amelia Hart",
+                    "priority": "High",
+                    "due": "2026-10-14",
+                    "description": "Orders with a discount code fail at the payment step on some phones."
+                }
+            ]
+        },
+        {
+            "shape": "TaskSections",
+            "rows": [
+                {
+                    "id": "task",
+                    "title": "Task details",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "project",
+                            "label": "Project"
+                        },
+                        {
+                            "name": "assignee",
+                            "label": "Assignee"
+                        },
+                        {
+                            "name": "priority",
+                            "label": "Priority"
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due",
+                            "type": "date"
+                        },
+                        {
+                            "name": "description",
+                            "label": "Description"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "TaskSubtasks",
+            "rows": [
+                {
+                    "title": "Subtasks",
+                    "items": [
+                        {
+                            "id": "s0",
+                            "label": "Reproduce on a phone",
+                            "owner": "Amelia Hart",
+                            "due": "2026-10-13",
+                            "done": true
+                        },
+                        {
+                            "id": "s1",
+                            "label": "Fix the discount rounding",
+                            "owner": "Oliver Reed",
+                            "due": "2026-10-15",
+                            "done": false
+                        },
+                        {
+                            "id": "s2",
+                            "label": "Add a regression test",
+                            "owner": "Priya Nair",
+                            "due": "2026-10-16",
+                            "done": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "TaskActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Oliver Reed",
+                    "action": "commented",
+                    "kind": "comment",
+                    "at": "2026-10-15T08:30:00Z",
+                    "body": "Found it: the discount is rounded after tax."
+                },
+                {
+                    "id": "a1",
+                    "actor": "Amelia Hart",
+                    "action": "changed the status",
+                    "kind": "status",
+                    "at": "2026-10-14T13:00:00Z",
+                    "body": "To do → In progress"
+                }
+            ]
+        },
+        {
+            "shape": "ProjectsFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

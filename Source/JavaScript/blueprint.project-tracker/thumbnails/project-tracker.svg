@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="Project and Task Tracker blueprint">
+    <rect x="0" y="0" width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#ea580c"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="70" height="30" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="160" y="40" width="70" height="30" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="236" y="40" width="70" height="30" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="84" y="78" width="224" height="110" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="94" y="90" width="200" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="94" y="107" width="164" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="94" y="124" width="200" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="94" y="141" width="164" height="6" rx="3" fill="#9aa3b2"/>
+    <rect x="94" y="158" width="200" height="6" rx="3" fill="#9aa3b2"/>
+</svg>
