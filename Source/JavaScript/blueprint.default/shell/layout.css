@@ -168,6 +168,13 @@
     padding: 0.75rem 1.5rem 0;
 }
 
+/* A crumb that leads somewhere reads as a link in the shell's own text colour, so it holds its contrast in every theme and layout mode. */
+.layout-breadcrumb a[data-part='link'] {
+    color: var(--layout-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
 .layout-content {
     position: relative;
     z-index: var(--layout-z-content);
