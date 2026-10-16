@@ -8,6 +8,7 @@ import { FoundationIcon } from './FoundationIcon';
 import { formatText, readFoundationStrings } from './foundationStrings';
 import { descendantCount, expandedToDepth, OrgTreeNode, buildOrgTree, placements, readOrgNodes, visibleNodes } from './orgModel';
 import { FoundationFrame } from './StateFrame';
+import { useUrlState } from './urlState';
 
 /**
  * The `orgTree` component: an organization as an expandable tree of people and units.
@@ -15,7 +16,8 @@ import { FoundationFrame } from './StateFrame';
  * `nodes` are flat rows - `id`, `label`, `title`, `parentId` - as a query returns them; the tree is built from them, so someone whose manager is
  * missing becomes a root and a reporting cycle is cut instead of looping. It follows the ARIA tree pattern: one tab stop, Up and Down move,
  * Right expands or enters, Left collapses or goes to the parent, Home and End jump, Enter or Space selects. Each item says how many reports it
- * has in words. The selected id is published as the `value` output; `expandedDepth` is how many levels are open at first.
+ * has in words. The selected id is published as the `value` output; `expandedDepth` is how many levels are open at first. With `urlKey` the selection is kept in the address
+ * under that parameter, so it survives a refresh and a component reading the same parameter - a list narrowing to the chosen branch - follows it.
  */
 export function OrgTree({ element, interactions, bindingOutputs }: RegisteredComponentProps) {
     const nodes = useMemo(() => readOrgNodes(element.properties.nodes), [element.properties.nodes]);
@@ -23,7 +25,7 @@ export function OrgTree({ element, interactions, bindingOutputs }: RegisteredCom
     const depth = typeof element.properties.expandedDepth === 'number' ? element.properties.expandedDepth : 2;
     const initial = useMemo(() => expandedToDepth(roots, depth), [roots, depth]);
     const [expanded, setExpanded] = useState<Set<string>>(initial);
-    const [selected, setSelected] = useState<string | undefined>(typeof element.properties.selected === 'string' ? element.properties.selected : undefined);
+    const [selected, setSelected] = useUrlState(typeof element.properties.urlKey === 'string' && element.properties.urlKey.length > 0 ? element.properties.urlKey : undefined, typeof element.properties.selected === 'string' ? element.properties.selected : undefined);
     const [focused, setFocused] = useState<string | undefined>(undefined);
     const strings = readFoundationStrings(element);
     const state = readComponentState(element, nodes.length > 0);

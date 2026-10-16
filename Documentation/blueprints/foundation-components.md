@@ -97,6 +97,12 @@ card (initials for a row that has none; the title beside it names the row, so th
 `danger`, `success`) and tints the row - an emphasis that always goes with a status column saying the same in an icon and words, so colour is
 never the only cue (a low-stock item is tinted *and* says "Low stock").
 
+A search box and the list it narrows are separate components that agree through one address parameter: `globalSearch` `urlKey: 'itemsq'` and a
+`dataList` `urlKey: 'items'` share `itemsq`, so typing narrows the list and the search is part of the link. A component that writes a parameter tells
+every other component using it. `orgTree` takes `urlKey` too: the chosen node is kept in the address, so a refresh restores it, and a list whose
+search parameter is the same one narrows to the chosen branch - give the tree nodes ids that are their paths and a row's location starts with its
+branch's id.
+
 ## Boards
 
 `kanbanBoard` shows a count and the over-limit warning in each column header. Name a numeric card field in `totalField` (a deal's `amount`) and the

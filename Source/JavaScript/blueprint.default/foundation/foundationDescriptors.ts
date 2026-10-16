@@ -308,6 +308,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         displayName: 'Org tree',
         description: 'An organization as an expandable tree built from rows of who reports to whom. Publishes the selected id as the value output.',
         properties: [
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the selected node in the address under this parameter, so a refresh restores it and a list using the same parameter follows it.'),
             {
                 ...list('nodes', 'People', 'Data', 'Person', [
                     text('id', 'Id', 'Data', undefined, { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
