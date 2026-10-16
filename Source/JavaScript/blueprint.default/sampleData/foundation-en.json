@@ -907,6 +907,158 @@
           "summary": "Five days from 16 March"
         }
       ]
+    },
+    {
+      "shape": "SettingsRail",
+      "rows": [
+        {
+          "id": "general",
+          "label": "General"
+        },
+        {
+          "id": "notifications",
+          "label": "Notifications"
+        },
+        {
+          "id": "branding",
+          "label": "Branding"
+        }
+      ]
+    },
+    {
+      "shape": "SettingsSections",
+      "rows": [
+        {
+          "id": "general",
+          "title": "General",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "organisation",
+              "label": "Organisation name",
+              "required": true
+            },
+            {
+              "name": "timezone",
+              "label": "Time zone",
+              "type": "select",
+              "options": [
+                "Europe/Oslo",
+                "Europe/London",
+                "America/New_York"
+              ]
+            },
+            {
+              "name": "locale",
+              "label": "Language",
+              "type": "select",
+              "options": [
+                "English",
+                "Norsk"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "notifications",
+          "title": "Notifications",
+          "fields": [
+            {
+              "name": "emailDigest",
+              "label": "Send a daily e-mail digest",
+              "type": "toggle"
+            },
+            {
+              "name": "mentions",
+              "label": "Notify me when I am mentioned",
+              "type": "toggle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "SettingsValues",
+      "rows": [
+        {
+          "organisation": "Northgate Ltd",
+          "timezone": "Europe/Oslo",
+          "locale": "English",
+          "emailDigest": true,
+          "mentions": true
+        }
+      ]
+    },
+    {
+      "shape": "ProfileTabs",
+      "rows": [
+        {
+          "id": "details",
+          "label": "Details"
+        },
+        {
+          "id": "preferences",
+          "label": "Preferences"
+        },
+        {
+          "id": "security",
+          "label": "Security"
+        }
+      ]
+    },
+    {
+      "shape": "ProfileSections",
+      "rows": [
+        {
+          "id": "details",
+          "title": "Details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "role",
+              "label": "Role"
+            },
+            {
+              "name": "email",
+              "label": "E-mail"
+            },
+            {
+              "name": "since",
+              "label": "Started",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "id": "preferences",
+          "title": "Preferences",
+          "fields": [
+            {
+              "name": "emailDigest",
+              "label": "Daily e-mail digest",
+              "type": "toggle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ProfileValues",
+      "rows": [
+        {
+          "name": "Ada Lovelace",
+          "role": "Head of Engineering",
+          "status": "Active",
+          "email": "ada@example.com",
+          "since": "2019-06-01",
+          "emailDigest": true
+        }
+      ]
     }
   ]
 }

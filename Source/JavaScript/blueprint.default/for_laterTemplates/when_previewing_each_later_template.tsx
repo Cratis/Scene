@@ -45,4 +45,28 @@ describe('when previewing each later foundation template', () => {
         preview('CalendarScreen');
         screen.getByRole('heading', { name: /March 2026/ });
     });
+
+    it('should draw the timeline, the inbox and the settings from the pack', () => {
+        preview('TimelineScreen');
+        screen.getAllByText('Design').length.should.be.greaterThan(0);
+        cleanup();
+        preview('InboxScreen');
+        screen.getAllByText('Leave request: Ada Lovelace').length.should.be.greaterThan(0);
+        cleanup();
+        preview('SettingsScreen');
+        screen.getByRole('navigation', { name: 'Settings sections' });
+        screen.getAllByRole('button', { name: /Save/ }).length.should.be.greaterThan(0);
+    });
+
+    it('should offer the report as a file and as figures', () => {
+        preview('ReportViewer');
+        ['Export as CSV', 'Export as PDF', 'Print'].forEach(name => screen.getByRole('button', { name }));
+        screen.getByText('Total value');
+    });
+
+    it('should name the person on the profile and offer its sections as tabs', () => {
+        preview('ProfileScreen');
+        screen.getAllByText('Ada Lovelace').length.should.be.greaterThan(0);
+        screen.getByRole('tab', { name: 'Security' });
+    });
 });

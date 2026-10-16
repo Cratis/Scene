@@ -11,7 +11,7 @@ import { foundationPack, packageRoot, queriesOf } from '../for_foundationTemplat
 
 // Part B 2.12, later additions: each is held to the same definition of done as the first eight foundation templates (Part B 6).
 describe('when checking each later foundation template is done', () => {
-    it('should list the later additions in order', () => laterScreenTemplates.map(template => template.name).should.deep.equal(['CalendarScreen', 'TimelineScreen', 'InboxScreen']));
+    it('should list the later additions in order', () => laterScreenTemplates.map(template => template.name).should.deep.equal(['CalendarScreen', 'TimelineScreen', 'InboxScreen', 'SettingsScreen', 'ProfileScreen', 'ReportViewer']));
 
     it('should declare every one of them in the manifest', () => laterScreenTemplates.filter(template => !defaultBlueprint.manifest.screenTemplates.includes(template.name)).should.deep.equal([]));
 
