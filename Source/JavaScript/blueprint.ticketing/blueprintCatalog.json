@@ -1,0 +1,240 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Ticketing",
+      "version": "1.0.0",
+      "domain": "ticketing",
+      "displayName": "Ticketing / Helpdesk",
+      "description": "A support desk: a dashboard, the ticket queue and its board, ticket pages with quick actions, a public portal form and a knowledge base.",
+      "thumbnail": "thumbnails/ticketing.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "support.dashboard",
+          "title": "Dashboard",
+          "description": "Open and overdue tickets, average response, tickets by priority and by assignee.",
+          "template": "SupportDashboard",
+          "order": 0
+        },
+        {
+          "name": "support.queue",
+          "title": "Queue",
+          "description": "Every ticket, with the saved views Unassigned, Mine and Overdue.",
+          "template": "TicketQueue",
+          "order": 1
+        },
+        {
+          "name": "support.queue.board",
+          "title": "Queue board",
+          "description": "The same tickets as cards in a column for each status.",
+          "template": "TicketBoard",
+          "parent": "support.queue",
+          "order": 0
+        },
+        {
+          "name": "support.queue.ticket",
+          "title": "Ticket",
+          "description": "One ticket: the conversation, its properties and the quick actions.",
+          "template": "TicketPage",
+          "parent": "support.queue"
+        },
+        {
+          "name": "support.queue.new",
+          "title": "New ticket",
+          "description": "Opens a ticket on behalf of a customer.",
+          "template": "TicketCreateForm",
+          "parent": "support.queue"
+        },
+        {
+          "name": "support.queue.portal",
+          "title": "Contact support",
+          "description": "The public form a customer opens a ticket with, outside the application shell.",
+          "template": "TicketPortalForm",
+          "parent": "support.queue"
+        },
+        {
+          "name": "support.mine",
+          "title": "My tickets",
+          "description": "The tickets assigned to me.",
+          "template": "MyTickets",
+          "order": 2
+        },
+        {
+          "name": "support.customers",
+          "title": "Customers",
+          "description": "The people and organisations that write in.",
+          "template": "CustomerList",
+          "order": 3
+        },
+        {
+          "name": "support.knowledge",
+          "title": "Knowledge base",
+          "description": "Articles by category on the left, the chosen article on the right.",
+          "template": "KnowledgeBase",
+          "order": 4
+        }
+      ],
+      "templates": [
+        {
+          "name": "SupportDashboard",
+          "kind": "ScreenTemplate",
+          "displayName": "Support dashboard",
+          "description": "Open and overdue tickets, average first response, tickets by priority and by assignee, and the overdue tickets.",
+          "type": "Dashboard",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/SupportDashboard.svg"
+        },
+        {
+          "name": "TicketQueue",
+          "kind": "ScreenTemplate",
+          "displayName": "Ticket queue",
+          "description": "Every ticket with its priority and status as chips, filtered by status, priority, assignee and age, with the saved views Unassigned, Mine and Overdue.",
+          "type": "List",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketQueue.svg"
+        },
+        {
+          "name": "TicketBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Ticket queue board",
+          "description": "Tickets as cards in a column for each status.",
+          "type": "Board",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketBoard.svg"
+        },
+        {
+          "name": "TicketPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Ticket page",
+          "description": "One ticket: the conversation, its properties in the aside, and the quick actions assign, change status, escalate and merge.",
+          "type": "Detail",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketPage.svg"
+        },
+        {
+          "name": "TicketCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "New ticket",
+          "description": "A form that opens a ticket on behalf of a customer.",
+          "type": "Form",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketCreateForm.svg"
+        },
+        {
+          "name": "TicketPortalForm",
+          "kind": "ScreenTemplate",
+          "displayName": "New ticket (portal)",
+          "description": "The public form a customer opens a ticket with, without application chrome.",
+          "type": "Form",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketPortalForm.svg"
+        },
+        {
+          "name": "MyTickets",
+          "kind": "ScreenTemplate",
+          "displayName": "My tickets",
+          "description": "The tickets assigned to the signed-in agent, with their priority and status as chips and how long each has waited.",
+          "type": "List",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/MyTickets.svg"
+        },
+        {
+          "name": "CustomerList",
+          "kind": "ScreenTemplate",
+          "displayName": "Customers",
+          "description": "The people and organisations that write in, with their plan, how many tickets they have open and when they last wrote.",
+          "type": "List",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/CustomerList.svg"
+        },
+        {
+          "name": "KnowledgeBase",
+          "kind": "ScreenTemplate",
+          "displayName": "Knowledge base",
+          "description": "Categories and articles as a tree with search on the left, the chosen article on the right; a navigation stack on a phone.",
+          "type": "Workspace",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/KnowledgeBase.svg"
+        },
+        {
+          "name": "TicketQuickCreate",
+          "kind": "DialogTemplate",
+          "displayName": "New ticket",
+          "description": "A short form that opens a ticket without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/TicketQuickCreate.svg"
+        },
+        {
+          "name": "CustomerQuickCreate",
+          "kind": "DialogTemplate",
+          "displayName": "New customer",
+          "description": "A short form that adds a customer without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/CustomerQuickCreate.svg"
+        },
+        {
+          "name": "AssignTicket",
+          "kind": "DialogTemplate",
+          "displayName": "Assign ticket",
+          "description": "Assigns a ticket to an agent, with a note they will see.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/AssignTicket.svg"
+        },
+        {
+          "name": "ChangeTicketStatus",
+          "kind": "DialogTemplate",
+          "displayName": "Change status",
+          "description": "Moves a ticket to another status, with a comment.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/ChangeTicketStatus.svg"
+        },
+        {
+          "name": "EscalateTicket",
+          "kind": "DialogTemplate",
+          "displayName": "Escalate ticket",
+          "description": "Raises a ticket to another team or level, with the reason.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/EscalateTicket.svg"
+        },
+        {
+          "name": "MergeTickets",
+          "kind": "DialogTemplate",
+          "displayName": "Merge tickets",
+          "description": "Merges a duplicate ticket into another one, keeping the conversation.",
+          "type": "Dialog",
+          "category": "Business / Ticketing",
+          "thumbnail": "thumbnails/MergeTickets.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "ticketing-helpdesk",
+          "title": "Ticketing · Helpdesk",
+          "locale": "en-GB",
+          "path": "sampleData/ticketing-helpdesk.json",
+          "default": true
+        },
+        {
+          "id": "ticketing-service-desk-de",
+          "title": "Ticketing · Service-Desk",
+          "locale": "de-DE",
+          "path": "sampleData/ticketing-service-desk-de.json",
+          "default": false
+        }
+      ]
+    }
+  ]
+}

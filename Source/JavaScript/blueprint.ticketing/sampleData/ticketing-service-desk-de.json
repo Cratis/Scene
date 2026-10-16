@@ -1,0 +1,1690 @@
+{
+  "id": "ticketing-service-desk-de",
+  "title": "Ticketing · Service-Desk",
+  "locale": "de-DE",
+  "owner": "blueprint:ticketing",
+  "sets": [
+    {
+      "shape": "SupportSettings",
+      "rows": [
+        {
+          "locale": "de-DE"
+        }
+      ]
+    },
+    {
+      "shape": "Tickets",
+      "rows": [
+        {
+          "id": "ticket-1",
+          "reference": "T-1040",
+          "subject": "Anmeldung nach Passwort-Reset nicht möglich",
+          "requester": "Lena Fischer",
+          "organisation": "Nordwind Logistik GmbH",
+          "priority": "Dringend",
+          "status": "Neu",
+          "assignee": "Nicht zugewiesen",
+          "age": "2 Std.",
+          "ageHours": 2,
+          "created": "2026-10-01",
+          "due": "2026-10-10",
+          "channel": "E-Mail",
+          "overdue": false
+        },
+        {
+          "id": "ticket-2",
+          "reference": "T-1041",
+          "subject": "Rechnung zeigt falsche USt-IdNr.",
+          "requester": "Paul Schmitt",
+          "organisation": "Hafen & Söhne",
+          "priority": "Hoch",
+          "status": "Offen",
+          "assignee": "Mia Schuster",
+          "age": "5 Std.",
+          "ageHours": 5,
+          "created": "2026-10-03",
+          "due": "2026-10-13",
+          "channel": "Webformular",
+          "overdue": false
+        },
+        {
+          "id": "ticket-3",
+          "reference": "T-1042",
+          "subject": "Drucker im 2. Stock offline",
+          "requester": "Clara Wagner",
+          "organisation": "Blauvogel Studio",
+          "priority": "Normal",
+          "status": "Offen",
+          "assignee": "Jonas Keller",
+          "age": "26 Std.",
+          "ageHours": 26,
+          "created": "2026-10-05",
+          "due": "2026-10-16",
+          "channel": "Telefon",
+          "overdue": true
+        },
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "CSV-Export läuft in ein Timeout",
+          "requester": "Felix Becker",
+          "organisation": "Zeder & Kiefer",
+          "priority": "Normal",
+          "status": "Wartend",
+          "assignee": "Anna Berger",
+          "age": "2 T.",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-5",
+          "reference": "T-1044",
+          "subject": "SSO leitet immer wieder zur Anmeldung",
+          "requester": "Emma Hoffmann",
+          "organisation": "Altstadt Systeme",
+          "priority": "Hoch",
+          "status": "Neu",
+          "assignee": "Nicht zugewiesen",
+          "age": "1 Std.",
+          "ageHours": 1,
+          "created": "2026-10-09",
+          "due": "2026-10-22",
+          "channel": "E-Mail",
+          "overdue": false
+        },
+        {
+          "id": "ticket-6",
+          "reference": "T-1045",
+          "subject": "Wunsch: Dunkelmodus für das Dashboard",
+          "requester": "Max Schäfer",
+          "organisation": "Rotholz Lebensmittel",
+          "priority": "Niedrig",
+          "status": "Offen",
+          "assignee": "Mia Schuster",
+          "age": "9 Std.",
+          "ageHours": 9,
+          "created": "2026-10-11",
+          "due": "2026-10-25",
+          "channel": "Webformular",
+          "overdue": false
+        },
+        {
+          "id": "ticket-7",
+          "reference": "T-1046",
+          "subject": "Mobile App stürzt beim Anhängen eines Fotos ab",
+          "requester": "Sophie Koch",
+          "organisation": "Falken Energie",
+          "priority": "Normal",
+          "status": "Gelöst",
+          "assignee": "Anna Berger",
+          "age": "3 T.",
+          "ageHours": 72,
+          "created": "2026-10-13",
+          "due": "2026-10-10",
+          "channel": "Telefon",
+          "overdue": false
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Neues Teammitglied lässt sich nicht einladen",
+          "requester": "Jan Richter",
+          "organisation": "Meridian Gesundheit",
+          "priority": "Dringend",
+          "status": "Offen",
+          "assignee": "Anna Berger",
+          "age": "30 Std.",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-9",
+          "reference": "T-1048",
+          "subject": "Änderung der Rechnungsadresse",
+          "requester": "Laura Klein",
+          "organisation": "Nordwind Logistik GmbH",
+          "priority": "Hoch",
+          "status": "Wartend",
+          "assignee": "Lukas Vogel",
+          "age": "14 Std.",
+          "ageHours": 14,
+          "created": "2026-10-03",
+          "due": "2026-10-16",
+          "channel": "E-Mail",
+          "overdue": false
+        },
+        {
+          "id": "ticket-10",
+          "reference": "T-1049",
+          "subject": "Webhook-Zustellungen verzögert",
+          "requester": "Tim Wolf",
+          "organisation": "Hafen & Söhne",
+          "priority": "Normal",
+          "status": "Neu",
+          "assignee": "Anna Berger",
+          "age": "3 Std.",
+          "ageHours": 3,
+          "created": "2026-10-05",
+          "due": "2026-10-19",
+          "channel": "Webformular",
+          "overdue": false
+        },
+        {
+          "id": "ticket-11",
+          "reference": "T-1050",
+          "subject": "Fehlende Audit-Log-Einträge im September",
+          "requester": "Nina Neumann",
+          "organisation": "Blauvogel Studio",
+          "priority": "Niedrig",
+          "status": "Offen",
+          "assignee": "Jonas Keller",
+          "age": "5 T.",
+          "ageHours": 120,
+          "created": "2026-10-07",
+          "due": "2026-10-22",
+          "channel": "Telefon",
+          "overdue": true
+        },
+        {
+          "id": "ticket-12",
+          "reference": "T-1051",
+          "subject": "Zwei-Faktor-Codes kommen verspätet an",
+          "requester": "Tom Braun",
+          "organisation": "Zeder & Kiefer",
+          "priority": "Hoch",
+          "status": "Offen",
+          "assignee": "Anna Berger",
+          "age": "7 Std.",
+          "ageHours": 7,
+          "created": "2026-10-09",
+          "due": "2026-10-25",
+          "channel": "Chat",
+          "overdue": false
+        }
+      ]
+    },
+    {
+      "shape": "MyTickets",
+      "rows": [
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "CSV-Export läuft in ein Timeout",
+          "requester": "Felix Becker",
+          "organisation": "Zeder & Kiefer",
+          "priority": "Normal",
+          "status": "Wartend",
+          "assignee": "Anna Berger",
+          "age": "2 T.",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-7",
+          "reference": "T-1046",
+          "subject": "Mobile App stürzt beim Anhängen eines Fotos ab",
+          "requester": "Sophie Koch",
+          "organisation": "Falken Energie",
+          "priority": "Normal",
+          "status": "Gelöst",
+          "assignee": "Anna Berger",
+          "age": "3 T.",
+          "ageHours": 72,
+          "created": "2026-10-13",
+          "due": "2026-10-10",
+          "channel": "Telefon",
+          "overdue": false
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Neues Teammitglied lässt sich nicht einladen",
+          "requester": "Jan Richter",
+          "organisation": "Meridian Gesundheit",
+          "priority": "Dringend",
+          "status": "Offen",
+          "assignee": "Anna Berger",
+          "age": "30 Std.",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-10",
+          "reference": "T-1049",
+          "subject": "Webhook-Zustellungen verzögert",
+          "requester": "Tim Wolf",
+          "organisation": "Hafen & Söhne",
+          "priority": "Normal",
+          "status": "Neu",
+          "assignee": "Anna Berger",
+          "age": "3 Std.",
+          "ageHours": 3,
+          "created": "2026-10-05",
+          "due": "2026-10-19",
+          "channel": "Webformular",
+          "overdue": false
+        },
+        {
+          "id": "ticket-12",
+          "reference": "T-1051",
+          "subject": "Zwei-Faktor-Codes kommen verspätet an",
+          "requester": "Tom Braun",
+          "organisation": "Zeder & Kiefer",
+          "priority": "Hoch",
+          "status": "Offen",
+          "assignee": "Anna Berger",
+          "age": "7 Std.",
+          "ageHours": 7,
+          "created": "2026-10-09",
+          "due": "2026-10-25",
+          "channel": "Chat",
+          "overdue": false
+        }
+      ]
+    },
+    {
+      "shape": "OverdueTickets",
+      "rows": [
+        {
+          "id": "ticket-3",
+          "reference": "T-1042",
+          "subject": "Drucker im 2. Stock offline",
+          "requester": "Clara Wagner",
+          "organisation": "Blauvogel Studio",
+          "priority": "Normal",
+          "status": "Offen",
+          "assignee": "Jonas Keller",
+          "age": "26 Std.",
+          "ageHours": 26,
+          "created": "2026-10-05",
+          "due": "2026-10-16",
+          "channel": "Telefon",
+          "overdue": true
+        },
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "CSV-Export läuft in ein Timeout",
+          "requester": "Felix Becker",
+          "organisation": "Zeder & Kiefer",
+          "priority": "Normal",
+          "status": "Wartend",
+          "assignee": "Anna Berger",
+          "age": "2 T.",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Neues Teammitglied lässt sich nicht einladen",
+          "requester": "Jan Richter",
+          "organisation": "Meridian Gesundheit",
+          "priority": "Dringend",
+          "status": "Offen",
+          "assignee": "Anna Berger",
+          "age": "30 Std.",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-11",
+          "reference": "T-1050",
+          "subject": "Fehlende Audit-Log-Einträge im September",
+          "requester": "Nina Neumann",
+          "organisation": "Blauvogel Studio",
+          "priority": "Niedrig",
+          "status": "Offen",
+          "assignee": "Jonas Keller",
+          "age": "5 T.",
+          "ageHours": 120,
+          "created": "2026-10-07",
+          "due": "2026-10-22",
+          "channel": "Telefon",
+          "overdue": true
+        }
+      ]
+    },
+    {
+      "shape": "TicketColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "subject",
+          "header": "Betreff"
+        },
+        {
+          "field": "requester",
+          "header": "Anfragender"
+        },
+        {
+          "field": "priority",
+          "header": "Priorität",
+          "kind": "status",
+          "tones": {
+            "Dringend": "danger",
+            "Hoch": "warning",
+            "Normal": "info",
+            "Niedrig": "neutral"
+          }
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Neu": "info",
+            "Offen": "warning",
+            "Wartend": "neutral",
+            "Gelöst": "success"
+          }
+        },
+        {
+          "field": "assignee",
+          "header": "Bearbeiter"
+        },
+        {
+          "field": "age",
+          "header": "Alter"
+        }
+      ]
+    },
+    {
+      "shape": "MyTicketColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "subject",
+          "header": "Betreff"
+        },
+        {
+          "field": "requester",
+          "header": "Anfragender"
+        },
+        {
+          "field": "priority",
+          "header": "Priorität",
+          "kind": "status",
+          "tones": {
+            "Dringend": "danger",
+            "Hoch": "warning",
+            "Normal": "info",
+            "Niedrig": "neutral"
+          }
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Neu": "info",
+            "Offen": "warning",
+            "Wartend": "neutral",
+            "Gelöst": "success"
+          }
+        },
+        {
+          "field": "age",
+          "header": "Alter"
+        }
+      ]
+    },
+    {
+      "shape": "TicketFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Neu",
+            "Offen",
+            "Wartend",
+            "Gelöst"
+          ]
+        },
+        {
+          "name": "priority",
+          "label": "Priorität",
+          "type": "select",
+          "options": [
+            "Dringend",
+            "Hoch",
+            "Normal",
+            "Niedrig"
+          ]
+        },
+        {
+          "name": "assignee",
+          "label": "Bearbeiter",
+          "type": "select",
+          "options": [
+            "Anna Berger",
+            "Lukas Vogel",
+            "Mia Schuster",
+            "Jonas Keller",
+            "Nicht zugewiesen"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Erstellt",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "TicketViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle Tickets"
+        },
+        {
+          "id": "unassigned",
+          "label": "Nicht zugewiesen"
+        },
+        {
+          "id": "mine",
+          "label": "Meine"
+        },
+        {
+          "id": "overdue",
+          "label": "Überfällig"
+        }
+      ]
+    },
+    {
+      "shape": "TicketColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "subject",
+          "label": "Betreff"
+        },
+        {
+          "id": "requester",
+          "label": "Anfragender"
+        },
+        {
+          "id": "priority",
+          "label": "Priorität"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "assignee",
+          "label": "Bearbeiter"
+        },
+        {
+          "id": "age",
+          "label": "Alter"
+        }
+      ]
+    },
+    {
+      "shape": "TicketSelection",
+      "rows": []
+    },
+    {
+      "shape": "Customers",
+      "rows": [
+        {
+          "id": "customer-1",
+          "name": "Lena Fischer",
+          "organisation": "Nordwind Logistik GmbH",
+          "plan": "Business",
+          "openTickets": 2,
+          "lastContact": "2026-10-01",
+          "email": "lena@beispiel.de",
+          "subject": "Lena Fischer"
+        },
+        {
+          "id": "customer-2",
+          "name": "Paul Schmitt",
+          "organisation": "Hafen & Söhne",
+          "plan": "Team",
+          "openTickets": 0,
+          "lastContact": "2026-10-03",
+          "email": "paul@beispiel.de",
+          "subject": "Paul Schmitt"
+        },
+        {
+          "id": "customer-3",
+          "name": "Clara Wagner",
+          "organisation": "Blauvogel Studio",
+          "plan": "Kostenlos",
+          "openTickets": 1,
+          "lastContact": "2026-10-05",
+          "email": "clara@beispiel.de",
+          "subject": "Clara Wagner"
+        },
+        {
+          "id": "customer-4",
+          "name": "Felix Becker",
+          "organisation": "Zeder & Kiefer",
+          "plan": "Enterprise",
+          "openTickets": 3,
+          "lastContact": "2026-10-07",
+          "email": "felix@beispiel.de",
+          "subject": "Felix Becker"
+        },
+        {
+          "id": "customer-5",
+          "name": "Emma Hoffmann",
+          "organisation": "Altstadt Systeme",
+          "plan": "Business",
+          "openTickets": 0,
+          "lastContact": "2026-10-09",
+          "email": "emma@beispiel.de",
+          "subject": "Emma Hoffmann"
+        },
+        {
+          "id": "customer-6",
+          "name": "Max Schäfer",
+          "organisation": "Rotholz Lebensmittel",
+          "plan": "Team",
+          "openTickets": 1,
+          "lastContact": "2026-10-11",
+          "email": "max@beispiel.de",
+          "subject": "Max Schäfer"
+        },
+        {
+          "id": "customer-7",
+          "name": "Sophie Koch",
+          "organisation": "Falken Energie",
+          "plan": "Enterprise",
+          "openTickets": 0,
+          "lastContact": "2026-10-13",
+          "email": "sophie@beispiel.de",
+          "subject": "Sophie Koch"
+        },
+        {
+          "id": "customer-8",
+          "name": "Jan Richter",
+          "organisation": "Meridian Gesundheit",
+          "plan": "Business",
+          "openTickets": 2,
+          "lastContact": "2026-10-15",
+          "email": "jan@beispiel.de",
+          "subject": "Jan Richter"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "organisation",
+          "header": "Organisation"
+        },
+        {
+          "field": "plan",
+          "header": "Tarif"
+        },
+        {
+          "field": "openTickets",
+          "header": "Offene Tickets"
+        },
+        {
+          "field": "lastContact",
+          "header": "Letzter Kontakt",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerFilterFields",
+      "rows": [
+        {
+          "name": "plan",
+          "label": "Tarif",
+          "type": "select",
+          "options": [
+            "Kostenlos",
+            "Team",
+            "Business",
+            "Enterprise"
+          ]
+        },
+        {
+          "name": "lastContact",
+          "label": "Letzter Kontakt",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle Kunden"
+        },
+        {
+          "id": "active",
+          "label": "Mit offenen Tickets"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "organisation",
+          "label": "Organisation"
+        },
+        {
+          "id": "plan",
+          "label": "Tarif"
+        },
+        {
+          "id": "openTickets",
+          "label": "Offene Tickets"
+        },
+        {
+          "id": "lastContact",
+          "label": "Letzter Kontakt"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerSelection",
+      "rows": []
+    },
+    {
+      "shape": "TicketStatuses",
+      "rows": [
+        {
+          "id": "Neu",
+          "label": "Neu"
+        },
+        {
+          "id": "Offen",
+          "label": "Offen",
+          "limit": 6
+        },
+        {
+          "id": "Wartend",
+          "label": "Wartend"
+        },
+        {
+          "id": "Gelöst",
+          "label": "Gelöst"
+        }
+      ]
+    },
+    {
+      "shape": "BoardTickets",
+      "rows": [
+        {
+          "id": "ticket-1",
+          "title": "Anmeldung nach Passwort-Reset nicht möglich",
+          "column": "Neu",
+          "assignee": "Nicht zugewiesen",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Lena Fischer"
+            },
+            {
+              "label": "Alter",
+              "value": "2 Std."
+            }
+          ],
+          "badges": [
+            "Dringend"
+          ]
+        },
+        {
+          "id": "ticket-2",
+          "title": "Rechnung zeigt falsche USt-IdNr.",
+          "column": "Offen",
+          "assignee": "Mia Schuster",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Paul Schmitt"
+            },
+            {
+              "label": "Alter",
+              "value": "5 Std."
+            }
+          ],
+          "badges": [
+            "Hoch"
+          ]
+        },
+        {
+          "id": "ticket-3",
+          "title": "Drucker im 2. Stock offline",
+          "column": "Offen",
+          "assignee": "Jonas Keller",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Clara Wagner"
+            },
+            {
+              "label": "Alter",
+              "value": "26 Std."
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-4",
+          "title": "CSV-Export läuft in ein Timeout",
+          "column": "Wartend",
+          "assignee": "Anna Berger",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Felix Becker"
+            },
+            {
+              "label": "Alter",
+              "value": "2 T."
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-5",
+          "title": "SSO leitet immer wieder zur Anmeldung",
+          "column": "Neu",
+          "assignee": "Nicht zugewiesen",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Emma Hoffmann"
+            },
+            {
+              "label": "Alter",
+              "value": "1 Std."
+            }
+          ],
+          "badges": [
+            "Hoch"
+          ]
+        },
+        {
+          "id": "ticket-6",
+          "title": "Wunsch: Dunkelmodus für das Dashboard",
+          "column": "Offen",
+          "assignee": "Mia Schuster",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Max Schäfer"
+            },
+            {
+              "label": "Alter",
+              "value": "9 Std."
+            }
+          ],
+          "badges": [
+            "Niedrig"
+          ]
+        },
+        {
+          "id": "ticket-7",
+          "title": "Mobile App stürzt beim Anhängen eines Fotos ab",
+          "column": "Gelöst",
+          "assignee": "Anna Berger",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Sophie Koch"
+            },
+            {
+              "label": "Alter",
+              "value": "3 T."
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-8",
+          "title": "Neues Teammitglied lässt sich nicht einladen",
+          "column": "Offen",
+          "assignee": "Anna Berger",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Jan Richter"
+            },
+            {
+              "label": "Alter",
+              "value": "30 Std."
+            }
+          ],
+          "badges": [
+            "Dringend"
+          ]
+        },
+        {
+          "id": "ticket-9",
+          "title": "Änderung der Rechnungsadresse",
+          "column": "Wartend",
+          "assignee": "Lukas Vogel",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Laura Klein"
+            },
+            {
+              "label": "Alter",
+              "value": "14 Std."
+            }
+          ],
+          "badges": [
+            "Hoch"
+          ]
+        },
+        {
+          "id": "ticket-10",
+          "title": "Webhook-Zustellungen verzögert",
+          "column": "Neu",
+          "assignee": "Anna Berger",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Tim Wolf"
+            },
+            {
+              "label": "Alter",
+              "value": "3 Std."
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-11",
+          "title": "Fehlende Audit-Log-Einträge im September",
+          "column": "Offen",
+          "assignee": "Jonas Keller",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Nina Neumann"
+            },
+            {
+              "label": "Alter",
+              "value": "5 T."
+            }
+          ],
+          "badges": [
+            "Niedrig"
+          ]
+        },
+        {
+          "id": "ticket-12",
+          "title": "Zwei-Faktor-Codes kommen verspätet an",
+          "column": "Offen",
+          "assignee": "Anna Berger",
+          "fields": [
+            {
+              "label": "Anfragender",
+              "value": "Tom Braun"
+            },
+            {
+              "label": "Alter",
+              "value": "7 Std."
+            }
+          ],
+          "badges": [
+            "Hoch"
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketRecord",
+      "rows": [
+        {
+          "id": "ticket-2",
+          "reference": "T-1041",
+          "subject": "Rechnung zeigt falsche USt-IdNr.",
+          "requester": "Paul Schmitt",
+          "organisation": "Hafen & Söhne",
+          "priority": "Hoch",
+          "status": "Offen",
+          "assignee": "Mia Schuster",
+          "age": "5 Std.",
+          "ageHours": 5,
+          "created": "2026-10-03",
+          "due": "2026-10-13",
+          "channel": "Webformular",
+          "overdue": false,
+          "description": "<p>Ich habe heute Morgen mein Passwort zurückgesetzt und das neue wird nicht akzeptiert. Ich habe zwei Browser und ein privates Fenster probiert. Damit steht unsere gesamte Buchhaltung.</p>",
+          "team": "Support",
+          "email": "paul@beispiel.de"
+        }
+      ]
+    },
+    {
+      "shape": "TicketSummary",
+      "rows": [
+        {
+          "status": "Offen",
+          "statusTone": "warning",
+          "priority": "Hoch",
+          "priorityTone": "warning",
+          "waitingHours": 5,
+          "people": [
+            {
+              "name": "Mia Schuster"
+            },
+            {
+              "name": "Paul Schmitt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketProperties",
+      "rows": [
+        {
+          "id": "props",
+          "title": "Eigenschaften",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "requester",
+              "label": "Anfragender"
+            },
+            {
+              "name": "email",
+              "label": "E-Mail"
+            },
+            {
+              "name": "organisation",
+              "label": "Organisation"
+            },
+            {
+              "name": "channel",
+              "label": "Kanal"
+            },
+            {
+              "name": "priority",
+              "label": "Priorität"
+            },
+            {
+              "name": "status",
+              "label": "Status"
+            },
+            {
+              "name": "assignee",
+              "label": "Bearbeiter"
+            },
+            {
+              "name": "team",
+              "label": "Team"
+            },
+            {
+              "name": "created",
+              "label": "Erstellt",
+              "type": "date"
+            },
+            {
+              "name": "due",
+              "label": "Fällig",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketDescription",
+      "rows": [
+        {
+          "id": "desc",
+          "title": "Beschreibung",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Betreff"
+            },
+            {
+              "name": "description",
+              "label": "Beschreibung",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketSections",
+      "rows": [
+        {
+          "id": "ticket",
+          "title": "Ticketdetails",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Betreff",
+              "required": true,
+              "span": 2
+            },
+            {
+              "name": "requester",
+              "label": "Anfragender",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "E-Mail",
+              "required": true
+            },
+            {
+              "name": "priority",
+              "label": "Priorität",
+              "type": "select",
+              "options": [
+                "Dringend",
+                "Hoch",
+                "Normal",
+                "Niedrig"
+              ],
+              "required": true
+            },
+            {
+              "name": "channel",
+              "label": "Kanal",
+              "type": "select",
+              "options": [
+                "E-Mail",
+                "Webformular",
+                "Telefon",
+                "Chat"
+              ]
+            },
+            {
+              "name": "assignee",
+              "label": "Bearbeiter",
+              "type": "select",
+              "options": [
+                "Anna Berger",
+                "Lukas Vogel",
+                "Mia Schuster",
+                "Jonas Keller"
+              ]
+            },
+            {
+              "name": "team",
+              "label": "Team",
+              "type": "select",
+              "options": [
+                "Support",
+                "Entwicklung",
+                "Buchhaltung",
+                "Sicherheit"
+              ]
+            },
+            {
+              "name": "description",
+              "label": "Beschreibung",
+              "type": "richText",
+              "span": 2,
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Neues Ticket",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Betreff",
+              "required": true
+            },
+            {
+              "name": "requester",
+              "label": "Anfragender",
+              "required": true
+            },
+            {
+              "name": "priority",
+              "label": "Priorität",
+              "type": "select",
+              "options": [
+                "Dringend",
+                "Hoch",
+                "Normal",
+                "Niedrig"
+              ]
+            },
+            {
+              "name": "assignee",
+              "label": "Bearbeiter",
+              "type": "select",
+              "options": [
+                "Anna Berger",
+                "Lukas Vogel",
+                "Mia Schuster",
+                "Jonas Keller"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketPortalSections",
+      "rows": [
+        {
+          "id": "portal",
+          "title": "Ihre Anfrage",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Ihr Name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "E-Mail",
+              "required": true
+            },
+            {
+              "name": "subject",
+              "label": "Betreff",
+              "required": true
+            },
+            {
+              "name": "description",
+              "label": "Was ist das Problem?",
+              "type": "richText",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CustomerQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Neuer Kunde",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "organisation",
+              "label": "Organisation"
+            },
+            {
+              "name": "email",
+              "label": "E-Mail",
+              "required": true
+            },
+            {
+              "name": "plan",
+              "label": "Tarif",
+              "type": "select",
+              "options": [
+                "Kostenlos",
+                "Team",
+                "Business",
+                "Enterprise"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "AssignTicketSections",
+      "rows": [
+        {
+          "id": "assign",
+          "title": "Ticket zuweisen",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "assignee",
+              "label": "Bearbeiter",
+              "type": "select",
+              "options": [
+                "Anna Berger",
+                "Lukas Vogel",
+                "Mia Schuster",
+                "Jonas Keller"
+              ],
+              "required": true
+            },
+            {
+              "name": "note",
+              "label": "Hinweis für den Bearbeiter",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ChangeStatusSections",
+      "rows": [
+        {
+          "id": "status",
+          "title": "Status ändern",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Neu",
+                "Offen",
+                "Wartend",
+                "Gelöst"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Kommentar",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "EscalateTicketSections",
+      "rows": [
+        {
+          "id": "escalate",
+          "title": "Ticket eskalieren",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "team",
+              "label": "Eskalieren an",
+              "type": "select",
+              "options": [
+                "Support",
+                "Entwicklung",
+                "Buchhaltung",
+                "Sicherheit"
+              ],
+              "required": true
+            },
+            {
+              "name": "reason",
+              "label": "Grund",
+              "type": "richText",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "MergeTicketSections",
+      "rows": [
+        {
+          "id": "merge",
+          "title": "Tickets zusammenführen",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "target",
+              "label": "Zusammenführen mit",
+              "type": "select",
+              "options": [
+                "T-1040",
+                "T-1041",
+                "T-1042",
+                "T-1043",
+                "T-1044",
+                "T-1045"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Kommentar",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "SupportFormErrors",
+      "rows": [
+        {}
+      ]
+    },
+    {
+      "shape": "TicketConversation",
+      "rows": [
+        {
+          "id": "Paul Schmitt-14",
+          "actor": "Paul Schmitt",
+          "action": "schrieb",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Guten Tag, ich habe heute Morgen mein Passwort zurückgesetzt und kann mich seitdem nicht mehr anmelden."
+        },
+        {
+          "id": "Anna Berger-14",
+          "actor": "Anna Berger",
+          "action": "antwortete",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Danke, Lena - ich sehe, dass der Reset durchgegangen ist. Bitte löschen Sie die Cookies der Seite und versuchen Sie es noch einmal; ich beobachte die Logs."
+        },
+        {
+          "id": "System-13",
+          "actor": "System",
+          "action": "setzte das Ticket auf Offen",
+          "kind": "status",
+          "at": "2026-10-13T09:30:00Z"
+        },
+        {
+          "id": "Paul Schmitt-12",
+          "actor": "Paul Schmitt",
+          "action": "schrieb",
+          "kind": "comment",
+          "at": "2026-10-12T09:30:00Z",
+          "body": "Unsere Buchhaltung kann nicht arbeiten, bis das behoben ist."
+        }
+      ]
+    },
+    {
+      "shape": "TicketNextSteps",
+      "rows": [
+        {
+          "title": "Nächste Schritte",
+          "items": [
+            {
+              "id": "s1",
+              "label": "Anmelde-Log zum Reset prüfen",
+              "owner": "Anna Berger",
+              "due": "2026-10-17",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "label": "Dem Kunden antworten",
+              "owner": "Anna Berger",
+              "due": "2026-10-16",
+              "done": true
+            },
+            {
+              "id": "s3",
+              "label": "Entwicklung fragen, ob der Cache geleert wurde",
+              "owner": "Lukas Vogel",
+              "due": "2026-10-20",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketTabs",
+      "rows": [
+        {
+          "id": "conversation",
+          "label": "Unterhaltung"
+        },
+        {
+          "id": "notes",
+          "label": "Interne Notizen",
+          "badge": "2"
+        },
+        {
+          "id": "history",
+          "label": "Verlauf"
+        }
+      ]
+    },
+    {
+      "shape": "SupportKpis",
+      "rows": [
+        {
+          "value": 11,
+          "change": -4.2
+        },
+        {
+          "value": 4,
+          "change": 12.5
+        },
+        {
+          "value": 2.4,
+          "change": -8.1
+        }
+      ]
+    },
+    {
+      "shape": "TicketsByPriority",
+      "rows": [
+        {
+          "categories": [
+            "Dringend",
+            "Hoch",
+            "Normal",
+            "Niedrig"
+          ],
+          "series": [
+            {
+              "name": "Offene Tickets",
+              "values": [
+                6,
+                14,
+                31,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketsByAssignee",
+      "rows": [
+        {
+          "categories": [
+            "Anna Berger",
+            "Lukas Vogel",
+            "Mia Schuster",
+            "Jonas Keller"
+          ],
+          "series": [
+            {
+              "name": "Offene Tickets",
+              "values": [
+                12,
+                9,
+                15,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ArticleTree",
+      "rows": [
+        {
+          "id": "cat-1",
+          "label": "Konten",
+          "title": "2"
+        },
+        {
+          "id": "art-1-1",
+          "label": "Passwort zurücksetzen",
+          "title": "Konten",
+          "parentId": "cat-1"
+        },
+        {
+          "id": "art-1-2",
+          "label": "Zwei-Faktor-Authentifizierung einrichten",
+          "title": "Konten",
+          "parentId": "cat-1"
+        },
+        {
+          "id": "cat-2",
+          "label": "Abrechnung",
+          "title": "2"
+        },
+        {
+          "id": "art-2-1",
+          "label": "Rechnungsadresse ändern",
+          "title": "Abrechnung",
+          "parentId": "cat-2"
+        },
+        {
+          "id": "art-2-2",
+          "label": "Rechnung herunterladen",
+          "title": "Abrechnung",
+          "parentId": "cat-2"
+        },
+        {
+          "id": "cat-3",
+          "label": "Geräte",
+          "title": "1"
+        },
+        {
+          "id": "art-3-1",
+          "label": "Scanner koppeln",
+          "title": "Geräte",
+          "parentId": "cat-3"
+        }
+      ]
+    },
+    {
+      "shape": "ArticleTabs",
+      "rows": [
+        {
+          "id": "article",
+          "label": "Artikel"
+        },
+        {
+          "id": "related",
+          "label": "Verwandt"
+        },
+        {
+          "id": "feedback",
+          "label": "Rückmeldung"
+        }
+      ]
+    },
+    {
+      "shape": "ArticleSections",
+      "rows": [
+        {
+          "id": "article",
+          "title": "Artikel",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "summary",
+              "label": "Zusammenfassung"
+            },
+            {
+              "name": "body",
+              "label": "Artikel",
+              "type": "richText"
+            },
+            {
+              "name": "updated",
+              "label": "Aktualisiert",
+              "type": "date"
+            },
+            {
+              "name": "helpful",
+              "label": "Als hilfreich bewertet",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ArticleRecord",
+      "rows": [
+        {
+          "id": "art-1-1",
+          "title": "Passwort zurücksetzen",
+          "category": "Konten",
+          "summary": "In drei Schritten wieder ins Konto.",
+          "body": "<p>Wählen Sie auf der Anmeldeseite <strong>Passwort vergessen</strong>, geben Sie Ihre Arbeits-E-Mail ein und folgen Sie dem Link. Der Link funktioniert einmal und läuft nach einer Stunde ab.</p>",
+          "updated": "2026-09-10",
+          "helpful": 41
+        }
+      ]
+    }
+  ]
+}

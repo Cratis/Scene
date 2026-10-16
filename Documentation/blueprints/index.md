@@ -67,4 +67,5 @@ screen templates, three dialog templates and two themes.
 - **[Theme tokens](theme-tokens.md)** — the thirteen shared tokens, and every theme's attribution.
 - **[Ship your own blueprint](ship-your-own-blueprint.md)** — when the default is not your look.
 - **[The CRM blueprint](crm-blueprint.md)** — the first domain blueprint: leads, contacts, companies and deals, with navigation and sample data.
+- **[The Ticketing blueprint](ticketing-blueprint.md)** — a support desk: queue, board, ticket pages, a public portal form and a knowledge base.
 - **[The Inventory and Assets blueprint](inventory-blueprint.md)** — items, locations, movements and suppliers for a warehouse, with navigation and sample data.

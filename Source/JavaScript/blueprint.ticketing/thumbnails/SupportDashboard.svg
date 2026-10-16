@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="Support dashboard">
+    <rect width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#4f46e5"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="70" height="34" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="160" y="40" width="70" height="34" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="236" y="40" width="70" height="34" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="84" y="82" width="110" height="60" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="200" y="82" width="108" height="60" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="84" y="150" width="224" height="38" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <circle cx="139" cy="112" r="20" fill="none" stroke="#4f46e5" stroke-width="8"/>
+    <path d="M214 134 L294 134 L284 122 L224 122 L218 108 L290 108" fill="none" stroke="#4f46e5" stroke-width="3"/>
+</svg>

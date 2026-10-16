@@ -1,0 +1,1690 @@
+{
+  "id": "ticketing-helpdesk",
+  "title": "Ticketing · Helpdesk",
+  "locale": "en-GB",
+  "owner": "blueprint:ticketing",
+  "sets": [
+    {
+      "shape": "SupportSettings",
+      "rows": [
+        {
+          "locale": "en-GB"
+        }
+      ]
+    },
+    {
+      "shape": "Tickets",
+      "rows": [
+        {
+          "id": "ticket-1",
+          "reference": "T-1040",
+          "subject": "Cannot sign in after password reset",
+          "requester": "Isla Morgan",
+          "organisation": "Northgate Logistics",
+          "priority": "Urgent",
+          "status": "New",
+          "assignee": "Unassigned",
+          "age": "2 h",
+          "ageHours": 2,
+          "created": "2026-10-01",
+          "due": "2026-10-10",
+          "channel": "Email",
+          "overdue": false
+        },
+        {
+          "id": "ticket-2",
+          "reference": "T-1041",
+          "subject": "Invoice PDF shows the wrong VAT number",
+          "requester": "Noah Bennett",
+          "organisation": "Harbour & Sons",
+          "priority": "High",
+          "status": "Open",
+          "assignee": "Priya Nair",
+          "age": "5 h",
+          "ageHours": 5,
+          "created": "2026-10-03",
+          "due": "2026-10-13",
+          "channel": "Web form",
+          "overdue": false
+        },
+        {
+          "id": "ticket-3",
+          "reference": "T-1042",
+          "subject": "Printer offline on floor 2",
+          "requester": "Freya Collins",
+          "organisation": "Bluebird Studio",
+          "priority": "Normal",
+          "status": "Open",
+          "assignee": "Daniel Cho",
+          "age": "26 h",
+          "ageHours": 26,
+          "created": "2026-10-05",
+          "due": "2026-10-16",
+          "channel": "Phone",
+          "overdue": true
+        },
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "Export to CSV times out",
+          "requester": "Arthur Whitaker",
+          "organisation": "Cedar & Pine",
+          "priority": "Normal",
+          "status": "Pending",
+          "assignee": "Amelia Hart",
+          "age": "2 d",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-5",
+          "reference": "T-1044",
+          "subject": "SSO login loops back to the sign-in page",
+          "requester": "Maya Patel",
+          "organisation": "Aldgate Systems",
+          "priority": "High",
+          "status": "New",
+          "assignee": "Unassigned",
+          "age": "1 h",
+          "ageHours": 1,
+          "created": "2026-10-09",
+          "due": "2026-10-22",
+          "channel": "Email",
+          "overdue": false
+        },
+        {
+          "id": "ticket-6",
+          "reference": "T-1045",
+          "subject": "Request: dark mode for the dashboard",
+          "requester": "Jack Sutton",
+          "organisation": "Redwood Foods",
+          "priority": "Low",
+          "status": "Open",
+          "assignee": "Priya Nair",
+          "age": "9 h",
+          "ageHours": 9,
+          "created": "2026-10-11",
+          "due": "2026-10-25",
+          "channel": "Web form",
+          "overdue": false
+        },
+        {
+          "id": "ticket-7",
+          "reference": "T-1046",
+          "subject": "Mobile app crashes when attaching a photo",
+          "requester": "Elsie Granger",
+          "organisation": "Kestrel Energy",
+          "priority": "Normal",
+          "status": "Resolved",
+          "assignee": "Amelia Hart",
+          "age": "3 d",
+          "ageHours": 72,
+          "created": "2026-10-13",
+          "due": "2026-10-10",
+          "channel": "Phone",
+          "overdue": false
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Cannot invite a new team member",
+          "requester": "Harry Lowe",
+          "organisation": "Meridian Health",
+          "priority": "Urgent",
+          "status": "Open",
+          "assignee": "Amelia Hart",
+          "age": "30 h",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-9",
+          "reference": "T-1048",
+          "subject": "Billing address change",
+          "requester": "Ruby Fletcher",
+          "organisation": "Northgate Logistics",
+          "priority": "High",
+          "status": "Pending",
+          "assignee": "Oliver Reed",
+          "age": "14 h",
+          "ageHours": 14,
+          "created": "2026-10-03",
+          "due": "2026-10-16",
+          "channel": "Email",
+          "overdue": false
+        },
+        {
+          "id": "ticket-10",
+          "reference": "T-1049",
+          "subject": "Webhook deliveries are delayed",
+          "requester": "Leo Barker",
+          "organisation": "Harbour & Sons",
+          "priority": "Normal",
+          "status": "New",
+          "assignee": "Amelia Hart",
+          "age": "3 h",
+          "ageHours": 3,
+          "created": "2026-10-05",
+          "due": "2026-10-19",
+          "channel": "Web form",
+          "overdue": false
+        },
+        {
+          "id": "ticket-11",
+          "reference": "T-1050",
+          "subject": "Missing audit log entries for September",
+          "requester": "Grace Holloway",
+          "organisation": "Bluebird Studio",
+          "priority": "Low",
+          "status": "Open",
+          "assignee": "Daniel Cho",
+          "age": "5 d",
+          "ageHours": 120,
+          "created": "2026-10-07",
+          "due": "2026-10-22",
+          "channel": "Phone",
+          "overdue": true
+        },
+        {
+          "id": "ticket-12",
+          "reference": "T-1051",
+          "subject": "Two-factor codes arrive late",
+          "requester": "Theo Marsh",
+          "organisation": "Cedar & Pine",
+          "priority": "High",
+          "status": "Open",
+          "assignee": "Amelia Hart",
+          "age": "7 h",
+          "ageHours": 7,
+          "created": "2026-10-09",
+          "due": "2026-10-25",
+          "channel": "Chat",
+          "overdue": false
+        }
+      ]
+    },
+    {
+      "shape": "MyTickets",
+      "rows": [
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "Export to CSV times out",
+          "requester": "Arthur Whitaker",
+          "organisation": "Cedar & Pine",
+          "priority": "Normal",
+          "status": "Pending",
+          "assignee": "Amelia Hart",
+          "age": "2 d",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-7",
+          "reference": "T-1046",
+          "subject": "Mobile app crashes when attaching a photo",
+          "requester": "Elsie Granger",
+          "organisation": "Kestrel Energy",
+          "priority": "Normal",
+          "status": "Resolved",
+          "assignee": "Amelia Hart",
+          "age": "3 d",
+          "ageHours": 72,
+          "created": "2026-10-13",
+          "due": "2026-10-10",
+          "channel": "Phone",
+          "overdue": false
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Cannot invite a new team member",
+          "requester": "Harry Lowe",
+          "organisation": "Meridian Health",
+          "priority": "Urgent",
+          "status": "Open",
+          "assignee": "Amelia Hart",
+          "age": "30 h",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-10",
+          "reference": "T-1049",
+          "subject": "Webhook deliveries are delayed",
+          "requester": "Leo Barker",
+          "organisation": "Harbour & Sons",
+          "priority": "Normal",
+          "status": "New",
+          "assignee": "Amelia Hart",
+          "age": "3 h",
+          "ageHours": 3,
+          "created": "2026-10-05",
+          "due": "2026-10-19",
+          "channel": "Web form",
+          "overdue": false
+        },
+        {
+          "id": "ticket-12",
+          "reference": "T-1051",
+          "subject": "Two-factor codes arrive late",
+          "requester": "Theo Marsh",
+          "organisation": "Cedar & Pine",
+          "priority": "High",
+          "status": "Open",
+          "assignee": "Amelia Hart",
+          "age": "7 h",
+          "ageHours": 7,
+          "created": "2026-10-09",
+          "due": "2026-10-25",
+          "channel": "Chat",
+          "overdue": false
+        }
+      ]
+    },
+    {
+      "shape": "OverdueTickets",
+      "rows": [
+        {
+          "id": "ticket-3",
+          "reference": "T-1042",
+          "subject": "Printer offline on floor 2",
+          "requester": "Freya Collins",
+          "organisation": "Bluebird Studio",
+          "priority": "Normal",
+          "status": "Open",
+          "assignee": "Daniel Cho",
+          "age": "26 h",
+          "ageHours": 26,
+          "created": "2026-10-05",
+          "due": "2026-10-16",
+          "channel": "Phone",
+          "overdue": true
+        },
+        {
+          "id": "ticket-4",
+          "reference": "T-1043",
+          "subject": "Export to CSV times out",
+          "requester": "Arthur Whitaker",
+          "organisation": "Cedar & Pine",
+          "priority": "Normal",
+          "status": "Pending",
+          "assignee": "Amelia Hart",
+          "age": "2 d",
+          "ageHours": 48,
+          "created": "2026-10-07",
+          "due": "2026-10-19",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-8",
+          "reference": "T-1047",
+          "subject": "Cannot invite a new team member",
+          "requester": "Harry Lowe",
+          "organisation": "Meridian Health",
+          "priority": "Urgent",
+          "status": "Open",
+          "assignee": "Amelia Hart",
+          "age": "30 h",
+          "ageHours": 30,
+          "created": "2026-10-01",
+          "due": "2026-10-13",
+          "channel": "Chat",
+          "overdue": true
+        },
+        {
+          "id": "ticket-11",
+          "reference": "T-1050",
+          "subject": "Missing audit log entries for September",
+          "requester": "Grace Holloway",
+          "organisation": "Bluebird Studio",
+          "priority": "Low",
+          "status": "Open",
+          "assignee": "Daniel Cho",
+          "age": "5 d",
+          "ageHours": 120,
+          "created": "2026-10-07",
+          "due": "2026-10-22",
+          "channel": "Phone",
+          "overdue": true
+        }
+      ]
+    },
+    {
+      "shape": "TicketColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "subject",
+          "header": "Subject"
+        },
+        {
+          "field": "requester",
+          "header": "Requester"
+        },
+        {
+          "field": "priority",
+          "header": "Priority",
+          "kind": "status",
+          "tones": {
+            "Urgent": "danger",
+            "High": "warning",
+            "Normal": "info",
+            "Low": "neutral"
+          }
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "New": "info",
+            "Open": "warning",
+            "Pending": "neutral",
+            "Resolved": "success"
+          }
+        },
+        {
+          "field": "assignee",
+          "header": "Assignee"
+        },
+        {
+          "field": "age",
+          "header": "Age"
+        }
+      ]
+    },
+    {
+      "shape": "MyTicketColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "subject",
+          "header": "Subject"
+        },
+        {
+          "field": "requester",
+          "header": "Requester"
+        },
+        {
+          "field": "priority",
+          "header": "Priority",
+          "kind": "status",
+          "tones": {
+            "Urgent": "danger",
+            "High": "warning",
+            "Normal": "info",
+            "Low": "neutral"
+          }
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "New": "info",
+            "Open": "warning",
+            "Pending": "neutral",
+            "Resolved": "success"
+          }
+        },
+        {
+          "field": "age",
+          "header": "Age"
+        }
+      ]
+    },
+    {
+      "shape": "TicketFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "New",
+            "Open",
+            "Pending",
+            "Resolved"
+          ]
+        },
+        {
+          "name": "priority",
+          "label": "Priority",
+          "type": "select",
+          "options": [
+            "Urgent",
+            "High",
+            "Normal",
+            "Low"
+          ]
+        },
+        {
+          "name": "assignee",
+          "label": "Assignee",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho",
+            "Unassigned"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Created",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "TicketViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All tickets"
+        },
+        {
+          "id": "unassigned",
+          "label": "Unassigned"
+        },
+        {
+          "id": "mine",
+          "label": "Mine"
+        },
+        {
+          "id": "overdue",
+          "label": "Overdue"
+        }
+      ]
+    },
+    {
+      "shape": "TicketColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "subject",
+          "label": "Subject"
+        },
+        {
+          "id": "requester",
+          "label": "Requester"
+        },
+        {
+          "id": "priority",
+          "label": "Priority"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "assignee",
+          "label": "Assignee"
+        },
+        {
+          "id": "age",
+          "label": "Age"
+        }
+      ]
+    },
+    {
+      "shape": "TicketSelection",
+      "rows": []
+    },
+    {
+      "shape": "Customers",
+      "rows": [
+        {
+          "id": "customer-1",
+          "name": "Isla Morgan",
+          "organisation": "Northgate Logistics",
+          "plan": "Business",
+          "openTickets": 2,
+          "lastContact": "2026-10-01",
+          "email": "isla@example.co.uk",
+          "subject": "Isla Morgan"
+        },
+        {
+          "id": "customer-2",
+          "name": "Noah Bennett",
+          "organisation": "Harbour & Sons",
+          "plan": "Team",
+          "openTickets": 0,
+          "lastContact": "2026-10-03",
+          "email": "noah@example.co.uk",
+          "subject": "Noah Bennett"
+        },
+        {
+          "id": "customer-3",
+          "name": "Freya Collins",
+          "organisation": "Bluebird Studio",
+          "plan": "Free",
+          "openTickets": 1,
+          "lastContact": "2026-10-05",
+          "email": "freya@example.co.uk",
+          "subject": "Freya Collins"
+        },
+        {
+          "id": "customer-4",
+          "name": "Arthur Whitaker",
+          "organisation": "Cedar & Pine",
+          "plan": "Enterprise",
+          "openTickets": 3,
+          "lastContact": "2026-10-07",
+          "email": "arthur@example.co.uk",
+          "subject": "Arthur Whitaker"
+        },
+        {
+          "id": "customer-5",
+          "name": "Maya Patel",
+          "organisation": "Aldgate Systems",
+          "plan": "Business",
+          "openTickets": 0,
+          "lastContact": "2026-10-09",
+          "email": "maya@example.co.uk",
+          "subject": "Maya Patel"
+        },
+        {
+          "id": "customer-6",
+          "name": "Jack Sutton",
+          "organisation": "Redwood Foods",
+          "plan": "Team",
+          "openTickets": 1,
+          "lastContact": "2026-10-11",
+          "email": "jack@example.co.uk",
+          "subject": "Jack Sutton"
+        },
+        {
+          "id": "customer-7",
+          "name": "Elsie Granger",
+          "organisation": "Kestrel Energy",
+          "plan": "Enterprise",
+          "openTickets": 0,
+          "lastContact": "2026-10-13",
+          "email": "elsie@example.co.uk",
+          "subject": "Elsie Granger"
+        },
+        {
+          "id": "customer-8",
+          "name": "Harry Lowe",
+          "organisation": "Meridian Health",
+          "plan": "Business",
+          "openTickets": 2,
+          "lastContact": "2026-10-15",
+          "email": "harry@example.co.uk",
+          "subject": "Harry Lowe"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "organisation",
+          "header": "Organisation"
+        },
+        {
+          "field": "plan",
+          "header": "Plan"
+        },
+        {
+          "field": "openTickets",
+          "header": "Open tickets"
+        },
+        {
+          "field": "lastContact",
+          "header": "Last contact",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerFilterFields",
+      "rows": [
+        {
+          "name": "plan",
+          "label": "Plan",
+          "type": "select",
+          "options": [
+            "Free",
+            "Team",
+            "Business",
+            "Enterprise"
+          ]
+        },
+        {
+          "name": "lastContact",
+          "label": "Last contact",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All customers"
+        },
+        {
+          "id": "active",
+          "label": "With open tickets"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "organisation",
+          "label": "Organisation"
+        },
+        {
+          "id": "plan",
+          "label": "Plan"
+        },
+        {
+          "id": "openTickets",
+          "label": "Open tickets"
+        },
+        {
+          "id": "lastContact",
+          "label": "Last contact"
+        }
+      ]
+    },
+    {
+      "shape": "CustomerSelection",
+      "rows": []
+    },
+    {
+      "shape": "TicketStatuses",
+      "rows": [
+        {
+          "id": "New",
+          "label": "New"
+        },
+        {
+          "id": "Open",
+          "label": "Open",
+          "limit": 6
+        },
+        {
+          "id": "Pending",
+          "label": "Pending"
+        },
+        {
+          "id": "Resolved",
+          "label": "Resolved"
+        }
+      ]
+    },
+    {
+      "shape": "BoardTickets",
+      "rows": [
+        {
+          "id": "ticket-1",
+          "title": "Cannot sign in after password reset",
+          "column": "New",
+          "assignee": "Unassigned",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Isla Morgan"
+            },
+            {
+              "label": "Age",
+              "value": "2 h"
+            }
+          ],
+          "badges": [
+            "Urgent"
+          ]
+        },
+        {
+          "id": "ticket-2",
+          "title": "Invoice PDF shows the wrong VAT number",
+          "column": "Open",
+          "assignee": "Priya Nair",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Noah Bennett"
+            },
+            {
+              "label": "Age",
+              "value": "5 h"
+            }
+          ],
+          "badges": [
+            "High"
+          ]
+        },
+        {
+          "id": "ticket-3",
+          "title": "Printer offline on floor 2",
+          "column": "Open",
+          "assignee": "Daniel Cho",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Freya Collins"
+            },
+            {
+              "label": "Age",
+              "value": "26 h"
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-4",
+          "title": "Export to CSV times out",
+          "column": "Pending",
+          "assignee": "Amelia Hart",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Arthur Whitaker"
+            },
+            {
+              "label": "Age",
+              "value": "2 d"
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-5",
+          "title": "SSO login loops back to the sign-in page",
+          "column": "New",
+          "assignee": "Unassigned",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Maya Patel"
+            },
+            {
+              "label": "Age",
+              "value": "1 h"
+            }
+          ],
+          "badges": [
+            "High"
+          ]
+        },
+        {
+          "id": "ticket-6",
+          "title": "Request: dark mode for the dashboard",
+          "column": "Open",
+          "assignee": "Priya Nair",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Jack Sutton"
+            },
+            {
+              "label": "Age",
+              "value": "9 h"
+            }
+          ],
+          "badges": [
+            "Low"
+          ]
+        },
+        {
+          "id": "ticket-7",
+          "title": "Mobile app crashes when attaching a photo",
+          "column": "Resolved",
+          "assignee": "Amelia Hart",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Elsie Granger"
+            },
+            {
+              "label": "Age",
+              "value": "3 d"
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-8",
+          "title": "Cannot invite a new team member",
+          "column": "Open",
+          "assignee": "Amelia Hart",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Harry Lowe"
+            },
+            {
+              "label": "Age",
+              "value": "30 h"
+            }
+          ],
+          "badges": [
+            "Urgent"
+          ]
+        },
+        {
+          "id": "ticket-9",
+          "title": "Billing address change",
+          "column": "Pending",
+          "assignee": "Oliver Reed",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Ruby Fletcher"
+            },
+            {
+              "label": "Age",
+              "value": "14 h"
+            }
+          ],
+          "badges": [
+            "High"
+          ]
+        },
+        {
+          "id": "ticket-10",
+          "title": "Webhook deliveries are delayed",
+          "column": "New",
+          "assignee": "Amelia Hart",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Leo Barker"
+            },
+            {
+              "label": "Age",
+              "value": "3 h"
+            }
+          ],
+          "badges": [
+            "Normal"
+          ]
+        },
+        {
+          "id": "ticket-11",
+          "title": "Missing audit log entries for September",
+          "column": "Open",
+          "assignee": "Daniel Cho",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Grace Holloway"
+            },
+            {
+              "label": "Age",
+              "value": "5 d"
+            }
+          ],
+          "badges": [
+            "Low"
+          ]
+        },
+        {
+          "id": "ticket-12",
+          "title": "Two-factor codes arrive late",
+          "column": "Open",
+          "assignee": "Amelia Hart",
+          "fields": [
+            {
+              "label": "Requester",
+              "value": "Theo Marsh"
+            },
+            {
+              "label": "Age",
+              "value": "7 h"
+            }
+          ],
+          "badges": [
+            "High"
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketRecord",
+      "rows": [
+        {
+          "id": "ticket-2",
+          "reference": "T-1041",
+          "subject": "Invoice PDF shows the wrong VAT number",
+          "requester": "Noah Bennett",
+          "organisation": "Harbour & Sons",
+          "priority": "High",
+          "status": "Open",
+          "assignee": "Priya Nair",
+          "age": "5 h",
+          "ageHours": 5,
+          "created": "2026-10-03",
+          "due": "2026-10-13",
+          "channel": "Web form",
+          "overdue": false,
+          "description": "<p>I reset my password this morning and the new one is not accepted. I have tried two browsers and a private window. This blocks our whole accounts team.</p>",
+          "team": "Support",
+          "email": "noah@example.co.uk"
+        }
+      ]
+    },
+    {
+      "shape": "TicketSummary",
+      "rows": [
+        {
+          "status": "Open",
+          "statusTone": "warning",
+          "priority": "High",
+          "priorityTone": "warning",
+          "waitingHours": 5,
+          "people": [
+            {
+              "name": "Priya Nair"
+            },
+            {
+              "name": "Noah Bennett"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketProperties",
+      "rows": [
+        {
+          "id": "props",
+          "title": "Properties",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "requester",
+              "label": "Requester"
+            },
+            {
+              "name": "email",
+              "label": "Email"
+            },
+            {
+              "name": "organisation",
+              "label": "Organisation"
+            },
+            {
+              "name": "channel",
+              "label": "Channel"
+            },
+            {
+              "name": "priority",
+              "label": "Priority"
+            },
+            {
+              "name": "status",
+              "label": "Status"
+            },
+            {
+              "name": "assignee",
+              "label": "Assignee"
+            },
+            {
+              "name": "team",
+              "label": "Team"
+            },
+            {
+              "name": "created",
+              "label": "Created",
+              "type": "date"
+            },
+            {
+              "name": "due",
+              "label": "Due",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketDescription",
+      "rows": [
+        {
+          "id": "desc",
+          "title": "Description",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Subject"
+            },
+            {
+              "name": "description",
+              "label": "Description",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketSections",
+      "rows": [
+        {
+          "id": "ticket",
+          "title": "Ticket details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Subject",
+              "required": true,
+              "span": 2
+            },
+            {
+              "name": "requester",
+              "label": "Requester",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "priority",
+              "label": "Priority",
+              "type": "select",
+              "options": [
+                "Urgent",
+                "High",
+                "Normal",
+                "Low"
+              ],
+              "required": true
+            },
+            {
+              "name": "channel",
+              "label": "Channel",
+              "type": "select",
+              "options": [
+                "Email",
+                "Web form",
+                "Phone",
+                "Chat"
+              ]
+            },
+            {
+              "name": "assignee",
+              "label": "Assignee",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "team",
+              "label": "Team",
+              "type": "select",
+              "options": [
+                "Support",
+                "Engineering",
+                "Billing",
+                "Security"
+              ]
+            },
+            {
+              "name": "description",
+              "label": "Description",
+              "type": "richText",
+              "span": 2,
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New ticket",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "subject",
+              "label": "Subject",
+              "required": true
+            },
+            {
+              "name": "requester",
+              "label": "Requester",
+              "required": true
+            },
+            {
+              "name": "priority",
+              "label": "Priority",
+              "type": "select",
+              "options": [
+                "Urgent",
+                "High",
+                "Normal",
+                "Low"
+              ]
+            },
+            {
+              "name": "assignee",
+              "label": "Assignee",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketPortalSections",
+      "rows": [
+        {
+          "id": "portal",
+          "title": "Your request",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Your name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "required": true
+            },
+            {
+              "name": "description",
+              "label": "What is wrong?",
+              "type": "richText",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CustomerQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New customer",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "organisation",
+              "label": "Organisation"
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "plan",
+              "label": "Plan",
+              "type": "select",
+              "options": [
+                "Free",
+                "Team",
+                "Business",
+                "Enterprise"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "AssignTicketSections",
+      "rows": [
+        {
+          "id": "assign",
+          "title": "Assign ticket",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "assignee",
+              "label": "Assignee",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ],
+              "required": true
+            },
+            {
+              "name": "note",
+              "label": "Note for the assignee",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ChangeStatusSections",
+      "rows": [
+        {
+          "id": "status",
+          "title": "Change status",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "New",
+                "Open",
+                "Pending",
+                "Resolved"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Comment",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "EscalateTicketSections",
+      "rows": [
+        {
+          "id": "escalate",
+          "title": "Escalate ticket",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "team",
+              "label": "Escalate to",
+              "type": "select",
+              "options": [
+                "Support",
+                "Engineering",
+                "Billing",
+                "Security"
+              ],
+              "required": true
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "richText",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "MergeTicketSections",
+      "rows": [
+        {
+          "id": "merge",
+          "title": "Merge tickets",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "target",
+              "label": "Merge into",
+              "type": "select",
+              "options": [
+                "T-1040",
+                "T-1041",
+                "T-1042",
+                "T-1043",
+                "T-1044",
+                "T-1045"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Comment",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "SupportFormErrors",
+      "rows": [
+        {}
+      ]
+    },
+    {
+      "shape": "TicketConversation",
+      "rows": [
+        {
+          "id": "Noah Bennett-14",
+          "actor": "Noah Bennett",
+          "action": "wrote",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Hello, I reset my password this morning and now I cannot sign in at all."
+        },
+        {
+          "id": "Amelia Hart-14",
+          "actor": "Amelia Hart",
+          "action": "replied",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Thanks Isla - I can see the reset went through. Please clear cookies for the site and try once more; I am watching the logs."
+        },
+        {
+          "id": "System-13",
+          "actor": "System",
+          "action": "moved the ticket to Open",
+          "kind": "status",
+          "at": "2026-10-13T09:30:00Z"
+        },
+        {
+          "id": "Noah Bennett-12",
+          "actor": "Noah Bennett",
+          "action": "wrote",
+          "kind": "comment",
+          "at": "2026-10-12T09:30:00Z",
+          "body": "Our accounts team cannot work until this is fixed."
+        }
+      ]
+    },
+    {
+      "shape": "TicketNextSteps",
+      "rows": [
+        {
+          "title": "Next steps",
+          "items": [
+            {
+              "id": "s1",
+              "label": "Check the sign-in log for the reset",
+              "owner": "Amelia Hart",
+              "due": "2026-10-17",
+              "done": false
+            },
+            {
+              "id": "s2",
+              "label": "Reply to the customer",
+              "owner": "Amelia Hart",
+              "due": "2026-10-16",
+              "done": true
+            },
+            {
+              "id": "s3",
+              "label": "Ask engineering whether the cache was flushed",
+              "owner": "Oliver Reed",
+              "due": "2026-10-20",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketTabs",
+      "rows": [
+        {
+          "id": "conversation",
+          "label": "Conversation"
+        },
+        {
+          "id": "notes",
+          "label": "Internal notes",
+          "badge": "2"
+        },
+        {
+          "id": "history",
+          "label": "History"
+        }
+      ]
+    },
+    {
+      "shape": "SupportKpis",
+      "rows": [
+        {
+          "value": 11,
+          "change": -4.2
+        },
+        {
+          "value": 4,
+          "change": 12.5
+        },
+        {
+          "value": 2.4,
+          "change": -8.1
+        }
+      ]
+    },
+    {
+      "shape": "TicketsByPriority",
+      "rows": [
+        {
+          "categories": [
+            "Urgent",
+            "High",
+            "Normal",
+            "Low"
+          ],
+          "series": [
+            {
+              "name": "Open tickets",
+              "values": [
+                6,
+                14,
+                31,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "TicketsByAssignee",
+      "rows": [
+        {
+          "categories": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ],
+          "series": [
+            {
+              "name": "Open tickets",
+              "values": [
+                12,
+                9,
+                15,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ArticleTree",
+      "rows": [
+        {
+          "id": "cat-1",
+          "label": "Accounts",
+          "title": "2"
+        },
+        {
+          "id": "art-1-1",
+          "label": "Reset a password",
+          "title": "Accounts",
+          "parentId": "cat-1"
+        },
+        {
+          "id": "art-1-2",
+          "label": "Set up two-factor authentication",
+          "title": "Accounts",
+          "parentId": "cat-1"
+        },
+        {
+          "id": "cat-2",
+          "label": "Billing",
+          "title": "2"
+        },
+        {
+          "id": "art-2-1",
+          "label": "Change your billing address",
+          "title": "Billing",
+          "parentId": "cat-2"
+        },
+        {
+          "id": "art-2-2",
+          "label": "Download an invoice",
+          "title": "Billing",
+          "parentId": "cat-2"
+        },
+        {
+          "id": "cat-3",
+          "label": "Devices",
+          "title": "1"
+        },
+        {
+          "id": "art-3-1",
+          "label": "Pair a scanner",
+          "title": "Devices",
+          "parentId": "cat-3"
+        }
+      ]
+    },
+    {
+      "shape": "ArticleTabs",
+      "rows": [
+        {
+          "id": "article",
+          "label": "Article"
+        },
+        {
+          "id": "related",
+          "label": "Related"
+        },
+        {
+          "id": "feedback",
+          "label": "Feedback"
+        }
+      ]
+    },
+    {
+      "shape": "ArticleSections",
+      "rows": [
+        {
+          "id": "article",
+          "title": "Article",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "summary",
+              "label": "Summary"
+            },
+            {
+              "name": "body",
+              "label": "Article",
+              "type": "richText"
+            },
+            {
+              "name": "updated",
+              "label": "Updated",
+              "type": "date"
+            },
+            {
+              "name": "helpful",
+              "label": "Found helpful",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ArticleRecord",
+      "rows": [
+        {
+          "id": "art-1-1",
+          "title": "Reset a password",
+          "category": "Accounts",
+          "summary": "Get back into your account in three steps.",
+          "body": "<p>Choose <strong>Forgot password</strong> on the sign-in page, enter your work email and follow the link. The link works once and expires after an hour.</p>",
+          "updated": "2026-09-10",
+          "helpful": 41
+        }
+      ]
+    }
+  ]
+}
