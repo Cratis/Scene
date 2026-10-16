@@ -168,6 +168,13 @@
     padding: 0.75rem 1.5rem 0;
 }
 
+/* A crumb that leads somewhere reads as a link in the shell's own text colour, so it holds its contrast in every theme and layout mode. */
+.layout-breadcrumb a[data-part='link'] {
+    color: var(--layout-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
 .layout-content {
     position: relative;
     z-index: var(--layout-z-content);
@@ -3189,4 +3196,13 @@ td[data-outside='true'] .foundation-calendar-day {
 .foundation-inbox-summary {
     color: var(--foundation-muted);
     font-size: 0.875rem;
+}
+
+/* A navigation entry whose target does not resolve in the host (spec N8): drawn with the warning marker, reported as `navTargetMissing`. */
+[data-nav-problem='navTargetMissing'] > .layout-menu-link::after,
+a[data-nav-problem='navTargetMissing']::after {
+    content: '\26A0';
+    margin-inline-start: auto;
+    color: var(--layout-warning, #d97706);
+    font-size: 0.85em;
 }

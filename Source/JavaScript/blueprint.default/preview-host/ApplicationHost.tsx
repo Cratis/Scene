@@ -5,7 +5,7 @@ import { ReactNode, useMemo, useState } from 'react';
 import { DialogTemplate, SceneElement, type EffectiveConfiguration } from '@cratis/scene.model';
 import { BindingResolver, BindingScope } from '@cratis/scene.engine';
 import {
-    ComponentRegistry, SceneElementView, SceneHistory, SceneNavigationContextValue, SceneNavigationModel, SceneNavigationModelProvider,
+    ComponentRegistry, NavigationActivationPolicy, NavigationActivationProvider, SceneElementView, SceneHistory, SceneNavigationContextValue, SceneNavigationModel, SceneNavigationModelProvider,
     SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, navigationDestinations,
     sceneRoutesFrom, sliceDialogParameters, useSceneHistoryNavigation,
 } from '@cratis/scene.react';
@@ -31,6 +31,13 @@ export interface ApplicationHostProps {
 
     /** Where entries are recorded: the address bar for Stage, an in-memory history for a preview, which never touches the host's URL (PRV4). */
     history?: SceneHistory;
+
+    /**
+     * How the navigating controls of the shell - menu entries, region items, crumbs, the logo, user-menu entries - are handled:
+     * `mode: 'select'` makes a click only report the activation (a design host selects the item), Alt-click does so in any mode,
+     * and `onActivate`/`onNavigate` are told of each. Absent, a click navigates (spec N1, N2).
+     */
+    navigationPolicy?: NavigationActivationPolicy;
 
     /** What the screens' bindings resolve against. */
     resolveBinding?: BindingResolver;
@@ -85,7 +92,7 @@ export interface ApplicationHostProps {
  * button or a dialog destination opened shown over it - one place for all of it (spec PRV9), so a behaviour that differs between
  * the two hosts is a bug in the host, not a second implementation.
  */
-export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, layoutConfigStorage = null, children }: ApplicationHostProps) {
+export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, navigationPolicy, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, layoutConfigStorage = null, children }: ApplicationHostProps) {
     const [memoryHistory] = useState(() => createMemorySceneHistory());
     const registry = useMemo(() => ({ ...previewComponents, ...hostRegistry }), [hostRegistry]);
     const hostHistory = history ?? memoryHistory;
@@ -140,8 +147,10 @@ export function ApplicationHost({ application, composition = {}, navigationModel
                 <SceneNavigationModelProvider model={navigationModel}>
                     {/* The shell reads its layout configuration from a provider; nothing is saved unless the host gives it somewhere to. */}
                     <LayoutConfigProvider storage={layoutConfigStorage}>
-                        {scope ? scope(navigation, body) : body}
-                        {children}
+                        <NavigationActivationProvider {...navigationPolicy}>
+                            {scope ? scope(navigation, body) : body}
+                            {children}
+                        </NavigationActivationProvider>
                     </LayoutConfigProvider>
                 </SceneNavigationModelProvider>
             </SceneOutletContext.Provider>

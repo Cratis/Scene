@@ -73,3 +73,4 @@ screen templates, three dialog templates and two themes.
 - **[The Inventory and Assets blueprint](inventory-blueprint.md)** — items, locations, movements and suppliers for a warehouse, with navigation and sample data.
 - **[The Administration blueprint](administration-blueprint.md)** — users, roles and permissions, settings and an audit log.
 - **[The Project and Task Tracker blueprint](project-tracker-blueprint.md)** — projects as cards, a project page, a task board with swimlanes, my tasks and a task side sheet.
+- **[The Orders blueprint](orders-blueprint.md)** — sales orders from placing to delivery: a list, an order page, a fulfilment board and a delivery calendar.

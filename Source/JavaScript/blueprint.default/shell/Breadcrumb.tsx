@@ -3,9 +3,11 @@
 
 import { Fragment } from 'react';
 import { Breadcrumb as PrimeBreadcrumb } from 'primereact/breadcrumb';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { RegisteredComponentProps, useOptionalSceneNavigation, useSceneNavigationModel } from '@cratis/scene.react';
 import { MenuEntry } from './MenuEntry';
-import { readOptionalString, readRecords, recordString } from './elementProperties';
+import { readBoolean, readOptionalString, readRecords, recordString } from './elementProperties';
+import { locationTrail } from './locationTrail';
+import { useShellLink } from './useShellLink';
 
 /**
  * The trail above the content.
@@ -21,15 +23,20 @@ import { readOptionalString, readRecords, recordString } from './elementProperti
  * this package's own {@link MenuEntry}. The last entry is `Breadcrumb.Current` rather than a link: a trail
  * whose final crumb navigates to the page already open is a link that does nothing, and it takes
  * `aria-current='page'` away from the one element that should carry it.
+ *
+ * Inside a navigation host the crumbs navigate through the host (they swap the primary region, never the address of the page that
+ * hosts the application), and a trail the element does not author - no `items` - is derived from where the host is (spec N4):
+ * the module and features down to the screen on the page, from the host's navigation model.
  */
 export function Breadcrumb({ element }: RegisteredComponentProps) {
     const home = readOptionalString(element, 'homeTargetScreen');
-    const trail = readRecords(element, 'items').map(
-        (item): MenuEntry => ({
-            label: recordString(item, 'label'),
-            url: recordString(item, 'targetScreen') ? `#/${recordString(item, 'targetScreen')}` : undefined,
-        }),
-    );
+    const navigation = useOptionalSceneNavigation();
+    const model = useSceneNavigationModel();
+    const authored = readRecords(element, 'items');
+    const derive = authored.length === 0 && readBoolean(element, 'followLocation', true) && navigation !== undefined && model !== undefined;
+    const trail = derive
+        ? locationTrail(model, navigation.primaryScreen).map((crumb): MenuEntry & { screen?: string } => ({ label: crumb.label, screen: crumb.targetScreen }))
+        : authored.map((item): MenuEntry & { screen?: string } => ({ label: recordString(item, 'label'), screen: recordString(item, 'targetScreen') || undefined }));
 
     return (
         <div data-scene-id={element.id}>
@@ -37,9 +44,9 @@ export function Breadcrumb({ element }: RegisteredComponentProps) {
                 <PrimeBreadcrumb.List>
                     {home && (
                         <PrimeBreadcrumb.Item>
-                            <PrimeBreadcrumb.Link as='a' href={`#/${home}`} aria-label='Home'>
+                            <Crumb id={`${element.id}-home`} screen={home} label='Home' ariaLabel='Home'>
                                 <i className='pi pi-home' aria-hidden='true' />
-                            </PrimeBreadcrumb.Link>
+                            </Crumb>
                         </PrimeBreadcrumb.Item>
                     )}
                     {trail.map((entry, index) => (
@@ -50,10 +57,10 @@ export function Breadcrumb({ element }: RegisteredComponentProps) {
                                 </PrimeBreadcrumb.Separator>
                             )}
                             <PrimeBreadcrumb.Item>
-                                {entry.url ? (
-                                    <PrimeBreadcrumb.Link as='a' href={entry.url}>
+                                {entry.screen ? (
+                                    <Crumb id={`${element.id}-${index}`} screen={entry.screen} label={entry.label}>
                                         {entry.label}
-                                    </PrimeBreadcrumb.Link>
+                                    </Crumb>
                                 ) : (
                                     <PrimeBreadcrumb.Current>{entry.label}</PrimeBreadcrumb.Current>
                                 )}
@@ -63,5 +70,14 @@ export function Breadcrumb({ element }: RegisteredComponentProps) {
                 </PrimeBreadcrumb.List>
             </PrimeBreadcrumb.Root>
         </div>
+    );
+}
+
+function Crumb({ id, screen, label, ariaLabel, children }: { id: string; screen: string; label: string; ariaLabel?: string; children: React.ReactNode }) {
+    const link = useShellLink(screen, { source: 'breadcrumb', id, label });
+    return (
+        <PrimeBreadcrumb.Link as='a' href={link.href ?? `#/${screen}`} aria-label={ariaLabel} onClick={link.onClick} data-nav-problem={link.dead ? 'navTargetMissing' : undefined}>
+            {children}
+        </PrimeBreadcrumb.Link>
     );
 }

@@ -8,6 +8,7 @@ import { SceneIcon } from '../../icons/SceneIcon';
 import { useIconAdapters } from '../../icons/IconAdapterContext';
 import { resolveDestination } from '../resolveDestination';
 import { SceneNavigationContextInternal } from '../SceneNavigationContext';
+import { useNavigationActivation } from '../NavigationActivationContext';
 import { NavigationRegionClassNames, defaultNavigationRegionClassNames } from './NavigationRegionClassNames';
 import { SceneNavigationModel } from './SceneNavigationModel';
 import { useSceneNavigationModel } from './SceneNavigationModelContext';
@@ -92,6 +93,7 @@ export function NavigationRegionView({ region, module, application = false, mode
 
     const navigation = useContext(SceneNavigationContextInternal);
     const adapters = useIconAdapters();
+    const activator = useNavigationActivation();
     const names = { ...defaultNavigationRegionClassNames, ...classNames };
     const index = useMemo(() => model.structure instanceof ApplicationStructureIndex ? model.structure : new ApplicationStructureIndex(model.structure), [model.structure]);
     const screenFor = model.screenFor ?? defaultScreenFor;
@@ -117,16 +119,10 @@ export function NavigationRegionView({ region, module, application = false, mode
     const isExpanded = (item: EffectiveNavItem, key: string) => overrides[key] ?? (expand === 'all' || containsActive(item, isActive));
     const toggle = (key: string, expanded: boolean) => setToggled({ key: activeKey, state: { ...overrides, [key]: expanded } });
 
-    const activate = (item: EffectiveNavItem) => {
+    const activate = (item: EffectiveNavItem, event?: Pick<MouseEvent, 'altKey' | 'metaKey' | 'ctrlKey' | 'shiftKey'>) => {
         const destination = navigationItemDestination(item, screenFor);
-        if (destination === undefined) return;
-        if (navigation) {
-            navigation.navigate(destination);
-        } else {
-            globalThis.dispatchEvent(new CustomEvent('cratis.scene.navigate', { detail: { targetScreen: destination.screen ?? '', destination, item } }));
-        }
-
-        onActivate?.(item, destination);
+        const activation = activator.activate({ destination, id: item.id, label: item.title, source: 'region', item }, event);
+        if (destination !== undefined && (activation.navigated || activation.mode === 'select')) onActivate?.(item, destination);
     };
 
     const links = () => Array.from(root.current?.querySelectorAll<HTMLElement>('[data-scene-nav-link]') ?? []);
@@ -200,11 +196,12 @@ export function NavigationRegionView({ region, module, application = false, mode
         const expanded = parent && isExpanded(item, key);
         const url = destination ? resolveDestination(destination).url : undefined;
         const href = destination ? (hrefFor ? hrefFor(destination, url) : url ? `#/${url}` : undefined) : undefined;
+        const dead = destination === undefined ? !parent : !activator.resolves(destination);
         const onClick = (event: MouseEvent) => {
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
             event.preventDefault();
-            if (destination) activate(item);
-            else if (parent) toggle(key, !expanded);
+            if (destination) activate(item, event);
+            else toggle(key, !expanded);
         };
         const content = <>
             {icon(item)}
@@ -214,12 +211,13 @@ export function NavigationRegionView({ region, module, application = false, mode
 
         return <li key={item.id} className={names.item} data-scene-nav-item={item.id} data-scene-nav-parent={parent ? 'true' : undefined}
             data-active={active} data-active-descendant={!active && parent && children.some(child => containsActive(child, isActive)) ? true : undefined} data-expanded={parent ? expanded : undefined} data-origin={item.origin} data-read-only={item.readOnly}
-            data-slot={item.slot} data-level={level}>
+            data-slot={item.slot} data-level={level} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
             {destination || parent
                 ? <a className={names.link} href={href ?? '#'} data-scene-nav-link={key} aria-current={active ? 'page' : undefined}
                     aria-expanded={parent && !destination ? expanded : undefined} tabIndex={key === stop ? 0 : -1}
                     onClick={onClick} onFocus={() => setFocused(key)}>{content}</a>
-                : <span className={names.link} aria-disabled='true' data-scene-nav-link={key} tabIndex={-1}>{content}</span>}
+                : <span className={names.link} aria-disabled='true' data-scene-nav-link={key} tabIndex={key === stop ? 0 : -1} title='This item has no target to go to.'
+                    onClick={event => activate(item, event)} onKeyDown={event => { if (event.key === 'Enter') activate(item, event); }} onFocus={() => setFocused(key)}>{content}</span>}
             {parent && <button type='button' className={names.toggle} tabIndex={-1} aria-expanded={expanded} aria-controls={`${key}-items`}
                 aria-label={`${expanded ? 'Collapse' : 'Expand'} ${item.title}`} onClick={() => toggle(key, !expanded)} />}
             {parent && expanded && <ul id={`${key}-items`} className={`${names.list} ${names.submenu}`}>{renderItems(children, [...path, item.id], level + 1)}</ul>}
