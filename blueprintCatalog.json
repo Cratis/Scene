@@ -716,6 +716,13 @@
           "parent": "hr.timeoff"
         },
         {
+          "name": "hr.timeoff.calendar",
+          "title": "Team calendar",
+          "description": "Who is away and when, on a month, a week or as an agenda.",
+          "template": "HrTeamCalendar",
+          "parent": "hr.timeoff"
+        },
+        {
           "name": "hr.onboarding",
           "title": "Onboarding",
           "description": "New hires and how far along their onboarding is.",
@@ -775,6 +782,15 @@
           "type": "List",
           "category": "Business / HR",
           "thumbnail": "thumbnails/HrTimeOffBalanceList.svg"
+        },
+        {
+          "name": "HrTeamCalendar",
+          "kind": "ScreenTemplate",
+          "displayName": "HR team calendar",
+          "description": "Who is away and when, on a month, a week or as an agenda, with the kind of leave told in words.",
+          "type": "Calendar",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrTeamCalendar.svg"
         },
         {
           "name": "HrOnboardingList",
