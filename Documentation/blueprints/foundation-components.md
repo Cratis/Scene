@@ -119,6 +119,12 @@ the unassigned cards last, and a lane has its own heading (a level above its col
 its lane, by dragging or by its Move-to menu; each column's count and total are for its lane, while the over-the-limit warning counts every lane, since a limit
 is the column's.
 
+## Deciding from a list
+
+`dataList` keeps a row's actions in a menu. For a list whose point is a decision - an approver's inbox - set `rowActionStyle` to `buttons` and each
+action is a button of its own in the row or card, named for its request ("Approve: Leave: Isla Morgan"), so a decision is one press away. The
+permission rule applies as it does to the menu: disabled buttons say why on hover, hidden ones are not drawn.
+
 ## Uploading files
 
 `fileUploader` checks a selection against `accept` (extensions, MIME types, wildcards), `maxSizeMb` and `multiple` before anything is
