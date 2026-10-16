@@ -1025,6 +1025,108 @@
       ]
     },
     {
+      "package": "Cratis.Blueprint.Orders",
+      "version": "1.0.0",
+      "domain": "orders",
+      "displayName": "Orders",
+      "description": "Sales orders from placing to delivery: every order with its status, an order page with its lines and shipments, a fulfilment board and a delivery calendar.",
+      "thumbnail": "thumbnails/orders.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "orders.list",
+          "title": "Orders",
+          "description": "Every order with its customer, dates, total and status.",
+          "template": "OrdersList",
+          "order": 0
+        },
+        {
+          "name": "orders.record",
+          "title": "Order",
+          "description": "One order: key facts, its lines, its shipments and its activity.",
+          "template": "OrderPage",
+          "parent": "orders.list"
+        },
+        {
+          "name": "orders.fulfilment",
+          "title": "Fulfilment",
+          "description": "Orders in a column for each fulfilment step.",
+          "template": "OrdersFulfilmentBoard",
+          "order": 1
+        },
+        {
+          "name": "orders.deliveries",
+          "title": "Deliveries",
+          "description": "The day each open order is due to arrive, on a calendar.",
+          "template": "OrdersDeliveryCalendar",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "OrdersList",
+          "kind": "ScreenTemplate",
+          "displayName": "Orders list",
+          "description": "Every order with customer, placed and delivery dates, total and status, filtered by customer, status, channel and date.",
+          "type": "List",
+          "category": "Business / Orders",
+          "thumbnail": "thumbnails/OrdersList.svg"
+        },
+        {
+          "name": "OrderPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Order page",
+          "description": "One order: key facts, its lines and shipments, and its activity.",
+          "type": "Detail",
+          "category": "Business / Orders",
+          "thumbnail": "thumbnails/OrderPage.svg"
+        },
+        {
+          "name": "OrdersFulfilmentBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Orders fulfilment board",
+          "description": "Orders as cards in a column for each fulfilment step, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Orders",
+          "thumbnail": "thumbnails/OrdersFulfilmentBoard.svg"
+        },
+        {
+          "name": "OrdersDeliveryCalendar",
+          "kind": "ScreenTemplate",
+          "displayName": "Orders delivery calendar",
+          "description": "The day each open order is due to arrive, on a month, a week or as an agenda.",
+          "type": "Calendar",
+          "category": "Business / Orders",
+          "thumbnail": "thumbnails/OrdersDeliveryCalendar.svg"
+        },
+        {
+          "name": "OrdersQuickCreateOrder",
+          "kind": "DialogTemplate",
+          "displayName": "Orders quick create order",
+          "description": "A short form that creates one order without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Orders",
+          "thumbnail": "thumbnails/OrdersQuickCreateOrder.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "orders-en",
+          "title": "Orders · English",
+          "locale": "en-GB",
+          "path": "sampleData/orders-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
       "package": "Cratis.Blueprint.ProjectTracker",
       "version": "1.0.0",
       "domain": "project-tracker",

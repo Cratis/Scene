@@ -46,6 +46,8 @@
         href: inventory-blueprint.md
       - name: The Project and Task Tracker blueprint
         href: project-tracker-blueprint.md
+      - name: The Orders blueprint
+        href: orders-blueprint.md
 
 - name: Understand
   items:
