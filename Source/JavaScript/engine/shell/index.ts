@@ -6,3 +6,6 @@ export * from './ShellDiagnostic';
 export * from './EffectiveShell';
 export * from './ShellResolutionContext';
 export * from './resolveEffectiveShell';
+export * from './ShellOutletAction';
+export * from './ShellSwitchPlan';
+export * from './planShellSwitch';

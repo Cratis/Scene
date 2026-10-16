@@ -119,7 +119,7 @@ never ids.
 `blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
 carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
 
-Still to come in the follow-on engine issues: shell switching and the legacy migration helper.
+Switching the shell is planned by [`planShellSwitch`](#switching-the-shell); what stops a profile is found by [`findProfileBlockers`](#what-stops-a-profile-from-being-applied); the nodes a designer edits are described by [`describeUiProfile`](#describing-the-profile-for-a-designer).
 
 ## Migrating a legacy profile
 
@@ -176,5 +176,50 @@ Write `root`, not `layout`, and let the engine - not your host - decide whether 
 5. Preview with the real host: [`ScenePreviewHost`](preview-host.md) with `target={{ application: ... }}` renders the shell with the
    application's navigation, and clicking an item really navigates. See [UI profile designer contract](ui-profile-designer-contract.md).
 
-Still to come in the follow-on engine issues: shell switching (`planShellSwitch`), the property descriptors a designer edits through, and the
-legacy migration helper.
+
+## Switching the shell
+
+`planShellSwitch(current, candidate, screens, templates, remaps)` (TypeScript) and `ShellSwitchPlanner.Plan` (C#) is the pre-flight of "Use this shell". The host resolves the
+shell in place and the candidate with `resolveEffectiveShell` (the candidate as the profile's root), hands both over with the screens and the templates a screen can be built from
+(`placeableScreenTemplates` / `ShellPlacement.PlaceableScreenTemplates`), shows the plan, and on commit applies it as one undoable edit. The plan is pure data and identical in both engines.
+
+The default mapping is **by name**, with the current shell's primary outlet following to the new shell's primary outlet (an outlet named `content` does too when the new shell has no
+outlet of that name). Every outlet of the current shell - and any outlet a screen uses that the shell does not have - gets one entry in `moves`:
+
+| `action` | Meaning |
+| --- | --- |
+| `keep` | the new shell has an outlet of that name; the content stays |
+| `primary` | the content follows to the new shell's primary outlet, which is named differently |
+| `unused` | the new shell has no such outlet and no screen uses it; nothing to decide |
+| `unresolved` | the new shell has no such outlet and screens use it: a blocker until the user chooses (`choices` lists them) |
+| `moveToPrimary` / `mapTo` / `drop` | the user's choice, passed back in `remaps` keyed by the outlet's name |
+
+An unresolved outlet's message names the screens and outlets - *3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'AppShell' does not have* - never
+ids or placeholders. A choice for an outlet that needs none is ignored; a `mapTo` to an outlet the new shell lacks is refused. `addPackages` lists the blueprint the candidate needs that the
+profile does not yet have; `blockers` carries the candidate's own problems (`rootTemplateUnknown`, `rootTemplateVersionNotSatisfied`, `rootTemplateNotApplicable`,
+`rootTemplateMissingContentSlot`, `rootTemplateCycle`) and every unresolved outlet (`profileSlotUnplaced`); `warnings` the rest (an incompatible theme). `canSwitch` is true when there are no blockers.
+
+## What stops a profile from being applied
+
+`findProfileBlockers(profile, context)` (TypeScript) and `ProfileBlockers.Find` (C#) is the one place these rules live. Studio presents the result; it has no rules of its own.
+
+| Code | When |
+| --- | --- |
+| `missingDependency` / `versionConflict` / `dependencyCycle` | the profile's packages cannot be satisfied |
+| `shellUnusable` | the shell has one of the five unusable-shell codes (its own is in `shellCode`) |
+| `themeIncompatible` | the theme is not marked compatible with a package the profile uses (every one is named) |
+| `defaultScreenTemplateUnavailable` | the template new screens start from exists nowhere |
+| `usedLayoutUnavailable` / `usedScreenTemplateUnavailable` / `usedDialogTemplateUnavailable` / `usedSlotUnavailable` | a screen relies on something the packages no longer provide |
+
+Each blocker carries `code`, `subject` and a `message` with real names (*Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide*). Icon impact stays with
+`analyzeIconImpact`, which already lives in the engine.
+
+## Describing the profile for a designer
+
+`describeUiProfile(profile, context)` returns one component descriptor per node of the profile - Application, Shell, Theme, Packages, Sample data (`UiProfileNodeKind`) - in the
+existing descriptor format, so a host renders them with the property-editor registry it already has. A property's `path` is its path in the profile (`appearance.colorScheme`,
+`defaults.newScreenTemplate`, `root.options.navigationMode`), and the labels, groups, choices, defaults, constraints and the reason a theme does not fit are the engine's. The context supplies the
+choices the application has (themes, packages, platforms, sample-data packs, the shell's options and navigation modes); an absent list leaves a property free-form. A theme the profile's packages do
+not support is still offered, with the reason in the choice's description.
+
+The shared corpora are `shell-switch-fixtures.json` and `profile-blockers-fixtures.json`; each is asserted by both engines.

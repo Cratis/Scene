@@ -74,7 +74,7 @@ export function resolveEffectiveShell(profile: UiProfile, context: ShellResoluti
 
     shell.diagnostics.push(...diagnostics);
     checkContentOutlet(shell);
-    const templates = shellTemplates(profile, context);
+    const templates = placeableScreenTemplates(profile, context);
     checkCycles(shell, templates);
 
     checkProfile(shell, profile, context);
@@ -264,7 +264,15 @@ function checkContentOutlet(shell: EffectiveShell): void {
     }
 }
 
-function shellTemplates(profile: UiProfile, context: ShellResolutionContext): ScreenTemplate[] {
+/**
+ * The screen templates a screen can be built from while a shell is in place: the application's own and those of the installed
+ * blueprints, without the root templates (those are shells, not parts of one). A name the application and a blueprint share is the application's.
+ *
+ * @param profile The profile whose installed blueprints are searched.
+ * @param context The library (and the rest) the shell is resolved against.
+ * @returns The templates, in the order own then installed blueprints.
+ */
+export function placeableScreenTemplates(profile: UiProfile, context: ShellResolutionContext): ScreenTemplate[] {
     const sources = [context.library.own, ...installedBlueprints(profile, context)];
     const templates: ScreenTemplate[] = [];
     for (const source of sources) {
@@ -315,7 +323,7 @@ function checkProfile(shell: EffectiveShell, profile: UiProfile, context: ShellR
 
 function checkScreens(shell: EffectiveShell, context: ShellResolutionContext, templates: readonly ScreenTemplate[]): void {
     for (const screen of context.screens ?? []) {
-        for (const outlet of outletsUsedBy(screen, shell, templates)) {
+        for (const outlet of outletsUsedBy(screen, shell.name, templates)) {
             if (!shell.outlets.includes(outlet)) {
                 shell.diagnostics.push({
                     code: ShellDiagnosticCode.ProfileSlotUnplaced,
@@ -327,8 +335,15 @@ function checkScreens(shell: EffectiveShell, context: ShellResolutionContext, te
     }
 }
 
-/** The outlets of the shell a screen puts content in: its own slots, or the slot its outermost template fits. */
-function outletsUsedBy(screen: Screen, shell: EffectiveShell, templates: readonly ScreenTemplate[]): string[] {
+/**
+ * The outlets of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
+ *
+ * @param screen The screen.
+ * @param shellName The name of the shell the screen is placed in.
+ * @param templates The screen templates a screen can be built from ({@link placeableScreenTemplates}).
+ * @returns The outlet names, which may include names the shell does not have.
+ */
+export function outletsUsedBy(screen: Screen, shellName: string, templates: readonly ScreenTemplate[]): string[] {
     if (screen.screenTemplate === undefined) {
         return Object.entries(screen.slotContent ?? {}).filter(([, content]) => content.length > 0).map(([slot]) => slot);
     }
@@ -341,7 +356,7 @@ function outletsUsedBy(screen: Screen, shell: EffectiveShell, templates: readonl
         const separator = current.fitsSlot.lastIndexOf('.');
         const qualifier = separator < 0 ? undefined : current.fitsSlot.slice(0, separator);
         const slot = separator < 0 ? current.fitsSlot : current.fitsSlot.slice(separator + 1);
-        if (qualifier === shell.name) return [slot];
+        if (qualifier === shellName) return [slot];
         const self: ScreenTemplate = current;
         const container = templates.find(template => template !== self && (qualifier === undefined || template.name === qualifier) && template.slots.some(candidate => candidate.name === slot));
         if (container === undefined) return [slot];

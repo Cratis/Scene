@@ -1,0 +1,2619 @@
+{
+  "description": "Shared fixture corpus for planning a shell switch: the C# engine (ShellSwitchPlanner) and the TypeScript engine (planShellSwitch) must produce identical plans. Each case resolves currentRoot and candidateRoot against the library, then plans the switch for the screens with the user's remaps.",
+  "libraries": {
+    "default": {
+      "own": {
+        "manifest": {
+          "name": "App",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "OwnShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "ToolShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "subject"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "DeskShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "subject"
+              },
+              {
+                "name": "content"
+              },
+              {
+                "name": "aside"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "OwnFrame",
+            "slots": [
+              {
+                "name": "nav"
+              },
+              {
+                "name": "main"
+              }
+            ],
+            "metadata": {
+              "role": "Root",
+              "primaryOutlet": "main",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Plain Page",
+            "slots": [],
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Orphan Page",
+            "slots": [],
+            "fitsSlot": "toolbar"
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "main"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Subject Panel",
+            "slots": [],
+            "fitsSlot": "subject"
+          },
+          {
+            "name": "Aside Note",
+            "slots": [],
+            "fitsSlot": "ToolShell.subject"
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Edit dialog",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ]
+          }
+        ]
+      },
+      "blueprints": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "CrmShell",
+              "slots": [
+                {
+                  "name": "sidebar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell",
+                "category": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "CRM Workspace",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "fitsSlot": "content"
+            },
+            {
+              "name": "Pipeline Board",
+              "slots": [],
+              "fitsSlot": "body"
+            },
+            {
+              "name": "CrmFrame",
+              "slots": [
+                {
+                  "name": "content"
+                },
+                {
+                  "name": "footer"
+                }
+              ],
+              "metadata": {
+                "role": "Root"
+              }
+            }
+          ]
+        },
+        {
+          "manifest": {
+            "name": "hr",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "HrShell",
+              "slots": [
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell"
+              }
+            }
+          ],
+          "screenTemplates": []
+        },
+        {
+          "manifest": {
+            "name": "analytics",
+            "version": "0.3.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [],
+          "screenTemplates": [
+            {
+              "name": "AnalyticsRoot",
+              "slots": [
+                {
+                  "name": "rail"
+                },
+                {
+                  "name": "main"
+                }
+              ],
+              "metadata": {
+                "role": "Root",
+                "primaryOutlet": "main"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "same shell",
+      "description": "switching to the shell already in place changes nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Customers-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": true,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders",
+              "Customers"
+            ],
+            "description": "'Orders' and 'Customers' stay in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "same outlet names",
+      "description": "a shell with the same outlets keeps every screen where it is",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "CrmShell",
+        "blueprint": "crm",
+        "version": "^1.4"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Menu",
+          "layout": "x",
+          "slotContent": {
+            "sidebar": [
+              {
+                "type": "test",
+                "id": "Menu-sidebar"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "CrmShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [
+              "Menu"
+            ],
+            "description": "'Menu' stays in outlet 'sidebar'"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "content follows the primary outlet",
+      "description": "content moves to the primary outlet of a shell that names it differently",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnFrame"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Customers-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Tickets",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Tickets-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "OwnFrame",
+        "fromPrimary": "content",
+        "toPrimary": "main",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'OwnFrame'; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "primary",
+            "target": "main",
+            "screens": [
+              "Orders",
+              "Customers",
+              "Tickets"
+            ],
+            "description": "'Orders', 'Customers' and 'Tickets' move from outlet 'content' to 'main', the primary outlet of shell 'OwnFrame'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "primary follows back",
+      "description": "the primary outlet of the current shell goes to the content outlet of the next",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnFrame"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "main": [
+              {
+                "type": "test",
+                "id": "Orders-main"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnFrame",
+        "to": "OwnShell",
+        "fromPrimary": "main",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "nav",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'nav' of shell 'OwnFrame' has no counterpart in shell 'OwnShell'; no screen uses it"
+          },
+          {
+            "outlet": "main",
+            "action": "primary",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' moves from outlet 'main' to 'content', the primary outlet of shell 'OwnShell'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "primary of a blueprint root template",
+      "description": "a blueprint root screen template with its own primary outlet",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "AnalyticsRoot",
+        "blueprint": "analytics",
+        "version": "^0.3"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "AnalyticsRoot",
+        "fromPrimary": "content",
+        "toPrimary": "main",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'AnalyticsRoot'; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "primary",
+            "target": "main",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' moves from outlet 'content' to 'main', the primary outlet of shell 'AnalyticsRoot'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "unused outlet without counterpart",
+      "description": "an outlet nobody uses needs no decision",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Customers-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders",
+              "Customers"
+            ],
+            "description": "'Orders' and 'Customers' stay in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "used outlet without counterpart",
+      "description": "screens in an outlet the new shell lacks block the switch until decided",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Tickets",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Tickets-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Invoices",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Invoices-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers",
+              "Tickets",
+              "Invoices"
+            ],
+            "description": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "one screen in the lost outlet",
+      "description": "singular wording with one screen",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers"
+            ],
+            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "more than three screens",
+      "description": "at most three screens are named, the rest are counted",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Orders-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Tickets",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Tickets-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Invoices",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Invoices-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Quotes",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Quotes-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Orders",
+              "Customers",
+              "Tickets",
+              "Invoices",
+              "Quotes"
+            ],
+            "description": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "move into the primary outlet",
+      "description": "the user moves the lost outlet into content",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Tickets",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Tickets-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "moveToPrimary"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "screens": [
+              "Customers",
+              "Tickets"
+            ],
+            "description": "The content that 'Customers' and 'Tickets' place in outlet 'subject' moves into 'content', the primary outlet of shell 'OwnShell'"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "drop",
+      "description": "the user drops the content",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "drop"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "drop",
+            "screens": [
+              "Customers"
+            ],
+            "description": "The content that 'Customers' places in outlet 'subject' is dropped"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "map to another outlet",
+      "description": "the user maps the lost outlet to another outlet of the new shell",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Tickets",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Tickets-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "mapTo",
+          "target": "sidebar"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "mapTo",
+            "target": "sidebar",
+            "screens": [
+              "Customers",
+              "Tickets"
+            ],
+            "description": "The content that 'Customers' and 'Tickets' place in outlet 'subject' moves into 'sidebar' of shell 'OwnShell'"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "map to an outlet that is not there",
+      "description": "a mapping to a missing outlet is refused",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "mapTo",
+          "target": "footer"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers"
+            ],
+            "description": "The content in outlet 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such outlet",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "The content in outlet 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such outlet"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "map without a target",
+      "description": "a mapping with no target is refused",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "mapTo"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers"
+            ],
+            "description": "The content in outlet 'subject' cannot be mapped to '': shell 'OwnShell' has no such outlet",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "The content in outlet 'subject' cannot be mapped to '': shell 'OwnShell' has no such outlet"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "choice for an outlet that needs none",
+      "description": "a choice for an outlet that is matched by name is ignored",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {
+        "subject": {
+          "action": "drop"
+        }
+      },
+      "expected": {
+        "from": "ToolShell",
+        "to": "DeskShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "keep",
+            "target": "subject",
+            "screens": [
+              "Customers"
+            ],
+            "description": "'Customers' stays in outlet 'subject'"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "template fits the lost outlet",
+      "description": "a screen built from a template that fits the lost outlet is affected through the template",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {},
+          "forms": [],
+          "contributions": [],
+          "screenTemplate": "Subject Panel"
+        },
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "DeskShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers"
+            ],
+            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          },
+          {
+            "outlet": "aside",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'aside' of shell 'DeskShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "template fits a qualified outlet",
+      "description": "a template that fits 'ToolShell.subject'",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [
+        {
+          "name": "Notes",
+          "layout": "x",
+          "slotContent": {},
+          "forms": [],
+          "contributions": [],
+          "screenTemplate": "Aside Note"
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Notes"
+            ],
+            "description": "1 screen ('Notes') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "1 screen ('Notes') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "screen already outside the current shell",
+      "description": "a screen that uses an outlet the current shell lacks is mapped too",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "screens": [
+        {
+          "name": "Stray",
+          "layout": "x",
+          "slotContent": {
+            "footer": [
+              {
+                "type": "test",
+                "id": "Stray-footer"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        },
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "ToolShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          },
+          {
+            "outlet": "footer",
+            "action": "unresolved",
+            "screens": [
+              "Stray"
+            ],
+            "description": "1 screen ('Stray') places content in outlet 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "mapTo",
+                "target": "subject"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "footer",
+            "message": "1 screen ('Stray') places content in outlet 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "screen already outside, found by name",
+      "description": "switching can repair a stray screen when the new shell has that outlet",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "screens": [
+        {
+          "name": "Stray",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Stray-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "ToolShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "keep",
+            "target": "subject",
+            "screens": [
+              "Stray"
+            ],
+            "description": "'Stray' stays in outlet 'subject'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "shell without a content outlet",
+      "description": "a shell with no outlet for the screens' content cannot be switched to",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "HeaderOnlyShell"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "HeaderOnlyShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "rootTemplateMissingContentSlot",
+            "subject": "HeaderOnlyShell",
+            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "shell that is not applicable",
+      "description": "a template that cannot be an application's shell blocks the switch",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "BadFrame"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "CrmShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "rootTemplateNotApplicable",
+            "subject": "BadFrame",
+            "message": "Root template 'BadFrame' cannot be the application's shell: Root template 'BadFrame' cannot fit slot 'content': nothing contains the application shell"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "shell that does not exist",
+      "description": "an unknown template blocks the switch",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "Nowhere"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "CrmShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "Nowhere",
+            "message": "Root template 'Nowhere' cannot be used: Own template 'Nowhere' does not exist"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "pin not satisfied",
+      "description": "a pin the installed blueprint does not meet blocks the switch",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "CrmShell",
+        "blueprint": "crm",
+        "version": "^2.0"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "CrmShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "rootTemplateVersionNotSatisfied",
+            "subject": "CrmShell",
+            "message": "Template 'CrmShell' was chosen from blueprint 'crm' ^2.0 but version 1.4.2 is installed"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    },
+    {
+      "name": "blueprint not among the packages",
+      "description": "the blueprint is added to the profile's packages in the same switch",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "HrShell",
+        "blueprint": "hr",
+        "version": "^2.0"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "HrShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'HrShell'; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' stays in outlet 'content'"
+          }
+        ],
+        "addPackages": [
+          "hr"
+        ],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "no screens",
+      "description": "a profile without screens switches freely",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "screens": [],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "OwnShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unused",
+            "screens": [],
+            "description": "Outlet 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "shell blocker comes first",
+      "description": "the shell's own blockers come before the outlets to decide",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "HeaderOnlyShell"
+      },
+      "screens": [
+        {
+          "name": "Customers",
+          "layout": "x",
+          "slotContent": {
+            "subject": [
+              {
+                "type": "test",
+                "id": "Customers-subject"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "ToolShell",
+        "to": "HeaderOnlyShell",
+        "fromPrimary": "content",
+        "toPrimary": "content",
+        "isNoOp": false,
+        "moves": [
+          {
+            "outlet": "sidebar",
+            "action": "keep",
+            "target": "sidebar",
+            "screens": [],
+            "description": "Outlet 'sidebar' is kept; no screen uses it"
+          },
+          {
+            "outlet": "subject",
+            "action": "unresolved",
+            "screens": [
+              "Customers"
+            ],
+            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "choices": [
+              {
+                "action": "moveToPrimary",
+                "target": "content"
+              },
+              {
+                "action": "mapTo",
+                "target": "sidebar"
+              },
+              {
+                "action": "mapTo",
+                "target": "header"
+              },
+              {
+                "action": "drop"
+              }
+            ]
+          },
+          {
+            "outlet": "content",
+            "action": "keep",
+            "target": "content",
+            "screens": [],
+            "description": "Outlet 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [
+          {
+            "code": "rootTemplateMissingContentSlot",
+            "subject": "HeaderOnlyShell",
+            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+          },
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "subject",
+            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another outlet or drop it"
+          }
+        ],
+        "warnings": [],
+        "canSwitch": false
+      }
+    }
+  ]
+}
