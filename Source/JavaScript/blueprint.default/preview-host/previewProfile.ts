@@ -43,5 +43,8 @@ export function previewProfile(profiles: UiProfile[] | undefined, additionalPack
         layout: declared?.layout,
         theme: declared?.theme,
         sampleData: declared?.sampleData,
+        root: declared?.root,
+        appearance: declared?.appearance,
+        defaults: declared?.defaults,
     };
 }

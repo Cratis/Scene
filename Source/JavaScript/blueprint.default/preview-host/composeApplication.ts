@@ -2,17 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-    DestinationReference, DialogTemplate, EditingScopeKind, Form, Layout, SceneElement, Screen, ScreenTemplate, UiProfile,
+    DestinationReference, DialogTemplate, EditingScopeKind, Form, Layout, PackageKind, SceneElement, Screen, ScreenTemplate, UiProfile,
     type ApplicationLogo, type EffectiveConfiguration,
 } from '@cratis/scene.model';
 import {
-    DescriptorCatalog, PackageCatalog, resolveEffectiveConfiguration, resolveScreenTemplates, resolveTemplateChain,
+    DescriptorCatalog, EffectiveShell, PackageCatalog, ShellKind, ShellOrigin, TemplateLibrary, resolveEffectiveConfiguration, resolveEffectiveShell,
+    resolveScreenTemplates, resolveTemplateChain,
 } from '@cratis/scene.engine';
+import { defaultBlueprintManifest } from '../defaultBlueprint';
 import { ComponentName } from '../ComponentName';
 import { externalComponent } from '../gallery/elements';
 import { resolveElementComponentNames } from '../gallery/resolveElementNames';
 import { galleryScreenTemplates } from '../gallery/screens';
-import { SlotName, defaultLayouts, shellComponentForLayout } from '../layouts';
+import { LayoutName, SlotName, defaultLayouts, shellComponentForLayout } from '../layouts';
 import { ApplicationDocument, completeDocument } from './ApplicationDocument';
 import { defaultApplicationChrome } from './defaultApplicationChrome';
 import { previewTemplateComponent } from './PreviewTemplate';
@@ -52,6 +54,12 @@ export interface CompositionOptions {
 
     /** The application's logo, shown in the default chrome's topbar. */
     logo?: ApplicationLogo;
+
+    /**
+     * The templates the shell is resolved against: the application's own and the blueprints that are installed. Absent, the
+     * document's own layouts and templates, and the default blueprint's.
+     */
+    templateLibrary?: TemplateLibrary;
 }
 
 /** One screen composed for the application shell. */
@@ -72,6 +80,52 @@ function previewCatalog(options: CompositionOptions): PackageCatalog {
 
 function profileOf(application: ApplicationDocument, options: CompositionOptions): UiProfile {
     return options.profile ?? previewProfile(application.uiProfiles);
+}
+
+/** The library the effective shell is resolved from: the document's own templates and the blueprint's. */
+function libraryOf(application: ApplicationDocument, options: CompositionOptions): TemplateLibrary {
+    return options.templateLibrary ?? {
+        own: {
+            manifest: { name: 'Application', version: '1.0.0', kind: PackageKind.ComponentLibrary, dependencies: [], components: [], layouts: [], screenTemplates: [], dialogTemplates: [], themes: [] },
+            layouts: application.layouts,
+            screenTemplates: application.screenTemplates,
+            dialogTemplates: application.dialogTemplates ?? [],
+        },
+        blueprints: [{
+            manifest: defaultBlueprintManifest,
+            layouts: options.blueprintLayouts ?? defaultLayouts,
+            screenTemplates: options.blueprintTemplates ?? galleryScreenTemplates,
+        }],
+    };
+}
+
+/**
+ * The shell a screen is composed in. When the profile names a root template, that is the application's shell for every screen
+ * except one that opts out by naming the chrome-less full-page layout (a sign-in page); otherwise the screen's own layout is the
+ * shell, as it was before the root template existed. Either way the answer comes from the one engine function, `resolveEffectiveShell`.
+ */
+export function effectiveShellOf(application: ApplicationDocument, screen: Screen, options: CompositionOptions = {}): EffectiveShell {
+    const profile = profileOf(application, options);
+    const optedOut = screen.layout === LayoutName.FullPage;
+    const resolved = optedOut || profile.root === undefined
+        ? { ...profile, root: undefined, layout: screen.layout }
+        : profile;
+    return resolveEffectiveShell(resolved, { library: libraryOf(application, options) });
+}
+
+/** The shell as the layout the templates are placed into: its name and outlets. */
+function shellLayout(shell: EffectiveShell): Layout {
+    return { name: shell.name, slots: shell.outlets.map(name => ({ name })) };
+}
+
+/**
+ * The component that draws a layout shell. A blueprint shell is its known component; a shell that no package provides keeps its
+ * own name, so the missing component shows in the rendered tree - substituting a default shell would hide a package problem.
+ * Without a root template a screen that names a layout the blueprint does not provide stays unresolved under that name.
+ */
+function shellComponentOf(shell: EffectiveShell, screen: Screen, hasRoot: boolean): string {
+    if (shell.origin === ShellOrigin.Bare) return hasRoot ? shellComponentForLayout(LayoutName.FullPage) ?? shell.name : screen.layout;
+    return shellComponentForLayout(shell.name) ?? shell.name;
 }
 
 function defaultForm(screenName: string, form: Form): SceneElement {
@@ -121,11 +175,11 @@ export function templatePoolFor(application: ApplicationDocument, screen: Screen
 }
 
 /** The slot of the layout a template chain's outermost template fits: its declared slot, or `content`. */
-function layoutSlotOf(layout: Layout | undefined, outermost: ScreenTemplate): string {
+function layoutSlotOf(shell: EffectiveShell, outermost: ScreenTemplate): string {
     const fits = outermost.fitsSlot;
-    if (fits === undefined) return SlotName.Content;
+    if (fits === undefined) return shell.primaryOutlet;
     const slot = fits.includes('.') ? fits.slice(fits.lastIndexOf('.') + 1) : fits;
-    return layout === undefined || layout.slots.some(candidate => candidate.name === slot) ? slot : SlotName.Content;
+    return shell.outlets.includes(slot) ? slot : shell.primaryOutlet;
 }
 
 /** The templates a screen's own template sits inside, outermost first, ending with the screen's own template. */
@@ -135,12 +189,12 @@ export function templateChainOf(application: ApplicationDocument, screen: Screen
     const own = templates.find(candidate => candidate.name === screen.screenTemplate);
     if (!own) return [];
 
-    const layout = findLayout(application, screen.layout, options);
-    const placements = layout ? resolveScreenTemplates(layout, templates).placements : [];
+    const layout = shellLayout(effectiveShellOf(application, screen, options));
+    const placements = resolveScreenTemplates(layout, templates).placements;
     const chain: ScreenTemplate[] = [own];
     for (let guard = 0; guard <= templates.length; guard++) {
         const placement = placements.find(candidate => candidate.template === chain[0].name);
-        if (!placement || placement.container === layout?.name) break;
+        if (!placement || placement.container === layout.name) break;
         const parent = templates.find(candidate => candidate.name === placement.container);
         if (!parent || chain.includes(parent)) break;
         chain.unshift(parent);
@@ -161,7 +215,7 @@ export function screenContent(application: ApplicationDocument, screen: Screen, 
     const forms = screen.forms.map(candidate => form(screen.name, candidate));
     const chain = templateChainOf(application, screen, options);
     if (chain.length === 0) {
-        return { content: [...Object.values(screen.slotContent).flat(), ...forms], templates: [], slot: SlotName.Content };
+        return { content: [...Object.values(screen.slotContent).flat(), ...forms], templates: [], slot: effectiveShellOf(application, screen, options).primaryOutlet };
     }
 
     let inner: SceneElement | undefined;
@@ -173,8 +227,7 @@ export function screenContent(application: ApplicationDocument, screen: Screen, 
         inner = externalComponent(`template-${screen.name}-${template.name}`, previewTemplateComponent, { arrangement: template.arrangement }, slots);
     }
 
-    const layout = findLayout(application, screen.layout, options);
-    return { content: [inner!], templates: chain.map(template => template.name), slot: layoutSlotOf(layout, chain[0]) };
+    return { content: [inner!], templates: chain.map(template => template.name), slot: layoutSlotOf(effectiveShellOf(application, screen, options), chain[0]) };
 }
 
 function slotName(template: ScreenTemplate): string {
@@ -204,14 +257,16 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
     const profile = profileOf(application, options);
     const { content, templates, slot } = screenContent(application, screen, options);
 
-    const shell = shellComponentForLayout(screen.layout) ?? screen.layout;
+    const effective = effectiveShellOf(application, screen, options);
+    const shell = shellComponentOf(effective, screen, profile.root !== undefined);
     const chrome = options.chrome
         ? options.chrome(screen, shell)
         : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo);
-    const composed = externalComponent(`screen-${screen.name}`, shell, { screenName: screen.name }, {
-        ...chrome,
-        [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === SlotName.Content ? options.trailing ?? [] : [])],
-    });
+    const screenSlots = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primaryOutlet ? options.trailing ?? [] : [])] };
+    const rootTemplate = effective.kind === ShellKind.ScreenTemplate ? effective.template as ScreenTemplate : undefined;
+    const composed = rootTemplate !== undefined
+        ? externalComponent(`screen-${screen.name}`, previewTemplateComponent, { arrangement: rootTemplate.arrangement }, mergeSlots(rootTemplate.content, chrome, screenSlots))
+        : externalComponent(`screen-${screen.name}`, shell, { screenName: screen.name }, { ...chrome, ...screenSlots });
 
     return { element: finish(composed, profile, previewCatalog(options), options), configuration: configurationOf(application, screen, options), templates };
 }
