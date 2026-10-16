@@ -1,0 +1,2729 @@
+{
+  "id": "crm-nordic-smb",
+  "title": "CRM · Nordic SMB",
+  "locale": "nb-NO",
+  "owner": "blueprint:crm",
+  "sets": [
+    {
+      "shape": "CrmSettings",
+      "rows": [
+        {
+          "locale": "nb-NO",
+          "currency": "NOK"
+        }
+      ]
+    },
+    {
+      "shape": "Leads",
+      "rows": [
+        {
+          "id": "lead-1",
+          "name": "Kari Nordmann",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Ingrid Solberg",
+          "status": "Ny",
+          "source": "Nettside",
+          "lastContact": "2026-10-01",
+          "created": "2026-09-01",
+          "email": "kari.nordmann@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "lead-2",
+          "name": "Ola Hansen",
+          "company": "Oslo Kaffekompani AS",
+          "owner": "Magnus Dahl",
+          "status": "Kontaktet",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-03",
+          "created": "2026-09-03",
+          "email": "ola.hansen@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        },
+        {
+          "id": "lead-3",
+          "name": "Silje Andersen",
+          "company": "Vestland Fisk AS",
+          "owner": "Sofie Berg",
+          "status": "Kvalifisert",
+          "source": "Messe",
+          "lastContact": "2026-10-05",
+          "created": "2026-09-05",
+          "email": "silje.andersen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "lead-4",
+          "name": "Jonas Pettersen",
+          "company": "Trondheim Data AS",
+          "owner": "Henrik Lund",
+          "status": "Ikke kvalifisert",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-07",
+          "created": "2026-09-07",
+          "email": "jonas.pettersen@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        },
+        {
+          "id": "lead-5",
+          "name": "Marte Kristiansen",
+          "company": "Lofoten Reiseliv AS",
+          "owner": "Ingrid Solberg",
+          "status": "Ny",
+          "source": "Nettside",
+          "lastContact": "2026-10-09",
+          "created": "2026-09-09",
+          "email": "marte.kristiansen@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "lead-6",
+          "name": "Anders Johansen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Kontaktet",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-11",
+          "created": "2026-09-11",
+          "email": "anders.johansen@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        },
+        {
+          "id": "lead-7",
+          "name": "Eira Larsen",
+          "company": "Nordlys Bygg AS",
+          "owner": "Sofie Berg",
+          "status": "Kvalifisert",
+          "source": "Messe",
+          "lastContact": "2026-10-13",
+          "created": "2026-09-13",
+          "email": "eira.larsen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "lead-8",
+          "name": "Sander Olsen",
+          "company": "Bergen Havn AS",
+          "owner": "Henrik Lund",
+          "status": "Ikke kvalifisert",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-15",
+          "created": "2026-09-15",
+          "email": "sander.olsen@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        },
+        {
+          "id": "lead-9",
+          "name": "Thea Eriksen",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Ingrid Solberg",
+          "status": "Ny",
+          "source": "Nettside",
+          "lastContact": "2026-10-17",
+          "created": "2026-09-17",
+          "email": "thea.eriksen@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "lead-10",
+          "name": "Mats Haugen",
+          "company": "Oslo Kaffekompani AS",
+          "owner": "Magnus Dahl",
+          "status": "Kontaktet",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-19",
+          "created": "2026-09-19",
+          "email": "mats.haugen@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        },
+        {
+          "id": "lead-11",
+          "name": "Emilie Moen",
+          "company": "Vestland Fisk AS",
+          "owner": "Sofie Berg",
+          "status": "Kvalifisert",
+          "source": "Messe",
+          "lastContact": "2026-10-21",
+          "created": "2026-09-21",
+          "email": "emilie.moen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "lead-12",
+          "name": "Lars Strand",
+          "company": "Trondheim Data AS",
+          "owner": "Henrik Lund",
+          "status": "Ikke kvalifisert",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-23",
+          "created": "2026-09-23",
+          "email": "lars.strand@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        }
+      ]
+    },
+    {
+      "shape": "LeadColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Navn"
+        },
+        {
+          "field": "company",
+          "header": "Firma"
+        },
+        {
+          "field": "owner",
+          "header": "Eier"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Ny": "info",
+            "Kontaktet": "neutral",
+            "Kvalifisert": "success",
+            "Ikke kvalifisert": "danger"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Siste kontakt",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "LeadFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Eier",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Ny",
+            "Kontaktet",
+            "Kvalifisert",
+            "Ikke kvalifisert"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Kilde",
+          "type": "select",
+          "options": [
+            "Nettside",
+            "Anbefaling",
+            "Messe",
+            "Oppsøkende"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Opprettet",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "LeadViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle leads"
+        },
+        {
+          "id": "mine",
+          "label": "Mine leads"
+        },
+        {
+          "id": "new",
+          "label": "Nye denne uken"
+        }
+      ]
+    },
+    {
+      "shape": "LeadColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Navn",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Firma"
+        },
+        {
+          "id": "owner",
+          "label": "Eier"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Siste kontakt"
+        }
+      ]
+    },
+    {
+      "shape": "LeadSelection",
+      "rows": []
+    },
+    {
+      "shape": "Contacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Silje Andersen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Kunde",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Driftssjef",
+          "email": "silje.andersen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "contact-2",
+          "name": "Jonas Pettersen",
+          "company": "Nordlys Bygg AS",
+          "owner": "Sofie Berg",
+          "status": "Potensiell",
+          "source": "Messe",
+          "lastContact": "2026-10-04",
+          "created": "2026-08-03",
+          "title": "Økonomisjef",
+          "email": "jonas.pettersen@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        },
+        {
+          "id": "contact-3",
+          "name": "Marte Kristiansen",
+          "company": "Bergen Havn AS",
+          "owner": "Henrik Lund",
+          "status": "Inaktiv",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-06",
+          "created": "2026-08-05",
+          "title": "Innkjøpssjef",
+          "email": "marte.kristiansen@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "contact-4",
+          "name": "Anders Johansen",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Ingrid Solberg",
+          "status": "Kunde",
+          "source": "Nettside",
+          "lastContact": "2026-10-08",
+          "created": "2026-08-07",
+          "title": "Daglig leder",
+          "email": "anders.johansen@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        },
+        {
+          "id": "contact-5",
+          "name": "Eira Larsen",
+          "company": "Oslo Kaffekompani AS",
+          "owner": "Magnus Dahl",
+          "status": "Potensiell",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-10",
+          "created": "2026-08-09",
+          "title": "IT-ansvarlig",
+          "email": "eira.larsen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "contact-6",
+          "name": "Sander Olsen",
+          "company": "Vestland Fisk AS",
+          "owner": "Sofie Berg",
+          "status": "Inaktiv",
+          "source": "Messe",
+          "lastContact": "2026-10-12",
+          "created": "2026-08-11",
+          "title": "Driftssjef",
+          "email": "sander.olsen@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        },
+        {
+          "id": "contact-7",
+          "name": "Thea Eriksen",
+          "company": "Trondheim Data AS",
+          "owner": "Henrik Lund",
+          "status": "Kunde",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-14",
+          "created": "2026-08-13",
+          "title": "Økonomisjef",
+          "email": "thea.eriksen@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "contact-8",
+          "name": "Mats Haugen",
+          "company": "Lofoten Reiseliv AS",
+          "owner": "Ingrid Solberg",
+          "status": "Potensiell",
+          "source": "Nettside",
+          "lastContact": "2026-10-16",
+          "created": "2026-08-15",
+          "title": "Innkjøpssjef",
+          "email": "mats.haugen@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        },
+        {
+          "id": "contact-9",
+          "name": "Emilie Moen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Inaktiv",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-18",
+          "created": "2026-08-17",
+          "title": "Daglig leder",
+          "email": "emilie.moen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "contact-10",
+          "name": "Lars Strand",
+          "company": "Nordlys Bygg AS",
+          "owner": "Sofie Berg",
+          "status": "Kunde",
+          "source": "Messe",
+          "lastContact": "2026-10-20",
+          "created": "2026-08-19",
+          "title": "IT-ansvarlig",
+          "email": "lars.strand@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        },
+        {
+          "id": "contact-11",
+          "name": "Nora Aas",
+          "company": "Bergen Havn AS",
+          "owner": "Henrik Lund",
+          "status": "Potensiell",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-22",
+          "created": "2026-08-21",
+          "title": "Driftssjef",
+          "email": "nora.aas@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        },
+        {
+          "id": "contact-12",
+          "name": "Eskil Bakken",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Ingrid Solberg",
+          "status": "Inaktiv",
+          "source": "Nettside",
+          "lastContact": "2026-10-24",
+          "created": "2026-08-23",
+          "title": "Økonomisjef",
+          "email": "eskil.bakken@eksempel.no",
+          "phone": "+47 55 00 20 02"
+        }
+      ]
+    },
+    {
+      "shape": "ContactColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Navn"
+        },
+        {
+          "field": "company",
+          "header": "Firma"
+        },
+        {
+          "field": "owner",
+          "header": "Eier"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Kunde": "success",
+            "Potensiell": "info",
+            "Inaktiv": "neutral"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Siste kontakt",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ContactFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Eier",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Kunde",
+            "Potensiell",
+            "Inaktiv"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Kilde",
+          "type": "select",
+          "options": [
+            "Nettside",
+            "Anbefaling",
+            "Messe",
+            "Oppsøkende"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Opprettet",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ContactViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle kontakter"
+        },
+        {
+          "id": "mine",
+          "label": "Mine kontakter"
+        },
+        {
+          "id": "recent",
+          "label": "Nylig kontaktet"
+        }
+      ]
+    },
+    {
+      "shape": "ContactColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Navn",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Firma"
+        },
+        {
+          "id": "owner",
+          "label": "Eier"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Siste kontakt"
+        }
+      ]
+    },
+    {
+      "shape": "ContactSelection",
+      "rows": []
+    },
+    {
+      "shape": "Companies",
+      "rows": [
+        {
+          "id": "company-1",
+          "name": "Fjordtech AS",
+          "industry": "Teknologi",
+          "owner": "Sofie Berg",
+          "status": "Kunde",
+          "source": "Messe",
+          "lastContact": "2026-10-01",
+          "created": "2026-07-01",
+          "website": "www.fjordtech.eksempel.no",
+          "city": "Bergen",
+          "employees": 12
+        },
+        {
+          "id": "company-2",
+          "name": "Nordlys Bygg AS",
+          "industry": "Bygg og anlegg",
+          "owner": "Henrik Lund",
+          "status": "Potensiell",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-04",
+          "created": "2026-07-04",
+          "website": "www.nordlysbygg.eksempel.no",
+          "city": "Stavanger",
+          "employees": 48
+        },
+        {
+          "id": "company-3",
+          "name": "Bergen Havn AS",
+          "industry": "Havn og logistikk",
+          "owner": "Ingrid Solberg",
+          "status": "Partner",
+          "source": "Nettside",
+          "lastContact": "2026-10-07",
+          "created": "2026-07-07",
+          "website": "www.bergenhavn.eksempel.no",
+          "city": "Bergen",
+          "employees": 230
+        },
+        {
+          "id": "company-4",
+          "name": "Telemark Mekanikk AS",
+          "industry": "Industri",
+          "owner": "Magnus Dahl",
+          "status": "Kunde",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-10",
+          "created": "2026-07-10",
+          "website": "www.telemarkmek.eksempel.no",
+          "city": "Skien",
+          "employees": 9
+        },
+        {
+          "id": "company-5",
+          "name": "Oslo Kaffekompani AS",
+          "industry": "Mat og drikke",
+          "owner": "Sofie Berg",
+          "status": "Potensiell",
+          "source": "Messe",
+          "lastContact": "2026-10-13",
+          "created": "2026-07-13",
+          "website": "www.oslokaffe.eksempel.no",
+          "city": "Oslo",
+          "employees": 640
+        },
+        {
+          "id": "company-6",
+          "name": "Vestland Fisk AS",
+          "industry": "Sjømat",
+          "owner": "Henrik Lund",
+          "status": "Partner",
+          "source": "Oppsøkende",
+          "lastContact": "2026-10-16",
+          "created": "2026-07-16",
+          "website": "www.vestlandfisk.eksempel.no",
+          "city": "Ålesund",
+          "employees": 75
+        },
+        {
+          "id": "company-7",
+          "name": "Trondheim Data AS",
+          "industry": "Programvare",
+          "owner": "Ingrid Solberg",
+          "status": "Kunde",
+          "source": "Nettside",
+          "lastContact": "2026-10-19",
+          "created": "2026-07-19",
+          "website": "www.trondheimdata.eksempel.no",
+          "city": "Trondheim",
+          "employees": 120
+        },
+        {
+          "id": "company-8",
+          "name": "Lofoten Reiseliv AS",
+          "industry": "Reiseliv",
+          "owner": "Magnus Dahl",
+          "status": "Potensiell",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-22",
+          "created": "2026-07-22",
+          "website": "www.lofotenreiseliv.eksempel.no",
+          "city": "Svolvær",
+          "employees": 18
+        }
+      ]
+    },
+    {
+      "shape": "CompanyColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Navn"
+        },
+        {
+          "field": "industry",
+          "header": "Bransje"
+        },
+        {
+          "field": "owner",
+          "header": "Eier"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Kunde": "success",
+            "Potensiell": "info",
+            "Partner": "warning"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Siste kontakt",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Eier",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Kunde",
+            "Potensiell",
+            "Partner"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Kilde",
+          "type": "select",
+          "options": [
+            "Nettside",
+            "Anbefaling",
+            "Messe",
+            "Oppsøkende"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Opprettet",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle firma"
+        },
+        {
+          "id": "mine",
+          "label": "Mine firma"
+        },
+        {
+          "id": "customers",
+          "label": "Kunder"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Navn",
+          "locked": true
+        },
+        {
+          "id": "industry",
+          "label": "Bransje"
+        },
+        {
+          "id": "owner",
+          "label": "Eier"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Siste kontakt"
+        }
+      ]
+    },
+    {
+      "shape": "CompanySelection",
+      "rows": []
+    },
+    {
+      "shape": "Deals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Fjordtech driftsplattform",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Ny",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-2",
+          "name": "Nordlys Bygg lisenser",
+          "company": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "stage": "Kvalifisert",
+          "value": 125000,
+          "closes": "2026-11-03",
+          "created": "2026-09-03",
+          "probability": 30,
+          "source": "Anbefaling"
+        },
+        {
+          "id": "deal-3",
+          "name": "Bergen Havn pilot",
+          "company": "Bergen Havn AS",
+          "owner": "Sofie Berg",
+          "stage": "Tilbud",
+          "value": 18500,
+          "closes": "2026-12-05",
+          "created": "2026-09-05",
+          "probability": 55,
+          "source": "Messe"
+        },
+        {
+          "id": "deal-4",
+          "name": "Telemark Mekanikk fornyelse",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Henrik Lund",
+          "stage": "Forhandling",
+          "value": 76000,
+          "closes": "2026-10-07",
+          "created": "2026-09-07",
+          "probability": 75,
+          "source": "Oppsøkende"
+        },
+        {
+          "id": "deal-5",
+          "name": "Oslo Kaffekompani nettbutikk",
+          "company": "Oslo Kaffekompani AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Vunnet",
+          "value": 32000,
+          "closes": "2026-11-09",
+          "created": "2026-09-09",
+          "probability": 100,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-6",
+          "name": "Vestland Fisk sporing",
+          "company": "Vestland Fisk AS",
+          "owner": "Magnus Dahl",
+          "stage": "Ny",
+          "value": 210000,
+          "closes": "2026-12-11",
+          "created": "2026-09-11",
+          "probability": 10,
+          "source": "Anbefaling"
+        },
+        {
+          "id": "deal-7",
+          "name": "Trondheim Data integrasjon",
+          "company": "Trondheim Data AS",
+          "owner": "Sofie Berg",
+          "stage": "Kvalifisert",
+          "value": 54000,
+          "closes": "2026-10-13",
+          "created": "2026-09-13",
+          "probability": 30,
+          "source": "Messe"
+        },
+        {
+          "id": "deal-8",
+          "name": "Lofoten Reiseliv booking",
+          "company": "Lofoten Reiseliv AS",
+          "owner": "Henrik Lund",
+          "stage": "Tilbud",
+          "value": 9800,
+          "closes": "2026-11-15",
+          "created": "2026-09-15",
+          "probability": 55,
+          "source": "Oppsøkende"
+        },
+        {
+          "id": "deal-9",
+          "name": "Fjordtech tilleggsmodul",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Forhandling",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-10",
+          "name": "Nordlys Bygg opplæring",
+          "company": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "stage": "Vunnet",
+          "value": 41000,
+          "closes": "2026-10-19",
+          "created": "2026-09-19",
+          "probability": 100,
+          "source": "Anbefaling"
+        },
+        {
+          "id": "deal-11",
+          "name": "Bergen Havn drift",
+          "company": "Bergen Havn AS",
+          "owner": "Sofie Berg",
+          "stage": "Ny",
+          "value": 150000,
+          "closes": "2026-11-21",
+          "created": "2026-09-21",
+          "probability": 10,
+          "source": "Messe"
+        },
+        {
+          "id": "deal-12",
+          "name": "Telemark Mekanikk service",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Henrik Lund",
+          "stage": "Kvalifisert",
+          "value": 27000,
+          "closes": "2026-12-23",
+          "created": "2026-09-23",
+          "probability": 30,
+          "source": "Oppsøkende"
+        }
+      ]
+    },
+    {
+      "shape": "DealColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Navn"
+        },
+        {
+          "field": "company",
+          "header": "Firma"
+        },
+        {
+          "field": "owner",
+          "header": "Eier"
+        },
+        {
+          "field": "stage",
+          "header": "Fase",
+          "kind": "status",
+          "tones": {
+            "Ny": "info",
+            "Kvalifisert": "info",
+            "Tilbud": "warning",
+            "Forhandling": "warning",
+            "Vunnet": "success"
+          }
+        },
+        {
+          "field": "value",
+          "header": "Verdi",
+          "kind": "currency",
+          "currency": "NOK"
+        },
+        {
+          "field": "closes",
+          "header": "Lukkedato",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "DealFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Eier",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund"
+          ]
+        },
+        {
+          "name": "stage",
+          "label": "Fase",
+          "type": "select",
+          "options": [
+            "Ny",
+            "Kvalifisert",
+            "Tilbud",
+            "Forhandling",
+            "Vunnet"
+          ]
+        },
+        {
+          "name": "value",
+          "label": "Verdi",
+          "type": "number"
+        },
+        {
+          "name": "created",
+          "label": "Opprettet",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "DealViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle avtaler"
+        },
+        {
+          "id": "mine",
+          "label": "Mine avtaler"
+        },
+        {
+          "id": "closing",
+          "label": "Lukkes denne måneden"
+        }
+      ]
+    },
+    {
+      "shape": "DealColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Navn",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Firma"
+        },
+        {
+          "id": "owner",
+          "label": "Eier"
+        },
+        {
+          "id": "stage",
+          "label": "Fase"
+        },
+        {
+          "id": "value",
+          "label": "Verdi"
+        },
+        {
+          "id": "closes",
+          "label": "Lukkedato"
+        }
+      ]
+    },
+    {
+      "shape": "DealSelection",
+      "rows": []
+    },
+    {
+      "shape": "Activities",
+      "rows": [
+        {
+          "id": "activity-1",
+          "name": "Behovsmøte med Kari Nordmann",
+          "type": "Samtale",
+          "related": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "status": "Planlagt",
+          "due": "2026-10-01",
+          "created": "2026-10-01"
+        },
+        {
+          "id": "activity-2",
+          "name": "Send tilbud til Nordlys Bygg AS",
+          "type": "Møte",
+          "related": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "status": "Utført",
+          "due": "2026-10-04",
+          "created": "2026-10-03"
+        },
+        {
+          "id": "activity-3",
+          "name": "Kvartalsmøte med Bergen Havn AS",
+          "type": "E-post",
+          "related": "Bergen Havn AS",
+          "owner": "Sofie Berg",
+          "status": "Utført",
+          "due": "2026-10-07",
+          "created": "2026-10-05"
+        },
+        {
+          "id": "activity-4",
+          "name": "Følg opp prisforslag",
+          "type": "Oppgave",
+          "related": "Telemark Mekanikk AS",
+          "owner": "Henrik Lund",
+          "status": "Planlagt",
+          "due": "2026-10-10",
+          "created": "2026-10-07"
+        },
+        {
+          "id": "activity-5",
+          "name": "Purre på signert ordre",
+          "type": "Samtale",
+          "related": "Oslo Kaffekompani AS",
+          "owner": "Ingrid Solberg",
+          "status": "Forfalt",
+          "due": "2026-10-13",
+          "created": "2026-10-09"
+        },
+        {
+          "id": "activity-6",
+          "name": "Demo for Oslo Kaffekompani AS",
+          "type": "Møte",
+          "related": "Vestland Fisk AS",
+          "owner": "Magnus Dahl",
+          "status": "Planlagt",
+          "due": "2026-10-16",
+          "created": "2026-10-11"
+        },
+        {
+          "id": "activity-7",
+          "name": "Kontraktsgjennomgang",
+          "type": "E-post",
+          "related": "Trondheim Data AS",
+          "owner": "Sofie Berg",
+          "status": "Utført",
+          "due": "2026-10-19",
+          "created": "2026-10-13"
+        },
+        {
+          "id": "activity-8",
+          "name": "Besøk hos Vestland Fisk AS",
+          "type": "Oppgave",
+          "related": "Lofoten Reiseliv AS",
+          "owner": "Henrik Lund",
+          "status": "Planlagt",
+          "due": "2026-10-22",
+          "created": "2026-10-15"
+        },
+        {
+          "id": "activity-9",
+          "name": "Påminnelse om fornyelse",
+          "type": "Samtale",
+          "related": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "status": "Forfalt",
+          "due": "2026-10-25",
+          "created": "2026-10-17"
+        },
+        {
+          "id": "activity-10",
+          "name": "Introduksjons-e-post til Trondheim Data AS",
+          "type": "Møte",
+          "related": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "status": "Utført",
+          "due": "2026-10-01",
+          "created": "2026-10-19"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Emne"
+        },
+        {
+          "field": "type",
+          "header": "Type"
+        },
+        {
+          "field": "related",
+          "header": "Gjelder"
+        },
+        {
+          "field": "owner",
+          "header": "Eier"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Planlagt": "info",
+            "Utført": "success",
+            "Forfalt": "danger"
+          }
+        },
+        {
+          "field": "due",
+          "header": "Frist",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Eier",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Planlagt",
+            "Utført",
+            "Forfalt"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Samtale",
+            "Møte",
+            "E-post",
+            "Oppgave"
+          ]
+        },
+        {
+          "name": "due",
+          "label": "Frist",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle aktiviteter"
+        },
+        {
+          "id": "mine",
+          "label": "Mine aktiviteter"
+        },
+        {
+          "id": "overdue",
+          "label": "Forfalt"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Emne",
+          "locked": true
+        },
+        {
+          "id": "type",
+          "label": "Type"
+        },
+        {
+          "id": "related",
+          "label": "Gjelder"
+        },
+        {
+          "id": "owner",
+          "label": "Eier"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "due",
+          "label": "Frist"
+        }
+      ]
+    },
+    {
+      "shape": "ActivitySelection",
+      "rows": []
+    },
+    {
+      "shape": "LeadSections",
+      "rows": [
+        {
+          "id": "lead",
+          "title": "Om leaden",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Firma"
+            },
+            {
+              "name": "email",
+              "label": "E-post",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Telefon"
+            },
+            {
+              "name": "source",
+              "label": "Kilde",
+              "type": "select",
+              "options": [
+                "Nettside",
+                "Anbefaling",
+                "Messe",
+                "Oppsøkende"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Ny",
+                "Kontaktet",
+                "Kvalifisert",
+                "Ikke kvalifisert"
+              ]
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notater",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactSections",
+      "rows": [
+        {
+          "id": "contact",
+          "title": "Om kontakten",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "title",
+              "label": "Stilling"
+            },
+            {
+              "name": "email",
+              "label": "E-post",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Telefon"
+            },
+            {
+              "name": "company",
+              "label": "Firma",
+              "type": "select",
+              "options": [
+                "Fjordtech AS",
+                "Nordlys Bygg AS",
+                "Bergen Havn AS",
+                "Telemark Mekanikk AS",
+                "Oslo Kaffekompani AS",
+                "Vestland Fisk AS",
+                "Trondheim Data AS",
+                "Lofoten Reiseliv AS"
+              ]
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Kunde",
+                "Potensiell",
+                "Inaktiv"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notater",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanySections",
+      "rows": [
+        {
+          "id": "company",
+          "title": "Om firmaet",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "industry",
+              "label": "Bransje",
+              "type": "select",
+              "options": [
+                "Teknologi",
+                "Bygg og anlegg",
+                "Havn og logistikk",
+                "Industri",
+                "Mat og drikke",
+                "Sjømat",
+                "Programvare",
+                "Reiseliv"
+              ]
+            },
+            {
+              "name": "website",
+              "label": "Nettsted"
+            },
+            {
+              "name": "city",
+              "label": "By"
+            },
+            {
+              "name": "employees",
+              "label": "Ansatte",
+              "type": "number"
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Kunde",
+                "Potensiell",
+                "Partner"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealSections",
+      "rows": [
+        {
+          "id": "deal",
+          "title": "Om avtalen",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Firma",
+              "type": "select",
+              "options": [
+                "Fjordtech AS",
+                "Nordlys Bygg AS",
+                "Bergen Havn AS",
+                "Telemark Mekanikk AS",
+                "Oslo Kaffekompani AS",
+                "Vestland Fisk AS",
+                "Trondheim Data AS",
+                "Lofoten Reiseliv AS"
+              ],
+              "required": true
+            },
+            {
+              "name": "value",
+              "label": "Verdi",
+              "type": "currency",
+              "required": true
+            },
+            {
+              "name": "stage",
+              "label": "Fase",
+              "type": "select",
+              "options": [
+                "Ny",
+                "Kvalifisert",
+                "Tilbud",
+                "Forhandling",
+                "Vunnet"
+              ],
+              "required": true
+            },
+            {
+              "name": "closes",
+              "label": "Lukkedato",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "probability",
+              "label": "Sannsynlighet (%)",
+              "type": "number"
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notater",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "LeadQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Ny lead",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Firma"
+            },
+            {
+              "name": "email",
+              "label": "E-post",
+              "required": true
+            },
+            {
+              "name": "source",
+              "label": "Kilde",
+              "type": "select",
+              "options": [
+                "Nettside",
+                "Anbefaling",
+                "Messe",
+                "Oppsøkende"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Ny kontakt",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "E-post",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Firma",
+              "type": "select",
+              "options": [
+                "Fjordtech AS",
+                "Nordlys Bygg AS",
+                "Bergen Havn AS",
+                "Telemark Mekanikk AS",
+                "Oslo Kaffekompani AS",
+                "Vestland Fisk AS",
+                "Trondheim Data AS",
+                "Lofoten Reiseliv AS"
+              ]
+            },
+            {
+              "name": "phone",
+              "label": "Telefon"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanyQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Nytt firma",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "industry",
+              "label": "Bransje",
+              "type": "select",
+              "options": [
+                "Teknologi",
+                "Bygg og anlegg",
+                "Havn og logistikk",
+                "Industri",
+                "Mat og drikke",
+                "Sjømat",
+                "Programvare",
+                "Reiseliv"
+              ]
+            },
+            {
+              "name": "city",
+              "label": "By"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Ny avtale",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Firma",
+              "type": "select",
+              "options": [
+                "Fjordtech AS",
+                "Nordlys Bygg AS",
+                "Bergen Havn AS",
+                "Telemark Mekanikk AS",
+                "Oslo Kaffekompani AS",
+                "Vestland Fisk AS",
+                "Trondheim Data AS",
+                "Lofoten Reiseliv AS"
+              ]
+            },
+            {
+              "name": "value",
+              "label": "Verdi",
+              "type": "currency"
+            },
+            {
+              "name": "closes",
+              "label": "Lukkedato",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ActivityQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Logg aktivitet",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Emne",
+              "required": true
+            },
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "options": [
+                "Samtale",
+                "Møte",
+                "E-post",
+                "Oppgave"
+              ]
+            },
+            {
+              "name": "due",
+              "label": "Frist",
+              "type": "date"
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "LeadRecord",
+      "rows": [
+        {
+          "id": "lead-1",
+          "name": "Kari Nordmann",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Ingrid Solberg",
+          "status": "Ny",
+          "source": "Nettside",
+          "lastContact": "2026-10-01",
+          "created": "2026-09-01",
+          "email": "kari.nordmann@eksempel.no",
+          "phone": "+47 22 00 10 01"
+        }
+      ]
+    },
+    {
+      "shape": "ContactRecord",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Silje Andersen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Kunde",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Driftssjef",
+          "email": "silje.andersen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyRecord",
+      "rows": [
+        {
+          "id": "company-1",
+          "name": "Fjordtech AS",
+          "industry": "Teknologi",
+          "owner": "Sofie Berg",
+          "status": "Kunde",
+          "source": "Messe",
+          "lastContact": "2026-10-01",
+          "created": "2026-07-01",
+          "website": "www.fjordtech.eksempel.no",
+          "city": "Bergen",
+          "employees": 12
+        }
+      ]
+    },
+    {
+      "shape": "DealRecord",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Fjordtech driftsplattform",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Ny",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Nettside"
+        }
+      ]
+    },
+    {
+      "shape": "ContactSummary",
+      "rows": [
+        {
+          "status": "Kunde",
+          "tone": "success",
+          "openDeals": 2,
+          "lifetimeValue": 173000,
+          "people": [
+            {
+              "name": "Magnus Dahl"
+            },
+            {
+              "name": "Sofie Berg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanySummary",
+      "rows": [
+        {
+          "status": "Kunde",
+          "tone": "success",
+          "contacts": 3,
+          "openDeals": 2,
+          "lifetimeValue": 173000,
+          "people": [
+            {
+              "name": "Sofie Berg"
+            },
+            {
+              "name": "Ingrid Solberg"
+            },
+            {
+              "name": "Henrik Lund"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealSummary",
+      "rows": [
+        {
+          "status": "Ny",
+          "tone": "info",
+          "value": 48000,
+          "probability": 10,
+          "people": [
+            {
+              "name": "Ingrid Solberg"
+            },
+            {
+              "name": "Magnus Dahl"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Fjordtech driftsplattform",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Ny",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-9",
+          "name": "Fjordtech tilleggsmodul",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Forhandling",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Nettside"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyContacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Silje Andersen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Kunde",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Driftssjef",
+          "email": "silje.andersen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "contact-9",
+          "name": "Emilie Moen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Inaktiv",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-18",
+          "created": "2026-08-17",
+          "title": "Daglig leder",
+          "email": "emilie.moen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Fjordtech driftsplattform",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Ny",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-9",
+          "name": "Fjordtech tilleggsmodul",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Forhandling",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Nettside"
+        }
+      ]
+    },
+    {
+      "shape": "DealContacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Silje Andersen",
+          "company": "Fjordtech AS",
+          "owner": "Magnus Dahl",
+          "status": "Kunde",
+          "source": "Anbefaling",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Driftssjef",
+          "email": "silje.andersen@eksempel.no",
+          "phone": "+47 73 00 30 03"
+        },
+        {
+          "id": "contact-2",
+          "name": "Jonas Pettersen",
+          "company": "Nordlys Bygg AS",
+          "owner": "Sofie Berg",
+          "status": "Potensiell",
+          "source": "Messe",
+          "lastContact": "2026-10-04",
+          "created": "2026-08-03",
+          "title": "Økonomisjef",
+          "email": "jonas.pettersen@eksempel.no",
+          "phone": "+47 35 00 40 04"
+        }
+      ]
+    },
+    {
+      "shape": "ContactActivity",
+      "rows": [
+        {
+          "id": "Ingrid Solberg-14",
+          "actor": "Ingrid Solberg",
+          "action": "kommenterte",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sendte revidert tilbud og ba om svar innen fredag."
+        },
+        {
+          "id": "Magnus Dahl-12",
+          "actor": "Magnus Dahl",
+          "action": "endret eier",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "flyttet avtalen til neste fase",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "ContactTasks",
+      "rows": [
+        {
+          "title": "Neste steg",
+          "items": [
+            {
+              "id": "Contact-t1",
+              "label": "Ring for å bekrefte behov",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Contact-t2",
+              "label": "Send ordreskjema",
+              "owner": "Magnus Dahl",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Contact-t3",
+              "label": "Book oppstartsmøte",
+              "owner": "Ingrid Solberg",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanyActivity",
+      "rows": [
+        {
+          "id": "Ingrid Solberg-14",
+          "actor": "Ingrid Solberg",
+          "action": "kommenterte",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sendte revidert tilbud og ba om svar innen fredag."
+        },
+        {
+          "id": "Magnus Dahl-12",
+          "actor": "Magnus Dahl",
+          "action": "endret eier",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "flyttet avtalen til neste fase",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyTasks",
+      "rows": [
+        {
+          "title": "Neste steg",
+          "items": [
+            {
+              "id": "Company-t1",
+              "label": "Ring for å bekrefte behov",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Company-t2",
+              "label": "Send ordreskjema",
+              "owner": "Magnus Dahl",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Company-t3",
+              "label": "Book oppstartsmøte",
+              "owner": "Ingrid Solberg",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealActivity",
+      "rows": [
+        {
+          "id": "Ingrid Solberg-14",
+          "actor": "Ingrid Solberg",
+          "action": "kommenterte",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sendte revidert tilbud og ba om svar innen fredag."
+        },
+        {
+          "id": "Magnus Dahl-12",
+          "actor": "Magnus Dahl",
+          "action": "endret eier",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "flyttet avtalen til neste fase",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "DealTasks",
+      "rows": [
+        {
+          "title": "Neste steg",
+          "items": [
+            {
+              "id": "Deal-t1",
+              "label": "Ring for å bekrefte behov",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Deal-t2",
+              "label": "Send ordreskjema",
+              "owner": "Magnus Dahl",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Deal-t3",
+              "label": "Book oppstartsmøte",
+              "owner": "Ingrid Solberg",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmKpis",
+      "rows": [
+        {
+          "value": 1245000,
+          "change": 8.4
+        },
+        {
+          "value": 312000,
+          "change": 12.6
+        },
+        {
+          "value": 24.5,
+          "change": -1.8
+        }
+      ]
+    },
+    {
+      "shape": "CrmLeadsBySource",
+      "rows": [
+        {
+          "categories": [
+            "Nettside",
+            "Anbefaling",
+            "Messe",
+            "Oppsøkende"
+          ],
+          "series": [
+            {
+              "name": "Leads",
+              "values": [
+                124,
+                86,
+                58,
+                41
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmDealsByStage",
+      "rows": [
+        {
+          "categories": [
+            "Ny",
+            "Kvalifisert",
+            "Tilbud",
+            "Forhandling",
+            "Vunnet"
+          ],
+          "series": [
+            {
+              "name": "Avtaler",
+              "values": [
+                96,
+                64,
+                38,
+                21,
+                12
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmMyTasks",
+      "rows": [
+        {
+          "title": "I dag",
+          "items": [
+            {
+              "id": "m1",
+              "label": "Ring for å bekrefte behov",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-16",
+              "done": false
+            },
+            {
+              "id": "m2",
+              "label": "Send ordreskjema",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-16",
+              "done": true
+            }
+          ]
+        },
+        {
+          "title": "Denne uken",
+          "items": [
+            {
+              "id": "m3",
+              "label": "Book oppstartsmøte",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "m4",
+              "label": "Forbered fornyelsestilbud",
+              "owner": "Ingrid Solberg",
+              "due": "2026-10-23",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ClosingSoonDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Fjordtech driftsplattform",
+          "company": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "stage": "Ny",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Nettside"
+        },
+        {
+          "id": "deal-4",
+          "name": "Telemark Mekanikk fornyelse",
+          "company": "Telemark Mekanikk AS",
+          "owner": "Henrik Lund",
+          "stage": "Forhandling",
+          "value": 76000,
+          "closes": "2026-10-07",
+          "created": "2026-09-07",
+          "probability": 75,
+          "source": "Oppsøkende"
+        },
+        {
+          "id": "deal-7",
+          "name": "Trondheim Data integrasjon",
+          "company": "Trondheim Data AS",
+          "owner": "Sofie Berg",
+          "stage": "Kvalifisert",
+          "value": 54000,
+          "closes": "2026-10-13",
+          "created": "2026-09-13",
+          "probability": 30,
+          "source": "Messe"
+        },
+        {
+          "id": "deal-10",
+          "name": "Nordlys Bygg opplæring",
+          "company": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "stage": "Vunnet",
+          "value": 41000,
+          "closes": "2026-10-19",
+          "created": "2026-09-19",
+          "probability": 100,
+          "source": "Anbefaling"
+        },
+        {
+          "id": "deal-2",
+          "name": "Nordlys Bygg lisenser",
+          "company": "Nordlys Bygg AS",
+          "owner": "Magnus Dahl",
+          "stage": "Kvalifisert",
+          "value": 125000,
+          "closes": "2026-11-03",
+          "created": "2026-09-03",
+          "probability": 30,
+          "source": "Anbefaling"
+        }
+      ]
+    },
+    {
+      "shape": "CrmRecordTabs",
+      "rows": [
+        {
+          "id": "overview",
+          "label": "Oversikt"
+        },
+        {
+          "id": "related",
+          "label": "Relatert",
+          "badge": "3"
+        },
+        {
+          "id": "files",
+          "label": "Filer"
+        },
+        {
+          "id": "history",
+          "label": "Historikk"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineStages",
+      "rows": [
+        {
+          "id": "new",
+          "label": "Ny",
+          "limit": 5
+        },
+        {
+          "id": "qualified",
+          "label": "Kvalifisert"
+        },
+        {
+          "id": "proposal",
+          "label": "Tilbud"
+        },
+        {
+          "id": "negotiation",
+          "label": "Forhandling"
+        },
+        {
+          "id": "won",
+          "label": "Vunnet"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "title": "Fjordtech driftsplattform",
+          "column": "new",
+          "assignee": "Ingrid Solberg",
+          "amount": 48000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Fjordtech AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "48 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-10-01"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-2",
+          "title": "Nordlys Bygg lisenser",
+          "column": "qualified",
+          "assignee": "Magnus Dahl",
+          "amount": 125000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Nordlys Bygg AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "125 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-11-03"
+            }
+          ],
+          "badges": [
+            "Het"
+          ]
+        },
+        {
+          "id": "deal-3",
+          "title": "Bergen Havn pilot",
+          "column": "proposal",
+          "assignee": "Sofie Berg",
+          "amount": 18500,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Bergen Havn AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "18 500 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-12-05"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-4",
+          "title": "Telemark Mekanikk fornyelse",
+          "column": "negotiation",
+          "assignee": "Henrik Lund",
+          "amount": 76000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Telemark Mekanikk AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "76 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-10-07"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-5",
+          "title": "Oslo Kaffekompani nettbutikk",
+          "column": "won",
+          "assignee": "Ingrid Solberg",
+          "amount": 32000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Oslo Kaffekompani AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "32 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-11-09"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-6",
+          "title": "Vestland Fisk sporing",
+          "column": "new",
+          "assignee": "Magnus Dahl",
+          "amount": 210000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Vestland Fisk AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "210 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-12-11"
+            }
+          ],
+          "badges": [
+            "Het"
+          ]
+        },
+        {
+          "id": "deal-7",
+          "title": "Trondheim Data integrasjon",
+          "column": "qualified",
+          "assignee": "Sofie Berg",
+          "amount": 54000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Trondheim Data AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "54 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-10-13"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-8",
+          "title": "Lofoten Reiseliv booking",
+          "column": "proposal",
+          "assignee": "Henrik Lund",
+          "amount": 9800,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Lofoten Reiseliv AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "9 800 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-11-15"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-9",
+          "title": "Fjordtech tilleggsmodul",
+          "column": "negotiation",
+          "assignee": "Ingrid Solberg",
+          "amount": 88000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Fjordtech AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "88 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-12-17"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-10",
+          "title": "Nordlys Bygg opplæring",
+          "column": "won",
+          "assignee": "Magnus Dahl",
+          "amount": 41000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Nordlys Bygg AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "41 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-10-19"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-11",
+          "title": "Bergen Havn drift",
+          "column": "new",
+          "assignee": "Sofie Berg",
+          "amount": 150000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Bergen Havn AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "150 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-11-21"
+            }
+          ],
+          "badges": [
+            "Het"
+          ]
+        },
+        {
+          "id": "deal-12",
+          "title": "Telemark Mekanikk service",
+          "column": "qualified",
+          "assignee": "Henrik Lund",
+          "amount": 27000,
+          "fields": [
+            {
+              "label": "Firma",
+              "value": "Telemark Mekanikk AS"
+            },
+            {
+              "label": "Verdi",
+              "value": "27 000 kr"
+            },
+            {
+              "label": "Lukkedato",
+              "value": "2026-12-23"
+            }
+          ],
+          "badges": []
+        }
+      ]
+    },
+    {
+      "shape": "CrmFormErrors",
+      "rows": [
+        {}
+      ]
+    }
+  ]
+}

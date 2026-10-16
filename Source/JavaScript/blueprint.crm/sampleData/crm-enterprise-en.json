@@ -1,0 +1,2729 @@
+{
+  "id": "crm-enterprise-en",
+  "title": "CRM · Enterprise",
+  "locale": "en-GB",
+  "owner": "blueprint:crm",
+  "sets": [
+    {
+      "shape": "CrmSettings",
+      "rows": [
+        {
+          "locale": "en-GB",
+          "currency": "GBP"
+        }
+      ]
+    },
+    {
+      "shape": "Leads",
+      "rows": [
+        {
+          "id": "lead-1",
+          "name": "Isla Morgan",
+          "company": "Cedar & Pine",
+          "owner": "Amelia Hart",
+          "status": "New",
+          "source": "Web",
+          "lastContact": "2026-10-01",
+          "created": "2026-09-01",
+          "email": "isla.morgan@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "lead-2",
+          "name": "Noah Bennett",
+          "company": "Aldgate Systems",
+          "owner": "Oliver Reed",
+          "status": "Contacted",
+          "source": "Referral",
+          "lastContact": "2026-10-03",
+          "created": "2026-09-03",
+          "email": "noah.bennett@example.co.uk",
+          "phone": "+44 161 496 0202"
+        },
+        {
+          "id": "lead-3",
+          "name": "Freya Collins",
+          "company": "Redwood Foods",
+          "owner": "Priya Nair",
+          "status": "Qualified",
+          "source": "Event",
+          "lastContact": "2026-10-05",
+          "created": "2026-09-05",
+          "email": "freya.collins@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "lead-4",
+          "name": "Arthur Whitaker",
+          "company": "Kestrel Energy",
+          "owner": "Daniel Cho",
+          "status": "Unqualified",
+          "source": "Outbound",
+          "lastContact": "2026-10-07",
+          "created": "2026-09-07",
+          "email": "arthur.whitaker@example.co.uk",
+          "phone": "+44 117 496 0404"
+        },
+        {
+          "id": "lead-5",
+          "name": "Maya Patel",
+          "company": "Meridian Health",
+          "owner": "Amelia Hart",
+          "status": "New",
+          "source": "Web",
+          "lastContact": "2026-10-09",
+          "created": "2026-09-09",
+          "email": "maya.patel@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "lead-6",
+          "name": "Jack Sutton",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Contacted",
+          "source": "Referral",
+          "lastContact": "2026-10-11",
+          "created": "2026-09-11",
+          "email": "jack.sutton@example.co.uk",
+          "phone": "+44 161 496 0202"
+        },
+        {
+          "id": "lead-7",
+          "name": "Elsie Granger",
+          "company": "Harbour & Sons",
+          "owner": "Priya Nair",
+          "status": "Qualified",
+          "source": "Event",
+          "lastContact": "2026-10-13",
+          "created": "2026-09-13",
+          "email": "elsie.granger@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "lead-8",
+          "name": "Harry Lowe",
+          "company": "Bluebird Studio",
+          "owner": "Daniel Cho",
+          "status": "Unqualified",
+          "source": "Outbound",
+          "lastContact": "2026-10-15",
+          "created": "2026-09-15",
+          "email": "harry.lowe@example.co.uk",
+          "phone": "+44 117 496 0404"
+        },
+        {
+          "id": "lead-9",
+          "name": "Ruby Fletcher",
+          "company": "Cedar & Pine",
+          "owner": "Amelia Hart",
+          "status": "New",
+          "source": "Web",
+          "lastContact": "2026-10-17",
+          "created": "2026-09-17",
+          "email": "ruby.fletcher@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "lead-10",
+          "name": "Leo Barker",
+          "company": "Aldgate Systems",
+          "owner": "Oliver Reed",
+          "status": "Contacted",
+          "source": "Referral",
+          "lastContact": "2026-10-19",
+          "created": "2026-09-19",
+          "email": "leo.barker@example.co.uk",
+          "phone": "+44 161 496 0202"
+        },
+        {
+          "id": "lead-11",
+          "name": "Grace Holloway",
+          "company": "Redwood Foods",
+          "owner": "Priya Nair",
+          "status": "Qualified",
+          "source": "Event",
+          "lastContact": "2026-10-21",
+          "created": "2026-09-21",
+          "email": "grace.holloway@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "lead-12",
+          "name": "Theo Marsh",
+          "company": "Kestrel Energy",
+          "owner": "Daniel Cho",
+          "status": "Unqualified",
+          "source": "Outbound",
+          "lastContact": "2026-10-23",
+          "created": "2026-09-23",
+          "email": "theo.marsh@example.co.uk",
+          "phone": "+44 117 496 0404"
+        }
+      ]
+    },
+    {
+      "shape": "LeadColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "company",
+          "header": "Company"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "New": "info",
+            "Contacted": "neutral",
+            "Qualified": "success",
+            "Unqualified": "danger"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Last contact",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "LeadFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "New",
+            "Contacted",
+            "Qualified",
+            "Unqualified"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Source",
+          "type": "select",
+          "options": [
+            "Web",
+            "Referral",
+            "Event",
+            "Outbound"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Created",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "LeadViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All leads"
+        },
+        {
+          "id": "mine",
+          "label": "My leads"
+        },
+        {
+          "id": "new",
+          "label": "New this week"
+        }
+      ]
+    },
+    {
+      "shape": "LeadColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Company"
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Last contact"
+        }
+      ]
+    },
+    {
+      "shape": "LeadSelection",
+      "rows": []
+    },
+    {
+      "shape": "Contacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Freya Collins",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Customer",
+          "source": "Referral",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Head of Operations",
+          "email": "freya.collins@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "contact-2",
+          "name": "Arthur Whitaker",
+          "company": "Harbour & Sons",
+          "owner": "Priya Nair",
+          "status": "Prospect",
+          "source": "Event",
+          "lastContact": "2026-10-04",
+          "created": "2026-08-03",
+          "title": "Finance Director",
+          "email": "arthur.whitaker@example.co.uk",
+          "phone": "+44 117 496 0404"
+        },
+        {
+          "id": "contact-3",
+          "name": "Maya Patel",
+          "company": "Bluebird Studio",
+          "owner": "Daniel Cho",
+          "status": "Inactive",
+          "source": "Outbound",
+          "lastContact": "2026-10-06",
+          "created": "2026-08-05",
+          "title": "Procurement Lead",
+          "email": "maya.patel@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "contact-4",
+          "name": "Jack Sutton",
+          "company": "Cedar & Pine",
+          "owner": "Amelia Hart",
+          "status": "Customer",
+          "source": "Web",
+          "lastContact": "2026-10-08",
+          "created": "2026-08-07",
+          "title": "Managing Director",
+          "email": "jack.sutton@example.co.uk",
+          "phone": "+44 161 496 0202"
+        },
+        {
+          "id": "contact-5",
+          "name": "Elsie Granger",
+          "company": "Aldgate Systems",
+          "owner": "Oliver Reed",
+          "status": "Prospect",
+          "source": "Referral",
+          "lastContact": "2026-10-10",
+          "created": "2026-08-09",
+          "title": "IT Manager",
+          "email": "elsie.granger@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "contact-6",
+          "name": "Harry Lowe",
+          "company": "Redwood Foods",
+          "owner": "Priya Nair",
+          "status": "Inactive",
+          "source": "Event",
+          "lastContact": "2026-10-12",
+          "created": "2026-08-11",
+          "title": "Head of Operations",
+          "email": "harry.lowe@example.co.uk",
+          "phone": "+44 117 496 0404"
+        },
+        {
+          "id": "contact-7",
+          "name": "Ruby Fletcher",
+          "company": "Kestrel Energy",
+          "owner": "Daniel Cho",
+          "status": "Customer",
+          "source": "Outbound",
+          "lastContact": "2026-10-14",
+          "created": "2026-08-13",
+          "title": "Finance Director",
+          "email": "ruby.fletcher@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "contact-8",
+          "name": "Leo Barker",
+          "company": "Meridian Health",
+          "owner": "Amelia Hart",
+          "status": "Prospect",
+          "source": "Web",
+          "lastContact": "2026-10-16",
+          "created": "2026-08-15",
+          "title": "Procurement Lead",
+          "email": "leo.barker@example.co.uk",
+          "phone": "+44 161 496 0202"
+        },
+        {
+          "id": "contact-9",
+          "name": "Grace Holloway",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Inactive",
+          "source": "Referral",
+          "lastContact": "2026-10-18",
+          "created": "2026-08-17",
+          "title": "Managing Director",
+          "email": "grace.holloway@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "contact-10",
+          "name": "Theo Marsh",
+          "company": "Harbour & Sons",
+          "owner": "Priya Nair",
+          "status": "Customer",
+          "source": "Event",
+          "lastContact": "2026-10-20",
+          "created": "2026-08-19",
+          "title": "IT Manager",
+          "email": "theo.marsh@example.co.uk",
+          "phone": "+44 117 496 0404"
+        },
+        {
+          "id": "contact-11",
+          "name": "Alice Dunmore",
+          "company": "Bluebird Studio",
+          "owner": "Daniel Cho",
+          "status": "Prospect",
+          "source": "Outbound",
+          "lastContact": "2026-10-22",
+          "created": "2026-08-21",
+          "title": "Head of Operations",
+          "email": "alice.dunmore@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        },
+        {
+          "id": "contact-12",
+          "name": "Oscar Kemp",
+          "company": "Cedar & Pine",
+          "owner": "Amelia Hart",
+          "status": "Inactive",
+          "source": "Web",
+          "lastContact": "2026-10-24",
+          "created": "2026-08-23",
+          "title": "Finance Director",
+          "email": "oscar.kemp@example.co.uk",
+          "phone": "+44 161 496 0202"
+        }
+      ]
+    },
+    {
+      "shape": "ContactColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "company",
+          "header": "Company"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Customer": "success",
+            "Prospect": "info",
+            "Inactive": "neutral"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Last contact",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ContactFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Customer",
+            "Prospect",
+            "Inactive"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Source",
+          "type": "select",
+          "options": [
+            "Web",
+            "Referral",
+            "Event",
+            "Outbound"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Created",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ContactViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All contacts"
+        },
+        {
+          "id": "mine",
+          "label": "My contacts"
+        },
+        {
+          "id": "recent",
+          "label": "Recently contacted"
+        }
+      ]
+    },
+    {
+      "shape": "ContactColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Company"
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Last contact"
+        }
+      ]
+    },
+    {
+      "shape": "ContactSelection",
+      "rows": []
+    },
+    {
+      "shape": "Companies",
+      "rows": [
+        {
+          "id": "company-1",
+          "name": "Northgate Logistics",
+          "industry": "Logistics",
+          "owner": "Priya Nair",
+          "status": "Customer",
+          "source": "Event",
+          "lastContact": "2026-10-01",
+          "created": "2026-07-01",
+          "website": "www.northgate.example.co.uk",
+          "city": "Manchester",
+          "employees": 12
+        },
+        {
+          "id": "company-2",
+          "name": "Harbour & Sons",
+          "industry": "Retail",
+          "owner": "Daniel Cho",
+          "status": "Prospect",
+          "source": "Outbound",
+          "lastContact": "2026-10-04",
+          "created": "2026-07-04",
+          "website": "www.harbour.example.co.uk",
+          "city": "Liverpool",
+          "employees": 48
+        },
+        {
+          "id": "company-3",
+          "name": "Bluebird Studio",
+          "industry": "Media",
+          "owner": "Amelia Hart",
+          "status": "Partner",
+          "source": "Web",
+          "lastContact": "2026-10-07",
+          "created": "2026-07-07",
+          "website": "www.bluebird.example.co.uk",
+          "city": "London",
+          "employees": 230
+        },
+        {
+          "id": "company-4",
+          "name": "Cedar & Pine",
+          "industry": "Construction",
+          "owner": "Oliver Reed",
+          "status": "Customer",
+          "source": "Referral",
+          "lastContact": "2026-10-10",
+          "created": "2026-07-10",
+          "website": "www.cedarpine.example.co.uk",
+          "city": "Bristol",
+          "employees": 9
+        },
+        {
+          "id": "company-5",
+          "name": "Aldgate Systems",
+          "industry": "Software",
+          "owner": "Priya Nair",
+          "status": "Prospect",
+          "source": "Event",
+          "lastContact": "2026-10-13",
+          "created": "2026-07-13",
+          "website": "www.aldgate.example.co.uk",
+          "city": "Leeds",
+          "employees": 640
+        },
+        {
+          "id": "company-6",
+          "name": "Redwood Foods",
+          "industry": "Food",
+          "owner": "Daniel Cho",
+          "status": "Partner",
+          "source": "Outbound",
+          "lastContact": "2026-10-16",
+          "created": "2026-07-16",
+          "website": "www.redwood.example.co.uk",
+          "city": "Glasgow",
+          "employees": 75
+        },
+        {
+          "id": "company-7",
+          "name": "Kestrel Energy",
+          "industry": "Energy",
+          "owner": "Amelia Hart",
+          "status": "Customer",
+          "source": "Web",
+          "lastContact": "2026-10-19",
+          "created": "2026-07-19",
+          "website": "www.kestrel.example.co.uk",
+          "city": "Aberdeen",
+          "employees": 120
+        },
+        {
+          "id": "company-8",
+          "name": "Meridian Health",
+          "industry": "Healthcare",
+          "owner": "Oliver Reed",
+          "status": "Prospect",
+          "source": "Referral",
+          "lastContact": "2026-10-22",
+          "created": "2026-07-22",
+          "website": "www.meridian.example.co.uk",
+          "city": "Cardiff",
+          "employees": 18
+        }
+      ]
+    },
+    {
+      "shape": "CompanyColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "industry",
+          "header": "Industry"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Customer": "success",
+            "Prospect": "info",
+            "Partner": "warning"
+          }
+        },
+        {
+          "field": "lastContact",
+          "header": "Last contact",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Customer",
+            "Prospect",
+            "Partner"
+          ]
+        },
+        {
+          "name": "source",
+          "label": "Source",
+          "type": "select",
+          "options": [
+            "Web",
+            "Referral",
+            "Event",
+            "Outbound"
+          ]
+        },
+        {
+          "name": "created",
+          "label": "Created",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All companies"
+        },
+        {
+          "id": "mine",
+          "label": "My companies"
+        },
+        {
+          "id": "customers",
+          "label": "Customers"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "industry",
+          "label": "Industry"
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "lastContact",
+          "label": "Last contact"
+        }
+      ]
+    },
+    {
+      "shape": "CompanySelection",
+      "rows": []
+    },
+    {
+      "shape": "Deals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Northgate fleet platform",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "New",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Web"
+        },
+        {
+          "id": "deal-2",
+          "name": "Harbour retail rollout",
+          "company": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "stage": "Qualified",
+          "value": 125000,
+          "closes": "2026-11-03",
+          "created": "2026-09-03",
+          "probability": 30,
+          "source": "Referral"
+        },
+        {
+          "id": "deal-3",
+          "name": "Bluebird studio licences",
+          "company": "Bluebird Studio",
+          "owner": "Priya Nair",
+          "stage": "Proposal",
+          "value": 18500,
+          "closes": "2026-12-05",
+          "created": "2026-09-05",
+          "probability": 55,
+          "source": "Event"
+        },
+        {
+          "id": "deal-4",
+          "name": "Cedar & Pine renewal",
+          "company": "Cedar & Pine",
+          "owner": "Daniel Cho",
+          "stage": "Negotiation",
+          "value": 76000,
+          "closes": "2026-10-07",
+          "created": "2026-09-07",
+          "probability": 75,
+          "source": "Outbound"
+        },
+        {
+          "id": "deal-5",
+          "name": "Aldgate integration",
+          "company": "Aldgate Systems",
+          "owner": "Amelia Hart",
+          "stage": "Won",
+          "value": 32000,
+          "closes": "2026-11-09",
+          "created": "2026-09-09",
+          "probability": 100,
+          "source": "Web"
+        },
+        {
+          "id": "deal-6",
+          "name": "Redwood supply portal",
+          "company": "Redwood Foods",
+          "owner": "Oliver Reed",
+          "stage": "New",
+          "value": 210000,
+          "closes": "2026-12-11",
+          "created": "2026-09-11",
+          "probability": 10,
+          "source": "Referral"
+        },
+        {
+          "id": "deal-7",
+          "name": "Kestrel monitoring",
+          "company": "Kestrel Energy",
+          "owner": "Priya Nair",
+          "stage": "Qualified",
+          "value": 54000,
+          "closes": "2026-10-13",
+          "created": "2026-09-13",
+          "probability": 30,
+          "source": "Event"
+        },
+        {
+          "id": "deal-8",
+          "name": "Meridian patient app",
+          "company": "Meridian Health",
+          "owner": "Daniel Cho",
+          "stage": "Proposal",
+          "value": 9800,
+          "closes": "2026-11-15",
+          "created": "2026-09-15",
+          "probability": 55,
+          "source": "Outbound"
+        },
+        {
+          "id": "deal-9",
+          "name": "Northgate warehouse add-on",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "Negotiation",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Web"
+        },
+        {
+          "id": "deal-10",
+          "name": "Harbour loyalty pilot",
+          "company": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "stage": "Won",
+          "value": 41000,
+          "closes": "2026-10-19",
+          "created": "2026-09-19",
+          "probability": 100,
+          "source": "Referral"
+        },
+        {
+          "id": "deal-11",
+          "name": "Bluebird render farm",
+          "company": "Bluebird Studio",
+          "owner": "Priya Nair",
+          "stage": "New",
+          "value": 150000,
+          "closes": "2026-11-21",
+          "created": "2026-09-21",
+          "probability": 10,
+          "source": "Event"
+        },
+        {
+          "id": "deal-12",
+          "name": "Cedar & Pine training",
+          "company": "Cedar & Pine",
+          "owner": "Daniel Cho",
+          "stage": "Qualified",
+          "value": 27000,
+          "closes": "2026-12-23",
+          "created": "2026-09-23",
+          "probability": 30,
+          "source": "Outbound"
+        }
+      ]
+    },
+    {
+      "shape": "DealColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "company",
+          "header": "Company"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "stage",
+          "header": "Stage",
+          "kind": "status",
+          "tones": {
+            "New": "info",
+            "Qualified": "info",
+            "Proposal": "warning",
+            "Negotiation": "warning",
+            "Won": "success"
+          }
+        },
+        {
+          "field": "value",
+          "header": "Value",
+          "kind": "currency",
+          "currency": "GBP"
+        },
+        {
+          "field": "closes",
+          "header": "Close date",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "DealFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ]
+        },
+        {
+          "name": "stage",
+          "label": "Stage",
+          "type": "select",
+          "options": [
+            "New",
+            "Qualified",
+            "Proposal",
+            "Negotiation",
+            "Won"
+          ]
+        },
+        {
+          "name": "value",
+          "label": "Value",
+          "type": "number"
+        },
+        {
+          "name": "created",
+          "label": "Created",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "DealViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All deals"
+        },
+        {
+          "id": "mine",
+          "label": "My deals"
+        },
+        {
+          "id": "closing",
+          "label": "Closing this month"
+        }
+      ]
+    },
+    {
+      "shape": "DealColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "company",
+          "label": "Company"
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "stage",
+          "label": "Stage"
+        },
+        {
+          "id": "value",
+          "label": "Value"
+        },
+        {
+          "id": "closes",
+          "label": "Close date"
+        }
+      ]
+    },
+    {
+      "shape": "DealSelection",
+      "rows": []
+    },
+    {
+      "shape": "Activities",
+      "rows": [
+        {
+          "id": "activity-1",
+          "name": "Discovery call with Isla Morgan",
+          "type": "Call",
+          "related": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "status": "Planned",
+          "due": "2026-10-01",
+          "created": "2026-10-01"
+        },
+        {
+          "id": "activity-2",
+          "name": "Send proposal to Harbour & Sons",
+          "type": "Meeting",
+          "related": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "status": "Done",
+          "due": "2026-10-04",
+          "created": "2026-10-03"
+        },
+        {
+          "id": "activity-3",
+          "name": "Quarterly review with Bluebird Studio",
+          "type": "Email",
+          "related": "Bluebird Studio",
+          "owner": "Priya Nair",
+          "status": "Done",
+          "due": "2026-10-07",
+          "created": "2026-10-05"
+        },
+        {
+          "id": "activity-4",
+          "name": "Follow up on pricing",
+          "type": "Task",
+          "related": "Cedar & Pine",
+          "owner": "Daniel Cho",
+          "status": "Planned",
+          "due": "2026-10-10",
+          "created": "2026-10-07"
+        },
+        {
+          "id": "activity-5",
+          "name": "Chase signed order form",
+          "type": "Call",
+          "related": "Aldgate Systems",
+          "owner": "Amelia Hart",
+          "status": "Overdue",
+          "due": "2026-10-13",
+          "created": "2026-10-09"
+        },
+        {
+          "id": "activity-6",
+          "name": "Demo for Aldgate Systems",
+          "type": "Meeting",
+          "related": "Redwood Foods",
+          "owner": "Oliver Reed",
+          "status": "Planned",
+          "due": "2026-10-16",
+          "created": "2026-10-11"
+        },
+        {
+          "id": "activity-7",
+          "name": "Contract review with legal",
+          "type": "Email",
+          "related": "Kestrel Energy",
+          "owner": "Priya Nair",
+          "status": "Done",
+          "due": "2026-10-19",
+          "created": "2026-10-13"
+        },
+        {
+          "id": "activity-8",
+          "name": "Onsite visit at Redwood Foods",
+          "type": "Task",
+          "related": "Meridian Health",
+          "owner": "Daniel Cho",
+          "status": "Planned",
+          "due": "2026-10-22",
+          "created": "2026-10-15"
+        },
+        {
+          "id": "activity-9",
+          "name": "Renewal reminder for Kestrel Energy",
+          "type": "Call",
+          "related": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "status": "Overdue",
+          "due": "2026-10-25",
+          "created": "2026-10-17"
+        },
+        {
+          "id": "activity-10",
+          "name": "Intro email to Meridian Health",
+          "type": "Meeting",
+          "related": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "status": "Done",
+          "due": "2026-10-01",
+          "created": "2026-10-19"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Subject"
+        },
+        {
+          "field": "type",
+          "header": "Type"
+        },
+        {
+          "field": "related",
+          "header": "Related to"
+        },
+        {
+          "field": "owner",
+          "header": "Owner"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Planned": "info",
+            "Done": "success",
+            "Overdue": "danger"
+          }
+        },
+        {
+          "field": "due",
+          "header": "Due",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityFilterFields",
+      "rows": [
+        {
+          "name": "owner",
+          "label": "Owner",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho"
+          ]
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Planned",
+            "Done",
+            "Overdue"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Call",
+            "Meeting",
+            "Email",
+            "Task"
+          ]
+        },
+        {
+          "name": "due",
+          "label": "Due",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All activities"
+        },
+        {
+          "id": "mine",
+          "label": "My activities"
+        },
+        {
+          "id": "overdue",
+          "label": "Overdue"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Subject",
+          "locked": true
+        },
+        {
+          "id": "type",
+          "label": "Type"
+        },
+        {
+          "id": "related",
+          "label": "Related to"
+        },
+        {
+          "id": "owner",
+          "label": "Owner"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "due",
+          "label": "Due"
+        }
+      ]
+    },
+    {
+      "shape": "ActivitySelection",
+      "rows": []
+    },
+    {
+      "shape": "LeadSections",
+      "rows": [
+        {
+          "id": "lead",
+          "title": "Lead details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company"
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Phone"
+            },
+            {
+              "name": "source",
+              "label": "Source",
+              "type": "select",
+              "options": [
+                "Web",
+                "Referral",
+                "Event",
+                "Outbound"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "New",
+                "Contacted",
+                "Qualified",
+                "Unqualified"
+              ]
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactSections",
+      "rows": [
+        {
+          "id": "contact",
+          "title": "Contact details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "title",
+              "label": "Job title"
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "phone",
+              "label": "Phone"
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Northgate Logistics",
+                "Harbour & Sons",
+                "Bluebird Studio",
+                "Cedar & Pine",
+                "Aldgate Systems",
+                "Redwood Foods",
+                "Kestrel Energy",
+                "Meridian Health"
+              ]
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Customer",
+                "Prospect",
+                "Inactive"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanySections",
+      "rows": [
+        {
+          "id": "company",
+          "title": "Company details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "industry",
+              "label": "Industry",
+              "type": "select",
+              "options": [
+                "Logistics",
+                "Retail",
+                "Media",
+                "Construction",
+                "Software",
+                "Food",
+                "Energy",
+                "Healthcare"
+              ]
+            },
+            {
+              "name": "website",
+              "label": "Website"
+            },
+            {
+              "name": "city",
+              "label": "City"
+            },
+            {
+              "name": "employees",
+              "label": "Employees",
+              "type": "number"
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Customer",
+                "Prospect",
+                "Partner"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealSections",
+      "rows": [
+        {
+          "id": "deal",
+          "title": "Deal details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Northgate Logistics",
+                "Harbour & Sons",
+                "Bluebird Studio",
+                "Cedar & Pine",
+                "Aldgate Systems",
+                "Redwood Foods",
+                "Kestrel Energy",
+                "Meridian Health"
+              ],
+              "required": true
+            },
+            {
+              "name": "value",
+              "label": "Value",
+              "type": "currency",
+              "required": true
+            },
+            {
+              "name": "stage",
+              "label": "Stage",
+              "type": "select",
+              "options": [
+                "New",
+                "Qualified",
+                "Proposal",
+                "Negotiation",
+                "Won"
+              ],
+              "required": true
+            },
+            {
+              "name": "closes",
+              "label": "Close date",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "probability",
+              "label": "Probability (%)",
+              "type": "number"
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "LeadQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New lead",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company"
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "source",
+              "label": "Source",
+              "type": "select",
+              "options": [
+                "Web",
+                "Referral",
+                "Event",
+                "Outbound"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New contact",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Northgate Logistics",
+                "Harbour & Sons",
+                "Bluebird Studio",
+                "Cedar & Pine",
+                "Aldgate Systems",
+                "Redwood Foods",
+                "Kestrel Energy",
+                "Meridian Health"
+              ]
+            },
+            {
+              "name": "phone",
+              "label": "Phone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanyQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New company",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "industry",
+              "label": "Industry",
+              "type": "select",
+              "options": [
+                "Logistics",
+                "Retail",
+                "Media",
+                "Construction",
+                "Software",
+                "Food",
+                "Energy",
+                "Healthcare"
+              ]
+            },
+            {
+              "name": "city",
+              "label": "City"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "New deal",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Northgate Logistics",
+                "Harbour & Sons",
+                "Bluebird Studio",
+                "Cedar & Pine",
+                "Aldgate Systems",
+                "Redwood Foods",
+                "Kestrel Energy",
+                "Meridian Health"
+              ]
+            },
+            {
+              "name": "value",
+              "label": "Value",
+              "type": "currency"
+            },
+            {
+              "name": "closes",
+              "label": "Close date",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ActivityQuickSections",
+      "rows": [
+        {
+          "id": "quick",
+          "title": "Log activity",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Subject",
+              "required": true
+            },
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "options": [
+                "Call",
+                "Meeting",
+                "Email",
+                "Task"
+              ]
+            },
+            {
+              "name": "due",
+              "label": "Due",
+              "type": "date"
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "LeadRecord",
+      "rows": [
+        {
+          "id": "lead-1",
+          "name": "Isla Morgan",
+          "company": "Cedar & Pine",
+          "owner": "Amelia Hart",
+          "status": "New",
+          "source": "Web",
+          "lastContact": "2026-10-01",
+          "created": "2026-09-01",
+          "email": "isla.morgan@example.co.uk",
+          "phone": "+44 20 7946 0101"
+        }
+      ]
+    },
+    {
+      "shape": "ContactRecord",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Freya Collins",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Customer",
+          "source": "Referral",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Head of Operations",
+          "email": "freya.collins@example.co.uk",
+          "phone": "+44 131 496 0303"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyRecord",
+      "rows": [
+        {
+          "id": "company-1",
+          "name": "Northgate Logistics",
+          "industry": "Logistics",
+          "owner": "Priya Nair",
+          "status": "Customer",
+          "source": "Event",
+          "lastContact": "2026-10-01",
+          "created": "2026-07-01",
+          "website": "www.northgate.example.co.uk",
+          "city": "Manchester",
+          "employees": 12
+        }
+      ]
+    },
+    {
+      "shape": "DealRecord",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Northgate fleet platform",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "New",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Web"
+        }
+      ]
+    },
+    {
+      "shape": "ContactSummary",
+      "rows": [
+        {
+          "status": "Customer",
+          "tone": "success",
+          "openDeals": 2,
+          "lifetimeValue": 173000,
+          "people": [
+            {
+              "name": "Oliver Reed"
+            },
+            {
+              "name": "Priya Nair"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanySummary",
+      "rows": [
+        {
+          "status": "Customer",
+          "tone": "success",
+          "contacts": 3,
+          "openDeals": 2,
+          "lifetimeValue": 173000,
+          "people": [
+            {
+              "name": "Priya Nair"
+            },
+            {
+              "name": "Amelia Hart"
+            },
+            {
+              "name": "Daniel Cho"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealSummary",
+      "rows": [
+        {
+          "status": "New",
+          "tone": "info",
+          "value": 48000,
+          "probability": 10,
+          "people": [
+            {
+              "name": "Amelia Hart"
+            },
+            {
+              "name": "Oliver Reed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ContactDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Northgate fleet platform",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "New",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Web"
+        },
+        {
+          "id": "deal-9",
+          "name": "Northgate warehouse add-on",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "Negotiation",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Web"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyContacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Freya Collins",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Customer",
+          "source": "Referral",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Head of Operations",
+          "email": "freya.collins@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "contact-9",
+          "name": "Grace Holloway",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Inactive",
+          "source": "Referral",
+          "lastContact": "2026-10-18",
+          "created": "2026-08-17",
+          "title": "Managing Director",
+          "email": "grace.holloway@example.co.uk",
+          "phone": "+44 131 496 0303"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Northgate fleet platform",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "New",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Web"
+        },
+        {
+          "id": "deal-9",
+          "name": "Northgate warehouse add-on",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "Negotiation",
+          "value": 88000,
+          "closes": "2026-12-17",
+          "created": "2026-09-17",
+          "probability": 75,
+          "source": "Web"
+        }
+      ]
+    },
+    {
+      "shape": "DealContacts",
+      "rows": [
+        {
+          "id": "contact-1",
+          "name": "Freya Collins",
+          "company": "Northgate Logistics",
+          "owner": "Oliver Reed",
+          "status": "Customer",
+          "source": "Referral",
+          "lastContact": "2026-10-02",
+          "created": "2026-08-01",
+          "title": "Head of Operations",
+          "email": "freya.collins@example.co.uk",
+          "phone": "+44 131 496 0303"
+        },
+        {
+          "id": "contact-2",
+          "name": "Arthur Whitaker",
+          "company": "Harbour & Sons",
+          "owner": "Priya Nair",
+          "status": "Prospect",
+          "source": "Event",
+          "lastContact": "2026-10-04",
+          "created": "2026-08-03",
+          "title": "Finance Director",
+          "email": "arthur.whitaker@example.co.uk",
+          "phone": "+44 117 496 0404"
+        }
+      ]
+    },
+    {
+      "shape": "ContactActivity",
+      "rows": [
+        {
+          "id": "Amelia Hart-14",
+          "actor": "Amelia Hart",
+          "action": "commented",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sent the revised quote and asked for a decision by Friday."
+        },
+        {
+          "id": "Oliver Reed-12",
+          "actor": "Oliver Reed",
+          "action": "changed the owner",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "moved the deal to the next stage",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "ContactTasks",
+      "rows": [
+        {
+          "title": "Next steps",
+          "items": [
+            {
+              "id": "Contact-t1",
+              "label": "Call to confirm requirements",
+              "owner": "Amelia Hart",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Contact-t2",
+              "label": "Send the order form",
+              "owner": "Oliver Reed",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Contact-t3",
+              "label": "Book the onboarding workshop",
+              "owner": "Amelia Hart",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CompanyActivity",
+      "rows": [
+        {
+          "id": "Amelia Hart-14",
+          "actor": "Amelia Hart",
+          "action": "commented",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sent the revised quote and asked for a decision by Friday."
+        },
+        {
+          "id": "Oliver Reed-12",
+          "actor": "Oliver Reed",
+          "action": "changed the owner",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "moved the deal to the next stage",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "CompanyTasks",
+      "rows": [
+        {
+          "title": "Next steps",
+          "items": [
+            {
+              "id": "Company-t1",
+              "label": "Call to confirm requirements",
+              "owner": "Amelia Hart",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Company-t2",
+              "label": "Send the order form",
+              "owner": "Oliver Reed",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Company-t3",
+              "label": "Book the onboarding workshop",
+              "owner": "Amelia Hart",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "DealActivity",
+      "rows": [
+        {
+          "id": "Amelia Hart-14",
+          "actor": "Amelia Hart",
+          "action": "commented",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Sent the revised quote and asked for a decision by Friday."
+        },
+        {
+          "id": "Oliver Reed-12",
+          "actor": "Oliver Reed",
+          "action": "changed the owner",
+          "kind": "change",
+          "at": "2026-10-12T09:30:00Z"
+        },
+        {
+          "id": "System-9",
+          "actor": "System",
+          "action": "moved the deal to the next stage",
+          "kind": "status",
+          "at": "2026-10-09T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "DealTasks",
+      "rows": [
+        {
+          "title": "Next steps",
+          "items": [
+            {
+              "id": "Deal-t1",
+              "label": "Call to confirm requirements",
+              "owner": "Amelia Hart",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "Deal-t2",
+              "label": "Send the order form",
+              "owner": "Oliver Reed",
+              "due": "2026-10-25",
+              "done": true
+            },
+            {
+              "id": "Deal-t3",
+              "label": "Book the onboarding workshop",
+              "owner": "Amelia Hart",
+              "due": "2026-11-02",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmKpis",
+      "rows": [
+        {
+          "value": 1245000,
+          "change": 8.4
+        },
+        {
+          "value": 312000,
+          "change": 12.6
+        },
+        {
+          "value": 24.5,
+          "change": -1.8
+        }
+      ]
+    },
+    {
+      "shape": "CrmLeadsBySource",
+      "rows": [
+        {
+          "categories": [
+            "Web",
+            "Referral",
+            "Event",
+            "Outbound"
+          ],
+          "series": [
+            {
+              "name": "Leads",
+              "values": [
+                124,
+                86,
+                58,
+                41
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmDealsByStage",
+      "rows": [
+        {
+          "categories": [
+            "New",
+            "Qualified",
+            "Proposal",
+            "Negotiation",
+            "Won"
+          ],
+          "series": [
+            {
+              "name": "Deals",
+              "values": [
+                96,
+                64,
+                38,
+                21,
+                12
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "CrmMyTasks",
+      "rows": [
+        {
+          "title": "Today",
+          "items": [
+            {
+              "id": "m1",
+              "label": "Call to confirm requirements",
+              "owner": "Amelia Hart",
+              "due": "2026-10-16",
+              "done": false
+            },
+            {
+              "id": "m2",
+              "label": "Send the order form",
+              "owner": "Amelia Hart",
+              "due": "2026-10-16",
+              "done": true
+            }
+          ]
+        },
+        {
+          "title": "This week",
+          "items": [
+            {
+              "id": "m3",
+              "label": "Book the onboarding workshop",
+              "owner": "Amelia Hart",
+              "due": "2026-10-21",
+              "done": false
+            },
+            {
+              "id": "m4",
+              "label": "Prepare the renewal quote",
+              "owner": "Amelia Hart",
+              "due": "2026-10-23",
+              "done": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ClosingSoonDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "name": "Northgate fleet platform",
+          "company": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "stage": "New",
+          "value": 48000,
+          "closes": "2026-10-01",
+          "created": "2026-09-01",
+          "probability": 10,
+          "source": "Web"
+        },
+        {
+          "id": "deal-4",
+          "name": "Cedar & Pine renewal",
+          "company": "Cedar & Pine",
+          "owner": "Daniel Cho",
+          "stage": "Negotiation",
+          "value": 76000,
+          "closes": "2026-10-07",
+          "created": "2026-09-07",
+          "probability": 75,
+          "source": "Outbound"
+        },
+        {
+          "id": "deal-7",
+          "name": "Kestrel monitoring",
+          "company": "Kestrel Energy",
+          "owner": "Priya Nair",
+          "stage": "Qualified",
+          "value": 54000,
+          "closes": "2026-10-13",
+          "created": "2026-09-13",
+          "probability": 30,
+          "source": "Event"
+        },
+        {
+          "id": "deal-10",
+          "name": "Harbour loyalty pilot",
+          "company": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "stage": "Won",
+          "value": 41000,
+          "closes": "2026-10-19",
+          "created": "2026-09-19",
+          "probability": 100,
+          "source": "Referral"
+        },
+        {
+          "id": "deal-2",
+          "name": "Harbour retail rollout",
+          "company": "Harbour & Sons",
+          "owner": "Oliver Reed",
+          "stage": "Qualified",
+          "value": 125000,
+          "closes": "2026-11-03",
+          "created": "2026-09-03",
+          "probability": 30,
+          "source": "Referral"
+        }
+      ]
+    },
+    {
+      "shape": "CrmRecordTabs",
+      "rows": [
+        {
+          "id": "overview",
+          "label": "Overview"
+        },
+        {
+          "id": "related",
+          "label": "Related",
+          "badge": "3"
+        },
+        {
+          "id": "files",
+          "label": "Files"
+        },
+        {
+          "id": "history",
+          "label": "History"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineStages",
+      "rows": [
+        {
+          "id": "new",
+          "label": "New",
+          "limit": 5
+        },
+        {
+          "id": "qualified",
+          "label": "Qualified"
+        },
+        {
+          "id": "proposal",
+          "label": "Proposal"
+        },
+        {
+          "id": "negotiation",
+          "label": "Negotiation"
+        },
+        {
+          "id": "won",
+          "label": "Won"
+        }
+      ]
+    },
+    {
+      "shape": "PipelineDeals",
+      "rows": [
+        {
+          "id": "deal-1",
+          "title": "Northgate fleet platform",
+          "column": "new",
+          "assignee": "Amelia Hart",
+          "amount": 48000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Northgate Logistics"
+            },
+            {
+              "label": "Value",
+              "value": "£48,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-10-01"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-2",
+          "title": "Harbour retail rollout",
+          "column": "qualified",
+          "assignee": "Oliver Reed",
+          "amount": 125000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Harbour & Sons"
+            },
+            {
+              "label": "Value",
+              "value": "£125,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-11-03"
+            }
+          ],
+          "badges": [
+            "Hot"
+          ]
+        },
+        {
+          "id": "deal-3",
+          "title": "Bluebird studio licences",
+          "column": "proposal",
+          "assignee": "Priya Nair",
+          "amount": 18500,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Bluebird Studio"
+            },
+            {
+              "label": "Value",
+              "value": "£18,500"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-12-05"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-4",
+          "title": "Cedar & Pine renewal",
+          "column": "negotiation",
+          "assignee": "Daniel Cho",
+          "amount": 76000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Cedar & Pine"
+            },
+            {
+              "label": "Value",
+              "value": "£76,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-10-07"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-5",
+          "title": "Aldgate integration",
+          "column": "won",
+          "assignee": "Amelia Hart",
+          "amount": 32000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Aldgate Systems"
+            },
+            {
+              "label": "Value",
+              "value": "£32,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-11-09"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-6",
+          "title": "Redwood supply portal",
+          "column": "new",
+          "assignee": "Oliver Reed",
+          "amount": 210000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Redwood Foods"
+            },
+            {
+              "label": "Value",
+              "value": "£210,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-12-11"
+            }
+          ],
+          "badges": [
+            "Hot"
+          ]
+        },
+        {
+          "id": "deal-7",
+          "title": "Kestrel monitoring",
+          "column": "qualified",
+          "assignee": "Priya Nair",
+          "amount": 54000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Kestrel Energy"
+            },
+            {
+              "label": "Value",
+              "value": "£54,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-10-13"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-8",
+          "title": "Meridian patient app",
+          "column": "proposal",
+          "assignee": "Daniel Cho",
+          "amount": 9800,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Meridian Health"
+            },
+            {
+              "label": "Value",
+              "value": "£9,800"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-11-15"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-9",
+          "title": "Northgate warehouse add-on",
+          "column": "negotiation",
+          "assignee": "Amelia Hart",
+          "amount": 88000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Northgate Logistics"
+            },
+            {
+              "label": "Value",
+              "value": "£88,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-12-17"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-10",
+          "title": "Harbour loyalty pilot",
+          "column": "won",
+          "assignee": "Oliver Reed",
+          "amount": 41000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Harbour & Sons"
+            },
+            {
+              "label": "Value",
+              "value": "£41,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-10-19"
+            }
+          ],
+          "badges": []
+        },
+        {
+          "id": "deal-11",
+          "title": "Bluebird render farm",
+          "column": "new",
+          "assignee": "Priya Nair",
+          "amount": 150000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Bluebird Studio"
+            },
+            {
+              "label": "Value",
+              "value": "£150,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-11-21"
+            }
+          ],
+          "badges": [
+            "Hot"
+          ]
+        },
+        {
+          "id": "deal-12",
+          "title": "Cedar & Pine training",
+          "column": "qualified",
+          "assignee": "Daniel Cho",
+          "amount": 27000,
+          "fields": [
+            {
+              "label": "Company",
+              "value": "Cedar & Pine"
+            },
+            {
+              "label": "Value",
+              "value": "£27,000"
+            },
+            {
+              "label": "Close date",
+              "value": "2026-12-23"
+            }
+          ],
+          "badges": []
+        }
+      ]
+    },
+    {
+      "shape": "CrmFormErrors",
+      "rows": [
+        {}
+      ]
+    }
+  ]
+}
