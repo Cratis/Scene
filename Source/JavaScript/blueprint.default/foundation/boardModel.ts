@@ -64,8 +64,26 @@ export function moveCard(columns: BoardColumn[], cards: BoardCard[], id: string,
     return [...cards.filter(candidate => candidate.id !== id), { ...card, column: to }];
 }
 
-/** Whether a column holds more cards than its limit. */
 /** The sum of a numeric card field over the cards in a column; a card without the field adds nothing. */
 export const totalOf = (cards: BoardCard[], field: string): number => cards.reduce((sum, card) => sum + (card.numbers[field] ?? 0), 0);
 
 export const overLimit = (column: BoardColumn, count: number): boolean => column.limit > 0 && count > column.limit;
+
+/** One horizontal lane of a board: the cards of one person, laid across the same columns as every other lane. */
+export interface BoardLane {
+    key: string;
+    /** The assignee, or an empty string for the cards that have none. */
+    assignee: string;
+    cards: BoardCard[];
+}
+
+/**
+ * Splits the cards into lanes by assignee, in the order the people first appear, with the unassigned cards last - so the lanes do not jump about as cards move,
+ * and a person whose last card moves away keeps their lane (an empty one is shown by the caller, not dropped here).
+ */
+export function lanesByAssignee(cards: BoardCard[], people: string[]): BoardLane[] {
+    const order = [...new Set([...people, ...cards.flatMap(card => (card.assignee ? [card.assignee] : []))])];
+    const lanes: BoardLane[] = order.map(assignee => ({ key: assignee, assignee, cards: cards.filter(card => card.assignee === assignee) }));
+    const unassigned = cards.filter(card => !card.assignee);
+    return unassigned.length > 0 ? [...lanes, { key: '', assignee: '', cards: unassigned }] : lanes;
+}

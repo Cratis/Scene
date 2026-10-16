@@ -110,6 +110,11 @@ header also shows the total of that field over the cards in the column, formatte
 `compact` or a plain number) in the element's `locale`. The totals follow a card when it is moved, by dragging or by its Move-to menu, so a
 pipeline's header always says what each stage is worth.
 
+`swimlane: assignee` lays the board out in a lane for each person, across the same columns: lanes appear in the order the people first appear in the cards,
+the unassigned cards last, and a lane has its own heading (a level above its columns', so the outline stays in order). A card moves between columns within
+its lane, by dragging or by its Move-to menu; each column's count and total are for its lane, while the over-the-limit warning counts every lane, since a limit
+is the column's.
+
 ## Uploading files
 
 `fileUploader` checks a selection against `accept` (extensions, MIME types, wildcards), `maxSizeMb` and `multiple` before anything is
