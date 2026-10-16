@@ -292,6 +292,12 @@ public static partial class ApprovedPackageSetJson
         public List<string>? Assets { get; set; }
 
         public List<string>? RuntimeSingletons { get; set; }
+
+        /// <summary>Gets or sets the gallery metadata of a domain blueprint; design-time only, read and dropped.</summary>
+        public JsonElement? Blueprint { get; set; }
+
+        /// <summary>Gets or sets the sample-data packs of a domain blueprint; design-time only, read and dropped.</summary>
+        public JsonElement? SampleData { get; set; }
     }
 
     sealed class Dependency
