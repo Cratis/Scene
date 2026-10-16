@@ -2845,6 +2845,8 @@
 }
 
 .foundation-calendar-scroll {
+    position: relative;
+    max-inline-size: 100%;
     overflow-x: auto;
 }
 
@@ -2991,10 +2993,11 @@ td[data-outside='true'] .foundation-calendar-day {
 }
 
 .foundation-timeline-scroll {
+    max-inline-size: 100%;
     overflow-x: auto;
 }
 
-.foundation-timeline {
+.foundation-timeline-chart {
     min-inline-size: 40rem;
 }
 
@@ -3133,7 +3136,7 @@ td[data-outside='true'] .foundation-calendar-day {
     font: inherit;
 }
 
-.foundation-inbox section h4 {
+.foundation-inbox-groups section h4 {
     margin: var(--foundation-space-3) 0 var(--foundation-space-2);
     color: var(--foundation-muted);
     font-size: 0.875rem;

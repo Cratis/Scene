@@ -46,7 +46,7 @@ describe('when using the calendar', () => {
         calendar();
         const panel = screen.getByRole('region', { name: /Events on/ });
         ['Ada Lovelace', 'Grace Hopper', 'Linus Torvalds', 'Margaret Hamilton'].forEach(name => within(panel).getAllByText(name).length.should.be.greaterThan(0));
-        within(panel).getByText('Sick leave');
+        within(panel).getAllByText('Sick leave').length.should.be.greaterThan(0);
     });
 
     it('should move the selected day with the arrow keys and keep it in the address', () => {
@@ -82,7 +82,7 @@ describe('when using the calendar', () => {
 
     it('should select an event and press its button', () => {
         calendar();
-        const button = screen.getAllByRole('button', { name: /Ada Lovelace, Annual leave/ })[0];
+        const button = screen.getAllByRole('button', { name: /Ada Lovelace.*Annual leave/ })[0];
         fireEvent.click(button);
         button.getAttribute('aria-pressed')!.should.equal('true');
     });

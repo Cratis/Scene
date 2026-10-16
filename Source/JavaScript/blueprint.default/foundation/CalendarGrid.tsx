@@ -76,10 +76,11 @@ export function CalendarGrid({ element, interactions, bindingOutputs }: Register
     const views: [CalendarView, string][] = [[CalendarView.Month, strings.calendarMonth], [CalendarView.Week, strings.calendarWeek], [CalendarView.Agenda, strings.calendarAgenda]];
     const eventButton = (event: CalendarEvent, full: boolean) => (
         <button type='button' className='foundation-calendar-event' data-tone={event.tone} aria-pressed={selected === event.id}
-            aria-label={[event.title, event.category, event.person].filter(Boolean).join(', ')} onClick={() => select(event)}>
+            onClick={() => select(event)}>
             <FoundationIcon name={statusToneIcons[event.tone]} />
             <span>{event.title}</span>
             {full && event.person && <span className='foundation-count'>{event.person}</span>}
+            {(event.category || (!full && event.person)) && <span className='foundation-visually-hidden'>{[event.category, full ? undefined : event.person].filter(Boolean).join(', ')}</span>}
         </button>
     );
     const eventLine = (event: CalendarEvent) => (
@@ -113,7 +114,7 @@ export function CalendarGrid({ element, interactions, bindingOutputs }: Register
                         </div>
                     </div>
                     {view !== CalendarView.Agenda && (
-                        <div className='foundation-calendar-scroll'>
+                        <div className='foundation-calendar-scroll' role='region' aria-label={heading} tabIndex={0}>
                             <table className='foundation-calendar-grid' data-view={view}>
                                 <caption className='foundation-visually-hidden'>{heading}</caption>
                                 <thead>

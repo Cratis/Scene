@@ -81,7 +81,7 @@ export function InboxList({ element, interactions, bindingOutputs }: RegisteredC
                     </div>
                     <p className='foundation-visually-hidden' role='status'>{formatText(strings.inboxShowing, { count: shown.length })}</p>
                     {shown.length === 0 ? <p className='foundation-count'>{strings.inboxNothing}</p> : (
-                        <div ref={list} className='foundation-inbox' onKeyDown={onKeyDown}>
+                        <div ref={list} className='foundation-inbox-groups' onKeyDown={onKeyDown}>
                             {groupMessages(shown, today).map(({ group, messages: inGroup }) => (
                                 <section key={group} aria-label={groupLabels[group]}>
                                     <h4>{groupLabels[group]}</h4>

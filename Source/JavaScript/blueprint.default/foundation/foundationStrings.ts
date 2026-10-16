@@ -230,6 +230,7 @@ export const foundationStrings = {
     timelineBlocks: 'Holds up',
     timelineNothing: 'nothing',
     timelineSchedule: 'Schedule',
+    timelineChart: 'Timeline chart',
     timelineShowTable: 'Show as a table',
     timelineItem: 'Item',
     timelineLane: 'Lane',

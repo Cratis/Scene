@@ -58,23 +58,25 @@ export function TimelineGrid({ element, interactions, bindingOutputs }: Register
     const todayOffset = span ? offsetOf(today, span) : undefined;
 
     const schedule = (
-        <table className='foundation-timeline-table'>
-            <caption>{strings.timelineSchedule}</caption>
-            <thead>
-                <tr>
-                    <th scope='col'>{strings.timelineItem}</th><th scope='col'>{strings.timelineLane}</th><th scope='col'>{strings.timelineStart}</th>
-                    <th scope='col'>{strings.timelineEnd}</th><th scope='col'>{strings.timelineProgressColumn}</th><th scope='col'>{strings.timelineWaitsOn}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {items.map(item => (
-                    <tr key={item.id}>
-                        <th scope='row'><button type='button' className='foundation-calendar-more' aria-pressed={selectedId === item.id} onClick={() => select(item)}>{item.title}</button></th><td>{item.lane}</td><td>{formatDay(item.start, locale)}</td><td>{formatDay(item.end, locale)}</td>
-                        <td>{item.progress}%</td><td>{predecessorsOf(items, item).map(predecessor => predecessor.title).join(', ')}</td>
+        <div className='foundation-timeline-scroll' role='region' aria-label={strings.timelineSchedule} tabIndex={0}>
+            <table className='foundation-timeline-table'>
+                <caption>{strings.timelineSchedule}</caption>
+                <thead>
+                    <tr>
+                        <th scope='col'>{strings.timelineItem}</th><th scope='col'>{strings.timelineLane}</th><th scope='col'>{strings.timelineStart}</th>
+                        <th scope='col'>{strings.timelineEnd}</th><th scope='col'>{strings.timelineProgressColumn}</th><th scope='col'>{strings.timelineWaitsOn}</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {items.map(item => (
+                        <tr key={item.id}>
+                            <th scope='row'><button type='button' className='foundation-calendar-more' aria-pressed={selectedId === item.id} onClick={() => select(item)}>{item.title}</button></th><td>{item.lane}</td><td>{formatDay(item.start, locale)}</td><td>{formatDay(item.end, locale)}</td>
+                            <td>{item.progress}%</td><td>{predecessorsOf(items, item).map(predecessor => predecessor.title).join(', ')}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 
     return (
@@ -91,8 +93,8 @@ export function TimelineGrid({ element, interactions, bindingOutputs }: Register
                                 ))}
                             </div>
                         </div>
-                        <div className='foundation-timeline-scroll'>
-                            <div className='foundation-timeline' data-scale={scale}>
+                        <div className='foundation-timeline-scroll' role='region' aria-label={strings.timelineChart} tabIndex={0}>
+                            <div className='foundation-timeline-chart' data-scale={scale}>
                                 <div className='foundation-timeline-row foundation-timeline-axis'>
                                     <span className='foundation-timeline-lane' />
                                     <div className='foundation-timeline-track' aria-hidden='true'>
