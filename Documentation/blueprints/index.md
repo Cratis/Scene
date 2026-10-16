@@ -69,3 +69,4 @@ screen templates, three dialog templates and two themes.
 - **[The CRM blueprint](crm-blueprint.md)** — the first domain blueprint: leads, contacts, companies and deals, with navigation and sample data.
 - **[The HR People and Time Off blueprint](hr-blueprint.md)** — a directory, employee pages, an org chart, time off and onboarding, with navigation and Norwegian sample data.
 - **[The Inventory and Assets blueprint](inventory-blueprint.md)** — items, locations, movements and suppliers for a warehouse, with navigation and sample data.
+- **[The Project and Task Tracker blueprint](project-tracker-blueprint.md)** — projects as cards, a project page, a task board with swimlanes, my tasks and a task side sheet.
