@@ -45,7 +45,7 @@ function Cell({ column, row, locale }: { column: ListColumn; row: ListRow; local
  * `rows` and `columns` (`field`, `header`, `kind`: text, number, currency, date or status, `sortable`, `tones`) come from a query; the list takes its
  * text, filter, sort, page and selection from the address when `urlKey` is given (`<urlKey>q`, `sort`, `page`, `selected`), so a shared link or a refresh restores
  * the screen as it was. `search` and `filter` (the filter builder's value) narrow the rows. A header is a button that cycles ascending, descending, none, and the
- * column says so in words. Rows select with checkboxes (`selectionMode` multiple or single), and a row's "Actions" menu names its row. On a phone a table becomes cards -
+ * column says so in words. Rows select with checkboxes (`selectionMode` multiple or single), and a row's "Actions" menu names its row (or, with `rowActionStyle` `buttons`, each action is a button of its own that names its row). On a phone a table becomes cards -
  * nothing is hidden or cut. The selection is the `value` output; a row action is the `action` output. Header, row and cell elements are real table elements,
  * so a screen reader announces the row and column of the cell it is on.
  */
@@ -93,7 +93,16 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     const allOnPage = page.rows.length > 0 && page.rows.every((row, index) => selected.includes(rowId(row, index, idField)));
     const count = matching.length === rows.length ? formatText(strings.listCount, { count: rows.length }) : formatText(strings.listCountFiltered, { shown: matching.length, total: rows.length });
 
-    const rowActions = (row: ListRow, index: number) => actions.length === 0 || actionRule === 'hidden' ? undefined : (
+    // `rowActionStyle: 'buttons'` lays the actions out as a row of buttons - what a decision needs to be one press away - instead of the menu.
+    const inlineActions = element.properties.rowActionStyle === 'buttons';
+    const rowActions = (row: ListRow, index: number) => actions.length === 0 || actionRule === 'hidden' ? undefined : inlineActions ? (
+        <div className='foundation-row-buttons' role='group' aria-label={formatText(strings.listRowActions, { name: nameOf(row, index) })}>
+            {actions.map(action => (
+                <button key={action} type='button' className='foundation-button' data-emphasis='secondary' disabled={actionRule === 'disabled'} title={actionRule === 'disabled' ? strings.disabledNoPermission : undefined}
+                    aria-label={`${action}: ${nameOf(row, index)}`} onClick={() => run(action, rowId(row, index, idField))}>{action}</button>
+            ))}
+        </div>
+    ) : (
         <select className='foundation-row-actions' aria-label={formatText(strings.listRowActions, { name: nameOf(row, index) })} value='' disabled={actionRule === 'disabled'} title={actionRule === 'disabled' ? strings.disabledNoPermission : undefined}
             onChange={event => { if (event.target.value) run(event.target.value, rowId(row, index, idField)); }}>
             <option value=''>{strings.listActions}</option>

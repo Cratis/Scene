@@ -385,6 +385,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             number('pageSize', 'Rows per page', 'Behavior', '0 shows every row.', { default: 0, constraints: { minimum: 0, integer: true } }),
             choice('selectionMode', 'Selection', 'Behavior', { none: 'None', single: 'One row', multiple: 'Many rows' }, 'none'),
             { path: 'rowActions', label: 'Row actions', group: 'Behavior', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], description: 'The actions in each row\'s menu; each is the action output.' },
+            choice('rowActionStyle', 'Row action layout', 'Behavior', { menu: 'Menu', buttons: 'Buttons' }, 'menu', 'Menu keeps a row compact; Buttons puts every action one press away, for a decision.'),
             rule('actionPermission', 'Row action permission', 'Whether row actions work, refuse with a reason or are not shown.'),
             text('search', 'Search', 'Data', 'The search text; bind to the search box output.', { acceptedBindingKinds: bindable }),
             { path: 'filter', label: 'Filter', group: 'Data', valueType: PropertyValueType.Object, acceptedBindingKinds: bindable, description: 'The filter builder\'s value.' },

@@ -2258,6 +2258,12 @@
     max-inline-size: 8rem;
 }
 
+.foundation-row-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--foundation-space-2);
+}
+
 .foundation-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
