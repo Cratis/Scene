@@ -57,6 +57,7 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     WizardScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'New account' }],
     CalendarScreen: [{ label: 'People', targetScreen: 'DashboardScreen' }, { label: 'Calendar' }],
     TimelineScreen: [{ label: 'Projects', targetScreen: 'DashboardScreen' }, { label: 'Timeline' }],
+    InboxScreen: [{ label: 'Work', targetScreen: 'DashboardScreen' }, { label: 'Inbox' }],
     ModuleWorkspace: [{ label: 'Operations' }],
     FeatureSection: [{ label: 'Operations', targetScreen: 'ModuleWorkspace' }, { label: 'Adjustments' }],
     SliceSection: [

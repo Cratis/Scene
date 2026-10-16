@@ -135,6 +135,12 @@ states in words the dates, the progress, what it waits on and what it holds up. 
 (a dashed border and the words), and a dependency on an unknown item is dropped. The same schedule is a table: on a phone it is the table, elsewhere a disclosure
 under the chart. The id of the selected item is the `value` output.
 
+`inboxList` is the queue of things that want attention: `messages` (`id`, `title`, `summary`, `sender`, `received`, `category`, `tone`, `unread`) grouped by day (Today,
+Yesterday, Earlier, relative to `today`). An unread message is told by the word "Unread" and a bold title, never by weight or color alone. The filter (All or Unread
+with its count) and the category are kept in the address under `urlKey` + `Filter` and + `Category`, the open message under `urlKey`. The arrow keys and J / K move between
+messages, Home and End go to the ends; opening a message marks it read, any message can be marked unread again and all can be marked read at once. The reader's marks are
+for the session; the open message's id is the `value` output, for a detail to bind to.
+
 ## Deciding from a list
 
 `dataList` keeps a row's actions in a menu. For a list whose point is a decision - an approver's inbox - set `rowActionStyle` to `buttons` and each

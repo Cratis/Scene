@@ -57,6 +57,8 @@ export * from './calendarModel';
 export * from './CalendarGrid';
 export * from './timelineModel';
 export * from './TimelineGrid';
+export * from './inboxModel';
+export * from './InboxList';
 export * from './formModel';
 export * from './FormScreenBody';
 export * from './foundationDescriptors';

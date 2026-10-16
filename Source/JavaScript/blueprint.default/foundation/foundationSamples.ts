@@ -179,6 +179,17 @@ export const foundationSamples: Record<string, FoundationSample> = {
         },
         data: ['March 2026', 'Ada Lovelace'], stateful: true,
     },
+    [ComponentName.InboxList]: {
+        properties: {
+            today: '2026-03-10', locale: 'en-GB',
+            messages: [
+                { id: 'm1', title: 'Leave request: Ada Lovelace', summary: 'Five days from 16 March', sender: 'Ada Lovelace', received: '2026-03-10T08:30:00Z', category: 'Approval', tone: 'warning', unread: true },
+                { id: 'm2', title: 'Expense report approved', summary: 'EUR 420 for the Oslo trip', sender: 'Finance', received: '2026-03-09T15:00:00Z', category: 'Notification', tone: 'success', unread: false },
+                { id: 'm3', title: 'You were mentioned in Launch plan', summary: '"Can you confirm the date?"', sender: 'Grace Hopper', received: '2026-03-02T10:00:00Z', category: 'Mention', tone: 'info', unread: true },
+            ],
+        },
+        data: ['Leave request: Ada Lovelace', 'Expense report approved'], stateful: true,
+    },
     [ComponentName.TimelineGrid]: {
         properties: {
             today: '2026-03-10', scale: 'week', locale: 'en-GB',

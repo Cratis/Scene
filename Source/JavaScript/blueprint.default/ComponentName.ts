@@ -144,4 +144,7 @@ export enum ComponentName {
 
     /** Work over time on a Gantt-style axis of days, weeks or months, with progress and dependencies. */
     TimelineGrid = 'timelineGrid',
+
+    /** The queue of messages that want attention, grouped by day, with unread state and keyboard movement. */
+    InboxList = 'inboxList',
 }

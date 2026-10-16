@@ -652,5 +652,30 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             ...standardStateProperties,
         ],
     },
+    {
+        component: key(ComponentName.InboxList),
+        displayName: 'Inbox',
+        description: 'The queue of messages that want attention, grouped by day, with unread state, a filter, categories and keyboard movement. The id of the open message is the value output.',
+        properties: [
+            {
+                ...list('messages', 'Messages', 'Data', 'Message', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('title', 'Title', 'Data', undefined, { constraints: { required: true } }),
+                    text('summary', 'Summary', 'Data', 'A line of what it is about.'),
+                    text('sender', 'Sender', 'Data', 'Who it is from.'),
+                    text('received', 'Received', 'Data', 'An ISO 8601 date or date-time.'),
+                    text('category', 'Category', 'Data', 'What kind of message it is, said in words.'),
+                    choice('tone', 'Tone', 'Appearance', { success: 'Success', warning: 'Warning', danger: 'Danger', info: 'Info', neutral: 'Neutral' }, 'neutral'),
+                    flag('unread', 'Unread', 'Data', 'Whether it has not been opened yet.'),
+                ], 'The queue, from a query.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('filter', 'Filter', 'Behavior', { all: 'All', unread: 'Unread' }, 'all', 'What is shown first.'),
+            text('today', 'Today', 'Behavior', 'Marks this day as today instead of the clock, for the Today and Yesterday groups; for previews that must not drift.'),
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the open message (and the filter and category, under the name + Filter and + Category) in the address.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the open message.'),
+            ...standardStateProperties,
+        ],
+    },
 ];
 
