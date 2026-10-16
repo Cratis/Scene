@@ -91,5 +91,6 @@ jobs:
         run: |
           yarn workspace @cratis/scene.blueprint.default test:browser
           yarn workspace @cratis/scene.blueprint.crm test:browser
+          yarn workspace @cratis/scene.blueprint.hr test:browser
           yarn workspace @cratis/scene.blueprint.inventory test:browser
           yarn workspace @cratis/scene.blueprint.project-tracker test:browser

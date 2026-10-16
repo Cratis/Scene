@@ -103,6 +103,10 @@ every other component using it. `orgTree` takes `urlKey` too: the chosen node is
 search parameter is the same one narrows to the chosen branch - give the tree nodes ids that are their paths and a row's location starts with its
 branch's id.
 
+`permissionMatrix` shows every role across by default. Name one in `focusRole` and it shows that role alone - bind it to a roles list's chosen row, the
+`value` output, for a matrix beside the list of roles. While no role is named, or the one named does not exist, every role is shown rather than nothing; the grants
+the matrix publishes are always the whole set.
+
 ## Boards
 
 `kanbanBoard` shows a count and the over-limit warning in each column header. Name a numeric card field in `totalField` (a deal's `amount`) and the
