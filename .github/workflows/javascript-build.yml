@@ -97,3 +97,4 @@ jobs:
           yarn workspace @cratis/scene.blueprint.inventory test:browser
           yarn workspace @cratis/scene.blueprint.administration test:browser
           yarn workspace @cratis/scene.blueprint.project-tracker test:browser
+          yarn workspace @cratis/scene.blueprint.orders test:browser

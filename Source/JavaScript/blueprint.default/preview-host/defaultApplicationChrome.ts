@@ -29,5 +29,7 @@ export function defaultApplicationChrome(logo?: ApplicationLogo): Record<string,
     return {
         [SlotName.Topbar]: [externalComponent('topbar', ComponentName.Topbar, {}, slots)],
         [SlotName.Sidebar]: [externalComponent('sidebar', ComponentName.Sidebar, {})],
+        // No authored trail: the breadcrumb follows where the host is (spec N4) - the module and features down to the screen on the page.
+        [SlotName.Breadcrumb]: [externalComponent('breadcrumb', ComponentName.Breadcrumb, {})],
     };
 }

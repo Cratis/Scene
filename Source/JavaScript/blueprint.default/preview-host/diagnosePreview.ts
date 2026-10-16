@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
 import {
     ApplicationStructureIndex, collectComponents, diagnoseNavigationRegions, resolveScreenTemplates,
     toolbarButtonFromItem, validateSampleDataSelection, validateToolbarButtons,
@@ -19,6 +19,9 @@ export interface PreviewDiagnosisInput {
     structure: ApplicationStructure | ApplicationStructureIndex;
     navigation?: NavigationModel;
     target: PreviewTarget;
+
+    /** Where the preview starts; one the document cannot render is reported as a warning. */
+    initialDestination?: DestinationReference;
 
     /** The packs available, for checking the profile's sample data selection. */
     packs?: SampleDataPack[];
@@ -63,6 +66,15 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
 
     const { plan, problems: targetProblems } = resolvePreviewPlan(index, input.target);
     problems.push(...targetProblems);
+
+    if (plan?.kind === 'application' && input.document.screens.length === 0) {
+        problems.push(make(PreviewProblemCode.ScreenMissing, PreviewProblemSeverity.Error, 'The application has no screen in the document, so there is nothing to render.'));
+    }
+
+    const initial = input.initialDestination;
+    if (initial && initial.kind !== DestinationKind.Dialog && !initial.dialog && !input.document.screens.some(candidate => candidate.name === initial.screen)) {
+        problems.push(make(PreviewProblemCode.NavigationInvalid, PreviewProblemSeverity.Warning, `The starting destination '${initial.screen ?? '(none)'}' is not a screen of the document, so the preview starts on its own page.`, initial.screen));
+    }
 
     let screen: Screen | undefined;
     if (plan?.feature !== undefined) {

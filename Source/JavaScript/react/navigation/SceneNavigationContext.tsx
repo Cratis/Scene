@@ -60,3 +60,8 @@ export function useSceneNavigation(): SceneNavigationContextValue {
     if (!context) throw new Error('No Scene navigation context is available.');
     return context;
 }
+
+/** The navigation context of the enclosing host, or undefined outside one - for a control that also works on its own. */
+export function useOptionalSceneNavigation(): SceneNavigationContextValue | undefined {
+    return useContext(Context);
+}

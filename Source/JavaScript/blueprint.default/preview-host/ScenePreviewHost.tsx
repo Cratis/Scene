@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ApplicationStructure, NavigationModel, Screen, SliceKind, Theme } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SliceKind, Theme } from '@cratis/scene.model';
 import { ApplicationStructureIndex, EffectiveNavItem, resolveToolbarButton } from '@cratis/scene.engine';
 import {
-    ComponentRegistry, SceneHistory, SceneThemeProvider, SliceCommandFieldsProvider, SliceCommandFieldsSource, SliceInvoker,
+    ComponentRegistry, NavigationActivation, NavigationActivationRequest, NavigationMode, SceneHistory, SceneThemeProvider, SliceCommandFieldsProvider, SliceCommandFieldsSource, SliceInvoker,
     SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, sliceDialogDestination, useSceneNavigation,
 } from '@cratis/scene.react';
 import { ComponentName } from '../ComponentName';
@@ -34,8 +34,28 @@ export interface ScenePreviewHostProps {
     /** The application and module navigation regions; none when absent. */
     navigation?: NavigationModel;
 
-    /** What to preview: a module, a feature or a slice. */
+    /** What to preview: the application itself, a module, a feature or a slice. */
     target: PreviewTarget;
+
+    /**
+     * Where the preview starts, in place of the target's own page: a screen (`{ screen }`) the document renders, or a dialog
+     * (`{ dialog }`) opened over the page. The *Showing* picker's destinations (`listDestinations`) are valid here. One that the
+     * document cannot render is reported as a `navigationInvalid` problem and ignored.
+     */
+    initialDestination?: DestinationReference;
+
+    /**
+     * What activating a navigation control does: `navigate` (the default) opens the destination in the preview; `select` only
+     * reports it through `onActivate`, which is what a design host wants when a click selects the item. Alt-click selects in any
+     * mode. A function decides per activation (spec N1, N2).
+     */
+    navigationMode?: NavigationMode | ((request: NavigationActivationRequest) => NavigationMode);
+
+    /** Called for every activation of a navigation control, whether it navigated or only selected - the design host's selection hook. */
+    onActivate?(activation: NavigationActivation): void;
+
+    /** Called with the destination whenever the preview moves to another screen or dialog, whatever caused it: a click, the picker's history, the back button. */
+    onNavigate?(destination: DestinationReference): void;
 
     /** The sample data to preview with; none when absent. */
     sampleData?: PreviewSampleData;
@@ -111,14 +131,14 @@ function minimalPage(layout: string, content: Screen['slotContent'][string]): Sc
  *   `onExit` on Escape.
  */
 export function ScenePreviewHost({
-    document: application, structure, navigation = noNavigation, target, sampleData, registry, invoker, onInvoked, fieldsFor, composition = {},
+    document: application, structure, navigation = noNavigation, target, initialDestination, navigationMode, onActivate, onNavigate, sampleData, registry, invoker, onInvoked, fieldsFor, composition = {},
     theme, isVisible, history, onProblems, onSelectProblem, onBreadcrumbChange, onExit, children,
 }: ScenePreviewHostProps) {
     const index = useMemo(() => structure instanceof ApplicationStructureIndex ? structure : new ApplicationStructureIndex(structure), [structure]);
     const compose = useMemo<CompositionOptions>(() => ({ logo: navigation.application.logo, ...composition }), [composition, navigation.application.logo]);
     const diagnosis = useMemo(
-        () => diagnosePreview({ document: application, structure: index, navigation, target, packs: sampleData?.packs, composition: compose }),
-        [application, compose, index, navigation, sampleData?.packs, target]);
+        () => diagnosePreview({ document: application, structure: index, navigation, target, initialDestination, packs: sampleData?.packs, composition: compose }),
+        [application, compose, index, initialDestination, navigation, sampleData?.packs, target]);
 
     const problems = useMemo(() => {
         const found = [...diagnosis.problems];
@@ -164,6 +184,11 @@ export function ScenePreviewHost({
         const { plan, screen } = diagnosis;
         if (!plan) return undefined;
 
+        if (plan.kind === 'application') {
+            const first = initialScreenOf(application, index, navigation, initialDestination);
+            return first === undefined ? undefined : { screens: application.screens, initial: first };
+        }
+
         if (!screen) {
             // A slice whose feature has no screen of its own: a minimal host page, headed with where it is.
             if (plan.slice === undefined) return undefined;
@@ -178,11 +203,14 @@ export function ScenePreviewHost({
             if (fragment.length > 0) return { screens: [...application.screens, minimalPage(screen.layout, fragment)], initial: previewPageScreen };
         }
 
-        return { screens: application.screens, initial: screen.name };
-    }, [application.screens, application.uiProfiles, diagnosis, index]);
+        const requested = initialDestination?.screen;
+        return { screens: application.screens, initial: requested !== undefined && application.screens.some(candidate => candidate.name === requested) ? requested : screen.name };
+    }, [application, diagnosis, index, initialDestination, navigation]);
 
     const hostApplication = useMemo(() => page ? { ...application, screens: page.screens } : application, [application, page]);
     const navigationModel = useMemo(() => ({ structure: index, navigation, isVisible }), [index, isVisible, navigation]);
+
+    const policy = useMemo(() => ({ mode: navigationMode, onActivate }), [navigationMode, onActivate]);
 
     const onKeyDown = useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape' && !event.defaultPrevented) onExit?.();
@@ -203,9 +231,12 @@ export function ScenePreviewHost({
                         registry={registry}
                         initialScreen={page.initial}
                         history={history ?? memoryHistory}
+                        navigationPolicy={policy}
                         resolveBinding={samples.resolveBinding}
                         queryResults={samples.queryResults}>
                         {diagnosis.plan?.kind === 'stateChange' && <OpenSliceDialog index={index} plan={diagnosis.plan} />}
+                        <OpenInitialDialog destination={initialDestination} />
+                        <ReportNavigation onNavigate={onNavigate} />
                         <EscapeToExit onKeyDown={onKeyDown} enabled={onExit !== undefined} />
                         {toast && invoker === undefined && <PreviewToast invocation={toast} onDismiss={() => setToast(undefined)} />}
                         {children}
@@ -216,6 +247,54 @@ export function ScenePreviewHost({
     );
 
     return theme ? <SceneThemeProvider theme={theme}>{body}</SceneThemeProvider> : body;
+}
+
+/**
+ * The screen an application preview starts on: the initial destination's when the document renders it, else the screen the first
+ * navigation item of the application leads to, else the document's first screen.
+ */
+function initialScreenOf(application: ApplicationDocument, index: ApplicationStructureIndex, navigation: NavigationModel, initial: DestinationReference | undefined): string | undefined {
+    const has = (name: string | undefined): name is string => name !== undefined && application.screens.some(candidate => candidate.name === name);
+    if (has(initial?.screen)) return initial?.screen;
+
+    for (const region of navigation.application.regions) {
+        for (const item of region.items) {
+            const target = item.target;
+            if (!target?.module) continue;
+            const feature = target.feature === undefined ? index.firstFeatureId(target.module) : `${target.module}.${target.feature}`;
+            if (has(feature)) return feature;
+        }
+    }
+
+    return application.screens[0]?.name;
+}
+
+/** Opens the dialog an initial destination names, once the page is up. */
+function OpenInitialDialog({ destination }: { destination: DestinationReference | undefined }) {
+    const navigation = useSceneNavigation();
+    const opened = useRef(false);
+    useEffect(() => {
+        if (opened.current || destination === undefined) return;
+        if (destination.kind !== DestinationKind.Dialog && !destination.dialog) return;
+        opened.current = true;
+        navigation.navigate(destination);
+    }, [destination, navigation]);
+
+    return null;
+}
+
+/** Tells the host where the preview moved to - the screen in the primary region or the dialog over it - every time it changes after the first draw. */
+function ReportNavigation({ onNavigate }: { onNavigate?(destination: DestinationReference): void }) {
+    const { primaryScreen, currentDialog } = useSceneNavigation();
+    const previous = useRef({ primaryScreen, currentDialog });
+    useEffect(() => {
+        const before = previous.current;
+        previous.current = { primaryScreen, currentDialog };
+        if (before.primaryScreen === primaryScreen && before.currentDialog === currentDialog) return;
+        onNavigate?.(currentDialog === undefined ? { kind: DestinationKind.Outlet, screen: primaryScreen } : { kind: DestinationKind.Dialog, dialog: currentDialog });
+    }, [currentDialog, onNavigate, primaryScreen]);
+
+    return null;
 }
 
 /** Opens the task dialog of a State Change slice once the page is up - the slice preview (PRV3). */

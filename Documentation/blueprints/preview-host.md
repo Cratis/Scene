@@ -25,6 +25,7 @@ import '@cratis/scene.blueprint.default/styles.css';
 
 | Target | Renders |
 | --- | --- |
+| `{ application }` | the application itself (`true`, or its name): the shell with the application's navigation, started on `initialDestination`, else the first destination of the application's navigation, else the document's first screen. Use it for an application with no authored structure - a blueprint's gallery (`galleryApplication()` with `galleryComposition`) |
 | `{ module }` | the application shell with the module's **effective navigation** and its first feature |
 | `{ module, feature }` | that feature in the shell, with navigation |
 | `{ slice }`, State Change | the slice's task dialog over a minimal host page - the feature's own page when it has one |
@@ -44,6 +45,25 @@ The preview has no design affordances and edits nothing. A toolbar button withou
 ## Navigation
 
 Navigation keeps to an in-memory history (`createMemorySceneHistory`), so a preview never touches the address of the page that hosts it. Clicking an item resolves its target and renders it in the item's slot; going to another module swaps the shell's effective navigation, with inherit, extend and override applied by `effectiveNavigation` - the host does not re-implement it. An item the host's `isVisible` hides is hidden, not disabled.
+
+**Every navigating control goes through the navigation context** (spec N1): the region items of the topbar and sidebar, `menuItem`, the `breadcrumb` crumbs, the `logo` and the entries of the `userMenu`. A click renders the target in its slot and records it in the history; the control that leads to the screen on the page is the current one (`aria-current="page"`), derived from the history location - not from a property the document has to keep in step. Outside a host (a Storybook story, a static render) the same controls stay ordinary hash links and `isActive` states what is current.
+
+**The breadcrumb follows the location** (N4): a `breadcrumb` with no authored `items` shows the module and the features down to the screen on the page, worked out from the structure (`locationTrail`); the default application chrome uses one. Authored `items` still win, and `followLocation: false` switches the derivation off.
+
+**An entry with nowhere to go is marked** (N8): a control whose target is not a screen the host renders, or an item with no target at all, is drawn with `data-nav-problem="navTargetMissing"` (a warning glyph) and does nothing when clicked.
+
+### Selecting versus navigating
+
+A design host does not always want a click to leave the page. Two props decide:
+
+- `navigationMode`: `'navigate'` (default) or `'select'`, or a function `(request) => mode` deciding per control. In `select` mode a click only reports the activation. **Alt-click selects in any mode.**
+- `onActivate(activation)`: called for every activation - `{ request: { source, id, label, destination, item }, mode, resolves, navigated }` - so the host selects the item for editing, and `onNavigate(destination)`: called whenever the preview moves to another screen or dialog, whatever caused it.
+
+These are the `NavigationActivationProvider` / `useNavigationActivation` of `@cratis/scene.react`; `ApplicationHost` takes the same policy as `navigationPolicy`, so Stage and the preview host share it.
+
+### The *Showing* picker
+
+`listDestinations(document)` lists every place the host can show - **Pages**, **States** (screens whose template is a standard state) and **Dialogs** - as `ListedDestination` entries with a `destination` that is valid input to `initialDestination` and to `useSceneNavigation().navigate`. `initialDestination` (`{ screen }` or `{ dialog }`) starts the preview there; one the document cannot render is reported as a `navigationInvalid` warning and ignored. The listing of the gallery is pinned by the fixture `preview-host/for_listDestinations/gallery-destinations.fixture.json`.
 
 ## Dialogs and the dry-run invoker
 

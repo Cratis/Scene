@@ -32,7 +32,7 @@ describe('when composing a screen', () => {
         const composed = composeApplicationScreen(application, application.screens[1]);
 
         it('should be the shell of its layout, resolved to the blueprint', () => asComponent(composed.element).componentName.should.equal('Cratis.Blueprint.Default:appShell'));
-        it('should chrome the shell with a topbar and a sidebar', () => slotNames(composed.element).sort().should.deep.equal(['content', 'sidebar', 'topbar']));
+        it('should chrome the shell with a topbar, a sidebar and a breadcrumb that follows the location', () => slotNames(composed.element).sort().should.deep.equal(['breadcrumb', 'content', 'sidebar', 'topbar']));
         it('should place the screen content in the content slot', () => ids(asComponent(composed.element).slots.content).should.deep.equal(['orders', 'order-list']));
         it('should name no template', () => composed.templates.should.deep.equal([]));
         it('should resolve no configuration without descriptors', () => (composed.configuration === undefined).should.equal(true));

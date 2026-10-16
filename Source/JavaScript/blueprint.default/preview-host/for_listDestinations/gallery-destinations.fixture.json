@@ -1,0 +1,417 @@
+[
+    {
+        "group": "Pages",
+        "destinations": [
+            {
+                "id": "page:WorkspaceScreen",
+                "label": "Module workspace",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "WorkspaceScreen"
+                }
+            },
+            {
+                "id": "page:DashboardScreen",
+                "label": "Dashboard",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "DashboardScreen"
+                }
+            },
+            {
+                "id": "page:ListScreen",
+                "label": "List",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ListScreen"
+                }
+            },
+            {
+                "id": "page:BoardScreen",
+                "label": "Board",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "BoardScreen"
+                }
+            },
+            {
+                "id": "page:MasterDetailScreen",
+                "label": "Master/detail with address selection",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "MasterDetailScreen"
+                }
+            },
+            {
+                "id": "page:RecordPage",
+                "label": "Record page",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "RecordPage"
+                }
+            },
+            {
+                "id": "page:FormScreen",
+                "label": "Form",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "FormScreen"
+                }
+            },
+            {
+                "id": "page:WizardScreen",
+                "label": "Wizard",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "WizardScreen"
+                }
+            },
+            {
+                "id": "page:CalendarScreen",
+                "label": "Calendar",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "CalendarScreen"
+                }
+            },
+            {
+                "id": "page:TimelineScreen",
+                "label": "Timeline",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "TimelineScreen"
+                }
+            },
+            {
+                "id": "page:InboxScreen",
+                "label": "Inbox",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "InboxScreen"
+                }
+            },
+            {
+                "id": "page:SettingsScreen",
+                "label": "Settings",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "SettingsScreen"
+                }
+            },
+            {
+                "id": "page:ProfileScreen",
+                "label": "Profile",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ProfileScreen"
+                }
+            },
+            {
+                "id": "page:ReportViewer",
+                "label": "Report viewer",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ReportViewer"
+                }
+            },
+            {
+                "id": "page:ImportWizard",
+                "label": "Import wizard",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ImportWizard"
+                }
+            },
+            {
+                "id": "page:LoginScreen",
+                "label": "Sign in",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "LoginScreen"
+                }
+            },
+            {
+                "id": "page:Dashboard",
+                "label": "Dashboard",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Dashboard"
+                }
+            },
+            {
+                "id": "page:CrudList",
+                "label": "List",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "CrudList"
+                }
+            },
+            {
+                "id": "page:MasterDetail",
+                "label": "Master/detail",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "MasterDetail"
+                }
+            },
+            {
+                "id": "page:DetailView",
+                "label": "Detail",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "DetailView"
+                }
+            },
+            {
+                "id": "page:FormPage",
+                "label": "Form",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "FormPage"
+                }
+            },
+            {
+                "id": "page:Documentation",
+                "label": "Documentation",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Documentation"
+                }
+            },
+            {
+                "id": "page:ProfileSettings",
+                "label": "Profile settings",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ProfileSettings"
+                }
+            },
+            {
+                "id": "page:UserManagement",
+                "label": "User management",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "UserManagement"
+                }
+            },
+            {
+                "id": "page:Invoice",
+                "label": "Invoice",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Invoice"
+                }
+            },
+            {
+                "id": "page:Help",
+                "label": "Help",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Help"
+                }
+            },
+            {
+                "id": "page:Login",
+                "label": "Sign in",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Login"
+                }
+            },
+            {
+                "id": "page:Register",
+                "label": "Register",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Register"
+                }
+            },
+            {
+                "id": "page:ForgotPassword",
+                "label": "Forgotten password",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ForgotPassword"
+                }
+            },
+            {
+                "id": "page:NewPassword",
+                "label": "New password",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "NewPassword"
+                }
+            },
+            {
+                "id": "page:Verification",
+                "label": "Verification",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Verification"
+                }
+            },
+            {
+                "id": "page:LockScreen",
+                "label": "Lock screen",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "LockScreen"
+                }
+            },
+            {
+                "id": "page:Landing",
+                "label": "Landing",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Landing"
+                }
+            },
+            {
+                "id": "page:ModuleWorkspace",
+                "label": "Module workspace",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ModuleWorkspace"
+                }
+            },
+            {
+                "id": "page:FeatureSection",
+                "label": "Feature section",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "FeatureSection"
+                }
+            },
+            {
+                "id": "page:SliceSection",
+                "label": "Slice section",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "SliceSection"
+                }
+            }
+        ]
+    },
+    {
+        "group": "States",
+        "destinations": [
+            {
+                "id": "state:NotFoundScreen",
+                "label": "Not found",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "NotFoundScreen"
+                }
+            },
+            {
+                "id": "state:ForbiddenScreen",
+                "label": "Forbidden",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ForbiddenScreen"
+                }
+            },
+            {
+                "id": "state:ErrorScreen",
+                "label": "Error",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "ErrorScreen"
+                }
+            },
+            {
+                "id": "state:Empty",
+                "label": "Empty state",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Empty"
+                }
+            },
+            {
+                "id": "state:Error",
+                "label": "Error",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "Error"
+                }
+            },
+            {
+                "id": "state:AccessDenied",
+                "label": "Access denied",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "AccessDenied"
+                }
+            },
+            {
+                "id": "state:NotFound",
+                "label": "Not found",
+                "destination": {
+                    "kind": "outlet",
+                    "screen": "NotFound"
+                }
+            }
+        ]
+    },
+    {
+        "group": "Dialogs",
+        "destinations": [
+            {
+                "id": "dialog:ConfirmDialog",
+                "label": "Confirmation dialog",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "ConfirmDialog"
+                }
+            },
+            {
+                "id": "dialog:FormDialog",
+                "label": "Form dialog",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "FormDialog"
+                }
+            },
+            {
+                "id": "dialog:DetailDialog",
+                "label": "Detail dialog",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "DetailDialog"
+                }
+            },
+            {
+                "id": "dialog:QuickCreateDialog",
+                "label": "Quick create",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "QuickCreateDialog"
+                }
+            },
+            {
+                "id": "dialog:LookupDialog",
+                "label": "Lookup",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "LookupDialog"
+                }
+            },
+            {
+                "id": "dialog:SideSheet",
+                "label": "Side sheet",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "SideSheet"
+                }
+            },
+            {
+                "id": "dialog:FilterDialog",
+                "label": "Filters",
+                "destination": {
+                    "kind": "dialog",
+                    "dialog": "FilterDialog"
+                }
+            }
+        ]
+    }
+]

@@ -32,10 +32,10 @@ export const galleryScreenTemplates: ScreenTemplate[] = [
 ];
 
 /** Which layout each template renders inside - the application shell unless it is one of the chrome-less screens. */
-const fullPageTemplateNames = new Set([...authTemplates, ...statusTemplates, ...stateScreenTemplates].map(template => template.name));
+export const fullPageTemplateNames = new Set([...authTemplates, ...statusTemplates, ...stateScreenTemplates].map(template => template.name));
 
 /** The trail shown above each application-shell screen. */
-const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
+export const galleryBreadcrumbs: Record<string, BreadcrumbEntry[]> = {
     Dashboard: [{ label: 'Dashboard' }],
     CrudList: [{ label: 'Catalog', targetScreen: 'Dashboard' }, { label: 'Products' }],
     MasterDetail: [{ label: 'Sales', targetScreen: 'Dashboard' }, { label: 'Customers' }],
@@ -81,7 +81,7 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
 function screenFor(template: ScreenTemplate): Screen {
     const isFullPage = fullPageTemplateNames.has(template.name);
     const layout: Layout = isFullPage ? fullPageLayout : appShellLayout;
-    const chrome = isFullPage ? fullPageChrome() : applicationChrome(template.name, breadcrumbs[template.name] ?? [{ label: template.displayName ?? template.name }]);
+    const chrome = isFullPage ? fullPageChrome() : applicationChrome(template.name, galleryBreadcrumbs[template.name] ?? [{ label: template.displayName ?? template.name }]);
     const placeable = nestScreenTemplates(containmentChainFor(template));
 
     return {

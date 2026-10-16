@@ -18,3 +18,5 @@ export * from './PreviewToast';
 export * from './PreviewProblemsView';
 export * from './ApplicationHost';
 export * from './ScenePreviewHost';
+export * from './listDestinations';
+export * from './galleryApplication';
