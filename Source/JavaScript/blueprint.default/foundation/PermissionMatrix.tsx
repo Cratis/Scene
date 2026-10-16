@@ -17,12 +17,15 @@ import { FoundationFrame } from './StateFrame';
  * or permission that does not exist is ignored. Each box is named in words ("Grant Edit deals to Sales") and every header is a real header
  * cell, so a screen reader announces the row and column of the box it is on. Changes are published as the `value` output - the grants,
  * in the same shape - for the screen to save. With `editPermission` not enabled the matrix is read-only and each cell says "Allowed" or
- * "Not allowed" in words and by icon. Wide matrices scroll sideways inside a keyboard-focusable region, keeping the permission column in view.
+ * "Not allowed" in words and by icon. `focusRole` names a role to show alone - a roles list's chosen row, bound in - and the matrix shows every role while none is named. Wide matrices scroll sideways inside a keyboard-focusable region, keeping the permission column in view.
  */
 export function PermissionMatrix({ element, interactions, bindingOutputs }: RegisteredComponentProps) {
-    const roles = useMemo(() => readRoles(element.properties.roles), [element.properties.roles]);
+    const allRoles = useMemo(() => readRoles(element.properties.roles), [element.properties.roles]);
+    const focusRole = typeof element.properties.focusRole === 'string' ? element.properties.focusRole : '';
+    // A role that is asked for and exists is the only column shown; one that is not asked for, or that does not exist, shows every role rather than nothing.
+    const roles = useMemo(() => (allRoles.some(role => role.id === focusRole) ? allRoles.filter(role => role.id === focusRole) : allRoles), [allRoles, focusRole]);
     const permissions = useMemo(() => readPermissions(element.properties.permissions), [element.properties.permissions]);
-    const supplied = useMemo(() => readGrants(element.properties.grants, roles, permissions), [element.properties.grants, roles, permissions]);
+    const supplied = useMemo(() => readGrants(element.properties.grants, allRoles, permissions), [element.properties.grants, allRoles, permissions]);
     const suppliedKey = JSON.stringify(supplied);
     const [grants, setGrants] = useState<MatrixGrant[]>(supplied);
     const strings = readFoundationStrings(element);
