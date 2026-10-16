@@ -365,7 +365,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
                 ...list('columns', 'Columns', 'Data', 'Column', [
                     text('field', 'Field', 'Data', 'The result field the column shows.', { constraints: { required: true }, editorKind: PropertyEditorKind.Field }),
                     text('header', 'Header', 'Content'),
-                    choice('kind', 'Kind', 'Appearance', { [CellKind.Text]: 'Text', [CellKind.Number]: 'Number', [CellKind.Currency]: 'Currency', [CellKind.Date]: 'Date', [CellKind.Status]: 'Status' }, CellKind.Text),
+                    choice('kind', 'Kind', 'Appearance', { [CellKind.Text]: 'Text', [CellKind.Number]: 'Number', [CellKind.Currency]: 'Currency', [CellKind.Date]: 'Date', [CellKind.Status]: 'Status', [CellKind.Progress]: 'Progress' }, CellKind.Text),
                     flag('sortable', 'Sortable', 'Behavior', undefined, { default: true }),
                     text('currency', 'Currency', 'Appearance'),
                     { path: 'tones', label: 'Status tones', group: 'Appearance', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap, description: 'The tone (success, warning, danger, info, neutral) of each status value.' },
@@ -376,6 +376,8 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             flag('collapse', 'Cards on a phone', 'Appearance', 'A table becomes cards on a phone-wide screen; nothing is hidden.', { default: true }),
             text('idField', 'Id field', 'Data', undefined, { default: 'id', editorKind: PropertyEditorKind.Field }),
             text('titleField', 'Title field', 'Data', 'The field that names a row for assistive technology and a card.', { editorKind: PropertyEditorKind.Field }),
+            text('imageField', 'Image field', 'Data', 'The field with the address of the picture a card shows; a card without one shows initials.', { editorKind: PropertyEditorKind.Field }),
+            text('toneField', 'Emphasis field', 'Data', 'The field holding a row\'s tone (success, warning, danger, info, neutral), which tints the row; pair it with a status column so colour is never the only cue.', { editorKind: PropertyEditorKind.Field }),
             text('groupBy', 'Group by', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
             text('totalField', 'Subtotal field', 'Data', undefined, { editorKind: PropertyEditorKind.Field }),
             number('pageSize', 'Rows per page', 'Behavior', '0 shows every row.', { default: 0, constraints: { minimum: 0, integer: true } }),

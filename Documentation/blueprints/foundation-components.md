@@ -91,6 +91,12 @@ it, and conditions on fields that no longer exist are dropped rather than shown 
 groups them by calendar day in `timeZone`, newest first unless `order` is `ascending`; the application supplies the content.
 `avatarStack` takes `people` (`name`, optional `imageUrl`) and folds those beyond `max` into a "+N" chip, announced as "N more".
 
+`dataList` also takes three options for the domain blueprints. `imageField` names the field with a picture's address and puts a picture on each
+card (initials for a row that has none; the title beside it names the row, so the picture is decoration). A column of `kind: progress` draws a
+0 to 100 value as a progress bar named by its column, with the figure in words. `toneField` names the field holding a row's tone (`warning`,
+`danger`, `success`) and tints the row - an emphasis that always goes with a status column saying the same in an icon and words, so colour is
+never the only cue (a low-stock item is tinted *and* says "Low stock").
+
 ## Boards
 
 `kanbanBoard` shows a count and the over-limit warning in each column header. Name a numeric card field in `totalField` (a deal's `amount`) and the

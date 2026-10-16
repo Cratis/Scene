@@ -2279,6 +2279,44 @@
     border-color: var(--foundation-primary);
 }
 
+.foundation-card-picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--foundation-radius);
+    background: var(--foundation-highlight);
+    color: var(--foundation-highlight-text);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.foundation-card-picture img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+}
+
+.foundation-card-row[data-tone='warning'],
+.foundation-table tbody tr[data-tone='warning'] { background: var(--foundation-warning-background); }
+.foundation-card-row[data-tone='danger'],
+.foundation-table tbody tr[data-tone='danger'] { background: var(--foundation-danger-background); }
+.foundation-card-row[data-tone='success'],
+.foundation-table tbody tr[data-tone='success'] { background: var(--foundation-success-background); }
+
+.foundation-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--foundation-space-2);
+}
+
+.foundation-progress progress {
+    inline-size: 6rem;
+    block-size: 0.5rem;
+    accent-color: var(--foundation-primary);
+}
+
 .foundation-card-head {
     display: flex;
     align-items: center;
