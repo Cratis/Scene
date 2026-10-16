@@ -185,6 +185,7 @@ public static class ApplicableTemplates
     {
         TemplateCatalogKind.Layout => [TemplateScope.Application],
         TemplateCatalogKind.DialogTemplate => [TemplateScope.Slice],
+        _ when metadata?.Role == TemplateRole.Root => [TemplateScope.Application],
         _ => metadata?.SliceKinds is null ? _screenScopes : [TemplateScope.Slice]
     };
 

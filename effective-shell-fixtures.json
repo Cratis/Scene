@@ -1,0 +1,1673 @@
+{
+  "description": "Shared fixture corpus for resolveEffectiveShell (TypeScript) and ShellResolver.Resolve (C#): which shell an application gets from its UI profile - root template, legacy layout, blueprint default, built-in bare shell - and every diagnostic. Both engines must produce identical results. Cratis/Scene#159.",
+  "libraries": {
+    "default": {
+      "own": {
+        "manifest": {
+          "name": "App",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "OwnShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "OwnFrame",
+            "slots": [
+              {
+                "name": "nav"
+              },
+              {
+                "name": "main"
+              }
+            ],
+            "metadata": {
+              "role": "Root",
+              "primaryOutlet": "main",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Plain Page",
+            "slots": [],
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Orphan Page",
+            "slots": [],
+            "fitsSlot": "toolbar"
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Edit dialog",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ]
+          }
+        ]
+      },
+      "blueprints": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "CrmShell",
+              "slots": [
+                {
+                  "name": "sidebar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell",
+                "category": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "CRM Workspace",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "fitsSlot": "content"
+            },
+            {
+              "name": "Pipeline Board",
+              "slots": [],
+              "fitsSlot": "body"
+            },
+            {
+              "name": "CrmFrame",
+              "slots": [
+                {
+                  "name": "content"
+                },
+                {
+                  "name": "footer"
+                }
+              ],
+              "metadata": {
+                "role": "Root"
+              }
+            }
+          ]
+        },
+        {
+          "manifest": {
+            "name": "hr",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "HrShell",
+              "slots": [
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell"
+              }
+            }
+          ],
+          "screenTemplates": []
+        },
+        {
+          "manifest": {
+            "name": "analytics",
+            "version": "0.3.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [],
+          "screenTemplates": [
+            {
+              "name": "AnalyticsRoot",
+              "slots": [
+                {
+                  "name": "rail"
+                },
+                {
+                  "name": "main"
+                }
+              ],
+              "metadata": {
+                "role": "Root",
+                "primaryOutlet": "main"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "cyclic": {
+      "own": {
+        "manifest": {
+          "name": "App",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "OwnShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "OwnFrame",
+            "slots": [
+              {
+                "name": "nav"
+              },
+              {
+                "name": "main"
+              }
+            ],
+            "metadata": {
+              "role": "Root",
+              "primaryOutlet": "main",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Plain Page",
+            "slots": [],
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Orphan Page",
+            "slots": [],
+            "fitsSlot": "toolbar"
+          },
+          {
+            "name": "Loop A",
+            "slots": [
+              {
+                "name": "a-slot"
+              }
+            ],
+            "fitsSlot": "b-slot"
+          },
+          {
+            "name": "Loop B",
+            "slots": [
+              {
+                "name": "b-slot"
+              }
+            ],
+            "fitsSlot": "a-slot"
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Edit dialog",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ]
+          }
+        ]
+      },
+      "blueprints": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "CrmShell",
+              "slots": [
+                {
+                  "name": "sidebar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell",
+                "category": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "CRM Workspace",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "fitsSlot": "content"
+            },
+            {
+              "name": "Pipeline Board",
+              "slots": [],
+              "fitsSlot": "body"
+            },
+            {
+              "name": "CrmFrame",
+              "slots": [
+                {
+                  "name": "content"
+                },
+                {
+                  "name": "footer"
+                }
+              ],
+              "metadata": {
+                "role": "Root"
+              }
+            }
+          ]
+        },
+        {
+          "manifest": {
+            "name": "hr",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "HrShell",
+              "slots": [
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell"
+              }
+            }
+          ],
+          "screenTemplates": []
+        },
+        {
+          "manifest": {
+            "name": "analytics",
+            "version": "0.3.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [],
+          "screenTemplates": [
+            {
+              "name": "AnalyticsRoot",
+              "slots": [
+                {
+                  "name": "rail"
+                },
+                {
+                  "name": "main"
+                }
+              ],
+              "metadata": {
+                "role": "Root",
+                "primaryOutlet": "main"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "name": "an own layout as the root template, with options",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          },
+          "options": {
+            "navigationMode": "slim",
+            "showFooter": true
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {
+          "navigationMode": "slim",
+          "showFooter": true
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an own root screen template names its primary outlet",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnFrame"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "screenTemplate",
+        "source": "own",
+        "name": "OwnFrame",
+        "reference": {
+          "source": "Own",
+          "id": "OwnFrame"
+        },
+        "outlets": [
+          "nav",
+          "main"
+        ],
+        "primaryOutlet": "main",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a blueprint layout with a satisfied pin",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm",
+            "version": "^1.4"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^1.4"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a blueprint root without a pin gets the default pin",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4.2",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a blueprint root screen template",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmFrame",
+            "blueprint": "crm",
+            "version": "^1.0"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "screenTemplate",
+        "source": "blueprint",
+        "name": "CrmFrame",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmFrame",
+          "blueprint": "crm",
+          "version": "^1.0"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.0",
+        "outlets": [
+          "content",
+          "footer"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a blueprint root screen template with its own primary outlet",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "analytics"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "AnalyticsRoot",
+            "blueprint": "analytics"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "screenTemplate",
+        "source": "blueprint",
+        "name": "AnalyticsRoot",
+        "reference": {
+          "source": "Blueprint",
+          "id": "AnalyticsRoot",
+          "blueprint": "analytics"
+        },
+        "package": "analytics",
+        "packageVersion": "0.3.0",
+        "pinStatus": "Current",
+        "pin": "^0.3.0",
+        "outlets": [
+          "rail",
+          "main"
+        ],
+        "primaryOutlet": "main",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a pin the installed version does not satisfy is used and reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm",
+            "version": "^2.0"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^2.0"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "NotSatisfied",
+        "pin": "^2.0",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateVersionNotSatisfied",
+            "subject": "CrmShell",
+            "message": "Template 'CrmShell' was chosen from blueprint 'crm' ^2.0 but version 1.4.2 is installed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a blueprint that is available but not in the packages is used and reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm",
+            "version": "^1.4"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^1.4"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateBlueprintNotInstalled",
+            "subject": "crm",
+            "message": "Root template 'CrmShell' comes from blueprint 'crm', which is available but not among the packages of profile 'Desktop'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a blueprint that is not available falls back to the legacy layout",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "layout": "OwnShell",
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "GhostShell",
+            "blueprint": "ghost",
+            "version": "^1.0"
+          }
+        }
+      },
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateBlueprintNotInstalled",
+            "subject": "ghost",
+            "message": "Root template 'GhostShell' comes from blueprint 'ghost', which is not installed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "an unknown root template falls back to the default layout of the first installed blueprint",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Nope"
+          }
+        }
+      },
+      "expected": {
+        "origin": "blueprintDefault",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "Nope",
+            "message": "Root template 'Nope' cannot be used: Own template 'Nope' does not exist"
+          }
+        ]
+      }
+    },
+    {
+      "name": "an unknown root template with nothing to fall back on gets the bare shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Nope"
+          }
+        }
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "Nope",
+            "message": "Root template 'Nope' cannot be used: Own template 'Nope' does not exist"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a malformed own reference is reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "layout": "OwnShell",
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell",
+            "blueprint": "crm",
+            "version": "^1.0"
+          }
+        }
+      },
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "OwnShell",
+            "message": "Root template 'OwnShell' cannot be used: Own template reference 'OwnShell' must not name a blueprint or a version"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a dialog template cannot be the shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Edit dialog"
+          }
+        }
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateNotApplicable",
+            "subject": "Edit dialog",
+            "message": "Root template 'Edit dialog' cannot be the application's shell: it is a dialog template, and only a layout or a screen template with the root role can be a shell"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a screen template without the root role cannot be the shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "layout": "OwnShell",
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Plain Page"
+          }
+        }
+      },
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateNotApplicable",
+            "subject": "Plain Page",
+            "message": "Root template 'Plain Page' cannot be the application's shell: it is a screen template without the root role, and only a layout or a screen template with the root role can be a shell"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a root screen template that fits a slot cannot be the shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "BadFrame"
+          }
+        }
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateNotApplicable",
+            "subject": "BadFrame",
+            "message": "Root template 'BadFrame' cannot be the application's shell: Root template 'BadFrame' cannot fit slot 'content': nothing contains the application shell"
+          }
+        ]
+      }
+    },
+    {
+      "name": "the root template wins over the legacy layout",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "layout": "OwnShell",
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnFrame"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "screenTemplate",
+        "source": "own",
+        "name": "OwnFrame",
+        "reference": {
+          "source": "Own",
+          "id": "OwnFrame"
+        },
+        "outlets": [
+          "nav",
+          "main"
+        ],
+        "primaryOutlet": "main",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a legacy own layout",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "layout": "OwnShell"
+      },
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a legacy layout from an installed blueprint",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "layout": "CrmShell"
+      },
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^1.4.2"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4.2",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a legacy layout that is not installed is reported and falls back",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr"
+        ],
+        "layout": "CrmShell"
+      },
+      "expected": {
+        "origin": "blueprintDefault",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "CrmShell",
+            "message": "Layout 'CrmShell' named by profile 'Desktop' does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "an unknown legacy layout with nothing to fall back on gets the bare shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "layout": "Nope"
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateUnknown",
+            "subject": "Nope",
+            "message": "Layout 'Nope' named by profile 'Desktop' does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "no root and no layout uses the default layout of the first installed blueprint",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr",
+          "crm"
+        ]
+      },
+      "expected": {
+        "origin": "blueprintDefault",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a blueprint offering only a root screen template is a default shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "analytics"
+        ]
+      },
+      "expected": {
+        "origin": "blueprintDefault",
+        "kind": "screenTemplate",
+        "source": "blueprint",
+        "name": "AnalyticsRoot",
+        "reference": {
+          "source": "Blueprint",
+          "id": "AnalyticsRoot",
+          "blueprint": "analytics",
+          "version": "^0.3.0"
+        },
+        "package": "analytics",
+        "packageVersion": "0.3.0",
+        "pinStatus": "Current",
+        "pin": "^0.3.0",
+        "outlets": [
+          "rail",
+          "main"
+        ],
+        "primaryOutlet": "main",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "no root, no layout and no blueprint gets the bare shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a shell without the content outlet is used and reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "HeaderOnlyShell"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "own",
+        "name": "HeaderOnlyShell",
+        "reference": {
+          "source": "Own",
+          "id": "HeaderOnlyShell"
+        },
+        "outlets": [
+          "sidebar",
+          "header"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateMissingContentSlot",
+            "subject": "HeaderOnlyShell",
+            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+          }
+        ]
+      }
+    },
+    {
+      "name": "templates that contain each other are reported",
+      "library": "cyclic",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        }
+      },
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateCycle",
+            "subject": "Loop A",
+            "message": "Templates 'Loop A' -> 'Loop B' -> 'Loop A' contain each other and can never be placed inside shell 'OwnShell'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a screen whose content has no outlet in the shell is reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        }
+      },
+      "screens": [
+        {
+          "name": "Home",
+          "layout": "x",
+          "slotContent": {},
+          "forms": [],
+          "contributions": [],
+          "screenTemplate": "Plain Page"
+        },
+        {
+          "name": "Lost",
+          "layout": "x",
+          "slotContent": {},
+          "forms": [],
+          "contributions": [],
+          "screenTemplate": "Orphan Page"
+        }
+      ],
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "own",
+        "name": "OwnShell",
+        "reference": {
+          "source": "Own",
+          "id": "OwnShell"
+        },
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "profileSlotUnplaced",
+            "subject": "Lost",
+            "message": "Screen 'Lost' places content in outlet 'toolbar', which shell 'OwnShell' does not have"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a screen nested in a blueprint template reaches the shell outlet",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm",
+            "version": "^1.4"
+          }
+        }
+      },
+      "screens": [
+        {
+          "name": "Pipeline",
+          "layout": "x",
+          "slotContent": {},
+          "forms": [],
+          "contributions": [],
+          "screenTemplate": "Pipeline Board"
+        }
+      ],
+      "expected": {
+        "origin": "root",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^1.4"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4",
+        "outlets": [
+          "sidebar",
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a theme that does not support every package is reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr"
+        ],
+        "layout": "HrShell",
+        "theme": "Aurora"
+      },
+      "themes": [
+        {
+          "name": "Aurora",
+          "compatibleWith": [
+            "core"
+          ]
+        }
+      ],
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "profileThemeIncompatible",
+            "subject": "Aurora",
+            "message": "Theme 'Aurora' does not support package 'hr' of profile 'Desktop'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a theme that supports every package is silent",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr"
+        ],
+        "layout": "HrShell",
+        "theme": "Aurora"
+      },
+      "themes": [
+        {
+          "name": "Aurora",
+          "compatibleWith": [
+            "core",
+            "hr"
+          ]
+        }
+      ],
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "packages that are not available are reported",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr",
+          "ghost"
+        ],
+        "layout": "HrShell"
+      },
+      "availablePackages": [
+        "core",
+        "hr"
+      ],
+      "expected": {
+        "origin": "legacyLayout",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "HrShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "HrShell",
+          "blueprint": "hr",
+          "version": "^2.0.0"
+        },
+        "package": "hr",
+        "packageVersion": "2.0.0",
+        "pinStatus": "Current",
+        "pin": "^2.0.0",
+        "outlets": [
+          "content"
+        ],
+        "primaryOutlet": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "profilePackageMissing",
+            "subject": "ghost",
+            "message": "Package 'ghost' of profile 'Desktop' is not available"
+          }
+        ]
+      }
+    }
+  ]
+}

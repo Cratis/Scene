@@ -6,6 +6,15 @@ import { TemplateCompatibility } from './TemplateCompatibility';
 import { SliceKind } from '../structure';
 
 /** The application hierarchy at which a reusable template is selected. */
+/** A structural role a template can take beyond its kind. */
+export enum TemplateRole {
+    /**
+     * The application's root template - its shell. A screen template with this role and scope Application can be the shell
+     * of an application exactly like a layout; it fits no slot of anything else.
+     */
+    Root = 'Root',
+}
+
 export enum TemplateScope {
     Application = 'Application',
     Module = 'Module',
@@ -42,8 +51,14 @@ export interface TemplateMetadata {
 
     /** The package-relative path of the template's gallery thumbnail (`thumbnails/<name>.png|webp|jpg|svg`); required of every template of a domain blueprint. */
     thumbnail?: string;
+
+    /** A structural role beyond the template's kind. `Root` marks a screen template that can be an application's shell. */
+    role?: TemplateRole;
+
+    /** For a shell: the name of the slot every screen's content is placed in. Absent means `content`. */
+    primaryOutlet?: string;
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet',
 ];

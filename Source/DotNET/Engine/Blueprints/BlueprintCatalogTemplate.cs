@@ -13,4 +13,7 @@ namespace Cratis.Scene.Engine.Blueprints;
 /// <param name="Type">The template type.</param>
 /// <param name="Category">The browse category.</param>
 /// <param name="Thumbnail">The package-relative thumbnail path.</param>
-public record BlueprintCatalogTemplate(string Name, string Kind, string? DisplayName = null, string? Description = null, string? Type = null, string? Category = null, string? Thumbnail = null);
+/// <param name="Outlets">For a shell (a layout, or a screen template with the root role): the names of its outlets, in declaration order.</param>
+/// <param name="PrimaryOutlet">For a shell: the outlet every screen's content is placed in. <see langword="null"/> when it is <c language="csharp">content</c>.</param>
+/// <param name="Role">The structural role the template takes, for a screen template with one (<c language="csharp">Root</c> marks a shell).</param>
+public record BlueprintCatalogTemplate(string Name, string Kind, string? DisplayName = null, string? Description = null, string? Type = null, string? Category = null, string? Thumbnail = null, IReadOnlyList<string>? Outlets = null, string? PrimaryOutlet = null, string? Role = null);
