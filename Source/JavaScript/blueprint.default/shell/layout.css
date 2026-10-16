@@ -2346,6 +2346,12 @@
     gap: var(--foundation-space-2);
 }
 
+.foundation-board-total {
+    margin-inline-start: auto;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 .foundation-board-header h3 {
     margin: 0;
     font-size: 1rem;

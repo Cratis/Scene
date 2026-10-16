@@ -91,6 +91,13 @@ it, and conditions on fields that no longer exist are dropped rather than shown 
 groups them by calendar day in `timeZone`, newest first unless `order` is `ascending`; the application supplies the content.
 `avatarStack` takes `people` (`name`, optional `imageUrl`) and folds those beyond `max` into a "+N" chip, announced as "N more".
 
+## Boards
+
+`kanbanBoard` shows a count and the over-limit warning in each column header. Name a numeric card field in `totalField` (a deal's `amount`) and the
+header also shows the total of that field over the cards in the column, formatted by `format` (`currency` with a `currency` code, `percent`,
+`compact` or a plain number) in the element's `locale`. The totals follow a card when it is moved, by dragging or by its Move-to menu, so a
+pipeline's header always says what each stage is worth.
+
 ## Uploading files
 
 `fileUploader` checks a selection against `accept` (extensions, MIME types, wildcards), `maxSizeMb` and `multiple` before anything is

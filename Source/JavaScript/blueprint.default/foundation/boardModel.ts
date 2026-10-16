@@ -17,6 +17,9 @@ export interface BoardCard {
     assignee?: string;
     fields: { label: string; value: string }[];
     badges: string[];
+
+    /** The card's numeric fields (a deal's `amount`), which a column can total. */
+    numbers: Record<string, number>;
 }
 
 const records = (value: unknown): Record<string, unknown>[] =>
@@ -41,6 +44,7 @@ export function readCards(value: unknown): BoardCard[] {
         const fields = records(entry.fields).flatMap(field => (typeof field.label === 'string' && typeof field.value === 'string' ? [{ label: field.label, value: field.value }] : [])).slice(0, 3);
         return [{
             id: entry.id, title: entry.title, column: typeof entry.column === 'string' ? entry.column : '', fields,
+            numbers: Object.fromEntries(Object.entries(entry).filter((pair): pair is [string, number] => typeof pair[1] === 'number' && Number.isFinite(pair[1]))),
             badges: Array.isArray(entry.badges) ? entry.badges.filter((badge): badge is string => typeof badge === 'string') : [],
             ...(typeof entry.assignee === 'string' ? { assignee: entry.assignee } : {}),
         }];
@@ -61,4 +65,7 @@ export function moveCard(columns: BoardColumn[], cards: BoardCard[], id: string,
 }
 
 /** Whether a column holds more cards than its limit. */
+/** The sum of a numeric card field over the cards in a column; a card without the field adds nothing. */
+export const totalOf = (cards: BoardCard[], field: string): number => cards.reduce((sum, card) => sum + (card.numbers[field] ?? 0), 0);
+
 export const overLimit = (column: BoardColumn, count: number): boolean => column.limit > 0 && count > column.limit;

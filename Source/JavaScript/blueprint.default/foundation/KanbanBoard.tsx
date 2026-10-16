@@ -3,8 +3,9 @@
 
 import { DragEvent, useEffect, useMemo, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
-import { BoardCard, BoardColumn, cardsOf, moveCard, overLimit, readCards, readColumnsOfBoard } from './boardModel';
+import { BoardCard, BoardColumn, cardsOf, moveCard, overLimit, readCards, readColumnsOfBoard, totalOf } from './boardModel';
 import { ComponentState, readComponentState } from './ComponentState';
+import { formatNumber, readLocale, readNumberFormat } from './formatting';
 import { FoundationIcon } from './FoundationIcon';
 import { formatText, readFoundationStrings } from './foundationStrings';
 import { readPermissionRule } from './PermissionRule';
@@ -16,7 +17,8 @@ import { FoundationFrame } from './StateFrame';
  * `columns` (`id`, `label`, `limit`) and `cards` (`id`, `title`, `column`, `assignee`, up to three `fields`, `badges`) come from a query. A card moves by
  * dragging it to another column **and** by its own "Move to" menu - the keyboard and screen-reader alternative, so nothing depends on a pointer
  * - and every move is announced. Columns show their count and a limit indicator that says "Over the limit" in words, and collapse to a
- * strip. The new arrangement is published as `value` (the cards with their columns) for the screen to save; with `editPermission` not enabled the
+ * strip. With `totalField` naming a numeric card field (a deal's `amount`) each column's header also shows the total of that field over its cards, formatted
+ * as `format` (`currency` with `currency`, for a pipeline of deals) in the `locale`; the totals follow a card as it moves. The new arrangement is published as `value` (the cards with their columns) for the screen to save; with `editPermission` not enabled the
  * board is read-only. A card whose column no longer exists is shown in the first column rather than lost.
  */
 export function KanbanBoard({ element, interactions, bindingOutputs }: RegisteredComponentProps) {
@@ -29,6 +31,10 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
     const [dragging, setDragging] = useState<string | undefined>();
     const strings = readFoundationStrings(element);
     const state = readComponentState(element, columns.length > 0);
+    const totalField = typeof element.properties.totalField === 'string' ? element.properties.totalField : '';
+    const locale = readLocale(element);
+    const totalFormat = readNumberFormat(element);
+    const currency = typeof element.properties.currency === 'string' && element.properties.currency.length > 0 ? element.properties.currency : undefined;
     const locked = readPermissionRule(element, 'editPermission') !== 'enabled';
 
     useEffect(() => setCards(supplied), [suppliedKey]);
@@ -65,6 +71,7 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
                                         </button>
                                         <h3>{column.label}</h3>
                                         <span className='foundation-count'>{inColumn.length}{column.limit > 0 ? ` / ${column.limit}` : ''}</span>
+                                        {totalField && <span className='foundation-board-total' data-total={totalOf(inColumn, totalField)}>{formatNumber(totalOf(inColumn, totalField), locale, totalFormat, currency, 0)}</span>}
                                         {over && <span className='foundation-chip' data-tone='danger'><FoundationIcon name='alert' />{formatText(strings.boardWipExceeded, { limit: column.limit })}</span>}
                                     </header>
                                     {!closed && (
