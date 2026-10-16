@@ -28,12 +28,19 @@ describe('when previewing each screen of the Project and Task Tracker blueprint'
         }
     }
 
+    it('should draw every project as a bar in a lane for its owner, with the milestones, and say the progress in words', () => {
+        const { container } = render(preview('projects.timeline', tracker));
+        within(container).getAllByText(/Website relaunch/).length.should.be.greaterThan(0);
+        within(container).getAllByText(/Website go-live/).length.should.be.greaterThan(0);
+        within(container).getAllByText(/72/).length.should.be.greaterThan(0);
+    });
+
     describe('and a standard state is forced on every region (Part B 1.4)', () => {
         const forced = (screen: string, state: ForcedState) =>
             render(preview(screen, tracker, { composition: { ...projectTrackerComposition, decorate: element => forceState(element, state) } }));
         const regionText = (container: HTMLElement) => Array.from(container.querySelectorAll('.foundation')).map(region => region.textContent ?? '').join(' ');
 
-        for (const screen of ['projects.list', 'projects.record', 'projects.board', 'projects.mytasks', 'projects.board.lanes']) {
+        for (const screen of ['projects.list', 'projects.record', 'projects.board', 'projects.mytasks', 'projects.board.lanes', 'projects.timeline']) {
             it(`should show ${screen} loading with an announced skeleton and none of its data`, () => {
                 const { container } = forced(screen, { state: ComponentState.Loading });
                 container.querySelectorAll('.foundation-skeleton').length.should.be.greaterThan(0);

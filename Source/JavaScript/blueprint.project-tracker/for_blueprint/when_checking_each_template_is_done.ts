@@ -43,8 +43,8 @@ describe('when checking each template of the Project and Task Tracker blueprint 
         }
     }
 
-    it('should ship 5 screen templates and 3 dialog templates, each declared by the manifest', () => {
-        [projectTrackerScreenTemplates.length, projectTrackerDialogTemplates.length].should.deep.equal([5, 3]);
+    it('should ship 6 screen templates and 3 dialog templates, each declared by the manifest', () => {
+        [projectTrackerScreenTemplates.length, projectTrackerDialogTemplates.length].should.deep.equal([6, 3]);
         projectTrackerScreenTemplates.map(template => template.name).should.deep.equal(projectTrackerBlueprint.manifest.screenTemplates);
         projectTrackerDialogTemplates.map(template => template.name).should.deep.equal(projectTrackerBlueprint.manifest.dialogTemplates);
     });
