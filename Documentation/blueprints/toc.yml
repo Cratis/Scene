@@ -32,6 +32,8 @@
         href: ship-your-own-blueprint.md
       - name: The CRM blueprint
         href: crm-blueprint.md
+      - name: The Ticketing blueprint
+        href: ticketing-blueprint.md
       - name: The HR People and Time Off blueprint
         href: hr-blueprint.md
       - name: The Administration blueprint
