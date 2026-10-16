@@ -75,6 +75,13 @@ structure once and answers lookups. It is pure: no DOM, no React, nothing is rew
 A feature id is never a slice and vice versa: `findSlice('sales.orders')` and `findFeature('sales.orders.PlaceOrder')`
 both resolve to nothing. A module without features has no first feature.
 
+## Where hosts use it for navigation
+
+The structure is also what drives the navigation a host draws: `effectiveNavigation` is computed for the module of the screen on the page, a
+module target opens `firstFeatureId`, and the default breadcrumb (`locationTrail` in `@cratis/scene.blueprint.default`) is the module and
+features from the qualified id of the screen on the page (`sales.orders.returns` -> Sales > Orders > Returns). A host lists what it can show
+with `listDestinations` ([the preview host](preview-host.md#the-showing-picker)); see the [designer contract](ui-profile-designer-contract.md).
+
 ## Diagnostics
 
 | Code | Meaning |

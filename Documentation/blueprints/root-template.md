@@ -119,4 +119,16 @@ never ids.
 `blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
 carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
 
-Still to come in the follow-on engine issues: shell switching and the legacy migration helper.
+## Authoring a profile
+
+Write `root`, not `layout`, and let the engine - not your host - decide whether it works:
+
+1. Pick a shell from `applicableTemplates` at the `Application` scope (layouts and root screen templates are offered side by side).
+2. Pin a blueprint template with a semver range (`^4.5`); leave `version` out only for an own template.
+3. Put only shell options in `root.options`; the shell owns the names.
+4. Run `resolveEffectiveShell` and show its `diagnostics` - a host never invents its own checks (REN2).
+5. Preview with the real host: [`ScenePreviewHost`](preview-host.md) with `target={{ application: ... }}` renders the shell with the
+   application's navigation, and clicking an item really navigates. See [UI profile designer contract](ui-profile-designer-contract.md).
+
+Still to come in the follow-on engine issues: shell switching (`planShellSwitch`), the property descriptors a designer edits through, and the
+legacy migration helper.
