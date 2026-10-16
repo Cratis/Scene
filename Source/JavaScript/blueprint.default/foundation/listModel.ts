@@ -8,6 +8,8 @@ export enum CellKind {
     Currency = 'currency',
     Date = 'date',
     Status = 'status',
+    /** A percentage from 0 to 100 drawn as a progress bar with its figure in words. */
+    Progress = 'progress',
 }
 
 /** One column of a list. */

@@ -21,6 +21,9 @@ export function writeUrlParameter(name: string, value: string | undefined): void
     window.history.replaceState(window.history.state, '', `${window.location.pathname}${query.length > 0 ? `?${query}` : ''}${window.location.hash}`);
 }
 
+/** The event that tells every component sharing an address parameter that it changed: replacing the address in place raises no event of its own. */
+const urlStateChanged = 'cratis-foundation-url-state';
+
 /**
  * State that lives in the address bar: a list's search, sort, page and filters, a master/detail's selection, a module's active section.
  *
@@ -39,13 +42,21 @@ export function useUrlState(key: string | undefined, fallback: string | undefine
     useEffect(() => {
         if (key === undefined) return;
         const restore = () => setValue(readUrlParameter(key) ?? fallback);
+        // Another component on the page writing the same parameter - a search box and the list it narrows - is a change here too.
+        const shared = (event: Event) => {
+            const detail = (event as CustomEvent<{ key: string; value: string | undefined }>).detail;
+            if (detail.key === key) setValue(detail.value ?? fallback);
+        };
         window.addEventListener('popstate', restore);
-        return () => window.removeEventListener('popstate', restore);
+        window.addEventListener(urlStateChanged, shared);
+        return () => { window.removeEventListener('popstate', restore); window.removeEventListener(urlStateChanged, shared); };
     }, [key, fallback]);
 
     const update = useCallback((next: string | undefined) => {
         setValue(next);
-        if (key !== undefined) writeUrlParameter(key, next);
+        if (key === undefined) return;
+        writeUrlParameter(key, next);
+        window.dispatchEvent(new CustomEvent(urlStateChanged, { detail: { key, value: next } }));
     }, [key]);
 
     return [value, update];

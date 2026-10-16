@@ -6,6 +6,7 @@ import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { readOptionalString } from '../shell/elementProperties';
 import { ComponentState, readComponentState } from './ComponentState';
 import { FoundationIcon } from './FoundationIcon';
+import { initialsOf } from './avatarModel';
 import { FoundationFrame } from './StateFrame';
 import { formatDate, formatNumber, NumberFormat, readLocale } from './formatting';
 import { formatText, readFoundationStrings } from './foundationStrings';
@@ -28,6 +29,10 @@ function Cell({ column, row, locale }: { column: ListColumn; row: ListRow; local
             const tone = column.tones[text] ?? 'neutral';
             const icon = ({ success: 'check', warning: 'alert', danger: 'close', info: 'info', neutral: 'circle' } as const)[tone as 'success'] ?? 'circle';
             return <span className='foundation-chip' data-tone={tone}><FoundationIcon name={icon} /><span>{text}</span></span>;
+        }
+        case CellKind.Progress: {
+            const percent = typeof raw === 'number' ? Math.min(100, Math.max(0, raw)) : Math.min(100, Math.max(0, Number(text) || 0));
+            return <span className='foundation-progress'><progress value={percent} max={100} aria-label={column.header}>{percent}%</progress><span>{formatNumber(percent / 100, locale, NumberFormat.Percent)}</span></span>;
         }
         default: return <>{text}</>;
     }
@@ -68,6 +73,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     const actionRule = readPermissionRule(element, 'actionPermission');
     const groupBy = readOptionalString(element, 'groupBy');
     const totalField = readOptionalString(element, 'totalField');
+    const imageField = readOptionalString(element, 'imageField');
+    const toneField = readOptionalString(element, 'toneField');
     const sort = parseSort(sortText, columns);
 
     const matching = useMemo(() => filterRows(searchRows(rows, columns, searchText ?? ''), element.properties.filter), [rows, columns, searchText, element.properties.filter]);
@@ -97,6 +104,16 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     const checkbox = (row: ListRow, index: number) => !selectable ? undefined : (
         <input type={multiple ? 'checkbox' : 'radio'} name={`${element.id}-select`} checked={selected.includes(rowId(row, index, idField))} aria-label={formatText(strings.listSelectRow, { name: nameOf(row, index) })} onChange={() => select(rowId(row, index, idField))} />
     );
+
+    // A row's tone is an emphasis, never the only cue: a status column carries the same fact as an icon and words.
+    const toneOf = (row: ListRow): string | undefined => (toneField === undefined ? undefined : textOf(row, toneField) || undefined);
+
+    // The picture of a card: the row's image, or its initials when it has none. The title beside it names the row, so the picture is decorative.
+    const picture = (row: ListRow, index: number) => {
+        if (imageField === undefined) return undefined;
+        const source = textOf(row, imageField);
+        return <div className='foundation-card-picture' aria-hidden='true'>{source ? <img src={source} alt='' loading='lazy' /> : <span>{initialsOf(nameOf(row, index))}</span>}</div>;
+    };
 
     const table = (tableRows: ListRow[], offset = 0, caption?: string) => (
         <div className='foundation-table-scroll'>
@@ -128,7 +145,7 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                         const index = offset + position;
                         const id = rowId(row, index, idField);
                         return (
-                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)}>
+                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)} data-tone={toneOf(row)}>
                                 {selectable && <td className='foundation-table-select'>{checkbox(row, index)}</td>}
                                 {columns.map((column, columnIndex) => columnIndex === 0
                                     ? <th key={column.field} scope='row'><Cell column={column} row={row} locale={locale} /></th>
@@ -148,7 +165,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                 const index = offset + position;
                 const id = rowId(row, index, idField);
                 return (
-                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)}>
+                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)} data-tone={toneOf(row)}>
+                        {picture(row, index)}
                         <div className='foundation-card-head'>{checkbox(row, index)}<strong>{nameOf(row, index)}</strong></div>
                         <dl>
                             {columns.filter(column => column.field !== titleField).map(column => (
