@@ -185,6 +185,8 @@ export const foundationStrings = {
     boardWip: 'Limit {limit}',
     boardWipExceeded: 'Over the limit of {limit}',
     boardNoCards: 'No cards',
+    boardLane: '{assignee}, {count} cards',
+    boardUnassigned: 'Unassigned',
     wizardStep: 'Step {n} of {total}',
     wizardBack: 'Back',
     wizardNext: 'Next',
