@@ -165,6 +165,48 @@
       "scope": 99,
       "definition": { "name": "custom", "slots": [] },
       "expectedProblems": ["Template 'custom' has unknown target scope '99'"]
+    },
+    {
+      "name": "a root screen template is a shell at the application scope",
+      "kind": "ScreenTemplate",
+      "scope": "Application",
+      "definition": { "name": "frame", "slots": [{ "name": "content" }], "metadata": { "role": "Root", "category": "Shell" } },
+      "expectedProblems": []
+    },
+    {
+      "name": "a root screen template is not offered below the application",
+      "kind": "ScreenTemplate",
+      "scope": "Module",
+      "definition": { "name": "frame", "slots": [{ "name": "content" }], "metadata": { "role": "Root" } },
+      "expectedProblems": ["Template 'frame' of kind 'ScreenTemplate' with the root role cannot be applied at scope 'Module'"]
+    },
+    {
+      "name": "a root screen template must not fit any slot",
+      "kind": "ScreenTemplate",
+      "scope": "Application",
+      "definition": { "name": "frame", "slots": [{ "name": "content" }], "fitsSlot": "content", "metadata": { "role": "Root" } },
+      "expectedProblems": ["Root template 'frame' cannot fit slot 'content': nothing contains the application shell"]
+    },
+    {
+      "name": "a root screen template that declares other scopes only is not a shell",
+      "kind": "ScreenTemplate",
+      "scope": "Application",
+      "definition": { "name": "frame", "slots": [], "metadata": { "role": "Root", "scopes": ["Module"] } },
+      "expectedProblems": ["Template 'frame' does not declare scope 'Application'"]
+    },
+    {
+      "name": "a dialog template cannot take the root role",
+      "kind": "DialogTemplate",
+      "scope": "Slice",
+      "definition": { "name": "edit", "slots": [], "metadata": { "role": "Root" } },
+      "expectedProblems": ["Template 'edit' of kind 'DialogTemplate' cannot have the root role"]
+    },
+    {
+      "name": "an unknown role is preserved and diagnosed",
+      "kind": "ScreenTemplate",
+      "scope": "Slice",
+      "definition": { "name": "frame", "slots": [], "metadata": { "role": 99 } },
+      "expectedProblems": ["Template 'frame' declares unknown role '99'"]
     }
   ],
   "library": {
@@ -198,6 +240,11 @@
         }
       ],
       "screenTemplates": [
+        {
+          "name": "RootFrame",
+          "slots": [{ "name": "content" }],
+          "metadata": { "role": "Root", "category": "Shell" }
+        },
         {
           "name": "Module Workspace",
           "slots": [
@@ -475,7 +522,8 @@
           {
             "category": "Shell",
             "templates": [
-              "MyShell"
+              "MyShell",
+              "RootFrame"
             ]
           }
         ],

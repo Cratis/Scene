@@ -67,5 +67,56 @@ profile in one canonical form, byte for byte identical, proven by the shared cor
 - readers ignore members they do not know, and a document written before `root`, `appearance` and `defaults` existed loads and
   writes back unchanged.
 
-This page is completed by the engine issues that follow: effective shell resolution, version pin drift and diagnostics, shell
-switching, and the legacy migration helper.
+## The root role
+
+A shell is either a **layout** or an **application-scope screen template with the root role**. A screen template takes the role with
+`metadata.role: Root` (C# `TemplateRole.Root`); it is offered only at the `Application` scope, must not fit any slot (nothing contains
+the shell), and `ApplicableTemplates` at the `Application` scope lists layouts and root screen templates side by side. A dialog
+template can never take the role. `metadata.primaryOutlet` names the slot every screen's content is placed in; it is `content` when
+absent.
+
+## The effective shell
+
+`resolveEffectiveShell(profile, context)` (TypeScript, `@cratis/scene.engine`) and `ShellResolver.Resolve(profile, context)` (C#,
+`Cratis.Scene.Engine.Shell`) are the one place the question "what is this application's shell?" is answered, for every host. They are
+asserted against the same corpus, `effective-shell-fixtures.json`.
+
+The order is:
+
+1. `profile.root` - the pinned template reference;
+2. the legacy `profile.layout` name, looked up in the application and then in the installed blueprints;
+3. the default layout (or root screen template) of the first installed blueprint;
+4. the built-in **Bare** shell: one `content` outlet and no chrome.
+
+A candidate that cannot be used at all - it does not exist, its blueprint is not available, it is a dialog template or a screen
+template without the root role - is reported and the next one is tried, so there is always a shell to render. A candidate that exists
+but is wrong in a way the host can still show (a pin the installed version does not satisfy, no `content` outlet, a blueprint that is
+available but not among the profile's packages) is used and reported.
+
+The result carries the pinned `reference`, the `template` (a layout or a screen template), its `kind`, `source` (own, blueprint,
+built in), the supplying `package` and its installed version, the pin evaluation (`Current`, `NotSatisfied`, ...), the `outlets` in
+declaration order, the `primaryOutlet`, the profile's `options` and the `diagnostics`.
+
+## Diagnostics
+
+The codes are camelCase and engine-owned; every message carries real names (templates, blueprints, screens, outlets, packages),
+never ids.
+
+| Code | When |
+|---|---|
+| `rootTemplateUnknown` | The root template (or the legacy layout name) does not exist. |
+| `rootTemplateVersionNotSatisfied` | The pin does not match the installed blueprint version (the shell is still used). |
+| `rootTemplateNotApplicable` | The template cannot be a shell: a dialog template, a screen template without the root role, or a root template that fits a slot. |
+| `rootTemplateMissingContentSlot` | The shell has no outlet for the screens' content. |
+| `rootTemplateCycle` | Templates that nest inside the shell contain each other and can never be placed. |
+| `rootTemplateBlueprintNotInstalled` | The root template's blueprint is unavailable, or available but not among the profile's packages. |
+| `profileThemeIncompatible` | The profile's theme does not support every package of the profile. |
+| `profilePackageMissing` | The profile lists a package that is not available. |
+| `profileSlotUnplaced` | A screen puts content in an outlet the shell does not have. |
+
+## Blueprint catalog
+
+`blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
+carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
+
+Still to come in the follow-on engine issues: shell switching and the legacy migration helper.

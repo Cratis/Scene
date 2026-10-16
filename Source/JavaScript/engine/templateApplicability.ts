@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateScope } from '@cratis/scene.model';
+import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateRole, TemplateScope } from '@cratis/scene.model';
 
 type TemplateKind = 'Layout' | 'ScreenTemplate' | 'DialogTemplate';
 /** The containing layout or screen template against which a fitsSlot selection is checked. */
@@ -23,6 +23,12 @@ export function validateScreenTemplateApplicability(
 ): string[] {
     if (!template) return [];
     const problems = validateRole(template.name, 'ScreenTemplate', template.metadata, scope);
+    if (template.metadata?.role === TemplateRole.Root) {
+        if (template.fitsSlot !== undefined) {
+            problems.push(`Root template '${template.name}' cannot fit slot '${template.fitsSlot}': nothing contains the application shell`);
+        }
+        return problems;
+    }
     if (template.fitsSlot !== undefined) {
         const separator = template.fitsSlot.lastIndexOf('.');
         const qualifier = separator < 0 ? undefined : template.fitsSlot.slice(0, separator);
@@ -50,10 +56,17 @@ export function filterApplicableScreenTemplates(
 
 function validateRole(name: string, kind: TemplateKind, metadata: TemplateMetadata | undefined, scope: TemplateScope): string[] {
     const problems: string[] = [];
+    const isRoot = kind === 'ScreenTemplate' && metadata?.role === TemplateRole.Root;
     if (!Object.values(TemplateScope).includes(scope)) {
         problems.push(`Template '${name}' has unknown target scope '${scope}'`);
-    } else if ((kind === 'Layout') !== (scope === TemplateScope.Application)) {
-        problems.push(`Template '${name}' of kind '${kind}' cannot be applied at scope '${scope}'`);
+    } else if ((kind === 'Layout' || isRoot) !== (scope === TemplateScope.Application)) {
+        problems.push(`Template '${name}' of kind '${kind}'${isRoot ? ' with the root role' : ''} cannot be applied at scope '${scope}'`);
+    }
+    if (metadata?.role !== undefined && !Object.values(TemplateRole).includes(metadata.role)) {
+        problems.push(`Template '${name}' declares unknown role '${metadata.role}'`);
+    }
+    if (metadata?.role === TemplateRole.Root && kind === 'DialogTemplate') {
+        problems.push(`Template '${name}' of kind 'DialogTemplate' cannot have the root role`);
     }
     if (metadata?.type === 'ApplicationShell' && kind !== 'Layout') {
         problems.push(`Template '${name}' of type 'ApplicationShell' must be a Layout`);

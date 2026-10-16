@@ -38,6 +38,16 @@ public static class TemplateApplicability
         }
 
         var problems = ValidateRole(template.Name, nameof(ScreenTemplate), template.Metadata, scope).ToList();
+        if (template.Metadata?.Role == TemplateRole.Root)
+        {
+            if (template.FitsSlot is not null)
+            {
+                problems.Add($"Root template '{template.Name}' cannot fit slot '{template.FitsSlot}': nothing contains the application shell");
+            }
+
+            return problems;
+        }
+
         if (template.FitsSlot is not null)
         {
             var separator = template.FitsSlot.LastIndexOf('.');
@@ -74,13 +84,24 @@ public static class TemplateApplicability
     static List<string> ValidateRole(string name, string kind, TemplateMetadata? metadata, TemplateScope scope)
     {
         var problems = new List<string>();
+        var isRoot = kind == nameof(ScreenTemplate) && metadata?.Role == TemplateRole.Root;
         if (!Enum.IsDefined(scope))
         {
             problems.Add($"Template '{name}' has unknown target scope '{scope}'");
         }
-        else if (kind == nameof(Layout) != (scope == TemplateScope.Application))
+        else if ((kind == nameof(Layout) || isRoot) != (scope == TemplateScope.Application))
         {
-            problems.Add($"Template '{name}' of kind '{kind}' cannot be applied at scope '{scope}'");
+            problems.Add($"Template '{name}' of kind '{kind}'{(isRoot ? " with the root role" : string.Empty)} cannot be applied at scope '{scope}'");
+        }
+
+        if (metadata?.Role is not null && !Enum.IsDefined(metadata.Role.Value))
+        {
+            problems.Add($"Template '{name}' declares unknown role '{metadata.Role}'");
+        }
+
+        if (metadata?.Role == TemplateRole.Root && kind == nameof(DialogTemplate))
+        {
+            problems.Add($"Template '{name}' of kind 'DialogTemplate' cannot have the root role");
         }
 
         if (metadata?.Type == "ApplicationShell" && kind != nameof(Layout))

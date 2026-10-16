@@ -326,7 +326,9 @@
       "license",
       "licenseUrl",
       "sliceKinds",
-      "thumbnail"
+      "thumbnail",
+      "role",
+      "primaryOutlet"
     ],
     "GridLength": [
       "value",
@@ -828,6 +830,9 @@
       "Light",
       "Dark",
       "System"
+    ],
+    "TemplateRole": [
+      "Root"
     ]
   }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PackageKind } from '@cratis/scene.model';
+import { PackageKind, TemplateRole } from '@cratis/scene.model';
 import { TemplateSource } from '../templates/TemplateSource';
 import { BlueprintCatalogEntry, BlueprintCatalogFile } from './BlueprintCatalogEntry';
 
@@ -44,7 +44,8 @@ export function describeBlueprintCatalog(sources: readonly TemplateSource[]): Bl
                     ...(screen.order === undefined ? {} : { order: screen.order }),
                 })),
                 templates: templates.map(({ kind, template }) => {
-                    const described = template as { displayName?: string; description?: string; metadata?: { type?: string; category?: string; thumbnail?: string } };
+                    const described = template as { displayName?: string; description?: string; slots?: { name: string }[]; metadata?: { type?: string; category?: string; thumbnail?: string; role?: string; primaryOutlet?: string } };
+                    const isShell = kind === 'Layout' || described.metadata?.role === TemplateRole.Root;
                     return {
                         name: template.name,
                         kind,
@@ -53,6 +54,9 @@ export function describeBlueprintCatalog(sources: readonly TemplateSource[]): Bl
                         ...(described.metadata?.type === undefined ? {} : { type: described.metadata.type }),
                         ...(described.metadata?.category === undefined ? {} : { category: described.metadata.category }),
                         ...(described.metadata?.thumbnail === undefined ? {} : { thumbnail: described.metadata.thumbnail }),
+                        ...(isShell ? { outlets: (described.slots ?? []).map(slot => slot.name) } : {}),
+                        ...(isShell && described.metadata?.primaryOutlet !== undefined ? { primaryOutlet: described.metadata.primaryOutlet } : {}),
+                        ...(described.metadata?.role === undefined ? {} : { role: described.metadata.role }),
                     };
                 }),
                 sampleData: (manifest.sampleData ?? []).map(reference => ({ id: reference.id, title: reference.title, locale: reference.locale, path: reference.path, default: reference.id === defaultId })),

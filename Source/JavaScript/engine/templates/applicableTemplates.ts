@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateReference, TemplateReferenceSource, TemplateScope, SliceKind } from '@cratis/scene.model';
+import { DialogTemplate, Layout, ScreenTemplate, TemplateMetadata, TemplateReference, TemplateReferenceSource, TemplateRole, TemplateScope, SliceKind } from '@cratis/scene.model';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
 import { validateDialogTemplateApplicability, validateLayoutApplicability, validateScreenTemplateApplicability } from '../templateApplicability';
 import { ApplicableBlueprint, ApplicableTemplate, ApplicableTemplateGroup, ApplicableTemplateSet } from './ApplicableTemplateSet';
@@ -139,7 +139,9 @@ function defaultScopes(kind: TemplateCatalogKind, metadata: TemplateMetadata | u
     switch (kind) {
         case TemplateCatalogKind.Layout: return [TemplateScope.Application];
         case TemplateCatalogKind.DialogTemplate: return [TemplateScope.Slice];
-        default: return metadata?.sliceKinds === undefined ? screenScopes : [TemplateScope.Slice];
+        default:
+            if (metadata?.role === TemplateRole.Root) return [TemplateScope.Application];
+            return metadata?.sliceKinds === undefined ? screenScopes : [TemplateScope.Slice];
     }
 }
 
