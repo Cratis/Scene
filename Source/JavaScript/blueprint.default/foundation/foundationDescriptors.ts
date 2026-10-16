@@ -351,6 +351,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
                 ], 'What each role holds.'),
                 acceptedBindingKinds: bindable,
             },
+            text('focusRole', 'Role shown alone', 'Data', 'The id of the one role to show, for a matrix beside a list of roles; empty shows every role.', { acceptedBindingKinds: bindable }),
             rule('editPermission', 'Edit permission', 'Enabled lets the user change grants; otherwise the matrix is read-only.'),
             valueOutputProperty(PropertyValueType.Json, 'The grants as the user has changed them: rows of role and permission, published as they change.'),
             ...standardStateProperties,
