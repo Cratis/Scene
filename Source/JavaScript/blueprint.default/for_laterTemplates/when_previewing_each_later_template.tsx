@@ -64,6 +64,12 @@ describe('when previewing each later foundation template', () => {
         screen.getByText('Total value');
     });
 
+    it('should start the import at the upload step with its progress', () => {
+        preview('ImportWizard');
+        screen.getAllByText('Upload').length.should.be.greaterThan(0);
+        screen.getAllByText('Review and confirm').length.should.be.greaterThan(0);
+    });
+
     it('should name the person on the profile and offer its sections as tabs', () => {
         preview('ProfileScreen');
         screen.getAllByText('Ada Lovelace').length.should.be.greaterThan(0);

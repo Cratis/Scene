@@ -1059,6 +1059,186 @@
           "emailDigest": true
         }
       ]
+    },
+    {
+      "shape": "ImportSteps",
+      "rows": [
+        {
+          "id": "upload",
+          "label": "Upload"
+        },
+        {
+          "id": "map",
+          "label": "Map columns"
+        },
+        {
+          "id": "preview",
+          "label": "Preview"
+        },
+        {
+          "id": "confirm",
+          "label": "Review and confirm"
+        }
+      ]
+    },
+    {
+      "shape": "ImportMappingSections",
+      "rows": [
+        {
+          "id": "mapping",
+          "title": "Which column holds what",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "type": "select",
+              "options": [
+                "Full name",
+                "Name",
+                "Contact"
+              ],
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "E-mail",
+              "type": "select",
+              "options": [
+                "E-mail",
+                "Mail"
+              ],
+              "required": true
+            },
+            {
+              "name": "company",
+              "label": "Company",
+              "type": "select",
+              "options": [
+                "Company",
+                "Employer"
+              ]
+            },
+            {
+              "name": "phone",
+              "label": "Phone",
+              "type": "select",
+              "options": [
+                "Phone",
+                "Mobile"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ImportMappingValues",
+      "rows": [
+        {
+          "name": "Full name",
+          "email": "E-mail",
+          "company": "Company",
+          "phone": "Mobile"
+        }
+      ]
+    },
+    {
+      "shape": "ImportSummary",
+      "rows": [
+        {
+          "message": "3 of 4 rows can be imported. 1 row is left out and the reason is given."
+        }
+      ]
+    },
+    {
+      "shape": "ImportPreviewColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "email",
+          "header": "E-mail"
+        },
+        {
+          "field": "company",
+          "header": "Company"
+        },
+        {
+          "field": "outcome",
+          "header": "Outcome",
+          "kind": "status",
+          "tones": {
+            "Will be imported": "success",
+            "Left out: invalid e-mail": "danger"
+          }
+        }
+      ]
+    },
+    {
+      "shape": "ImportPreview",
+      "rows": [
+        {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "Analytical Engines",
+          "outcome": "Will be imported"
+        },
+        {
+          "name": "Grace Hopper",
+          "email": "grace@example.com",
+          "company": "Navy",
+          "outcome": "Will be imported"
+        },
+        {
+          "name": "Linus Torvalds",
+          "email": "linus@example.com",
+          "company": "Linux Foundation",
+          "outcome": "Will be imported"
+        },
+        {
+          "name": "Alan Turing",
+          "email": "alan-at-example",
+          "company": "Bletchley",
+          "outcome": "Left out: invalid e-mail"
+        }
+      ]
+    },
+    {
+      "shape": "ImportConfirmSections",
+      "rows": [
+        {
+          "id": "confirm",
+          "title": "Ready to import",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "file",
+              "label": "File"
+            },
+            {
+              "name": "rows",
+              "label": "Rows imported"
+            },
+            {
+              "name": "skipped",
+              "label": "Rows left out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ImportConfirmValues",
+      "rows": [
+        {
+          "file": "contacts.csv",
+          "rows": "3",
+          "skipped": "1"
+        }
+      ]
     }
   ]
 }

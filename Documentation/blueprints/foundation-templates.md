@@ -38,6 +38,7 @@ template type vocabulary of both engines.
 | `SettingsScreen` | Settings | `header`, `sections`, `body` | Settings sections in a rail beside the form of the chosen section, each section saved on its own; a row of tabs on a phone |
 | `ProfileScreen` | Profile | `header`, `summary`, `tabs`, `details`, `activity` | A person with their team and status, tabbed details, preferences and security, and recent activity |
 | `ReportViewer` | Report | `header`, `parameters`, `actions`, `figures`, `chart`, `table` | A report as figures, a chart and the rows behind them, narrowed by parameters (a filter) and exported as CSV or PDF, or printed |
+| `ImportWizard` | Import | `header`, `progress`, `step`, `actions` | Upload a file, map its columns, preview what will be imported (with each rejected row's reason in words) and confirm; the step survives a refresh |
 
 `MasterDetailScreen` names its container: the qualified slot `WorkspaceScreen.moduleContent` says which `content`-like
 slot it means, so it is placed only inside a workspace and never ambiguous with the shell's own `content`.

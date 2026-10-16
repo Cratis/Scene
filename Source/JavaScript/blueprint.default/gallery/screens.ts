@@ -61,6 +61,7 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     SettingsScreen: [{ label: 'Organisation', targetScreen: 'DashboardScreen' }, { label: 'Settings' }],
     ProfileScreen: [{ label: 'People', targetScreen: 'DashboardScreen' }, { label: 'Profile' }],
     ReportViewer: [{ label: 'Reports', targetScreen: 'DashboardScreen' }, { label: 'Deals by owner' }],
+    ImportWizard: [{ label: 'Contacts', targetScreen: 'DashboardScreen' }, { label: 'Import' }],
     ModuleWorkspace: [{ label: 'Operations' }],
     FeatureSection: [{ label: 'Operations', targetScreen: 'ModuleWorkspace' }, { label: 'Adjustments' }],
     SliceSection: [
