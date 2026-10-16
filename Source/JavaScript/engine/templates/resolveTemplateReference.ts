@@ -71,9 +71,17 @@ function unknown(reference: TemplateReference, source: TemplateSource | undefine
     };
 }
 
+/**
+ * Which kind of template `name` is in a source. A source that carries the templates themselves answers from them; one known only by its manifest -
+ * a package approved for a render, whose bundle is not loaded here - answers from the names the manifest lists, so a reference to a template the
+ * package does not ship is still diagnosed instead of being left to resolve to nothing.
+ */
 function kindOf(name: string, source: TemplateSource): TemplateCatalogKind | undefined {
-    if (source.screenTemplates?.some(template => template.name === name)) return TemplateCatalogKind.ScreenTemplate;
-    if (source.dialogTemplates?.some(template => template.name === name)) return TemplateCatalogKind.DialogTemplate;
-    if (source.layouts?.some(layout => layout.name === name)) return TemplateCatalogKind.Layout;
+    const screenTemplates = source.screenTemplates?.map(template => template.name) ?? source.manifest.screenTemplates;
+    const dialogTemplates = source.dialogTemplates?.map(template => template.name) ?? source.manifest.dialogTemplates;
+    const layouts = source.layouts?.map(layout => layout.name) ?? source.manifest.layouts;
+    if (screenTemplates.includes(name)) return TemplateCatalogKind.ScreenTemplate;
+    if (dialogTemplates.includes(name)) return TemplateCatalogKind.DialogTemplate;
+    if (layouts.includes(name)) return TemplateCatalogKind.Layout;
     return undefined;
 }

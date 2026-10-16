@@ -508,6 +508,19 @@
             ]
           }
         ]
+      },
+      {
+        "manifest": {
+          "name": "Catalog",
+          "version": "2.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [ "CatalogShell" ],
+          "screenTemplates": [ "CatalogList" ],
+          "dialogTemplates": [ "CatalogConfirm" ],
+          "themes": []
+        }
       }
     ]
   },
@@ -1429,6 +1442,26 @@
         "status": "Malformed",
         "message": "A template reference must name a template"
       }
+    },
+    {
+      "name": "a blueprint known only by its manifest resolves a screen template by the name the manifest lists",
+      "reference": { "source": "Blueprint", "id": "CatalogList", "blueprint": "Catalog", "version": "^2.0.0" },
+      "expected": { "status": "Resolved", "package": "Catalog", "version": "2.0.0", "kind": "ScreenTemplate" }
+    },
+    {
+      "name": "a blueprint known only by its manifest resolves a dialog template by the name the manifest lists",
+      "reference": { "source": "Blueprint", "id": "CatalogConfirm", "blueprint": "Catalog" },
+      "expected": { "status": "Resolved", "package": "Catalog", "version": "2.0.0", "kind": "DialogTemplate" }
+    },
+    {
+      "name": "a blueprint known only by its manifest resolves a layout by the name the manifest lists",
+      "reference": { "source": "Blueprint", "id": "CatalogShell", "blueprint": "Catalog" },
+      "expected": { "status": "Resolved", "package": "Catalog", "version": "2.0.0", "kind": "Layout" }
+    },
+    {
+      "name": "a template the manifest of a manifest-only blueprint does not list is diagnosed instead of being left to a silent fallback",
+      "reference": { "source": "Blueprint", "id": "CatalogMissing", "blueprint": "Catalog" },
+      "expected": { "status": "UnknownTemplate", "package": "Catalog", "version": "2.0.0", "message": "Blueprint 'Catalog' has no template 'CatalogMissing'" }
     }
   ]
 }
