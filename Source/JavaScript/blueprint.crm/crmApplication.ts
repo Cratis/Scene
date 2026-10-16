@@ -12,7 +12,7 @@ import { crmDialogTemplates, crmScreenTemplates } from './templates';
 export const crmDefaultSampleDataId = 'crm-enterprise-en';
 
 /**
- * The example application of the blueprint: the foundation's layouts, the CRM's templates and quick-create dialogs and its eighteen screens, rendering against the
+ * The example application of the blueprint: the foundation's layouts, the CRM's templates and quick-create dialogs and its twenty screens, rendering against the
  * foundation's packages with the default sample-data pack chosen. This is what a gallery previews and what the conformance fixture
  * (`Samples/Crm/crm.play`) declares in Screenplay: the document, the structure and the navigation are the three things an application is made of.
  */

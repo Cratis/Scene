@@ -43,8 +43,8 @@ describe('when checking each template of the CRM blueprint is done', () => {
         }
     }
 
-    it('should ship eighteen screen templates and five dialog templates, each declared by the manifest', () => {
-        [crmScreenTemplates.length, crmDialogTemplates.length].should.deep.equal([18, 5]);
+    it('should ship twenty screen templates and five dialog templates, each declared by the manifest', () => {
+        [crmScreenTemplates.length, crmDialogTemplates.length].should.deep.equal([20, 5]);
         crmScreenTemplates.map(template => template.name).should.deep.equal(crmBlueprint.manifest.screenTemplates);
         crmDialogTemplates.map(template => template.name).should.deep.equal(crmBlueprint.manifest.dialogTemplates);
     });

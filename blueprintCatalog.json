@@ -436,6 +436,20 @@
           "description": "Calls, meetings, emails and tasks.",
           "template": "CrmActivityList",
           "order": 5
+        },
+        {
+          "name": "crm.activities.new",
+          "title": "New activity",
+          "description": "Logs an activity.",
+          "template": "CrmActivityCreateForm",
+          "parent": "crm.activities"
+        },
+        {
+          "name": "crm.activities.edit",
+          "title": "Edit activity",
+          "description": "Edits an activity.",
+          "template": "CrmActivityEditForm",
+          "parent": "crm.activities"
         }
       ],
       "templates": [
@@ -600,6 +614,24 @@
           "type": "Form",
           "category": "Business / CRM",
           "thumbnail": "thumbnails/CrmDealEditForm.svg"
+        },
+        {
+          "name": "CrmActivityCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM create activity",
+          "description": "A form that creates one activity.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmActivityCreateForm.svg"
+        },
+        {
+          "name": "CrmActivityEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM edit activity",
+          "description": "A form that edits one activity.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmActivityEditForm.svg"
         },
         {
           "name": "CrmQuickCreateLead",

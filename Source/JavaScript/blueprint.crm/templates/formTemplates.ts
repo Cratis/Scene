@@ -41,9 +41,9 @@ function formTemplateOf(entity: CrmEntityKind, mode: FormMode): ScreenTemplate {
     };
 }
 
-const kinds = [CrmEntityKind.Lead, CrmEntityKind.Contact, CrmEntityKind.Company, CrmEntityKind.Deal] as const;
+const kinds = [CrmEntityKind.Lead, CrmEntityKind.Contact, CrmEntityKind.Company, CrmEntityKind.Deal, CrmEntityKind.Activity] as const;
 
-/** The create and edit forms of the four main entities. */
+/** The create and edit forms of the five entities: the four main ones and the activities logged against them. */
 export const crmFormTemplates: ScreenTemplate[] = kinds.flatMap(entity => [formTemplateOf(entity, 'create'), formTemplateOf(entity, 'edit')]);
 
 /**
@@ -73,4 +73,4 @@ function quickCreateOf(entity: CrmEntityKind): DialogTemplate {
 }
 
 /** The quick-create dialogs: one for each entity, activities included. */
-export const crmQuickCreateDialogs: DialogTemplate[] = [...kinds, CrmEntityKind.Activity].map(quickCreateOf);
+export const crmQuickCreateDialogs: DialogTemplate[] = kinds.map(quickCreateOf);

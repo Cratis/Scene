@@ -1597,6 +1597,82 @@
       ]
     },
     {
+      "shape": "ActivitySections",
+      "rows": [
+        {
+          "id": "activity",
+          "title": "Om aktiviteten",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Emne",
+              "required": true
+            },
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "options": [
+                "Samtale",
+                "Møte",
+                "E-post",
+                "Oppgave"
+              ]
+            },
+            {
+              "name": "related",
+              "label": "Gjelder",
+              "type": "select",
+              "options": [
+                "Fjordtech AS",
+                "Nordlys Bygg AS",
+                "Bergen Havn AS",
+                "Telemark Mekanikk AS",
+                "Oslo Kaffekompani AS",
+                "Vestland Fisk AS",
+                "Trondheim Data AS",
+                "Lofoten Reiseliv AS"
+              ],
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Planlagt",
+                "Utført",
+                "Forfalt"
+              ]
+            },
+            {
+              "name": "due",
+              "label": "Frist",
+              "type": "date"
+            },
+            {
+              "name": "owner",
+              "label": "Eier",
+              "type": "select",
+              "options": [
+                "Ingrid Solberg",
+                "Magnus Dahl",
+                "Sofie Berg",
+                "Henrik Lund"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notater",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
       "shape": "LeadQuickSections",
       "rows": [
         {
@@ -1863,6 +1939,21 @@
           "created": "2026-09-01",
           "probability": 10,
           "source": "Nettside"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityRecord",
+      "rows": [
+        {
+          "id": "activity-1",
+          "name": "Behovsmøte med Kari Nordmann",
+          "type": "Samtale",
+          "related": "Fjordtech AS",
+          "owner": "Ingrid Solberg",
+          "status": "Planlagt",
+          "due": "2026-10-01",
+          "created": "2026-10-01"
         }
       ]
     },
