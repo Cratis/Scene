@@ -84,3 +84,21 @@ The dark strip (`Previewing`, the breadcrumb, the sample data selector, `Exit pr
 `ApplicationHost` is what runs it: the shell for the screen on the page, nested outlets, the navigation model in scope for the topbar and sidebar regions, every destination routed, and the dialog a toolbar button or a dialog destination opened. A host decides only what is its own through `CompositionOptions` - the chrome, the form component, trailing content, a last pass over the tree (Stage binds its data sources there) and the packages names resolve against - and through `renderScreen`, with which Stage wraps a screen in its data and command scope.
 
 The specs run the corpus application through both paths and compare what they render.
+
+## The shell comes from the root template
+
+`composeApplicationScreen` (which Stage and the preview host both compose through) no longer decides the shell itself. It asks the
+engine's `resolveEffectiveShell` - through `effectiveShellOf(application, screen, options)` - and draws what comes back:
+
+- With a [root template](root-template.md) on the profile, that template is the shell of **every** screen, so a screen cannot end up
+  in a different shell by naming another layout. The one exception is the chrome-less `FullPage` layout, which a screen may still name
+  to opt out of the chrome (a sign-in page).
+- A root that is a layout draws that layout's component; a root that is a screen template with the root role is drawn by the
+  template component with its own arrangement and content, and the screen goes in its primary outlet.
+- Without a root the screen's own layout is the shell, exactly as before; a layout name no package provides stays an unresolved
+  component in the tree on purpose, rather than being silently replaced.
+- The templates a chain is placed into, and the outlet the screen lands in, are the resolved shell's outlets and primary outlet.
+
+`CompositionOptions.templateLibrary` lets a host hand over the installed blueprints; absent, the document's own templates and the
+default blueprint's are used. The shell's problems (`rootTemplateUnknown`, drifted pins, a missing content outlet, ...) are on
+`effectiveShellOf(...).diagnostics`.
