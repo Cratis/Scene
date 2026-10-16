@@ -73,7 +73,7 @@ It composes the validators above, `resolveScreenTemplates` (a template must find
 
 | Target | Offered by default | Typical categories |
 | --- | --- | --- |
-| Application | Layouts | Shell, Auth |
+| Application | Layouts and screen templates with `metadata.role: Root` (the shell candidates a UI profile's `root` can name) | Shell, Auth |
 | Module | Screen templates fitting a slot of the shell layout | Workspace, Dashboard |
 | Feature | Screen templates whose `fitsSlot` matches a slot of the parent template | List, Board, Detail, Dashboard, Form |
 | Subfeature | Page templates and panels | Detail, List |
@@ -81,6 +81,10 @@ It composes the validators above, `resolveScreenTemplates` (a template must find
 | Slice, state view | Screen templates declaring the Slice scope or `StateView` | List, Detail |
 
 A screen template that declares `sliceKinds` without `scopes` defaults to the Slice scope. The per-level defaults are part of `applicableTemplates` and the `validate*ForTarget` functions (C# `ApplicableTemplates.Validate`), which give the reason a template does not apply at a target. The lower-level `validate*Applicability` functions below keep their legacy defaults.
+
+A root-role template never fits a slot, is offered only at the Application scope and is never a dialog template; see
+[The root template](root-template.md#the-root-role). The *new screen* default of a profile (`defaults.newScreenTemplate`) is filtered by the same rules as any
+picker at the scope of the new screen.
 
 ## Use the same rules in pickers and on apply
 

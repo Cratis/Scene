@@ -12,3 +12,4 @@ Read every concern below before working in this repository. Together they are th
 
 - [Commands](.cratis/ai/rules/project/commands.md)
 - [AI-assisted development](.cratis/ai/rules/project/ai-assisted-development.md)
+- [UI profile and shell navigation](.cratis/ai/rules/project/ui-profile.md)
