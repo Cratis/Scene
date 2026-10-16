@@ -82,18 +82,25 @@ public static class TemplateReferenceResolver
             ? $"Own template '{reference.Id}' does not exist"
             : $"Blueprint '{reference.Blueprint}' has no template '{reference.Id}'";
 
+    // A source that carries the templates themselves answers from them; one known only by its manifest - a package approved for a
+    // render, whose bundle is not loaded here - answers from the names the manifest lists, so a reference to a template the package
+    // does not ship is still diagnosed instead of being left to resolve to nothing.
     static TemplateCatalogKind? TemplateKindOf(string name, TemplateSource source)
     {
-        if ((source.ScreenTemplates ?? []).Any(template => template.Name == name))
+        var screenTemplates = source.ScreenTemplates?.Select(template => template.Name) ?? source.Manifest.ScreenTemplates;
+        var dialogTemplates = source.DialogTemplates?.Select(template => template.Name) ?? source.Manifest.DialogTemplates;
+        var layouts = source.Layouts?.Select(layout => layout.Name) ?? source.Manifest.Layouts;
+
+        if (screenTemplates.Contains(name))
         {
             return TemplateCatalogKind.ScreenTemplate;
         }
 
-        if ((source.DialogTemplates ?? []).Any(template => template.Name == name))
+        if (dialogTemplates.Contains(name))
         {
             return TemplateCatalogKind.DialogTemplate;
         }
 
-        return (source.Layouts ?? []).Any(layout => layout.Name == name) ? TemplateCatalogKind.Layout : null;
+        return layouts.Contains(name) ? TemplateCatalogKind.Layout : null;
     }
 }
