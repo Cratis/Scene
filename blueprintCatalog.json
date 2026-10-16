@@ -841,6 +841,143 @@
           "default": true
         }
       ]
+    },
+    {
+      "package": "Cratis.Blueprint.ProjectTracker",
+      "version": "1.0.0",
+      "domain": "project-tracker",
+      "displayName": "Project and Task Tracker",
+      "description": "Projects, tasks and a board for a team: projects as cards with progress, a project page with its tasks and members, a task board, a personal task list grouped by due date and a task side sheet.",
+      "thumbnail": "thumbnails/project-tracker.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "projects.list",
+          "title": "Projects",
+          "description": "Every project as a card with its owner, progress, due date and status.",
+          "template": "ProjectList",
+          "order": 0
+        },
+        {
+          "name": "projects.record",
+          "title": "Project",
+          "description": "One project: key facts, its tasks and its members.",
+          "template": "ProjectPage",
+          "parent": "projects.list"
+        },
+        {
+          "name": "projects.mytasks",
+          "title": "My tasks",
+          "description": "The tasks of the signed-in user, grouped by when they are due.",
+          "template": "ProjectMyTasks",
+          "order": 1
+        },
+        {
+          "name": "projects.board",
+          "title": "Board",
+          "description": "Tasks in a column for each status.",
+          "template": "ProjectTaskBoard",
+          "order": 2
+        },
+        {
+          "name": "projects.board.lanes",
+          "title": "Board by person",
+          "description": "The same board with a lane for each assignee.",
+          "template": "ProjectTaskLanes",
+          "parent": "projects.board",
+          "order": 0
+        }
+      ],
+      "templates": [
+        {
+          "name": "ProjectList",
+          "kind": "ScreenTemplate",
+          "displayName": "Project list",
+          "description": "Projects as cards with owner, a progress bar, due date and status, filtered by owner, status and due date.",
+          "type": "List",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectList.svg"
+        },
+        {
+          "name": "ProjectPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Project page",
+          "description": "One project: key facts, its task list, its members and its activity.",
+          "type": "Detail",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectPage.svg"
+        },
+        {
+          "name": "ProjectMyTasks",
+          "kind": "ScreenTemplate",
+          "displayName": "Project my tasks",
+          "description": "The user's tasks grouped by due date, with project, priority and status.",
+          "type": "List",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectMyTasks.svg"
+        },
+        {
+          "name": "ProjectTaskBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Project task board",
+          "description": "Tasks as cards in a column for each status, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectTaskBoard.svg"
+        },
+        {
+          "name": "ProjectTaskLanes",
+          "kind": "ScreenTemplate",
+          "displayName": "Project task board by person",
+          "description": "Tasks in a lane for each assignee and a column for each status.",
+          "type": "Board",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectTaskLanes.svg"
+        },
+        {
+          "name": "ProjectQuickCreateProject",
+          "kind": "DialogTemplate",
+          "displayName": "Project quick create project",
+          "description": "A short form that creates one project without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectQuickCreateProject.svg"
+        },
+        {
+          "name": "ProjectQuickCreateTask",
+          "kind": "DialogTemplate",
+          "displayName": "Project quick create task",
+          "description": "A short form that creates one task without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectQuickCreateTask.svg"
+        },
+        {
+          "name": "ProjectTaskSheet",
+          "kind": "DialogTemplate",
+          "displayName": "Project task sheet",
+          "description": "A side sheet that shows one task: its status, people, fields, subtasks and conversation.",
+          "type": "Dialog",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectTaskSheet.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "project-tracker-en",
+          "title": "Projects · English",
+          "locale": "en-GB",
+          "path": "sampleData/project-tracker-en.json",
+          "default": true
+        }
+      ]
     }
   ]
 }

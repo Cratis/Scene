@@ -1,0 +1,80 @@
+{
+    "name": "@cratis/scene.blueprint.project-tracker",
+    "version": "1.0.0",
+    "description": "Projects, tasks and a board for a team.",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "blueprint",
+        "project-tracker"
+    ],
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist",
+        "sampleData",
+        "thumbnails",
+        "blueprintCatalog.json",
+        "**/*.ts",
+        "**/*.tsx",
+        "!**/for_*/**"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "test:browser": "yarn g:test --config ./vitest.browser.config.mts",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up"
+    },
+    "dependencies": {
+        "@cratis/scene.blueprint.default": "1.0.0",
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0",
+        "@cratis/scene.react": "1.0.0"
+    },
+    "devDependencies": {
+        "@cratis/scene.blueprint.default": "1.0.0",
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0",
+        "@cratis/scene.react": "1.0.0",
+        "@primereact/core": "11.2.0",
+        "@primereact/headless": "11.2.0",
+        "primeicons": "8.0.2",
+        "primereact": "11.2.0",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
+    },
+    "peerDependencies": {
+        "@cratis/components": "^4.1.1",
+        "@primereact/core": "^11.0.0",
+        "@primereact/headless": "^11.0.0",
+        "primeicons": "^8.0.0",
+        "primereact": "^11.0.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    }
+}
