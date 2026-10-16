@@ -56,6 +56,7 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     FormScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Accounts', targetScreen: 'ListScreen' }, { label: 'New account' }],
     WizardScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'New account' }],
     CalendarScreen: [{ label: 'People', targetScreen: 'DashboardScreen' }, { label: 'Calendar' }],
+    TimelineScreen: [{ label: 'Projects', targetScreen: 'DashboardScreen' }, { label: 'Timeline' }],
     ModuleWorkspace: [{ label: 'Operations' }],
     FeatureSection: [{ label: 'Operations', targetScreen: 'ModuleWorkspace' }, { label: 'Adjustments' }],
     SliceSection: [

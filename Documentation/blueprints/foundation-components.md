@@ -129,6 +129,12 @@ What an event is - its category and who it concerns - is said in words and by an
 `today` fixes the day marked as today, and `urlKey` keeps the shown day (and the view, under `urlKey` + `View`) in the address. The id of the selected event is the
 `value` output.
 
+`timelineGrid` is the Gantt-style schedule: `items` (`id`, `title`, `start`, `end`, `lane`, `progress`, `tone`, `dependsOn`, `milestone`) are bars in a lane for each
+person or team, on an axis of days, weeks or months (`scale`, kept in the address under `urlKey`). A bar is a button; pressing it selects the item and the panel below
+states in words the dates, the progress, what it waits on and what it holds up. An item that starts before something it waits on has finished is marked as a conflict
+(a dashed border and the words), and a dependency on an unknown item is dropped. The same schedule is a table: on a phone it is the table, elsewhere a disclosure
+under the chart. The id of the selected item is the `value` output.
+
 ## Deciding from a list
 
 `dataList` keeps a row's actions in a menu. For a list whose point is a decision - an approver's inbox - set `rowActionStyle` to `buttons` and each

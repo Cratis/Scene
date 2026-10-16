@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { ActionButtonControl, DialogFrame, Notice, BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, CalendarGrid, StatCard, StatusChip, TrendChip } from './foundation';
+import { ActionButtonControl, DialogFrame, Notice, BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, CalendarGrid, TimelineGrid, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -77,4 +77,5 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.WizardProgress)]: WizardProgress,
     [componentRegistryKey(defaultBlueprintName, ComponentName.FormScreenBody)]: FormScreenBody,
     [componentRegistryKey(defaultBlueprintName, ComponentName.CalendarGrid)]: CalendarGrid,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.TimelineGrid)]: TimelineGrid,
 };

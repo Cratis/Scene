@@ -55,6 +55,8 @@ export * from './wizardModel';
 export * from './WizardProgress';
 export * from './calendarModel';
 export * from './CalendarGrid';
+export * from './timelineModel';
+export * from './TimelineGrid';
 export * from './formModel';
 export * from './FormScreenBody';
 export * from './foundationDescriptors';

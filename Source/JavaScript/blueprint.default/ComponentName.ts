@@ -141,4 +141,7 @@ export enum ComponentName {
 
     /** Events on a month, a week or as an agenda, with the day and view kept in the address. */
     CalendarGrid = 'calendarGrid',
+
+    /** Work over time on a Gantt-style axis of days, weeks or months, with progress and dependencies. */
+    TimelineGrid = 'timelineGrid',
 }

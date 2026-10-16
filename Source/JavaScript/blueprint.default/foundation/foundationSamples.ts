@@ -179,6 +179,18 @@ export const foundationSamples: Record<string, FoundationSample> = {
         },
         data: ['March 2026', 'Ada Lovelace'], stateful: true,
     },
+    [ComponentName.TimelineGrid]: {
+        properties: {
+            today: '2026-03-10', scale: 'week', locale: 'en-GB',
+            items: [
+                { id: 't1', title: 'Design', start: '2026-03-02', end: '2026-03-13', lane: 'Ada Lovelace', progress: 100, tone: 'success' },
+                { id: 't2', title: 'Build', start: '2026-03-16', end: '2026-04-10', lane: 'Grace Hopper', progress: 20, tone: 'info', dependsOn: ['t1'] },
+                { id: 't3', title: 'Test', start: '2026-04-06', end: '2026-04-17', lane: 'Linus Torvalds', progress: 0, tone: 'warning', dependsOn: ['t2'] },
+                { id: 't4', title: 'Launch', start: '2026-04-20', milestone: true, lane: 'Linus Torvalds', dependsOn: ['t3'] },
+            ],
+        },
+        data: ['Design', 'Build'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */

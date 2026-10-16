@@ -625,5 +625,32 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             ...standardStateProperties,
         ],
     },
+    {
+        component: key(ComponentName.TimelineGrid),
+        displayName: 'Timeline',
+        description: 'A Gantt-style schedule: bars in a lane for each person or team on an axis of days, weeks or months, with progress, milestones and dependencies. The id of the selected item is the value output.',
+        properties: [
+            {
+                ...list('items', 'Items', 'Data', 'Item', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('title', 'Title', 'Data', undefined, { constraints: { required: true } }),
+                    text('start', 'First day', 'Data', 'An ISO date, YYYY-MM-DD.', { constraints: { required: true } }),
+                    text('end', 'Last day', 'Data', 'The last day, included; empty is a one-day item.'),
+                    text('lane', 'Lane', 'Data', 'The person, team or project the bar is drawn in.'),
+                    number('progress', 'Progress', 'Data', 'How much is done, 0 to 100.', { constraints: { minimum: 0, maximum: 100, integer: true } }),
+                    choice('tone', 'Tone', 'Appearance', { success: 'Success', warning: 'Warning', danger: 'Danger', info: 'Info', neutral: 'Neutral' }, 'neutral'),
+                    { path: 'dependsOn', label: 'Waits on', group: 'Data', valueType: PropertyValueType.Json, editorKind: PropertyEditorKind.StringList, default: [], description: 'The ids of the items that must finish first.' },
+                    flag('milestone', 'Milestone', 'Data', 'A single day drawn as a marker rather than a bar.'),
+                ], 'The work to schedule, from a query.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('scale', 'Scale', 'Behavior', { day: 'Days', week: 'Weeks', month: 'Months' }, 'week', 'The coarseness of the time axis.'),
+            text('today', 'Today', 'Behavior', 'Marks this day as today instead of the clock; for previews that must not drift.'),
+            number('firstDay', 'First day of the week', 'Behavior', '0 is Sunday, 1 is Monday.', { default: 1, constraints: { minimum: 0, maximum: 6, integer: true } }),
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the scale in the address.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the selected item.'),
+            ...standardStateProperties,
+        ],
+    },
 ];
 
