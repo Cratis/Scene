@@ -138,4 +138,7 @@ export enum ComponentName {
 
     /** Sections of validated fields with the save bar and unsaved-changes guard. */
     FormScreenBody = 'formScreenBody',
+
+    /** Events on a month, a week or as an agenda, with the day and view kept in the address. */
+    CalendarGrid = 'calendarGrid',
 }

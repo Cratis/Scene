@@ -37,4 +37,5 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.KanbanBoard]: m('Kanban board', ComponentCategory.DataDisplay, 'kanban', ['board', 'kanban', 'columns', 'pipeline', 'cards']),
     [ComponentName.WizardProgress]: m('Wizard', ComponentCategory.Navigation, 'footprints', ['wizard', 'steps', 'stepper', 'multi-step']),
     [ComponentName.FormScreenBody]: m('Form', ComponentCategory.Forms, 'text-cursor-input', ['form', 'fields', 'sections', 'validation']),
+    [ComponentName.CalendarGrid]: m('Calendar', ComponentCategory.DataDisplay, 'calendar-days', ['calendar', 'month', 'week', 'agenda', 'events', 'schedule', 'time off']),
 };

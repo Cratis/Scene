@@ -5,7 +5,7 @@
 export const foundationPackageName = 'Cratis.Blueprint.Default';
 
 /** The template types a domain blueprint may declare (Part B 1.2). */
-export const blueprintTemplateTypes: readonly string[] = ['Shell', 'Workspace', 'Dashboard', 'List', 'Board', 'Detail', 'Form', 'Wizard', 'Dialog', 'Auth', 'State'];
+export const blueprintTemplateTypes: readonly string[] = ['Shell', 'Workspace', 'Dashboard', 'List', 'Board', 'Detail', 'Form', 'Wizard', 'Dialog', 'Auth', 'State', 'Calendar', 'Timeline', 'Inbox', 'Settings', 'Profile', 'Report', 'Import'];
 
 /** The prefix every template category of a domain blueprint starts with; the rest is the domain. */
 export const businessCategoryPrefix = 'Business / ';

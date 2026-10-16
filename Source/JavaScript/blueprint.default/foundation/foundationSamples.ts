@@ -167,6 +167,18 @@ export const foundationSamples: Record<string, FoundationSample> = {
         },
         data: ['Account details'], stateful: true,
     },
+    [ComponentName.CalendarGrid]: {
+        properties: {
+            today: '2026-03-10', date: '2026-03-10', locale: 'en-GB',
+            events: [
+                { id: 'e1', title: 'Ada Lovelace', start: '2026-03-09', end: '2026-03-13', category: 'Annual leave', tone: 'success', person: 'Ada Lovelace' },
+                { id: 'e2', title: 'Grace Hopper', start: '2026-03-10', end: '2026-03-10', category: 'Sick leave', tone: 'warning', person: 'Grace Hopper' },
+                { id: 'e3', title: 'Linus Torvalds', start: '2026-03-12', end: '2026-03-20', category: 'Parental leave', tone: 'info', person: 'Linus Torvalds' },
+                { id: 'e4', title: 'Margaret Hamilton', start: '2026-03-10', end: '2026-03-11', category: 'Training', tone: 'neutral', person: 'Margaret Hamilton' },
+            ],
+        },
+        data: ['March 2026', 'Ada Lovelace'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */

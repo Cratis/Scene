@@ -24,6 +24,16 @@ sidebar left (the default), top navigation only (the `Horizontal` layout mode) a
 | `FormScreen` | Form | `content` | `header`, `body`, `actions` | Sections of validated fields; create, edit, read-only and settings by mode; unsaved-changes guard |
 | `WizardScreen` | Wizard | `content` | `header`, `progress`, `step`, `actions` | Linear steps with progress, Back/Next, save draft and a review step |
 
+## Later additions
+
+The later additions of Part B 2.12 are declared by the same rules: they ship in `@cratis/scene.blueprint.default` under `foundation/templates`, fit the `AppShell` layout's `content` slot, are
+categorised `Foundation / <type>`, and are filled from the same sample-data pack. Their types (`Calendar`, `Timeline`, `Inbox`, `Settings`, `Profile`, `Report` and `Import`) are part of the
+template type vocabulary of both engines.
+
+| Template | Type | Slots | What it is |
+| --- | --- | --- | --- |
+| `CalendarScreen` | Calendar | `header`, `toolbar`, `filters`, `calendar`, `aside` | Events on a month, a week or an agenda, with filters and a list of what the period holds; the day and the view are kept in the address |
+
 `MasterDetailScreen` names its container: the qualified slot `WorkspaceScreen.moduleContent` says which `content`-like
 slot it means, so it is placed only inside a workspace and never ambiguous with the shell's own `content`.
 

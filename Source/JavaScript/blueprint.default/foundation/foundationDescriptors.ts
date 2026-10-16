@@ -599,5 +599,31 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             ...standardStateProperties,
         ],
     },
+    {
+        component: key(ComponentName.CalendarGrid),
+        displayName: 'Calendar',
+        description: 'Events on a month, a week or as an agenda. Each day is a button, the arrow keys move between days, and the focused day and the view stay in the address. The id of the selected event is the value output.',
+        properties: [
+            {
+                ...list('events', 'Events', 'Data', 'Event', [
+                    text('id', 'Id', 'Data', undefined, { constraints: { required: true } }),
+                    text('title', 'Title', 'Data', undefined, { constraints: { required: true } }),
+                    text('start', 'First day', 'Data', 'An ISO date, YYYY-MM-DD.', { constraints: { required: true } }),
+                    text('end', 'Last day', 'Data', 'The last day, included; empty is a one-day event.'),
+                    text('category', 'Category', 'Data', 'What kind of event it is, said in words.'),
+                    choice('tone', 'Tone', 'Appearance', { success: 'Success', warning: 'Warning', danger: 'Danger', info: 'Info', neutral: 'Neutral' }, 'neutral'),
+                    text('person', 'Person', 'Data', 'Who the event concerns.'),
+                ], 'What happens, from a query.'),
+                acceptedBindingKinds: bindable,
+            },
+            choice('view', 'View', 'Behavior', { month: 'Month', week: 'Week', agenda: 'Agenda' }, 'month', 'The view shown first; a phone shows the agenda in place of the month.'),
+            text('date', 'Shown day', 'Behavior', 'A day (YYYY-MM-DD) in the period to show first; empty shows the first event.'),
+            text('today', 'Today', 'Behavior', 'Marks this day as today instead of the clock; for previews that must not drift.'),
+            number('firstDay', 'First day of the week', 'Behavior', '0 is Sunday, 1 is Monday.', { default: 1, constraints: { minimum: 0, maximum: 6, integer: true } }),
+            text('urlKey', 'Address parameter', 'Behavior', 'Keeps the shown day (and the view, under the name + View) in the address.'),
+            valueOutputProperty(PropertyValueType.String, 'The id of the selected event.'),
+            ...standardStateProperties,
+        ],
+    },
 ];
 

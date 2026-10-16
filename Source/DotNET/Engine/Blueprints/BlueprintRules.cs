@@ -28,7 +28,7 @@ public static partial class BlueprintRules
     /// <summary>
     /// The template types a domain blueprint may declare.
     /// </summary>
-    public static readonly IReadOnlyList<string> TemplateTypes = ["Shell", "Workspace", "Dashboard", "List", "Board", "Detail", "Form", "Wizard", "Dialog", "Auth", "State"];
+    public static readonly IReadOnlyList<string> TemplateTypes = ["Shell", "Workspace", "Dashboard", "List", "Board", "Detail", "Form", "Wizard", "Dialog", "Auth", "State", "Calendar", "Timeline", "Inbox", "Settings", "Profile", "Report", "Import"];
 
     /// <summary>
     /// Whether a value is a lower-case domain slug: <c language="csharp">crm</c>, <c language="csharp">project-tracker</c>.

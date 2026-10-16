@@ -53,6 +53,8 @@ export * from './boardModel';
 export * from './KanbanBoard';
 export * from './wizardModel';
 export * from './WizardProgress';
+export * from './calendarModel';
+export * from './CalendarGrid';
 export * from './formModel';
 export * from './FormScreenBody';
 export * from './foundationDescriptors';

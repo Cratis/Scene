@@ -3403,7 +3403,7 @@
       ],
       "expectedProblems": [
         "Template 'LeadList' declares no type",
-        "Template 'LeadDetail' declares type 'Page', which is not one of Shell, Workspace, Dashboard, List, Board, Detail, Form, Wizard, Dialog, Auth, State",
+        "Template 'LeadDetail' declares type 'Page', which is not one of Shell, Workspace, Dashboard, List, Board, Detail, Form, Wizard, Dialog, Auth, State, Calendar, Timeline, Inbox, Settings, Profile, Report, Import",
         "Template 'LeadDetail' declares category 'Sales', which does not start with 'Business / '",
         "Template 'LeadDetail' declares no thumbnail",
         "Template 'Extra' declares no thumbnail"

@@ -119,6 +119,16 @@ the unassigned cards last, and a lane has its own heading (a level above its col
 its lane, by dragging or by its Move-to menu; each column's count and total are for its lane, while the over-the-limit warning counts every lane, since a limit
 is the column's.
 
+## Calendars
+
+`calendarGrid` draws events (`id`, `title`, `start`, `end`, `category`, `tone`, `person`) on a month, a week or as an agenda. An event covers every day from `start` to
+`end` (both included, calendar days with no time zone), so a week of leave shows on each of its days. The month and the week are a table of days: each day is a
+button, the arrow keys move between days (Page Up and Page Down between months), a month cell shows two events and says how many more there are, and the events of
+the selected day are always listed in full below the table, so a busy day is never cut off. The agenda lists the month day by day and replaces the month on a phone.
+What an event is - its category and who it concerns - is said in words and by an icon, never only by its color. `firstDay` sets the first day of the week (0 is Sunday),
+`today` fixes the day marked as today, and `urlKey` keeps the shown day (and the view, under `urlKey` + `View`) in the address. The id of the selected event is the
+`value` output.
+
 ## Deciding from a list
 
 `dataList` keeps a row's actions in a menu. For a list whose point is a decision - an approver's inbox - set `rowActionStyle` to `buttons` and each
