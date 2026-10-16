@@ -32,7 +32,7 @@ describe('when using the HR application', () => {
 
         it('should put the requests and the balances beneath time off once it is opened', () => {
             fireEvent.click(screen.getByRole('button', { name: 'Expand Time off' }));
-            labels(sidebar()).should.deep.equal(['Directory', 'Org chart', 'Time off', 'Requests', 'Balances', 'Onboarding']);
+            labels(sidebar()).should.deep.equal(['Directory', 'Org chart', 'Time off', 'Requests', 'Team calendar', 'Balances', 'Onboarding']);
         });
 
         it('should mark the directory as the place the user is', () => within(sidebar()).getByText('Directory').closest('[aria-current]')!.getAttribute('aria-current')!.should.equal('page'));
