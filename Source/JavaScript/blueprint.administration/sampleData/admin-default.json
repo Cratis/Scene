@@ -1,0 +1,1034 @@
+{
+    "id": "admin-default",
+    "title": "Administration · Default",
+    "locale": "en-GB",
+    "owner": "blueprint:administration",
+    "sets": [
+        {
+            "shape": "AdminSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP"
+                }
+            ]
+        },
+        {
+            "shape": "Users",
+            "rows": [
+                {
+                    "id": "user-1",
+                    "name": "Amelia Hart",
+                    "email": "amelia.hart@example.co.uk",
+                    "role": "Administrator",
+                    "status": "Active",
+                    "lastActive": "2026-10-16"
+                },
+                {
+                    "id": "user-2",
+                    "name": "Oliver Reed",
+                    "email": "oliver.reed@example.co.uk",
+                    "role": "Manager",
+                    "status": "Active",
+                    "lastActive": "2026-10-16"
+                },
+                {
+                    "id": "user-3",
+                    "name": "Priya Nair",
+                    "email": "priya.nair@example.co.uk",
+                    "role": "Editor",
+                    "status": "Active",
+                    "lastActive": "2026-10-15"
+                },
+                {
+                    "id": "user-4",
+                    "name": "Daniel Cho",
+                    "email": "daniel.cho@example.co.uk",
+                    "role": "Editor",
+                    "status": "Active",
+                    "lastActive": "2026-10-14"
+                },
+                {
+                    "id": "user-5",
+                    "name": "Leah Morgan",
+                    "email": "leah.morgan@example.co.uk",
+                    "role": "Viewer",
+                    "status": "Active",
+                    "lastActive": "2026-10-09"
+                },
+                {
+                    "id": "user-6",
+                    "name": "Marcus Webb",
+                    "email": "marcus.webb@example.co.uk",
+                    "role": "Manager",
+                    "status": "Suspended",
+                    "lastActive": "2026-08-21"
+                },
+                {
+                    "id": "user-7",
+                    "name": "Aisha Patel",
+                    "email": "aisha.patel@example.co.uk",
+                    "role": "Auditor",
+                    "status": "Active",
+                    "lastActive": "2026-10-12"
+                },
+                {
+                    "id": "user-8",
+                    "name": "Tom Eriksen",
+                    "email": "tom.eriksen@example.co.uk",
+                    "role": "Viewer",
+                    "status": "Invited",
+                    "lastActive": ""
+                },
+                {
+                    "id": "user-9",
+                    "name": "Hannah Cole",
+                    "email": "hannah.cole@example.co.uk",
+                    "role": "Editor",
+                    "status": "Active",
+                    "lastActive": "2026-10-15"
+                },
+                {
+                    "id": "user-10",
+                    "name": "Ivy Chen",
+                    "email": "ivy.chen@example.co.uk",
+                    "role": "Viewer",
+                    "status": "Invited",
+                    "lastActive": ""
+                },
+                {
+                    "id": "user-11",
+                    "name": "Fred Alder",
+                    "email": "fred.alder@example.co.uk",
+                    "role": "Editor",
+                    "status": "Active",
+                    "lastActive": "2026-10-02"
+                },
+                {
+                    "id": "user-12",
+                    "name": "Nora Quinn",
+                    "email": "nora.quinn@example.co.uk",
+                    "role": "Viewer",
+                    "status": "Active",
+                    "lastActive": "2026-09-30"
+                }
+            ]
+        },
+        {
+            "shape": "UserColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Name"
+                },
+                {
+                    "field": "email",
+                    "header": "Email"
+                },
+                {
+                    "field": "role",
+                    "header": "Role"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Active": "success",
+                        "Invited": "info",
+                        "Suspended": "danger"
+                    }
+                },
+                {
+                    "field": "lastActive",
+                    "header": "Last active",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "UserFilterFields",
+            "rows": [
+                {
+                    "name": "role",
+                    "label": "Role",
+                    "type": "select",
+                    "options": [
+                        "Administrator",
+                        "Manager",
+                        "Editor",
+                        "Viewer",
+                        "Auditor"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Active",
+                        "Invited",
+                        "Suspended"
+                    ]
+                },
+                {
+                    "name": "lastActive",
+                    "label": "Last active",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "UserViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All users"
+                },
+                {
+                    "id": "invited",
+                    "label": "Invited"
+                },
+                {
+                    "id": "suspended",
+                    "label": "Suspended"
+                }
+            ]
+        },
+        {
+            "shape": "UserColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Name",
+                    "locked": true
+                },
+                {
+                    "id": "email",
+                    "label": "Email"
+                },
+                {
+                    "id": "role",
+                    "label": "Role"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                },
+                {
+                    "id": "lastActive",
+                    "label": "Last active"
+                }
+            ]
+        },
+        {
+            "shape": "UserSelection",
+            "rows": []
+        },
+        {
+            "shape": "AuditEntries",
+            "rows": [
+                {
+                    "id": "audit-1",
+                    "time": "2026-10-16T09:12:00Z",
+                    "actor": "Amelia Hart",
+                    "action": "Changed a setting",
+                    "target": "Branding · Primary colour"
+                },
+                {
+                    "id": "audit-2",
+                    "time": "2026-10-16T08:47:00Z",
+                    "actor": "Oliver Reed",
+                    "action": "Invited",
+                    "target": "tom.eriksen@example.co.uk"
+                },
+                {
+                    "id": "audit-3",
+                    "time": "2026-10-15T16:30:00Z",
+                    "actor": "Amelia Hart",
+                    "action": "Granted a permission",
+                    "target": "Auditor · Export the audit log"
+                },
+                {
+                    "id": "audit-4",
+                    "time": "2026-10-15T08:03:00Z",
+                    "actor": "Priya Nair",
+                    "action": "Signed in",
+                    "target": "Web · London"
+                },
+                {
+                    "id": "audit-5",
+                    "time": "2026-10-14T14:21:00Z",
+                    "actor": "Amelia Hart",
+                    "action": "Suspended",
+                    "target": "Marcus Webb"
+                },
+                {
+                    "id": "audit-6",
+                    "time": "2026-10-14T11:05:00Z",
+                    "actor": "Oliver Reed",
+                    "action": "Changed role",
+                    "target": "Hannah Cole · Viewer to Editor"
+                },
+                {
+                    "id": "audit-7",
+                    "time": "2026-10-13T15:40:00Z",
+                    "actor": "Aisha Patel",
+                    "action": "Exported",
+                    "target": "Audit log · 1 to 14 Oct"
+                },
+                {
+                    "id": "audit-8",
+                    "time": "2026-10-13T10:15:00Z",
+                    "actor": "Amelia Hart",
+                    "action": "Invited",
+                    "target": "ivy.chen@example.co.uk"
+                },
+                {
+                    "id": "audit-9",
+                    "time": "2026-10-12T07:55:00Z",
+                    "actor": "Daniel Cho",
+                    "action": "Signed in",
+                    "target": "Mobile · Leeds"
+                },
+                {
+                    "id": "audit-10",
+                    "time": "2026-10-09T13:00:00Z",
+                    "actor": "Amelia Hart",
+                    "action": "Changed a setting",
+                    "target": "Notifications · Security alerts"
+                },
+                {
+                    "id": "audit-11",
+                    "time": "2026-10-09T09:30:00Z",
+                    "actor": "Oliver Reed",
+                    "action": "Changed role",
+                    "target": "Leah Morgan · Editor to Viewer"
+                },
+                {
+                    "id": "audit-12",
+                    "time": "2026-10-08T08:10:00Z",
+                    "actor": "Aisha Patel",
+                    "action": "Signed in",
+                    "target": "Web · Manchester"
+                }
+            ]
+        },
+        {
+            "shape": "AuditColumns",
+            "rows": [
+                {
+                    "field": "time",
+                    "header": "Time",
+                    "kind": "date"
+                },
+                {
+                    "field": "actor",
+                    "header": "Actor"
+                },
+                {
+                    "field": "action",
+                    "header": "Action",
+                    "kind": "status",
+                    "tones": {
+                        "Suspended": "danger",
+                        "Granted a permission": "warning",
+                        "Changed role": "warning",
+                        "Changed a setting": "info",
+                        "Invited": "info",
+                        "Exported": "neutral",
+                        "Signed in": "neutral"
+                    }
+                },
+                {
+                    "field": "target",
+                    "header": "Target"
+                }
+            ]
+        },
+        {
+            "shape": "AuditFilterFields",
+            "rows": [
+                {
+                    "name": "actor",
+                    "label": "Actor",
+                    "type": "select",
+                    "options": [
+                        "Aisha Patel",
+                        "Amelia Hart",
+                        "Daniel Cho",
+                        "Oliver Reed",
+                        "Priya Nair"
+                    ]
+                },
+                {
+                    "name": "action",
+                    "label": "Action",
+                    "type": "select",
+                    "options": [
+                        "Changed a setting",
+                        "Changed role",
+                        "Exported",
+                        "Granted a permission",
+                        "Invited",
+                        "Signed in",
+                        "Suspended"
+                    ]
+                },
+                {
+                    "name": "time",
+                    "label": "Time",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "AuditViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All activity"
+                },
+                {
+                    "id": "security",
+                    "label": "Security changes"
+                },
+                {
+                    "id": "mine",
+                    "label": "My activity"
+                }
+            ]
+        },
+        {
+            "shape": "AuditColumnChoices",
+            "rows": [
+                {
+                    "id": "time",
+                    "label": "Time",
+                    "locked": true
+                },
+                {
+                    "id": "actor",
+                    "label": "Actor"
+                },
+                {
+                    "id": "action",
+                    "label": "Action"
+                },
+                {
+                    "id": "target",
+                    "label": "Target"
+                }
+            ]
+        },
+        {
+            "shape": "AuditSelection",
+            "rows": []
+        },
+        {
+            "shape": "InviteSections",
+            "rows": [
+                {
+                    "id": "invite",
+                    "title": "Invite a user",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "email",
+                            "label": "Email",
+                            "required": true
+                        },
+                        {
+                            "name": "role",
+                            "label": "Role",
+                            "type": "select",
+                            "options": [
+                                "Administrator",
+                                "Manager",
+                                "Editor",
+                                "Viewer",
+                                "Auditor"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "message",
+                            "label": "Message"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "RoleQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New role",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name",
+                            "required": true
+                        },
+                        {
+                            "name": "description",
+                            "label": "Description"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationRoles",
+            "rows": [
+                {
+                    "id": "admin",
+                    "name": "Administrator",
+                    "description": "Full access to everything",
+                    "members": 1
+                },
+                {
+                    "id": "manager",
+                    "name": "Manager",
+                    "description": "Manages people and content",
+                    "members": 2
+                },
+                {
+                    "id": "editor",
+                    "name": "Editor",
+                    "description": "Creates and edits content",
+                    "members": 4
+                },
+                {
+                    "id": "viewer",
+                    "name": "Viewer",
+                    "description": "Read-only access",
+                    "members": 4
+                },
+                {
+                    "id": "auditor",
+                    "name": "Auditor",
+                    "description": "Reads the audit log",
+                    "members": 1
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationRoleColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Role"
+                },
+                {
+                    "field": "description",
+                    "header": "Description"
+                },
+                {
+                    "field": "members",
+                    "header": "Members",
+                    "kind": "number"
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationMatrixRoles",
+            "rows": [
+                {
+                    "id": "admin",
+                    "label": "Administrator"
+                },
+                {
+                    "id": "manager",
+                    "label": "Manager"
+                },
+                {
+                    "id": "editor",
+                    "label": "Editor"
+                },
+                {
+                    "id": "viewer",
+                    "label": "Viewer"
+                },
+                {
+                    "id": "auditor",
+                    "label": "Auditor"
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationPermissions",
+            "rows": [
+                {
+                    "id": "users.read",
+                    "label": "View users",
+                    "group": "Users"
+                },
+                {
+                    "id": "users.invite",
+                    "label": "Invite users",
+                    "group": "Users"
+                },
+                {
+                    "id": "users.edit",
+                    "label": "Edit users",
+                    "group": "Users"
+                },
+                {
+                    "id": "users.suspend",
+                    "label": "Suspend users",
+                    "group": "Users"
+                },
+                {
+                    "id": "roles.read",
+                    "label": "View roles",
+                    "group": "Roles"
+                },
+                {
+                    "id": "roles.edit",
+                    "label": "Edit roles and permissions",
+                    "group": "Roles"
+                },
+                {
+                    "id": "settings.read",
+                    "label": "View settings",
+                    "group": "Settings"
+                },
+                {
+                    "id": "settings.edit",
+                    "label": "Change settings",
+                    "group": "Settings"
+                },
+                {
+                    "id": "audit.read",
+                    "label": "View the audit log",
+                    "group": "Audit"
+                },
+                {
+                    "id": "audit.export",
+                    "label": "Export the audit log",
+                    "group": "Audit"
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationGrants",
+            "rows": [
+                {
+                    "role": "admin",
+                    "permission": "users.read"
+                },
+                {
+                    "role": "admin",
+                    "permission": "users.invite"
+                },
+                {
+                    "role": "admin",
+                    "permission": "users.edit"
+                },
+                {
+                    "role": "admin",
+                    "permission": "users.suspend"
+                },
+                {
+                    "role": "admin",
+                    "permission": "roles.read"
+                },
+                {
+                    "role": "admin",
+                    "permission": "roles.edit"
+                },
+                {
+                    "role": "admin",
+                    "permission": "settings.read"
+                },
+                {
+                    "role": "admin",
+                    "permission": "settings.edit"
+                },
+                {
+                    "role": "admin",
+                    "permission": "audit.read"
+                },
+                {
+                    "role": "admin",
+                    "permission": "audit.export"
+                },
+                {
+                    "role": "manager",
+                    "permission": "users.read"
+                },
+                {
+                    "role": "manager",
+                    "permission": "users.invite"
+                },
+                {
+                    "role": "manager",
+                    "permission": "users.edit"
+                },
+                {
+                    "role": "manager",
+                    "permission": "users.suspend"
+                },
+                {
+                    "role": "manager",
+                    "permission": "roles.read"
+                },
+                {
+                    "role": "manager",
+                    "permission": "settings.read"
+                },
+                {
+                    "role": "manager",
+                    "permission": "audit.read"
+                },
+                {
+                    "role": "editor",
+                    "permission": "users.read"
+                },
+                {
+                    "role": "editor",
+                    "permission": "roles.read"
+                },
+                {
+                    "role": "editor",
+                    "permission": "settings.read"
+                },
+                {
+                    "role": "viewer",
+                    "permission": "users.read"
+                },
+                {
+                    "role": "auditor",
+                    "permission": "users.read"
+                },
+                {
+                    "role": "auditor",
+                    "permission": "audit.read"
+                },
+                {
+                    "role": "auditor",
+                    "permission": "audit.export"
+                }
+            ]
+        },
+        {
+            "shape": "UserRecord",
+            "rows": [
+                {
+                    "id": "user-1",
+                    "name": "Amelia Hart",
+                    "email": "amelia.hart@example.co.uk",
+                    "role": "Administrator",
+                    "status": "Active",
+                    "lastActive": "2026-10-16",
+                    "phone": "+44 20 7946 0101",
+                    "jobTitle": "Head of Operations",
+                    "timeZone": "Europe/London",
+                    "language": "English (UK)",
+                    "created": "2024-02-12"
+                }
+            ]
+        },
+        {
+            "shape": "UserSections",
+            "rows": [
+                {
+                    "id": "profile",
+                    "title": "Profile",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name"
+                        },
+                        {
+                            "name": "email",
+                            "label": "Email"
+                        },
+                        {
+                            "name": "phone",
+                            "label": "Phone"
+                        },
+                        {
+                            "name": "jobTitle",
+                            "label": "Job title"
+                        },
+                        {
+                            "name": "timeZone",
+                            "label": "Time zone"
+                        },
+                        {
+                            "name": "language",
+                            "label": "Language"
+                        },
+                        {
+                            "name": "created",
+                            "label": "Member since",
+                            "type": "date"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "UserSummary",
+            "rows": [
+                {
+                    "status": "Active",
+                    "tone": "success",
+                    "roles": 1,
+                    "sessions": 2,
+                    "logins": 41
+                }
+            ]
+        },
+        {
+            "shape": "AssignmentColumns",
+            "rows": [
+                {
+                    "field": "role",
+                    "header": "Role"
+                },
+                {
+                    "field": "grantedBy",
+                    "header": "Granted by"
+                },
+                {
+                    "field": "since",
+                    "header": "Since",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "UserRoles",
+            "rows": [
+                {
+                    "id": "as-1",
+                    "role": "Administrator",
+                    "grantedBy": "System",
+                    "since": "2024-02-12"
+                }
+            ]
+        },
+        {
+            "shape": "SessionColumns",
+            "rows": [
+                {
+                    "field": "device",
+                    "header": "Device"
+                },
+                {
+                    "field": "place",
+                    "header": "Place"
+                },
+                {
+                    "field": "started",
+                    "header": "Started",
+                    "kind": "date"
+                },
+                {
+                    "field": "current",
+                    "header": "This session",
+                    "kind": "status",
+                    "tones": {
+                        "Yes": "success",
+                        "No": "neutral"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "UserSessions",
+            "rows": [
+                {
+                    "id": "se-1",
+                    "device": "Chrome on macOS",
+                    "place": "London, UK",
+                    "started": "2026-10-16",
+                    "current": "Yes"
+                },
+                {
+                    "id": "se-2",
+                    "device": "Safari on iPhone",
+                    "place": "London, UK",
+                    "started": "2026-10-14",
+                    "current": "No"
+                }
+            ]
+        },
+        {
+            "shape": "UserActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Amelia Hart",
+                    "action": "changed a setting",
+                    "kind": "change",
+                    "at": "2026-10-16T09:12:00Z",
+                    "body": "Branding · Primary colour"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Oliver Reed",
+                    "action": "reset the password",
+                    "kind": "status",
+                    "at": "2026-09-30T10:00:00Z",
+                    "body": ""
+                },
+                {
+                    "id": "a2",
+                    "actor": "System",
+                    "action": "created the account",
+                    "kind": "system",
+                    "at": "2024-02-12T09:00:00Z",
+                    "body": ""
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationRecordTabs",
+            "rows": [
+                {
+                    "id": "profile",
+                    "label": "Profile"
+                },
+                {
+                    "id": "roles",
+                    "label": "Roles"
+                },
+                {
+                    "id": "sessions",
+                    "label": "Sessions"
+                },
+                {
+                    "id": "history",
+                    "label": "History"
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationSettingsSections",
+            "rows": [
+                {
+                    "id": "general",
+                    "title": "General",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "organization",
+                            "label": "Organization name",
+                            "required": true
+                        },
+                        {
+                            "name": "language",
+                            "label": "Default language",
+                            "type": "select",
+                            "options": [
+                                "English (UK)",
+                                "English (US)",
+                                "Norsk bokmål",
+                                "Deutsch"
+                            ]
+                        },
+                        {
+                            "name": "timeZone",
+                            "label": "Time zone",
+                            "type": "select",
+                            "options": [
+                                "Europe/London",
+                                "Europe/Oslo",
+                                "Europe/Berlin",
+                                "America/New_York"
+                            ]
+                        },
+                        {
+                            "name": "supportEmail",
+                            "label": "Support email"
+                        }
+                    ]
+                },
+                {
+                    "id": "branding",
+                    "title": "Branding",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "logo",
+                            "label": "Logo",
+                            "type": "file",
+                            "help": "A square image, at least 128 px."
+                        },
+                        {
+                            "name": "primaryColor",
+                            "label": "Primary colour",
+                            "help": "A hex colour such as #4f46e5."
+                        },
+                        {
+                            "name": "tagline",
+                            "label": "Tagline",
+                            "span": 2
+                        }
+                    ]
+                },
+                {
+                    "id": "notifications",
+                    "title": "Notifications",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "securityAlerts",
+                            "label": "Security alerts",
+                            "type": "toggle"
+                        },
+                        {
+                            "name": "weeklyDigest",
+                            "label": "Weekly digest",
+                            "type": "toggle"
+                        },
+                        {
+                            "name": "productNews",
+                            "label": "Product news",
+                            "type": "toggle"
+                        },
+                        {
+                            "name": "digestDay",
+                            "label": "Digest day",
+                            "type": "select",
+                            "options": [
+                                "Monday",
+                                "Friday"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationSettingsValues",
+            "rows": [
+                {
+                    "organization": "Cedar & Pine Ltd",
+                    "language": "English (UK)",
+                    "timeZone": "Europe/London",
+                    "supportEmail": "help@cedarandpine.example.co.uk",
+                    "primaryColor": "#4f46e5",
+                    "tagline": "Good timber, honestly priced",
+                    "securityAlerts": true,
+                    "weeklyDigest": true,
+                    "productNews": false,
+                    "digestDay": "Monday"
+                }
+            ]
+        },
+        {
+            "shape": "AdministrationFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

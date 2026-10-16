@@ -2,6 +2,133 @@
   "schema": 1,
   "blueprints": [
     {
+      "package": "Cratis.Blueprint.Administration",
+      "version": "1.0.0",
+      "domain": "administration",
+      "displayName": "Administration",
+      "description": "Users, roles and permissions, settings and an audit log for an administrator: a user list and page, a roles list beside its permission matrix, a settings form and a read-only audit log.",
+      "thumbnail": "thumbnails/administration.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "admin.users",
+          "title": "Users",
+          "description": "Everyone with an account: role, status and when they were last active; invite someone.",
+          "template": "AdministrationUserList",
+          "order": 0
+        },
+        {
+          "name": "admin.users.record",
+          "title": "User",
+          "description": "One user: profile, role assignments and sessions.",
+          "template": "AdministrationUserPage",
+          "parent": "admin.users"
+        },
+        {
+          "name": "admin.roles",
+          "title": "Roles and permissions",
+          "description": "The roles on the left and what the chosen role may do on the right.",
+          "template": "AdministrationRoles",
+          "order": 1
+        },
+        {
+          "name": "admin.settings",
+          "title": "Settings",
+          "description": "General, branding and notification settings of the organization.",
+          "template": "AdministrationSettings",
+          "order": 2
+        },
+        {
+          "name": "admin.audit",
+          "title": "Audit log",
+          "description": "Who did what to what and when, read only; filtered and exported.",
+          "template": "AdministrationAuditLog",
+          "order": 3
+        }
+      ],
+      "templates": [
+        {
+          "name": "AdministrationUserList",
+          "kind": "ScreenTemplate",
+          "displayName": "Administration users",
+          "description": "Users with name, email, role, status and last active, filtered by role, status and last active; an invite action.",
+          "type": "List",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationUserList.svg"
+        },
+        {
+          "name": "AdministrationUserPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Administration user page",
+          "description": "One user: profile, role assignments and sessions.",
+          "type": "Detail",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationUserPage.svg"
+        },
+        {
+          "name": "AdministrationRoles",
+          "kind": "ScreenTemplate",
+          "displayName": "Administration roles and permissions",
+          "description": "The roles on the left and the permission matrix of the chosen role on the right.",
+          "type": "Workspace",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationRoles.svg"
+        },
+        {
+          "name": "AdministrationSettings",
+          "kind": "ScreenTemplate",
+          "displayName": "Administration settings",
+          "description": "General, branding and notification settings, each section with its own Save.",
+          "type": "Form",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationSettings.svg"
+        },
+        {
+          "name": "AdministrationAuditLog",
+          "kind": "ScreenTemplate",
+          "displayName": "Administration audit log",
+          "description": "Time, actor, action and target of every change, filtered by actor, action and date range; exportable.",
+          "type": "List",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationAuditLog.svg"
+        },
+        {
+          "name": "AdministrationInviteUser",
+          "kind": "DialogTemplate",
+          "displayName": "Administration quick create invitation",
+          "description": "A short form that invites someone by email with a role, without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationInviteUser.svg"
+        },
+        {
+          "name": "AdministrationQuickCreateRole",
+          "kind": "DialogTemplate",
+          "displayName": "Administration quick create role",
+          "description": "A short form that creates one role without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Administration",
+          "thumbnail": "thumbnails/AdministrationQuickCreateRole.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "admin-default",
+          "title": "Administration · Default",
+          "locale": "en-GB",
+          "path": "sampleData/admin-default.json",
+          "default": true
+        }
+      ]
+    },
+    {
       "package": "Cratis.Blueprint.Crm",
       "version": "1.0.0",
       "domain": "crm",
