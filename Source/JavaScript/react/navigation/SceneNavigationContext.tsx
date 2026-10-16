@@ -37,6 +37,12 @@ export interface SceneNavigationContextValue {
     /** Closes the open dialog, returning to the entry that opened it, and records its result. */
     closeDialog(result?: unknown): void;
 
+    /**
+     * Closes the screen shown in an outlet the shell declares (a side pane), keeping the primary screen: one history entry, so back
+     * reopens it. An outlet that shows nothing is left as it is.
+     */
+    closeOutlet(name: string): void;
+
     /** Goes back one history entry. */
     back(): void;
 }

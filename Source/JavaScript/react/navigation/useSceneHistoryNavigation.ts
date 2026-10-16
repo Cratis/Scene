@@ -77,6 +77,14 @@ export function useSceneHistoryNavigation(
         history.back();
     }, [history, state.dialog]);
 
+    const closeOutlet = useCallback((name: string) => {
+        if (state.outlets?.[name] === undefined) return;
+        const { [name]: _closed, ...remaining } = state.outlets;
+        const primary = state.primary ?? state.screen;
+        const own = routes.find(route => route.screen === primary && route.outlet === undefined);
+        go({ screen: primary, primary, outlets: remaining, url: own?.route ?? primary, parameters: {} });
+    }, [go, routes, state]);
+
     return useMemo(() => ({
         currentScreen: state.screen,
         primaryScreen: state.primary ?? state.screen,
@@ -91,6 +99,7 @@ export function useSceneHistoryNavigation(
         bindingScope,
         navigate,
         closeDialog,
+        closeOutlet,
         back: () => history.back(),
-    }), [bindingScope, closeDialog, dialogResult, history, navigate, state, unresolvedUrl]);
+    }), [bindingScope, closeDialog, closeOutlet, dialogResult, history, navigate, state, unresolvedUrl]);
 }

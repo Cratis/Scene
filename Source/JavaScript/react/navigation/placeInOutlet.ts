@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DestinationReference } from '@cratis/scene.model';
+import { shellOutletOwner } from './collectOutletOwners';
 import { SceneNavigationState } from './SceneNavigationState';
 
 /** The most levels of nesting a placement follows before it stops, so a cyclic model cannot loop forever. */
@@ -13,7 +14,8 @@ const maximumDepth = 32;
  * When `outlet` is a nested outlet - one a screen declares with `core:outlet` - the screen goes into it, and
  * the screen that declares it is placed first: where it already is, or, when it is not on the page, where a
  * known destination puts it, up to the primary region. Outlets declared by screens that are no longer on the
- * page are dropped. Any other outlet replaces the primary region and clears every nested placement.
+ * page are dropped. An outlet the shell declares ({@link shellOutletOwner}) takes the screen beside the primary region, which keeps its
+ * screen, and keeps it when the primary region changes. Any other outlet replaces the primary region and clears every nested placement.
  */
 export function placeInOutlet(
     current: SceneNavigationState,
@@ -35,6 +37,7 @@ export function placeInOutlet(
         }
 
         placements[target.outlet!] = target.screen;
+        if (owner === shellOutletOwner) break;
         if (isOnPage(owner, root, placements, owners)) break;
         target = { screen: owner, outlet: destinations.find(destination => destination.screen === owner && destination.outlet)?.outlet };
     }
@@ -52,6 +55,13 @@ function reachable(root: string, placements: Record<string, string>, owners: Rec
     const kept: Record<string, string> = {};
     const pending = [root];
     const seen = new Set<string>();
+    for (const [outlet, placed] of Object.entries(placements)) {
+        if (owners[outlet] === shellOutletOwner) {
+            kept[outlet] = placed;
+            pending.push(placed);
+        }
+    }
+
     while (pending.length > 0) {
         const screen = pending.shift()!;
         if (seen.has(screen)) continue;

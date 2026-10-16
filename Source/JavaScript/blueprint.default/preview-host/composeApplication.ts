@@ -56,6 +56,13 @@ export interface CompositionOptions {
     logo?: ApplicationLogo;
 
     /**
+     * Outlets the shell declares that navigation renders screens into - a navigation item authored with `slot side`. Each one the shell
+     * has, other than its primary outlet, holds a closable `core:outlet` so the screen placed there is drawn beside the primary screen.
+     * {@link ApplicationHost} fills it from the destinations; a host that composes on its own names the outlets it wants.
+     */
+    hostedOutlets?: string[];
+
+    /**
      * The templates the shell is resolved against: the application's own and the blueprints that are installed. Absent, the
      * document's own layouts and templates, and the default blueprint's.
      */
@@ -262,13 +269,22 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
     const chrome = options.chrome
         ? options.chrome(screen, shell)
         : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo);
-    const screenSlots = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primaryOutlet ? options.trailing ?? [] : [])] };
+    const screenSlots: Record<string, SceneElement[]> = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primaryOutlet ? options.trailing ?? [] : [])] };
+    for (const name of hostedShellOutlets(effective, options)) {
+        screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`outlet-${name}`, 'core:outlet', { name, closable: true })];
+    }
+
     const rootTemplate = effective.kind === ShellKind.ScreenTemplate ? effective.template as ScreenTemplate : undefined;
     const composed = rootTemplate !== undefined
         ? externalComponent(`screen-${screen.name}`, previewTemplateComponent, { arrangement: rootTemplate.arrangement }, mergeSlots(rootTemplate.content, chrome, screenSlots))
         : externalComponent(`screen-${screen.name}`, shell, { screenName: screen.name }, { ...chrome, ...screenSlots });
 
     return { element: finish(composed, profile, previewCatalog(options), options), configuration: configurationOf(application, screen, options), templates };
+}
+
+/** The outlets the host asked to hold screens that this shell has, other than the one every screen is placed in. */
+export function hostedShellOutlets(shell: EffectiveShell, options: CompositionOptions): string[] {
+    return (options.hostedOutlets ?? []).filter(name => name !== shell.primaryOutlet && shell.outlets.includes(name));
 }
 
 /**

@@ -6,13 +6,13 @@ import { DialogTemplate, SceneElement, type EffectiveConfiguration } from '@crat
 import { BindingResolver, BindingScope } from '@cratis/scene.engine';
 import {
     ComponentRegistry, NavigationActivationPolicy, NavigationActivationProvider, SceneElementView, SceneHistory, SceneNavigationContextValue, SceneNavigationModel, SceneNavigationModelProvider,
-    SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, navigationDestinations,
+    SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, shellOutletOwner, navigationDestinations,
     sceneRoutesFrom, sliceDialogParameters, useSceneHistoryNavigation,
 } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../configuration';
 import { ApplicationDocument } from './ApplicationDocument';
 import { previewComponents } from './PreviewTemplate';
-import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen } from './composeApplication';
+import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen, effectiveShellOf } from './composeApplication';
 
 export interface ApplicationHostProps {
     /** The document the application is composed from. */
@@ -101,16 +101,29 @@ export function ApplicationHost({ application, composition = {}, navigationModel
     const outletScreens = useMemo(
         () => Object.fromEntries(screens.map(candidate => [candidate.name, composeOutletScreen(application, candidate, composition)])),
         [application, composition, screens]);
-    const owners = useMemo(() => collectOutletOwners(outletScreens), [outletScreens]);
     const destinations = useMemo(
         () => [...collectDestinations(application), ...navigationDestinations(navigationModel.structure, navigationModel.navigation, navigationModel.screenFor)],
         [application, navigationModel]);
+    const screenOwners = useMemo(() => collectOutletOwners(outletScreens), [outletScreens]);
+
+    // An outlet a destination renders into that no screen declares but the shell does - `slot side` - is the shell's: it holds the screen beside
+    // the primary one, so the shell is given a closable outlet in that slot and the owner of the outlet is the shell.
+    const shellOutlets = useMemo(() => {
+        const wanted = new Set(destinations.flatMap(destination => destination.outlet && !(destination.outlet in screenOwners) ? [destination.outlet] : []));
+        if (wanted.size === 0) return [];
+        return [...new Set(screens.flatMap(candidate => {
+            const shell = effectiveShellOf(application, candidate, composition);
+            return shell.outlets.filter(name => name !== shell.primaryOutlet && wanted.has(name));
+        }))];
+    }, [application, composition, destinations, screenOwners, screens]);
+    const owners = useMemo(() => ({ ...screenOwners, ...Object.fromEntries(shellOutlets.map(name => [name, shellOutletOwner])) }), [screenOwners, shellOutlets]);
+    const hostedComposition = useMemo<CompositionOptions>(() => shellOutlets.length === 0 ? composition : { ...composition, hostedOutlets: [...(composition.hostedOutlets ?? []), ...shellOutlets] }, [composition, shellOutlets]);
     const routes = useMemo(() => sceneRoutesFrom(screens.map(candidate => candidate.name), destinations), [destinations, screens]);
     const bindingScope = useMemo<BindingScope>(() => ({ queryResults }), [queryResults]);
     const navigation = useSceneHistoryNavigation(hostHistory, routes, initialScreen, bindingScope, owners, destinations);
 
     const screen = screens.find(candidate => candidate.name === navigation.primaryScreen) ?? screens.find(candidate => candidate.name === initialScreen) ?? screens[0];
-    const composed = useMemo(() => screen ? composeApplicationScreen(application, screen, composition) : undefined, [application, composition, screen]);
+    const composed = useMemo(() => screen ? composeApplicationScreen(application, screen, hostedComposition) : undefined, [application, hostedComposition, screen]);
     const outletContext = useMemo(() => ({ screens: outletScreens, registry }), [outletScreens, registry]);
 
     const dialogTemplate = navigation.currentDialog ? application.dialogTemplates?.find(candidate => candidate.name === navigation.currentDialog) : undefined;
