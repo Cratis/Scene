@@ -517,6 +517,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         displayName: 'Kanban board',
         description: 'Columns mapped to a status, with cards that move by dragging or by their own Move-to menu. The new arrangement is the value output.',
         properties: [
+            choice('swimlane', 'Swimlanes', 'Appearance', { none: 'None', assignee: 'By assignee' }, 'none', 'Lays the board out in a lane for each person, across the same columns.'),
             {
                 ...list('columns', 'Columns', 'Data', 'Column', [
                     text('id', 'Id', 'Data', 'The status or stage value.', { constraints: { required: true } }),

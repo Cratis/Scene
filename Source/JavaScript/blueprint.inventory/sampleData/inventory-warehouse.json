@@ -1,0 +1,1770 @@
+{
+    "id": "inventory-warehouse",
+    "title": "Inventory · Warehouse",
+    "locale": "en-GB",
+    "owner": "blueprint:inventory",
+    "sets": [
+        {
+            "shape": "InventorySettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP"
+                }
+            ]
+        },
+        {
+            "shape": "Items",
+            "rows": [
+                {
+                    "id": "item-1",
+                    "sku": "EQ-1001",
+                    "name": "Pallet jack",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 6,
+                    "reorderLevel": 2,
+                    "unitCost": 289,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2830,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2830,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-2",
+                    "sku": "EQ-1002",
+                    "name": "Hand truck",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 3,
+                    "reorderLevel": 4,
+                    "unitCost": 96,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2851,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2851,45%25,25%25%29' font-family='sans-serif'%3EH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-3",
+                    "sku": "EQ-1003",
+                    "name": "Forklift battery",
+                    "category": "Equipment",
+                    "location": "Returns cage",
+                    "quantity": 1,
+                    "reorderLevel": 2,
+                    "unitCost": 1450,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2872,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2872,45%25,25%25%29' font-family='sans-serif'%3EF%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-4",
+                    "sku": "EQ-1004",
+                    "name": "Tape measure",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 24,
+                    "reorderLevel": 10,
+                    "unitCost": 7,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2893,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2893,45%25,25%25%29' font-family='sans-serif'%3ET%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-5",
+                    "sku": "SF-2001",
+                    "name": "Safety gloves (L)",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "quantity": 140,
+                    "reorderLevel": 60,
+                    "unitCost": 3,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28114,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28114,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-6",
+                    "sku": "SF-2002",
+                    "name": "Hi-vis vest",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "quantity": 58,
+                    "reorderLevel": 40,
+                    "unitCost": 6,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28135,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28135,45%25,25%25%29' font-family='sans-serif'%3EH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-7",
+                    "sku": "SF-2003",
+                    "name": "Safety boots (42)",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 0,
+                    "reorderLevel": 8,
+                    "unitCost": 54,
+                    "status": "Out of stock",
+                    "tone": "danger",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28156,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28156,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-8",
+                    "sku": "PK-3001",
+                    "name": "Stretch wrap roll",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 82,
+                    "reorderLevel": 30,
+                    "unitCost": 11,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28177,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28177,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-9",
+                    "sku": "PK-3002",
+                    "name": "Packing tape",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 12,
+                    "reorderLevel": 40,
+                    "unitCost": 2,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28198,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28198,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-10",
+                    "sku": "PK-3003",
+                    "name": "Cardboard box M",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 420,
+                    "reorderLevel": 150,
+                    "unitCost": 1,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28219,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28219,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-11",
+                    "sku": "PK-3004",
+                    "name": "Cardboard box L",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 260,
+                    "reorderLevel": 120,
+                    "unitCost": 2,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28240,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28240,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-12",
+                    "sku": "PK-3005",
+                    "name": "Bubble wrap",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 35,
+                    "reorderLevel": 20,
+                    "unitCost": 18,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28261,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28261,45%25,25%25%29' font-family='sans-serif'%3EB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-13",
+                    "sku": "EL-4001",
+                    "name": "Barcode scanner",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 14,
+                    "reorderLevel": 5,
+                    "unitCost": 168,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28282,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28282,45%25,25%25%29' font-family='sans-serif'%3EB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-14",
+                    "sku": "EL-4002",
+                    "name": "Label printer",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 4,
+                    "reorderLevel": 5,
+                    "unitCost": 240,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28303,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28303,45%25,25%25%29' font-family='sans-serif'%3EL%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-15",
+                    "sku": "EL-4003",
+                    "name": "Thermal labels 100x150",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 38,
+                    "reorderLevel": 25,
+                    "unitCost": 9,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Northern Labels",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28324,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28324,45%25,25%25%29' font-family='sans-serif'%3ET%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-16",
+                    "sku": "EL-4004",
+                    "name": "Cable ties (100)",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 7,
+                    "reorderLevel": 20,
+                    "unitCost": 4,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28345,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28345,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                }
+            ]
+        },
+        {
+            "shape": "ItemColumns",
+            "rows": [
+                {
+                    "field": "sku",
+                    "header": "SKU"
+                },
+                {
+                    "field": "name",
+                    "header": "Name"
+                },
+                {
+                    "field": "category",
+                    "header": "Category"
+                },
+                {
+                    "field": "location",
+                    "header": "Location"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Quantity",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "In stock": "success",
+                        "Low stock": "warning",
+                        "Out of stock": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ItemFilterFields",
+            "rows": [
+                {
+                    "name": "category",
+                    "label": "Category",
+                    "type": "select",
+                    "options": [
+                        "Equipment",
+                        "Safety",
+                        "Packaging",
+                        "Electronics"
+                    ]
+                },
+                {
+                    "name": "location",
+                    "label": "Location",
+                    "type": "select",
+                    "options": [
+                        "Main warehouse / Aisle A / Shelf A1",
+                        "Main warehouse / Aisle A / Shelf A2",
+                        "Main warehouse / Aisle B / Shelf B1",
+                        "Main warehouse / Aisle B / Shelf B2",
+                        "Cold store / Rack 1",
+                        "Returns cage"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "In stock",
+                        "Low stock",
+                        "Out of stock"
+                    ]
+                },
+                {
+                    "name": "quantity",
+                    "label": "Quantity",
+                    "type": "number"
+                }
+            ]
+        },
+        {
+            "shape": "ItemViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All items"
+                },
+                {
+                    "id": "low",
+                    "label": "Low stock"
+                },
+                {
+                    "id": "out",
+                    "label": "Out of stock"
+                }
+            ]
+        },
+        {
+            "shape": "ItemColumnChoices",
+            "rows": [
+                {
+                    "id": "sku",
+                    "label": "SKU",
+                    "locked": true
+                },
+                {
+                    "id": "name",
+                    "label": "Name"
+                },
+                {
+                    "id": "category",
+                    "label": "Category"
+                },
+                {
+                    "id": "location",
+                    "label": "Location"
+                },
+                {
+                    "id": "quantity",
+                    "label": "Quantity"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "ItemSelection",
+            "rows": []
+        },
+        {
+            "shape": "Movements",
+            "rows": [
+                {
+                    "id": "move-1",
+                    "when": "2026-10-16",
+                    "item": "Cardboard box M",
+                    "type": "Check in",
+                    "quantity": 120,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-2",
+                    "when": "2026-10-16",
+                    "item": "Safety gloves (L)",
+                    "type": "Check out",
+                    "quantity": -20,
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "by": "Marcus Webb"
+                },
+                {
+                    "id": "move-3",
+                    "when": "2026-10-15",
+                    "item": "Barcode scanner",
+                    "type": "Check out",
+                    "quantity": -2,
+                    "location": "Cold store / Rack 1",
+                    "by": "Aisha Patel"
+                },
+                {
+                    "id": "move-4",
+                    "when": "2026-10-15",
+                    "item": "Stretch wrap roll",
+                    "type": "Check in",
+                    "quantity": 40,
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "by": "Tom Eriksen"
+                },
+                {
+                    "id": "move-5",
+                    "when": "2026-10-14",
+                    "item": "Packing tape",
+                    "type": "Check out",
+                    "quantity": -28,
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-6",
+                    "when": "2026-10-14",
+                    "item": "Pallet jack",
+                    "type": "Transfer",
+                    "quantity": 1,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Marcus Webb"
+                },
+                {
+                    "id": "move-7",
+                    "when": "2026-10-13",
+                    "item": "Hi-vis vest",
+                    "type": "Adjustment",
+                    "quantity": -2,
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "by": "Aisha Patel"
+                },
+                {
+                    "id": "move-8",
+                    "when": "2026-10-13",
+                    "item": "Cable ties (100)",
+                    "type": "Check out",
+                    "quantity": -13,
+                    "location": "Cold store / Rack 1",
+                    "by": "Tom Eriksen"
+                },
+                {
+                    "id": "move-9",
+                    "when": "2026-10-12",
+                    "item": "Label printer",
+                    "type": "Check in",
+                    "quantity": 2,
+                    "location": "Cold store / Rack 1",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-10",
+                    "when": "2026-10-12",
+                    "item": "Cardboard box L",
+                    "type": "Check out",
+                    "quantity": -40,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Marcus Webb"
+                },
+                {
+                    "id": "move-11",
+                    "when": "2026-10-09",
+                    "item": "Thermal labels 100x150",
+                    "type": "Check in",
+                    "quantity": 20,
+                    "location": "Cold store / Rack 1",
+                    "by": "Aisha Patel"
+                },
+                {
+                    "id": "move-12",
+                    "when": "2026-10-09",
+                    "item": "Hand truck",
+                    "type": "Check out",
+                    "quantity": -1,
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "by": "Tom Eriksen"
+                },
+                {
+                    "id": "move-13",
+                    "when": "2026-10-08",
+                    "item": "Bubble wrap",
+                    "type": "Adjustment",
+                    "quantity": -1,
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-14",
+                    "when": "2026-10-07",
+                    "item": "Safety boots (42)",
+                    "type": "Check out",
+                    "quantity": -4,
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "by": "Marcus Webb"
+                }
+            ]
+        },
+        {
+            "shape": "MovementColumns",
+            "rows": [
+                {
+                    "field": "when",
+                    "header": "Date",
+                    "kind": "date"
+                },
+                {
+                    "field": "item",
+                    "header": "Item"
+                },
+                {
+                    "field": "type",
+                    "header": "Type",
+                    "kind": "status",
+                    "tones": {
+                        "Check in": "success",
+                        "Check out": "info",
+                        "Transfer": "neutral",
+                        "Adjustment": "warning"
+                    }
+                },
+                {
+                    "field": "quantity",
+                    "header": "Quantity",
+                    "kind": "number"
+                },
+                {
+                    "field": "location",
+                    "header": "Location"
+                },
+                {
+                    "field": "by",
+                    "header": "By"
+                }
+            ]
+        },
+        {
+            "shape": "MovementFilterFields",
+            "rows": [
+                {
+                    "name": "type",
+                    "label": "Type",
+                    "type": "select",
+                    "options": [
+                        "Check in",
+                        "Check out",
+                        "Transfer",
+                        "Adjustment"
+                    ]
+                },
+                {
+                    "name": "location",
+                    "label": "Location",
+                    "type": "select",
+                    "options": [
+                        "Main warehouse / Aisle A / Shelf A1",
+                        "Main warehouse / Aisle A / Shelf A2",
+                        "Main warehouse / Aisle B / Shelf B1",
+                        "Main warehouse / Aisle B / Shelf B2",
+                        "Cold store / Rack 1",
+                        "Returns cage"
+                    ]
+                },
+                {
+                    "name": "by",
+                    "label": "By",
+                    "type": "select",
+                    "options": [
+                        "Hannah Cole",
+                        "Marcus Webb",
+                        "Aisha Patel",
+                        "Tom Eriksen"
+                    ]
+                },
+                {
+                    "name": "when",
+                    "label": "Date",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "MovementViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All movements"
+                },
+                {
+                    "id": "today",
+                    "label": "Today"
+                },
+                {
+                    "id": "mine",
+                    "label": "My movements"
+                }
+            ]
+        },
+        {
+            "shape": "MovementColumnChoices",
+            "rows": [
+                {
+                    "id": "when",
+                    "label": "Date",
+                    "locked": true
+                },
+                {
+                    "id": "item",
+                    "label": "Item"
+                },
+                {
+                    "id": "type",
+                    "label": "Type"
+                },
+                {
+                    "id": "quantity",
+                    "label": "Quantity"
+                },
+                {
+                    "id": "location",
+                    "label": "Location"
+                },
+                {
+                    "id": "by",
+                    "label": "By"
+                }
+            ]
+        },
+        {
+            "shape": "MovementSelection",
+            "rows": []
+        },
+        {
+            "shape": "Suppliers",
+            "rows": [
+                {
+                    "id": "supplier-1",
+                    "name": "Hartley Industrial",
+                    "contact": "Ben Hartley",
+                    "email": "orders@hartley.example.co.uk",
+                    "phone": "+44 20 7946 0210",
+                    "items": 5,
+                    "status": "Active"
+                },
+                {
+                    "id": "supplier-2",
+                    "name": "Brightpack Ltd",
+                    "contact": "Nora Quinn",
+                    "email": "sales@brightpack.example.co.uk",
+                    "phone": "+44 161 496 0311",
+                    "items": 4,
+                    "status": "Active"
+                },
+                {
+                    "id": "supplier-3",
+                    "name": "Safeway PPE",
+                    "contact": "Omar Rahman",
+                    "email": "trade@safeway.example.co.uk",
+                    "phone": "+44 113 496 0412",
+                    "items": 3,
+                    "status": "Active"
+                },
+                {
+                    "id": "supplier-4",
+                    "name": "Scanline Systems",
+                    "contact": "Ivy Chen",
+                    "email": "hello@scanline.example.co.uk",
+                    "phone": "+44 131 496 0513",
+                    "items": 3,
+                    "status": "On hold"
+                },
+                {
+                    "id": "supplier-5",
+                    "name": "Northern Labels",
+                    "contact": "Fred Alder",
+                    "email": "orders@northernlabels.example.co.uk",
+                    "phone": "+44 191 496 0614",
+                    "items": 1,
+                    "status": "Active"
+                }
+            ]
+        },
+        {
+            "shape": "SupplierColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Name"
+                },
+                {
+                    "field": "contact",
+                    "header": "Contact"
+                },
+                {
+                    "field": "email",
+                    "header": "Email"
+                },
+                {
+                    "field": "items",
+                    "header": "Items",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Active": "success",
+                        "On hold": "warning"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "SupplierFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Active",
+                        "On hold"
+                    ]
+                },
+                {
+                    "name": "items",
+                    "label": "Items supplied",
+                    "type": "number"
+                }
+            ]
+        },
+        {
+            "shape": "SupplierViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All suppliers"
+                },
+                {
+                    "id": "active",
+                    "label": "Active suppliers"
+                }
+            ]
+        },
+        {
+            "shape": "SupplierColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Name",
+                    "locked": true
+                },
+                {
+                    "id": "contact",
+                    "label": "Contact"
+                },
+                {
+                    "id": "email",
+                    "label": "Email"
+                },
+                {
+                    "id": "items",
+                    "label": "Items"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "SupplierSelection",
+            "rows": []
+        },
+        {
+            "shape": "ItemSections",
+            "rows": [
+                {
+                    "id": "item",
+                    "title": "Item details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "sku",
+                            "label": "SKU"
+                        },
+                        {
+                            "name": "name",
+                            "label": "Name"
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category"
+                        },
+                        {
+                            "name": "location",
+                            "label": "Location"
+                        },
+                        {
+                            "name": "quantity",
+                            "label": "Quantity",
+                            "type": "number"
+                        },
+                        {
+                            "name": "reorderLevel",
+                            "label": "Reorder level",
+                            "type": "number"
+                        },
+                        {
+                            "name": "unitCost",
+                            "label": "Unit cost",
+                            "type": "currency"
+                        }
+                    ]
+                },
+                {
+                    "id": "supplier",
+                    "title": "Supplier",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "supplierName",
+                            "label": "Supplier"
+                        },
+                        {
+                            "name": "supplierContact",
+                            "label": "Contact"
+                        },
+                        {
+                            "name": "supplierEmail",
+                            "label": "Email"
+                        },
+                        {
+                            "name": "supplierPhone",
+                            "label": "Phone"
+                        },
+                        {
+                            "name": "leadTime",
+                            "label": "Lead time"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ItemQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New item",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "sku",
+                            "label": "SKU",
+                            "required": true
+                        },
+                        {
+                            "name": "name",
+                            "label": "Name",
+                            "required": true
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category",
+                            "type": "select",
+                            "options": [
+                                "Equipment",
+                                "Safety",
+                                "Packaging",
+                                "Electronics"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "location",
+                            "label": "Location",
+                            "type": "select",
+                            "options": [
+                                "Main warehouse / Aisle A / Shelf A1",
+                                "Main warehouse / Aisle A / Shelf A2",
+                                "Main warehouse / Aisle B / Shelf B1",
+                                "Main warehouse / Aisle B / Shelf B2",
+                                "Cold store / Rack 1",
+                                "Returns cage"
+                            ]
+                        },
+                        {
+                            "name": "quantity",
+                            "label": "Opening quantity",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "SupplierQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New supplier",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name",
+                            "required": true
+                        },
+                        {
+                            "name": "contact",
+                            "label": "Contact"
+                        },
+                        {
+                            "name": "email",
+                            "label": "Email",
+                            "required": true
+                        },
+                        {
+                            "name": "phone",
+                            "label": "Phone"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "AdjustStockSections",
+            "rows": [
+                {
+                    "id": "adjust",
+                    "title": "Adjust stock",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "item",
+                            "label": "Item",
+                            "type": "select",
+                            "options": [
+                                "Pallet jack",
+                                "Hand truck",
+                                "Forklift battery",
+                                "Tape measure",
+                                "Safety gloves (L)",
+                                "Hi-vis vest",
+                                "Safety boots (42)",
+                                "Stretch wrap roll",
+                                "Packing tape",
+                                "Cardboard box M",
+                                "Cardboard box L",
+                                "Bubble wrap",
+                                "Barcode scanner",
+                                "Label printer",
+                                "Thermal labels 100x150",
+                                "Cable ties (100)"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "change",
+                            "label": "Quantity change",
+                            "type": "number",
+                            "required": true,
+                            "help": "Use a minus sign to take stock away."
+                        },
+                        {
+                            "name": "reason",
+                            "label": "Reason",
+                            "type": "select",
+                            "options": [
+                                "Cycle count",
+                                "Damaged",
+                                "Found",
+                                "Expired",
+                                "Other"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "note",
+                            "label": "Note"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CheckInOutSections",
+            "rows": [
+                {
+                    "id": "item",
+                    "title": "Item",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "item",
+                            "label": "Item",
+                            "required": true,
+                            "placeholder": "Scan a barcode or search for an item",
+                            "help": "A barcode scanner types the SKU for you; or type a SKU or a name."
+                        },
+                        {
+                            "name": "direction",
+                            "label": "Direction",
+                            "type": "select",
+                            "options": [
+                                "Check out",
+                                "Check in"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "quantity",
+                            "label": "Quantity",
+                            "type": "number",
+                            "required": true
+                        }
+                    ]
+                },
+                {
+                    "id": "assignment",
+                    "title": "Who has it",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "assignee",
+                            "label": "Assignee",
+                            "type": "select",
+                            "options": [
+                                "Hannah Cole",
+                                "Marcus Webb",
+                                "Aisha Patel",
+                                "Tom Eriksen"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due back",
+                            "type": "date"
+                        },
+                        {
+                            "name": "note",
+                            "label": "Note"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ItemRecord",
+            "rows": [
+                {
+                    "id": "item-1",
+                    "sku": "EQ-1001",
+                    "name": "Pallet jack",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 6,
+                    "reorderLevel": 2,
+                    "unitCost": 289,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2830,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2830,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E",
+                    "supplierName": "Hartley Industrial",
+                    "supplierContact": "Ben Hartley",
+                    "supplierEmail": "orders@hartley.example.co.uk",
+                    "supplierPhone": "+44 20 7946 0210",
+                    "leadTime": "5 working days"
+                }
+            ]
+        },
+        {
+            "shape": "ItemSummary",
+            "rows": [
+                {
+                    "status": "In stock",
+                    "tone": "success",
+                    "onHand": 6,
+                    "reorderLevel": 2,
+                    "stockValue": 1734
+                }
+            ]
+        },
+        {
+            "shape": "StockByLocationColumns",
+            "rows": [
+                {
+                    "field": "location",
+                    "header": "Location"
+                },
+                {
+                    "field": "quantity",
+                    "header": "On hand",
+                    "kind": "number"
+                },
+                {
+                    "field": "reserved",
+                    "header": "Reserved",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "In stock": "success",
+                        "Low stock": "warning",
+                        "Out of stock": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ItemStockByLocation",
+            "rows": [
+                {
+                    "id": "sbl-1",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 4,
+                    "reserved": 1,
+                    "status": "In stock"
+                },
+                {
+                    "id": "sbl-2",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 2,
+                    "reserved": 0,
+                    "status": "Low stock"
+                }
+            ]
+        },
+        {
+            "shape": "ItemMovements",
+            "rows": [
+                {
+                    "id": "move-6",
+                    "when": "2026-10-14",
+                    "item": "Pallet jack",
+                    "type": "Transfer",
+                    "quantity": 1,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Marcus Webb"
+                },
+                {
+                    "id": "move-12",
+                    "when": "2026-10-09",
+                    "item": "Hand truck",
+                    "type": "Check out",
+                    "quantity": -1,
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "by": "Tom Eriksen"
+                }
+            ]
+        },
+        {
+            "shape": "ItemActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Hannah Cole",
+                    "action": "counted the shelf",
+                    "kind": "change",
+                    "at": "2026-10-14T09:30:00Z",
+                    "body": "Cycle count matched the system: 6 on hand."
+                },
+                {
+                    "id": "a1",
+                    "actor": "Marcus Webb",
+                    "action": "moved 1 to Shelf A2",
+                    "kind": "change",
+                    "at": "2026-10-13T14:05:00Z",
+                    "body": ""
+                },
+                {
+                    "id": "a2",
+                    "actor": "Aisha Patel",
+                    "action": "commented",
+                    "kind": "comment",
+                    "at": "2026-10-12T08:45:00Z",
+                    "body": "The left wheel squeaks; booked a service for next week."
+                }
+            ]
+        },
+        {
+            "shape": "ItemTasks",
+            "rows": [
+                {
+                    "title": "Cycle counts",
+                    "items": [
+                        {
+                            "id": "c0",
+                            "label": "Count Shelf A1",
+                            "owner": "Hannah Cole",
+                            "due": "2026-10-21",
+                            "done": false
+                        },
+                        {
+                            "id": "c1",
+                            "label": "Count Shelf A2",
+                            "owner": "Marcus Webb",
+                            "due": "2026-10-22",
+                            "done": false
+                        },
+                        {
+                            "id": "c2",
+                            "label": "Reconcile the count with the system",
+                            "owner": "Hannah Cole",
+                            "due": "2026-10-23",
+                            "done": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InventoryRecordTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "stock",
+                    "label": "Stock"
+                },
+                {
+                    "id": "movements",
+                    "label": "Movements"
+                },
+                {
+                    "id": "supplier",
+                    "label": "Supplier"
+                }
+            ]
+        },
+        {
+            "shape": "InventoryKpis",
+            "rows": [
+                {
+                    "value": 6,
+                    "change": -1
+                },
+                {
+                    "value": 10586,
+                    "change": 2.4
+                },
+                {
+                    "value": 128,
+                    "change": 6.7
+                }
+            ]
+        },
+        {
+            "shape": "InventoryTopMovers",
+            "rows": [
+                {
+                    "categories": [
+                        "Cardboard box M",
+                        "Cardboard box L",
+                        "Safety gloves (L)",
+                        "Packing tape",
+                        "Stretch wrap roll",
+                        "Thermal labels"
+                    ],
+                    "series": [
+                        {
+                            "name": "Units moved",
+                            "values": [
+                                310,
+                                220,
+                                146,
+                                98,
+                                74,
+                                52
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InventoryLowStock",
+            "rows": [
+                {
+                    "id": "item-2",
+                    "sku": "EQ-1002",
+                    "name": "Hand truck",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 3,
+                    "reorderLevel": 4,
+                    "unitCost": 96,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2851,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2851,45%25,25%25%29' font-family='sans-serif'%3EH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-3",
+                    "sku": "EQ-1003",
+                    "name": "Forklift battery",
+                    "category": "Equipment",
+                    "location": "Returns cage",
+                    "quantity": 1,
+                    "reorderLevel": 2,
+                    "unitCost": 1450,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2872,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2872,45%25,25%25%29' font-family='sans-serif'%3EF%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-7",
+                    "sku": "SF-2003",
+                    "name": "Safety boots (42)",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 0,
+                    "reorderLevel": 8,
+                    "unitCost": 54,
+                    "status": "Out of stock",
+                    "tone": "danger",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28156,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28156,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-9",
+                    "sku": "PK-3002",
+                    "name": "Packing tape",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 12,
+                    "reorderLevel": 40,
+                    "unitCost": 2,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28198,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28198,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-14",
+                    "sku": "EL-4002",
+                    "name": "Label printer",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 4,
+                    "reorderLevel": 5,
+                    "unitCost": 240,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28303,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28303,45%25,25%25%29' font-family='sans-serif'%3EL%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-16",
+                    "sku": "EL-4004",
+                    "name": "Cable ties (100)",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 7,
+                    "reorderLevel": 20,
+                    "unitCost": 4,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28345,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28345,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                }
+            ]
+        },
+        {
+            "shape": "RecentMovements",
+            "rows": [
+                {
+                    "id": "move-1",
+                    "when": "2026-10-16",
+                    "item": "Cardboard box M",
+                    "type": "Check in",
+                    "quantity": 120,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-2",
+                    "when": "2026-10-16",
+                    "item": "Safety gloves (L)",
+                    "type": "Check out",
+                    "quantity": -20,
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "by": "Marcus Webb"
+                },
+                {
+                    "id": "move-3",
+                    "when": "2026-10-15",
+                    "item": "Barcode scanner",
+                    "type": "Check out",
+                    "quantity": -2,
+                    "location": "Cold store / Rack 1",
+                    "by": "Aisha Patel"
+                },
+                {
+                    "id": "move-4",
+                    "when": "2026-10-15",
+                    "item": "Stretch wrap roll",
+                    "type": "Check in",
+                    "quantity": 40,
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "by": "Tom Eriksen"
+                },
+                {
+                    "id": "move-5",
+                    "when": "2026-10-14",
+                    "item": "Packing tape",
+                    "type": "Check out",
+                    "quantity": -28,
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "by": "Hannah Cole"
+                },
+                {
+                    "id": "move-6",
+                    "when": "2026-10-14",
+                    "item": "Pallet jack",
+                    "type": "Transfer",
+                    "quantity": 1,
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "by": "Marcus Webb"
+                }
+            ]
+        },
+        {
+            "shape": "LocationNodes",
+            "rows": [
+                {
+                    "id": "Main warehouse",
+                    "label": "Main warehouse",
+                    "title": "11 items"
+                },
+                {
+                    "id": "Main warehouse / Aisle A",
+                    "label": "Aisle A",
+                    "title": "6 items",
+                    "parentId": "Main warehouse"
+                },
+                {
+                    "id": "Main warehouse / Aisle A / Shelf A1",
+                    "label": "Shelf A1",
+                    "title": "3 items",
+                    "parentId": "Main warehouse / Aisle A"
+                },
+                {
+                    "id": "Main warehouse / Aisle A / Shelf A2",
+                    "label": "Shelf A2",
+                    "title": "3 items",
+                    "parentId": "Main warehouse / Aisle A"
+                },
+                {
+                    "id": "Main warehouse / Aisle B",
+                    "label": "Aisle B",
+                    "title": "5 items",
+                    "parentId": "Main warehouse"
+                },
+                {
+                    "id": "Main warehouse / Aisle B / Shelf B1",
+                    "label": "Shelf B1",
+                    "title": "2 items",
+                    "parentId": "Main warehouse / Aisle B"
+                },
+                {
+                    "id": "Main warehouse / Aisle B / Shelf B2",
+                    "label": "Shelf B2",
+                    "title": "3 items",
+                    "parentId": "Main warehouse / Aisle B"
+                },
+                {
+                    "id": "Cold store",
+                    "label": "Cold store",
+                    "title": "4 items"
+                },
+                {
+                    "id": "Cold store / Rack 1",
+                    "label": "Rack 1",
+                    "title": "4 items",
+                    "parentId": "Cold store"
+                },
+                {
+                    "id": "Returns cage",
+                    "label": "Returns cage",
+                    "title": "1 items"
+                }
+            ]
+        },
+        {
+            "shape": "LocationContentColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Item"
+                },
+                {
+                    "field": "sku",
+                    "header": "SKU"
+                },
+                {
+                    "field": "location",
+                    "header": "Location"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Quantity",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "In stock": "success",
+                        "Low stock": "warning",
+                        "Out of stock": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "LocationContents",
+            "rows": [
+                {
+                    "id": "item-1",
+                    "sku": "EQ-1001",
+                    "name": "Pallet jack",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 6,
+                    "reorderLevel": 2,
+                    "unitCost": 289,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2830,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2830,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-2",
+                    "sku": "EQ-1002",
+                    "name": "Hand truck",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 3,
+                    "reorderLevel": 4,
+                    "unitCost": 96,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2851,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2851,45%25,25%25%29' font-family='sans-serif'%3EH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-3",
+                    "sku": "EQ-1003",
+                    "name": "Forklift battery",
+                    "category": "Equipment",
+                    "location": "Returns cage",
+                    "quantity": 1,
+                    "reorderLevel": 2,
+                    "unitCost": 1450,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2872,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2872,45%25,25%25%29' font-family='sans-serif'%3EF%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-4",
+                    "sku": "EQ-1004",
+                    "name": "Tape measure",
+                    "category": "Equipment",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 24,
+                    "reorderLevel": 10,
+                    "unitCost": 7,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Hartley Industrial",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%2893,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%2893,45%25,25%25%29' font-family='sans-serif'%3ET%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-5",
+                    "sku": "SF-2001",
+                    "name": "Safety gloves (L)",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "quantity": 140,
+                    "reorderLevel": 60,
+                    "unitCost": 3,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28114,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28114,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-6",
+                    "sku": "SF-2002",
+                    "name": "Hi-vis vest",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B1",
+                    "quantity": 58,
+                    "reorderLevel": 40,
+                    "unitCost": 6,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28135,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28135,45%25,25%25%29' font-family='sans-serif'%3EH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-7",
+                    "sku": "SF-2003",
+                    "name": "Safety boots (42)",
+                    "category": "Safety",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 0,
+                    "reorderLevel": 8,
+                    "unitCost": 54,
+                    "status": "Out of stock",
+                    "tone": "danger",
+                    "supplier": "Safeway PPE",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28156,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28156,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-8",
+                    "sku": "PK-3001",
+                    "name": "Stretch wrap roll",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 82,
+                    "reorderLevel": 30,
+                    "unitCost": 11,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28177,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28177,45%25,25%25%29' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-9",
+                    "sku": "PK-3002",
+                    "name": "Packing tape",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle B / Shelf B2",
+                    "quantity": 12,
+                    "reorderLevel": 40,
+                    "unitCost": 2,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28198,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28198,45%25,25%25%29' font-family='sans-serif'%3EP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-10",
+                    "sku": "PK-3003",
+                    "name": "Cardboard box M",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 420,
+                    "reorderLevel": 150,
+                    "unitCost": 1,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28219,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28219,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-11",
+                    "sku": "PK-3004",
+                    "name": "Cardboard box L",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A1",
+                    "quantity": 260,
+                    "reorderLevel": 120,
+                    "unitCost": 2,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28240,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28240,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-12",
+                    "sku": "PK-3005",
+                    "name": "Bubble wrap",
+                    "category": "Packaging",
+                    "location": "Main warehouse / Aisle A / Shelf A2",
+                    "quantity": 35,
+                    "reorderLevel": 20,
+                    "unitCost": 18,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Brightpack Ltd",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28261,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28261,45%25,25%25%29' font-family='sans-serif'%3EB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-13",
+                    "sku": "EL-4001",
+                    "name": "Barcode scanner",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 14,
+                    "reorderLevel": 5,
+                    "unitCost": 168,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28282,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28282,45%25,25%25%29' font-family='sans-serif'%3EB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-14",
+                    "sku": "EL-4002",
+                    "name": "Label printer",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 4,
+                    "reorderLevel": 5,
+                    "unitCost": 240,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28303,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28303,45%25,25%25%29' font-family='sans-serif'%3EL%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-15",
+                    "sku": "EL-4003",
+                    "name": "Thermal labels 100x150",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 38,
+                    "reorderLevel": 25,
+                    "unitCost": 9,
+                    "status": "In stock",
+                    "tone": "",
+                    "supplier": "Northern Labels",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28324,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28324,45%25,25%25%29' font-family='sans-serif'%3ET%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "item-16",
+                    "sku": "EL-4004",
+                    "name": "Cable ties (100)",
+                    "category": "Electronics",
+                    "location": "Cold store / Rack 1",
+                    "quantity": 7,
+                    "reorderLevel": 20,
+                    "unitCost": 4,
+                    "status": "Low stock",
+                    "tone": "warning",
+                    "supplier": "Scanline Systems",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28345,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28345,45%25,25%25%29' font-family='sans-serif'%3EC%3C/text%3E%3C/svg%3E"
+                }
+            ]
+        },
+        {
+            "shape": "InventoryFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

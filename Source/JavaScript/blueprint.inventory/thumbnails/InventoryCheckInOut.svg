@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="Inventory check in and out">
+    <rect x="0" y="0" width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#0f766e"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="224" height="148" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="94" y="48" width="60" height="6" rx="3" fill="#0f766e"/>
+    <rect x="94" y="66" width="98" height="24" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="94" y="60" width="30" height="4" rx="2" fill="#9aa3b2"/>
+    <rect x="202" y="66" width="98" height="24" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="202" y="60" width="30" height="4" rx="2" fill="#9aa3b2"/>
+    <rect x="94" y="102" width="98" height="24" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="94" y="96" width="30" height="4" rx="2" fill="#9aa3b2"/>
+    <rect x="202" y="102" width="98" height="24" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="202" y="96" width="30" height="4" rx="2" fill="#9aa3b2"/>
+    <rect x="94" y="160" width="50" height="20" rx="4" fill="#0f766e"/>
+    <rect x="150" y="160" width="50" height="20" rx="4" fill="#d5d9df"/>
+</svg>
