@@ -9,7 +9,8 @@
             "rows": [
                 {
                     "locale": "nb-NO",
-                    "currency": "NOK"
+                    "currency": "NOK",
+                    "calendarDay": "2026-10-19"
                 }
             ]
         },
@@ -1653,6 +1654,154 @@
             "shape": "HrFormErrors",
             "rows": [
                 {}
+            ]
+        },
+        {
+            "shape": "TeamCalendarEvents",
+            "rows": [
+                {
+                    "id": "req-1",
+                    "title": "Silje Andersen",
+                    "start": "2026-10-26",
+                    "end": "2026-10-30",
+                    "category": "Ferie · Venter",
+                    "tone": "warning",
+                    "person": "Silje Andersen"
+                },
+                {
+                    "id": "req-2",
+                    "title": "Emil Johansen",
+                    "start": "2026-11-02",
+                    "end": "2026-11-04",
+                    "category": "Ferie · Venter",
+                    "tone": "warning",
+                    "person": "Emil Johansen"
+                },
+                {
+                    "id": "req-3",
+                    "title": "Thea Pedersen",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Avspasering · Godkjent",
+                    "tone": "success",
+                    "person": "Thea Pedersen"
+                },
+                {
+                    "id": "req-4",
+                    "title": "Nora Karlsen",
+                    "start": "2026-09-01",
+                    "end": "2026-12-31",
+                    "category": "Permisjon · Godkjent",
+                    "tone": "success",
+                    "person": "Nora Karlsen"
+                },
+                {
+                    "id": "req-5",
+                    "title": "Oskar Nilsen",
+                    "start": "2026-12-21",
+                    "end": "2026-12-31",
+                    "category": "Ferie · Venter",
+                    "tone": "warning",
+                    "person": "Oskar Nilsen"
+                },
+                {
+                    "id": "req-6",
+                    "title": "Lars Strand",
+                    "start": "2026-10-12",
+                    "end": "2026-10-14",
+                    "category": "Sykefravær · Godkjent",
+                    "tone": "success",
+                    "person": "Lars Strand"
+                },
+                {
+                    "id": "req-8",
+                    "title": "Maja Bakken",
+                    "start": "2026-10-05",
+                    "end": "2026-10-09",
+                    "category": "Ferie · Godkjent",
+                    "tone": "success",
+                    "person": "Maja Bakken"
+                },
+                {
+                    "id": "req-9",
+                    "title": "Jonas Eriksen",
+                    "start": "2026-10-23",
+                    "end": "2026-10-23",
+                    "category": "Avspasering · Venter",
+                    "tone": "warning",
+                    "person": "Jonas Eriksen"
+                },
+                {
+                    "id": "req-10",
+                    "title": "Henriette Vik",
+                    "start": "2026-11-09",
+                    "end": "2026-11-13",
+                    "category": "Ferie · Venter",
+                    "tone": "warning",
+                    "person": "Henriette Vik"
+                },
+                {
+                    "id": "req-11",
+                    "title": "Kristian Moen",
+                    "start": "2026-12-28",
+                    "end": "2026-12-31",
+                    "category": "Ferie · Godkjent",
+                    "tone": "success",
+                    "person": "Kristian Moen"
+                },
+                {
+                    "id": "req-12",
+                    "title": "Henrik Lund",
+                    "start": "2026-10-21",
+                    "end": "2026-10-22",
+                    "category": "Ferie · Venter",
+                    "tone": "warning",
+                    "person": "Henrik Lund"
+                }
+            ]
+        },
+        {
+            "shape": "TeamCalendarColumns",
+            "rows": [
+                {
+                    "field": "person",
+                    "header": "Ansatt"
+                },
+                {
+                    "field": "category",
+                    "header": "Fravær"
+                },
+                {
+                    "field": "start",
+                    "header": "Fra",
+                    "kind": "date"
+                },
+                {
+                    "field": "end",
+                    "header": "Til",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "TeamCalendarFilterFields",
+            "rows": [
+                {
+                    "name": "person",
+                    "label": "Ansatt",
+                    "type": "text"
+                },
+                {
+                    "name": "category",
+                    "label": "Fravær",
+                    "type": "select",
+                    "options": [
+                        "Ferie",
+                        "Sykefravær",
+                        "Permisjon",
+                        "Avspasering"
+                    ]
+                }
             ]
         }
     ]

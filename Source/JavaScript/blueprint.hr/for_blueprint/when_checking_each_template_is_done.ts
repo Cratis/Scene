@@ -43,8 +43,8 @@ describe('when checking each template of the HR People and Time Off blueprint is
         }
     }
 
-    it('should ship 7 screen templates and 2 dialog templates, each declared by the manifest', () => {
-        [hrScreenTemplates.length, hrDialogTemplates.length].should.deep.equal([7, 2]);
+    it('should ship 8 screen templates and 2 dialog templates, each declared by the manifest', () => {
+        [hrScreenTemplates.length, hrDialogTemplates.length].should.deep.equal([8, 2]);
         hrScreenTemplates.map(template => template.name).should.deep.equal(hrBlueprint.manifest.screenTemplates);
         hrDialogTemplates.map(template => template.name).should.deep.equal(hrBlueprint.manifest.dialogTemplates);
     });

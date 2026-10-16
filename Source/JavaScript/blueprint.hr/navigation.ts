@@ -31,7 +31,7 @@ export const hrStructure: ApplicationStructure = (() => {
 
 /**
  * The navigation of the application the blueprint is: the topbar names the module, and the module's sidebar - which overrides the application's - lists
- * the four places an HR team goes: Directory, Org chart, Time off (with its requests and its balances beneath it) and Onboarding.
+ * the four places an HR team goes: Directory, Org chart, Time off (with its requests, the team calendar and its balances beneath it) and Onboarding.
  */
 export const hrNavigation: NavigationModel = {
     application: {
@@ -49,6 +49,7 @@ export const hrNavigation: NavigationModel = {
                 {
                     id: 'timeoff', title: 'Time off', target: { module: hrModule, feature: 'timeoff' }, children: [
                         { id: 'requests', title: 'Requests', target: { module: hrModule, feature: 'timeoff' } },
+                        { id: 'calendar', title: 'Team calendar', target: { module: hrModule, feature: 'timeoff.calendar' } },
                         { id: 'balances', title: 'Balances', target: { module: hrModule, feature: 'timeoff.balances' } },
                     ],
                 },

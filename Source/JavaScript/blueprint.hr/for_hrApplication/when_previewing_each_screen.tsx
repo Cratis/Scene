@@ -28,12 +28,19 @@ describe('when previewing each screen of the HR People and Time Off blueprint', 
         }
     }
 
+    it('should draw the team calendar of October with who is away and say the kind of leave in words', () => {
+        const { container } = render(preview('hr.timeoff.calendar', nordic));
+        within(container).getByRole('heading', { level: 3, name: /oktober 2026/i });
+        within(container).getAllByText(/Godkjent/).length.should.be.greaterThan(0);
+        within(container).getAllByText('Silje Andersen').length.should.be.greaterThan(0);
+    });
+
     describe('and a standard state is forced on every region (Part B 1.4)', () => {
         const forced = (screen: string, state: ForcedState) =>
             render(preview(screen, nordic, { composition: { ...hrComposition, decorate: element => forceState(element, state) } }));
         const regionText = (container: HTMLElement) => Array.from(container.querySelectorAll('.foundation')).map(region => region.textContent ?? '').join(' ');
 
-        for (const screen of ['hr.directory', 'hr.directory.record', 'hr.org', 'hr.timeoff', 'hr.timeoff.balances', 'hr.onboarding', 'hr.onboarding.record']) {
+        for (const screen of ['hr.directory', 'hr.directory.record', 'hr.org', 'hr.timeoff', 'hr.timeoff.balances', 'hr.timeoff.calendar', 'hr.onboarding', 'hr.onboarding.record']) {
             it(`should show ${screen} loading with an announced skeleton and none of its data`, () => {
                 const { container } = forced(screen, { state: ComponentState.Loading });
                 container.querySelectorAll('.foundation-skeleton').length.should.be.greaterThan(0);
