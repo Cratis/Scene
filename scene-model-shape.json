@@ -206,7 +206,21 @@
       "defaultSizeClass",
       "layout",
       "theme",
-      "sampleData"
+      "sampleData",
+      "root",
+      "appearance",
+      "defaults"
+    ],
+    "RootTemplate": [
+      "template",
+      "options"
+    ],
+    "ProfileAppearance": [
+      "colorScheme",
+      "accent"
+    ],
+    "ProfileDefaults": [
+      "newScreenTemplate"
     ],
     "Theme": [
       "name",
@@ -809,6 +823,11 @@
       "Primary",
       "Secondary",
       "Quiet"
+    ],
+    "ColorScheme": [
+      "Light",
+      "Dark",
+      "System"
     ]
   }
 }

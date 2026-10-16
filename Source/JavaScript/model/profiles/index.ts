@@ -3,3 +3,7 @@
 
 export * from './UiProfile';
 export * from './Theme';
+export * from './ColorScheme';
+export * from './ProfileAppearance';
+export * from './ProfileDefaults';
+export * from './RootTemplate';
