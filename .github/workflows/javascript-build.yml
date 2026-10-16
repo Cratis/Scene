@@ -88,4 +88,6 @@ jobs:
         run: npx playwright-core install --with-deps chromium
 
       - name: Browser specifications
-        run: yarn workspace @cratis/scene.blueprint.default test:browser
+        run: |
+          yarn workspace @cratis/scene.blueprint.default test:browser
+          yarn workspace @cratis/scene.blueprint.crm test:browser

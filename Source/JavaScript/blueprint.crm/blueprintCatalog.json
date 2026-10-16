@@ -1,0 +1,375 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Crm",
+      "version": "1.0.0",
+      "domain": "crm",
+      "displayName": "CRM",
+      "description": "Leads, contacts, companies and deals for a sales team: a dashboard, lists, a pipeline board, record pages, forms and quick create.",
+      "thumbnail": "thumbnails/crm.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "crm.dashboard",
+          "title": "Dashboard",
+          "description": "Open pipeline, wins, conversion, leads by source and deals by stage.",
+          "template": "CrmDashboard",
+          "order": 0
+        },
+        {
+          "name": "crm.leads",
+          "title": "Leads",
+          "description": "Every lead, filtered and worked from one list.",
+          "template": "CrmLeadList",
+          "order": 1
+        },
+        {
+          "name": "crm.leads.new",
+          "title": "New lead",
+          "description": "Creates a lead.",
+          "template": "CrmLeadCreateForm",
+          "parent": "crm.leads"
+        },
+        {
+          "name": "crm.leads.edit",
+          "title": "Edit lead",
+          "description": "Edits a lead.",
+          "template": "CrmLeadEditForm",
+          "parent": "crm.leads"
+        },
+        {
+          "name": "crm.contacts",
+          "title": "Contacts",
+          "description": "Every contact, filtered and worked from one list.",
+          "template": "CrmContactList",
+          "order": 2
+        },
+        {
+          "name": "crm.contacts.record",
+          "title": "Contact",
+          "description": "One contact with their deals and activity.",
+          "template": "CrmContactPage",
+          "parent": "crm.contacts"
+        },
+        {
+          "name": "crm.contacts.new",
+          "title": "New contact",
+          "description": "Creates a contact.",
+          "template": "CrmContactCreateForm",
+          "parent": "crm.contacts"
+        },
+        {
+          "name": "crm.contacts.edit",
+          "title": "Edit contact",
+          "description": "Edits a contact.",
+          "template": "CrmContactEditForm",
+          "parent": "crm.contacts"
+        },
+        {
+          "name": "crm.companies",
+          "title": "Companies",
+          "description": "Every company, filtered and worked from one list.",
+          "template": "CrmCompanyList",
+          "order": 3
+        },
+        {
+          "name": "crm.companies.record",
+          "title": "Company",
+          "description": "One company with its contacts, deals and activity.",
+          "template": "CrmCompanyPage",
+          "parent": "crm.companies"
+        },
+        {
+          "name": "crm.companies.new",
+          "title": "New company",
+          "description": "Creates a company.",
+          "template": "CrmCompanyCreateForm",
+          "parent": "crm.companies"
+        },
+        {
+          "name": "crm.companies.edit",
+          "title": "Edit company",
+          "description": "Edits a company.",
+          "template": "CrmCompanyEditForm",
+          "parent": "crm.companies"
+        },
+        {
+          "name": "crm.deals",
+          "title": "Deals pipeline",
+          "description": "Deals in a column for each stage, with the value of each stage.",
+          "template": "CrmDealPipeline",
+          "order": 4
+        },
+        {
+          "name": "crm.deals.list",
+          "title": "Deals list",
+          "description": "Every deal as a table grouped by stage.",
+          "template": "CrmDealList",
+          "parent": "crm.deals",
+          "order": 0
+        },
+        {
+          "name": "crm.deals.record",
+          "title": "Deal",
+          "description": "One deal with its contacts and activity.",
+          "template": "CrmDealPage",
+          "parent": "crm.deals"
+        },
+        {
+          "name": "crm.deals.new",
+          "title": "New deal",
+          "description": "Creates a deal.",
+          "template": "CrmDealCreateForm",
+          "parent": "crm.deals"
+        },
+        {
+          "name": "crm.deals.edit",
+          "title": "Edit deal",
+          "description": "Edits a deal.",
+          "template": "CrmDealEditForm",
+          "parent": "crm.deals"
+        },
+        {
+          "name": "crm.activities",
+          "title": "Activities",
+          "description": "Calls, meetings, emails and tasks.",
+          "template": "CrmActivityList",
+          "order": 5
+        }
+      ],
+      "templates": [
+        {
+          "name": "CrmDashboard",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM sales dashboard",
+          "description": "Open pipeline value, won this month, conversion rate, leads by source, deals by stage and my tasks.",
+          "type": "Dashboard",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDashboard.svg"
+        },
+        {
+          "name": "CrmLeadList",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM leads",
+          "description": "Leads with their company, owner, status and last contact, filtered by owner, status, source and creation date.",
+          "type": "List",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmLeadList.svg"
+        },
+        {
+          "name": "CrmContactList",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM contacts",
+          "description": "Contacts with their company, owner, status and last contact, filtered by owner, status, source and creation date.",
+          "type": "List",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmContactList.svg"
+        },
+        {
+          "name": "CrmCompanyList",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM companies",
+          "description": "Companies with their industry, owner, status and last contact, filtered by owner, status, source and creation date.",
+          "type": "List",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmCompanyList.svg"
+        },
+        {
+          "name": "CrmDealPipeline",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM deals pipeline",
+          "description": "Deals as cards in a column for each stage, each stage showing its total value.",
+          "type": "Board",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDealPipeline.svg"
+        },
+        {
+          "name": "CrmDealList",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM deals list",
+          "description": "Every deal as a table grouped by stage, with the value of each stage as its subtotal.",
+          "type": "List",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDealList.svg"
+        },
+        {
+          "name": "CrmActivityList",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM activities",
+          "description": "Calls, meetings, emails and tasks with their owner, status and date.",
+          "type": "List",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmActivityList.svg"
+        },
+        {
+          "name": "CrmContactPage",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM contact page",
+          "description": "One contact: key facts, their fields, their deals and the activity with them.",
+          "type": "Detail",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmContactPage.svg"
+        },
+        {
+          "name": "CrmCompanyPage",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM company page",
+          "description": "One company: key facts, its fields, its contacts and deals and the activity with it.",
+          "type": "Detail",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmCompanyPage.svg"
+        },
+        {
+          "name": "CrmDealPage",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM deal page",
+          "description": "One deal: stage, value and close date, its fields, the contacts involved and the activity on it.",
+          "type": "Detail",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDealPage.svg"
+        },
+        {
+          "name": "CrmLeadCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM create lead",
+          "description": "A form that creates one lead.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmLeadCreateForm.svg"
+        },
+        {
+          "name": "CrmLeadEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM edit lead",
+          "description": "A form that edits one lead.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmLeadEditForm.svg"
+        },
+        {
+          "name": "CrmContactCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM create contact",
+          "description": "A form that creates one contact.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmContactCreateForm.svg"
+        },
+        {
+          "name": "CrmContactEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM edit contact",
+          "description": "A form that edits one contact.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmContactEditForm.svg"
+        },
+        {
+          "name": "CrmCompanyCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM create company",
+          "description": "A form that creates one company.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmCompanyCreateForm.svg"
+        },
+        {
+          "name": "CrmCompanyEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM edit company",
+          "description": "A form that edits one company.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmCompanyEditForm.svg"
+        },
+        {
+          "name": "CrmDealCreateForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM create deal",
+          "description": "A form that creates one deal.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDealCreateForm.svg"
+        },
+        {
+          "name": "CrmDealEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "CRM edit deal",
+          "description": "A form that edits one deal.",
+          "type": "Form",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmDealEditForm.svg"
+        },
+        {
+          "name": "CrmQuickCreateLead",
+          "kind": "DialogTemplate",
+          "displayName": "CRM quick create lead",
+          "description": "A short form that creates one lead without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmQuickCreateLead.svg"
+        },
+        {
+          "name": "CrmQuickCreateContact",
+          "kind": "DialogTemplate",
+          "displayName": "CRM quick create contact",
+          "description": "A short form that creates one contact without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmQuickCreateContact.svg"
+        },
+        {
+          "name": "CrmQuickCreateCompany",
+          "kind": "DialogTemplate",
+          "displayName": "CRM quick create company",
+          "description": "A short form that creates one company without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmQuickCreateCompany.svg"
+        },
+        {
+          "name": "CrmQuickCreateDeal",
+          "kind": "DialogTemplate",
+          "displayName": "CRM quick create deal",
+          "description": "A short form that creates one deal without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmQuickCreateDeal.svg"
+        },
+        {
+          "name": "CrmQuickCreateActivity",
+          "kind": "DialogTemplate",
+          "displayName": "CRM quick create activity",
+          "description": "A short form that creates one activity without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / CRM",
+          "thumbnail": "thumbnails/CrmQuickCreateActivity.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "crm-enterprise-en",
+          "title": "CRM · Enterprise",
+          "locale": "en-GB",
+          "path": "sampleData/crm-enterprise-en.json",
+          "default": true
+        },
+        {
+          "id": "crm-nordic-smb",
+          "title": "CRM · Nordic SMB",
+          "locale": "nb-NO",
+          "path": "sampleData/crm-nordic-smb.json",
+          "default": false
+        }
+      ]
+    }
+  ]
+}

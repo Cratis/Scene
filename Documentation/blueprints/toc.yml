@@ -30,6 +30,8 @@
   items:
       - name: Ship your own blueprint
         href: ship-your-own-blueprint.md
+      - name: The CRM blueprint
+        href: crm-blueprint.md
 
 - name: Understand
   items:

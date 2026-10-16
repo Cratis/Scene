@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="CRM quick create lead">
+    <rect width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#4f46e5"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="12" y="40" width="296" height="148" fill="#000000" fill-opacity="0.15"/>
+    <rect x="96" y="56" width="128" height="118" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="104" y="64" width="60" height="6" rx="3" fill="#4f46e5"/>
+    <rect x="104" y="82" width="112" height="18" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="104" y="106" width="112" height="18" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="170" y="148" width="46" height="16" rx="4" fill="#4f46e5"/>
+</svg>

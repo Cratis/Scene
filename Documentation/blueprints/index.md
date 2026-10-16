@@ -66,3 +66,4 @@ screen templates, three dialog templates and two themes.
 - **[The template set](template-set.md)** — every screen and dialog template it ships.
 - **[Theme tokens](theme-tokens.md)** — the thirteen shared tokens, and every theme's attribution.
 - **[Ship your own blueprint](ship-your-own-blueprint.md)** — when the default is not your look.
+- **[The CRM blueprint](crm-blueprint.md)** — the first domain blueprint: leads, contacts, companies and deals, with navigation and sample data.

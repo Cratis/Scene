@@ -191,6 +191,8 @@ kind - a CRM, a project tracker, a ticketing desk - and it brings no shell at al
 components and themes, and adds what is particular to the domain: templates, a **ready-to-use screen set**, **sample-data packs** and
 **thumbnails**. All seven start from the same scaffold and are held to the same definition of done.
 
+[The CRM blueprint](crm-blueprint.md) is the worked example of everything below.
+
 ### Scaffold it
 
 ```bash
