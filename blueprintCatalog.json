@@ -370,6 +370,165 @@
           "default": false
         }
       ]
+    },
+    {
+      "package": "Cratis.Blueprint.Hr",
+      "version": "1.0.0",
+      "domain": "hr",
+      "displayName": "HR People and Time Off",
+      "description": "People, the org chart, time off and onboarding for an HR team: a directory of cards, employee pages, an org tree, time-off requests and balances, and onboarding checklists.",
+      "thumbnail": "thumbnails/hr.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "hr.directory",
+          "title": "Directory",
+          "description": "Everyone in the company as cards with their photo, title, department and contact.",
+          "template": "HrEmployeeDirectory",
+          "order": 0
+        },
+        {
+          "name": "hr.directory.record",
+          "title": "Employee",
+          "description": "One employee: personal and job information, documents and time-off balance.",
+          "template": "HrEmployeePage",
+          "parent": "hr.directory"
+        },
+        {
+          "name": "hr.org",
+          "title": "Org chart",
+          "description": "Who reports to whom, as a tree.",
+          "template": "HrOrgChart",
+          "order": 1
+        },
+        {
+          "name": "hr.timeoff",
+          "title": "Time off",
+          "description": "Time-off requests to approve, with who is away and for how long.",
+          "template": "HrTimeOffList",
+          "order": 2
+        },
+        {
+          "name": "hr.timeoff.balances",
+          "title": "Balances",
+          "description": "What each employee has taken and has left.",
+          "template": "HrTimeOffBalanceList",
+          "parent": "hr.timeoff"
+        },
+        {
+          "name": "hr.onboarding",
+          "title": "Onboarding",
+          "description": "New hires and how far along their onboarding is.",
+          "template": "HrOnboardingList",
+          "order": 3
+        },
+        {
+          "name": "hr.onboarding.record",
+          "title": "Onboarding checklist",
+          "description": "One new hire's checklist: sections of tasks, each with an owner and a due date.",
+          "template": "HrOnboardingChecklist",
+          "parent": "hr.onboarding"
+        }
+      ],
+      "templates": [
+        {
+          "name": "HrEmployeeDirectory",
+          "kind": "ScreenTemplate",
+          "displayName": "HR employee directory",
+          "description": "Employees as cards with photo, name, title, department and contact, filtered by department, location and status.",
+          "type": "List",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrEmployeeDirectory.svg"
+        },
+        {
+          "name": "HrEmployeePage",
+          "kind": "ScreenTemplate",
+          "displayName": "HR employee page",
+          "description": "One employee: personal and job information, documents and time-off balance.",
+          "type": "Detail",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrEmployeePage.svg"
+        },
+        {
+          "name": "HrOrgChart",
+          "kind": "ScreenTemplate",
+          "displayName": "HR org chart",
+          "description": "The company as a tree of who reports to whom, with titles and report counts.",
+          "type": "Detail",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrOrgChart.svg"
+        },
+        {
+          "name": "HrTimeOffList",
+          "kind": "ScreenTemplate",
+          "displayName": "HR time off",
+          "description": "Time-off requests with the employee, type, dates, days and status, filtered by type, status and period.",
+          "type": "List",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrTimeOffList.svg"
+        },
+        {
+          "name": "HrTimeOffBalanceList",
+          "kind": "ScreenTemplate",
+          "displayName": "HR time-off balances",
+          "description": "Each employee's entitlement, days taken and days left, with how much of it is used.",
+          "type": "List",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrTimeOffBalanceList.svg"
+        },
+        {
+          "name": "HrOnboardingList",
+          "kind": "ScreenTemplate",
+          "displayName": "HR onboarding",
+          "description": "New hires with their start date, owner and a progress bar of their checklist.",
+          "type": "List",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrOnboardingList.svg"
+        },
+        {
+          "name": "HrOnboardingChecklist",
+          "kind": "ScreenTemplate",
+          "displayName": "HR onboarding checklist",
+          "description": "One new hire's onboarding: checklist sections with an owner and a due date for each task, and the key facts of the hire.",
+          "type": "Detail",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrOnboardingChecklist.svg"
+        },
+        {
+          "name": "HrRequestTimeOff",
+          "kind": "DialogTemplate",
+          "displayName": "HR quick create time-off request",
+          "description": "A short form that asks for time off without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrRequestTimeOff.svg"
+        },
+        {
+          "name": "HrQuickCreateEmployee",
+          "kind": "DialogTemplate",
+          "displayName": "HR quick create employee",
+          "description": "A short form that creates one employee without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / HR",
+          "thumbnail": "thumbnails/HrQuickCreateEmployee.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "hr-nordic",
+          "title": "HR · Nordic",
+          "locale": "nb-NO",
+          "path": "sampleData/hr-nordic.json",
+          "default": true
+        }
+      ]
     }
   ]
 }
