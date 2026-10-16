@@ -370,6 +370,191 @@
           "default": false
         }
       ]
+    },
+    {
+      "package": "Cratis.Blueprint.Inventory",
+      "version": "1.0.0",
+      "domain": "inventory",
+      "displayName": "Inventory and Assets",
+      "description": "Items, locations, movements and suppliers for a warehouse: a dashboard, item lists and cards, item pages, a location tree, stock adjustment and check in and out.",
+      "thumbnail": "thumbnails/inventory.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "inventory.dashboard",
+          "title": "Dashboard",
+          "description": "Low stock, stock value, top movers and recent movements.",
+          "template": "InventoryDashboard",
+          "order": 0
+        },
+        {
+          "name": "inventory.items",
+          "title": "Items",
+          "description": "Every item with its stock, low stock highlighted.",
+          "template": "InventoryItemList",
+          "order": 1
+        },
+        {
+          "name": "inventory.items.gallery",
+          "title": "Item gallery",
+          "description": "Every item as a card with its picture.",
+          "template": "InventoryItemGallery",
+          "parent": "inventory.items",
+          "order": 0
+        },
+        {
+          "name": "inventory.items.record",
+          "title": "Item",
+          "description": "One item with its stock by location, movement history and supplier.",
+          "template": "InventoryItemPage",
+          "parent": "inventory.items"
+        },
+        {
+          "name": "inventory.locations",
+          "title": "Locations",
+          "description": "The location tree beside what is stored in the chosen location.",
+          "template": "InventoryLocations",
+          "order": 2
+        },
+        {
+          "name": "inventory.movements",
+          "title": "Movements",
+          "description": "Every check in, check out, transfer and adjustment.",
+          "template": "InventoryMovementList",
+          "order": 3
+        },
+        {
+          "name": "inventory.movements.check",
+          "title": "Check in or out",
+          "description": "Scan or search an item and check it in or out, from a phone.",
+          "template": "InventoryCheckInOut",
+          "parent": "inventory.movements"
+        },
+        {
+          "name": "inventory.suppliers",
+          "title": "Suppliers",
+          "description": "The suppliers items are bought from.",
+          "template": "InventorySupplierList",
+          "order": 4
+        }
+      ],
+      "templates": [
+        {
+          "name": "InventoryDashboard",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory dashboard",
+          "description": "Low stock count, stock value, top movers, recent movements and the items to reorder.",
+          "type": "Dashboard",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryDashboard.svg"
+        },
+        {
+          "name": "InventoryItemList",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory items",
+          "description": "Items with sku, category, location, quantity and status, low stock highlighted, filtered by category, location and status.",
+          "type": "List",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryItemList.svg"
+        },
+        {
+          "name": "InventoryItemGallery",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory item gallery",
+          "description": "Items as cards with a picture, sku, quantity and status, low stock highlighted.",
+          "type": "List",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryItemGallery.svg"
+        },
+        {
+          "name": "InventoryItemPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory item page",
+          "description": "One item: key facts, its fields and supplier, its stock by location and its movement history.",
+          "type": "Detail",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryItemPage.svg"
+        },
+        {
+          "name": "InventoryLocations",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory locations",
+          "description": "The tree of locations beside what is stored in the chosen location.",
+          "type": "Workspace",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryLocations.svg"
+        },
+        {
+          "name": "InventoryMovementList",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory movements",
+          "description": "Check ins, check outs, transfers and adjustments with the item, quantity, location and who did it.",
+          "type": "List",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryMovementList.svg"
+        },
+        {
+          "name": "InventoryCheckInOut",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory check in and out",
+          "description": "A mobile-first form to scan or search for an item and check it in or out, with who has it and when it is due back.",
+          "type": "Form",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryCheckInOut.svg"
+        },
+        {
+          "name": "InventorySupplierList",
+          "kind": "ScreenTemplate",
+          "displayName": "Inventory suppliers",
+          "description": "Suppliers with their contact, the items they supply and their status.",
+          "type": "List",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventorySupplierList.svg"
+        },
+        {
+          "name": "InventoryAdjustStock",
+          "kind": "DialogTemplate",
+          "displayName": "Inventory quick create stock adjustment",
+          "description": "A short form that adjusts the stock of one item without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryAdjustStock.svg"
+        },
+        {
+          "name": "InventoryQuickCreateItem",
+          "kind": "DialogTemplate",
+          "displayName": "Inventory quick create item",
+          "description": "A short form that creates one item without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryQuickCreateItem.svg"
+        },
+        {
+          "name": "InventoryQuickCreateSupplier",
+          "kind": "DialogTemplate",
+          "displayName": "Inventory quick create supplier",
+          "description": "A short form that creates one supplier without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Inventory",
+          "thumbnail": "thumbnails/InventoryQuickCreateSupplier.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "inventory-warehouse",
+          "title": "Inventory · Warehouse",
+          "locale": "en-GB",
+          "path": "sampleData/inventory-warehouse.json",
+          "default": true
+        }
+      ]
     }
   ]
 }
