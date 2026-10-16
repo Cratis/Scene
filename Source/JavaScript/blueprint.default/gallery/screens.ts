@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Layout, Screen, ScreenTemplate } from '@cratis/scene.model';
-import { foundationScreenTemplates, stateScreenTemplates } from '../foundation/templates';
+import { foundationScreenTemplates, laterScreenTemplates, stateScreenTemplates } from '../foundation/templates';
 import { LayoutName, appShellLayout, fullPageLayout } from '../layouts';
 import { BreadcrumbEntry, applicationChrome, fullPageChrome } from './applicationChrome';
 import { nestScreenTemplates, templateContentInLayout } from './composeScreen';
@@ -22,6 +22,7 @@ import { workspaceTemplates } from './workspaceTemplates';
  */
 export const galleryScreenTemplates: ScreenTemplate[] = [
     ...foundationScreenTemplates,
+    ...laterScreenTemplates,
     ...stateScreenTemplates,
     ...workspaceTemplates,
     ...supportTemplates,
@@ -54,6 +55,13 @@ const breadcrumbs: Record<string, BreadcrumbEntry[]> = {
     RecordPage: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Accounts', targetScreen: 'ListScreen' }, { label: 'Account' }],
     FormScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'Accounts', targetScreen: 'ListScreen' }, { label: 'New account' }],
     WizardScreen: [{ label: 'Sales', targetScreen: 'DashboardScreen' }, { label: 'New account' }],
+    CalendarScreen: [{ label: 'People', targetScreen: 'DashboardScreen' }, { label: 'Calendar' }],
+    TimelineScreen: [{ label: 'Projects', targetScreen: 'DashboardScreen' }, { label: 'Timeline' }],
+    InboxScreen: [{ label: 'Work', targetScreen: 'DashboardScreen' }, { label: 'Inbox' }],
+    SettingsScreen: [{ label: 'Organisation', targetScreen: 'DashboardScreen' }, { label: 'Settings' }],
+    ProfileScreen: [{ label: 'People', targetScreen: 'DashboardScreen' }, { label: 'Profile' }],
+    ReportViewer: [{ label: 'Reports', targetScreen: 'DashboardScreen' }, { label: 'Deals by owner' }],
+    ImportWizard: [{ label: 'Contacts', targetScreen: 'DashboardScreen' }, { label: 'Import' }],
     ModuleWorkspace: [{ label: 'Operations' }],
     FeatureSection: [{ label: 'Operations', targetScreen: 'ModuleWorkspace' }, { label: 'Adjustments' }],
     SliceSection: [

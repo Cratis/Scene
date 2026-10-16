@@ -24,6 +24,22 @@ sidebar left (the default), top navigation only (the `Horizontal` layout mode) a
 | `FormScreen` | Form | `content` | `header`, `body`, `actions` | Sections of validated fields; create, edit, read-only and settings by mode; unsaved-changes guard |
 | `WizardScreen` | Wizard | `content` | `header`, `progress`, `step`, `actions` | Linear steps with progress, Back/Next, save draft and a review step |
 
+## Later additions
+
+The later additions of Part B 2.12 are declared by the same rules: they ship in `@cratis/scene.blueprint.default` under `foundation/templates`, fit the `AppShell` layout's `content` slot, are
+categorised `Foundation / <type>`, and are filled from the same sample-data pack. Their types (`Calendar`, `Timeline`, `Inbox`, `Settings`, `Profile`, `Report` and `Import`) are part of the
+template type vocabulary of both engines.
+
+| Template | Type | Slots | What it is |
+| --- | --- | --- | --- |
+| `CalendarScreen` | Calendar | `header`, `toolbar`, `filters`, `calendar`, `aside` | Events on a month, a week or an agenda, with filters and a list of what the period holds; the day and the view are kept in the address |
+| `TimelineScreen` | Timeline | `header`, `toolbar`, `timeline`, `list` | A Gantt-style schedule in lanes with progress, milestones and dependencies, and the same items as a list |
+| `InboxScreen` | Inbox | `header`, `queue`, `message`, `history` | The queue of messages that want attention beside the open message, with unread state and keyboard movement |
+| `SettingsScreen` | Settings | `header`, `sections`, `body` | Settings sections in a rail beside the form of the chosen section, each section saved on its own; a row of tabs on a phone |
+| `ProfileScreen` | Profile | `header`, `summary`, `tabs`, `details`, `activity` | A person with their team and status, tabbed details, preferences and security, and recent activity |
+| `ReportViewer` | Report | `header`, `parameters`, `actions`, `figures`, `chart`, `table` | A report as figures, a chart and the rows behind them, narrowed by parameters (a filter) and exported as CSV or PDF, or printed |
+| `ImportWizard` | Import | `header`, `progress`, `step`, `actions` | Upload a file, map its columns, preview what will be imported (with each rejected row's reason in words) and confirm; the step survives a refresh |
+
 `MasterDetailScreen` names its container: the qualified slot `WorkspaceScreen.moduleContent` says which `content`-like
 slot it means, so it is placed only inside a workspace and never ambiguous with the shell's own `content`.
 

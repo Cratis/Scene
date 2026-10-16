@@ -138,4 +138,13 @@ export enum ComponentName {
 
     /** Sections of validated fields with the save bar and unsaved-changes guard. */
     FormScreenBody = 'formScreenBody',
+
+    /** Events on a month, a week or as an agenda, with the day and view kept in the address. */
+    CalendarGrid = 'calendarGrid',
+
+    /** Work over time on a Gantt-style axis of days, weeks or months, with progress and dependencies. */
+    TimelineGrid = 'timelineGrid',
+
+    /** The queue of messages that want attention, grouped by day, with unread state and keyboard movement. */
+    InboxList = 'inboxList',
 }

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="SettingsScreen">
+    <rect width="320" height="200" rx="8" fill="#f4f5f7"/>
+    <rect x="0" y="0" width="320" height="22" fill="#4f46e5"/>
+    <rect x="0" y="22" width="56" height="178" fill="#e3e5ea"/>
+    <rect x="64" y="30" width="80" height="12" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="64" y="50" width="60" height="138" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="70" y="58" width="48" height="6" rx="2" fill="#4f46e5" stroke="#4f46e5"/>
+    <rect x="70" y="70" width="48" height="6" rx="2" fill="#e3e5ea" stroke="#e3e5ea"/>
+    <rect x="70" y="82" width="48" height="6" rx="2" fill="#e3e5ea" stroke="#e3e5ea"/>
+    <rect x="132" y="50" width="178" height="64" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="140" y="58" width="100" height="8" rx="2" fill="#d5d9df" stroke="#d5d9df"/>
+    <rect x="140" y="74" width="160" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="140" y="90" width="160" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="250" y="102" width="50" height="8" rx="2" fill="#4f46e5" stroke="#4f46e5"/>
+    <rect x="132" y="122" width="178" height="66" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="140" y="130" width="100" height="8" rx="2" fill="#d5d9df" stroke="#d5d9df"/>
+    <rect x="140" y="146" width="160" height="10" rx="3" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="250" y="174" width="50" height="8" rx="2" fill="#4f46e5" stroke="#4f46e5"/>
+</svg>

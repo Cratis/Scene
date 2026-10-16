@@ -119,6 +119,28 @@ the unassigned cards last, and a lane has its own heading (a level above its col
 its lane, by dragging or by its Move-to menu; each column's count and total are for its lane, while the over-the-limit warning counts every lane, since a limit
 is the column's.
 
+## Calendars
+
+`calendarGrid` draws events (`id`, `title`, `start`, `end`, `category`, `tone`, `person`) on a month, a week or as an agenda. An event covers every day from `start` to
+`end` (both included, calendar days with no time zone), so a week of leave shows on each of its days. The month and the week are a table of days: each day is a
+button, the arrow keys move between days (Page Up and Page Down between months), a month cell shows two events and says how many more there are, and the events of
+the selected day are always listed in full below the table, so a busy day is never cut off. The agenda lists the month day by day and replaces the month on a phone.
+What an event is - its category and who it concerns - is said in words and by an icon, never only by its color. `firstDay` sets the first day of the week (0 is Sunday),
+`today` fixes the day marked as today, and `urlKey` keeps the shown day (and the view, under `urlKey` + `View`) in the address. The id of the selected event is the
+`value` output.
+
+`timelineGrid` is the Gantt-style schedule: `items` (`id`, `title`, `start`, `end`, `lane`, `progress`, `tone`, `dependsOn`, `milestone`) are bars in a lane for each
+person or team, on an axis of days, weeks or months (`scale`, kept in the address under `urlKey`). A bar is a button; pressing it selects the item and the panel below
+states in words the dates, the progress, what it waits on and what it holds up. An item that starts before something it waits on has finished is marked as a conflict
+(a dashed border and the words), and a dependency on an unknown item is dropped. The same schedule is a table: on a phone it is the table, elsewhere a disclosure
+under the chart. The id of the selected item is the `value` output.
+
+`inboxList` is the queue of things that want attention: `messages` (`id`, `title`, `summary`, `sender`, `received`, `category`, `tone`, `unread`) grouped by day (Today,
+Yesterday, Earlier, relative to `today`). An unread message is told by the word "Unread" and a bold title, never by weight or color alone. The filter (All or Unread
+with its count) and the category are kept in the address under `urlKey` + `Filter` and + `Category`, the open message under `urlKey`. The arrow keys and J / K move between
+messages, Home and End go to the ends; opening a message marks it read, any message can be marked unread again and all can be marked read at once. The reader's marks are
+for the session; the open message's id is the `value` output, for a detail to bind to.
+
 ## Deciding from a list
 
 `dataList` keeps a row's actions in a menu. For a list whose point is a decision - an approver's inbox - set `rowActionStyle` to `buttons` and each

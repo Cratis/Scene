@@ -167,6 +167,41 @@ export const foundationSamples: Record<string, FoundationSample> = {
         },
         data: ['Account details'], stateful: true,
     },
+    [ComponentName.CalendarGrid]: {
+        properties: {
+            today: '2026-03-10', date: '2026-03-10', locale: 'en-GB',
+            events: [
+                { id: 'e1', title: 'Ada Lovelace', start: '2026-03-09', end: '2026-03-13', category: 'Annual leave', tone: 'success', person: 'Ada Lovelace' },
+                { id: 'e2', title: 'Grace Hopper', start: '2026-03-10', end: '2026-03-10', category: 'Sick leave', tone: 'warning', person: 'Grace Hopper' },
+                { id: 'e3', title: 'Linus Torvalds', start: '2026-03-12', end: '2026-03-20', category: 'Parental leave', tone: 'info', person: 'Linus Torvalds' },
+                { id: 'e4', title: 'Margaret Hamilton', start: '2026-03-10', end: '2026-03-11', category: 'Training', tone: 'neutral', person: 'Margaret Hamilton' },
+            ],
+        },
+        data: ['March 2026', 'Ada Lovelace'], stateful: true,
+    },
+    [ComponentName.InboxList]: {
+        properties: {
+            today: '2026-03-10', locale: 'en-GB',
+            messages: [
+                { id: 'm1', title: 'Leave request: Ada Lovelace', summary: 'Five days from 16 March', sender: 'Ada Lovelace', received: '2026-03-10T08:30:00Z', category: 'Approval', tone: 'warning', unread: true },
+                { id: 'm2', title: 'Expense report approved', summary: 'EUR 420 for the Oslo trip', sender: 'Finance', received: '2026-03-09T15:00:00Z', category: 'Notification', tone: 'success', unread: false },
+                { id: 'm3', title: 'You were mentioned in Launch plan', summary: '"Can you confirm the date?"', sender: 'Grace Hopper', received: '2026-03-02T10:00:00Z', category: 'Mention', tone: 'info', unread: true },
+            ],
+        },
+        data: ['Leave request: Ada Lovelace', 'Expense report approved'], stateful: true,
+    },
+    [ComponentName.TimelineGrid]: {
+        properties: {
+            today: '2026-03-10', scale: 'week', locale: 'en-GB',
+            items: [
+                { id: 't1', title: 'Design', start: '2026-03-02', end: '2026-03-13', lane: 'Ada Lovelace', progress: 100, tone: 'success' },
+                { id: 't2', title: 'Build', start: '2026-03-16', end: '2026-04-10', lane: 'Grace Hopper', progress: 20, tone: 'info', dependsOn: ['t1'] },
+                { id: 't3', title: 'Test', start: '2026-04-06', end: '2026-04-17', lane: 'Linus Torvalds', progress: 0, tone: 'warning', dependsOn: ['t2'] },
+                { id: 't4', title: 'Launch', start: '2026-04-20', milestone: true, lane: 'Linus Torvalds', dependsOn: ['t3'] },
+            ],
+        },
+        data: ['Design', 'Build'], stateful: true,
+    },
 };
 
 /** A scene element for a foundation component, populated with its sample unless properties are given, with the state forced when asked. */

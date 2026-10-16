@@ -21,6 +21,7 @@ export * from './masterDetailScreenTemplate';
 export * from './recordPageTemplate';
 export * from './wizardScreenTemplate';
 export * from './workspaceScreenTemplate';
+export * from './laterScreenTemplates';
 
 /** The foundation screen templates, in the order the manifest lists them. The workspace comes first: it is the container the master/detail nests in. */
 export const foundationScreenTemplates = [
