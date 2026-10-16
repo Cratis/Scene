@@ -117,10 +117,16 @@ for (const workspaceName in workspaces) {
                 }
 
                 console.log(`Publishing workspace '${workspaceName}' at '${workspaceRelativeLocation}'`);
-                const result = spawn('npm', ['publish', '--provenance'], { cwd: workspaceAbsoluteLocation });
-                console.log(result.stdout.toString());
-                console.log(result.stderr.toString());
-                if (result.status !== 0) {
+                // npm lists every packed file; a package with many files overruns the default 1 MB buffer, which kills the child and leaves no
+                // output to print. A workspace that cannot be published is collected like any other failure instead of ending the release.
+                const result = spawn('npm', ['publish', '--provenance'], { cwd: workspaceAbsoluteLocation, maxBuffer: 256 * 1024 * 1024 });
+                console.log(result.stdout?.toString() ?? '');
+                console.log(result.stderr?.toString() ?? '');
+                if (result.error) console.log(`Error running npm publish for workspace '${workspaceName}': ${result.error.message}`);
+                if (result.status !== 0 && /cannot publish over the previously published versions/i.test(result.stderr?.toString() ?? '')) {
+                    // A re-run of a release that stopped part way: what already reached the registry is not a failure.
+                    console.log(`Workspace '${workspaceName}' is already published at ${version} - continuing with remaining workspaces`);
+                } else if (result.status !== 0) {
                     // Don't abort the release: a single workspace failing (e.g. a brand-new
                     // package whose npm trusted publisher isn't configured yet) must not
                     // strand the other packages. Collect and fail at the end instead.
