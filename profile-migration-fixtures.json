@@ -1,0 +1,945 @@
+{
+  "description": "Shared fixture corpus for migrating a legacy UI profile (shell + layout + Studio-only fields) to the root template shape: the C# engine (ProfileMigrator) and the TypeScript engine (migrateLegacyProfile) must give identical profiles (canonical JSON) and identical diagnostics, and migrating a migrated profile must change nothing.",
+  "library": {
+    "own": {
+      "manifest": {
+        "name": "App",
+        "version": "1.0.0",
+        "kind": "ComponentLibrary",
+        "dependencies": [],
+        "components": [],
+        "layouts": [],
+        "screenTemplates": [],
+        "dialogTemplates": [],
+        "themes": []
+      },
+      "layouts": [
+        {
+          "name": "OwnShell",
+          "slots": [
+            {
+              "name": "sidebar"
+            },
+            {
+              "name": "content"
+            }
+          ],
+          "metadata": {
+            "type": "ApplicationShell"
+          }
+        },
+        {
+          "name": "SharedShell",
+          "slots": [
+            {
+              "name": "sidebar"
+            },
+            {
+              "name": "content"
+            }
+          ],
+          "metadata": {
+            "type": "ApplicationShell"
+          }
+        }
+      ],
+      "screenTemplates": [
+        {
+          "name": "Plain Page",
+          "slots": [],
+          "fitsSlot": "content"
+        },
+        {
+          "name": "OwnFrame",
+          "slots": [
+            {
+              "name": "rail"
+            },
+            {
+              "name": "main"
+            }
+          ],
+          "metadata": {
+            "role": "Root",
+            "primaryOutlet": "main"
+          }
+        }
+      ]
+    },
+    "blueprints": [
+      {
+        "manifest": {
+          "name": "crm",
+          "version": "1.4.2",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "CrmShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "SharedShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "CRM Workspace",
+            "slots": [],
+            "fitsSlot": "content"
+          }
+        ]
+      },
+      {
+        "manifest": {
+          "name": "hr",
+          "version": "2.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "HrShell",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": []
+      },
+      {
+        "manifest": {
+          "name": "analytics",
+          "version": "0.3.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [],
+        "screenTemplates": [
+          {
+            "name": "AnalyticsRoot",
+            "slots": [
+              {
+                "name": "rail"
+              },
+              {
+                "name": "main"
+              }
+            ],
+            "metadata": {
+              "role": "Root",
+              "primaryOutlet": "main"
+            }
+          },
+          {
+            "name": "Dashboard Page",
+            "slots": [],
+            "fitsSlot": "content"
+          }
+        ]
+      },
+      {
+        "manifest": {
+          "name": "icons",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [],
+        "screenTemplates": []
+      },
+      {
+        "manifest": {
+          "name": "beta",
+          "version": "3.2.0-beta.1",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "BetaShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": []
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "nothing legacy",
+      "description": "a profile that is already in the new shape comes back unchanged",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "root": {
+            "template": {
+              "source": "blueprint",
+              "id": "CrmShell",
+              "blueprint": "crm",
+              "version": "^1.4"
+            },
+            "options": {
+              "navigationMode": "Sidebar"
+            }
+          },
+          "appearance": {
+            "colorScheme": "Dark"
+          }
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"},\"options\":{\"navigationMode\":\"Sidebar\"}},\"appearance\":{\"colorScheme\":\"Dark\"}}",
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "no shell and no layout",
+      "description": "no root, the Bare shell; nothing to migrate",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "own layout",
+      "description": "a layout of the application becomes an own reference and the legacy layout name goes",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "OwnShell"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"OwnShell\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "blueprint layout from profile",
+      "description": "a layout of an installed blueprint becomes a blueprint reference pinned to ^major.minor",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "CrmShell"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "shell and layout",
+      "description": "the Studio shell names the blueprint, the layout the shell in it",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "hr"
+          ],
+          "layout": "HrShell"
+        },
+        "shell": "hr",
+        "layout": "HrShell"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"hr\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"HrShell\",\"blueprint\":\"hr\",\"version\":\"^2.0\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "shell only",
+      "description": "a shell with no layout stands for the blueprint's first usable shell",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "shell": "crm"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "shell with a root template only",
+      "description": "a blueprint that ships only a root screen template is its shell",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "analytics"
+          ]
+        },
+        "shell": "analytics"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"analytics\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"AnalyticsRoot\",\"blueprint\":\"analytics\",\"version\":\"^0.3\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "studio layout wins over profile layout",
+      "description": "the layout the workspace kept takes precedence over the profile's",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "OwnShell"
+        },
+        "layout": "CrmShell"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "own layout wins over an installed blueprint",
+      "description": "a name both the application and a blueprint have is the application's",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "SharedShell"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"SharedShell\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "the named shell wins over own",
+      "description": "naming the blueprint chooses its layout even when the application has one of the same name",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "SharedShell"
+        },
+        "shell": "crm",
+        "layout": "SharedShell"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"SharedShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "prerelease blueprint",
+      "description": "the pin is the caret of major.minor whatever the suffix of the installed version",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "beta"
+          ],
+          "layout": "BetaShell"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"beta\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"BetaShell\",\"blueprint\":\"beta\",\"version\":\"^3.2\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "existing root wins",
+      "description": "a profile that already has a root keeps it and drops the legacy layout name",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "OwnShell",
+          "root": {
+            "template": {
+              "source": "own",
+              "id": "OwnFrame"
+            }
+          }
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"OwnFrame\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "unknown layout",
+      "description": "a layout that exists nowhere is reported and the profile keeps its name",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "Missing"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"layout\":\"Missing\"}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyLayoutUnknown",
+            "subject": "Missing",
+            "message": "Layout 'Missing' of profile 'Desktop' does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout of a blueprint that is not installed",
+      "description": "only blueprints among the profile's packages are searched when no shell is named",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "HrShell"
+        }
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"layout\":\"HrShell\"}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyLayoutUnknown",
+            "subject": "HrShell",
+            "message": "Layout 'HrShell' of profile 'Desktop' does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shell not available",
+      "description": "a shell that is no blueprint is reported",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "shell": "ghost"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyShellNotInstalled",
+            "subject": "ghost",
+            "message": "Shell 'ghost' of profile 'Desktop' is not an available blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shell not available, own layout",
+      "description": "the layout still migrates when the shell is gone",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "OwnShell"
+        },
+        "shell": "ghost"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"OwnShell\"}}}",
+        "changed": true,
+        "diagnostics": [
+          {
+            "code": "legacyShellNotInstalled",
+            "subject": "ghost",
+            "message": "Shell 'ghost' of profile 'Desktop' is not an available blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "shell with nothing to offer",
+      "description": "a blueprint with no shell is reported",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "icons"
+          ]
+        },
+        "shell": "icons"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"icons\"]}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyShellHasNoLayout",
+            "subject": "icons",
+            "message": "Blueprint 'icons' of profile 'Desktop' provides no layout or root template an application can use as its shell"
+          }
+        ]
+      }
+    },
+    {
+      "name": "navigation mode",
+      "description": "the menu mode becomes a root option",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "CrmShell"
+        },
+        "navigationMode": "Sidebar"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"},\"options\":{\"navigationMode\":\"Sidebar\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "navigation mode already set",
+      "description": "an option already on the root wins",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "root": {
+            "template": {
+              "source": "own",
+              "id": "OwnShell"
+            },
+            "options": {
+              "navigationMode": "Top",
+              "density": "compact"
+            }
+          }
+        },
+        "navigationMode": "Sidebar"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"OwnShell\"},\"options\":{\"density\":\"compact\",\"navigationMode\":\"Top\"}}}",
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "navigation mode without a root",
+      "description": "an option with nowhere to live is reported",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "navigationMode": "Sidebar"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyNavigationModeWithoutRoot",
+            "subject": "Sidebar",
+            "message": "Navigation mode 'Sidebar' of profile 'Desktop' cannot be kept: the profile has no root template to carry it"
+          }
+        ]
+      }
+    },
+    {
+      "name": "appearance",
+      "description": "colour scheme (any case) and accent become the appearance",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "colorScheme": "dark",
+        "accent": "#4f46e5"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"appearance\":{\"colorScheme\":\"Dark\",\"accent\":\"#4f46e5\"}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "system colour scheme",
+      "description": "System is a scheme of its own",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "colorScheme": "SYSTEM"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"appearance\":{\"colorScheme\":\"System\"}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "unknown colour scheme",
+      "description": "an unknown scheme is reported and the accent still migrates",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "colorScheme": "Sepia",
+        "accent": "#ff0000"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"appearance\":{\"accent\":\"#ff0000\"}}",
+        "changed": true,
+        "diagnostics": [
+          {
+            "code": "legacyColorSchemeUnknown",
+            "subject": "Sepia",
+            "message": "Colour scheme 'Sepia' of profile 'Desktop' is not Light, Dark or System"
+          }
+        ]
+      }
+    },
+    {
+      "name": "existing appearance wins",
+      "description": "values already in the new shape are not overwritten",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "appearance": {
+            "colorScheme": "Light",
+            "accent": "#111111"
+          }
+        },
+        "colorScheme": "Dark",
+        "accent": "#222222"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"appearance\":{\"colorScheme\":\"Light\",\"accent\":\"#111111\"}}",
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "default screen template, own",
+      "description": "an own screen template becomes an own reference",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "defaultScreenTemplate": "Plain Page"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"defaults\":{\"newScreenTemplate\":{\"source\":\"Own\",\"id\":\"Plain Page\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "default screen template, blueprint",
+      "description": "an installed blueprint's screen template becomes a pinned reference",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "defaultScreenTemplate": "CRM Workspace"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"defaults\":{\"newScreenTemplate\":{\"source\":\"Blueprint\",\"id\":\"CRM Workspace\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "default screen template, unknown",
+      "description": "a template that exists nowhere is reported",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "defaultScreenTemplate": "Nope"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyDefaultScreenTemplateUnknown",
+            "subject": "Nope",
+            "message": "Screen template 'Nope', the default for new screens of profile 'Desktop', does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "default screen template of a blueprint that is not installed",
+      "description": "only installed blueprints are searched",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "defaultScreenTemplate": "Dashboard Page"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyDefaultScreenTemplateUnknown",
+            "subject": "Dashboard Page",
+            "message": "Screen template 'Dashboard Page', the default for new screens of profile 'Desktop', does not exist in the application or in any installed blueprint"
+          }
+        ]
+      }
+    },
+    {
+      "name": "blank values",
+      "description": "blank strings are the same as absent",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ]
+        },
+        "shell": " ",
+        "layout": "",
+        "navigationMode": "  ",
+        "colorScheme": "",
+        "accent": " ",
+        "defaultScreenTemplate": ""
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"]}",
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "everything at once",
+      "description": "all legacy fields of a Studio profile together",
+      "legacy": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "core",
+            "crm"
+          ],
+          "layout": "OwnShell",
+          "theme": "Aurora",
+          "sampleData": {
+            "activePack": "nordic",
+            "mappings": [],
+            "bindings": []
+          }
+        },
+        "shell": "crm",
+        "layout": "CrmShell",
+        "navigationMode": "Top",
+        "colorScheme": "Light",
+        "accent": "#0ea5e9",
+        "defaultScreenTemplate": "CRM Workspace"
+      },
+      "expected": {
+        "profile": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"crm\"],\"theme\":\"Aurora\",\"sampleData\":{\"activePack\":\"nordic\",\"bindings\":[],\"mappings\":[]},\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"CrmShell\",\"blueprint\":\"crm\",\"version\":\"^1.4\"},\"options\":{\"navigationMode\":\"Top\"}},\"appearance\":{\"colorScheme\":\"Light\",\"accent\":\"#0ea5e9\"},\"defaults\":{\"newScreenTemplate\":{\"source\":\"Blueprint\",\"id\":\"CRM Workspace\",\"blueprint\":\"crm\",\"version\":\"^1.4\"}}}",
+        "changed": true,
+        "diagnostics": []
+      }
+    }
+  ]
+}

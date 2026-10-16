@@ -119,6 +119,52 @@ never ids.
 `blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
 carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
 
+Still to come in the follow-on engine issues: shell switching and the legacy migration helper.
+
+## Migrating a legacy profile
+
+Before the root template, a profile named its shell as a **blueprint** (Studio's `Shell`) and a **layout name** (`UiProfile.Layout`), and Studio kept the
+navigation mode, colour scheme, accent and default screen template as separate fields. `migrateLegacyProfile` (TypeScript, `@cratis/scene.engine`) and
+`ProfileMigrator.Migrate` (C#, `Cratis.Scene.Engine.Profiles`) turn that into the new shape in one pure step. Studio's migration, the Screenplay fix-it and the CLI
+all call it; none of them has its own copy of the rules.
+
+```ts
+const { profile, changed, diagnostics } = migrateLegacyProfile(
+    { profile: legacy, shell: 'Cratis.Blueprint.CRM', layout: 'AppShell', navigationMode: 'Sidebar', colorScheme: 'dark', accent: '#4f46e5', defaultScreenTemplate: 'Overview' },
+    library); // library.own = the application's templates, library.blueprints = the blueprints available
+```
+
+| Legacy | Becomes |
+| --- | --- |
+| `shell` + `layout` naming a layout (or root screen template) of that blueprint | `root.template` as a `blueprint` reference, pinned to `^<installed major.minor>` |
+| `layout` found in the application | `root.template` as an `own` reference |
+| `layout` found only in an installed blueprint (no `shell` named) | `root.template` as a `blueprint` reference |
+| `shell` and no `layout` | the blueprint's first usable shell |
+| neither | no root: the built-in Bare shell |
+| `navigationMode` | `root.options.navigationMode` |
+| `colorScheme` (any case) / `accent` | `appearance.colorScheme` / `appearance.accent` |
+| `defaultScreenTemplate` | `defaults.newScreenTemplate` (own, or a pinned blueprint reference) |
+
+The lookup order for a layout name is the one `resolveEffectiveShell` uses for a legacy layout: the named shell, the application, then the installed blueprints,
+so migrating never changes which shell an application gets.
+
+### Compatibility rules
+
+- **Readers accept both shapes; writers always emit the new shape.** The loader keeps reading `layout`; whoever saves a profile saves the migrated one, and once a root exists the legacy `layout` is dropped.
+- **Idempotent.** A profile that is already migrated comes back unchanged (`changed` is `false`), whether or not the legacy fields are passed again. A value already in the new shape always wins over its legacy counterpart.
+- **Nothing is thrown, nothing is lost silently.** What cannot be mapped stays where it was and is reported, with real names:
+
+| Code | When |
+| --- | --- |
+| `legacyLayoutUnknown` | the layout is in neither the application nor an installed blueprint (the profile keeps its `layout`) |
+| `legacyShellNotInstalled` | the shell names a blueprint that is not available |
+| `legacyShellHasNoLayout` | the shell is available but offers nothing an application can use as its shell |
+| `legacyColorSchemeUnknown` | the colour scheme is not Light, Dark or System |
+| `legacyNavigationModeWithoutRoot` | a navigation mode was set but the profile ends up with no root to carry it |
+| `legacyDefaultScreenTemplateUnknown` | the default screen template exists nowhere |
+
+The two engines are asserted against the same corpus, `profile-migration-fixtures.json` (29 permutations, each also migrated a second time).
+
 ## Authoring a profile
 
 Write `root`, not `layout`, and let the engine - not your host - decide whether it works:
