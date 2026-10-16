@@ -1,0 +1,952 @@
+{
+    "id": "orders-en",
+    "title": "Orders · English",
+    "locale": "en-GB",
+    "owner": "blueprint:orders",
+    "sets": [
+        {
+            "shape": "OrdersSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Orders",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "number": "SO-1042",
+                    "customer": "Northwind Traders",
+                    "placed": "2026-10-12",
+                    "delivery": "2026-10-19",
+                    "items": 4,
+                    "total": 1284.5,
+                    "status": "Picking",
+                    "channel": "Web",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "order-2",
+                    "number": "SO-1041",
+                    "customer": "Contoso Ltd",
+                    "placed": "2026-10-12",
+                    "delivery": "2026-10-20",
+                    "items": 9,
+                    "total": 3410.0,
+                    "status": "New",
+                    "channel": "Partner",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "order-3",
+                    "number": "SO-1040",
+                    "customer": "Fabrikam Inc",
+                    "placed": "2026-10-11",
+                    "delivery": "2026-10-16",
+                    "items": 2,
+                    "total": 219.9,
+                    "status": "Shipped",
+                    "channel": "Web",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "order-4",
+                    "number": "SO-1039",
+                    "customer": "Adventure Works",
+                    "placed": "2026-10-10",
+                    "delivery": "2026-10-15",
+                    "items": 6,
+                    "total": 942.3,
+                    "status": "Delivered",
+                    "channel": "Phone",
+                    "owner": "Edsger Dijkstra"
+                },
+                {
+                    "id": "order-5",
+                    "number": "SO-1038",
+                    "customer": "Tailspin Toys",
+                    "placed": "2026-10-10",
+                    "delivery": "2026-10-21",
+                    "items": 12,
+                    "total": 5120.75,
+                    "status": "New",
+                    "channel": "Partner",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "order-6",
+                    "number": "SO-1037",
+                    "customer": "Wingtip Supplies",
+                    "placed": "2026-10-09",
+                    "delivery": "2026-10-14",
+                    "items": 3,
+                    "total": 388.0,
+                    "status": "Delivered",
+                    "channel": "Web",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "order-7",
+                    "number": "SO-1036",
+                    "customer": "Northwind Traders",
+                    "placed": "2026-10-08",
+                    "delivery": "2026-10-16",
+                    "items": 5,
+                    "total": 1076.4,
+                    "status": "Shipped",
+                    "channel": "Phone",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "order-8",
+                    "number": "SO-1035",
+                    "customer": "Contoso Ltd",
+                    "placed": "2026-10-07",
+                    "delivery": "2026-10-13",
+                    "items": 1,
+                    "total": 89.0,
+                    "status": "Cancelled",
+                    "channel": "Web",
+                    "owner": "Edsger Dijkstra"
+                },
+                {
+                    "id": "order-9",
+                    "number": "SO-1034",
+                    "customer": "Fabrikam Inc",
+                    "placed": "2026-10-06",
+                    "delivery": "2026-10-22",
+                    "items": 8,
+                    "total": 2250.0,
+                    "status": "Picking",
+                    "channel": "Partner",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "order-10",
+                    "number": "SO-1033",
+                    "customer": "Adventure Works",
+                    "placed": "2026-10-05",
+                    "delivery": "2026-10-12",
+                    "items": 7,
+                    "total": 1630.2,
+                    "status": "Delivered",
+                    "channel": "Web",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "order-11",
+                    "number": "SO-1032",
+                    "customer": "Tailspin Toys",
+                    "placed": "2026-10-05",
+                    "delivery": "2026-10-23",
+                    "items": 10,
+                    "total": 4075.6,
+                    "status": "New",
+                    "channel": "Phone",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "order-12",
+                    "number": "SO-1031",
+                    "customer": "Wingtip Supplies",
+                    "placed": "2026-10-02",
+                    "delivery": "2026-10-09",
+                    "items": 2,
+                    "total": 156.0,
+                    "status": "Delivered",
+                    "channel": "Web",
+                    "owner": "Edsger Dijkstra"
+                }
+            ]
+        },
+        {
+            "shape": "OrderColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Order"
+                },
+                {
+                    "field": "customer",
+                    "header": "Customer"
+                },
+                {
+                    "field": "placed",
+                    "header": "Placed",
+                    "kind": "date"
+                },
+                {
+                    "field": "delivery",
+                    "header": "Delivery",
+                    "kind": "date"
+                },
+                {
+                    "field": "total",
+                    "header": "Total",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "New": "info",
+                        "Picking": "warning",
+                        "Shipped": "info",
+                        "Delivered": "success",
+                        "Cancelled": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "OrderFilterFields",
+            "rows": [
+                {
+                    "name": "customer",
+                    "label": "Customer",
+                    "type": "select",
+                    "options": [
+                        "Northwind Traders",
+                        "Contoso Ltd",
+                        "Fabrikam Inc",
+                        "Adventure Works",
+                        "Tailspin Toys",
+                        "Wingtip Supplies"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "New",
+                        "Picking",
+                        "Shipped",
+                        "Delivered",
+                        "Cancelled"
+                    ]
+                },
+                {
+                    "name": "channel",
+                    "label": "Channel",
+                    "type": "select",
+                    "options": [
+                        "Web",
+                        "Phone",
+                        "Partner"
+                    ]
+                },
+                {
+                    "name": "placed",
+                    "label": "Placed",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "OrderViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All orders"
+                },
+                {
+                    "id": "open",
+                    "label": "Open orders"
+                },
+                {
+                    "id": "late",
+                    "label": "Delivery this week"
+                }
+            ]
+        },
+        {
+            "shape": "OrderColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Order",
+                    "locked": true
+                },
+                {
+                    "id": "customer",
+                    "label": "Customer"
+                },
+                {
+                    "id": "placed",
+                    "label": "Placed"
+                },
+                {
+                    "id": "delivery",
+                    "label": "Delivery"
+                },
+                {
+                    "id": "total",
+                    "label": "Total"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "OrderSelection",
+            "rows": []
+        },
+        {
+            "shape": "OrderQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New order",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "customer",
+                            "label": "Customer",
+                            "type": "select",
+                            "options": [
+                                "Northwind Traders",
+                                "Contoso Ltd",
+                                "Fabrikam Inc",
+                                "Adventure Works",
+                                "Tailspin Toys",
+                                "Wingtip Supplies"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "delivery",
+                            "label": "Delivery date",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "channel",
+                            "label": "Channel",
+                            "type": "select",
+                            "options": [
+                                "Web",
+                                "Phone",
+                                "Partner"
+                            ]
+                        },
+                        {
+                            "name": "notes",
+                            "label": "Notes",
+                            "type": "textarea"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "OrderRecord",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "number": "SO-1042",
+                    "customer": "Northwind Traders",
+                    "placed": "2026-10-12",
+                    "delivery": "2026-10-19",
+                    "items": 4,
+                    "total": 1284.5,
+                    "status": "Picking",
+                    "channel": "Web",
+                    "owner": "Grace Hopper",
+                    "summary": "Two pallets of fittings for the Bergen depot",
+                    "shipTo": "Bergen depot, Strandgaten 12",
+                    "payment": "Invoice, 30 days",
+                    "carrier": "DHL Freight"
+                }
+            ]
+        },
+        {
+            "shape": "OrderSections",
+            "rows": [
+                {
+                    "id": "order",
+                    "title": "Order details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "number",
+                            "label": "Order"
+                        },
+                        {
+                            "name": "customer",
+                            "label": "Customer"
+                        },
+                        {
+                            "name": "placed",
+                            "label": "Placed",
+                            "type": "date"
+                        },
+                        {
+                            "name": "delivery",
+                            "label": "Delivery",
+                            "type": "date"
+                        },
+                        {
+                            "name": "channel",
+                            "label": "Channel"
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Owner"
+                        },
+                        {
+                            "name": "payment",
+                            "label": "Payment"
+                        },
+                        {
+                            "name": "carrier",
+                            "label": "Carrier"
+                        },
+                        {
+                            "name": "shipTo",
+                            "label": "Ship to",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "OrderSummary",
+            "rows": [
+                {
+                    "status": "Picking",
+                    "tone": "warning",
+                    "total": 1284.5,
+                    "items": 4,
+                    "daysToDelivery": 3
+                }
+            ]
+        },
+        {
+            "shape": "OrderLines",
+            "rows": [
+                {
+                    "id": "l1",
+                    "sku": "FIT-210",
+                    "name": "Compression fitting 22 mm",
+                    "quantity": 40,
+                    "price": 12.5,
+                    "amount": 500.0
+                },
+                {
+                    "id": "l2",
+                    "sku": "FIT-318",
+                    "name": "Elbow fitting 22 mm",
+                    "quantity": 30,
+                    "price": 9.8,
+                    "amount": 294.0
+                },
+                {
+                    "id": "l3",
+                    "sku": "PIP-022",
+                    "name": "Copper pipe 22 mm, 3 m",
+                    "quantity": 12,
+                    "price": 23.2,
+                    "amount": 278.4
+                },
+                {
+                    "id": "l4",
+                    "sku": "SEA-002",
+                    "name": "PTFE sealing tape",
+                    "quantity": 24,
+                    "price": 0.5,
+                    "amount": 12.0
+                }
+            ]
+        },
+        {
+            "shape": "OrderLineColumns",
+            "rows": [
+                {
+                    "field": "sku",
+                    "header": "SKU"
+                },
+                {
+                    "field": "name",
+                    "header": "Product"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Qty",
+                    "kind": "number"
+                },
+                {
+                    "field": "price",
+                    "header": "Price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "OrderShipments",
+            "rows": [
+                {
+                    "id": "s1",
+                    "carrier": "DHL Freight",
+                    "reference": "DHL-77120",
+                    "status": "Packed",
+                    "eta": "2026-10-19"
+                }
+            ]
+        },
+        {
+            "shape": "OrderShipmentColumns",
+            "rows": [
+                {
+                    "field": "carrier",
+                    "header": "Carrier"
+                },
+                {
+                    "field": "reference",
+                    "header": "Reference"
+                },
+                {
+                    "field": "eta",
+                    "header": "Expected",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "OrderActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "started picking",
+                    "kind": "status",
+                    "at": "2026-10-15T13:05:00Z",
+                    "body": "Aisle 4, pallet 2 of 2"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Alan Turing",
+                    "action": "confirmed the payment terms",
+                    "kind": "comment",
+                    "at": "2026-10-12T09:40:00Z",
+                    "body": "Invoice, 30 days."
+                },
+                {
+                    "id": "a2",
+                    "actor": "Katherine Johnson",
+                    "action": "placed the order",
+                    "kind": "created",
+                    "at": "2026-10-12T08:15:00Z",
+                    "body": "Through the web shop"
+                }
+            ]
+        },
+        {
+            "shape": "OrderRecordTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "lines",
+                    "label": "Lines"
+                },
+                {
+                    "id": "shipments",
+                    "label": "Shipments"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "FulfilmentColumns",
+            "rows": [
+                {
+                    "id": "new",
+                    "label": "New"
+                },
+                {
+                    "id": "picking",
+                    "label": "Picking",
+                    "limit": 4
+                },
+                {
+                    "id": "shipped",
+                    "label": "Shipped"
+                },
+                {
+                    "id": "delivered",
+                    "label": "Delivered"
+                }
+            ]
+        },
+        {
+            "shape": "FulfilmentCards",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "title": "SO-1042",
+                    "column": "picking",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Northwind Traders"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "19 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Web"
+                    ]
+                },
+                {
+                    "id": "order-2",
+                    "title": "SO-1041",
+                    "column": "new",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Contoso Ltd"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "20 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Partner"
+                    ]
+                },
+                {
+                    "id": "order-3",
+                    "title": "SO-1040",
+                    "column": "shipped",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Fabrikam Inc"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "16 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Web"
+                    ]
+                },
+                {
+                    "id": "order-4",
+                    "title": "SO-1039",
+                    "column": "delivered",
+                    "assignee": "Edsger Dijkstra",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Adventure Works"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "15 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Phone"
+                    ]
+                },
+                {
+                    "id": "order-5",
+                    "title": "SO-1038",
+                    "column": "new",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Tailspin Toys"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "21 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Partner"
+                    ]
+                },
+                {
+                    "id": "order-6",
+                    "title": "SO-1037",
+                    "column": "delivered",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Wingtip Supplies"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "14 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Web"
+                    ]
+                },
+                {
+                    "id": "order-7",
+                    "title": "SO-1036",
+                    "column": "shipped",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Northwind Traders"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "16 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Phone"
+                    ]
+                },
+                {
+                    "id": "order-9",
+                    "title": "SO-1034",
+                    "column": "picking",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Fabrikam Inc"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "22 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Partner"
+                    ]
+                },
+                {
+                    "id": "order-10",
+                    "title": "SO-1033",
+                    "column": "delivered",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Adventure Works"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "12 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Web"
+                    ]
+                },
+                {
+                    "id": "order-11",
+                    "title": "SO-1032",
+                    "column": "new",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Tailspin Toys"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "23 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Phone"
+                    ]
+                },
+                {
+                    "id": "order-12",
+                    "title": "SO-1031",
+                    "column": "delivered",
+                    "assignee": "Edsger Dijkstra",
+                    "fields": [
+                        {
+                            "label": "Customer",
+                            "value": "Wingtip Supplies"
+                        },
+                        {
+                            "label": "Delivery",
+                            "value": "9 Oct"
+                        }
+                    ],
+                    "badges": [
+                        "Web"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "DeliveryEvents",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "title": "SO-1042 · Northwind Traders",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Picking",
+                    "tone": "warning",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "order-2",
+                    "title": "SO-1041 · Contoso Ltd",
+                    "start": "2026-10-20",
+                    "end": "2026-10-20",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "order-3",
+                    "title": "SO-1040 · Fabrikam Inc",
+                    "start": "2026-10-16",
+                    "end": "2026-10-16",
+                    "category": "Shipped",
+                    "tone": "info",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "order-4",
+                    "title": "SO-1039 · Adventure Works",
+                    "start": "2026-10-15",
+                    "end": "2026-10-15",
+                    "category": "Delivered",
+                    "tone": "success",
+                    "person": "Edsger Dijkstra"
+                },
+                {
+                    "id": "order-5",
+                    "title": "SO-1038 · Tailspin Toys",
+                    "start": "2026-10-21",
+                    "end": "2026-10-21",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "order-6",
+                    "title": "SO-1037 · Wingtip Supplies",
+                    "start": "2026-10-14",
+                    "end": "2026-10-14",
+                    "category": "Delivered",
+                    "tone": "success",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "order-7",
+                    "title": "SO-1036 · Northwind Traders",
+                    "start": "2026-10-16",
+                    "end": "2026-10-16",
+                    "category": "Shipped",
+                    "tone": "info",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "order-9",
+                    "title": "SO-1034 · Fabrikam Inc",
+                    "start": "2026-10-22",
+                    "end": "2026-10-22",
+                    "category": "Picking",
+                    "tone": "warning",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "order-10",
+                    "title": "SO-1033 · Adventure Works",
+                    "start": "2026-10-12",
+                    "end": "2026-10-12",
+                    "category": "Delivered",
+                    "tone": "success",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "order-11",
+                    "title": "SO-1032 · Tailspin Toys",
+                    "start": "2026-10-23",
+                    "end": "2026-10-23",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "order-12",
+                    "title": "SO-1031 · Wingtip Supplies",
+                    "start": "2026-10-09",
+                    "end": "2026-10-09",
+                    "category": "Delivered",
+                    "tone": "success",
+                    "person": "Edsger Dijkstra"
+                }
+            ]
+        },
+        {
+            "shape": "DeliveryColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Order"
+                },
+                {
+                    "field": "start",
+                    "header": "Delivery",
+                    "kind": "date"
+                },
+                {
+                    "field": "category",
+                    "header": "Status"
+                },
+                {
+                    "field": "person",
+                    "header": "Owner"
+                }
+            ]
+        },
+        {
+            "shape": "OrdersFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}
