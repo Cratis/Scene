@@ -82,9 +82,14 @@ public static class TemplateReferenceResolver
             ? $"Own template '{reference.Id}' does not exist"
             : $"Blueprint '{reference.Blueprint}' has no template '{reference.Id}'";
 
-    // A source that carries the templates themselves answers from them; one known only by its manifest - a package approved for a
-    // render, whose bundle is not loaded here - answers from the names the manifest lists, so a reference to a template the package
-    // does not ship is still diagnosed instead of being left to resolve to nothing.
+    /// <summary>
+    /// Which kind of template <paramref name="name"/> is in a source. A source that carries the templates themselves answers from them; one known only
+    /// by its manifest - a package approved for a render, whose bundle is not loaded here - answers from the names the manifest lists, so a reference
+    /// to a template the package does not ship is still diagnosed instead of being left to resolve to nothing.
+    /// </summary>
+    /// <param name="name">The template name.</param>
+    /// <param name="source">The source to look in.</param>
+    /// <returns>The kind, or null when the source has no such template.</returns>
     static TemplateCatalogKind? TemplateKindOf(string name, TemplateSource source)
     {
         var screenTemplates = source.ScreenTemplates?.Select(template => template.Name) ?? source.Manifest.ScreenTemplates;
