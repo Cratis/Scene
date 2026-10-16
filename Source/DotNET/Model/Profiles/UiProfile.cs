@@ -19,7 +19,8 @@ namespace Cratis.Scene.Model.Profiles;
 /// <param name="Layout">
 /// The name of the <see cref="Layouts.Layout"/> this profile renders inside - the application's base
 /// navigational shell, normally provided by a <see cref="Packages.PackageKind.Blueprint"/> in
-/// <paramref name="Packages"/>. <see langword="null"/> when the profile does not select one.
+/// <paramref name="Packages"/>. <see langword="null"/> when the profile does not select one. Legacy: still readable, superseded by
+/// <paramref name="Root"/>.
 /// </param>
 /// <param name="Theme">
 /// The name of the <see cref="Theme"/> this profile applies, or <see langword="null"/> when it selects
@@ -32,6 +33,13 @@ namespace Cratis.Scene.Model.Profiles;
 /// stated by a screen, slice or component, and never part of a production build. <see langword="null"/> selects the blueprint's
 /// default pack, then generated data.
 /// </param>
+/// <param name="Root">
+/// The application's root template (its shell): a <see cref="RootTemplate.Template"/> reference - own or blueprint, with a version pin -
+/// and the shell's own options. Supersedes <paramref name="Layout"/>; <see langword="null"/> falls back to <paramref name="Layout"/>
+/// and then to the blueprint's default shell.
+/// </param>
+/// <param name="Appearance">The colour scheme and accent colour the application presents, or <see langword="null"/> for the theme's defaults.</param>
+/// <param name="Defaults">Application-wide authoring defaults such as the template new screens start from, or <see langword="null"/> for none.</param>
 /// <remarks>
 /// A profile is where the choices that make a description concrete are made: which component vocabulary,
 /// which shell, which theme. Deliberately none of them are stated by a <see cref="Screens.Screen"/> - that
@@ -45,4 +53,7 @@ public record UiProfile(
     TargetSizeClass? DefaultSizeClass = null,
     string? Layout = null,
     string? Theme = null,
-    SampleData.SampleDataSelection? SampleData = null);
+    SampleData.SampleDataSelection? SampleData = null,
+    RootTemplate? Root = null,
+    ProfileAppearance? Appearance = null,
+    ProfileDefaults? Defaults = null);

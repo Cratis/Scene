@@ -80,3 +80,6 @@ renderer and a future native one agree exactly on when a boundary is crossed.
 A [screen template](screen-templates.md) has the same shape — slots plus an arrangement — and is evaluated by
 the same engine. The difference is role and one field: a screen template also declares which of its parent's
 slots it fills, and an application has many of them, where it has one layout.
+
+A UI profile names its shell with a [root template](root-template.md): an own or blueprint template reference with a version pin
+and the shell's options. The profile's `layout` name stays readable as the legacy form.
