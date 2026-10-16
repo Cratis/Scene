@@ -1,0 +1,1659 @@
+{
+    "id": "hr-nordic",
+    "title": "HR · Nordic",
+    "locale": "nb-NO",
+    "owner": "blueprint:hr",
+    "sets": [
+        {
+            "shape": "HrSettings",
+            "rows": [
+                {
+                    "locale": "nb-NO",
+                    "currency": "NOK"
+                }
+            ]
+        },
+        {
+            "shape": "Employees",
+            "rows": [
+                {
+                    "id": "emp-1",
+                    "name": "Ingrid Solberg",
+                    "title": "Administrerende direktør",
+                    "department": "Ledelse",
+                    "location": "Oslo",
+                    "email": "ingrid.solberg@eksempel.no",
+                    "phone": "+47 400 10 200",
+                    "status": "Aktiv",
+                    "manager": "",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28190,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28190,45%25,25%25%29' font-family='sans-serif'%3EIS%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-2",
+                    "name": "Magnus Dahl",
+                    "title": "Teknologidirektør",
+                    "department": "Ledelse",
+                    "location": "Bergen",
+                    "email": "magnus.dahl@eksempel.no",
+                    "phone": "+47 407 11 213",
+                    "status": "Aktiv",
+                    "manager": "Ingrid Solberg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28201,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28201,45%25,25%25%29' font-family='sans-serif'%3EMD%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-3",
+                    "name": "Sofie Berg",
+                    "title": "Økonomidirektør",
+                    "department": "Økonomi",
+                    "location": "Trondheim",
+                    "email": "sofie.berg@eksempel.no",
+                    "phone": "+47 414 12 226",
+                    "status": "Aktiv",
+                    "manager": "Ingrid Solberg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28212,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28212,45%25,25%25%29' font-family='sans-serif'%3ESB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-4",
+                    "name": "Henrik Lund",
+                    "title": "Driftsdirektør",
+                    "department": "Drift",
+                    "location": "Oslo",
+                    "email": "henrik.lund@eksempel.no",
+                    "phone": "+47 421 13 239",
+                    "status": "Aktiv",
+                    "manager": "Ingrid Solberg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28223,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28223,45%25,25%25%29' font-family='sans-serif'%3EHL%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-5",
+                    "name": "Marte Haugen",
+                    "title": "HR-sjef",
+                    "department": "HR",
+                    "location": "Oslo",
+                    "email": "marte.haugen@eksempel.no",
+                    "phone": "+47 428 14 252",
+                    "status": "Aktiv",
+                    "manager": "Ingrid Solberg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28234,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28234,45%25,25%25%29' font-family='sans-serif'%3EMH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-6",
+                    "name": "Jonas Eriksen",
+                    "title": "Utviklingssjef",
+                    "department": "Utvikling",
+                    "location": "Bergen",
+                    "email": "jonas.eriksen@eksempel.no",
+                    "phone": "+47 435 15 265",
+                    "status": "Aktiv",
+                    "manager": "Magnus Dahl",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28245,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28245,45%25,25%25%29' font-family='sans-serif'%3EJE%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-7",
+                    "name": "Silje Andersen",
+                    "title": "Seniorutvikler",
+                    "department": "Utvikling",
+                    "location": "Oslo",
+                    "email": "silje.andersen@eksempel.no",
+                    "phone": "+47 442 16 278",
+                    "status": "Aktiv",
+                    "manager": "Jonas Eriksen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28256,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28256,45%25,25%25%29' font-family='sans-serif'%3ESA%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-8",
+                    "name": "Emil Johansen",
+                    "title": "Utvikler",
+                    "department": "Utvikling",
+                    "location": "Trondheim",
+                    "email": "emil.johansen@eksempel.no",
+                    "phone": "+47 449 17 291",
+                    "status": "Prøvetid",
+                    "manager": "Jonas Eriksen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28267,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28267,45%25,25%25%29' font-family='sans-serif'%3EEJ%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-9",
+                    "name": "Nora Karlsen",
+                    "title": "Utvikler",
+                    "department": "Utvikling",
+                    "location": "Bergen",
+                    "email": "nora.karlsen@eksempel.no",
+                    "phone": "+47 456 18 304",
+                    "status": "Permisjon",
+                    "manager": "Jonas Eriksen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28278,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28278,45%25,25%25%29' font-family='sans-serif'%3ENK%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-10",
+                    "name": "Kristian Moen",
+                    "title": "Salgssjef",
+                    "department": "Salg",
+                    "location": "Oslo",
+                    "email": "kristian.moen@eksempel.no",
+                    "phone": "+47 463 19 317",
+                    "status": "Aktiv",
+                    "manager": "Ingrid Solberg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28289,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28289,45%25,25%25%29' font-family='sans-serif'%3EKM%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-11",
+                    "name": "Thea Pedersen",
+                    "title": "Kundeansvarlig",
+                    "department": "Salg",
+                    "location": "Oslo",
+                    "email": "thea.pedersen@eksempel.no",
+                    "phone": "+47 470 20 330",
+                    "status": "Aktiv",
+                    "manager": "Kristian Moen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28300,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28300,45%25,25%25%29' font-family='sans-serif'%3ETP%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-12",
+                    "name": "Oskar Nilsen",
+                    "title": "Kundeansvarlig",
+                    "department": "Salg",
+                    "location": "Bergen",
+                    "email": "oskar.nilsen@eksempel.no",
+                    "phone": "+47 477 21 343",
+                    "status": "Aktiv",
+                    "manager": "Kristian Moen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28311,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28311,45%25,25%25%29' font-family='sans-serif'%3EON%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-13",
+                    "name": "Maja Bakken",
+                    "title": "Regnskapsfører",
+                    "department": "Økonomi",
+                    "location": "Oslo",
+                    "email": "maja.bakken@eksempel.no",
+                    "phone": "+47 484 22 356",
+                    "status": "Aktiv",
+                    "manager": "Sofie Berg",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28322,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28322,45%25,25%25%29' font-family='sans-serif'%3EMB%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-14",
+                    "name": "Lars Strand",
+                    "title": "Driftsleder",
+                    "department": "Drift",
+                    "location": "Trondheim",
+                    "email": "lars.strand@eksempel.no",
+                    "phone": "+47 491 23 369",
+                    "status": "Aktiv",
+                    "manager": "Henrik Lund",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28333,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28333,45%25,25%25%29' font-family='sans-serif'%3ELS%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-15",
+                    "name": "Ida Hansen",
+                    "title": "Kundeservicemedarbeider",
+                    "department": "Drift",
+                    "location": "Trondheim",
+                    "email": "ida.hansen@eksempel.no",
+                    "phone": "+47 498 24 382",
+                    "status": "Prøvetid",
+                    "manager": "Lars Strand",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28344,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28344,45%25,25%25%29' font-family='sans-serif'%3EIH%3C/text%3E%3C/svg%3E"
+                },
+                {
+                    "id": "emp-16",
+                    "name": "Henriette Vik",
+                    "title": "HR-rådgiver",
+                    "department": "HR",
+                    "location": "Oslo",
+                    "email": "henriette.vik@eksempel.no",
+                    "phone": "+47 505 25 395",
+                    "status": "Aktiv",
+                    "manager": "Marte Haugen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28355,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28355,45%25,25%25%29' font-family='sans-serif'%3EHV%3C/text%3E%3C/svg%3E"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Navn"
+                },
+                {
+                    "field": "title",
+                    "header": "Stilling"
+                },
+                {
+                    "field": "department",
+                    "header": "Avdeling"
+                },
+                {
+                    "field": "email",
+                    "header": "E-post"
+                },
+                {
+                    "field": "phone",
+                    "header": "Telefon"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeFilterFields",
+            "rows": [
+                {
+                    "name": "department",
+                    "label": "Avdeling",
+                    "type": "select",
+                    "options": [
+                        "Ledelse",
+                        "Utvikling",
+                        "Salg",
+                        "Økonomi",
+                        "Drift",
+                        "HR"
+                    ]
+                },
+                {
+                    "name": "location",
+                    "label": "Sted",
+                    "type": "select",
+                    "options": [
+                        "Bergen",
+                        "Oslo",
+                        "Trondheim"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Aktiv",
+                        "Prøvetid",
+                        "Permisjon"
+                    ]
+                },
+                {
+                    "name": "manager",
+                    "label": "Leder",
+                    "type": "select",
+                    "options": [
+                        "Ingrid Solberg",
+                        "Magnus Dahl",
+                        "Sofie Berg",
+                        "Henrik Lund",
+                        "Marte Haugen",
+                        "Jonas Eriksen"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "Alle ansatte"
+                },
+                {
+                    "id": "mine",
+                    "label": "Mitt team"
+                },
+                {
+                    "id": "new",
+                    "label": "Nye ansatte"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Navn",
+                    "locked": true
+                },
+                {
+                    "id": "title",
+                    "label": "Stilling"
+                },
+                {
+                    "id": "department",
+                    "label": "Avdeling"
+                },
+                {
+                    "id": "email",
+                    "label": "E-post"
+                },
+                {
+                    "id": "phone",
+                    "label": "Telefon"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeSelection",
+            "rows": []
+        },
+        {
+            "shape": "TimeOffRequests",
+            "rows": [
+                {
+                    "id": "req-1",
+                    "employee": "Silje Andersen",
+                    "type": "Ferie",
+                    "from": "2026-10-26",
+                    "to": "2026-10-30",
+                    "days": 5,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-2",
+                    "employee": "Emil Johansen",
+                    "type": "Ferie",
+                    "from": "2026-11-02",
+                    "to": "2026-11-04",
+                    "days": 3,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-3",
+                    "employee": "Thea Pedersen",
+                    "type": "Avspasering",
+                    "from": "2026-10-19",
+                    "to": "2026-10-19",
+                    "days": 1,
+                    "status": "Godkjent"
+                },
+                {
+                    "id": "req-4",
+                    "employee": "Nora Karlsen",
+                    "type": "Permisjon",
+                    "from": "2026-09-01",
+                    "to": "2026-12-31",
+                    "days": 85,
+                    "status": "Godkjent"
+                },
+                {
+                    "id": "req-5",
+                    "employee": "Oskar Nilsen",
+                    "type": "Ferie",
+                    "from": "2026-12-21",
+                    "to": "2026-12-31",
+                    "days": 7,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-6",
+                    "employee": "Lars Strand",
+                    "type": "Sykefravær",
+                    "from": "2026-10-12",
+                    "to": "2026-10-14",
+                    "days": 3,
+                    "status": "Godkjent"
+                },
+                {
+                    "id": "req-7",
+                    "employee": "Ida Hansen",
+                    "type": "Ferie",
+                    "from": "2026-11-16",
+                    "to": "2026-11-20",
+                    "days": 5,
+                    "status": "Avslått"
+                },
+                {
+                    "id": "req-8",
+                    "employee": "Maja Bakken",
+                    "type": "Ferie",
+                    "from": "2026-10-05",
+                    "to": "2026-10-09",
+                    "days": 5,
+                    "status": "Godkjent"
+                },
+                {
+                    "id": "req-9",
+                    "employee": "Jonas Eriksen",
+                    "type": "Avspasering",
+                    "from": "2026-10-23",
+                    "to": "2026-10-23",
+                    "days": 1,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-10",
+                    "employee": "Henriette Vik",
+                    "type": "Ferie",
+                    "from": "2026-11-09",
+                    "to": "2026-11-13",
+                    "days": 5,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-11",
+                    "employee": "Kristian Moen",
+                    "type": "Ferie",
+                    "from": "2026-12-28",
+                    "to": "2026-12-31",
+                    "days": 4,
+                    "status": "Godkjent"
+                },
+                {
+                    "id": "req-12",
+                    "employee": "Henrik Lund",
+                    "type": "Ferie",
+                    "from": "2026-10-21",
+                    "to": "2026-10-22",
+                    "days": 2,
+                    "status": "Venter"
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffColumns",
+            "rows": [
+                {
+                    "field": "employee",
+                    "header": "Ansatt"
+                },
+                {
+                    "field": "type",
+                    "header": "Type"
+                },
+                {
+                    "field": "from",
+                    "header": "Fra",
+                    "kind": "date"
+                },
+                {
+                    "field": "to",
+                    "header": "Til",
+                    "kind": "date"
+                },
+                {
+                    "field": "days",
+                    "header": "Dager",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Venter": "warning",
+                        "Godkjent": "success",
+                        "Avslått": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffFilterFields",
+            "rows": [
+                {
+                    "name": "type",
+                    "label": "Type",
+                    "type": "select",
+                    "options": [
+                        "Ferie",
+                        "Sykefravær",
+                        "Permisjon",
+                        "Avspasering"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Venter",
+                        "Godkjent",
+                        "Avslått"
+                    ]
+                },
+                {
+                    "name": "employee",
+                    "label": "Ansatt",
+                    "type": "select",
+                    "options": [
+                        "Ingrid Solberg",
+                        "Magnus Dahl",
+                        "Sofie Berg",
+                        "Henrik Lund",
+                        "Marte Haugen",
+                        "Jonas Eriksen",
+                        "Silje Andersen",
+                        "Emil Johansen",
+                        "Nora Karlsen",
+                        "Kristian Moen",
+                        "Thea Pedersen",
+                        "Oskar Nilsen",
+                        "Maja Bakken",
+                        "Lars Strand",
+                        "Ida Hansen",
+                        "Henriette Vik"
+                    ]
+                },
+                {
+                    "name": "from",
+                    "label": "Fra",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "Alle forespørsler"
+                },
+                {
+                    "id": "pending",
+                    "label": "Venter på godkjenning"
+                },
+                {
+                    "id": "team",
+                    "label": "Mitt team"
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffColumnChoices",
+            "rows": [
+                {
+                    "id": "employee",
+                    "label": "Ansatt",
+                    "locked": true
+                },
+                {
+                    "id": "type",
+                    "label": "Type"
+                },
+                {
+                    "id": "from",
+                    "label": "Fra"
+                },
+                {
+                    "id": "to",
+                    "label": "Til"
+                },
+                {
+                    "id": "days",
+                    "label": "Dager"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffSelection",
+            "rows": []
+        },
+        {
+            "shape": "Balances",
+            "rows": [
+                {
+                    "id": "bal-1",
+                    "employee": "Ingrid Solberg",
+                    "department": "Ledelse",
+                    "entitlement": 25,
+                    "taken": 7,
+                    "left": 18,
+                    "used": 28
+                },
+                {
+                    "id": "bal-2",
+                    "employee": "Magnus Dahl",
+                    "department": "Ledelse",
+                    "entitlement": 25,
+                    "taken": 12,
+                    "left": 13,
+                    "used": 48
+                },
+                {
+                    "id": "bal-3",
+                    "employee": "Sofie Berg",
+                    "department": "Økonomi",
+                    "entitlement": 25,
+                    "taken": 5,
+                    "left": 20,
+                    "used": 20
+                },
+                {
+                    "id": "bal-4",
+                    "employee": "Henrik Lund",
+                    "department": "Drift",
+                    "entitlement": 25,
+                    "taken": 9,
+                    "left": 16,
+                    "used": 36
+                },
+                {
+                    "id": "bal-5",
+                    "employee": "Marte Haugen",
+                    "department": "HR",
+                    "entitlement": 25,
+                    "taken": 14,
+                    "left": 11,
+                    "used": 56
+                },
+                {
+                    "id": "bal-6",
+                    "employee": "Jonas Eriksen",
+                    "department": "Utvikling",
+                    "entitlement": 25,
+                    "taken": 3,
+                    "left": 22,
+                    "used": 12
+                },
+                {
+                    "id": "bal-7",
+                    "employee": "Silje Andersen",
+                    "department": "Utvikling",
+                    "entitlement": 25,
+                    "taken": 8,
+                    "left": 17,
+                    "used": 32
+                },
+                {
+                    "id": "bal-8",
+                    "employee": "Emil Johansen",
+                    "department": "Utvikling",
+                    "entitlement": 25,
+                    "taken": 2,
+                    "left": 23,
+                    "used": 8
+                },
+                {
+                    "id": "bal-9",
+                    "employee": "Nora Karlsen",
+                    "department": "Utvikling",
+                    "entitlement": 25,
+                    "taken": 20,
+                    "left": 5,
+                    "used": 80
+                },
+                {
+                    "id": "bal-10",
+                    "employee": "Kristian Moen",
+                    "department": "Salg",
+                    "entitlement": 25,
+                    "taken": 11,
+                    "left": 14,
+                    "used": 44
+                },
+                {
+                    "id": "bal-11",
+                    "employee": "Thea Pedersen",
+                    "department": "Salg",
+                    "entitlement": 25,
+                    "taken": 6,
+                    "left": 19,
+                    "used": 24
+                },
+                {
+                    "id": "bal-12",
+                    "employee": "Oskar Nilsen",
+                    "department": "Salg",
+                    "entitlement": 25,
+                    "taken": 10,
+                    "left": 15,
+                    "used": 40
+                },
+                {
+                    "id": "bal-13",
+                    "employee": "Maja Bakken",
+                    "department": "Økonomi",
+                    "entitlement": 25,
+                    "taken": 4,
+                    "left": 21,
+                    "used": 16
+                },
+                {
+                    "id": "bal-14",
+                    "employee": "Lars Strand",
+                    "department": "Drift",
+                    "entitlement": 25,
+                    "taken": 13,
+                    "left": 12,
+                    "used": 52
+                },
+                {
+                    "id": "bal-15",
+                    "employee": "Ida Hansen",
+                    "department": "Drift",
+                    "entitlement": 25,
+                    "taken": 1,
+                    "left": 24,
+                    "used": 4
+                },
+                {
+                    "id": "bal-16",
+                    "employee": "Henriette Vik",
+                    "department": "HR",
+                    "entitlement": 25,
+                    "taken": 9,
+                    "left": 16,
+                    "used": 36
+                }
+            ]
+        },
+        {
+            "shape": "BalanceColumns",
+            "rows": [
+                {
+                    "field": "employee",
+                    "header": "Ansatt"
+                },
+                {
+                    "field": "department",
+                    "header": "Avdeling"
+                },
+                {
+                    "field": "entitlement",
+                    "header": "Rett til",
+                    "kind": "number"
+                },
+                {
+                    "field": "taken",
+                    "header": "Tatt ut",
+                    "kind": "number"
+                },
+                {
+                    "field": "left",
+                    "header": "Igjen",
+                    "kind": "number"
+                },
+                {
+                    "field": "used",
+                    "header": "Brukt",
+                    "kind": "progress"
+                }
+            ]
+        },
+        {
+            "shape": "BalanceFilterFields",
+            "rows": [
+                {
+                    "name": "department",
+                    "label": "Avdeling",
+                    "type": "select",
+                    "options": [
+                        "Ledelse",
+                        "Utvikling",
+                        "Salg",
+                        "Økonomi",
+                        "Drift",
+                        "HR"
+                    ]
+                },
+                {
+                    "name": "left",
+                    "label": "Dager igjen",
+                    "type": "number"
+                }
+            ]
+        },
+        {
+            "shape": "BalanceViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "Alle saldoer"
+                },
+                {
+                    "id": "low",
+                    "label": "Få dager igjen"
+                }
+            ]
+        },
+        {
+            "shape": "BalanceColumnChoices",
+            "rows": [
+                {
+                    "id": "employee",
+                    "label": "Ansatt",
+                    "locked": true
+                },
+                {
+                    "id": "department",
+                    "label": "Avdeling"
+                },
+                {
+                    "id": "entitlement",
+                    "label": "Rett til"
+                },
+                {
+                    "id": "taken",
+                    "label": "Tatt ut"
+                },
+                {
+                    "id": "left",
+                    "label": "Igjen"
+                },
+                {
+                    "id": "used",
+                    "label": "Brukt"
+                }
+            ]
+        },
+        {
+            "shape": "BalanceSelection",
+            "rows": []
+        },
+        {
+            "shape": "Onboardings",
+            "rows": [
+                {
+                    "id": "onb-1",
+                    "name": "Emil Johansen",
+                    "role": "Utvikler",
+                    "start": "2026-10-01",
+                    "owner": "Marte Haugen",
+                    "progress": 58,
+                    "status": "Pågår"
+                },
+                {
+                    "id": "onb-2",
+                    "name": "Ida Hansen",
+                    "role": "Kundeservicemedarbeider",
+                    "start": "2026-10-12",
+                    "owner": "Lars Strand",
+                    "progress": 33,
+                    "status": "Pågår"
+                },
+                {
+                    "id": "onb-3",
+                    "name": "Henriette Vik",
+                    "role": "HR-rådgiver",
+                    "start": "2026-11-02",
+                    "owner": "Marte Haugen",
+                    "progress": 8,
+                    "status": "Venter"
+                },
+                {
+                    "id": "onb-4",
+                    "name": "Thea Pedersen",
+                    "role": "Kundeansvarlig",
+                    "start": "2026-08-17",
+                    "owner": "Kristian Moen",
+                    "progress": 100,
+                    "status": "Fullført"
+                },
+                {
+                    "id": "onb-5",
+                    "name": "Silje Andersen",
+                    "role": "Seniorutvikler",
+                    "start": "2026-11-16",
+                    "owner": "Jonas Eriksen",
+                    "progress": 0,
+                    "status": "Venter"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Navn"
+                },
+                {
+                    "field": "role",
+                    "header": "Stilling"
+                },
+                {
+                    "field": "start",
+                    "header": "Startdato",
+                    "kind": "date"
+                },
+                {
+                    "field": "owner",
+                    "header": "Ansvarlig"
+                },
+                {
+                    "field": "progress",
+                    "header": "Fremdrift",
+                    "kind": "progress"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Venter": "neutral",
+                        "Pågår": "info",
+                        "Fullført": "success"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Venter",
+                        "Pågår",
+                        "Fullført"
+                    ]
+                },
+                {
+                    "name": "owner",
+                    "label": "Ansvarlig",
+                    "type": "select",
+                    "options": [
+                        "Marte Haugen",
+                        "Lars Strand",
+                        "Kristian Moen",
+                        "Jonas Eriksen"
+                    ]
+                },
+                {
+                    "name": "start",
+                    "label": "Startdato",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "Alle"
+                },
+                {
+                    "id": "active",
+                    "label": "Pågår"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Navn",
+                    "locked": true
+                },
+                {
+                    "id": "role",
+                    "label": "Stilling"
+                },
+                {
+                    "id": "start",
+                    "label": "Startdato"
+                },
+                {
+                    "id": "owner",
+                    "label": "Ansvarlig"
+                },
+                {
+                    "id": "progress",
+                    "label": "Fremdrift"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingSelection",
+            "rows": []
+        },
+        {
+            "shape": "OrgNodes",
+            "rows": [
+                {
+                    "id": "emp-1",
+                    "label": "Ingrid Solberg",
+                    "title": "Administrerende direktør"
+                },
+                {
+                    "id": "emp-2",
+                    "label": "Magnus Dahl",
+                    "title": "Teknologidirektør",
+                    "parentId": "emp-1"
+                },
+                {
+                    "id": "emp-3",
+                    "label": "Sofie Berg",
+                    "title": "Økonomidirektør",
+                    "parentId": "emp-1"
+                },
+                {
+                    "id": "emp-4",
+                    "label": "Henrik Lund",
+                    "title": "Driftsdirektør",
+                    "parentId": "emp-1"
+                },
+                {
+                    "id": "emp-5",
+                    "label": "Marte Haugen",
+                    "title": "HR-sjef",
+                    "parentId": "emp-1"
+                },
+                {
+                    "id": "emp-6",
+                    "label": "Jonas Eriksen",
+                    "title": "Utviklingssjef",
+                    "parentId": "emp-2"
+                },
+                {
+                    "id": "emp-7",
+                    "label": "Silje Andersen",
+                    "title": "Seniorutvikler",
+                    "parentId": "emp-6"
+                },
+                {
+                    "id": "emp-8",
+                    "label": "Emil Johansen",
+                    "title": "Utvikler",
+                    "parentId": "emp-6"
+                },
+                {
+                    "id": "emp-9",
+                    "label": "Nora Karlsen",
+                    "title": "Utvikler",
+                    "parentId": "emp-6"
+                },
+                {
+                    "id": "emp-10",
+                    "label": "Kristian Moen",
+                    "title": "Salgssjef",
+                    "parentId": "emp-1"
+                },
+                {
+                    "id": "emp-11",
+                    "label": "Thea Pedersen",
+                    "title": "Kundeansvarlig",
+                    "parentId": "emp-10"
+                },
+                {
+                    "id": "emp-12",
+                    "label": "Oskar Nilsen",
+                    "title": "Kundeansvarlig",
+                    "parentId": "emp-10"
+                },
+                {
+                    "id": "emp-13",
+                    "label": "Maja Bakken",
+                    "title": "Regnskapsfører",
+                    "parentId": "emp-3"
+                },
+                {
+                    "id": "emp-14",
+                    "label": "Lars Strand",
+                    "title": "Driftsleder",
+                    "parentId": "emp-4"
+                },
+                {
+                    "id": "emp-15",
+                    "label": "Ida Hansen",
+                    "title": "Kundeservicemedarbeider",
+                    "parentId": "emp-14"
+                },
+                {
+                    "id": "emp-16",
+                    "label": "Henriette Vik",
+                    "title": "HR-rådgiver",
+                    "parentId": "emp-5"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeSections",
+            "rows": [
+                {
+                    "id": "personal",
+                    "title": "Personlig informasjon",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Navn"
+                        },
+                        {
+                            "name": "email",
+                            "label": "E-post"
+                        },
+                        {
+                            "name": "phone",
+                            "label": "Telefon"
+                        },
+                        {
+                            "name": "address",
+                            "label": "Adresse"
+                        },
+                        {
+                            "name": "birthDate",
+                            "label": "Fødselsdato",
+                            "type": "date"
+                        },
+                        {
+                            "name": "emergency",
+                            "label": "Pårørende"
+                        }
+                    ]
+                },
+                {
+                    "id": "job",
+                    "title": "Stillingsinformasjon",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "Stilling"
+                        },
+                        {
+                            "name": "department",
+                            "label": "Avdeling"
+                        },
+                        {
+                            "name": "manager",
+                            "label": "Leder"
+                        },
+                        {
+                            "name": "location",
+                            "label": "Sted"
+                        },
+                        {
+                            "name": "startDate",
+                            "label": "Startdato",
+                            "type": "date"
+                        },
+                        {
+                            "name": "employment",
+                            "label": "Ansettelsesform"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "Ny ansatt",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Navn",
+                            "required": true
+                        },
+                        {
+                            "name": "title",
+                            "label": "Stilling",
+                            "required": true
+                        },
+                        {
+                            "name": "department",
+                            "label": "Avdeling",
+                            "type": "select",
+                            "options": [
+                                "Ledelse",
+                                "Utvikling",
+                                "Salg",
+                                "Økonomi",
+                                "Drift",
+                                "HR"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "email",
+                            "label": "E-post",
+                            "required": true
+                        },
+                        {
+                            "name": "startDate",
+                            "label": "Startdato",
+                            "type": "date"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "TimeOffQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "Be om fri",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "type",
+                            "label": "Type",
+                            "type": "select",
+                            "options": [
+                                "Ferie",
+                                "Sykefravær",
+                                "Permisjon",
+                                "Avspasering"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "from",
+                            "label": "Fra",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "to",
+                            "label": "Til",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "note",
+                            "label": "Merknad"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeRecord",
+            "rows": [
+                {
+                    "id": "emp-7",
+                    "name": "Silje Andersen",
+                    "title": "Seniorutvikler",
+                    "department": "Utvikling",
+                    "location": "Oslo",
+                    "email": "silje.andersen@eksempel.no",
+                    "phone": "+47 442 16 278",
+                    "status": "Aktiv",
+                    "manager": "Jonas Eriksen",
+                    "photo": "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='hsl%28256,45%25,82%25%29'/%3E%3Ctext x='160' y='108' font-size='72' text-anchor='middle' fill='hsl%28256,45%25,25%25%29' font-family='sans-serif'%3ESA%3C/text%3E%3C/svg%3E",
+                    "address": "Storgata 12, 0155 Oslo",
+                    "birthDate": "1991-04-12",
+                    "emergency": "Per Andersen, +47 912 34 567",
+                    "startDate": "2022-08-15",
+                    "employment": "Fast ansatt"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeSummary",
+            "rows": [
+                {
+                    "status": "Aktiv",
+                    "tone": "success",
+                    "leaveLeft": 17,
+                    "leaveTaken": 8,
+                    "years": 4,
+                    "people": [
+                        {
+                            "name": "Jonas Eriksen"
+                        },
+                        {
+                            "name": "Emil Johansen"
+                        },
+                        {
+                            "name": "Nora Karlsen"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "DocumentColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Dokument"
+                },
+                {
+                    "field": "type",
+                    "header": "Type"
+                },
+                {
+                    "field": "uploaded",
+                    "header": "Lastet opp",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Signert": "success",
+                        "Mangler": "warning",
+                        "Utløper snart": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeDocuments",
+            "rows": [
+                {
+                    "id": "doc-1",
+                    "name": "Arbeidsavtale",
+                    "type": "Kontrakt",
+                    "uploaded": "2022-08-01",
+                    "status": "Signert"
+                },
+                {
+                    "id": "doc-2",
+                    "name": "Skattekort",
+                    "type": "Skatt",
+                    "uploaded": "2026-01-10",
+                    "status": "Signert"
+                },
+                {
+                    "id": "doc-3",
+                    "name": "Helseattest",
+                    "type": "Attest",
+                    "uploaded": "2025-11-03",
+                    "status": "Utløper snart"
+                },
+                {
+                    "id": "doc-4",
+                    "name": "Taushetserklæring",
+                    "type": "Kontrakt",
+                    "uploaded": "2022-08-01",
+                    "status": "Signert"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeTimeOff",
+            "rows": [
+                {
+                    "id": "req-1",
+                    "employee": "Silje Andersen",
+                    "type": "Ferie",
+                    "from": "2026-10-26",
+                    "to": "2026-10-30",
+                    "days": 5,
+                    "status": "Venter"
+                },
+                {
+                    "id": "req-9",
+                    "employee": "Jonas Eriksen",
+                    "type": "Avspasering",
+                    "from": "2026-10-23",
+                    "to": "2026-10-23",
+                    "days": 1,
+                    "status": "Venter"
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Marte Haugen",
+                    "action": "oppdaterte stillingen",
+                    "kind": "change",
+                    "at": "2026-09-30T10:00:00Z",
+                    "body": "Fra Utvikler til Seniorutvikler."
+                },
+                {
+                    "id": "a1",
+                    "actor": "Jonas Eriksen",
+                    "action": "kommenterte",
+                    "kind": "comment",
+                    "at": "2026-09-15T13:20:00Z",
+                    "body": "Gjennomførte medarbeidersamtalen; fornøyd med utviklingen."
+                },
+                {
+                    "id": "a2",
+                    "actor": "Marte Haugen",
+                    "action": "godkjente ferie",
+                    "kind": "status",
+                    "at": "2026-08-02T08:05:00Z",
+                    "body": ""
+                }
+            ]
+        },
+        {
+            "shape": "EmployeeTasks",
+            "rows": [
+                {
+                    "title": "Åpne oppgaver",
+                    "items": [
+                        {
+                            "id": "å0",
+                            "label": "Fornye helseattest",
+                            "owner": "Marte Haugen",
+                            "due": "2026-11-30",
+                            "done": false
+                        },
+                        {
+                            "id": "å1",
+                            "label": "Planlegge kompetanseutvikling",
+                            "owner": "Jonas Eriksen",
+                            "due": "2026-12-15",
+                            "done": false
+                        },
+                        {
+                            "id": "å2",
+                            "label": "Medarbeidersamtale",
+                            "owner": "Jonas Eriksen",
+                            "due": "2026-09-15",
+                            "done": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "HrRecordTabs",
+            "rows": [
+                {
+                    "id": "personal",
+                    "label": "Personlig"
+                },
+                {
+                    "id": "job",
+                    "label": "Stilling"
+                },
+                {
+                    "id": "documents",
+                    "label": "Dokumenter"
+                },
+                {
+                    "id": "timeoff",
+                    "label": "Fri"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingRecord",
+            "rows": [
+                {
+                    "id": "onb-1",
+                    "name": "Emil Johansen",
+                    "role": "Utvikler",
+                    "startDate": "2026-10-01",
+                    "manager": "Jonas Eriksen",
+                    "buddy": "Silje Andersen",
+                    "equipment": "Bærbar PC, skjerm, headset",
+                    "location": "Bergen"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingSections",
+            "rows": [
+                {
+                    "id": "facts",
+                    "title": "Nøkkelinformasjon",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "role",
+                            "label": "Stilling"
+                        },
+                        {
+                            "name": "startDate",
+                            "label": "Startdato",
+                            "type": "date"
+                        },
+                        {
+                            "name": "manager",
+                            "label": "Leder"
+                        },
+                        {
+                            "name": "buddy",
+                            "label": "Fadder"
+                        },
+                        {
+                            "name": "equipment",
+                            "label": "Utstyr"
+                        },
+                        {
+                            "name": "location",
+                            "label": "Sted"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingSummary",
+            "rows": [
+                {
+                    "status": "Pågår",
+                    "tone": "info",
+                    "done": 7,
+                    "open": 5,
+                    "people": [
+                        {
+                            "name": "Marte Haugen"
+                        },
+                        {
+                            "name": "Jonas Eriksen"
+                        },
+                        {
+                            "name": "Silje Andersen"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingTasks",
+            "rows": [
+                {
+                    "title": "Før første dag",
+                    "items": [
+                        {
+                            "id": "f0",
+                            "label": "Send arbeidsavtale til signering",
+                            "owner": "Marte Haugen",
+                            "due": "2026-09-17",
+                            "done": true
+                        },
+                        {
+                            "id": "f1",
+                            "label": "Bestill bærbar PC og skjerm",
+                            "owner": "Lars Strand",
+                            "due": "2026-09-21",
+                            "done": true
+                        },
+                        {
+                            "id": "f2",
+                            "label": "Opprett konto og e-post",
+                            "owner": "Magnus Dahl",
+                            "due": "2026-09-28",
+                            "done": true
+                        }
+                    ]
+                },
+                {
+                    "title": "Første uke",
+                    "items": [
+                        {
+                            "id": "f0",
+                            "label": "Møte med leder",
+                            "owner": "Jonas Eriksen",
+                            "due": "2026-10-01",
+                            "done": true
+                        },
+                        {
+                            "id": "f1",
+                            "label": "Gjennomgang av sikkerhet og rutiner",
+                            "owner": "Marte Haugen",
+                            "due": "2026-10-02",
+                            "done": true
+                        },
+                        {
+                            "id": "f2",
+                            "label": "Introduksjon til teamet",
+                            "owner": "Silje Andersen",
+                            "due": "2026-10-02",
+                            "done": true
+                        },
+                        {
+                            "id": "f3",
+                            "label": "Sette opp utviklingsmiljø",
+                            "owner": "Silje Andersen",
+                            "due": "2026-10-06",
+                            "done": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Første måned",
+                    "items": [
+                        {
+                            "id": "f0",
+                            "label": "Første oppgave levert",
+                            "owner": "Jonas Eriksen",
+                            "due": "2026-10-23",
+                            "done": false
+                        },
+                        {
+                            "id": "f1",
+                            "label": "Samtale etter 30 dager",
+                            "owner": "Marte Haugen",
+                            "due": "2026-10-31",
+                            "done": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Marte Haugen",
+                    "action": "sendte velkomstpakke",
+                    "kind": "status",
+                    "at": "2026-09-28T09:00:00Z",
+                    "body": ""
+                },
+                {
+                    "id": "a1",
+                    "actor": "Silje Andersen",
+                    "action": "kommenterte",
+                    "kind": "comment",
+                    "at": "2026-10-02T14:10:00Z",
+                    "body": "Utviklingsmiljøet blir klart i morgen."
+                }
+            ]
+        },
+        {
+            "shape": "HrFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

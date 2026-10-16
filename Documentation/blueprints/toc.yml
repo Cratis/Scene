@@ -34,6 +34,8 @@
         href: crm-blueprint.md
       - name: The Ticketing blueprint
         href: ticketing-blueprint.md
+      - name: The HR People and Time Off blueprint
+        href: hr-blueprint.md
       - name: The Inventory and Assets blueprint
         href: inventory-blueprint.md
 
