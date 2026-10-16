@@ -16,7 +16,7 @@ export const hrCategory = 'Business / HR';
 export const thumbnailOf = (templateName: string): string => `thumbnails/${templateName}.svg`;
 
 /** The metadata of a screen template of this blueprint: provenance, a type from the vocabulary, the category, a thumbnail and the levels it applies at. */
-export const hrMetadata = (name: string, type: 'Dashboard' | 'List' | 'Board' | 'Detail' | 'Form' | 'Dialog' | 'Workspace', scopes: TemplateScope[]): TemplateMetadata =>
+export const hrMetadata = (name: string, type: 'Dashboard' | 'List' | 'Board' | 'Detail' | 'Form' | 'Dialog' | 'Workspace' | 'Calendar', scopes: TemplateScope[]): TemplateMetadata =>
     ({ ...hrTemplateProvenance, type, category: hrCategory, thumbnail: thumbnailOf(name), scopes });
 
 /** A button of the foundation: a verb, its emphasis, and the permission rule every action declares (spec Part B 1.5). */

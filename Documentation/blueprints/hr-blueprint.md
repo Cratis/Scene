@@ -4,7 +4,7 @@ description: A directory, employee pages, an org chart, time off and onboarding 
 ---
 
 `@cratis/scene.blueprint.hr` is a **domain blueprint** for the people side of a company, built on the [foundation set](foundation-templates.md) the way
-[the CRM blueprint](crm-blueprint.md) is: it brings no shell, component or theme of its own and adds what is particular to people - seven screen templates,
+[the CRM blueprint](crm-blueprint.md) is: it brings no shell, component or theme of its own and adds what is particular to people - eight screen templates,
 two quick-create dialogs, a screen set wired into navigation, and a Norwegian sample-data pack. It follows Part B 3.5 of the screen blueprints specification and
 is held to the same [definition of done](ship-your-own-blueprint.md#the-definition-of-done): `verifyBlueprintPackage` is green, every template passes the
 per-template check, and every screen and dialog is audited in Chromium at desktop, tablet and phone widths in the light and dark themes, colour contrast included.
@@ -17,6 +17,7 @@ per-template check, and every screen and dialog is audited in Chromium at deskto
 | `hr.directory.record` | `HrEmployeePage` | RecordPage | The time-off balance as key facts, personal and job information, documents and time-off requests as related lists, history and open tasks |
 | `hr.org` | `HrOrgChart` | (tree page) | The company as a tree of who reports to whom, with titles and report counts; the chosen person is kept in the address |
 | `hr.timeoff` | `HrTimeOffList` | ListScreen | Requests with employee, type, dates, days and status; approve or decline one row or many; **Request time off** |
+| `hr.timeoff.calendar` | `HrTeamCalendar` | CalendarScreen | Who is away and when on a month, a week or as an agenda (the foundation `calendarGrid`); the kind of leave is told in words, the day and view are kept in the address |
 | `hr.timeoff.balances` | `HrTimeOffBalanceList` | ListScreen (read-only) | Entitlement, days taken and left per employee, with a progress bar for how much is used |
 | `hr.onboarding` | `HrOnboardingList` | ListScreen | New hires with start date, owner and a progress bar of their checklist; choosing a row opens the checklist |
 | `hr.onboarding.record` | `HrOnboardingChecklist` | RecordPage variant | Checklist sections (before the first day, the first week, the first month) with an owner and a due date for each task, and the key facts of the hire |
@@ -25,12 +26,13 @@ per-template check, and every screen and dialog is audited in Chromium at deskto
 The categories are all `Business / HR`. Templates carry their `scopes` (Part A 4.2): the directory, the org chart and the time-off lists apply at module and
 feature level, the employee page and the onboarding checklist at feature and sub-feature level, and the dialogs at slice level.
 
-**The team calendar.** The specification pairs the time-off list with a calendar screen "once available". The calendar is on the later-additions list of the
-foundation (Part B 2.12) and is not part of this delivery; the time-off list and the balances cover requests and entitlements until it exists.
+**The team calendar.** The specification pairs the time-off list with a calendar screen. `HrTeamCalendar` is built on the foundation's `calendarGrid` (Part B 2.12): each
+approved or pending request is an event across the days it asks for (a declined one is left out), the kind and the status are told in words, a filter narrows it to a person or a
+kind of leave, and the list beside it names everyone away. It is a sub-feature of Time off, `hr.timeoff.calendar`.
 
 ## Navigation
 
-The topbar names the module, `HR`; the module's sidebar overrides the application's and lists **Directory, Org chart, Time off** (with **Requests** and
+The topbar names the module, `HR`; the module's sidebar overrides the application's and lists **Directory, Org chart, Time off** (with **Requests**, **Team calendar** and
 **Balances** beneath it) and **Onboarding**. A screen is a feature of the `hr` module: `hr.directory.record` is the `record` feature of `directory`. The screen set
 (`hrScreenDefinitions`) is the one list the manifest's `blueprint.screenSet`, the `Screen` instances, the application structure and the navigation are all derived
 from, and a specification holds them to it.
@@ -47,7 +49,7 @@ from, and a specification holds them to it.
 
 No template carries a row: every property that shows data is a binding to a query (`Employees`, `TimeOffRequests`, `Balances`, `OrgNodes`, `OnboardingTasks` ...) and
 the pack answers it. One pack ships, `hr-nordic` (`nb-NO`, NOK), owned by `blueprint:hr`: sixteen people in six departments with a reporting line, twelve
-time-off requests, balances, five new hires and a three-part checklist. Its one-row `HrSettings` shape gives every date and figure its locale, so dates read
+time-off requests (and the calendar events they make), balances, five new hires and a three-part checklist. Its one-row `HrSettings` shape gives every date and figure its locale, so dates read
 `26. okt. 2026`. The template's own labels (titles, button text) are English and are overridden through each component's `strings`, as for every foundation component.
 
 ## Using it

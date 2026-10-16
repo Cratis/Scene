@@ -15,6 +15,9 @@ export const HrQuery = {
     Settings: 'HrSettings',
     RecordTabs: 'HrRecordTabs',
     OrgNodes: 'OrgNodes',
+    TeamCalendarEvents: 'TeamCalendarEvents',
+    TeamCalendarFilterFields: 'TeamCalendarFilterFields',
+    TeamCalendarColumns: 'TeamCalendarColumns',
     FormErrors: 'HrFormErrors',
 } as const;
 
