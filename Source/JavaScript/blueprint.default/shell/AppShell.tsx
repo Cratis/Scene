@@ -34,6 +34,9 @@ function AppShellSurface({ elementId, slots }: AppShellSurfaceProps) {
     const revealsOnPointer = isPointerRevealMode(effectiveMode);
     const hasSidebar = filled(slots, SlotName.Sidebar) || filled(slots, SlotName.Menu);
 
+    // A slot the layout declares beyond the regions this shell knows - `side` - is a pane beside the page, in the order the slots were given.
+    const extraSlots = Object.keys(slots).filter(name => !knownSlots.has(name) && (slots[name]?.length ?? 0) > 0);
+
     return (
         <div className={wrapperClasses.join(' ')} data-scene-id={elementId} data-layout-mode={config.mode}>
             {filled(slots, SlotName.Topbar) && <header className='layout-topbar'>{slots[SlotName.Topbar]}</header>}
@@ -54,12 +57,16 @@ function AppShellSurface({ elementId, slots }: AppShellSurfaceProps) {
                 {filled(slots, SlotName.Footer) && <footer className='layout-footer'>{slots[SlotName.Footer]}</footer>}
             </div>
 
+            {extraSlots.map(name => <aside key={name} className='layout-side' data-scene-slot={name}>{slots[name]}</aside>)}
             {filled(slots, SlotName.RightPanel) && <aside className='layout-right-panel'>{slots[SlotName.RightPanel]}</aside>}
             {slots[SlotName.ConfigPanel]}
             <LayoutMask />
         </div>
     );
 }
+
+/** The slots the shell draws in their own regions; any other slot with content becomes a side pane. */
+const knownSlots = new Set<string>(Object.values(SlotName));
 
 function filled(slots: Record<string, ReactNode[]>, name: SlotName): boolean {
     return (slots[name]?.length ?? 0) > 0;

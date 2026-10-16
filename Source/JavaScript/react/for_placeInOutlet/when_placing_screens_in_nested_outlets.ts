@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { shellOutletOwner } from '../navigation/collectOutletOwners';
 import { placeInOutlet } from '../navigation/placeInOutlet';
 
 describe('when placing screens in nested outlets', () => {
@@ -25,5 +26,22 @@ describe('when placing screens in nested outlets', () => {
         const cyclic = { a: 'B', b: 'A' };
         const result = placeInOutlet({ screen: 'Start', parameters: {} }, 'A', 'a', cyclic, [{ screen: 'A', outlet: 'a' }, { screen: 'B', outlet: 'b' }]);
         result.primary!.should.equal('Start');
+    });
+
+    describe('and the outlet is one the shell declares', () => {
+        const shellOwners = { ...owners, side: shellOutletOwner };
+
+        it('should keep the primary screen and place the screen beside it', () =>
+            placeInOutlet(start, 'Articles', 'side', shellOwners).should.deep.equal({ primary: 'Orders', outlets: { side: 'Articles' } }));
+
+        it('should keep the side screen when the primary screen changes', () =>
+            placeInOutlet({ ...start, outlets: { side: 'Articles' } }, 'Customers', 'content', shellOwners).should.deep.equal({ primary: 'Customers', outlets: { side: 'Articles' } }));
+
+        it('should replace the side screen when another one is placed there', () =>
+            placeInOutlet({ ...start, outlets: { side: 'Articles' } }, 'Invoice', 'side', shellOwners).should.deep.equal({ primary: 'Orders', outlets: { side: 'Invoice' } }));
+
+        it('should keep the outlets of the screen shown beside the primary one', () =>
+            placeInOutlet({ ...start, outlets: { side: 'OrderDetails' } }, 'OrderLine', 'line', shellOwners, [{ screen: 'OrderDetails', outlet: 'side' }])
+                .should.deep.equal({ primary: 'Orders', outlets: { side: 'OrderDetails', line: 'OrderLine' } }));
     });
 });

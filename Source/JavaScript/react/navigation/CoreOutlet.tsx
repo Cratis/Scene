@@ -10,9 +10,11 @@ import { useSceneOutlets } from './SceneOutletContext';
 /**
  * A nested outlet a screen declares: `core:outlet` with a `name`. Inside a navigation host it renders the
  * screen placed in that outlet - which may declare outlets of its own, so composition nests to any depth -
- * and nothing while the outlet is empty. Outside a navigation host it renders the empty region.
+ * and nothing while the outlet is empty. Outside a navigation host it renders the empty region. A `closable` outlet - one the host
+ * puts in a slot the shell declares - carries a `Close` button that empties it.
  */
 export function CoreOutlet({ element }: RegisteredComponentProps) {
+    const closable = element.properties.closable === true;
     const name = typeof element.properties.name === 'string' ? element.properties.name : '';
     const navigation = useContext(SceneNavigationContextInternal);
     const outlets = useSceneOutlets();
@@ -20,6 +22,9 @@ export function CoreOutlet({ element }: RegisteredComponentProps) {
     const screen = placed && outlets ? outlets.screens[placed] : undefined;
 
     return <div data-scene-outlet={name} data-scene-outlet-screen={placed}>
+        {closable && placed && <div className='scene-outlet-bar'>
+            <button type='button' className='scene-outlet-close' aria-label='Close' onClick={() => navigation?.closeOutlet(name)}>Close</button>
+        </div>}
         {screen && outlets && <SceneElementView element={screen} registry={outlets.registry}
             dataContext={navigation?.bindingScope.dataContext} queryResults={navigation?.bindingScope.queryResults} />}
     </div>;

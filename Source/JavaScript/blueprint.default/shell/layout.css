@@ -209,6 +209,39 @@
     margin-inline-end: 20rem;
 }
 
+/* A slot the layout declares beyond the shell's own regions (`slot side`): a pane beside the page that a navigation item opens. */
+.layout-side {
+    position: fixed;
+    inset-block-start: var(--layout-topbar-height);
+    inset-inline-end: 0;
+    inset-block-end: 0;
+    z-index: var(--layout-z-topbar);
+    width: 20rem;
+    padding: 1rem;
+    overflow-y: auto;
+    background: var(--layout-card);
+    border-inline-start: 1px solid var(--layout-border);
+}
+
+.layout-wrapper:has(> .layout-side) .layout-main {
+    margin-inline-end: 20rem;
+}
+
+.scene-outlet-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding-block-end: 0.5rem;
+}
+
+.scene-outlet-close {
+    padding: 0.25rem 0.75rem;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--layout-border);
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
 .layout-mask {
     position: fixed;
     inset: 0;
@@ -656,6 +689,8 @@
     }
 
     .layout-wrapper .layout-right-panel,
+    .layout-wrapper .layout-side,
+    .layout-wrapper:has(> .layout-side) .layout-main,
     .layout-wrapper:has(> .layout-right-panel) .layout-main {
         position: static;
         width: auto;

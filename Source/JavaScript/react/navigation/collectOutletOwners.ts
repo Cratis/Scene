@@ -7,6 +7,12 @@ import { SceneElement } from '@cratis/scene.model';
 export const outletComponentName = 'core:outlet';
 
 /**
+ * The owner of an outlet the shell declares - a slot of the layout or root template, such as `side` - rather than a screen. The shell is
+ * always on the page, so a screen placed in such an outlet sits beside the primary screen and stays when the primary screen changes.
+ */
+export const shellOutletOwner = '\u0000shell';
+
+/**
  * Which screen declares each nested outlet: every `core:outlet` element, by its `name`, mapped to the screen
  * whose tree contains it. A screen that declares an outlet another screen also declares keeps the first one,
  * in screen order - the same rule navigation diagnostics report as a duplicate outlet.
