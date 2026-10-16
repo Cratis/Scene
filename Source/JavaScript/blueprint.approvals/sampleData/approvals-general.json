@@ -1,0 +1,1269 @@
+{
+  "id": "approvals-general",
+  "title": "Approvals · General",
+  "locale": "en-GB",
+  "owner": "blueprint:approvals",
+  "sets": [
+    {
+      "shape": "ApprovalsSettings",
+      "rows": [
+        {
+          "locale": "en-GB",
+          "currency": "GBP"
+        }
+      ]
+    },
+    {
+      "shape": "InboxRequests",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Leave: Oliver Reed",
+          "type": "Leave",
+          "requester": "Oliver Reed",
+          "approver": "Priya Nair",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-01",
+          "waiting": "2 h",
+          "dates": "3-7 Nov",
+          "step": "Manager",
+          "detail": "Oliver Reed - Leave - 2 h"
+        },
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Expense: Priya Nair",
+          "type": "Expense",
+          "requester": "Priya Nair",
+          "approver": "Daniel Cho",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12 Oct",
+          "step": "Finance",
+          "detail": "Priya Nair - Expense - 1 d"
+        },
+        {
+          "id": "req-3",
+          "reference": "R-2052",
+          "title": "Purchase: Daniel Cho",
+          "type": "Purchase",
+          "requester": "Daniel Cho",
+          "approver": "Isla Morgan",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 18500,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20-24 Oct",
+          "step": "Director",
+          "detail": "Daniel Cho - Purchase - 3 d"
+        },
+        {
+          "id": "req-6",
+          "reference": "R-2055",
+          "title": "Leave: Amelia Hart",
+          "type": "Leave",
+          "requester": "Amelia Hart",
+          "approver": "Oliver Reed",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 9400,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3-7 Nov",
+          "step": "Director",
+          "detail": "Amelia Hart - Leave - 6 d"
+        },
+        {
+          "id": "req-10",
+          "reference": "R-2059",
+          "title": "Invoice approval: Isla Morgan",
+          "type": "Invoice approval",
+          "requester": "Isla Morgan",
+          "approver": "Noah Bennett",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 76000,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-10",
+          "waiting": "3 h",
+          "dates": "2-3 Dec",
+          "step": "Manager",
+          "detail": "Isla Morgan - Invoice approval - 3 h"
+        }
+      ]
+    },
+    {
+      "shape": "InboxColumns",
+      "rows": [
+        {
+          "field": "title",
+          "header": "Request"
+        },
+        {
+          "field": "requester",
+          "header": "Requester"
+        },
+        {
+          "field": "amount",
+          "header": "Amount",
+          "kind": "currency",
+          "currency": "GBP"
+        },
+        {
+          "field": "waiting",
+          "header": "Waiting"
+        },
+        {
+          "field": "submitted",
+          "header": "Submitted",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "InboxFilterFields",
+      "rows": [
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Leave",
+            "Expense",
+            "Purchase",
+            "Travel",
+            "Invoice approval"
+          ]
+        },
+        {
+          "name": "requester",
+          "label": "Requester",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho",
+            "Isla Morgan",
+            "Noah Bennett"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Submitted",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "InboxViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All waiting"
+        },
+        {
+          "id": "overdue",
+          "label": "Overdue"
+        },
+        {
+          "id": "mine",
+          "label": "Large amounts"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequests",
+      "rows": [
+        {
+          "id": "mine-1",
+          "reference": "R-2050",
+          "title": "Leave: Amelia Hart",
+          "type": "Leave",
+          "requester": "Amelia Hart",
+          "approver": "Priya Nair",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-01",
+          "waiting": "2 h",
+          "dates": "3-7 Nov",
+          "step": "Manager"
+        },
+        {
+          "id": "mine-2",
+          "reference": "R-2051",
+          "title": "Expense: Amelia Hart",
+          "type": "Expense",
+          "requester": "Amelia Hart",
+          "approver": "Daniel Cho",
+          "status": "Approved",
+          "tone": "success",
+          "amount": 1240,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12 Oct",
+          "step": "Finance"
+        },
+        {
+          "id": "mine-3",
+          "reference": "R-2052",
+          "title": "Purchase: Amelia Hart",
+          "type": "Purchase",
+          "requester": "Amelia Hart",
+          "approver": "Isla Morgan",
+          "status": "Draft",
+          "tone": "neutral",
+          "amount": 18500,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20-24 Oct",
+          "step": "Director"
+        },
+        {
+          "id": "mine-4",
+          "reference": "R-2053",
+          "title": "Travel: Amelia Hart",
+          "type": "Travel",
+          "requester": "Amelia Hart",
+          "approver": "Noah Bennett",
+          "status": "Rejected",
+          "tone": "danger",
+          "amount": 2860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-04",
+          "waiting": "5 h",
+          "dates": "15 Nov",
+          "step": "Manager"
+        },
+        {
+          "id": "mine-5",
+          "reference": "R-2054",
+          "title": "Invoice approval: Amelia Hart",
+          "type": "Invoice approval",
+          "requester": "Amelia Hart",
+          "approver": "Amelia Hart",
+          "status": "Changes requested",
+          "tone": "warning",
+          "amount": 640,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-05",
+          "waiting": "2 d",
+          "dates": "2-3 Dec",
+          "step": "Finance"
+        },
+        {
+          "id": "mine-6",
+          "reference": "R-2055",
+          "title": "Leave: Amelia Hart",
+          "type": "Leave",
+          "requester": "Amelia Hart",
+          "approver": "Oliver Reed",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 9400,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3-7 Nov",
+          "step": "Director"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "title",
+          "header": "Request"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Draft": "neutral",
+            "Submitted": "info",
+            "Approved": "success",
+            "Rejected": "danger",
+            "Changes requested": "warning"
+          }
+        },
+        {
+          "field": "approver",
+          "header": "Approver"
+        },
+        {
+          "field": "amount",
+          "header": "Amount",
+          "kind": "currency",
+          "currency": "GBP"
+        },
+        {
+          "field": "submitted",
+          "header": "Submitted",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Draft",
+            "Submitted",
+            "Approved",
+            "Rejected",
+            "Changes requested"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Leave",
+            "Expense",
+            "Purchase",
+            "Travel",
+            "Invoice approval"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Submitted",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All mine"
+        },
+        {
+          "id": "drafts",
+          "label": "Drafts"
+        },
+        {
+          "id": "open",
+          "label": "Open"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "title",
+          "label": "Request"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "approver",
+          "label": "Approver"
+        },
+        {
+          "id": "amount",
+          "label": "Amount"
+        },
+        {
+          "id": "submitted",
+          "label": "Submitted"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestSelection",
+      "rows": []
+    },
+    {
+      "shape": "AllRequests",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Leave: Oliver Reed",
+          "type": "Leave",
+          "requester": "Oliver Reed",
+          "approver": "Priya Nair",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-01",
+          "waiting": "2 h",
+          "dates": "3-7 Nov",
+          "step": "Manager"
+        },
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Expense: Priya Nair",
+          "type": "Expense",
+          "requester": "Priya Nair",
+          "approver": "Daniel Cho",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12 Oct",
+          "step": "Finance"
+        },
+        {
+          "id": "req-3",
+          "reference": "R-2052",
+          "title": "Purchase: Daniel Cho",
+          "type": "Purchase",
+          "requester": "Daniel Cho",
+          "approver": "Isla Morgan",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 18500,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20-24 Oct",
+          "step": "Director"
+        },
+        {
+          "id": "req-4",
+          "reference": "R-2053",
+          "title": "Travel: Isla Morgan",
+          "type": "Travel",
+          "requester": "Isla Morgan",
+          "approver": "Noah Bennett",
+          "status": "Approved",
+          "tone": "success",
+          "amount": 2860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-04",
+          "waiting": "5 h",
+          "dates": "15 Nov",
+          "step": "Manager"
+        },
+        {
+          "id": "req-5",
+          "reference": "R-2054",
+          "title": "Invoice approval: Noah Bennett",
+          "type": "Invoice approval",
+          "requester": "Noah Bennett",
+          "approver": "Amelia Hart",
+          "status": "Rejected",
+          "tone": "danger",
+          "amount": 640,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-05",
+          "waiting": "2 d",
+          "dates": "2-3 Dec",
+          "step": "Finance"
+        },
+        {
+          "id": "req-6",
+          "reference": "R-2055",
+          "title": "Leave: Amelia Hart",
+          "type": "Leave",
+          "requester": "Amelia Hart",
+          "approver": "Oliver Reed",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 9400,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3-7 Nov",
+          "step": "Director"
+        },
+        {
+          "id": "req-7",
+          "reference": "R-2056",
+          "title": "Expense: Oliver Reed",
+          "type": "Expense",
+          "requester": "Oliver Reed",
+          "approver": "Priya Nair",
+          "status": "Draft",
+          "tone": "neutral",
+          "amount": 2140,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-07",
+          "waiting": "1 h",
+          "dates": "12 Oct",
+          "step": "Manager"
+        },
+        {
+          "id": "req-8",
+          "reference": "R-2057",
+          "title": "Purchase: Priya Nair",
+          "type": "Purchase",
+          "requester": "Priya Nair",
+          "approver": "Daniel Cho",
+          "status": "Changes requested",
+          "tone": "warning",
+          "amount": 5200,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-08",
+          "waiting": "4 d",
+          "dates": "20-24 Oct",
+          "step": "Finance"
+        },
+        {
+          "id": "req-9",
+          "reference": "R-2058",
+          "title": "Travel: Daniel Cho",
+          "type": "Travel",
+          "requester": "Daniel Cho",
+          "approver": "Isla Morgan",
+          "status": "Approved",
+          "tone": "success",
+          "amount": 320,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-09",
+          "waiting": "2 d",
+          "dates": "15 Nov",
+          "step": "Director"
+        },
+        {
+          "id": "req-10",
+          "reference": "R-2059",
+          "title": "Invoice approval: Isla Morgan",
+          "type": "Invoice approval",
+          "requester": "Isla Morgan",
+          "approver": "Noah Bennett",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 76000,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-10",
+          "waiting": "3 h",
+          "dates": "2-3 Dec",
+          "step": "Manager"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "title",
+          "header": "Request"
+        },
+        {
+          "field": "requester",
+          "header": "Requester"
+        },
+        {
+          "field": "approver",
+          "header": "Current approver"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Draft": "neutral",
+            "Submitted": "info",
+            "Approved": "success",
+            "Rejected": "danger",
+            "Changes requested": "warning"
+          }
+        },
+        {
+          "field": "amount",
+          "header": "Amount",
+          "kind": "currency",
+          "currency": "GBP"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Draft",
+            "Submitted",
+            "Approved",
+            "Rejected",
+            "Changes requested"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Leave",
+            "Expense",
+            "Purchase",
+            "Travel",
+            "Invoice approval"
+          ]
+        },
+        {
+          "name": "requester",
+          "label": "Requester",
+          "type": "select",
+          "options": [
+            "Amelia Hart",
+            "Oliver Reed",
+            "Priya Nair",
+            "Daniel Cho",
+            "Isla Morgan",
+            "Noah Bennett"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Submitted",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All requests"
+        },
+        {
+          "id": "open",
+          "label": "Open"
+        },
+        {
+          "id": "rejected",
+          "label": "Rejected"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "title",
+          "label": "Request"
+        },
+        {
+          "id": "requester",
+          "label": "Requester"
+        },
+        {
+          "id": "approver",
+          "label": "Current approver"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "amount",
+          "label": "Amount"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestSelection",
+      "rows": []
+    },
+    {
+      "shape": "RequestTypes",
+      "rows": [
+        {
+          "id": "type-1",
+          "title": "Leave",
+          "name": "Leave",
+          "approvers": "Manager → HR",
+          "steps": 2,
+          "active": "Yes",
+          "asks": "Dates, the kind of leave and who covers"
+        },
+        {
+          "id": "type-2",
+          "title": "Expense",
+          "name": "Expense",
+          "approvers": "Manager → Finance",
+          "steps": 2,
+          "active": "Yes",
+          "asks": "Receipts, amount and cost centre"
+        },
+        {
+          "id": "type-3",
+          "title": "Purchase",
+          "name": "Purchase",
+          "approvers": "Manager → Finance → Director",
+          "steps": 3,
+          "active": "Yes",
+          "asks": "What, from whom and the quote"
+        },
+        {
+          "id": "type-4",
+          "title": "Travel",
+          "name": "Travel",
+          "approvers": "Manager → Finance",
+          "steps": 2,
+          "active": "Yes",
+          "asks": "Where, when and the estimate"
+        },
+        {
+          "id": "type-5",
+          "title": "Invoice approval",
+          "name": "Invoice approval",
+          "approvers": "Finance → Director",
+          "steps": 2,
+          "active": "No",
+          "asks": "The invoice and the purchase order"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Name"
+        },
+        {
+          "field": "approvers",
+          "header": "Approval steps"
+        },
+        {
+          "field": "steps",
+          "header": "Steps"
+        },
+        {
+          "field": "active",
+          "header": "Active"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeFilterFields",
+      "rows": [
+        {
+          "name": "active",
+          "label": "Active",
+          "type": "select",
+          "options": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "All types"
+        },
+        {
+          "id": "active",
+          "label": "Active only"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Name",
+          "locked": true
+        },
+        {
+          "id": "approvers",
+          "label": "Approval steps"
+        },
+        {
+          "id": "steps",
+          "label": "Steps"
+        },
+        {
+          "id": "active",
+          "label": "Active"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeSelection",
+      "rows": []
+    },
+    {
+      "shape": "RequestWizardSteps",
+      "rows": [
+        {
+          "id": "type",
+          "label": "Request type",
+          "valid": true
+        },
+        {
+          "id": "details",
+          "label": "Details",
+          "valid": true
+        },
+        {
+          "id": "attachments",
+          "label": "Attachments",
+          "valid": true
+        },
+        {
+          "id": "review",
+          "label": "Review and submit",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeSections",
+      "rows": [
+        {
+          "id": "type",
+          "title": "Request type",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Request type",
+              "type": "select",
+              "options": [
+                "Leave",
+                "Expense",
+                "Purchase",
+                "Travel",
+                "Invoice approval"
+              ],
+              "required": true
+            },
+            {
+              "name": "note",
+              "label": "The type decides what the next step asks for and who approves."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestDetailSections",
+      "rows": [
+        {
+          "id": "details",
+          "title": "Details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "title",
+              "label": "Request",
+              "required": true,
+              "span": 2
+            },
+            {
+              "name": "amount",
+              "label": "Amount",
+              "type": "currency"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "richText",
+              "span": 2,
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestReviewValues",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Leave: Amelia Hart",
+          "type": "Leave",
+          "requester": "Oliver Reed",
+          "approver": "Priya Nair",
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-01",
+          "waiting": "2 h",
+          "dates": "3-7 Nov",
+          "step": "Manager",
+          "from": "2026-11-03",
+          "to": "2026-11-07",
+          "reason": "<p>Annual leave booked with the team; cover is arranged.</p>"
+        }
+      ]
+    },
+    {
+      "shape": "RequestReviewSections",
+      "rows": [
+        {
+          "id": "review",
+          "title": "Review and submit",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Request type"
+            },
+            {
+              "name": "title",
+              "label": "Request",
+              "span": 2
+            },
+            {
+              "name": "amount",
+              "label": "Amount",
+              "type": "currency"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "date"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestRecord",
+      "rows": [
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Expense: Priya Nair",
+          "type": "Expense",
+          "requester": "Priya Nair",
+          "approver": "Daniel Cho",
+          "status": "Submitted",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Amount",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12 Oct",
+          "step": "Finance",
+          "from": "2026-11-03",
+          "to": "2026-11-07",
+          "reason": "<p>Annual leave booked with the team; cover is arranged.</p>",
+          "department": "Operations",
+          "costCentre": "4120"
+        }
+      ]
+    },
+    {
+      "shape": "RequestSummary",
+      "rows": [
+        {
+          "status": "Submitted",
+          "tone": "info",
+          "amount": 1240,
+          "amountLabel": "Amount",
+          "people": [
+            {
+              "name": "Priya Nair"
+            },
+            {
+              "name": "Daniel Cho"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestSections",
+      "rows": [
+        {
+          "id": "request",
+          "title": "Request details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Request type"
+            },
+            {
+              "name": "requester",
+              "label": "Requester"
+            },
+            {
+              "name": "department",
+              "label": "Department"
+            },
+            {
+              "name": "costCentre",
+              "label": "Cost centre"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "date"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestChain",
+      "rows": [
+        {
+          "label": "Manager",
+          "approver": "Priya Nair",
+          "state": "approved",
+          "at": "2026-10-03T09:15:00Z",
+          "comment": "Fine by me."
+        },
+        {
+          "label": "Finance",
+          "approver": "Daniel Cho",
+          "state": "current"
+        },
+        {
+          "label": "Director",
+          "approver": "Oliver Reed",
+          "state": "pending"
+        }
+      ]
+    },
+    {
+      "shape": "RequestAttachments",
+      "rows": [
+        {
+          "id": "a1",
+          "name": "Receipt-2026-10-02.pdf",
+          "size": "184 KB",
+          "added": "2026-10-02",
+          "owner": "Priya Nair"
+        },
+        {
+          "id": "a2",
+          "name": "Quote-Northgate.pdf",
+          "size": "1.2 MB",
+          "added": "2026-10-02",
+          "owner": "Priya Nair"
+        }
+      ]
+    },
+    {
+      "shape": "AttachmentColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "File"
+        },
+        {
+          "field": "size",
+          "header": "Size"
+        },
+        {
+          "field": "owner",
+          "header": "Added by"
+        },
+        {
+          "field": "added",
+          "header": "Added",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "RequestComments",
+      "rows": [
+        {
+          "id": "Daniel Cho-14",
+          "actor": "Daniel Cho",
+          "action": "asked a question",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Is the quote still valid after 30 October?"
+        },
+        {
+          "id": "Priya Nair-3",
+          "actor": "Priya Nair",
+          "action": "approved the manager step",
+          "kind": "status",
+          "at": "2026-10-03T09:30:00Z",
+          "body": "Fine by me."
+        },
+        {
+          "id": "Priya Nair-2",
+          "actor": "Priya Nair",
+          "action": "submitted the request",
+          "kind": "status",
+          "at": "2026-10-02T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTabs",
+      "rows": [
+        {
+          "id": "overview",
+          "label": "Overview"
+        },
+        {
+          "id": "attachments",
+          "label": "Attachments",
+          "badge": "2"
+        },
+        {
+          "id": "history",
+          "label": "History"
+        }
+      ]
+    },
+    {
+      "shape": "DecisionSections",
+      "rows": [
+        {
+          "id": "decision",
+          "title": "Decision",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Approve",
+                "Reject",
+                "Request changes"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Comment for the requester",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeEditorSections",
+      "rows": [
+        {
+          "id": "type",
+          "title": "Request type",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "required": true
+            },
+            {
+              "name": "active",
+              "label": "Active",
+              "type": "select",
+              "options": [
+                "Yes",
+                "No"
+              ]
+            },
+            {
+              "name": "steps",
+              "label": "Approval steps",
+              "span": 2
+            },
+            {
+              "name": "asks",
+              "label": "What it asks for",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ApprovalsFormErrors",
+      "rows": [
+        {}
+      ]
+    }
+  ]
+}
