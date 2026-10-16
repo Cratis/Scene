@@ -3190,3 +3190,12 @@ td[data-outside='true'] .foundation-calendar-day {
     color: var(--foundation-muted);
     font-size: 0.875rem;
 }
+
+/* A navigation entry whose target does not resolve in the host (spec N8): drawn with the warning marker, reported as `navTargetMissing`. */
+[data-nav-problem='navTargetMissing'] > .layout-menu-link::after,
+a[data-nav-problem='navTargetMissing']::after {
+    content: '\26A0';
+    margin-inline-start: auto;
+    color: var(--layout-warning, #d97706);
+    font-size: 0.85em;
+}

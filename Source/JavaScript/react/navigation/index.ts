@@ -3,6 +3,9 @@
 
 export * from './DestinationResolution';
 export * from './DialogResult';
+export * from './NavigationMode';
+export * from './NavigationActivation';
+export * from './NavigationActivationContext';
 export * from './SceneHistory';
 export * from './SceneNavigationContext';
 export * from './SceneNavigationHost';

@@ -7,6 +7,7 @@ import { Menu as PrimeMenu } from 'primereact/menu';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { MenuEntry } from './MenuEntry';
 import { readRecords, readString, recordString } from './elementProperties';
+import { useShellLink } from './useShellLink';
 
 /**
  * The signed-in user's avatar and menu.
@@ -28,9 +29,10 @@ export function UserMenu({ element }: RegisteredComponentProps) {
     const role = readString(element, 'role');
     const initials = readString(element, 'initials', name.slice(0, 1).toUpperCase());
     const items = readRecords(element, 'items').map(
-        (item): MenuEntry => ({
+        (item): MenuEntry & { screen?: string } => ({
             label: recordString(item, 'label'),
             icon: recordString(item, 'icon') || undefined,
+            screen: recordString(item, 'targetScreen') || undefined,
             url: recordString(item, 'targetScreen') ? `#/${recordString(item, 'targetScreen')}` : undefined,
         }),
     );
@@ -53,10 +55,7 @@ export function UserMenu({ element }: RegisteredComponentProps) {
                         <PrimeMenu.Popup>
                             <PrimeMenu.List>
                                 {items.map(item => (
-                                    <PrimeMenu.Item key={item.label} as='a' href={item.url}>
-                                        {item.icon && <i className={item.icon} aria-hidden='true' />}
-                                        <span>{item.label}</span>
-                                    </PrimeMenu.Item>
+                                    <UserMenuEntry key={item.label} id={`${element.id}-${item.label}`} entry={item} />
                                 ))}
                             </PrimeMenu.List>
                         </PrimeMenu.Popup>
@@ -64,5 +63,15 @@ export function UserMenu({ element }: RegisteredComponentProps) {
                 </PrimeMenu.Portal>
             </PrimeMenu.Root>
         </div>
+    );
+}
+
+function UserMenuEntry({ id, entry }: { id: string; entry: MenuEntry & { screen?: string } }) {
+    const link = useShellLink(entry.screen, { source: 'userMenu', id, label: entry.label });
+    return (
+        <PrimeMenu.Item as='a' href={link.href ?? entry.url} onClick={link.onClick} data-nav-problem={entry.screen && link.dead ? 'navTargetMissing' : undefined}>
+            {entry.icon && <i className={entry.icon} aria-hidden='true' />}
+            <span>{entry.label}</span>
+        </PrimeMenu.Item>
     );
 }
