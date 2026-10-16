@@ -339,7 +339,7 @@ public static class ShellResolver
             return [.. screen.SlotContent.Where(entry => entry.Value.Count > 0).Select(entry => entry.Key)];
         }
 
-        var current = templates.FirstOrDefault(template => template.Name == screen.ScreenTemplate);
+        var current = templates.Find(template => template.Name == screen.ScreenTemplate);
         var visited = new HashSet<string>(StringComparer.Ordinal);
         while (current is not null && visited.Add(current.Name))
         {
@@ -357,7 +357,7 @@ public static class ShellResolver
             }
 
             var self = current;
-            var container = templates.FirstOrDefault(template =>
+            var container = templates.Find(template =>
                 template != self && (qualifier is null || template.Name == qualifier) && template.Slots.Any(candidate => candidate.Name == slot));
             if (container is null)
             {

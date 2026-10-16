@@ -79,9 +79,9 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             $"reference {(expected.TryGetProperty("reference", out var reference) ? Reference(reference.GetProperty("source").GetString()!, reference.GetProperty("id").GetString()!, Optional(reference, "blueprint"), Optional(reference, "version")) : string.Empty)}",
             $"package {Optional(expected, "package")} {Optional(expected, "packageVersion")}",
             $"pin {Optional(expected, "pinStatus")} {Optional(expected, "pin")}",
-            $"outlets {string.Join(",", expected.GetProperty("outlets").EnumerateArray().Select(item => item.GetString()))}",
+            $"outlets {string.Join(',', expected.GetProperty("outlets").EnumerateArray().Select(item => item.GetString()))}",
             $"primary {expected.GetProperty("primaryOutlet").GetString()}",
-            $"options {string.Join(",", expected.GetProperty("options").EnumerateObject().OrderBy(property => property.Name, StringComparer.Ordinal).Select(property => $"{property.Name}={property.Value.GetRawText()}"))}"
+            $"options {string.Join(',', expected.GetProperty("options").EnumerateObject().OrderBy(property => property.Name, StringComparer.Ordinal).Select(property => $"{property.Name}={property.Value.GetRawText()}"))}"
         };
         lines.AddRange(expected.GetProperty("diagnostics").EnumerateArray().Select(item => $"diagnostic {item.GetProperty("code").GetString()}|{(item.GetProperty("subject").ValueKind == JsonValueKind.Null ? string.Empty : item.GetProperty("subject").GetString())}|{item.GetProperty("message").GetString()}"));
         return string.Join('\n', lines);
@@ -98,9 +98,9 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             $"reference {(shell.Reference is null ? string.Empty : Reference(shell.Reference.Source.ToString(), shell.Reference.Id, shell.Reference.Blueprint ?? string.Empty, shell.Reference.Version ?? string.Empty))}",
             $"package {shell.Package} {shell.PackageVersion}",
             $"pin {(shell.Pin is null ? string.Empty : shell.Pin.Status.ToString())} {shell.Pin?.Pin}",
-            $"outlets {string.Join(",", shell.Outlets)}",
+            $"outlets {string.Join(',', shell.Outlets)}",
             $"primary {shell.PrimaryOutlet}",
-            $"options {string.Join(",", shell.Options.OrderBy(option => option.Key, StringComparer.Ordinal).Select(option => $"{option.Key}={option.Value?.ToJsonString() ?? "null"}"))}"
+            $"options {string.Join(',', shell.Options.OrderBy(option => option.Key, StringComparer.Ordinal).Select(option => $"{option.Key}={option.Value?.ToJsonString() ?? "null"}"))}"
         };
         lines.AddRange(shell.Diagnostics.Select(item => $"diagnostic {ToCamelCase(item.Code.ToString())}|{item.Subject}|{item.Message}"));
         return string.Join('\n', lines);
