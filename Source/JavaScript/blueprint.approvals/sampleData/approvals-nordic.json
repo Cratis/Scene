@@ -1,0 +1,1269 @@
+{
+  "id": "approvals-nordic",
+  "title": "Approvals · Nordic",
+  "locale": "nb-NO",
+  "owner": "blueprint:approvals",
+  "sets": [
+    {
+      "shape": "ApprovalsSettings",
+      "rows": [
+        {
+          "locale": "nb-NO",
+          "currency": "NOK"
+        }
+      ]
+    },
+    {
+      "shape": "InboxRequests",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Permisjon: Magnus Dahl",
+          "type": "Permisjon",
+          "requester": "Magnus Dahl",
+          "approver": "Sofie Berg",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-01",
+          "waiting": "2 t",
+          "dates": "3.-7. nov",
+          "step": "Manager",
+          "detail": "Magnus Dahl - Permisjon - 2 t"
+        },
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Utlegg: Sofie Berg",
+          "type": "Utlegg",
+          "requester": "Sofie Berg",
+          "approver": "Henrik Lund",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12. okt",
+          "step": "Finance",
+          "detail": "Sofie Berg - Utlegg - 1 d"
+        },
+        {
+          "id": "req-3",
+          "reference": "R-2052",
+          "title": "Innkjøp: Henrik Lund",
+          "type": "Innkjøp",
+          "requester": "Henrik Lund",
+          "approver": "Kari Nordmann",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 18500,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20.-24. okt",
+          "step": "Director",
+          "detail": "Henrik Lund - Innkjøp - 3 d"
+        },
+        {
+          "id": "req-6",
+          "reference": "R-2055",
+          "title": "Permisjon: Ingrid Solberg",
+          "type": "Permisjon",
+          "requester": "Ingrid Solberg",
+          "approver": "Magnus Dahl",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 9400,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3.-7. nov",
+          "step": "Director",
+          "detail": "Ingrid Solberg - Permisjon - 6 d"
+        },
+        {
+          "id": "req-10",
+          "reference": "R-2059",
+          "title": "Fakturagodkjenning: Kari Nordmann",
+          "type": "Fakturagodkjenning",
+          "requester": "Kari Nordmann",
+          "approver": "Ola Hansen",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 76000,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-10",
+          "waiting": "3 t",
+          "dates": "2.-3. des",
+          "step": "Manager",
+          "detail": "Kari Nordmann - Fakturagodkjenning - 3 t"
+        }
+      ]
+    },
+    {
+      "shape": "InboxColumns",
+      "rows": [
+        {
+          "field": "title",
+          "header": "Forespørsel"
+        },
+        {
+          "field": "requester",
+          "header": "Forespurt av"
+        },
+        {
+          "field": "amount",
+          "header": "Beløp",
+          "kind": "currency",
+          "currency": "NOK"
+        },
+        {
+          "field": "waiting",
+          "header": "Ventet"
+        },
+        {
+          "field": "submitted",
+          "header": "Sendt inn",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "InboxFilterFields",
+      "rows": [
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Permisjon",
+            "Utlegg",
+            "Innkjøp",
+            "Reise",
+            "Fakturagodkjenning"
+          ]
+        },
+        {
+          "name": "requester",
+          "label": "Forespurt av",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund",
+            "Kari Nordmann",
+            "Ola Hansen"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Sendt inn",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "InboxViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle ventende"
+        },
+        {
+          "id": "overdue",
+          "label": "Forfalt"
+        },
+        {
+          "id": "mine",
+          "label": "Store beløp"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequests",
+      "rows": [
+        {
+          "id": "mine-1",
+          "reference": "R-2050",
+          "title": "Permisjon: Ingrid Solberg",
+          "type": "Permisjon",
+          "requester": "Ingrid Solberg",
+          "approver": "Sofie Berg",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-01",
+          "waiting": "2 t",
+          "dates": "3.-7. nov",
+          "step": "Manager"
+        },
+        {
+          "id": "mine-2",
+          "reference": "R-2051",
+          "title": "Utlegg: Ingrid Solberg",
+          "type": "Utlegg",
+          "requester": "Ingrid Solberg",
+          "approver": "Henrik Lund",
+          "status": "Godkjent",
+          "tone": "success",
+          "amount": 1240,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12. okt",
+          "step": "Finance"
+        },
+        {
+          "id": "mine-3",
+          "reference": "R-2052",
+          "title": "Innkjøp: Ingrid Solberg",
+          "type": "Innkjøp",
+          "requester": "Ingrid Solberg",
+          "approver": "Kari Nordmann",
+          "status": "Utkast",
+          "tone": "neutral",
+          "amount": 18500,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20.-24. okt",
+          "step": "Director"
+        },
+        {
+          "id": "mine-4",
+          "reference": "R-2053",
+          "title": "Reise: Ingrid Solberg",
+          "type": "Reise",
+          "requester": "Ingrid Solberg",
+          "approver": "Ola Hansen",
+          "status": "Avslått",
+          "tone": "danger",
+          "amount": 2860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-04",
+          "waiting": "5 t",
+          "dates": "15. nov",
+          "step": "Manager"
+        },
+        {
+          "id": "mine-5",
+          "reference": "R-2054",
+          "title": "Fakturagodkjenning: Ingrid Solberg",
+          "type": "Fakturagodkjenning",
+          "requester": "Ingrid Solberg",
+          "approver": "Ingrid Solberg",
+          "status": "Endringer ønskes",
+          "tone": "warning",
+          "amount": 640,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-05",
+          "waiting": "2 d",
+          "dates": "2.-3. des",
+          "step": "Finance"
+        },
+        {
+          "id": "mine-6",
+          "reference": "R-2055",
+          "title": "Permisjon: Ingrid Solberg",
+          "type": "Permisjon",
+          "requester": "Ingrid Solberg",
+          "approver": "Magnus Dahl",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 9400,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3.-7. nov",
+          "step": "Director"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "title",
+          "header": "Forespørsel"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Utkast": "neutral",
+            "Sendt inn": "info",
+            "Godkjent": "success",
+            "Avslått": "danger",
+            "Endringer ønskes": "warning"
+          }
+        },
+        {
+          "field": "approver",
+          "header": "Godkjenner"
+        },
+        {
+          "field": "amount",
+          "header": "Beløp",
+          "kind": "currency",
+          "currency": "NOK"
+        },
+        {
+          "field": "submitted",
+          "header": "Sendt inn",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Utkast",
+            "Sendt inn",
+            "Godkjent",
+            "Avslått",
+            "Endringer ønskes"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Permisjon",
+            "Utlegg",
+            "Innkjøp",
+            "Reise",
+            "Fakturagodkjenning"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Sendt inn",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle mine"
+        },
+        {
+          "id": "drafts",
+          "label": "Utkast"
+        },
+        {
+          "id": "open",
+          "label": "Åpne"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "title",
+          "label": "Forespørsel"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "approver",
+          "label": "Godkjenner"
+        },
+        {
+          "id": "amount",
+          "label": "Beløp"
+        },
+        {
+          "id": "submitted",
+          "label": "Sendt inn"
+        }
+      ]
+    },
+    {
+      "shape": "MyRequestSelection",
+      "rows": []
+    },
+    {
+      "shape": "AllRequests",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Permisjon: Magnus Dahl",
+          "type": "Permisjon",
+          "requester": "Magnus Dahl",
+          "approver": "Sofie Berg",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-01",
+          "waiting": "2 t",
+          "dates": "3.-7. nov",
+          "step": "Manager"
+        },
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Utlegg: Sofie Berg",
+          "type": "Utlegg",
+          "requester": "Sofie Berg",
+          "approver": "Henrik Lund",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12. okt",
+          "step": "Finance"
+        },
+        {
+          "id": "req-3",
+          "reference": "R-2052",
+          "title": "Innkjøp: Henrik Lund",
+          "type": "Innkjøp",
+          "requester": "Henrik Lund",
+          "approver": "Kari Nordmann",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 18500,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-03",
+          "waiting": "3 d",
+          "dates": "20.-24. okt",
+          "step": "Director"
+        },
+        {
+          "id": "req-4",
+          "reference": "R-2053",
+          "title": "Reise: Kari Nordmann",
+          "type": "Reise",
+          "requester": "Kari Nordmann",
+          "approver": "Ola Hansen",
+          "status": "Godkjent",
+          "tone": "success",
+          "amount": 2860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-04",
+          "waiting": "5 t",
+          "dates": "15. nov",
+          "step": "Manager"
+        },
+        {
+          "id": "req-5",
+          "reference": "R-2054",
+          "title": "Fakturagodkjenning: Ola Hansen",
+          "type": "Fakturagodkjenning",
+          "requester": "Ola Hansen",
+          "approver": "Ingrid Solberg",
+          "status": "Avslått",
+          "tone": "danger",
+          "amount": 640,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-05",
+          "waiting": "2 d",
+          "dates": "2.-3. des",
+          "step": "Finance"
+        },
+        {
+          "id": "req-6",
+          "reference": "R-2055",
+          "title": "Permisjon: Ingrid Solberg",
+          "type": "Permisjon",
+          "requester": "Ingrid Solberg",
+          "approver": "Magnus Dahl",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 9400,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-06",
+          "waiting": "6 d",
+          "dates": "3.-7. nov",
+          "step": "Director"
+        },
+        {
+          "id": "req-7",
+          "reference": "R-2056",
+          "title": "Utlegg: Magnus Dahl",
+          "type": "Utlegg",
+          "requester": "Magnus Dahl",
+          "approver": "Sofie Berg",
+          "status": "Utkast",
+          "tone": "neutral",
+          "amount": 2140,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-07",
+          "waiting": "1 t",
+          "dates": "12. okt",
+          "step": "Manager"
+        },
+        {
+          "id": "req-8",
+          "reference": "R-2057",
+          "title": "Innkjøp: Sofie Berg",
+          "type": "Innkjøp",
+          "requester": "Sofie Berg",
+          "approver": "Henrik Lund",
+          "status": "Endringer ønskes",
+          "tone": "warning",
+          "amount": 5200,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-08",
+          "waiting": "4 d",
+          "dates": "20.-24. okt",
+          "step": "Finance"
+        },
+        {
+          "id": "req-9",
+          "reference": "R-2058",
+          "title": "Reise: Henrik Lund",
+          "type": "Reise",
+          "requester": "Henrik Lund",
+          "approver": "Kari Nordmann",
+          "status": "Godkjent",
+          "tone": "success",
+          "amount": 320,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-09",
+          "waiting": "2 d",
+          "dates": "15. nov",
+          "step": "Director"
+        },
+        {
+          "id": "req-10",
+          "reference": "R-2059",
+          "title": "Fakturagodkjenning: Kari Nordmann",
+          "type": "Fakturagodkjenning",
+          "requester": "Kari Nordmann",
+          "approver": "Ola Hansen",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 76000,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-10",
+          "waiting": "3 t",
+          "dates": "2.-3. des",
+          "step": "Manager"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestColumns",
+      "rows": [
+        {
+          "field": "reference",
+          "header": "ID"
+        },
+        {
+          "field": "title",
+          "header": "Forespørsel"
+        },
+        {
+          "field": "requester",
+          "header": "Forespurt av"
+        },
+        {
+          "field": "approver",
+          "header": "Nåværende godkjenner"
+        },
+        {
+          "field": "status",
+          "header": "Status",
+          "kind": "status",
+          "tones": {
+            "Utkast": "neutral",
+            "Sendt inn": "info",
+            "Godkjent": "success",
+            "Avslått": "danger",
+            "Endringer ønskes": "warning"
+          }
+        },
+        {
+          "field": "amount",
+          "header": "Beløp",
+          "kind": "currency",
+          "currency": "NOK"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestFilterFields",
+      "rows": [
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Utkast",
+            "Sendt inn",
+            "Godkjent",
+            "Avslått",
+            "Endringer ønskes"
+          ]
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "options": [
+            "Permisjon",
+            "Utlegg",
+            "Innkjøp",
+            "Reise",
+            "Fakturagodkjenning"
+          ]
+        },
+        {
+          "name": "requester",
+          "label": "Forespurt av",
+          "type": "select",
+          "options": [
+            "Ingrid Solberg",
+            "Magnus Dahl",
+            "Sofie Berg",
+            "Henrik Lund",
+            "Kari Nordmann",
+            "Ola Hansen"
+          ]
+        },
+        {
+          "name": "submitted",
+          "label": "Sendt inn",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle forespørsler"
+        },
+        {
+          "id": "open",
+          "label": "Åpne"
+        },
+        {
+          "id": "rejected",
+          "label": "Avslåtte"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestColumnChoices",
+      "rows": [
+        {
+          "id": "reference",
+          "label": "ID",
+          "locked": true
+        },
+        {
+          "id": "title",
+          "label": "Forespørsel"
+        },
+        {
+          "id": "requester",
+          "label": "Forespurt av"
+        },
+        {
+          "id": "approver",
+          "label": "Nåværende godkjenner"
+        },
+        {
+          "id": "status",
+          "label": "Status"
+        },
+        {
+          "id": "amount",
+          "label": "Beløp"
+        }
+      ]
+    },
+    {
+      "shape": "AllRequestSelection",
+      "rows": []
+    },
+    {
+      "shape": "RequestTypes",
+      "rows": [
+        {
+          "id": "type-1",
+          "title": "Permisjon",
+          "name": "Permisjon",
+          "approvers": "Leder → HR",
+          "steps": 2,
+          "active": "Ja",
+          "asks": "Datoer, type permisjon og vikar"
+        },
+        {
+          "id": "type-2",
+          "title": "Utlegg",
+          "name": "Utlegg",
+          "approvers": "Leder → Økonomi",
+          "steps": 2,
+          "active": "Ja",
+          "asks": "Kvitteringer, beløp og kostnadssted"
+        },
+        {
+          "id": "type-3",
+          "title": "Innkjøp",
+          "name": "Innkjøp",
+          "approvers": "Leder → Økonomi → Direktør",
+          "steps": 3,
+          "active": "Ja",
+          "asks": "Hva, fra hvem og tilbudet"
+        },
+        {
+          "id": "type-4",
+          "title": "Reise",
+          "name": "Reise",
+          "approvers": "Leder → Økonomi",
+          "steps": 2,
+          "active": "Ja",
+          "asks": "Hvor, når og anslag"
+        },
+        {
+          "id": "type-5",
+          "title": "Fakturagodkjenning",
+          "name": "Fakturagodkjenning",
+          "approvers": "Økonomi → Direktør",
+          "steps": 2,
+          "active": "Nei",
+          "asks": "Fakturaen og bestillingen"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Navn"
+        },
+        {
+          "field": "approvers",
+          "header": "Godkjenningstrinn"
+        },
+        {
+          "field": "steps",
+          "header": "Trinn"
+        },
+        {
+          "field": "active",
+          "header": "Aktiv"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeFilterFields",
+      "rows": [
+        {
+          "name": "active",
+          "label": "Aktiv",
+          "type": "select",
+          "options": [
+            "Ja",
+            "Nei"
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeViews",
+      "rows": [
+        {
+          "id": "all",
+          "label": "Alle typer"
+        },
+        {
+          "id": "active",
+          "label": "Bare aktive"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeColumnChoices",
+      "rows": [
+        {
+          "id": "name",
+          "label": "Navn",
+          "locked": true
+        },
+        {
+          "id": "approvers",
+          "label": "Godkjenningstrinn"
+        },
+        {
+          "id": "steps",
+          "label": "Trinn"
+        },
+        {
+          "id": "active",
+          "label": "Aktiv"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeSelection",
+      "rows": []
+    },
+    {
+      "shape": "RequestWizardSteps",
+      "rows": [
+        {
+          "id": "type",
+          "label": "Type forespørsel",
+          "valid": true
+        },
+        {
+          "id": "details",
+          "label": "Detaljer",
+          "valid": true
+        },
+        {
+          "id": "attachments",
+          "label": "Vedlegg",
+          "valid": true
+        },
+        {
+          "id": "review",
+          "label": "Se over og send inn",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeSections",
+      "rows": [
+        {
+          "id": "type",
+          "title": "Type forespørsel",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Type forespørsel",
+              "type": "select",
+              "options": [
+                "Permisjon",
+                "Utlegg",
+                "Innkjøp",
+                "Reise",
+                "Fakturagodkjenning"
+              ],
+              "required": true
+            },
+            {
+              "name": "note",
+              "label": "Typen avgjør hva neste steg spør om og hvem som godkjenner."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestDetailSections",
+      "rows": [
+        {
+          "id": "details",
+          "title": "Detaljer",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "title",
+              "label": "Forespørsel",
+              "required": true,
+              "span": 2
+            },
+            {
+              "name": "amount",
+              "label": "Beløp",
+              "type": "currency"
+            },
+            {
+              "name": "from",
+              "label": "Fra",
+              "type": "date",
+              "required": true
+            },
+            {
+              "name": "to",
+              "label": "Til",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Begrunnelse",
+              "type": "richText",
+              "span": 2,
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestReviewValues",
+      "rows": [
+        {
+          "id": "req-1",
+          "reference": "R-2050",
+          "title": "Permisjon: Ingrid Solberg",
+          "type": "Permisjon",
+          "requester": "Magnus Dahl",
+          "approver": "Sofie Berg",
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 1860,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-01",
+          "waiting": "2 t",
+          "dates": "3.-7. nov",
+          "step": "Manager",
+          "from": "2026-11-03",
+          "to": "2026-11-07",
+          "reason": "<p>Ferie avtalt med teamet; vikar er ordnet.</p>"
+        }
+      ]
+    },
+    {
+      "shape": "RequestReviewSections",
+      "rows": [
+        {
+          "id": "review",
+          "title": "Se over og send inn",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Type forespørsel"
+            },
+            {
+              "name": "title",
+              "label": "Forespørsel",
+              "span": 2
+            },
+            {
+              "name": "amount",
+              "label": "Beløp",
+              "type": "currency"
+            },
+            {
+              "name": "from",
+              "label": "Fra",
+              "type": "date"
+            },
+            {
+              "name": "to",
+              "label": "Til",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Begrunnelse",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestRecord",
+      "rows": [
+        {
+          "id": "req-2",
+          "reference": "R-2051",
+          "title": "Utlegg: Sofie Berg",
+          "type": "Utlegg",
+          "requester": "Sofie Berg",
+          "approver": "Henrik Lund",
+          "status": "Sendt inn",
+          "tone": "warning",
+          "amount": 1240,
+          "amountLabel": "Beløp",
+          "submitted": "2026-10-02",
+          "waiting": "1 d",
+          "dates": "12. okt",
+          "step": "Finance",
+          "from": "2026-11-03",
+          "to": "2026-11-07",
+          "reason": "<p>Ferie avtalt med teamet; vikar er ordnet.</p>",
+          "department": "Drift",
+          "costCentre": "4120"
+        }
+      ]
+    },
+    {
+      "shape": "RequestSummary",
+      "rows": [
+        {
+          "status": "Sendt inn",
+          "tone": "info",
+          "amount": 1240,
+          "amountLabel": "Beløp",
+          "people": [
+            {
+              "name": "Sofie Berg"
+            },
+            {
+              "name": "Henrik Lund"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestSections",
+      "rows": [
+        {
+          "id": "request",
+          "title": "Om forespørselen",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "type",
+              "label": "Type forespørsel"
+            },
+            {
+              "name": "requester",
+              "label": "Forespurt av"
+            },
+            {
+              "name": "department",
+              "label": "Avdeling"
+            },
+            {
+              "name": "costCentre",
+              "label": "Kostnadssted"
+            },
+            {
+              "name": "from",
+              "label": "Fra",
+              "type": "date"
+            },
+            {
+              "name": "to",
+              "label": "Til",
+              "type": "date"
+            },
+            {
+              "name": "reason",
+              "label": "Begrunnelse",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestChain",
+      "rows": [
+        {
+          "label": "Leder",
+          "approver": "Sofie Berg",
+          "state": "approved",
+          "at": "2026-10-03T09:15:00Z",
+          "comment": "Greit for meg."
+        },
+        {
+          "label": "Økonomi",
+          "approver": "Henrik Lund",
+          "state": "current"
+        },
+        {
+          "label": "Direktør",
+          "approver": "Magnus Dahl",
+          "state": "pending"
+        }
+      ]
+    },
+    {
+      "shape": "RequestAttachments",
+      "rows": [
+        {
+          "id": "a1",
+          "name": "Kvittering-2026-10-02.pdf",
+          "size": "184 KB",
+          "added": "2026-10-02",
+          "owner": "Sofie Berg"
+        },
+        {
+          "id": "a2",
+          "name": "Tilbud-Fjordtech.pdf",
+          "size": "1.2 MB",
+          "added": "2026-10-02",
+          "owner": "Sofie Berg"
+        }
+      ]
+    },
+    {
+      "shape": "AttachmentColumns",
+      "rows": [
+        {
+          "field": "name",
+          "header": "Fil"
+        },
+        {
+          "field": "size",
+          "header": "Størrelse"
+        },
+        {
+          "field": "owner",
+          "header": "Lagt til av"
+        },
+        {
+          "field": "added",
+          "header": "Lagt til",
+          "kind": "date"
+        }
+      ]
+    },
+    {
+      "shape": "RequestComments",
+      "rows": [
+        {
+          "id": "Henrik Lund-14",
+          "actor": "Henrik Lund",
+          "action": "stilte et spørsmål",
+          "kind": "comment",
+          "at": "2026-10-14T09:30:00Z",
+          "body": "Er tilbudet fortsatt gyldig etter 30. oktober?"
+        },
+        {
+          "id": "Sofie Berg-3",
+          "actor": "Sofie Berg",
+          "action": "godkjente lederleddet",
+          "kind": "status",
+          "at": "2026-10-03T09:30:00Z",
+          "body": "Greit for meg."
+        },
+        {
+          "id": "Sofie Berg-2",
+          "actor": "Sofie Berg",
+          "action": "sendte inn forespørselen",
+          "kind": "status",
+          "at": "2026-10-02T09:30:00Z"
+        }
+      ]
+    },
+    {
+      "shape": "RequestTabs",
+      "rows": [
+        {
+          "id": "overview",
+          "label": "Oversikt"
+        },
+        {
+          "id": "attachments",
+          "label": "Vedlegg",
+          "badge": "2"
+        },
+        {
+          "id": "history",
+          "label": "Historikk"
+        }
+      ]
+    },
+    {
+      "shape": "DecisionSections",
+      "rows": [
+        {
+          "id": "decision",
+          "title": "Avgjørelse",
+          "columns": 1,
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Avgjørelse",
+              "type": "select",
+              "options": [
+                "Godkjenn",
+                "Avslå",
+                "Be om endringer"
+              ],
+              "required": true
+            },
+            {
+              "name": "comment",
+              "label": "Kommentar til forespørselen",
+              "type": "richText"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "RequestTypeEditorSections",
+      "rows": [
+        {
+          "id": "type",
+          "title": "Forespørselstype",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Navn",
+              "required": true
+            },
+            {
+              "name": "active",
+              "label": "Aktiv",
+              "type": "select",
+              "options": [
+                "Ja",
+                "Nei"
+              ]
+            },
+            {
+              "name": "steps",
+              "label": "Godkjenningstrinn",
+              "span": 2
+            },
+            {
+              "name": "asks",
+              "label": "Hva den spør om",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "shape": "ApprovalsFormErrors",
+      "rows": [
+        {}
+      ]
+    }
+  ]
+}

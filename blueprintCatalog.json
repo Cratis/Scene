@@ -129,6 +129,172 @@
       ]
     },
     {
+      "package": "Cratis.Blueprint.Approvals",
+      "version": "1.0.0",
+      "domain": "approvals",
+      "displayName": "Approvals and Requests",
+      "description": "Requests and approvals: an approver's inbox, my requests, a new-request wizard, request pages with their approval chain and the request types an organisation offers.",
+      "thumbnail": "thumbnails/approvals.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "approvals.inbox",
+          "title": "Inbox",
+          "description": "The requests waiting for my decision, with Approve, Reject and Request changes on each.",
+          "template": "ApprovalInbox",
+          "order": 0
+        },
+        {
+          "name": "approvals.requests",
+          "title": "My requests",
+          "description": "The requests I made, with draft, submitted, approved and rejected as chips.",
+          "template": "MyRequests",
+          "order": 1
+        },
+        {
+          "name": "approvals.requests.new",
+          "title": "New request",
+          "description": "Request type, details, attachments, then review and submit.",
+          "template": "NewRequestWizard",
+          "parent": "approvals.requests"
+        },
+        {
+          "name": "approvals.requests.page",
+          "title": "Request",
+          "description": "One request: its summary, its approval chain, its attachments and the comments.",
+          "template": "RequestPage",
+          "parent": "approvals.requests"
+        },
+        {
+          "name": "approvals.all",
+          "title": "All requests",
+          "description": "Every request in the organisation.",
+          "template": "AllRequests",
+          "order": 2
+        },
+        {
+          "name": "approvals.templates",
+          "title": "Templates",
+          "description": "The request types an organisation offers, for administrators.",
+          "template": "RequestTypes",
+          "order": 3
+        },
+        {
+          "name": "approvals.templates.edit",
+          "title": "Edit request type",
+          "description": "Edits what a request type asks for and who approves it.",
+          "template": "RequestTypeEditForm",
+          "parent": "approvals.templates"
+        }
+      ],
+      "templates": [
+        {
+          "name": "ApprovalInbox",
+          "kind": "ScreenTemplate",
+          "displayName": "Approval inbox",
+          "description": "The requests waiting for my decision as cards, with Approve, Reject and Request changes inline.",
+          "type": "List",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/ApprovalInbox.svg"
+        },
+        {
+          "name": "MyRequests",
+          "kind": "ScreenTemplate",
+          "displayName": "My requests",
+          "description": "The requests I made, with draft, submitted, approved and rejected as chips.",
+          "type": "List",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/MyRequests.svg"
+        },
+        {
+          "name": "NewRequestWizard",
+          "kind": "ScreenTemplate",
+          "displayName": "New request",
+          "description": "Request type, details, attachments, then review and submit; the step survives a refresh and a draft can be saved.",
+          "type": "Wizard",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/NewRequestWizard.svg"
+        },
+        {
+          "name": "RequestPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Request page",
+          "description": "One request: summary, approval chain, fields, attachments and comments, and the decision buttons.",
+          "type": "Detail",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/RequestPage.svg"
+        },
+        {
+          "name": "AllRequests",
+          "kind": "ScreenTemplate",
+          "displayName": "All requests",
+          "description": "Every request of the organisation with its type, requester, current approver and status.",
+          "type": "List",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/AllRequests.svg"
+        },
+        {
+          "name": "RequestTypes",
+          "kind": "ScreenTemplate",
+          "displayName": "Request types",
+          "description": "The request types an organisation offers, with the steps that approve each and whether it is active.",
+          "type": "List",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/RequestTypes.svg"
+        },
+        {
+          "name": "RequestTypeEditForm",
+          "kind": "ScreenTemplate",
+          "displayName": "Edit request type",
+          "description": "A form that edits a request type: its name, what it asks for and its approval steps.",
+          "type": "Form",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/RequestTypeEditForm.svg"
+        },
+        {
+          "name": "DecisionDialog",
+          "kind": "DialogTemplate",
+          "displayName": "Decision",
+          "description": "A confirmation with a decision (approve, reject or request changes) and a comment for the requester.",
+          "type": "Dialog",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/DecisionDialog.svg"
+        },
+        {
+          "name": "RequestTypeQuickCreate",
+          "kind": "DialogTemplate",
+          "displayName": "New request type",
+          "description": "A short form that adds a request type without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Approvals",
+          "thumbnail": "thumbnails/RequestTypeQuickCreate.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "approvals-general",
+          "title": "Approvals · General",
+          "locale": "en-GB",
+          "path": "sampleData/approvals-general.json",
+          "default": true
+        },
+        {
+          "id": "approvals-nordic",
+          "title": "Approvals · Nordic",
+          "locale": "nb-NO",
+          "path": "sampleData/approvals-nordic.json",
+          "default": false
+        }
+      ]
+    },
+    {
       "package": "Cratis.Blueprint.Crm",
       "version": "1.0.0",
       "domain": "crm",
