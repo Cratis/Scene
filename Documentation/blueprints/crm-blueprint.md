@@ -5,7 +5,7 @@ description: Leads, contacts, companies and deals for a sales team - the screens
 
 `@cratis/scene.blueprint.crm` is the first **domain blueprint**: a ready-to-use sales application built on the
 [foundation set](foundation-templates.md). It brings no shell, component or theme of its own - every component is the
-foundation's - and adds what is particular to selling: eighteen screen templates, five quick-create dialogs, a screen
+foundation's - and adds what is particular to selling: twenty screen templates, five quick-create dialogs, a screen
 set wired into navigation, and two sample-data packs.
 
 It follows Part B 3.1 of the screen blueprints specification, and it is held to the same
@@ -24,7 +24,7 @@ widths in the light and dark themes, with colour contrast.
 | `crm.deals` | `CrmDealPipeline` | BoardScreen | A column for each stage with the value of the stage in its header; a card for each deal with name, company, value, close date and owner |
 | `crm.deals.list` | `CrmDealList` | ListScreen (grouped) | The same deals as a table grouped by stage, with the value of each stage as its subtotal |
 | `crm.contacts.record`, `crm.companies.record`, `crm.deals.record` | `CrmContactPage`, `CrmCompanyPage`, `CrmDealPage` | RecordPage | Key facts, tabs, the record's fields, related lists (the deals of a contact, the contacts and deals of a company), activity and next steps |
-| `crm.leads.new`, `crm.contacts.new`, `crm.companies.new`, `crm.deals.new` and the four `.edit` screens | `Crm<Entity>CreateForm`, `Crm<Entity>EditForm` | FormScreen | Sections of validated fields; create has Save and new, edit shows the record |
+| `crm.leads.new`, `crm.contacts.new`, `crm.companies.new`, `crm.deals.new`, `crm.activities.new` and the five `.edit` screens | `Crm<Entity>CreateForm`, `Crm<Entity>EditForm` | FormScreen | Sections of validated fields; create has Save and new, edit shows the record |
 | `crm.activities` | `CrmActivityList` | ListScreen | Calls, meetings, emails and tasks |
 | (dialogs) | `CrmQuickCreateLead`, `…Contact`, `…Company`, `…Deal`, `…Activity` | QuickCreateDialog | The few fields needed to make one record without leaving the page; opened by the list's primary button |
 

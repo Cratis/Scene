@@ -1597,6 +1597,82 @@
       ]
     },
     {
+      "shape": "ActivitySections",
+      "rows": [
+        {
+          "id": "activity",
+          "title": "Activity details",
+          "columns": 2,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Subject",
+              "required": true
+            },
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "options": [
+                "Call",
+                "Meeting",
+                "Email",
+                "Task"
+              ]
+            },
+            {
+              "name": "related",
+              "label": "Related to",
+              "type": "select",
+              "options": [
+                "Northgate Logistics",
+                "Harbour & Sons",
+                "Bluebird Studio",
+                "Cedar & Pine",
+                "Aldgate Systems",
+                "Redwood Foods",
+                "Kestrel Energy",
+                "Meridian Health"
+              ],
+              "required": true
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Planned",
+                "Done",
+                "Overdue"
+              ]
+            },
+            {
+              "name": "due",
+              "label": "Due",
+              "type": "date"
+            },
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "Amelia Hart",
+                "Oliver Reed",
+                "Priya Nair",
+                "Daniel Cho"
+              ]
+            },
+            {
+              "name": "notes",
+              "label": "Notes",
+              "type": "richText",
+              "span": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
       "shape": "LeadQuickSections",
       "rows": [
         {
@@ -1863,6 +1939,21 @@
           "created": "2026-09-01",
           "probability": 10,
           "source": "Web"
+        }
+      ]
+    },
+    {
+      "shape": "ActivityRecord",
+      "rows": [
+        {
+          "id": "activity-1",
+          "name": "Discovery call with Isla Morgan",
+          "type": "Call",
+          "related": "Northgate Logistics",
+          "owner": "Amelia Hart",
+          "status": "Planned",
+          "due": "2026-10-01",
+          "created": "2026-10-01"
         }
       ]
     },

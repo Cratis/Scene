@@ -32,4 +32,6 @@ export const crmScreenDefinitions: CrmScreenDefinition[] = [
     { name: 'crm.deals.new', title: 'New deal', template: 'CrmDealCreateForm', parent: 'crm.deals', description: 'Creates a deal.' },
     { name: 'crm.deals.edit', title: 'Edit deal', template: 'CrmDealEditForm', parent: 'crm.deals', description: 'Edits a deal.' },
     { name: 'crm.activities', title: 'Activities', template: 'CrmActivityList', order: 5, description: 'Calls, meetings, emails and tasks.' },
+    { name: 'crm.activities.new', title: 'New activity', template: 'CrmActivityCreateForm', parent: 'crm.activities', description: 'Logs an activity.' },
+    { name: 'crm.activities.edit', title: 'Edit activity', template: 'CrmActivityEditForm', parent: 'crm.activities', description: 'Edits an activity.' },
 ];
