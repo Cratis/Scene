@@ -3,15 +3,15 @@
 
 import { ApplicationStructure, FeatureNode, SliceKind } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { PreviewTarget, isSliceTarget } from './PreviewTarget';
+import { PreviewTarget, isApplicationTarget, isSliceTarget } from './PreviewTarget';
 import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity } from './PreviewProblem';
 
 /** What a target resolved to in the application structure. */
 export interface PreviewPlan {
-    /** `module`, `feature`, `stateChange` or `stateView`. */
-    kind: 'module' | 'feature' | 'stateChange' | 'stateView';
+    /** `application`, `module`, `feature`, `stateChange` or `stateView`. */
+    kind: 'application' | 'module' | 'feature' | 'stateChange' | 'stateView';
 
-    /** The module the preview is in. */
+    /** The module the preview is in; empty for the application itself. */
     module: string;
 
     /** The qualified id of the feature whose screen is the page: the module's first feature, the feature itself, or the slice's feature. */
@@ -57,6 +57,10 @@ function featurePath(structure: ApplicationStructure, qualified: string): { feat
  */
 export function resolvePreviewPlan(structure: ApplicationStructure | ApplicationStructureIndex, target: PreviewTarget): PreviewPlanResult {
     const index = structure instanceof ApplicationStructureIndex ? structure : new ApplicationStructureIndex(structure);
+
+    if (isApplicationTarget(target)) {
+        return { plan: { kind: 'application', module: '', breadcrumb: typeof target.application === 'string' ? [target.application] : [] }, problems: [] };
+    }
 
     if (isSliceTarget(target)) {
         const slice = index.findSlice(target.slice);

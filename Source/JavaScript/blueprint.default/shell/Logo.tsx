@@ -4,6 +4,7 @@
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { useSceneTheme } from '@cratis/scene.react';
 import { readOptionalString, readString } from './elementProperties';
+import { useShellLink } from './useShellLink';
 
 /**
  * The brand mark.
@@ -20,9 +21,10 @@ export function Logo({ element }: RegisteredComponentProps) {
     const darkSource = readOptionalString(element, 'darkImageUrl');
     const source = theme?.isDark ? darkSource ?? lightSource : lightSource ?? darkSource;
     const targetScreen = readString(element, 'targetScreen', 'Dashboard');
+    const link = useShellLink(targetScreen === '' ? undefined : targetScreen, { source: 'logo', id: element.id, label });
 
     return (
-        <a className='layout-logo' href={`#/${targetScreen}`} data-scene-id={element.id}>
+        <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id}>
             {source ? <img src={source} alt={label} height={28} /> : <span className='layout-logo-mark'>{initials}</span>}
             <span>{label}</span>
         </a>
