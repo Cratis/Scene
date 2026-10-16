@@ -1075,6 +1075,13 @@
           "template": "ProjectTaskLanes",
           "parent": "projects.board",
           "order": 0
+        },
+        {
+          "name": "projects.timeline",
+          "title": "Timeline",
+          "description": "Every project as a bar on a schedule, in a lane for each owner, with progress, milestones and what waits on what.",
+          "template": "ProjectTimeline",
+          "order": 3
         }
       ],
       "templates": [
@@ -1122,6 +1129,15 @@
           "type": "Board",
           "category": "Business / Project tracker",
           "thumbnail": "thumbnails/ProjectTaskLanes.svg"
+        },
+        {
+          "name": "ProjectTimeline",
+          "kind": "ScreenTemplate",
+          "displayName": "Project timeline",
+          "description": "Every project as a bar on a schedule in a lane for each owner, with progress, milestones and dependencies.",
+          "type": "Timeline",
+          "category": "Business / Project tracker",
+          "thumbnail": "thumbnails/ProjectTimeline.svg"
         },
         {
           "name": "ProjectQuickCreateProject",

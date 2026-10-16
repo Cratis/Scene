@@ -14,6 +14,8 @@ export const ProjectTrackerQuery = {
     /** One row: the `locale` the figures and dates are formatted in. */
     Settings: 'ProjectsSettings',
     RecordTabs: 'ProjectRecordTabs',
+    TimelineItems: 'ProjectTimelineItems',
+    TimelineColumns: 'ProjectTimelineColumns',
     BoardColumns: 'TaskBoardColumns',
     BoardCards: 'TaskBoardCards',
     TaskRecord: 'TaskRecord',

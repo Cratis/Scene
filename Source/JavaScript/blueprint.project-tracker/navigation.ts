@@ -31,7 +31,7 @@ export const projectTrackerStructure: ApplicationStructure = (() => {
 
 /**
  * The navigation of the application the blueprint is: the topbar names the module, and the module's sidebar - which overrides the application's - lists
- * the places a team goes: Projects, My tasks and Board. (The timeline of the specification is a later addition to the foundation and is not part of this delivery.)
+ * the places a team goes: Projects, My tasks, Board and Timeline.
  */
 export const projectTrackerNavigation: NavigationModel = {
     application: {
@@ -52,6 +52,7 @@ export const projectTrackerNavigation: NavigationModel = {
                         { id: 'board-person', title: 'By person', target: { module: projectTrackerModule, feature: 'board.lanes' } },
                     ],
                 },
+                { id: 'timeline', title: 'Timeline', target: { module: projectTrackerModule, feature: 'timeline' } },
             ],
         }],
     }],

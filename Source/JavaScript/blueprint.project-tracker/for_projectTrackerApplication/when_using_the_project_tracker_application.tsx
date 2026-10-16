@@ -28,11 +28,11 @@ describe('when using the Project and Task Tracker application', () => {
             document.querySelector('.layout-logo')!.textContent!.should.contain('Projects');
         });
 
-        it('should list the places of a team in the sidebar', () => labels(sidebar()).should.deep.equal(['Projects', 'My tasks', 'Board']));
+        it('should list the places of a team in the sidebar', () => labels(sidebar()).should.deep.equal(['Projects', 'My tasks', 'Board', 'Timeline']));
 
         it('should put the two ways of seeing the board beneath it once it is opened', () => {
             fireEvent.click(screen.getByRole('button', { name: 'Expand Board' }));
-            labels(sidebar()).should.deep.equal(['Projects', 'My tasks', 'Board', 'By status', 'By person']);
+            labels(sidebar()).should.deep.equal(['Projects', 'My tasks', 'Board', 'By status', 'By person', 'Timeline']);
         });
 
         it('should show each project as a card with its owner, a progress bar, its due date and its status', () => {

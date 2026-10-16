@@ -9,7 +9,9 @@
             "rows": [
                 {
                     "locale": "en-GB",
-                    "currency": "GBP"
+                    "currency": "GBP",
+                    "today": "2026-10-14",
+                    "firstDay": 1
                 }
             ]
         },
@@ -1341,6 +1343,145 @@
             "shape": "ProjectsFormErrors",
             "rows": [
                 {}
+            ]
+        },
+        {
+            "shape": "ProjectTimelineItems",
+            "rows": [
+                {
+                    "id": "project-1",
+                    "title": "Website relaunch",
+                    "start": "2026-08-21",
+                    "end": "2026-11-13",
+                    "lane": "Amelia Hart",
+                    "progress": 72,
+                    "tone": "success"
+                },
+                {
+                    "id": "project-2",
+                    "title": "Mobile app v2",
+                    "start": "2026-08-30",
+                    "end": "2026-12-18",
+                    "lane": "Oliver Reed",
+                    "progress": 38,
+                    "tone": "warning",
+                    "dependsOn": [
+                        "project-1"
+                    ]
+                },
+                {
+                    "id": "project-3",
+                    "title": "Data warehouse migration",
+                    "start": "2026-07-26",
+                    "end": "2026-10-30",
+                    "lane": "Priya Nair",
+                    "progress": 55,
+                    "tone": "success"
+                },
+                {
+                    "id": "project-4",
+                    "title": "Brand refresh",
+                    "start": "2026-07-17",
+                    "end": "2026-09-25",
+                    "lane": "Daniel Cho",
+                    "progress": 100,
+                    "tone": "neutral"
+                },
+                {
+                    "id": "project-5",
+                    "title": "Customer portal",
+                    "start": "2026-08-13",
+                    "end": "2026-10-12",
+                    "lane": "Leah Morgan",
+                    "progress": 21,
+                    "tone": "danger"
+                },
+                {
+                    "id": "project-6",
+                    "title": "Office move",
+                    "start": "2026-09-13",
+                    "end": "2026-11-27",
+                    "lane": "Amelia Hart",
+                    "progress": 64,
+                    "tone": "success"
+                },
+                {
+                    "id": "project-7",
+                    "title": "Security audit",
+                    "start": "2026-09-08",
+                    "end": "2026-10-23",
+                    "lane": "Priya Nair",
+                    "progress": 83,
+                    "tone": "success",
+                    "dependsOn": [
+                        "project-3"
+                    ]
+                },
+                {
+                    "id": "project-8",
+                    "title": "Partner onboarding",
+                    "start": "2026-10-21",
+                    "end": "2027-01-29",
+                    "lane": "Oliver Reed",
+                    "progress": 12,
+                    "tone": "warning",
+                    "dependsOn": [
+                        "project-6"
+                    ]
+                },
+                {
+                    "id": "ms-1",
+                    "title": "Website go-live",
+                    "start": "2026-11-13",
+                    "end": "2026-11-13",
+                    "lane": "Amelia Hart",
+                    "progress": 0,
+                    "tone": "neutral",
+                    "milestone": true,
+                    "dependsOn": [
+                        "project-1"
+                    ]
+                },
+                {
+                    "id": "ms-2",
+                    "title": "Warehouse cut-over",
+                    "start": "2026-10-30",
+                    "end": "2026-10-30",
+                    "lane": "Priya Nair",
+                    "progress": 0,
+                    "tone": "neutral",
+                    "milestone": true,
+                    "dependsOn": [
+                        "project-3"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ProjectTimelineColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Item"
+                },
+                {
+                    "field": "lane",
+                    "header": "Owner"
+                },
+                {
+                    "field": "start",
+                    "header": "Starts",
+                    "kind": "date"
+                },
+                {
+                    "field": "end",
+                    "header": "Ends",
+                    "kind": "date"
+                },
+                {
+                    "field": "progress",
+                    "header": "Done"
+                }
             ]
         }
     ]

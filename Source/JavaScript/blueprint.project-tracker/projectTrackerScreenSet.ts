@@ -19,4 +19,5 @@ export const projectTrackerScreenDefinitions: ProjectTrackerScreenDefinition[] =
     { name: 'projects.mytasks', title: 'My tasks', template: 'ProjectMyTasks', order: 1, description: 'The tasks of the signed-in user, grouped by when they are due.' },
     { name: 'projects.board', title: 'Board', template: 'ProjectTaskBoard', order: 2, description: 'Tasks in a column for each status.' },
     { name: 'projects.board.lanes', title: 'Board by person', template: 'ProjectTaskLanes', parent: 'projects.board', order: 0, description: 'The same board with a lane for each assignee.' },
+    { name: 'projects.timeline', title: 'Timeline', template: 'ProjectTimeline', order: 3, description: 'Every project as a bar on a schedule, in a lane for each owner, with progress, milestones and what waits on what.' },
 ];

@@ -5,7 +5,7 @@ description: Projects as cards, a project page, a task board, a personal task li
 
 `@cratis/scene.blueprint.project-tracker` is a **domain blueprint** for a team that plans work in projects and tasks, built on the
 [foundation set](foundation-templates.md) the way [the CRM blueprint](crm-blueprint.md) is: it brings no shell, component or theme of its own and adds what is
-particular to tracking work - five screen templates, three dialog templates, a screen set wired into navigation, and a sample-data pack. It follows Part B 3.6 of
+particular to tracking work - six screen templates, three dialog templates, a screen set wired into navigation, and a sample-data pack. It follows Part B 3.6 of
 the screen blueprints specification and is held to the same [definition of done](ship-your-own-blueprint.md#the-definition-of-done): `verifyBlueprintPackage` is
 green, every template passes the per-template check, and every screen and dialog is audited in Chromium at desktop, tablet and phone widths in the light and
 dark themes, colour contrast included.
@@ -19,14 +19,14 @@ dark themes, colour contrast included.
 | `projects.mytasks` | `ProjectMyTasks` | ListScreen (grouped) | The user's tasks grouped by when they are due - overdue, today, this week, later - with project, priority and status; choosing a task opens it in a side sheet |
 | `projects.board` | `ProjectTaskBoard` | BoardScreen | A column for each status - to do, in progress, in review, done - and a card for each task with assignee, project, due date and priority |
 | `projects.board.lanes` | `ProjectTaskLanes` | BoardScreen (swimlanes) | The same board with a lane for each assignee across the same columns |
+| `projects.timeline` | `ProjectTimeline` | TimelineScreen | Every project as a bar on a schedule in a lane for each owner, with progress, two milestones and what waits on what; the scale is kept in the address, and on a phone the schedule is the table |
 | (dialogs) | `ProjectQuickCreateProject`, `ProjectQuickCreateTask` | QuickCreateDialog | The few fields to start a project or a task |
 | (dialog) | `ProjectTaskSheet` | SideSheet | One task in a drawer: status and people, its fields, subtasks as a checklist and the conversation; hosts a record page beside the list it came from |
 
 The categories are all `Business / Project tracker`. Templates carry their `scopes` (Part A 4.2): the list, the board and my tasks apply at module and feature
 level, the project page at feature and sub-feature level, and the dialogs at slice level.
 
-**Not in this delivery.** The specification's *Timeline* (a Gantt-style `TimelineScreen`) is on the foundation's later-additions list (Part B 2.12) and is not
-shipped; the navigation therefore lists Projects, My tasks and Board (with By status and By person beneath it). 
+**The timeline.** `ProjectTimeline` is built on the foundation's `timelineGrid` (Part B 2.12): a project's bar runs to its due date, a milestone marks a go-live, a dependency says what waits on what, and an owner's overlapping bars are told as a conflict in words. The navigation lists Projects, My tasks, Board (with By status and By person beneath it) and Timeline.
 
 ## Navigation
 
