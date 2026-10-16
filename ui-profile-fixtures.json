@@ -1,0 +1,340 @@
+{
+  "description": "Shared fixture corpus for the UiProfile JSON contract: reading (lenient) and writing (canonical) a profile must give identical bytes in the C# engine (UiProfileJson) and the TypeScript engine (parseUiProfile/serializeUiProfile). Canonical form: camelCase, enum values by declared name, absent members omitted, compact; key order is the model's declaration order for the profile, root template, template reference, appearance and defaults, ordinal order everywhere else. Part of Cratis/Scene#158.",
+  "cases": [
+    {
+      "name": "no root, appearance or defaults",
+      "description": "a profile written before the root template existed loads unchanged and writes back without the new members",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ]
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"]}"
+    },
+    {
+      "name": "legacy layout only",
+      "description": "Layout stays readable as the legacy shell name",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "layout": "AppShell",
+        "theme": "Aurora",
+        "defaultSizeClass": "Expanded"
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"defaultSizeClass\":\"Expanded\",\"layout\":\"AppShell\",\"theme\":\"Aurora\"}"
+    },
+    {
+      "name": "own root template",
+      "description": "an own template, no pin",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "AppFrame"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"AppFrame\"}}}"
+    },
+    {
+      "name": "blueprint root template with a version pin",
+      "description": "a blueprint template with its blueprint and pin",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "AppShell",
+            "blueprint": "Cratis.Blueprint.Default",
+            "version": "^4.5"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"AppShell\",\"blueprint\":\"Cratis.Blueprint.Default\",\"version\":\"^4.5\"}}}"
+    },
+    {
+      "name": "root template with options",
+      "description": "options are keyed by the shell's exposed option name and canonicalised by ordinal key order",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "AppShell",
+            "blueprint": "Cratis.Blueprint.Default",
+            "version": "^4.5"
+          },
+          "options": {
+            "showFooter": true,
+            "navigationMode": "slim",
+            "density": {
+              "rows": 2,
+              "compact": false
+            },
+            "tags": [
+              "a",
+              "b"
+            ],
+            "note": null
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"AppShell\",\"blueprint\":\"Cratis.Blueprint.Default\",\"version\":\"^4.5\"},\"options\":{\"density\":{\"compact\":false,\"rows\":2},\"navigationMode\":\"slim\",\"note\":null,\"showFooter\":true,\"tags\":[\"a\",\"b\"]}}}"
+    },
+    {
+      "name": "root template alongside the legacy layout",
+      "description": "both are kept; the engine decides precedence (root first)",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "layout": "AppShell",
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "AppFrame"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"layout\":\"AppShell\",\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"AppFrame\"}}}"
+    },
+    {
+      "name": "appearance",
+      "description": "colour scheme and accent",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "appearance": {
+          "colorScheme": "Dark",
+          "accent": "#4f46e5"
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"appearance\":{\"colorScheme\":\"Dark\",\"accent\":\"#4f46e5\"}}"
+    },
+    {
+      "name": "appearance with only an accent",
+      "description": "an absent colour scheme stays absent",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "appearance": {
+          "accent": "#0ea5e9"
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"appearance\":{\"accent\":\"#0ea5e9\"}}"
+    },
+    {
+      "name": "defaults new screen template",
+      "description": "a blueprint template new screens start from",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Blueprint",
+            "id": "Workspace",
+            "blueprint": "crm",
+            "version": "^2.0"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"defaults\":{\"newScreenTemplate\":{\"source\":\"Blueprint\",\"id\":\"Workspace\",\"blueprint\":\"crm\",\"version\":\"^2.0\"}}}"
+    },
+    {
+      "name": "own new screen template",
+      "description": "an own template new screens start from",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Standard"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"defaults\":{\"newScreenTemplate\":{\"source\":\"Own\",\"id\":\"Standard\"}}}"
+    },
+    {
+      "name": "empty appearance and defaults",
+      "description": "empty objects are kept as written; absence and emptiness are different statements",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "appearance": {},
+        "defaults": {}
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"appearance\":{},\"defaults\":{}}"
+    },
+    {
+      "name": "everything with sample data",
+      "description": "every member at once, with the sample-data selection kept and its keys ordered",
+      "input": {
+        "name": "Contoso",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components",
+          "Cratis.Blueprint.Default"
+        ],
+        "defaultSizeClass": "Regular",
+        "layout": "Legacy",
+        "theme": "Aurora",
+        "sampleData": {
+          "bindings": [
+            {
+              "target": "Customers",
+              "pack": "crm-nordic"
+            }
+          ],
+          "activePack": "crm-nordic-smb",
+          "mappings": [
+            {
+              "shape": "Cust",
+              "readModel": "CustomerList"
+            }
+          ]
+        },
+        "root": {
+          "template": {
+            "id": "AppShell",
+            "source": "Blueprint",
+            "version": "^4.5",
+            "blueprint": "Cratis.Blueprint.Default"
+          },
+          "options": {
+            "showFooter": true,
+            "navigationMode": "slim"
+          }
+        },
+        "appearance": {
+          "accent": "#4f46e5",
+          "colorScheme": "Dark"
+        },
+        "defaults": {
+          "newScreenTemplate": {
+            "version": "^2.0",
+            "blueprint": "crm",
+            "id": "Workspace",
+            "source": "Blueprint"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Contoso\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\",\"Cratis.Blueprint.Default\"],\"defaultSizeClass\":\"Regular\",\"layout\":\"Legacy\",\"theme\":\"Aurora\",\"sampleData\":{\"activePack\":\"crm-nordic-smb\",\"bindings\":[{\"pack\":\"crm-nordic\",\"target\":\"Customers\"}],\"mappings\":[{\"readModel\":\"CustomerList\",\"shape\":\"Cust\"}]},\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"AppShell\",\"blueprint\":\"Cratis.Blueprint.Default\",\"version\":\"^4.5\"},\"options\":{\"navigationMode\":\"slim\",\"showFooter\":true}},\"appearance\":{\"colorScheme\":\"Dark\",\"accent\":\"#4f46e5\"},\"defaults\":{\"newScreenTemplate\":{\"source\":\"Blueprint\",\"id\":\"Workspace\",\"blueprint\":\"crm\",\"version\":\"^2.0\"}}}"
+    },
+    {
+      "name": "lenient reading of enum case",
+      "description": "enum values are read case-insensitively and written as their declared names",
+      "input": {
+        "name": "Mobile",
+        "targetPlatform": "ios",
+        "packages": [],
+        "defaultSizeClass": "compact",
+        "root": {
+          "template": {
+            "source": "blueprint",
+            "id": "Shell",
+            "blueprint": "Cratis.Blueprint.Default"
+          }
+        },
+        "appearance": {
+          "colorScheme": "system"
+        },
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "own",
+            "id": "Start"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Mobile\",\"targetPlatform\":\"ios\",\"packages\":[],\"defaultSizeClass\":\"Compact\",\"root\":{\"template\":{\"source\":\"Blueprint\",\"id\":\"Shell\",\"blueprint\":\"Cratis.Blueprint.Default\"}},\"appearance\":{\"colorScheme\":\"System\"},\"defaults\":{\"newScreenTemplate\":{\"source\":\"Own\",\"id\":\"Start\"}}}"
+    },
+    {
+      "name": "non-ASCII names",
+      "description": "names are written as text, not escaped",
+      "input": {
+        "name": "Økonomi – Æ",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Skall<&>"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Økonomi – Æ\",\"targetPlatform\":\"web\",\"packages\":[\"core\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"Skall<&>\"}}}"
+    },
+    {
+      "name": "unknown properties are ignored",
+      "description": "a reader never fails on a member it does not know",
+      "input": {
+        "name": "Future",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "somethingNew": 1,
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "A",
+            "extra": true
+          },
+          "extra": [
+            1
+          ]
+        }
+      },
+      "canonical": "{\"name\":\"Future\",\"targetPlatform\":\"web\",\"packages\":[\"core\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"A\"}}}"
+    }
+  ]
+}

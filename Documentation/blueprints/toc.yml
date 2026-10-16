@@ -2,6 +2,8 @@
   href: index.md
 - name: Layouts
   href: layouts.md
+- name: The root template
+  href: root-template.md
 - name: Screen and dialog templates
   href: screen-templates.md
 - name: Types, categories and applicability

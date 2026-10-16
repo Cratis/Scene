@@ -47,3 +47,4 @@ export * from './editing';
 export * from './sampleData';
 export * from './structure';
 export * from './toolbar';
+export * from './uiProfileJson';

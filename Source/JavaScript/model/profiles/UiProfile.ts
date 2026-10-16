@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { SampleDataSelection } from '../sampleData';
+import { ProfileAppearance } from './ProfileAppearance';
+import { ProfileDefaults } from './ProfileDefaults';
+import { RootTemplate } from './RootTemplate';
 import { TargetSizeClass } from '../sizeClasses';
 
 /**
@@ -39,6 +42,7 @@ export interface UiProfile {
     /**
      * The name of the {@link Layout} this profile renders inside — the application's base navigational
      * shell, normally provided by a blueprint in `packages`. Absent when the profile does not select one.
+     * Legacy: still readable, superseded by {@link UiProfile.root}.
      */
     layout?: string;
 
@@ -55,6 +59,19 @@ export interface UiProfile {
      * part of a production build. Absent selects the blueprint's default pack, then generated data.
      */
     sampleData?: SampleDataSelection;
+
+    /**
+     * The application's root template (its shell): a template reference - own or blueprint, with a version pin - and the
+     * shell's own options. Supersedes {@link UiProfile.layout}; absent falls back to `layout` and then to the blueprint's
+     * default shell.
+     */
+    root?: RootTemplate;
+
+    /** The colour scheme and accent colour the application presents. Absent keeps the theme's defaults. */
+    appearance?: ProfileAppearance;
+
+    /** Application-wide authoring defaults such as the template new screens start from. Absent for none. */
+    defaults?: ProfileDefaults;
 }
 
 export const UiProfilePropertyNames: (keyof UiProfile)[] = [
@@ -65,4 +82,7 @@ export const UiProfilePropertyNames: (keyof UiProfile)[] = [
     'layout',
     'theme',
     'sampleData',
+    'root',
+    'appearance',
+    'defaults',
 ];
