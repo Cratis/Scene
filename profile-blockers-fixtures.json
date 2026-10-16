@@ -1,0 +1,1090 @@
+{
+  "description": "Shared fixture corpus for finding what stops a UI profile from being applied: the C# engine (ProfileBlockers.Find) and the TypeScript engine (findProfileBlockers) must give the same blockers, in the same order, with the same messages. The shell is resolved from profile.root against the library, as a host does.",
+  "libraries": {
+    "default": {
+      "own": {
+        "manifest": {
+          "name": "App",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "OwnShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "ToolShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "subject"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "DeskShell",
+            "slots": [
+              {
+                "name": "sidebar"
+              },
+              {
+                "name": "subject"
+              },
+              {
+                "name": "content"
+              },
+              {
+                "name": "aside"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          },
+          {
+            "name": "HeaderOnlyShell",
+            "slots": [
+              {
+                "name": "header"
+              }
+            ],
+            "metadata": {
+              "type": "ApplicationShell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "OwnFrame",
+            "slots": [
+              {
+                "name": "nav"
+              },
+              {
+                "name": "main"
+              }
+            ],
+            "metadata": {
+              "role": "Root",
+              "primaryOutlet": "main",
+              "category": "Shell"
+            }
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "content"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Plain Page",
+            "slots": [],
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Orphan Page",
+            "slots": [],
+            "fitsSlot": "toolbar"
+          },
+          {
+            "name": "BadFrame",
+            "slots": [
+              {
+                "name": "main"
+              }
+            ],
+            "fitsSlot": "content",
+            "metadata": {
+              "role": "Root"
+            }
+          },
+          {
+            "name": "Subject Panel",
+            "slots": [],
+            "fitsSlot": "subject"
+          },
+          {
+            "name": "Aside Note",
+            "slots": [],
+            "fitsSlot": "ToolShell.subject"
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Confirm",
+            "slots": [
+              {
+                "name": "body"
+              },
+              {
+                "name": "actions"
+              }
+            ]
+          }
+        ]
+      },
+      "blueprints": [
+        {
+          "manifest": {
+            "name": "crm",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "CrmShell",
+              "slots": [
+                {
+                  "name": "sidebar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell",
+                "category": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "CRM Workspace",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "fitsSlot": "content"
+            },
+            {
+              "name": "Pipeline Board",
+              "slots": [],
+              "fitsSlot": "body"
+            },
+            {
+              "name": "CrmFrame",
+              "slots": [
+                {
+                  "name": "content"
+                },
+                {
+                  "name": "footer"
+                }
+              ],
+              "metadata": {
+                "role": "Root"
+              }
+            }
+          ],
+          "dialogTemplates": [
+            {
+              "name": "CrmDialog",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "manifest": {
+            "name": "hr",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "HrShell",
+              "slots": [
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "type": "ApplicationShell"
+              }
+            }
+          ],
+          "screenTemplates": []
+        },
+        {
+          "manifest": {
+            "name": "analytics",
+            "version": "0.3.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [],
+          "screenTemplates": [
+            {
+              "name": "AnalyticsRoot",
+              "slots": [
+                {
+                  "name": "rail"
+                },
+                {
+                  "name": "main"
+                }
+              ],
+              "metadata": {
+                "role": "Root",
+                "primaryOutlet": "main"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "packages": [
+    {
+      "name": "core",
+      "version": "1.0.0",
+      "kind": "ComponentLibrary",
+      "dependencies": [],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    },
+    {
+      "name": "crm",
+      "version": "1.4.2",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "core",
+          "versionRange": "^1.0"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    },
+    {
+      "name": "hr",
+      "version": "2.0.0",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "core",
+          "versionRange": "^2.0"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    },
+    {
+      "name": "needy",
+      "version": "1.0.0",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "ghost",
+          "versionRange": "^1.0"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    },
+    {
+      "name": "a",
+      "version": "1.0.0",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "b",
+          "versionRange": "^1.0"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    },
+    {
+      "name": "b",
+      "version": "1.0.0",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "a",
+          "versionRange": "^1.0"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "nothing wrong",
+      "description": "a profile whose packages, shell, theme and screens all hold has no blockers",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Plain Page"
+          }
+        }
+      },
+      "theme": {
+        "name": "Aurora",
+        "compatibleWith": [
+          "core",
+          "crm"
+        ]
+      },
+      "usages": [
+        {
+          "screen": "Orders",
+          "layouts": [
+            "OwnShell"
+          ],
+          "screenTemplates": [
+            "Plain Page"
+          ],
+          "dialogTemplates": [
+            "Confirm"
+          ],
+          "slots": [
+            {
+              "owner": "OwnShell",
+              "slot": "content"
+            }
+          ]
+        }
+      ],
+      "expected": []
+    },
+    {
+      "name": "missing dependency",
+      "description": "a package needs one that is not available",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "needy"
+        ]
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "missingDependency",
+          "subject": "ghost",
+          "message": "Package 'needy' needs 'ghost', which is not available",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "version conflict",
+      "description": "a package needs a version of another that is not the one available",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "hr"
+        ]
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "versionConflict",
+          "subject": "core",
+          "message": "Package 'hr' needs 'core' ^2.0, but version 1.0.0 is what is available",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "dependency cycle",
+      "description": "packages that need each other",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "a",
+          "b"
+        ]
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "dependencyCycle",
+          "subject": "a → b",
+          "message": "Packages depend on each other in a circle: a → b",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "shell unknown",
+      "description": "a root that names nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Nowhere"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "shellUnusable",
+          "subject": "Nowhere",
+          "message": "Root template 'Nowhere' cannot be used: Own template 'Nowhere' does not exist",
+          "shellCode": "rootTemplateUnknown"
+        }
+      ]
+    },
+    {
+      "name": "shell pin not met",
+      "description": "a pin the installed blueprint does not meet",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CrmShell",
+            "blueprint": "crm",
+            "version": "^2.0"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "shellUnusable",
+          "subject": "CrmShell",
+          "message": "Template 'CrmShell' was chosen from blueprint 'crm' ^2.0 but version 1.4.2 is installed",
+          "shellCode": "rootTemplateVersionNotSatisfied"
+        }
+      ]
+    },
+    {
+      "name": "shell without a content outlet",
+      "description": "a root with nowhere to put screens",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "HeaderOnlyShell"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "shellUnusable",
+          "subject": "HeaderOnlyShell",
+          "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it",
+          "shellCode": "rootTemplateMissingContentSlot"
+        }
+      ]
+    },
+    {
+      "name": "theme not compatible",
+      "description": "a theme not marked compatible with a package",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ]
+      },
+      "theme": {
+        "name": "Slate",
+        "compatibleWith": [
+          "core"
+        ]
+      },
+      "usages": [],
+      "expected": [
+        {
+          "code": "themeIncompatible",
+          "subject": "Slate",
+          "message": "Theme 'Slate' is not marked compatible with 'crm', which profile 'Desktop' uses",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "theme not compatible with two",
+      "description": "every package it does not cover is named",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr"
+        ]
+      },
+      "theme": {
+        "name": "Slate",
+        "compatibleWith": [
+          "core"
+        ]
+      },
+      "usages": [],
+      "expected": [
+        {
+          "code": "versionConflict",
+          "subject": "core",
+          "message": "Package 'hr' needs 'core' ^2.0, but version 1.0.0 is what is available",
+          "shellCode": null
+        },
+        {
+          "code": "themeIncompatible",
+          "subject": "Slate",
+          "message": "Theme 'Slate' is not marked compatible with 'crm', 'hr', which profile 'Desktop' uses",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "default screen template of the application",
+      "description": "an own default that exists is fine",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Plain Page"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    },
+    {
+      "name": "default screen template of a blueprint",
+      "description": "a blueprint default of an installed blueprint is fine",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Blueprint",
+            "id": "CRM Workspace",
+            "blueprint": "crm",
+            "version": "^1.4"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    },
+    {
+      "name": "default screen template missing",
+      "description": "a default that exists nowhere",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Nope"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "defaultScreenTemplateUnavailable",
+          "subject": "Nope",
+          "message": "Screen template 'Nope', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "default screen template of a blueprint that is not installed",
+      "description": "only installed blueprints are searched",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Blueprint",
+            "id": "Dashboard Page",
+            "blueprint": "analytics"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "defaultScreenTemplateUnavailable",
+          "subject": "Dashboard Page",
+          "message": "Screen template 'Dashboard Page', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "used layout missing",
+      "description": "a screen uses a layout the packages do not provide",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Orders",
+          "layouts": [
+            "HrShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "slots": []
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedLayoutUnavailable",
+          "subject": "HrShell",
+          "message": "Screen 'Orders' uses layout 'HrShell', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "used screen template missing",
+      "description": "a screen uses a template the packages do not provide",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Customers",
+          "layouts": [],
+          "screenTemplates": [
+            "CRM Workspace"
+          ],
+          "dialogTemplates": [],
+          "slots": []
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedScreenTemplateUnavailable",
+          "subject": "CRM Workspace",
+          "message": "Screen 'Customers' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "used dialog template missing",
+      "description": "a screen uses a dialog template the packages do not provide",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Customers",
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [
+            "CrmDialog"
+          ],
+          "slots": []
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedDialogTemplateUnavailable",
+          "subject": "CrmDialog",
+          "message": "Screen 'Customers' uses dialog template 'CrmDialog', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "used slot missing",
+      "description": "a screen fills a slot its layout no longer has",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Tickets",
+          "layouts": [
+            "OwnShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "slots": [
+            {
+              "owner": "OwnShell",
+              "slot": "subject"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedSlotUnavailable",
+          "subject": "OwnShell.subject",
+          "message": "Screen 'Tickets' places content in slot 'subject' of 'OwnShell', which no longer has it",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "used slot of an owner that is gone",
+      "description": "a slot of a layout that is itself gone is reported once, as the layout",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Tickets",
+          "layouts": [
+            "CrmShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "slots": [
+            {
+              "owner": "CrmShell",
+              "slot": "sidebar"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedLayoutUnavailable",
+          "subject": "CrmShell",
+          "message": "Screen 'Tickets' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "several screens",
+      "description": "each screen is named in its own message",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "theme": null,
+      "usages": [
+        {
+          "screen": "Orders",
+          "layouts": [
+            "CrmShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "slots": []
+        },
+        {
+          "screen": "Customers",
+          "layouts": [
+            "CrmShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "slots": []
+        },
+        {
+          "screen": "Quotes",
+          "layouts": [],
+          "screenTemplates": [
+            "CRM Workspace"
+          ],
+          "dialogTemplates": [],
+          "slots": []
+        }
+      ],
+      "expected": [
+        {
+          "code": "usedLayoutUnavailable",
+          "subject": "CrmShell",
+          "message": "Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        },
+        {
+          "code": "usedLayoutUnavailable",
+          "subject": "CrmShell",
+          "message": "Screen 'Customers' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        },
+        {
+          "code": "usedScreenTemplateUnavailable",
+          "subject": "CRM Workspace",
+          "message": "Screen 'Quotes' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        }
+      ]
+    },
+    {
+      "name": "everything at once",
+      "description": "dependency, shell, theme, default template and usages together, in that order",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "needy"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "Nowhere"
+          }
+        },
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Nope"
+          }
+        }
+      },
+      "theme": {
+        "name": "Slate",
+        "compatibleWith": []
+      },
+      "usages": [
+        {
+          "screen": "Orders",
+          "layouts": [
+            "CrmShell"
+          ],
+          "screenTemplates": [
+            "CRM Workspace"
+          ],
+          "dialogTemplates": [
+            "CrmDialog"
+          ],
+          "slots": [
+            {
+              "owner": "OwnShell",
+              "slot": "subject"
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "code": "missingDependency",
+          "subject": "ghost",
+          "message": "Package 'needy' needs 'ghost', which is not available",
+          "shellCode": null
+        },
+        {
+          "code": "shellUnusable",
+          "subject": "Nowhere",
+          "message": "Root template 'Nowhere' cannot be used: Own template 'Nowhere' does not exist",
+          "shellCode": "rootTemplateUnknown"
+        },
+        {
+          "code": "themeIncompatible",
+          "subject": "Slate",
+          "message": "Theme 'Slate' is not marked compatible with 'core', 'needy', which profile 'Desktop' uses",
+          "shellCode": null
+        },
+        {
+          "code": "defaultScreenTemplateUnavailable",
+          "subject": "Nope",
+          "message": "Screen template 'Nope', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
+          "shellCode": null
+        },
+        {
+          "code": "usedLayoutUnavailable",
+          "subject": "CrmShell",
+          "message": "Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        },
+        {
+          "code": "usedScreenTemplateUnavailable",
+          "subject": "CRM Workspace",
+          "message": "Screen 'Orders' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        },
+        {
+          "code": "usedDialogTemplateUnavailable",
+          "subject": "CrmDialog",
+          "message": "Screen 'Orders' uses dialog template 'CrmDialog', which the packages of profile 'Desktop' do not provide",
+          "shellCode": null
+        },
+        {
+          "code": "usedSlotUnavailable",
+          "subject": "OwnShell.subject",
+          "message": "Screen 'Orders' places content in slot 'subject' of 'OwnShell', which no longer has it",
+          "shellCode": null
+        }
+      ]
+    }
+  ]
+}

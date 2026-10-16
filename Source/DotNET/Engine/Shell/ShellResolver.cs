@@ -69,7 +69,7 @@ public static class ShellResolver
         shell ??= Bare();
 
         var all = new List<ShellDiagnostic>(diagnostics);
-        var templates = ShellTemplates(profile, context);
+        var templates = ShellPlacement.PlaceableScreenTemplates(profile, context).ToList();
         CheckContentOutlet(shell, all);
         CheckCycles(shell, templates, all);
         CheckProfile(profile, context, all);
@@ -77,7 +77,11 @@ public static class ShellResolver
         return shell with { Diagnostics = all };
     }
 
-    static List<TemplateSource> InstalledBlueprints(UiProfile profile, ShellResolutionContext context) =>
+    /// <summary>The blueprints among the profile's packages that the library holds, in the profile's order.</summary>
+    /// <param name="profile">The profile.</param>
+    /// <param name="context">The library.</param>
+    /// <returns>The installed blueprints.</returns>
+    internal static List<TemplateSource> InstalledBlueprints(UiProfile profile, ShellResolutionContext context) =>
         [.. profile.Packages
             .Select(name => context.Library.Blueprints.FirstOrDefault(source => source.Manifest.Name == name && source.Manifest.Kind == PackageKind.Blueprint))
             .OfType<TemplateSource>()];
@@ -269,23 +273,6 @@ public static class ShellResolver
         }
     }
 
-    static List<ScreenTemplate> ShellTemplates(UiProfile profile, ShellResolutionContext context)
-    {
-        var templates = new List<ScreenTemplate>();
-        foreach (var source in new[] { context.Library.Own }.Concat(InstalledBlueprints(profile, context)))
-        {
-            foreach (var template in source?.ScreenTemplates ?? [])
-            {
-                if (template.Metadata?.Role != TemplateRole.Root && !templates.Exists(candidate => candidate.Name == template.Name))
-                {
-                    templates.Add(template);
-                }
-            }
-        }
-
-        return templates;
-    }
-
     static void CheckCycles(EffectiveShell shell, List<ScreenTemplate> templates, List<ShellDiagnostic> diagnostics)
     {
         var slots = shell.Layout?.Slots ?? shell.RootTemplate!.Slots;
@@ -325,49 +312,11 @@ public static class ShellResolver
     {
         foreach (var screen in context.Screens ?? [])
         {
-            foreach (var outlet in OutletsUsedBy(screen, shell, templates).Where(outlet => !shell.Outlets.Contains(outlet)))
+            foreach (var outlet in ShellPlacement.OutletsUsedBy(screen, shell.Name, templates).Where(outlet => !shell.Outlets.Contains(outlet)))
             {
                 diagnostics.Add(new(ShellDiagnosticCode.ProfileSlotUnplaced, $"Screen '{screen.Name}' places content in outlet '{outlet}', which shell '{shell.Name}' does not have", screen.Name));
             }
         }
-    }
-
-    static List<string> OutletsUsedBy(Screen screen, EffectiveShell shell, List<ScreenTemplate> templates)
-    {
-        if (screen.ScreenTemplate is null)
-        {
-            return [.. screen.SlotContent.Where(entry => entry.Value.Count > 0).Select(entry => entry.Key)];
-        }
-
-        var current = templates.Find(template => template.Name == screen.ScreenTemplate);
-        var visited = new HashSet<string>(StringComparer.Ordinal);
-        while (current is not null && visited.Add(current.Name))
-        {
-            if (current.FitsSlot is null)
-            {
-                return [];
-            }
-
-            var separator = current.FitsSlot.LastIndexOf('.');
-            var qualifier = separator < 0 ? null : current.FitsSlot[..separator];
-            var slot = separator < 0 ? current.FitsSlot : current.FitsSlot[(separator + 1)..];
-            if (qualifier == shell.Name)
-            {
-                return [slot];
-            }
-
-            var self = current;
-            var container = templates.Find(template =>
-                template != self && (qualifier is null || template.Name == qualifier) && template.Slots.Any(candidate => candidate.Name == slot));
-            if (container is null)
-            {
-                return [slot];
-            }
-
-            current = container;
-        }
-
-        return [];
     }
 
     sealed record Found(Layout? Layout, ScreenTemplate? ScreenTemplate, ShellKind Kind, TemplateSource? Source, bool IsBlueprint);
