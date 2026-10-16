@@ -89,6 +89,13 @@ function updateDependencyVersionsFromLocalWorkspaces(file, packageJson, version)
 
 const publishFailures = [];
 
+// npm lists every file of the package it packs. Printing a few hundred lines of that in one write to the runner's pipe ended the release
+// part way (the process exits with nothing printed after the biggest package), so only the end of the output - where the outcome is - is shown.
+function tailOf(output, lines = 40) {
+    const all = (output?.toString() ?? '').split('\n');
+    return all.length <= lines ? all.join('\n') : `... ${all.length - lines} earlier line(s) of npm output not shown\n${all.slice(-lines).join('\n')}`;
+}
+
 for (const workspaceName in workspaces) {
     const workspaceRelativeLocation = workspaces[workspaceName];
     const workspaceAbsoluteLocation = path.join(process.cwd(), workspaceRelativeLocation);
@@ -118,9 +125,13 @@ for (const workspaceName in workspaces) {
 
                 console.log(`Publishing workspace '${workspaceName}' at '${workspaceRelativeLocation}'`);
                 const result = spawn('npm', ['publish', '--provenance'], { cwd: workspaceAbsoluteLocation });
-                console.log(result.stdout.toString());
-                console.log(result.stderr.toString());
-                if (result.status !== 0) {
+                console.log(tailOf(result.stdout));
+                console.log(tailOf(result.stderr));
+                if (result.error) console.log(`Error running npm publish for workspace '${workspaceName}': ${result.error.message}`);
+                if (result.status !== 0 && /cannot publish over the previously published versions/i.test(result.stderr?.toString() ?? '')) {
+                    // A re-run of a release that stopped part way: what already reached the registry is not a failure.
+                    console.log(`Workspace '${workspaceName}' is already published at ${version} - continuing with remaining workspaces`);
+                } else if (result.status !== 0) {
                     // Don't abort the release: a single workspace failing (e.g. a brand-new
                     // package whose npm trusted publisher isn't configured yet) must not
                     // strand the other packages. Collect and fail at the end instead.
