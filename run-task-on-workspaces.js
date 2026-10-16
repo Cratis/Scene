@@ -117,9 +117,7 @@ for (const workspaceName in workspaces) {
                 }
 
                 console.log(`Publishing workspace '${workspaceName}' at '${workspaceRelativeLocation}'`);
-                // npm lists every packed file; a package with many files overruns the default 1 MB buffer, which kills the child and leaves no
-                // output to print. A workspace that cannot be published is collected like any other failure instead of ending the release.
-                const result = spawn('npm', ['publish', '--provenance'], { cwd: workspaceAbsoluteLocation, maxBuffer: 256 * 1024 * 1024 });
+                const result = spawn('npm', ['publish', '--provenance'], { cwd: workspaceAbsoluteLocation });
                 console.log(result.stdout?.toString() ?? '');
                 console.log(result.stderr?.toString() ?? '');
                 if (result.error) console.log(`Error running npm publish for workspace '${workspaceName}': ${result.error.message}`);
