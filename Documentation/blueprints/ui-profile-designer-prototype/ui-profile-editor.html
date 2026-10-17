@@ -1,0 +1,672 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>UI Profile Editor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap">
+<style>
+/* Layout: live preview is the navigation. One scrolling inspector on the right, sections mirror the preview regions. Dark-first chrome. */
+:root{
+  --bg:#0c111d; --panel:#131a2b; --raise:#1a2338; --line:#26314b; --fg:#e7ebf6; --mute:#8f9bb8;
+  --accent:#7ea4ff; --accent-ink:#0a1230; --ok:#4cd68a; --warn:#f2b84b; --bad:#ff7b7b; --stage:#090d17;
+  --hl:#7ea4ff;
+  --ui:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:'Geist Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#eef1f8; --panel:#ffffff; --raise:#f3f5fb; --line:#d8deec; --fg:#141a2c; --mute:#5b6784;
+  --accent:#2c5bde; --accent-ink:#ffffff; --ok:#12804a; --warn:#a86a00; --bad:#c62f3b; --stage:#dfe4f1; --hl:#2c5bde; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#eef1f8; --panel:#ffffff; --raise:#f3f5fb; --line:#d8deec; --fg:#141a2c; --mute:#5b6784;
+  --accent:#2c5bde; --accent-ink:#ffffff; --ok:#12804a; --warn:#a86a00; --bad:#c62f3b; --stage:#dfe4f1; --hl:#2c5bde; color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:13px/1.45 var(--ui);padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:0;overflow:hidden}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ic{flex:none}
+
+#root{height:100%;display:grid;grid-template-rows:auto 1fr auto;min-height:0}
+header.bar{display:flex;align-items:center;gap:14px;padding:10px 0;flex-wrap:wrap;min-width:0}
+.bar h1{font-size:14px;font-weight:600;margin:0;white-space:nowrap}
+.bar h1 span{color:var(--mute);font-weight:400}
+.saved{color:var(--mute);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.saved i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+.grow{flex:1}
+.ibtn{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 9px;color:var(--fg)}
+.ibtn:hover:not(:disabled){background:var(--raise)}
+.ibtn:disabled{opacity:.4;cursor:default}
+.ibtn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.grp{display:inline-flex;gap:4px}
+.dim{font-family:var(--mono);font-size:11.5px;color:var(--mute);white-space:nowrap}
+
+main{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px;min-height:0;padding-bottom:12px}
+.stage-col{display:flex;flex-direction:column;min-height:0;min-width:0;gap:10px}
+.starter{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.starter b{font-weight:600}
+.starter span{color:var(--mute);flex:1;min-width:200px}
+.stage{position:relative;flex:1;min-height:0;background:var(--stage);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:18px 18px}
+#fw{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 20px 60px rgba(0,0,0,.35);border-radius:8px;overflow:hidden}
+#frame{transform-origin:0 0;position:absolute;left:0;top:0}
+.ov{position:absolute;pointer-events:none;border:2px solid var(--hl);border-radius:6px;transition:all .12s ease;z-index:5}
+.ov .tag{position:absolute;left:-2px;top:-24px;background:var(--hl);color:var(--accent-ink);font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px 5px 5px 0;white-space:nowrap}
+.ov.hov{border-style:dashed;opacity:.85}
+.ov.sel{box-shadow:0 0 0 4px color-mix(in srgb,var(--hl) 22%,transparent)}
+.ov[hidden]{display:none}
+
+aside#insp{background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0;min-width:0}
+.tabs{display:flex;gap:2px;padding:6px 8px 0;border-bottom:1px solid var(--line);overflow-x:auto;flex:none}
+.tabs button{background:none;border:0;padding:9px 10px;color:var(--mute);border-bottom:2px solid transparent;font-weight:500;white-space:nowrap}
+.tabs button:hover{color:var(--fg)}
+.tabs button.on{color:var(--fg);border-bottom-color:var(--accent)}
+#scroll{overflow-y:auto;flex:1;min-height:0;scroll-behavior:smooth}
+.sec{padding:20px 20px 26px;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:0;min-height:60%}
+.sec.pulse{animation:pulse 1.1s ease}
+@keyframes pulse{0%{background:color-mix(in srgb,var(--accent) 18%,transparent)}100%{background:transparent}}
+.sec h2{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:15px;font-weight:600}
+.sec h2 .ic{color:var(--accent)}
+.sec>p.desc{margin:0 0 16px;color:var(--mute);max-width:52ch}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.f>label,.lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.hint{color:var(--mute);font-size:12px;margin:0}
+input[type=text],select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+input[type=text]:focus,select:focus{border-color:var(--accent);outline:none}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px;flex-wrap:wrap}
+.seg button{background:none;border:0;border-radius:7px;padding:6px 12px;color:var(--mute)}
+.seg button.on{background:var(--raise);color:var(--fg);box-shadow:0 0 0 1px var(--line) inset}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.card{position:relative;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card:hover{border-color:var(--mute)}
+.card.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.card b{font-weight:600}
+.card small{color:var(--mute);font-size:12px;line-height:1.35}
+.card.off{opacity:.6}
+.card .chk{position:absolute;right:8px;top:8px;color:var(--accent)}
+.thumb{height:46px;border-radius:6px;background:var(--raise);border:1px solid var(--line);position:relative;overflow:hidden}
+.thumb i{position:absolute;background:var(--mute);opacity:.55;border-radius:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{background:var(--raise);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-weight:500}
+.btn:hover{border-color:var(--mute)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.sm{padding:4px 9px;font-size:12px}
+.link{background:none;border:0;color:var(--accent);padding:0;font-weight:500}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:99px;padding:1px 8px;font-size:11.5px;color:var(--mute);white-space:nowrap}
+.chip.ok{color:var(--ok)} .chip.warn{color:var(--warn)} .chip.bad{color:var(--bad)}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:24px;height:24px;border-radius:50%;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line)}
+.sw.on{box-shadow:0 0 0 2px var(--fg)}
+.accrow{display:flex;gap:8px;align-items:center}
+input[type=color]{width:38px;height:36px;padding:2px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.menus{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.menus .card{padding:8px;align-items:center;text-align:center;gap:4px}
+.menus .card b{font-size:12px;font-weight:500}
+.pk{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 10px 10px 12px;margin-bottom:8px}
+.pk .n{font-family:var(--mono);color:var(--mute);width:14px;padding-top:1px}
+.pk .m{flex:1;min-width:0}
+.pk .m b{font-weight:600}
+.pk .m small{display:block;color:var(--mute);font-size:12px;margin-top:2px}
+.pk .a{display:flex;gap:3px}
+.pk .a button{background:var(--raise);border:1px solid var(--line);border-radius:6px;width:26px;height:26px;display:grid;place-items:center;padding:0}
+.pk .a button:disabled{opacity:.3;cursor:not-allowed}
+table.sup{width:100%;border-collapse:collapse;font-size:12.5px}
+table.sup td,table.sup th{text-align:left;padding:6px 6px;border-bottom:1px solid var(--line)}
+table.sup th{color:var(--mute);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.add-list{margin:0 0 10px;display:flex;flex-direction:column;gap:6px}
+.add-list .pk{margin:0}
+
+.icons{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.ibox{aspect-ratio:1;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:0}
+.ibox:hover{border-color:var(--mute)}
+.ibox.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;color:var(--accent)}
+.lprev{width:40px;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);display:grid;place-items:center;overflow:hidden;flex:none}
+.lprev img{max-width:100%;max-height:100%}
+footer.status{display:flex;align-items:center;gap:12px;padding:6px 0 10px;color:var(--mute);position:relative;min-width:0;flex-wrap:wrap}
+.pchip{display:inline-flex;gap:6px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+.pchip.has{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,var(--line))}
+.pchip.clean{color:var(--ok)}
+#prob{position:absolute;left:0;bottom:40px;width:min(520px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.4);padding:6px;z-index:20}
+#prob .it{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:8px}
+#prob .it+.it{border-top:1px solid var(--line)}
+#prob .it .t{flex:1;min-width:0;color:var(--fg)}
+#prob .it .t small{display:block;color:var(--mute)}
+.sev{margin-top:2px}.sev.warn{color:var(--warn)}.sev.info{color:var(--accent)}
+
+/* ---------- the previewed application ---------- */
+.app{--a:#4f46e5;--r:10px;--bg:#f4f5f9;--sf:#fff;--tx:#1b2033;--mu:#6a7288;--bd:#e3e6ee;--ok:#168a52;--wn:#a86a00;--bd2:#c2354a;--navbg:#fff;--navtx:#1b2033;--navw:240px;
+  width:100%;height:100%;background:var(--bg);color:var(--tx);font-family:var(--af);display:grid;grid-template-columns:var(--navw) 1fr;position:relative;overflow:hidden;font-size:14px;line-height:1.4}
+.app.dark{--bg:#10131b;--sf:#181c27;--tx:#e8eaf2;--mu:#98a0b8;--bd:#2a3043;--ok:#4cd68a;--wn:#f2b84b;--bd2:#ff7b8a;--navbg:#181c27;--navtx:#e8eaf2}
+.app.mt-dark{--navbg:#0d1018;--navtx:#e8eaf2}
+.app.mt-primary{--navbg:var(--a);--navtx:#fff}
+.app svg{color:inherit}
+.nav{background:var(--navbg);color:var(--navtx);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;z-index:4;transition:width .18s,transform .18s}
+.brand{display:flex;align-items:center;gap:10px;padding:14px 16px;font-weight:600;font-size:17px;white-space:nowrap}
+.logo{width:34px;height:34px;border-radius:var(--r);background:var(--a);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.grplbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;padding:14px 20px 6px;white-space:nowrap}
+.item{display:flex;align-items:center;gap:12px;padding:10px 16px;margin:1px 8px;border-radius:calc(var(--r) - 2px);white-space:nowrap;cursor:pointer;opacity:.9}
+.item:hover{background:color-mix(in srgb,currentColor 9%,transparent)}
+.item.act{background:color-mix(in srgb,var(--a) 16%,transparent);color:var(--a);opacity:1;font-weight:500}
+.mt-primary .item.act{background:rgba(255,255,255,.2);color:#fff}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{display:flex;align-items:center;gap:14px;padding:0 20px;height:62px;background:var(--sf);border-bottom:1px solid var(--bd);flex:none}
+.burger{background:none;border:0;padding:6px;color:var(--a);display:grid;place-items:center;border-radius:6px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--bd);border-radius:var(--r);padding:7px 12px;color:var(--mu);min-width:220px}
+.logo.img{background:transparent;color:inherit}
+.logo img{width:100%;height:100%;object-fit:contain;display:block}
+.logo.empty{background:none;color:var(--mu);border:2px dashed color-mix(in srgb,currentColor 55%,transparent)}
+.avatar{width:32px;height:32px;border-radius:50%;background:color-mix(in srgb,var(--a) 25%,var(--sf));margin-left:auto;flex:none}
+.hnav{display:none;gap:2px;margin-left:8px}
+.hnav .item{margin:0;padding:8px 12px}
+.crumb{margin:18px 24px 0;padding:11px 16px;background:#161a28;color:#c9cfe2;border-radius:var(--r);display:flex;gap:8px;align-items:center;font-size:13px}
+.content{margin:16px 24px 24px;background:var(--sf);border:1px solid var(--bd);border-radius:calc(var(--r) + 2px);padding:20px;overflow:hidden;min-height:0;flex:1}
+.chead{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.chead h3{margin:0;font-size:20px;font-weight:600;flex:1}
+.abtn{background:var(--a);color:#fff;border:0;border-radius:var(--r);padding:8px 14px;font:inherit;font-weight:500;display:inline-flex;gap:6px;align-items:center}
+.app table{width:100%;border-collapse:collapse}
+.app th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--bd)}
+.app td{padding:11px 10px;border-bottom:1px solid var(--bd)}
+.app tbody tr:last-child td{border-bottom:0}
+.pill{display:inline-block;border-radius:99px;padding:2px 10px;font-size:12px;background:color-mix(in srgb,var(--mu) 18%,transparent);color:var(--mu)}
+.pill.g{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.pill.w{background:color-mix(in srgb,var(--wn) 16%,transparent);color:var(--wn)}
+.pill.b{background:color-mix(in srgb,var(--bd2) 16%,transparent);color:var(--bd2)}
+.cap{margin-top:12px;color:var(--mu);font-size:12px}
+.scrim{position:absolute;inset:0;background:rgba(5,8,16,.45);z-index:3;opacity:0;pointer-events:none;transition:opacity .18s}
+/* menu modes */
+.m-static{--navw:240px}
+.m-compact{--navw:190px}.m-compact .item{padding:7px 12px;font-size:13px;gap:10px}.m-compact .brand{padding:10px 12px;font-size:15px}
+.m-slim,.m-reveal{--navw:68px}
+.m-slim .lbl2,.m-reveal:not(.mobile) .nav:not(:hover) .lbl2,.m-slim .grplbl,.m-reveal:not(.mobile) .nav:not(:hover) .grplbl,.m-slimplus .grplbl{display:none}
+.m-slim .item,.m-reveal .item{justify-content:center}
+.m-slim .brand,.m-reveal .brand{justify-content:center;padding-inline:0}
+.m-slim .brand .bn,.m-reveal .brand .bn{display:none}
+.m-reveal .nav{position:absolute;left:0;top:0;bottom:0;width:68px}
+.m-reveal .nav:hover{width:240px;box-shadow:8px 0 30px rgba(0,0,0,.18)}
+.m-reveal .nav:hover .item{justify-content:flex-start}
+.m-reveal .nav:hover .brand{justify-content:flex-start;padding-inline:16px}
+.m-reveal .nav:hover .brand .bn{display:inline}
+.m-reveal .main{grid-column:2}
+.m-slimplus{--navw:92px}
+.m-slimplus .item{flex-direction:column;gap:3px;padding:9px 4px;font-size:10.5px;text-align:center;margin-inline:6px;white-space:normal}
+.m-slimplus .brand{justify-content:center;padding-inline:0}.m-slimplus .brand .bn{display:none}
+.m-overlay,.m-drawer,.m-horizontal,.app.mobile{--navw:0px}
+.m-overlay .nav,.m-drawer .nav,.app.mobile .nav{position:absolute;left:0;top:0;bottom:0;width:260px;transform:translateX(-100%)}
+.m-overlay.open .nav,.m-drawer.open .nav,.app.mobile.open .nav{transform:none;box-shadow:10px 0 40px rgba(0,0,0,.25)}
+.m-drawer.open .scrim,.app.mobile.open .scrim{opacity:1;pointer-events:auto}
+.m-overlay .main,.m-drawer .main,.m-horizontal .main,.app.mobile .main{grid-column:1/-1}
+.m-horizontal:not(.mobile) .nav{display:none}
+.m-horizontal:not(.mobile) .hnav{display:flex}
+.m-horizontal:not(.mobile) .burger{display:none}
+.m-horizontal.mobile .hnav{display:none}
+.m-horizontal:not(.mobile) .brand{padding:0}
+.top .brand{padding:0;font-size:17px;color:var(--tx)}
+.app:not(.m-horizontal):not(.m-overlay):not(.m-drawer):not(.mobile) .top .brand{display:none}
+.app:not(.m-overlay):not(.m-drawer):not(.mobile) .burger.only{display:none}
+.app.mobile .search{display:none}
+.app.mobile .top{padding:0 14px}.app.mobile .crumb,.app.mobile .content{margin-inline:12px}
+.app.mobile .c3,.app.mobile .c4{display:none}
+.app.mobile .chead h3{font-size:17px}
+.app.mobile .hnav{display:none}
+.app.mobile .burger.only{display:grid}
+.app.mobile:not(.m-horizontal) .top .brand{display:flex}
+
+@media (max-width:900px){
+  body{overflow:auto}
+  #root{height:auto;min-height:100%}
+  main{grid-template-columns:minmax(0,1fr)}
+  .stage{height:62vh;flex:none}
+  aside#insp{height:80vh}
+  .menus{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div id="root">
+  <header class="bar">
+    <h1 id="ttl">Some App <span>· UI profile</span></h1>
+    <div class="saved"><i></i><span id="saved">All changes saved</span></div>
+    <div class="grp">
+      <button class="ibtn" id="undo" aria-label="Undo" title="Undo (Ctrl+Z)"></button>
+      <button class="ibtn" id="redo" aria-label="Redo" title="Redo (Ctrl+Shift+Z)"></button>
+    </div>
+    <div class="grow"></div>
+    <div class="grp" role="group" aria-label="Preview device">
+      <button class="ibtn" id="dDesk" aria-label="Desktop preview"></button>
+      <button class="ibtn" id="dMob" aria-label="Mobile preview"></button>
+    </div>
+    <span class="dim" id="dim"></span>
+  </header>
+
+  <main>
+    <section class="stage-col">
+      <div class="starter" id="starter">
+        <b id="stq">How should Some App look?</b>
+        <span>Pick a starting point. Everything stays editable and every change can be undone.</span>
+        <button class="btn pri" data-start="blueprint">Start from a blueprint</button>
+        <button class="btn" data-start="own">Use my own shell</button>
+        <button class="btn" data-start="defaults">Keep the defaults</button>
+      </div>
+      <div class="stage" id="stage">
+        <div id="fw"><div id="frame"></div></div>
+        <div class="ov hov" id="ovh" hidden><span class="tag"></span></div>
+        <div class="ov sel" id="ovs" hidden><span class="tag"></span></div>
+      </div>
+    </section>
+
+    <aside id="insp" aria-label="Profile inspector">
+      <nav class="tabs" id="tabs"></nav>
+      <div id="scroll"></div>
+    </aside>
+  </main>
+
+  <footer class="status">
+    <button class="pchip" id="pbtn"></button>
+    <span id="msg"></span>
+    <span class="grow"></span>
+    <span>Click anything in the preview to edit it</span>
+    <div id="prob" hidden></div>
+  </footer>
+</div>
+
+<script>
+const I={home:"M3 11l9-8 9 8M5 10v10h14V10",box:"M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8",file:"M14 3H6v18h12V7zM14 3v4h4",
+users:"M16 19v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1M9.5 11a3 3 0 100-6 3 3 0 000 6M21 19v-1a4 4 0 00-3-3.9M16 5.1a3 3 0 010 5.8",
+plus:"M12 5v14M5 12h14",receipt:"M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6",inbox:"M3 13l3-8h12l3 8v6H3zM3 13h5l1 3h6l1-3h5",
+menu:"M4 6h16M4 12h16M4 18h16",search:"M11 18a7 7 0 100-14 7 7 0 000 14M20 20l-4-4",undo:"M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3",
+redo:"M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3",monitor:"M3 4h18v12H3zM8 20h8M12 16v4",phone:"M7 2h10v20H7zM11 18h2",
+up:"M6 15l6-6 6 6",down:"M6 9l6 6 6-6",x:"M6 6l12 12M18 6L6 18",check:"M5 12l5 5 9-10",alert:"M12 3l10 18H2zM12 10v5M12 18v.01",
+info:"M12 21a9 9 0 100-18 9 9 0 000 18M12 11v5M12 8v.01",layers:"M12 3l9 5-9 5-9-5zM3 13l9 5 9-5",
+palette:"M12 3a9 9 0 100 18c1.5 0 2-1 1.5-2s0-2 1.5-2h2a3 3 0 003-3c0-5-4-11-8-11z",
+db:"M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3",
+nav:"M3 4h18v16H3zM9 4v16",lock:"M6 11h12v9H6zM8 11V8a4 4 0 118 0v3",pkg:"M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5",
+app:"M4 4h16v16H4zM4 9h16",shell:"M3 5h18v14H3zM3 9h18M7 7v.01",chev:"M9 6l6 6-6 6"};
+const ic=(n,s=16)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${I[n]}"/></svg>`;
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- catalog ---------- */
+const BP={
+  'cratis-default':{name:'Cratis Default Blueprint',pkg:'cratis-default-blueprint',desc:'Sidebar, search and breadcrumbs. A good general start.',mode:'static',thumb:[[0,0,28,100],[32,0,60,16]]},
+  'dashboard':{name:'Dashboard Blueprint',pkg:'blueprint-dashboard',desc:'Horizontal navigation for data-heavy, wide screens.',mode:'horizontal',thumb:[[0,0,100,22],[8,36,40,8],[8,52,70,8]]},
+  'minimal':{name:'Minimal Blueprint',pkg:'blueprint-minimal',desc:'Slim icon rail. Content gets the room.',mode:'slim',thumb:[[0,0,10,100],[16,0,70,16]]}
+};
+const PK={
+  'cratis-default-blueprint':{n:'Cratis Default Blueprint',v:'1.0.0',k:'Blueprint',req:['cratis-components'],sup:['Shell'],d:'The application shell'},
+  'blueprint-dashboard':{n:'Dashboard Blueprint',v:'1.0.0',k:'Blueprint',req:['cratis-components'],sup:['Shell'],d:'Horizontal shell for dashboards'},
+  'blueprint-minimal':{n:'Minimal Blueprint',v:'1.0.0',k:'Blueprint',req:['cratis-components'],sup:['Shell'],d:'Slim rail shell'},
+  'cratis-components':{n:'Cratis Components',v:'3.0.0',k:'Components',req:['primereact'],sup:['Button','DataTable','Dialog'],d:'Components with Cratis behavior built in'},
+  'primereact':{n:'PrimeReact',v:'11.1.0',k:'Components',req:['tailwind'],sup:['Button','DataTable','Dialog','Menu'],d:'General purpose component library'},
+  'tailwind':{n:'Tailwind CSS',v:'4.3.3',k:'Styling',req:[],sup:[],d:'Utility styling'},
+  'core':{n:'Core',v:'1.0.0',k:'Components',req:[],sup:['Button','Dialog','Menu'],d:'Always there, the last to be asked',locked:true},
+  'material-components':{n:'Material Components',v:'2.4.0',k:'Components',req:['tailwind'],sup:['Button','DataTable','Dialog','Chart'],d:'Material look for common components'},
+  'cratis-charts':{n:'Cratis Charts',v:'1.2.0',k:'Components',req:[],sup:['Chart'],d:'Charts bound to read models'},
+  'material-themes':{n:'Material Themes',v:'1.1.0',k:'Themes',req:[],sup:[],d:'Indigo and Night themes'}
+};
+const COMPONENTS=['Button','DataTable','Dialog','Menu','Chart'];
+const THEMES={
+  'scene-light':{n:'Scene Default Light',scheme:'light',accent:'#4f46e5',r:10},
+  'scene-dark':{n:'Scene Default Dark',scheme:'dark',accent:'#6366f1',r:10},
+  'material-indigo':{n:'Material Indigo',scheme:'light',accent:'#3f51b5',r:4,needs:'material-themes'},
+  'material-night':{n:'Material Night',scheme:'dark',accent:'#5c6bc0',r:4,needs:'material-themes'}
+};
+const FONTS={inter:["Inter","'Inter',system-ui,sans-serif"],plex:["IBM Plex Sans","'IBM Plex Sans',system-ui,sans-serif"],serif:["Source Serif 4","'Source Serif 4',Georgia,serif"],system:["System UI","system-ui,-apple-system,'Segoe UI',sans-serif"]};
+const MODES=[['static','Static'],['overlay','Overlay'],['slim','Slim'],['slimplus','Slim+'],['compact','Compact'],['horizontal','Horizontal'],['reveal','Reveal'],['drawer','Drawer']];
+const PACKS={
+  generic:{n:'Generic (typed by field kind)',d:'No pack chosen. Rows are made up from each field’s type.',cols:['Name','Amount','Date','Status'],rows:[['Sample text 1','1 240','2026-01-12','Active'],['Sample text 2','318','2026-02-03','Pending'],['Sample text 3','9 075','2026-02-19','Active'],['Sample text 4','54','2026-03-01','Inactive']]},
+  retail:{n:'Contoso Retail',d:'Outdoor gear catalog with prices and stock.',cols:['SKU','Product','Price','Availability'],rows:[['CT-1042','Ridgeline backpack','$89.00','In stock'],['CT-2210','Trail kettle','$34.50','Low'],['CT-3187','Merino base layer','$72.00','Out of stock'],['CT-4005','Summit headlamp','$49.90','In stock']]},
+  health:{n:'Clinic',d:'Appointments across a small clinic.',cols:['Patient','Visit','Date','Status'],rows:[['Ingrid Solheim','Annual check-up','2026-03-04','Confirmed'],['Tor Haugen','Follow-up','2026-03-04','Pending'],['Mina Berg','Vaccination','2026-03-05','Confirmed'],['Jon Lie','Consultation','2026-03-06','Cancelled']]},
+  finance:{n:'Ledger',d:'Invoices in NOK with paid and overdue states.',cols:['Invoice','Customer','Amount','Status'],rows:[['INV-2041','Fjord Logistics','NOK 48 200','Paid'],['INV-2042','Nordlys Bakeri','NOK 6 950','Overdue'],['INV-2043','Vestfold Marine','NOK 112 400','Pending'],['INV-2044','Sandar Bygg','NOK 23 800','Paid']]}
+};
+const NAV=[['Workspace',[['Dashboard','home'],['Products','box'],['Product detail','file'],['Customers','users'],['New product','plus'],['Invoices','receipt'],['Nothing yet','inbox']]],['Administration',[['Users','users'],['Roles','layers']]]];
+const ACCENTS=['#4f46e5','#0d9488','#c2410c','#be185d','#1d4ed8','#4d7c0f','#111827'];
+const SECTIONS=[['app','App','app'],['shell','Shell','shell'],['look','Look','palette'],['menu','Menu','nav'],['pkg','Packages','pkg'],['data','Sample data','db']];
+
+/* ---------- state ---------- */
+const SAMPLE='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f766e"/><path d="M8 46L24 22l10 14 8-10 14 20z" fill="#f2f0e6"/><path d="M8 51q12-6 24 0t24 0" stroke="#7dd3c8" stroke-width="3" fill="none" stroke-linecap="round"/></svg>');
+const DEF={appName:'Some App',logo:{kind:'initial',text:'',icon:'box',image:'',showName:true},started:false,shell:{kind:'blueprint',id:'cratis-default',version:'^1.0.0',path:''},platform:'web',newScreen:'blank',
+  scheme:'light',theme:'scene-light',accent:'',font:'inter',radius:'default',menuMode:'static',menuTheme:'light',
+  packages:['cratis-default-blueprint','cratis-components','primereact','tailwind','core'],pack:'generic'};
+let S=JSON.parse(JSON.stringify(DEF));
+let past=[],future=[],pastL=[],futureL=[],lastLabel='',lastT=0,msg='Ready. Changes apply to the preview as you make them.';
+const ui={device:window.innerWidth<700?'mobile':'desktop',active:'app',menuOpen:false,screen:'Products',problems:false,addOpen:false,hover:null};
+
+function commit(label,fn,coalesce,opts){
+  const now=Date.now();
+  if(!(coalesce&&lastLabel===label&&now-lastT<900)){past.push(JSON.stringify(S));pastL.push(label);if(past.length>150){past.shift();pastL.shift()}}
+  fn(S);future=[];futureL=[];lastLabel=label;lastT=now;msg=label;render(opts);
+}
+function undo(){if(!past.length)return;const l=pastL.pop();future.push(JSON.stringify(S));futureL.push(l);S=JSON.parse(past.pop());msg='Undid: '+l;lastLabel='';render()}
+function redo(){if(!future.length)return;const l=futureL.pop();past.push(JSON.stringify(S));pastL.push(l);S=JSON.parse(future.pop());msg='Redid: '+l;lastLabel='';render()}
+
+/* ---------- derived ---------- */
+const theme=()=>THEMES[S.theme]||THEMES['scene-light'];
+const accent=()=>S.accent||theme().accent;
+const hexRGB=h=>{h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return null;return[0,2,4].map(i=>parseInt(h.substr(i,2),16))};
+const lum=([r,g,b])=>{const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};return .2126*f(r)+.7152*f(g)+.0722*f(b)};
+function contrast(hex){const c=hexRGB(hex);if(!c)return null;return 1.05/(lum(c)+.05)}
+const requiredBy=id=>S.packages.filter(p=>PK[p].req.includes(id));
+function lockReason(id){
+  if(PK[id].locked)return 'Always last';
+  if(S.shell.kind==='blueprint'&&BP[S.shell.id].pkg===id)return 'Used by Shell';
+  const r=requiredBy(id);if(r.length)return 'Needed by '+r.map(x=>PK[x].n).join(', ');
+  return '';
+}
+function winner(c){for(const p of S.packages){if(PK[p].sup.includes(c))return p}return null}
+function problems(){
+  const out=[],t=theme();
+  if(t.needs&&!S.packages.includes(t.needs))out.push({id:'theme',sev:'warn',t:`${t.n} needs ${PK[t.needs].n}`,s:'That package is not in this profile, so the theme cannot load.',fix:'Add package',go:'pkg'});
+  const c=contrast(accent());
+  if(c&&c<3)out.push({id:'acc',sev:'warn',t:'Accent is too light for white button text',s:`Contrast is ${c.toFixed(1)}:1. Buttons need at least 3:1.`,fix:'Use theme accent',go:'look'});
+  if(S.shell.kind==='own'&&!S.shell.path.trim())out.push({id:'own',sev:'warn',t:'Your own shell has no package or path',s:'Enter where the shell comes from, or go back to a blueprint.',fix:'Use default blueprint',go:'shell'});
+  if(S.logo.kind==='image'&&!S.logo.image)out.push({id:'logo',sev:'warn',t:'Logo type is Image but no image is chosen',s:'The preview shows an empty logo box. Choose an image or go back to initials.',fix:'Use initials',go:'app'});
+  if(ui.device==='mobile'&&S.menuMode==='reveal')out.push({id:'reveal',sev:'info',t:'Reveal menu needs hover',s:'Touch screens show the menu as a drawer instead.',fix:'Switch to Drawer',go:'menu'});
+  return out;
+}
+
+/* ---------- preview ---------- */
+function appHTML(){
+  const t=theme(),mob=ui.device==='mobile',f=FONTS[S.font][1];
+  const rad={sharp:4,default:t.r,round:18}[S.radius]??t.r;
+  const pack=PACKS[S.pack],dt=winner('DataTable');
+  const mode=S.menuMode;
+  const items=NAV.map(([g,list])=>`<div class="grplbl">${g}</div>`+list.map(([n,i])=>`<div class="item${ui.screen===n?' act':''}" data-screen="${n}">${ic(i,18)}<span class="lbl2">${n}</span></div>`).join('')).join('');
+  const flat=NAV[0][1].slice(0,6).map(([n,i])=>`<div class="item${ui.screen===n?' act':''}" data-screen="${n}">${ic(i,16)}<span>${n}</span></div>`).join('');
+  const pill=v=>{const g=['Active','Paid','Confirmed','In stock'],w=['Pending','Low'],b=['Out of stock','Overdue','Cancelled'];return `<span class="pill ${g.includes(v)?'g':w.includes(v)?'w':b.includes(v)?'b':''}">${v}</span>`};
+  const rows=pack.rows.map(r=>`<tr>${r.map((v,i)=>`<td class="c${i+1}">${i===3?pill(v):esc(v)}</td>`).join('')}</tr>`).join('');
+  const bn=esc(S.appName||'App');const L=S.logo||{};
+  const mark=L.kind==='image'?(L.image?`<div class="logo img"><img src="${L.image}" alt=""></div>`:'<div class="logo empty"></div>'):L.kind==='icon'?`<div class="logo">${ic(L.icon||'box',20)}</div>`:`<div class="logo">${esc(((L.text||(S.appName||'A')[0])+'').toUpperCase())}</div>`;
+  const brandInner=mark+(L.showName===false?'':`<span class="bn">${bn}</span>`);
+  return `<div class="app ${t.scheme==='dark'?'dark':''} mt-${S.menuTheme} m-${mode}${mob?' mobile':''}${ui.menuOpen?' open':''}" data-sel="look" style="--a:${accent()};--r:${rad}px;--af:${f}">
+    <aside class="nav" data-sel="menu"><div class="brand" data-sel="app">${brandInner}</div>${items}</aside>
+    <div class="main">
+      <header class="top" data-sel="shell">
+        <button class="burger only" data-burger aria-label="Toggle menu">${ic('menu',20)}</button>
+        <div class="brand" data-sel="app">${brandInner}</div>
+        <div class="hnav" data-sel="menu">${flat}</div>
+        <div class="search">${ic('search',15)}<span>Search</span></div>
+        <div class="avatar"></div>
+      </header>
+      <div class="crumb">${ic('home',15)}${ic('chev',13)}<span>${ui.screen}</span></div>
+      <section class="content" data-sel="data">
+        <div class="chead"><h3>${ui.screen}</h3><button class="abtn" data-sel="look">${ic('plus',15)}New</button></div>
+        <table><thead><tr>${pack.cols.map((c,i)=>`<th class="c${i+1}">${c}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+        <div class="cap">${esc(pack.n)} sample data · DataTable from ${dt?PK[dt].n:'no package'}</div>
+      </section>
+    </div>
+    <div class="scrim" data-scrim></div>
+  </div>`;
+}
+const REGION={app:'app',shell:'shell',look:'look',menu:'menu',data:'data'};
+const LABEL={app:'App name and logo',shell:'Shell',look:'Look and accent',menu:'Menu',data:'Sample data'};
+function fit(){
+  const st=$('#stage'),mob=ui.device==='mobile';
+  const W=mob?390:1280,H=mob?800:720,pad=28;
+  const sc=Math.min(1,(st.clientWidth-pad)/W,(st.clientHeight-pad)/H);
+  const fr=$('#frame'),fw=$('#fw');
+  fr.style.width=W+'px';fr.style.height=H+'px';fr.style.transform=`scale(${sc})`;
+  fw.style.width=W*sc+'px';fw.style.height=H*sc+'px';
+  $('#dim').textContent=mob?'390 × 800 · Compact width, Regular height':'1280 × 720 · Regular width, Regular height';
+}
+function relRect(el){
+  const st=$('#stage').getBoundingClientRect(),r=el.getBoundingClientRect();
+  return{l:r.left-st.left,t:r.top-st.top,w:r.width,h:r.height,ok:r.width>2&&r.height>2&&r.right>st.left&&r.left<st.right&&r.bottom>st.top&&r.top<st.bottom};
+}
+function place(ov,el,label){
+  if(!el){ov.hidden=true;return}
+  let r=relRect(el);
+  if(!r.ok){const b=$('.burger.only')||el;r=relRect(b);if(!r.ok){ov.hidden=true;return}}
+  ov.hidden=false;ov.style.left=r.l+'px';ov.style.top=r.t+'px';ov.style.width=r.w+'px';ov.style.height=r.h+'px';
+  const tag=$('.tag',ov);tag.textContent=label;tag.style.top=r.t<26?'auto':'-24px';if(r.t<26){tag.style.bottom='-24px';tag.style.borderRadius='0 0 5px 5px'}else{tag.style.bottom='auto';tag.style.borderRadius='5px 5px 5px 0'}
+}
+function regionEl(key){
+  if(key==='menu'){const n=$('#frame .nav'),h=$('#frame .hnav');return S.menuMode==='horizontal'&&!ui.device.startsWith('m')?h:n}
+  if(key==='app')return $('#frame .nav .brand')&&relRect($('#frame .nav .brand')).ok?$('#frame .nav .brand'):$('#frame .top .brand');
+  if(key==='shell')return $('#frame .top');
+  if(key==='data')return $('#frame .content');
+  if(key==='look')return $('#frame .abtn');
+  return null;
+}
+function overlays(){
+  const k=ui.active;place($('#ovs'),regionEl(k),LABEL[k]||'');
+  const h=ui.hover;
+  if(h&&h!==ui.active)place($('#ovh'),regionEl(h),LABEL[h]);else $('#ovh').hidden=true;
+}
+
+/* ---------- inspector ---------- */
+const seg=(act,opts,cur)=>`<div class="seg" role="group">${opts.map(([v,l,dis])=>`<button data-act="${act}" data-v="${v}" class="${cur===v?'on':''}"${dis?' disabled':''}>${l}</button>`).join('')}</div>`;
+function miniMenu(m){
+  const box=(x,y,w,h,o)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="currentColor" opacity="${o||.5}"/>`;
+  let b='';
+  if(m==='static')b=box(2,2,12,24);
+  if(m==='compact')b=box(2,2,9,24);
+  if(m==='slim'||m==='reveal')b=box(2,2,5,24);
+  if(m==='slimplus')b=box(2,2,8,24)+box(4,6,4,2,.9)+box(4,12,4,2,.9);
+  if(m==='horizontal')b=box(2,2,36,5)+box(5,3.5,6,2,.9)+box(13,3.5,6,2,.9);
+  if(m==='overlay')b=box(2,2,12,24,.9);
+  if(m==='drawer')b='<rect x="1" y="1" width="38" height="26" fill="currentColor" opacity=".18"/>'+box(2,2,12,24,.9);
+  if(m==='reveal')b+=box(8,2,9,24,.25);
+  return `<svg width="52" height="34" viewBox="0 0 40 28" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="39" height="27" rx="3" stroke="currentColor" opacity=".5"/>${b}</svg>`;
+}
+const thumb=a=>`<div class="thumb">${a.map(([x,y,w,h])=>`<i style="left:${x}%;top:${y}%;width:${w}%;height:${h}%"></i>`).join('')}</div>`;
+
+function inspectorHTML(){
+  const t=theme(),bpOn=S.shell.kind==='blueprint';
+  const L=S.logo;
+  const logoCtl=L.kind==='initial'?`<div class="f"><label for="logoText">Initials</label><input type="text" id="logoText" maxlength="2" value="${esc(L.text)}" placeholder="${esc((S.appName||'A')[0].toUpperCase())} (from the name)"><p class="hint">One or two characters on the accent color. Empty uses the first letter of the name.</p></div>`
+   :L.kind==='icon'?`<div class="f"><span class="lbl">Icon</span><div class="icons">${['box','layers','home','users','receipt','pkg','db','palette'].map(i=>`<button class="ibox${L.icon===i?' on':''}" data-act="logoicon" data-v="${i}" aria-label="Icon ${i}">${ic(i,20)}</button>`).join('')}</div></div>`
+   :`<div class="f"><span class="lbl">Image</span><div class="row">${L.image?`<span class="lprev"><img src="${L.image}" alt=""></span>`:''}<button class="btn" data-act="logopick">Choose image…</button><input type="file" id="logoFile" accept="image/*" hidden><button class="btn" data-act="logosample">Use sample logo</button>${L.image?'<button class="link" data-act="logoclear">Remove</button>':''}</div><p class="hint">${L.image?'Image set.':'No image yet.'} PNG, JPG, SVG or WebP up to 400 KB. Square images work best.</p></div>`;
+  const secApp=`
+    <div class="f"><label for="appName">Name</label><input type="text" id="appName" value="${esc(S.appName)}"><p class="hint">What the application is called. Renaming it here renames it everywhere.</p></div>
+    <div class="f"><span class="lbl">Logo</span><div id="logoKindSeg">${seg('logokind',[['initial','Initials'],['icon','Icon'],['image','Image']],S.logo.kind)}</div><p class="hint">Every blueprint draws this logo and name in its own way: sidebar, top bar, slim rail and mobile header.</p></div>
+    ${logoCtl}
+    <div class="f"><span class="lbl">Name beside logo</span><div id="logoNameSeg">${seg('logoname',[['show','Show'],['hide','Hide']],S.logo.showName===false?'hide':'show')}</div></div>
+    <div class="f"><span class="lbl">Target platform</span>${seg('platform',[['web','Web'],['native','Native (not yet)',1]],S.platform)}<p class="hint">Studio draws for the web today.</p></div>
+    <div class="f"><label for="newScreen">New screens start from</label>
+      <select id="newScreen">${[['blank','A blank screen'],['list','A list screen'],['form','A form screen'],['detail','A detail screen']].map(([v,l])=>`<option value="${v}"${S.newScreen===v?' selected':''}>${l}</option>`).join('')}</select>
+      <p class="hint">The template a screen you add starts from.</p></div>`;
+  const secShell=`
+    <div class="cards">${Object.entries(BP).map(([id,b])=>`<button class="card${bpOn&&S.shell.id===id?' on':''}" data-act="bp" data-v="${id}">${thumb(b.thumb)}<b>${b.name.replace(' Blueprint','')}</b><small>${b.desc}</small>${bpOn&&S.shell.id===id?`<span class="chk">${ic('check',16)}</span>`:''}</button>`).join('')}
+      <button class="card${!bpOn?' on':''}" data-act="own">${thumb([[0,0,100,12],[0,16,30,84]])}<b>My own shell</b><small>Bring a shell package or a path in your repository.</small>${!bpOn?`<span class="chk">${ic('check',16)}</span>`:''}</button></div>
+    <p class="hint" style="margin-top:12px">Every blueprint draws the name and logo you set under <button class="link" data-act="goto" data-v="app">App</button>.</p>
+    ${bpOn?`<div class="f" style="margin-top:16px"><label for="ver">Version</label>
+      <select id="ver">${[['^1.0.0','Follow compatible versions (^1.0.0)'],['1.0.0','Pin to 1.0.0'],['*','Always the latest']].map(([v,l])=>`<option value="${v}"${S.shell.version===v?' selected':''}>${l}</option>`).join('')}</select>
+      <p class="hint"><span class="chip ok">${ic('check',12)} Up to date</span> ${BP[S.shell.id].name} 1.0.0</p></div>
+      <div class="row"><button class="btn" data-act="toast" data-v="Copied to your templates. In the real editor this opens the copy for editing.">Copy to my templates and edit…</button><button class="btn" data-act="toast" data-v="In the real editor this starts an empty shell you design yourself.">Create new shell…</button></div>`
+    :`<div class="f" style="margin-top:16px"><label for="ownPath">Shell package or path</label><input type="text" id="ownPath" placeholder="@acme/app-shell or ./Shell" value="${esc(S.shell.path)}"><p class="hint">The preview keeps showing the default shell until this resolves.</p></div>`}`;
+  const accOn=S.accent.toLowerCase();
+  const cr=contrast(accent());
+  const secLook=`
+    <div class="f"><span class="lbl">Color scheme</span>${seg('scheme',[['light','Light'],['dark','Dark']],t.scheme)}<p class="hint">Whether the application is light or dark.</p></div>
+    <div class="f"><span class="lbl">Theme</span><div class="cards">${Object.entries(THEMES).filter(([,x])=>x.scheme===t.scheme).map(([id,x])=>{
+      const miss=x.needs&&!S.packages.includes(x.needs);
+      return `<button class="card${S.theme===id?' on':''}${miss?' off':''}" data-act="theme" data-v="${id}"><div class="thumb" style="background:${x.scheme==='dark'?'#181c27':'#f4f5f9'}"><i style="left:8%;top:22%;width:30%;height:14%;background:${x.accent};opacity:1"></i><i style="left:8%;top:50%;width:70%;height:8%"></i></div><b>${x.n}</b>${miss?`<small>Needs ${PK[x.needs].n}. Selecting it adds the package.</small>`:`<small>${x.r}px corners</small>`}</button>`}).join('')}</div></div>
+    <div class="f"><label for="accHex">Accent</label>
+      <div class="accrow"><input type="color" id="acc" value="${accent()}" aria-label="Accent color"><input type="text" id="accHex" value="${S.accent}" placeholder="${theme().accent} (theme default)" spellcheck="false"></div>
+      <div class="swatches">${ACCENTS.map(c=>`<button class="sw${accOn===c?' on':''}" style="background:${c}" data-act="accent" data-v="${c}" aria-label="Accent ${c}"></button>`).join('')}<button class="link" data-act="accent" data-v="" style="margin-left:6px">Use theme accent</button></div>
+      <p class="hint" id="contrast">${contrastText(cr)}</p></div>
+    <div class="f"><label for="font">Font</label><select id="font">${Object.entries(FONTS).map(([k,[n]])=>`<option value="${k}"${S.font===k?' selected':''}>${n}</option>`).join('')}</select>
+      <p class="hint" style="font-family:${FONTS[S.font][1]};font-size:15px;color:var(--fg)">Orders shipped this week: 1 284</p></div>
+    <div class="f"><span class="lbl">Corners</span>${seg('radius',[['sharp','Sharp'],['default','Theme default'],['round','Round']],S.radius)}</div>`;
+  const secMenu=`
+    <div class="f"><span class="lbl">Menu mode</span><div class="menus">${MODES.map(([v,l])=>`<button class="card${S.menuMode===v?' on':''}" data-act="mode" data-v="${v}">${miniMenu(v)}<b>${l}</b></button>`).join('')}</div>
+      <p class="hint">How the shell presents the application’s navigation. Overlay, Drawer and Reveal respond in the preview.</p></div>
+    <div class="f"><span class="lbl">Menu theme</span>${seg('mtheme',[['light','Light'],['dark','Dark'],['primary','Primary']],S.menuTheme)}</div>`;
+  const pk=S.packages.map((id,i)=>{
+    const p=PK[id],lock=lockReason(id),locked=!!lock;
+    const movable=!p.locked;
+    const canUp=movable&&i>0,canDown=movable&&i<S.packages.length-2;
+    return `<div class="pk"><span class="n">${i+1}</span><div class="m"><b>${p.n}</b> <span class="dim">${p.v}</span> <span class="chip">${p.k}</span><small>${locked?esc(lock):'Chosen'} · ${p.d}</small></div>
+      <div class="a"><button data-act="pkup" data-v="${id}" aria-label="Move up"${canUp?'':' disabled'}>${ic('up',13)}</button><button data-act="pkdown" data-v="${id}" aria-label="Move down"${canDown?'':' disabled'}>${ic('down',13)}</button><button data-act="pkrm" data-v="${id}" aria-label="Remove ${p.n}"${locked?' disabled':''} title="${locked?esc(lock):'Remove'}">${ic(locked?'lock':'x',13)}</button></div></div>`}).join('');
+  const avail=Object.keys(PK).filter(id=>!S.packages.includes(id));
+  const secPkg=`
+    <p class="hint" style="margin-bottom:12px">The first package wins when two supply the same component. Use the arrows to change the order.</p>
+    ${pk}
+    <button class="btn" data-act="addtoggle">${ui.addOpen?'Close':'Add a package…'}</button>
+    ${ui.addOpen?`<div class="add-list" style="margin-top:10px">${avail.length?avail.map(id=>`<div class="pk"><div class="m"><b>${PK[id].n}</b> <span class="dim">${PK[id].v}</span> <span class="chip">${PK[id].k}</span><small>${PK[id].d}${PK[id].req.filter(r=>!S.packages.includes(r)).length?' · also adds '+PK[id].req.filter(r=>!S.packages.includes(r)).map(r=>PK[r].n).join(', '):''}</small></div><button class="btn sm" data-act="pkadd" data-v="${id}">Add</button></div>`).join(''):'<p class="hint">Every available package is already added.</p>'}</div>`:''}
+    <div class="f" style="margin-top:20px"><span class="lbl">Who supplies a component?</span>
+      <table class="sup"><tr><th>Component</th><th>Used</th><th>Also in</th></tr>${COMPONENTS.map(c=>{const w=winner(c),others=S.packages.filter(p=>p!==w&&PK[p].sup.includes(c));return `<tr><td>${c}</td><td>${w?PK[w].n:'<span class="chip warn">none</span>'}</td><td style="color:var(--mute)">${others.map(o=>PK[o].n).join(', ')||'—'}</td></tr>`}).join('')}</table></div>`;
+  const secData=`
+    <p class="hint" style="margin-bottom:12px">The pack every preview, screen and run of the application uses. Production builds never include sample data.</p>
+    <div class="cards" style="grid-template-columns:1fr">${Object.entries(PACKS).map(([id,p])=>`<button class="card${S.pack===id?' on':''}" data-act="pack" data-v="${id}"><b>${p.n}</b><small>${p.d}</small><small class="dim">${p.cols.join(' · ')}</small>${S.pack===id?`<span class="chk">${ic('check',16)}</span>`:''}</button>`).join('')}</div>
+    <div class="row" style="margin-top:12px"><button class="btn" data-act="toast" data-v="In the real editor this opens the pack manager.">Manage packs…</button></div>`;
+  const body={app:secApp,shell:secShell,look:secLook,menu:secMenu,pkg:secPkg,data:secData};
+  const desc={app:'Name and defaults for the application.',shell:'The frame around every screen. Start from a blueprint or bring your own.',look:'Theme, accent and type. Changes show in the preview right away.',menu:'How people move around the application.',pkg:'Where components, styling and themes come from, in priority order.',data:'What the preview and screens show while you design.'};
+  return SECTIONS.map(([id,l,i])=>`<section class="sec" id="sec-${id}" data-sec="${id}"><h2>${ic(i,17)}${{app:'App',shell:'Shell',look:'Look',menu:'Menu',pkg:'Packages',data:'Sample data'}[id]}</h2><p class="desc">${desc[id]}</p>${body[id]}</section>`).join('');
+}
+function contrastText(c){
+  if(c==null)return 'Enter a hex color like #4f46e5.';
+  const g=c>=7?'AAA':c>=4.5?'AA':c>=3?'large text only':'fails';
+  return `<span class="chip ${c>=4.5?'ok':c>=3?'warn':'bad'}">${c.toFixed(1)}:1 with white text · ${g}</span>`;
+}
+
+/* ---------- render ---------- */
+function render(opts){
+  opts=opts||{};
+  const fr=$('#frame');fr.innerHTML=appHTML();
+  $('#ttl').innerHTML=esc(S.appName||'App')+' <span>· UI profile</span>';$('#stq').textContent='How should '+(S.appName||'App')+' look?';
+  fit();
+  $('#starter').hidden=S.started;
+  $('#undo').innerHTML=ic('undo',15);$('#undo').disabled=!past.length;
+  $('#redo').innerHTML=ic('redo',15);$('#redo').disabled=!future.length;
+  $('#dDesk').innerHTML=ic('monitor',15);$('#dMob').innerHTML=ic('phone',15);
+  $('#dDesk').classList.toggle('on',ui.device==='desktop');$('#dMob').classList.toggle('on',ui.device==='mobile');
+  const pr=problems();
+  const pb=$('#pbtn');pb.className='pchip '+(pr.length?'has':'clean');
+  pb.innerHTML=pr.length?`${ic('alert',14)} ${pr.length} problem${pr.length>1?'s':''}`:`${ic('check',14)} No problems`;
+  $('#msg').textContent=msg;
+  $('#prob').hidden=!ui.problems||!pr.length;
+  $('#prob').innerHTML=pr.map(p=>`<div class="it"><span class="sev ${p.sev}">${ic(p.sev==='warn'?'alert':'info',16)}</span><div class="t">${p.t}<small>${p.s}</small></div><button class="btn sm" data-fix="${p.id}">${p.fix}</button></div>`).join('');
+  $('#tabs').innerHTML=SECTIONS.map(([id,l])=>`<button data-go="${id}" class="${ui.active===id?'on':''}">${l}</button>`).join('');
+  if(!opts.keepInspector){
+    const sc=$('#scroll'),top=sc.scrollTop;
+    const prev=sc.style.scrollBehavior;sc.style.scrollBehavior='auto';
+    sc.innerHTML=inspectorHTML();sc.scrollTop=top;sc.style.scrollBehavior=prev;
+  }
+  overlays();
+}
+function go(id,pulse){
+  ui.active=id;ui.lock=Date.now()+700;
+  const el=$('#sec-'+id),sc=$('#scroll');
+  if(el)sc.scrollTo({top:el.offsetTop-sc.offsetTop,behavior:'smooth'});
+  if(pulse&&el){el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
+  $('#tabs').innerHTML=SECTIONS.map(([sid,l])=>`<button data-go="${sid}" class="${ui.active===sid?'on':''}">${l}</button>`).join('');
+  overlays();
+}
+
+/* ---------- actions ---------- */
+function setBlueprint(id){
+  const b=BP[id];
+  S.packages=S.packages.filter(p=>PK[p].k!=='Blueprint');
+  S.packages.unshift(b.pkg);
+  S.shell={kind:'blueprint',id,version:S.shell.version||'^1.0.0',path:''};
+  S.menuMode=b.mode;
+}
+function addPkg(id){
+  if(S.packages.includes(id))return;
+  const at=S.packages.indexOf('core');
+  S.packages.splice(at<0?S.packages.length:at,0,id);
+  PK[id].req.forEach(r=>{if(!S.packages.includes(r)){const a=S.packages.indexOf('core');S.packages.splice(a,0,r)}});
+}
+function move(id,d){
+  const i=S.packages.indexOf(id),j=i+d;
+  if(j<0||j>=S.packages.length-1)return;
+  [S.packages[i],S.packages[j]]=[S.packages[j],S.packages[i]];
+}
+function act(a,v){
+  switch(a){
+    case 'bp':commit(`Shell: ${BP[v].name}, menu set to ${v}`,()=>{setBlueprint(v);S.started=true});break;
+    case 'own':commit('Shell: your own shell',s=>{s.shell={kind:'own',id:'',version:'',path:s.shell.path||''};s.started=true});break;
+    case 'scheme':commit(`Color scheme: ${v}`,s=>{s.scheme=v;if(THEMES[s.theme].scheme!==v){s.theme=v==='dark'?'scene-dark':'scene-light'}});break;
+    case 'theme':commit(`Theme: ${THEMES[v].n}`,s=>{s.theme=v;s.scheme=THEMES[v].scheme;if(THEMES[v].needs)addPkg(THEMES[v].needs)});break;
+    case 'accent':commit(v?`Accent: ${v}`:'Accent: theme default',s=>{s.accent=v});break;
+    case 'radius':commit(`Corners: ${v}`,s=>{s.radius=v});break;
+    case 'mode':commit(`Menu mode: ${MODES.find(m=>m[0]===v)[1]}`,s=>{s.menuMode=v;ui.menuOpen=false});break;
+    case 'mtheme':commit(`Menu theme: ${v}`,s=>{s.menuTheme=v});break;
+    case 'pack':commit(`Sample data: ${PACKS[v].n}`,s=>{s.pack=v});break;
+    case 'pkup':commit(`Moved ${PK[v].n} up`,()=>move(v,-1));break;
+    case 'pkdown':commit(`Moved ${PK[v].n} down`,()=>move(v,1));break;
+    case 'pkrm':if(lockReason(v))return;commit(`Removed ${PK[v].n}`,s=>{s.packages=s.packages.filter(p=>p!==v)});break;
+    case 'pkadd':commit(`Added ${PK[v].n}`,()=>addPkg(v));break;
+    case 'addtoggle':ui.addOpen=!ui.addOpen;render();break;
+    case 'logokind':commit(`Logo: ${v==='initial'?'initials':v}`,s=>{s.logo.kind=v});break;
+    case 'logoicon':commit(`Logo icon: ${v}`,s=>{s.logo.icon=v;s.logo.kind='icon'});break;
+    case 'logosample':commit('Logo: sample image',s=>{s.logo.image=SAMPLE;s.logo.kind='image'});break;
+    case 'logoclear':commit('Logo image removed',s=>{s.logo.image=''});break;
+    case 'logoname':commit(v==='hide'?'Name hidden beside logo':'Name shown beside logo',s=>{s.logo.showName=v!=='hide'});break;
+    case 'logopick':{const f=$('#logoFile');if(f)f.click();break}
+    case 'goto':go(v,true);break;
+    case 'toast':msg=v;render();break;
+  }
+}
+function fixProblem(id){
+  if(id==='theme')commit('Added package for theme',()=>addPkg(theme().needs));
+  if(id==='acc')commit('Accent: theme default',s=>{s.accent=''});
+  if(id==='own')commit('Shell: Cratis Default Blueprint',()=>setBlueprint('cratis-default'));
+  if(id==='logo')commit('Logo: initials',s=>{s.logo.kind='initial'});
+  if(id==='reveal')commit('Menu mode: Drawer',s=>{s.menuMode='drawer'});
+  ui.problems=false;render();
+}
+
+/* ---------- events ---------- */
+const insp=$('#scroll');
+insp.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b)act(b.dataset.act,b.dataset.v)});
+insp.addEventListener('change',e=>{
+  const id=e.target.id,v=e.target.value;
+  if(id==='logoFile'){const f=e.target.files[0];if(!f)return;if(f.size>400*1024){msg='That image is over 400 KB. Use a smaller file.';render();return}const r=new FileReader();r.onload=()=>commit('Logo: '+f.name,s=>{s.logo.image=r.result;s.logo.kind='image'});r.readAsDataURL(f)}
+  if(id==='newScreen')commit('New screens start from: '+v,s=>{s.newScreen=v});
+  if(id==='ver')commit('Shell version: '+v,s=>{s.shell.version=v});
+  if(id==='font')commit('Font: '+FONTS[v][0],s=>{s.font=v});
+  if(id==='ownPath')commit('Own shell path set',s=>{s.shell.path=v});
+  if(id==='accHex'){const c=v.trim();if(c===''||hexRGB(c))commit(c?`Accent: ${c}`:'Accent: theme default',s=>{s.accent=c&&!c.startsWith('#')?'#'+c:c});else{msg='That is not a hex color. Try #4f46e5.';render()}}
+});
+insp.addEventListener('input',e=>{
+  if(e.target.id==='appName'){const v=e.target.value;commit('Renamed app to '+(v||'App'),s=>{s.appName=v||'App'},true,{keepInspector:true});const lt=$('#logoText');if(lt)lt.placeholder=((v||'A')[0]).toUpperCase()+' (from the name)'}
+  if(e.target.id==='logoText'){const v=e.target.value;commit('Logo initials: '+(v||'from the name'),s=>{s.logo.text=v},true,{keepInspector:true})}
+  if(e.target.id==='acc'){
+    const v=e.target.value;
+    commit(`Accent: ${v}`,s=>{s.accent=v},true,{keepInspector:true});
+    $('#accHex').value=v;$('#contrast').innerHTML=contrastText(contrast(v));
+  }
+});
+insp.addEventListener('scroll',()=>{
+  if(Date.now()<(ui.lock||0))return;
+  const sc=insp,y=sc.scrollTop+60;let cur=SECTIONS[0][0];
+  for(const [id] of SECTIONS){const el=$('#sec-'+id);if(el&&el.offsetTop-sc.offsetTop<=y)cur=id}
+  if(sc.scrollTop+sc.clientHeight>=sc.scrollHeight-4)cur='data';
+  if(cur!==ui.active){ui.active=cur;$('#tabs').innerHTML=SECTIONS.map(([sid,l])=>`<button data-go="${sid}" class="${ui.active===sid?'on':''}">${l}</button>`).join('');overlays()}
+});
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go,true)});
+$('#frame').addEventListener('mouseover',e=>{
+  const el=e.target.closest('[data-sel]');const k=el?el.dataset.sel:null;
+  if(k!==ui.hover){ui.hover=k;overlays()}
+});
+$('#stage').addEventListener('mouseleave',()=>{ui.hover=null;overlays()});
+$('#frame').addEventListener('click',e=>{
+  if(e.target.closest('[data-burger],[data-scrim]')){ui.menuOpen=!ui.menuOpen;render({keepInspector:true});return}
+  const it=e.target.closest('[data-screen]');
+  if(it){ui.screen=it.dataset.screen;if(ui.device==='mobile'||['overlay','drawer'].includes(S.menuMode))ui.menuOpen=false}
+  const el=e.target.closest('[data-sel]');
+  if(el){ui.active=el.dataset.sel;render({keepInspector:true});go(el.dataset.sel,true)}else render({keepInspector:true});
+});
+$('#starter').addEventListener('click',e=>{
+  const b=e.target.closest('[data-start]');if(!b)return;
+  const k=b.dataset.start;
+  if(k==='own')commit('Shell: your own shell',s=>{s.shell={kind:'own',id:'',version:'',path:''};s.started=true});
+  else commit(k==='defaults'?'Kept the defaults':'Choose a blueprint in the Shell section',s=>{s.started=true});
+  if(k!=='defaults')go('shell',true);
+});
+$('#undo').onclick=undo;$('#redo').onclick=redo;
+$('#dDesk').onclick=()=>{ui.device='desktop';ui.menuOpen=false;render()};
+$('#dMob').onclick=()=>{ui.device='mobile';ui.menuOpen=false;render()};
+$('#pbtn').onclick=()=>{if(problems().length){ui.problems=!ui.problems;render({keepInspector:true})}};
+$('#prob').addEventListener('click',e=>{const b=e.target.closest('[data-fix]');if(b){const p=problems().find(x=>x.id===b.dataset.fix);if(p)go(p.go,true);fixProblem(b.dataset.fix)}});
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'&&!/INPUT|SELECT/.test(document.activeElement.tagName)){e.preventDefault();e.shiftKey?redo():undo()}
+});
+window.addEventListener('resize',()=>{fit();overlays()});
+if(window.ResizeObserver)new ResizeObserver(()=>{fit();overlays()}).observe($('#stage'));
+render();
+</script>
+
+</body></html>
