@@ -4,6 +4,7 @@
 import { Screen } from '@cratis/scene.model';
 import { ComponentName } from '../ComponentName';
 import { LayoutName, defaultLayouts } from '../layouts';
+import type { ResolvedProfileIdentity } from '@cratis/scene.engine';
 import { fullPageChrome, applicationChrome } from '../gallery/applicationChrome';
 import { galleryDialogTemplates } from '../gallery/dialogTemplates';
 import { fullPageTemplateNames, galleryBreadcrumbs, galleryScreenTemplates } from '../gallery/screens';
@@ -36,9 +37,15 @@ export function galleryApplication(): ApplicationDocument {
     };
 }
 
-/** What {@link galleryApplication} is composed with: the gallery's chrome for each screen, the full-page shell none beyond the configurator. */
-export const galleryComposition: CompositionOptions = {
+/**
+ * What {@link galleryApplication} is composed with: the gallery's chrome for each screen, the full-page shell none beyond the configurator. Given the
+ * profile's resolved identity, the chrome draws the application's own name and logo in place of the gallery's.
+ */
+export const galleryCompositionFor = (identity?: ResolvedProfileIdentity): CompositionOptions => ({
     chrome: (screen, shell) => fullPageTemplateNames.has(screen.name) || shell === ComponentName.FullPageShell
         ? fullPageChrome()
-        : applicationChrome(screen.name, galleryBreadcrumbs[screen.name] ?? [{ label: galleryScreenTemplates.find(template => template.name === screen.name)?.displayName ?? screen.name }]),
-};
+        : applicationChrome(screen.name, galleryBreadcrumbs[screen.name] ?? [{ label: galleryScreenTemplates.find(template => template.name === screen.name)?.displayName ?? screen.name }], identity),
+});
+
+/** What {@link galleryApplication} is composed with when the application has no identity of its own. */
+export const galleryComposition: CompositionOptions = galleryCompositionFor();
