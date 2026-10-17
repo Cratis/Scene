@@ -20,3 +20,4 @@ export * from './ApplicationHost';
 export * from './ScenePreviewHost';
 export * from './listDestinations';
 export * from './galleryApplication';
+export * from './previewRegions';
