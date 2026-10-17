@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Model.SampleData;
 
 /// <summary>
@@ -15,6 +17,7 @@ namespace Cratis.Scene.Model.SampleData;
 /// <param name="Columns">The names of the pack's main table's columns, in the order a preview shows them.</param>
 /// <param name="StatusColumn">The column whose values are drawn as status pills.</param>
 /// <param name="Statuses">Which values of the status column are good, pending, bad or neutral; any other value is neutral.</param>
+[method: JsonConstructor]
 public record SampleDataPackReference(
     string Id,
     string Title,
@@ -23,4 +26,18 @@ public record SampleDataPackReference(
     string? Description = null,
     IReadOnlyList<string>? Columns = null,
     string? StatusColumn = null,
-    SampleStatusClassification? Statuses = null);
+    SampleStatusClassification? Statuses = null)
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SampleDataPackReference"/> record with the members it had before the description, columns and statuses.
+    /// Kept so a package compiled against an earlier version still finds the constructor it was built with.
+    /// </summary>
+    /// <param name="id">The pack identity.</param>
+    /// <param name="title">The title.</param>
+    /// <param name="locale">The locale tag.</param>
+    /// <param name="path">The package-relative path of the pack.</param>
+    public SampleDataPackReference(string id, string title, string locale, string path)
+        : this(id, title, locale, path, null, null, null, null)
+    {
+    }
+}

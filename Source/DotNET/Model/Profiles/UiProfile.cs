@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 using Cratis.Scene.Model.SizeClasses;
 
 namespace Cratis.Scene.Model.Profiles;
@@ -47,6 +49,7 @@ namespace Cratis.Scene.Model.Profiles;
 /// is what keeps a screen portable across targets, and what lets one application ship a different shell to
 /// the web than to a phone.
 /// </remarks>
+[method: JsonConstructor]
 public record UiProfile(
     string Name,
     string TargetPlatform,
@@ -58,4 +61,34 @@ public record UiProfile(
     RootTemplate? Root = null,
     ProfileAppearance? Appearance = null,
     ProfileDefaults? Defaults = null,
-    ProfileIdentity? Identity = null);
+    ProfileIdentity? Identity = null)
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UiProfile"/> record with the members it had before the identity.
+    /// Kept so a package compiled against an earlier version still finds the constructor it was built with.
+    /// </summary>
+    /// <param name="name">The profile's name.</param>
+    /// <param name="targetPlatform">The target platform.</param>
+    /// <param name="packages">The packages.</param>
+    /// <param name="defaultSizeClass">The default size class.</param>
+    /// <param name="layout">The legacy layout.</param>
+    /// <param name="theme">The theme.</param>
+    /// <param name="sampleData">The sample data selection.</param>
+    /// <param name="root">The root template.</param>
+    /// <param name="appearance">The appearance.</param>
+    /// <param name="defaults">The defaults for new work.</param>
+    public UiProfile(
+        string name,
+        string targetPlatform,
+        IReadOnlyList<string> packages,
+        TargetSizeClass? defaultSizeClass,
+        string? layout,
+        string? theme,
+        SampleData.SampleDataSelection? sampleData,
+        RootTemplate? root,
+        ProfileAppearance? appearance,
+        ProfileDefaults? defaults)
+        : this(name, targetPlatform, packages, defaultSizeClass, layout, theme, sampleData, root, appearance, defaults, null)
+    {
+    }
+}
