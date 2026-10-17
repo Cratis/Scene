@@ -2,10 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Cratis.Scene.Engine.Packages;
+using Cratis.Scene.Engine.Profiles;
 using Cratis.Scene.Engine.SampleData;
 using Cratis.Scene.Engine.Screens;
 using Cratis.Scene.Engine.Templates;
 using Cratis.Scene.Model.Packages;
+using Cratis.Scene.Model.Screens;
 
 namespace Cratis.Scene.Engine.Blueprints;
 
@@ -237,6 +239,8 @@ public static class BlueprintVerification
                 problems.Add($"{owner} declares no description");
             }
 
+            problems.AddRange(ShellCardProblems(owner, displayName, description, metadata, source.Files));
+
             if (!domain)
             {
                 continue;
@@ -259,6 +263,33 @@ public static class BlueprintVerification
             problems.AddRange(ThumbnailProblems(owner, metadata?.Thumbnail, source.Files));
         }
 
+        return problems;
+    }
+
+    static List<string> ShellCardProblems(string owner, string? displayName, string? description, TemplateMetadata? metadata, IReadOnlyList<string>? files)
+    {
+        var problems = new List<string>();
+        if (metadata?.DefaultMenuMode is not { } mode)
+        {
+            return problems;
+        }
+
+        if (ShellOptions.Normalize(mode) is null)
+        {
+            problems.Add($"{owner} declares default menu mode '{mode}', which is not one of {string.Join(", ", ShellOptions.NavigationModes.Select(candidate => char.ToLowerInvariant(candidate.Id.ToString()[0]) + candidate.Id.ToString()[1..]))}");
+        }
+
+        if (string.IsNullOrWhiteSpace(metadata.DisplayName ?? displayName))
+        {
+            problems.Add($"{owner} is offered as a shell card but declares no title");
+        }
+
+        if (string.IsNullOrWhiteSpace(metadata.Description ?? description))
+        {
+            problems.Add($"{owner} is offered as a shell card but declares no description");
+        }
+
+        problems.AddRange(ThumbnailProblems(owner, metadata.Thumbnail, files));
         return problems;
     }
 

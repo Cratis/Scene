@@ -22,3 +22,4 @@ export * from './ThemeSwitcher';
 export * from './LayoutModeSwitcher';
 export * from './locationTrail';
 export * from './useShellLink';
+export * from './menuModeCards';

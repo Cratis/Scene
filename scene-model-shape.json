@@ -343,7 +343,9 @@
       "thumbnail",
       "role",
       "primaryOutlet",
-      "defaultMenuMode"
+      "defaultMenuMode",
+      "displayName",
+      "description"
     ],
     "GridLength": [
       "value",

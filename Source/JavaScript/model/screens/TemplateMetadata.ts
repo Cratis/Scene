@@ -60,8 +60,14 @@ export interface TemplateMetadata {
 
     /** For a shell: the navigation mode the application starts in when the shell is chosen. The author can change it afterwards. */
     defaultMenuMode?: string;
+
+    /** For a shell offered as a card: its title. Falls back to the template's display name, then its name. */
+    displayName?: string;
+
+    /** For a shell offered as a card: its one-line description. */
+    description?: string;
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet', 'defaultMenuMode',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet', 'defaultMenuMode', 'displayName', 'description',
 ];
