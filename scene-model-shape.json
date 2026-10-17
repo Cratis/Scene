@@ -209,7 +209,8 @@
       "sampleData",
       "root",
       "appearance",
-      "defaults"
+      "defaults",
+      "identity"
     ],
     "RootTemplate": [
       "template",
@@ -217,10 +218,23 @@
     ],
     "ProfileAppearance": [
       "colorScheme",
-      "accent"
+      "accent",
+      "corners",
+      "font"
     ],
     "ProfileDefaults": [
       "newScreenTemplate"
+    ],
+    "ProfileIdentity": [
+      "name",
+      "logo",
+      "showName"
+    ],
+    "ProfileLogo": [
+      "kind",
+      "initials",
+      "icon",
+      "image"
     ],
     "Theme": [
       "name",
@@ -830,6 +844,16 @@
       "Light",
       "Dark",
       "System"
+    ],
+    "CornerStyle": [
+      "Sharp",
+      "Default",
+      "Round"
+    ],
+    "LogoKind": [
+      "Initials",
+      "Icon",
+      "Image"
     ],
     "TemplateRole": [
       "Root"

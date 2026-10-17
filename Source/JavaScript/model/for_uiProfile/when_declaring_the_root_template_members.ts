@@ -3,6 +3,10 @@
 
 import {
     ColorScheme,
+    CornerStyle,
+    LogoKind,
+    ProfileIdentityPropertyNames,
+    ProfileLogoPropertyNames,
     ProfileAppearancePropertyNames,
     ProfileDefaultsPropertyNames,
     RootTemplatePropertyNames,
@@ -23,8 +27,24 @@ describe('when declaring the root template members', () => {
         RootTemplatePropertyNames.should.have.members(['template', 'options']);
     });
 
-    it('should expose the colour scheme and accent on the appearance', () => {
-        ProfileAppearancePropertyNames.should.have.members(['colorScheme', 'accent']);
+    it('should expose the colour scheme, accent, corners and font on the appearance', () => {
+        ProfileAppearancePropertyNames.should.have.members(['colorScheme', 'accent', 'corners', 'font']);
+    });
+
+    it('should expose the name, logo and name visibility on the identity', () => {
+        ProfileIdentityPropertyNames.should.have.members(['name', 'logo', 'showName']);
+    });
+
+    it('should expose the kind, initials, icon and image on the logo', () => {
+        ProfileLogoPropertyNames.should.have.members(['kind', 'initials', 'icon', 'image']);
+    });
+
+    it('should offer sharp, default and round corners', () => {
+        Object.values(CornerStyle).should.deep.equal(['Sharp', 'Default', 'Round']);
+    });
+
+    it('should offer initials, icon and image logos', () => {
+        Object.values(LogoKind).should.deep.equal(['Initials', 'Icon', 'Image']);
     });
 
     it('should expose the new screen template on the defaults', () => {
