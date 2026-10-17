@@ -11,3 +11,6 @@ export * from './ProfileBlockerCode';
 export * from './ProfileUsage';
 export * from './ProfileBlocker';
 export * from './findProfileBlockers';
+export * from './profileIdentity';
+export * from './fontCatalog';
+export * from './resolveAppearance';

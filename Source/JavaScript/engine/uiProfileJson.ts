@@ -3,8 +3,12 @@
 
 import {
     ColorScheme,
+    CornerStyle,
+    LogoKind,
     ProfileAppearance,
     ProfileDefaults,
+    ProfileIdentity,
+    ProfileLogo,
     RootTemplate,
     TargetSizeClass,
     TemplateReference,
@@ -18,10 +22,12 @@ type JsonObject = { [key: string]: Json };
 const referenceOrder = ['source', 'id', 'blueprint', 'version'];
 
 const orderByPath: Record<string, string[]> = {
-    '': ['name', 'targetPlatform', 'packages', 'defaultSizeClass', 'layout', 'theme', 'sampleData', 'root', 'appearance', 'defaults'],
+    '': ['name', 'targetPlatform', 'packages', 'defaultSizeClass', 'layout', 'theme', 'sampleData', 'root', 'appearance', 'defaults', 'identity'],
     root: ['template', 'options'],
     'root.template': referenceOrder,
-    appearance: ['colorScheme', 'accent'],
+    appearance: ['colorScheme', 'accent', 'corners', 'font'],
+    identity: ['name', 'logo', 'showName'],
+    'identity.logo': ['kind', 'initials', 'icon', 'image'],
     defaults: ['newScreenTemplate'],
     'defaults.newScreenTemplate': referenceOrder,
 };
@@ -58,7 +64,29 @@ function readAppearance(value: unknown): ProfileAppearance | undefined {
     const appearance: ProfileAppearance = {};
     if (value.colorScheme !== undefined) appearance.colorScheme = enumValue(ColorScheme, value.colorScheme) as ColorScheme;
     if (value.accent !== undefined) appearance.accent = value.accent as string;
+    if (value.corners !== undefined) appearance.corners = enumValue(CornerStyle, value.corners) as CornerStyle;
+    if (value.font !== undefined) appearance.font = value.font as string;
     return appearance;
+}
+
+function readLogo(value: unknown): ProfileLogo | undefined {
+    if (!isObject(value)) return undefined;
+    const logo: ProfileLogo = {};
+    if (value.kind !== undefined) logo.kind = enumValue(LogoKind, value.kind) as LogoKind;
+    if (value.initials !== undefined) logo.initials = value.initials as string;
+    if (value.icon !== undefined) logo.icon = value.icon as string;
+    if (value.image !== undefined) logo.image = value.image as string;
+    return logo;
+}
+
+function readIdentity(value: unknown): ProfileIdentity | undefined {
+    if (!isObject(value)) return undefined;
+    const identity: ProfileIdentity = {};
+    if (value.name !== undefined) identity.name = value.name as string;
+    const logo = readLogo(value.logo);
+    if (logo) identity.logo = logo;
+    if (value.showName !== undefined) identity.showName = value.showName as boolean;
+    return identity;
 }
 
 function readDefaults(value: unknown): ProfileDefaults | undefined {
@@ -88,8 +116,8 @@ function canonicalize(value: Json, path: string): Json {
 
 /**
  * Reads a {@link UiProfile} from JSON. Reading is lenient, exactly like the C# `UiProfileJson.Parse`: enum values are matched
- * case-insensitively, unknown members of the profile, its root template, template references, appearance and defaults are ignored,
- * and any member may be absent - so a profile written before `root`, `appearance` and `defaults` existed loads unchanged.
+ * case-insensitively, unknown members of the profile, its root template, template references, appearance, defaults, identity and logo are ignored,
+ * and any member may be absent - so a profile written before `root`, `appearance`, `defaults` and `identity` existed loads unchanged.
  *
  * @param json The JSON text of a profile, or an already parsed value.
  * @returns The profile.
@@ -113,13 +141,15 @@ export function parseUiProfile(json: string | unknown): UiProfile {
     if (appearance) profile.appearance = appearance;
     const defaults = readDefaults(value.defaults);
     if (defaults) profile.defaults = defaults;
+    const identity = readIdentity(value.identity);
+    if (identity) profile.identity = identity;
     return profile;
 }
 
 /**
  * Writes a {@link UiProfile} as canonical JSON, byte for byte what the C# `UiProfileJson.Serialize` writes: camelCase names, enum
  * values by declared name, absent members omitted, no whitespace. Key order is the model's declaration order for the profile, its root
- * template, template references, appearance and defaults, and ordinal order everywhere else (sample data, shell options).
+ * template, template references, appearance, defaults, identity and logo, and ordinal order everywhere else (sample data, shell options).
  *
  * @param profile The profile to write.
  * @returns The canonical JSON text.

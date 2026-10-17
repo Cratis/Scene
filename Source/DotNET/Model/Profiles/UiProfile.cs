@@ -38,8 +38,9 @@ namespace Cratis.Scene.Model.Profiles;
 /// and the shell's own options. Supersedes <paramref name="Layout"/>; <see langword="null"/> falls back to <paramref name="Layout"/>
 /// and then to the blueprint's default shell.
 /// </param>
-/// <param name="Appearance">The colour scheme and accent colour the application presents, or <see langword="null"/> for the theme's defaults.</param>
+/// <param name="Appearance">The colour scheme, accent colour, corner style and font the application presents, or <see langword="null"/> for the theme's defaults.</param>
 /// <param name="Defaults">Application-wide authoring defaults such as the template new screens start from, or <see langword="null"/> for none.</param>
+/// <param name="Identity">The application's name and logo, set once and drawn by every blueprint, or <see langword="null"/> for the host's application name and initials taken from it.</param>
 /// <remarks>
 /// A profile is where the choices that make a description concrete are made: which component vocabulary,
 /// which shell, which theme. Deliberately none of them are stated by a <see cref="Screens.Screen"/> - that
@@ -56,4 +57,5 @@ public record UiProfile(
     SampleData.SampleDataSelection? SampleData = null,
     RootTemplate? Root = null,
     ProfileAppearance? Appearance = null,
-    ProfileDefaults? Defaults = null);
+    ProfileDefaults? Defaults = null,
+    ProfileIdentity? Identity = null);

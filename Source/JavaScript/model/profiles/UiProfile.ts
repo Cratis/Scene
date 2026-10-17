@@ -4,6 +4,7 @@
 import { SampleDataSelection } from '../sampleData';
 import { ProfileAppearance } from './ProfileAppearance';
 import { ProfileDefaults } from './ProfileDefaults';
+import { ProfileIdentity } from './ProfileIdentity';
 import { RootTemplate } from './RootTemplate';
 import { TargetSizeClass } from '../sizeClasses';
 
@@ -67,11 +68,14 @@ export interface UiProfile {
      */
     root?: RootTemplate;
 
-    /** The colour scheme and accent colour the application presents. Absent keeps the theme's defaults. */
+    /** The colour scheme, accent colour, corner style and font the application presents. Absent keeps the theme's defaults. */
     appearance?: ProfileAppearance;
 
     /** Application-wide authoring defaults such as the template new screens start from. Absent for none. */
     defaults?: ProfileDefaults;
+
+    /** The application's name and logo, set once and drawn by every blueprint. Absent uses the host's application name and initials taken from it. */
+    identity?: ProfileIdentity;
 }
 
 export const UiProfilePropertyNames: (keyof UiProfile)[] = [
@@ -85,4 +89,5 @@ export const UiProfilePropertyNames: (keyof UiProfile)[] = [
     'root',
     'appearance',
     'defaults',
+    'identity',
 ];

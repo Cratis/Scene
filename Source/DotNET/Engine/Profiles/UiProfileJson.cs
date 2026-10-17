@@ -17,18 +17,18 @@ namespace Cratis.Scene.Engine.Profiles;
 /// <para>
 /// Readers are lenient: property names and enum values are matched case-insensitively, unknown properties are ignored and any
 /// member may be absent, so documents written before <see cref="UiProfile.Root"/>, <see cref="UiProfile.Appearance"/> and
-/// <see cref="UiProfile.Defaults"/> existed load unchanged. Writers are strict: camelCase names, enum values by their declared
+/// <see cref="UiProfile.Defaults"/> and <see cref="UiProfile.Identity"/> existed load unchanged. Writers are strict: camelCase names, enum values by their declared
 /// name, absent members omitted, no whitespace.
 /// </para>
 /// <para>
 /// Canonical key order is the model's declaration order for the profile, its root template, its template references, its
-/// appearance and its defaults; every other object (the sample-data selection, the shell's options) has its keys ordered by
+/// appearance, its defaults, its identity and its logo; every other object (the sample-data selection, the shell's options) has its keys ordered by
 /// ordinal comparison. Arrays keep their order.
 /// </para>
 /// </remarks>
 public static class UiProfileJson
 {
-    static readonly string[] _profileOrder = ["name", "targetPlatform", "packages", "defaultSizeClass", "layout", "theme", "sampleData", "root", "appearance", "defaults"];
+    static readonly string[] _profileOrder = ["name", "targetPlatform", "packages", "defaultSizeClass", "layout", "theme", "sampleData", "root", "appearance", "defaults", "identity"];
     static readonly string[] _referenceOrder = ["source", "id", "blueprint", "version"];
 
     static readonly Dictionary<string, string[]> _orderByPath = new(StringComparer.Ordinal)
@@ -36,7 +36,9 @@ public static class UiProfileJson
         [string.Empty] = _profileOrder,
         ["root"] = ["template", "options"],
         ["root.template"] = _referenceOrder,
-        ["appearance"] = ["colorScheme", "accent"],
+        ["appearance"] = ["colorScheme", "accent", "corners", "font"],
+        ["identity"] = ["name", "logo", "showName"],
+        ["identity.logo"] = ["kind", "initials", "icon", "image"],
         ["defaults"] = ["newScreenTemplate"],
         ["defaults.newScreenTemplate"] = _referenceOrder,
     };
