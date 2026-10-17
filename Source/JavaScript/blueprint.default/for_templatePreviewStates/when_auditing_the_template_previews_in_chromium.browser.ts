@@ -34,12 +34,46 @@ describe('when auditing the template previews in Chromium', () => {
         await chromium.page.setViewportSize(viewports.desktop);
         (await chromium.auditPreview('Dashboard', TemplatePreviewState.Populated, 'light')).should.deep.equal([]);
         const found = await chromium.page.evaluate(async rules => {
-            document.body.insertAdjacentHTML('beforeend', '<p id="contrast-probe" style="color:#c8c8c8;background:#ffffff">Pale on white</p><main id="second-main">Second</main><button style="width:10px;height:10px;padding:0">x</button><button style="width:10px;height:10px;padding:0">y</button>');
+            const marker = document.createElement('div');
+            marker.innerHTML = '<p style="color:#c8c8c8;background:#ffffff">Pale on white</p><main>Second</main><button style="width:10px;height:10px;padding:0">x</button><button style="width:10px;height:10px;padding:0">y</button>';
+            document.body.append(marker);
             const axe_ = (window as unknown as { axe: { run(context: unknown, options: unknown): Promise<{ violations: { id: string }[] }> } }).axe;
             const wcag = await axe_.run(document.body, { runOnly: { type: 'tag', values: ['wcag2aa', 'wcag22aa'] } });
             const landmarks = await axe_.run(document.body, { runOnly: { type: 'rule', values: rules } });
+            marker.remove();
             return [...wcag.violations, ...landmarks.violations].map(violation => violation.id);
         }, landmarkRules);
         found.should.include.members(['color-contrast', 'landmark-no-duplicate-main', 'region', 'target-size']);
+    });
+
+    // Found by the vector on the live Stage and a generated React application (Cratis/Scene#95), where PrimeReact is styled and its tables are wide: a grid item keeps
+    // min-width: auto, so a widget holding a wide table pushed its track past the window. This page draws a template's content without the template's arrangement, so the
+    // rule is asserted on an item of the arrangement's slot, and the vector asserts what it does to a real page.
+    it('should let every item of a template slot shrink to its track, so a wide widget scrolls inside itself instead of widening the page', async () => {
+        await chromium.page.setViewportSize(viewports.phone);
+        await chromium.auditPreview('Dashboard', TemplatePreviewState.Populated, 'light');
+        const minimumWidth = await chromium.page.evaluate(() => {
+            const slot = document.createElement('section');
+            slot.className = 'scene-template-slot';
+            slot.innerHTML = '<section id="slot-item">item</section>';
+            document.body.append(slot);
+            const value = getComputedStyle(slot.querySelector('#slot-item')!).minWidth;
+            slot.remove();
+            return value;
+        });
+        minimumWidth.should.equal('0px');
+    });
+
+    it('should give every tag severity the contrast WCAG AA asks for with white text in the light scheme, whatever PrimeReact preset paints it', async () => {
+        await chromium.page.setViewportSize(viewports.desktop);
+        await chromium.auditPreview('MasterDetail', TemplatePreviewState.Populated, 'light');
+        const found = await chromium.page.evaluate(async () => {
+            const host = document.querySelector('.layout-wrapper')!;
+            host.insertAdjacentHTML('beforeend', ['info', 'success', 'warn', 'danger'].map(severity => `<span class="tag-probe" style="background:var(--p-tag-${severity}-background);color:#ffffff;padding:4px;font-size:12px;font-weight:700">${severity}</span>`).join(''));
+            const axe_ = (window as unknown as { axe: { run(context: unknown, options: unknown): Promise<{ violations: { nodes: { target: string[] }[] }[] }> } }).axe;
+            const result = await axe_.run('.layout-wrapper', { runOnly: { type: 'rule', values: ['color-contrast'] } });
+            return result.violations.flatMap(violation => violation.nodes.map(node => node.target.join(' '))).filter(target => target.includes('tag-probe'));
+        });
+        found.should.deep.equal([]);
     });
 });
