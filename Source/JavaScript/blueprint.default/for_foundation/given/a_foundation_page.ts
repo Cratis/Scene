@@ -26,7 +26,7 @@ let root;
 const registry = mergePackageRegistries([corePackage, defaultBlueprint]);
 window.showScreen = (screen, pack, theme, forceState) => {
     root ??= createRoot(document.getElementById('root'));
-    flushSync(() => root.render(<PrimeReactProvider><GalleryScreenPreview screenName={screen} registry={registry} pack={pack} forceState={forceState} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
+    flushSync(() => root.render(<PrimeReactProvider><GalleryScreenPreview key={theme} screenName={screen} registry={registry} pack={pack} forceState={forceState} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
 };
 const packageBacked = mergePackageRegistries([corePackage, primeReactPackage, defaultBlueprint]);
 // The PrimeReact theme the Stage hands its provider (Stage's stageTheme.ts): the Lara preset, dark where the Scene configuration says so, so the blueprint's own
@@ -37,11 +37,11 @@ const hostTheme = { preset: Lara, options: { darkModeSelector: "[data-scene-colo
 const PreviewHost = ({ children }) => <PrimeReactProvider theme={hostTheme}>{children}</PrimeReactProvider>;
 window.showPreview = (screen, state, theme) => {
     root ??= createRoot(document.getElementById('root'));
-    flushSync(() => root.render(<PreviewHost><GalleryScreenPreview screenName={screen} state={state} registry={packageBacked} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PreviewHost>));
+    flushSync(() => root.render(<PreviewHost><GalleryScreenPreview key={theme} screenName={screen} state={state} registry={packageBacked} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PreviewHost>));
 };
 window.showDialog = (dialog, pack, theme) => {
     root ??= createRoot(document.getElementById('root'));
-    flushSync(() => root.render(<PrimeReactProvider><GalleryDialogPreview dialogName={dialog} registry={registry} pack={pack} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
+    flushSync(() => root.render(<PrimeReactProvider><GalleryDialogPreview key={theme} dialogName={dialog} registry={registry} pack={pack} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
 };
 window.show = (component, theme, properties, rightToLeft) => {
     root ??= createRoot(document.getElementById('root'));
