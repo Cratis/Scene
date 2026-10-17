@@ -21,3 +21,4 @@ export * from './ProfileSection';
 export * from './ProfileFix';
 export * from './contrast';
 export * from './findProfileProblems';
+export * from './profileRegions';
