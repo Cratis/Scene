@@ -119,7 +119,7 @@ never ids.
 `blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
 carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
 
-Switching the shell is planned by [`planShellSwitch`](#switching-the-shell); what stops a profile is found by [`findProfileBlockers`](#what-stops-a-profile-from-being-applied); the nodes a designer edits are described by [`describeUiProfile`](#describing-the-profile-for-a-designer).
+Switching the shell is planned by [`planShellSwitch`](#switching-the-shell) and applied by [`applyShellSwitch`](#applying-the-switch); what stops a profile is found by [`findProfileBlockers`](#what-stops-a-profile-from-being-applied); the nodes a designer edits are described by [`describeUiProfile`](#describing-the-profile-for-a-designer).
 
 ## Migrating a legacy profile
 
@@ -198,6 +198,33 @@ An unresolved outlet's message names the screens and outlets - *3 screens ('Cust
 ids or placeholders. A choice for an outlet that needs none is ignored; a `mapTo` to an outlet the new shell lacks is refused. `addPackages` lists the blueprint the candidate needs that the
 profile does not yet have; `blockers` carries the candidate's own problems (`rootTemplateUnknown`, `rootTemplateVersionNotSatisfied`, `rootTemplateNotApplicable`,
 `rootTemplateMissingContentSlot`, `rootTemplateCycle`) and every unresolved outlet (`profileSlotUnplaced`); `warnings` the rest (an incompatible theme). `canSwitch` is true when there are no blockers.
+
+### Applying the switch
+
+`applyShellSwitch(document, plan, templates?)` (TypeScript, `@cratis/scene.engine`) and `ShellSwitchApplier.Apply(screens, screenTemplates, plan, templates)` (C#) is what the host calls on commit. It is a pure function over the document - nothing it is given is changed - so Studio, the CLI,
+MCP and Screenplay tooling all apply the same remap; none of them has its own copy of the rules. Call it once per saved document (Studio: each slice's screens and the templates), with the plan made from the whole application and `templates` set to
+`placeableScreenTemplates` / `ShellPlacement.PlaceableScreenTemplates` so a template chain that crosses documents resolves.
+
+```ts
+const plan = planShellSwitch(current, candidate, screens, templates, remaps);
+const { document: switched, applied, changes } = applyShellSwitch(document, plan, templates);
+```
+
+| Plan says | Screens built directly on the shell (`slotContent`) | Screen templates that fit the outlet (`fitsSlot`) |
+| --- | --- | --- |
+| `keep` | untouched | untouched - except a name qualified with the old shell's (`ToolShell.subject`), which is requalified with the new shell's (`DeskShell.subject`) |
+| `primary`, `moveToPrimary`, `mapTo` | the outlet's content is appended to the target outlet | `fitsSlot` becomes the target outlet, keeping a qualifier (`OwnShell.content`); the screens built from the template move with it |
+| `drop` | the outlet's content is removed | `fitsSlot` is removed: the template is placed explicitly, not by declaration |
+| `unused`, `unresolved` | untouched | untouched |
+
+- Content moved into an outlet is appended after what the outlet already holds, in the order of the outlets it came from. In a screen's `slotContent` the kept outlets come first, then the outlets the move created; an outlet the content left disappears, and an empty outlet no screen uses (`unused`) is left alone.
+- A screen built from a screen template has no content of its own in a shell outlet - its template's chain is placed - so only the **outermost** template of the chain is edited; the inner templates fit slots of the outer one and stay.
+- Only the document's own screens and templates are edited. A template that lives in an installed blueprint is not the application's to edit, and a screen's `layout` is not touched.
+- A plan with blockers (an undecided outlet, an unusable shell) is not applied: `applied` is `false` and the document comes back as it was. A plan that changes nothing (the same shell, or nothing to move) comes back as `applied` with no `changes`, and the very document that was given.
+- `changes` is the review list, screens first in document order and then templates: `kind` (`content` or `placement`), the `screen` or `template`, the `outlet`, the plan's `action`, the `target` (absent when dropped), the element `count` (1 for a placement) and a `description` with real names, never ids.
+
+Both engines are asserted against `shell-switch-apply-fixtures.json` (the libraries and roots of `shell-switch-fixtures.json`): keep, the same shell, an outlet nobody uses, primary following to a differently named primary outlet, moving into an occupied primary outlet, mapping, several outlets into one,
+dropping, a template that fits the lost outlet (moved, mapped and dropped), qualified templates, a nested template chain and a blocked plan.
 
 ## What stops a profile from being applied
 

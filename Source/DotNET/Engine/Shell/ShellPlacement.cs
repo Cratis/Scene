@@ -36,6 +36,48 @@ public static class ShellPlacement
     }
 
     /// <summary>
+    /// Where a screen template lands in the shell: follows <see cref="ScreenTemplate.FitsSlot"/> from template to containing template until the slot is an
+    /// outlet of the shell - qualified with the shell's name, or one no template of the chain declares. A template without a <c language="csharp">FitsSlot</c> is placed
+    /// explicitly and has no placement.
+    /// </summary>
+    /// <param name="templateName">The screen template the chain starts at.</param>
+    /// <param name="shellName">The name of the shell the template is placed in.</param>
+    /// <param name="templates">The screen templates a screen can be built from (<see cref="PlaceableScreenTemplates"/>).</param>
+    /// <returns>The placement, or <see langword="null"/> when the chain is placed explicitly, is cyclic or starts at an unknown template.</returns>
+    public static TemplatePlacement? PlacementOf(string templateName, string shellName, IReadOnlyList<ScreenTemplate> templates)
+    {
+        var current = templates.FirstOrDefault(template => template.Name == templateName);
+        var visited = new HashSet<string>(StringComparer.Ordinal);
+        while (current is not null && visited.Add(current.Name))
+        {
+            if (current.FitsSlot is null)
+            {
+                return null;
+            }
+
+            var separator = current.FitsSlot.LastIndexOf('.');
+            var qualifier = separator < 0 ? null : current.FitsSlot[..separator];
+            var slot = separator < 0 ? current.FitsSlot : current.FitsSlot[(separator + 1)..];
+            if (qualifier == shellName)
+            {
+                return new TemplatePlacement(current.Name, slot, qualifier);
+            }
+
+            var self = current;
+            var container = templates.FirstOrDefault(template =>
+                template != self && (qualifier is null || template.Name == qualifier) && template.Slots.Any(candidate => candidate.Name == slot));
+            if (container is null)
+            {
+                return new TemplatePlacement(current.Name, slot, qualifier);
+            }
+
+            current = container;
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// The outlets of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
     /// </summary>
     /// <param name="screen">The screen.</param>
@@ -49,34 +91,7 @@ public static class ShellPlacement
             return [.. screen.SlotContent.Where(entry => entry.Value.Count > 0).Select(entry => entry.Key)];
         }
 
-        var current = templates.FirstOrDefault(template => template.Name == screen.ScreenTemplate);
-        var visited = new HashSet<string>(StringComparer.Ordinal);
-        while (current is not null && visited.Add(current.Name))
-        {
-            if (current.FitsSlot is null)
-            {
-                return [];
-            }
-
-            var separator = current.FitsSlot.LastIndexOf('.');
-            var qualifier = separator < 0 ? null : current.FitsSlot[..separator];
-            var slot = separator < 0 ? current.FitsSlot : current.FitsSlot[(separator + 1)..];
-            if (qualifier == shellName)
-            {
-                return [slot];
-            }
-
-            var self = current;
-            var container = templates.FirstOrDefault(template =>
-                template != self && (qualifier is null || template.Name == qualifier) && template.Slots.Any(candidate => candidate.Name == slot));
-            if (container is null)
-            {
-                return [slot];
-            }
-
-            current = container;
-        }
-
-        return [];
+        var placement = PlacementOf(screen.ScreenTemplate, shellName, templates);
+        return placement is null ? [] : [placement.Outlet];
     }
 }
