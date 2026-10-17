@@ -9588,7 +9588,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": true
+          "selected": true,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [
           {
@@ -9721,7 +9740,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": false
+          "selected": false,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [
           {
@@ -9818,7 +9856,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": false
+          "selected": false,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [
           {
@@ -9888,7 +9945,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": true
+          "selected": true,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [],
         "blueprints": [
@@ -9919,7 +9995,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": true
+          "selected": true,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [],
         "blueprints": [],
@@ -9966,7 +10061,26 @@
           "isGenerated": true,
           "name": "Generic (typed by field kind)",
           "label": "Generic (typed by field kind)",
-          "selected": false
+          "selected": false,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
         },
         "own": [],
         "blueprints": [
@@ -9994,6 +10108,288 @@
         ],
         "problems": []
       }
+    },
+    {
+      "name": "packs carry their description, columns and status classes",
+      "sources": [
+        {
+          "manifest": {
+            "name": "@cratis/scene.blueprint.orders",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": [],
+            "sampleData": [
+              {
+                "id": "orders-en",
+                "title": "Orders · English",
+                "locale": "en-GB",
+                "path": "sampleData/orders-en.json",
+                "description": "Orders in English.",
+                "columns": [
+                  "Number",
+                  "Customer",
+                  "Status"
+                ],
+                "statusColumn": "Status",
+                "statuses": {
+                  "good": [
+                    "Delivered"
+                  ],
+                  "bad": [
+                    "Cancelled"
+                  ]
+                }
+              }
+            ],
+            "displayName": "Orders"
+          }
+        }
+      ],
+      "ownPacks": [
+        {
+          "id": "mine",
+          "title": "Mine",
+          "locale": "en-GB",
+          "description": "My own rows.",
+          "columns": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "expected": {
+        "generated": {
+          "id": "",
+          "isGenerated": true,
+          "name": "Generic (typed by field kind)",
+          "label": "Generic (typed by field kind)",
+          "selected": true,
+          "description": "Made-up rows typed by each field: a name, an amount, a date and a status.",
+          "columns": [
+            "Name",
+            "Amount",
+            "Date",
+            "Status"
+          ],
+          "statusColumn": "Status",
+          "statuses": {
+            "good": [
+              "Active"
+            ],
+            "pending": [
+              "Pending"
+            ],
+            "bad": [
+              "Inactive"
+            ]
+          }
+        },
+        "own": [
+          {
+            "id": "mine",
+            "isGenerated": false,
+            "name": "Mine",
+            "label": "Mine",
+            "locale": "en-GB",
+            "selected": false,
+            "description": "My own rows.",
+            "columns": [
+              "A",
+              "B"
+            ]
+          }
+        ],
+        "blueprints": [
+          {
+            "blueprint": "Orders",
+            "packs": [
+              {
+                "id": "orders-en",
+                "isGenerated": false,
+                "name": "English",
+                "label": "Orders · English",
+                "locale": "en-GB",
+                "selected": false,
+                "description": "Orders in English.",
+                "columns": [
+                  "Number",
+                  "Customer",
+                  "Status"
+                ],
+                "statusColumn": "Status",
+                "statuses": {
+                  "good": [
+                    "Delivered"
+                  ],
+                  "bad": [
+                    "Cancelled"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "problems": []
+      }
+    }
+  ],
+  "statusClassification": [
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ],
+        "pending": [
+          "Pending"
+        ],
+        "bad": [
+          "Inactive"
+        ]
+      },
+      "value": "Active",
+      "expected": "good"
+    },
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ],
+        "pending": [
+          "Pending"
+        ],
+        "bad": [
+          "Inactive"
+        ]
+      },
+      "value": "  pending ",
+      "expected": "pending"
+    },
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ],
+        "pending": [
+          "Pending"
+        ],
+        "bad": [
+          "Inactive"
+        ]
+      },
+      "value": "INACTIVE",
+      "expected": "bad"
+    },
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ],
+        "pending": [
+          "Pending"
+        ],
+        "bad": [
+          "Inactive"
+        ]
+      },
+      "value": "Unknown",
+      "expected": "neutral"
+    },
+    {
+      "classification": {
+        "neutral": [
+          "Partner"
+        ]
+      },
+      "value": "Partner",
+      "expected": "neutral"
+    },
+    {
+      "classification": {
+        "good": [
+          "Aktiv",
+          "Utført"
+        ],
+        "bad": [
+          "Avslått"
+        ]
+      },
+      "value": "aktiv",
+      "expected": "good"
+    },
+    {
+      "classification": {
+        "good": [
+          "Aktiv",
+          "Utført"
+        ],
+        "bad": [
+          "Avslått"
+        ]
+      },
+      "value": "UTFØRT",
+      "expected": "good"
+    },
+    {
+      "classification": {
+        "good": [
+          "Aktiv",
+          "Utført"
+        ],
+        "bad": [
+          "Avslått"
+        ]
+      },
+      "value": "avslått",
+      "expected": "bad"
+    },
+    {
+      "classification": {
+        "good": [
+          "Gelöst"
+        ],
+        "pending": [
+          "Offen"
+        ]
+      },
+      "value": "GELÖST",
+      "expected": "good"
+    },
+    {
+      "classification": {
+        "good": [
+          "In stock"
+        ]
+      },
+      "value": "in stock",
+      "expected": "good"
+    },
+    {
+      "classification": null,
+      "value": "Active",
+      "expected": "neutral"
+    },
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ]
+      },
+      "value": null,
+      "expected": "neutral"
+    },
+    {
+      "classification": {
+        "good": [
+          "Active"
+        ]
+      },
+      "value": 5,
+      "expected": "neutral"
     }
   ]
 }

@@ -28,7 +28,7 @@ export const ordersBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.orders',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
-    sampleData: [{ id: 'orders-en', title: 'Orders · English', locale: 'en-GB', path: 'sampleData/orders-en.json' }],
+    sampleData: [{ id: 'orders-en', title: 'Orders · English', locale: 'en-GB', path: 'sampleData/orders-en.json', description: 'English customer orders from new to delivered.', columns: ['Number', 'Customer', 'Placed', 'Delivery', 'Items'], statusColumn: 'Status', statuses: { good: ['Delivered', 'Shipped'], pending: ['New', 'Packed', 'Picking'], bad: ['Cancelled'] } }],
     blueprint: {
         domain: 'orders',
         description,

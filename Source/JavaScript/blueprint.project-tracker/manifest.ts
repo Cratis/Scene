@@ -28,7 +28,7 @@ export const projectTrackerBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.project-tracker',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
-    sampleData: [{ id: 'project-tracker-en', title: 'Projects · English', locale: 'en-GB', path: 'sampleData/project-tracker-en.json' }],
+    sampleData: [{ id: 'project-tracker-en', title: 'Projects · English', locale: 'en-GB', path: 'sampleData/project-tracker-en.json', description: 'Projects, tasks and their progress, in English.', columns: ['Name', 'Owner', 'Progress', 'Due', 'Status'], statusColumn: 'Status', statuses: { good: ['Done', 'On track'], pending: ['At risk', 'In progress', 'Review', 'To do'], bad: ['Late'] } }],
     blueprint: {
         domain: 'project-tracker',
         description,

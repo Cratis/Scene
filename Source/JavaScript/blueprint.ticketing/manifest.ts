@@ -29,8 +29,8 @@ export const ticketingBlueprintManifest: ScenePackage = {
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
     sampleData: [
-        { id: 'ticketing-helpdesk', title: 'Ticketing · Helpdesk', locale: 'en-GB', path: 'sampleData/ticketing-helpdesk.json' },
-        { id: 'ticketing-service-desk-de', title: 'Ticketing · Service-Desk', locale: 'de-DE', path: 'sampleData/ticketing-service-desk-de.json' },
+        { id: 'ticketing-helpdesk', title: 'Ticketing · Helpdesk', locale: 'en-GB', path: 'sampleData/ticketing-helpdesk.json', description: 'A helpdesk queue of English support tickets.', columns: ['Reference', 'Subject', 'Requester', 'Organisation', 'Priority'], statusColumn: 'Status', statuses: { good: ['Resolved'], pending: ['New', 'Open', 'Pending'] } },
+        { id: 'ticketing-service-desk-de', title: 'Ticketing · Service-Desk', locale: 'de-DE', path: 'sampleData/ticketing-service-desk-de.json', description: 'A German service desk queue of support tickets.', columns: ['Reference', 'Subject', 'Requester', 'Organisation', 'Priority'], statusColumn: 'Status', statuses: { good: ['Gelöst'], pending: ['Neu', 'Offen', 'Wartend'] } },
     ],
     blueprint: {
         domain: 'ticketing',

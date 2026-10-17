@@ -15,3 +15,4 @@ export * from './SampleDataPackSource';
 export * from './validateSampleDataPackages';
 export * from './describeSampleDataCatalog';
 export * from './findSampleRowLiterals';
+export * from './sampleStatus';

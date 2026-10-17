@@ -568,7 +568,17 @@
       "id",
       "title",
       "locale",
-      "path"
+      "path",
+      "description",
+      "columns",
+      "statusColumn",
+      "statuses"
+    ],
+    "SampleStatusClassification": [
+      "good",
+      "pending",
+      "bad",
+      "neutral"
     ],
     "SampleDataMapping": [
       "shape",
@@ -850,6 +860,12 @@
       "Sharp",
       "Default",
       "Round"
+    ],
+    "SampleStatus": [
+      "Good",
+      "Pending",
+      "Bad",
+      "Neutral"
     ],
     "LogoKind": [
       "Initials",

@@ -10,3 +10,5 @@ export * from './SampleDataPackReference';
 export * from './SampleDataMapping';
 export * from './SampleDataBinding';
 export * from './SampleDataSelection';
+export * from './SampleStatus';
+export * from './SampleStatusClassification';

@@ -12,4 +12,18 @@ namespace Cratis.Scene.Engine.SampleData;
 /// <param name="Label">The full label (<c language="csharp">CRM · Nordic SMB</c>, or just the name for generated and own packs).</param>
 /// <param name="Selected">Whether it is the active pack (the generated entry is selected when no pack is active).</param>
 /// <param name="Locale">The locale tag, null for the generated entry.</param>
-public record SampleDataCatalogEntry(string Id, bool IsGenerated, string Name, string Label, bool Selected, string? Locale = null);
+/// <param name="Description">One line saying what the pack is.</param>
+/// <param name="Columns">The columns of the pack's main table, in order.</param>
+/// <param name="StatusColumn">The column drawn as status pills.</param>
+/// <param name="Statuses">The classification of the status column's values.</param>
+public record SampleDataCatalogEntry(
+    string Id,
+    bool IsGenerated,
+    string Name,
+    string Label,
+    bool Selected,
+    string? Locale = null,
+    string? Description = null,
+    IReadOnlyList<string>? Columns = null,
+    string? StatusColumn = null,
+    Cratis.Scene.Model.SampleData.SampleStatusClassification? Statuses = null);

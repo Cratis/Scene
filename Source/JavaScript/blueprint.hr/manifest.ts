@@ -28,7 +28,7 @@ export const hrBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.hr',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
-    sampleData: [{ id: 'hr-nordic', title: 'HR · Nordic', locale: 'nb-NO', path: 'sampleData/hr-nordic.json' }],
+    sampleData: [{ id: 'hr-nordic', title: 'HR · Nordic', locale: 'nb-NO', path: 'sampleData/hr-nordic.json', description: 'Norwegian employees, time off and onboarding.', columns: ['Name', 'Title', 'Department', 'Location', 'Email'], statusColumn: 'Status', statuses: { good: ['Aktiv', 'Fullført', 'Godkjent', 'Signert'], pending: ['Permisjon', 'Prøvetid', 'Pågår', 'Utløper snart', 'Venter'], bad: ['Avslått'] } }],
     blueprint: {
         domain: 'hr',
         description,
