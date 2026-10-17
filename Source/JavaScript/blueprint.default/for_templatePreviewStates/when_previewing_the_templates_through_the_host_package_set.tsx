@@ -18,7 +18,7 @@ import { provideBrowserApis, packageBackedRegistry } from './given';
  */
 const empty = (name: string, kind: PackageKind) => ({ manifest: { name, version: '3.0.0', kind, dependencies: [], components: [], layouts: [], screenTemplates: [], dialogTemplates: [], themes: [] }, components: {} });
 // Their components are not what a template's previews need, and the packages that provide them are not this package's dependencies.
-const dependencies = [empty('Cratis.Components', PackageKind.Components), empty('Tailwind', PackageKind.Components)];
+const dependencies = [empty('Cratis.Components', PackageKind.ComponentLibrary), empty('Tailwind', PackageKind.Styling)];
 
 const host = resolvePackageHost({
     profile: { name: 'Desktop', targetPlatform: 'web', packages: ['Cratis.Blueprint.Default'] },
