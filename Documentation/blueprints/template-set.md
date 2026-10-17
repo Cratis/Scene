@@ -149,6 +149,26 @@ Form fields carry their label as an accessible name.
 AA rules, in every data state for the default blueprint. The audit found, and the packages now fix, two real
 defects: PrimeReact's sort trigger put `aria-sort` on the button, where WAI-ARIA does not allow it (the column
 header now carries it), and a progress bar had no accessible name (it takes a `label`). Colour contrast and
-page-level landmark rules need a real layout and a whole page, so jsdom cannot judge them; they are not asserted
-here and need a browser run.
+page-level landmark rules need a real layout and a whole page, so jsdom cannot judge them; the browser run below does.
+
+#### In a real browser
+
+`for_templatePreviewStates/when_auditing_the_template_previews_in_chromium.browser.ts` (`yarn workspace @cratis/scene.blueprint.default test:browser`, run by the
+JavaScript Build workflow, so a regression fails CI) renders **every** screen template the blueprint ships - business, foundation, state, support, auth, status and the nesting chain -
+in Chromium against the registry a host with the blueprint's dependencies uses (`core`, PrimeReact with a theme preset, the blueprint), in every data state (populated, empty, loading,
+error), at desktop, tablet and phone widths, in the light and the dark theme. Each page must have no axe-core violation of WCAG 2.0/2.1/2.2 A and AA - colour contrast and the
+24 by 24 pixel target size included - no horizontal overflow, and a sound landmark structure (one `main`, no duplicate or nested landmarks, unique landmark names, all content inside a
+landmark, a level-one heading). A last specification breaks the page it just judged (pale text, a second `main`, content outside a landmark, two tiny adjacent buttons) and expects each
+finding, so a clean audit is never vacuous.
+
+The audit found, and the blueprint now fixes: the bare `core:button` was 21 pixels high (the shell gives a button in the content area a 2rem minimum, in the application and the
+full-page shell), and two `search` landmarks on one page (the topbar's and a list's) had no names to tell them apart (`foundation:globalSearch` names its form with its label).
+The vector that renders the same templates on the live Stage and as a generated React application (below) found two more, which the blueprint's stylesheet now fixes: a grid item keeps
+`min-width: auto`, so a widget holding a wide table pushed its track past the window (a phone scrolled sideways and, on a desktop, the dashboard's primary column overlapped its secondary
+one) - every item of a template slot now shrinks to its track and the table scrolls inside itself - and PrimeReact's Lara tag severities painted white on a mid-tone in the light scheme
+(2.3 to 3.8:1) - the blueprint darkens them to AA, leaving the dark scheme's values alone.
+
+The page renders PrimeReact's unstyled primitives (`primereact/<component>`: a 13 pixel checkbox input, a 6 pixel date-picker trigger, a severity tag with no colour of its own);
+the Stage swaps in the styled `@primereact/ui` components, so the target size of the primitives is not judged here, and a styled control's contrast is judged in the
+vector rendered on the live Stage and as a generated React application (Cratis/Scene#95), which audits the same templates with the styled components.
 

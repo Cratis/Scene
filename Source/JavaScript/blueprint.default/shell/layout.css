@@ -1114,6 +1114,21 @@
 .flow-child > .scene-template-slot { flex: 1 1 auto; }
 .scene-template { display: flex; flex-direction: column; gap: var(--layout-gap, 1rem); min-width: 0; }
 .scene-template-slot { display: grid; gap: var(--layout-gap, 1rem); min-width: 0; width: 100%; align-content: start; }
+/* A grid item defaults to min-width: auto, so a widget holding a wide table pushed its track past the window: on a phone the page scrolled sideways, and on a desktop the primary
+   column overlapped the secondary one. The item shrinks to its track and the table scrolls inside its own container. */
+.scene-template-slot > * { min-width: 0; }
+/* PrimeReact's Lara tag severities paint white on a mid-tone in the light scheme (2.3 to 3.8:1, WCAG AA wants 4.5:1); the blueprint darkens them. The dark scheme's values are Lara's own. */
+.layout-wrapper,
+.layout-full-page {
+    --p-tag-info-background: light-dark(#0369a1, #38bdf8);
+    --p-tag-success-background: light-dark(#15803d, #4ade80);
+    --p-tag-warn-background: light-dark(#b45309, #fb923c);
+    --p-tag-danger-background: light-dark(#b91c1c, #f87171);
+}
+
+/* The minimum vocabulary's button is a bare <button>; the shell must still give it a comfortable target (WCAG 2.2 2.5.8, 24 by 24 CSS pixels at least). */
+.layout-content button[data-scene-id],
+.layout-full-page-content button[data-scene-id] { min-block-size: 2rem; min-inline-size: 2rem; padding-inline: 0.75rem; }
 
 .scene-preview-problems { margin: 1rem; padding: 1rem 1.25rem; border: 1px solid #e11d48; border-radius: 0.75rem; background: #fff1f2; color: #881337; }
 .scene-preview-problems h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
