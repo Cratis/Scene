@@ -57,6 +57,11 @@ Navigation keeps to an in-memory history (`createMemorySceneHistory`), so a prev
 A design host does not always want a click to leave the page. Two props decide:
 
 - `navigationMode`: `'navigate'` (default) or `'select'`, or a function `(request) => mode` deciding per control. In `select` mode a click only reports the activation. **Alt-click selects in any mode.**
+- `viewportWidth`: the width the preview is laid out for when it is not the window's - a device preview. At or below the mobile width the menu is a drawer with a scrim, whatever the mode.
+- `onRegionHover(region | null)`, `onRegionActivate(region)`: the pointer over, and a click or Enter on, one of the five regions (`identity`, `shell`, `menu`, `content`, `accent`) the shell marks with `data-scene-region` (rule N9 of [the designer contract](ui-profile-designer-contract.md)). A click on a navigation item still navigates and also reports `menu`.
+- `regions`: a ref filled with `{ regionRect(region) }`, the box of a drawn region in the preview's own unscaled pixels measured from its top left corner - correct when the host scales the preview - and `undefined` when it is not drawn.
+
+The preview reads the profile in the document: `identity` draws the name and logo, `appearance` sets the corner, accent and font tokens on the host element, and `root.options.navigationMode` and `menuTheme` set the menu mode and tint, following changes without remounting.
 - `onActivate(activation)`: called for every activation - `{ request: { source, id, label, destination, item }, mode, resolves, navigated }` - so the host selects the item for editing, and `onNavigate(destination)`: called whenever the preview moves to another screen or dialog, whatever caused it.
 
 These are the `NavigationActivationProvider` / `useNavigationActivation` of `@cratis/scene.react`; `ApplicationHost` takes the same policy as `navigationPolicy`, so Stage and the preview host share it.
