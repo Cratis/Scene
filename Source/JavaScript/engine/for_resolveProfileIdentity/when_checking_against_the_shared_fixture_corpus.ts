@@ -10,12 +10,16 @@ interface IdentityCase {
     name: string;
     description: string;
     hostName: string;
+    imageBytes?: number;
     profile: UiProfile;
     expected: unknown;
 }
 
 const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../profile-identity-fixtures.json'), 'utf-8')) as { cases: IdentityCase[] };
-const resolved = (fixture: IdentityCase) => JSON.parse(JSON.stringify(resolveProfileIdentity(fixture.profile, fixture.hostName)));
+const generated = (fixture: IdentityCase) => `data:image/png;base64,${Buffer.alloc(fixture.imageBytes!).toString('base64')}`;
+const withGeneratedImage = (fixture: IdentityCase, value: unknown) => fixture.imageBytes === undefined ? value : JSON.parse(JSON.stringify(value).replace('$generated', generated(fixture)));
+const resolved = (fixture: IdentityCase) => JSON.parse(JSON.stringify(resolveProfileIdentity(withGeneratedImage(fixture, fixture.profile) as UiProfile, fixture.hostName)));
+const expectedOf = (fixture: IdentityCase) => withGeneratedImage(fixture, fixture.expected);
 
 describe('when resolving the identity against the shared fixture corpus', () => {
     it('should have cases in the corpus', () => corpus.cases.length.should.be.greaterThan(15));
@@ -27,7 +31,7 @@ describe('when resolving the identity against the shared fixture corpus', () => 
 
     for (const fixture of corpus.cases) {
         describe(`and the case is ${fixture.name}`, () => {
-            it('should resolve what the corpus expects', () => resolved(fixture).should.deep.equal(fixture.expected));
+            it('should resolve what the corpus expects', () => resolved(fixture).should.deep.equal(expectedOf(fixture)));
         });
     }
 });

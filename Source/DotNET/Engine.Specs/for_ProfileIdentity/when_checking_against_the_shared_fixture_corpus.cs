@@ -28,10 +28,20 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        var corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "profile-identity-fixtures.json")))!;
+        var text = File.ReadAllText(Path.Combine(directory!.FullName, "profile-identity-fixtures.json"));
+        var corpus = JsonNode.Parse(text)!;
         _results = [.. corpus["cases"]!.AsArray().Select(item =>
         {
-            var profile = item!["profile"].Deserialize<UiProfile>(_options)!;
+            var generated = item!["imageBytes"] is { } bytes ? $"data:image/png;base64,{Convert.ToBase64String(new byte[bytes.GetValue<int>()])}" : null;
+            var profileText = item["profile"]!.ToJsonString();
+            var expectedText = item["expected"]!.ToJsonString();
+            if (generated is not null)
+            {
+                profileText = profileText.Replace("$generated", generated, StringComparison.Ordinal);
+                expectedText = expectedText.Replace("$generated", generated, StringComparison.Ordinal);
+            }
+
+            var profile = JsonSerializer.Deserialize<UiProfile>(profileText, _options)!;
             var resolved = ProfileIdentityResolver.Resolve(profile, item["hostName"]!.GetValue<string>());
             var actual = JsonSerializer.SerializeToNode(resolved, _options)!;
             foreach (var diagnostic in actual["diagnostics"]!.AsArray())
@@ -40,7 +50,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
                 diagnostic["code"] = char.ToLowerInvariant(code[0]) + code[1..];
             }
 
-            return (item["name"]!.GetValue<string>(), item["expected"]!.DeepClone(), actual);
+            return (item["name"]!.GetValue<string>(), JsonNode.Parse(expectedText)!, actual);
         })];
     }
 

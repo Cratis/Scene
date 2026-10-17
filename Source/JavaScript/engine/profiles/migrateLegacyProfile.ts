@@ -148,7 +148,7 @@ function firstShellOf(source: TemplateSource): string | undefined {
 }
 
 /** The pin a reference gets when it is created: the caret range of the installed blueprint's major.minor. */
-function pinOf(version: string): string | undefined {
+export function pinOf(version: string): string | undefined {
     const match = /^(\d+)\.(\d+)/.exec(version.trim());
     return match === null ? undefined : `^${match[1]}.${match[2]}`;
 }

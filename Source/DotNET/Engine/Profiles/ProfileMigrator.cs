@@ -95,6 +95,17 @@ public static partial class ProfileMigrator
         return new ProfileMigration(migrated, changed, diagnostics);
     }
 
+    /// <summary>
+    /// Gets the pin a reference gets when it is created: the caret range of the installed blueprint's major.minor.
+    /// </summary>
+    /// <param name="version">The installed version.</param>
+    /// <returns>The range, or <see langword="null"/> when the version has no major.minor.</returns>
+    public static string? PinOf(string version)
+    {
+        var match = VersionPrefix().Match(version.Trim());
+        return match.Success ? $"^{match.Groups["major"].Value}.{match.Groups["minor"].Value}" : null;
+    }
+
     static TemplateReference? DeriveRoot(string? shell, string? layout, UiProfile profile, TemplateLibrary library, List<ProfileMigrationDiagnostic> diagnostics)
     {
         if (shell is null && layout is null)
@@ -181,9 +192,7 @@ public static partial class ProfileMigrator
 
     static TemplateReference BlueprintReference(TemplateSource blueprint, string id)
     {
-        var match = VersionPrefix().Match(blueprint.Manifest.Version.Trim());
-        var pin = match.Success ? $"^{match.Groups["major"].Value}.{match.Groups["minor"].Value}" : null;
-        return new TemplateReference(TemplateReferenceSource.Blueprint, id, blueprint.Manifest.Name, pin);
+        return new TemplateReference(TemplateReferenceSource.Blueprint, id, blueprint.Manifest.Name, PinOf(blueprint.Manifest.Version));
     }
 
     static ProfileAppearance? AppearanceOf(LegacyProfile legacy, ProfileAppearance? existing, List<ProfileMigrationDiagnostic> diagnostics)

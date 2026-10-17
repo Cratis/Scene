@@ -1,0 +1,1810 @@
+{
+  "description": "Shared by both engines: the package list of a UI profile - rows with reasons and locks, addable packages with what they also add, who supplies each component, and the edits (add, remove, move, choose a blueprint, choose a theme). Packages are stored weakest first with core in front; rows are listed strongest first, core last. `expected` for a describe case is the rows, addable packages and (when given) suppliers; for an edit it is the outcome, the profile's packages, root template and theme, and what was added and removed.",
+  "packages": [
+    {
+      "name": "core",
+      "version": "1.0.0",
+      "kind": "ComponentLibrary",
+      "dependencies": [],
+      "components": [
+        "button",
+        "card",
+        "table"
+      ],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Core",
+      "description": "The fallback components."
+    },
+    {
+      "name": "primereact",
+      "version": "1.0.0",
+      "kind": "ComponentLibrary",
+      "dependencies": [],
+      "components": [
+        "button",
+        "datatable",
+        "card"
+      ],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "PrimeReact",
+      "description": "PrimeReact components."
+    },
+    {
+      "name": "tailwind",
+      "version": "1.0.0",
+      "kind": "Styling",
+      "dependencies": [],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Tailwind",
+      "description": "Utility styling."
+    },
+    {
+      "name": "material",
+      "version": "1.0.0",
+      "kind": "ComponentLibrary",
+      "dependencies": [
+        {
+          "name": "tailwind"
+        }
+      ],
+      "components": [
+        "button",
+        "datatable"
+      ],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Material Components",
+      "description": "Material components."
+    },
+    {
+      "name": "material-themes",
+      "version": "1.0.0",
+      "kind": "Styling",
+      "dependencies": [
+        {
+          "name": "material"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [
+        "Material Ocean"
+      ],
+      "displayName": "Material Themes",
+      "description": "Material themes."
+    },
+    {
+      "name": "bp.default",
+      "version": "1.4.2",
+      "kind": "Blueprint",
+      "dependencies": [],
+      "components": [],
+      "layouts": [
+        "AppShell"
+      ],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Cratis Default",
+      "description": "The default blueprint."
+    },
+    {
+      "name": "bp.dashboard",
+      "version": "2.0.0",
+      "kind": "Blueprint",
+      "dependencies": [
+        {
+          "name": "primereact"
+        }
+      ],
+      "components": [],
+      "layouts": [
+        "DashboardShell"
+      ],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Dashboard",
+      "description": "Horizontal navigation."
+    },
+    {
+      "name": "broken",
+      "version": "1.0.0",
+      "kind": "ComponentLibrary",
+      "dependencies": [
+        {
+          "name": "ghost"
+        }
+      ],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [],
+      "displayName": "Broken",
+      "description": "Needs a package nobody has."
+    }
+  ],
+  "cases": [
+    {
+      "name": "one library above core",
+      "description": "the strongest package is first, core is pinned last, and nothing can move past core",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "alsoAdds": [
+              "Tailwind"
+            ],
+            "text": "Also adds Tailwind"
+          },
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [
+              "Tailwind",
+              "Material Components"
+            ],
+            "text": "Also adds Tailwind, Material Components"
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ],
+        "suppliers": [
+          {
+            "component": "button",
+            "winner": "primereact",
+            "others": [
+              "core"
+            ]
+          },
+          {
+            "component": "card",
+            "winner": "primereact",
+            "others": [
+              "core"
+            ]
+          },
+          {
+            "component": "datatable",
+            "winner": "primereact",
+            "others": []
+          },
+          {
+            "component": "table",
+            "winner": "core",
+            "others": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "core not listed",
+      "description": "core is the implicit fallback: a profile that does not list it still shows it last",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "alsoAdds": [
+              "Tailwind"
+            ],
+            "text": "Also adds Tailwind"
+          },
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [
+              "Tailwind",
+              "Material Components"
+            ],
+            "text": "Also adds Tailwind, Material Components"
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "a package another needs",
+      "description": "a package that is needed names who needs it, is locked, and cannot move past its dependant",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind",
+          "material"
+        ]
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "reason": {
+              "kind": "neededBy",
+              "packages": [
+                "Material Components"
+              ],
+              "text": "Needed by Material Components"
+            },
+            "canMoveUp": false,
+            "canMoveDown": true,
+            "lock": {
+              "kind": "neededBy",
+              "packages": [
+                "Material Components"
+              ],
+              "text": "Tailwind is needed by Material Components, so it stays while they are listed."
+            }
+          },
+          {
+            "position": 3,
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": true,
+            "canMoveDown": false
+          },
+          {
+            "position": 4,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ],
+        "suppliers": [
+          {
+            "component": "button",
+            "winner": "material",
+            "others": [
+              "primereact",
+              "core"
+            ]
+          },
+          {
+            "component": "card",
+            "winner": "primereact",
+            "others": [
+              "core"
+            ]
+          },
+          {
+            "component": "datatable",
+            "winner": "material",
+            "others": [
+              "primereact"
+            ]
+          },
+          {
+            "component": "table",
+            "winner": "core",
+            "others": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "the shell blueprint",
+      "description": "the blueprint of the current shell says so and stays while it is the shell; what it needs is locked too",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "DashboardShell",
+            "blueprint": "bp.dashboard",
+            "version": "^2.0"
+          }
+        }
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "reason": {
+              "kind": "usedByShell",
+              "packages": [],
+              "text": "Used by Shell"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "shell",
+              "packages": [],
+              "text": "Dashboard is the blueprint of the current shell, so it stays while it is the shell."
+            }
+          },
+          {
+            "position": 2,
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "reason": {
+              "kind": "neededBy",
+              "packages": [
+                "Dashboard"
+              ],
+              "text": "Needed by Dashboard"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "neededBy",
+              "packages": [
+                "Dashboard"
+              ],
+              "text": "PrimeReact is needed by Dashboard, so it stays while they are listed."
+            }
+          },
+          {
+            "position": 3,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "alsoAdds": [
+              "Tailwind"
+            ],
+            "text": "Also adds Tailwind"
+          },
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [
+              "Tailwind",
+              "Material Components"
+            ],
+            "text": "Also adds Tailwind, Material Components"
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "two independent packages",
+      "description": "packages that do not depend on each other can swap places",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": true
+          },
+          {
+            "position": 2,
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": true,
+            "canMoveDown": false
+          },
+          {
+            "position": 3,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [
+              "Material Components"
+            ],
+            "text": "Also adds Material Components"
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "a package the catalog does not know",
+      "description": "an unknown name is listed as it is, with no version or description",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "mystery"
+        ]
+      },
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "mystery",
+            "displayName": "mystery",
+            "version": "",
+            "kind": "ComponentLibrary",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "The fallback components.",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "primereact",
+            "displayName": "PrimeReact",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "PrimeReact components.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "tailwind",
+            "displayName": "Tailwind",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Utility styling.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "material",
+            "displayName": "Material Components",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Material components.",
+            "alsoAdds": [
+              "Tailwind"
+            ],
+            "text": "Also adds Tailwind"
+          },
+          {
+            "name": "material-themes",
+            "displayName": "Material Themes",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "description": "Material themes.",
+            "alsoAdds": [
+              "Tailwind",
+              "Material Components"
+            ],
+            "text": "Also adds Tailwind, Material Components"
+          },
+          {
+            "name": "bp.default",
+            "displayName": "Cratis Default",
+            "version": "1.4.2",
+            "kind": "Blueprint",
+            "description": "The default blueprint.",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bp.dashboard",
+            "displayName": "Dashboard",
+            "version": "2.0.0",
+            "kind": "Blueprint",
+            "description": "Horizontal navigation.",
+            "alsoAdds": [
+              "PrimeReact"
+            ],
+            "text": "Also adds PrimeReact"
+          },
+          {
+            "name": "broken",
+            "displayName": "Broken",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "description": "Needs a package nobody has.",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "add with a dependency",
+      "description": "adding Material Components also adds Tailwind, both just above core",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "material"
+      },
+      "expected": {
+        "outcome": "added",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "primereact"
+        ],
+        "added": [
+          "tailwind",
+          "material"
+        ],
+        "removed": [],
+        "message": "Added Material Components with Tailwind."
+      }
+    },
+    {
+      "name": "add a package that is already listed",
+      "description": "adding what is there changes nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "primereact"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core",
+          "primereact"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "add a dependency that is already listed",
+      "description": "only what is missing is added, and it goes above what it needs",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "material"
+      },
+      "expected": {
+        "outcome": "added",
+        "packages": [
+          "core",
+          "tailwind",
+          "material"
+        ],
+        "added": [
+          "material"
+        ],
+        "removed": [],
+        "message": "Added Material Components."
+      }
+    },
+    {
+      "name": "add the dependant of a higher package",
+      "description": "a package is never inserted below one it needs",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "material"
+      },
+      "expected": {
+        "outcome": "added",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind",
+          "material"
+        ],
+        "added": [
+          "material"
+        ],
+        "removed": [],
+        "message": "Added Material Components."
+      }
+    },
+    {
+      "name": "add an unknown package",
+      "description": "a name the catalog lacks is refused",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "nope"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Package 'nope' is not available."
+      }
+    },
+    {
+      "name": "add a package whose dependency is missing",
+      "description": "the refusal names what is missing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "broken"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Package 'Broken' needs 'ghost', which is not available."
+      }
+    },
+    {
+      "name": "add without listing core",
+      "description": "core stays out of a profile that did not list it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "add",
+        "name": "tailwind"
+      },
+      "expected": {
+        "outcome": "added",
+        "packages": [
+          "tailwind",
+          "primereact"
+        ],
+        "added": [
+          "tailwind"
+        ],
+        "removed": [],
+        "message": "Added Tailwind."
+      }
+    },
+    {
+      "name": "remove a free package",
+      "description": "a package nothing needs can go",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "remove",
+        "name": "primereact"
+      },
+      "expected": {
+        "outcome": "removed",
+        "packages": [
+          "core",
+          "tailwind"
+        ],
+        "added": [],
+        "removed": [
+          "primereact"
+        ],
+        "message": "Removed PrimeReact."
+      }
+    },
+    {
+      "name": "remove a needed package",
+      "description": "the refusal names who needs it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind",
+          "material"
+        ]
+      },
+      "action": {
+        "kind": "remove",
+        "name": "tailwind"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core",
+          "tailwind",
+          "material"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Tailwind is needed by Material Components, so it stays while they are listed."
+      }
+    },
+    {
+      "name": "remove core",
+      "description": "core can never be removed",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "remove",
+        "name": "core"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core",
+          "primereact"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+      }
+    },
+    {
+      "name": "remove the shell blueprint",
+      "description": "the blueprint of the shell stays while it is the shell",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "DashboardShell",
+            "blueprint": "bp.dashboard",
+            "version": "^2.0"
+          }
+        }
+      },
+      "action": {
+        "kind": "remove",
+        "name": "bp.dashboard"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Dashboard is the blueprint of the current shell, so it stays while it is the shell.",
+        "root": {
+          "source": "Blueprint",
+          "id": "DashboardShell",
+          "blueprint": "bp.dashboard",
+          "version": "^2.0"
+        }
+      }
+    },
+    {
+      "name": "remove a package that is not listed",
+      "description": "nothing to remove",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "remove",
+        "name": "primereact"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "remove a package a theme needs",
+      "description": "the theme is never changed silently: the profile keeps it and the engine reports the problem",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ],
+        "theme": "Material Ocean"
+      },
+      "action": {
+        "kind": "remove",
+        "name": "primereact"
+      },
+      "expected": {
+        "outcome": "removed",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [
+          "primereact"
+        ],
+        "message": "Removed PrimeReact.",
+        "theme": "Material Ocean"
+      }
+    },
+    {
+      "name": "move down",
+      "description": "down is weaker: one step towards core",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "tailwind",
+        "direction": "down"
+      },
+      "expected": {
+        "outcome": "moved",
+        "packages": [
+          "core",
+          "tailwind",
+          "primereact"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Moved Tailwind down."
+      }
+    },
+    {
+      "name": "move up",
+      "description": "up is stronger",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "tailwind",
+        "direction": "up"
+      },
+      "expected": {
+        "outcome": "moved",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Moved Tailwind up."
+      }
+    },
+    {
+      "name": "move up at the top",
+      "description": "the strongest package cannot go further up",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "tailwind",
+        "direction": "up"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core",
+          "primereact",
+          "tailwind"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "move below core",
+      "description": "nothing can move below core",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "primereact",
+        "direction": "down"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core",
+          "primereact"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "move past a dependency",
+      "description": "a package never moves below one it needs",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind",
+          "material"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "material",
+        "direction": "down"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core",
+          "tailwind",
+          "material"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "move core",
+      "description": "core is pinned last",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "core",
+        "direction": "up"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core",
+          "primereact"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Core is always last and cannot be moved."
+      }
+    },
+    {
+      "name": "move a package that is not listed",
+      "description": "nothing to move",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "move",
+        "name": "tailwind",
+        "direction": "up"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "choose a blueprint from none",
+      "description": "the blueprint becomes position 1 and the root points at its first layout, pinned to its major.minor",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bp.default"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bp.default"
+        ],
+        "added": [
+          "bp.default"
+        ],
+        "removed": [],
+        "message": "Shell set to Cratis Default.",
+        "root": {
+          "source": "Blueprint",
+          "id": "AppShell",
+          "blueprint": "bp.default",
+          "version": "^1.4"
+        }
+      }
+    },
+    {
+      "name": "swap the blueprint",
+      "description": "the previous blueprint leaves the list, the new one takes position 1",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.default"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "AppShell",
+            "blueprint": "bp.default",
+            "version": "^1.4"
+          }
+        }
+      },
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bp.dashboard"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "added": [
+          "bp.dashboard"
+        ],
+        "removed": [
+          "bp.default"
+        ],
+        "message": "Shell set to Dashboard.",
+        "root": {
+          "source": "Blueprint",
+          "id": "DashboardShell",
+          "blueprint": "bp.dashboard",
+          "version": "^2.0"
+        }
+      }
+    },
+    {
+      "name": "choose a blueprint that needs a package",
+      "description": "what the blueprint needs is added above core first",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bp.dashboard"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "added": [
+          "primereact",
+          "bp.dashboard"
+        ],
+        "removed": [],
+        "message": "Shell set to Dashboard.",
+        "root": {
+          "source": "Blueprint",
+          "id": "DashboardShell",
+          "blueprint": "bp.dashboard",
+          "version": "^2.0"
+        }
+      }
+    },
+    {
+      "name": "choose a package that is not a blueprint",
+      "description": "only a blueprint can be the shell",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "primereact"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Package 'primereact' is not a blueprint."
+      }
+    },
+    {
+      "name": "choose a named shell",
+      "description": "a blueprint can be asked for a specific shell",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bp.dashboard",
+        "shell": "Alternate"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "primereact",
+          "bp.dashboard"
+        ],
+        "added": [
+          "bp.dashboard"
+        ],
+        "removed": [],
+        "message": "Shell set to Dashboard.",
+        "root": {
+          "source": "Blueprint",
+          "id": "Alternate",
+          "blueprint": "bp.dashboard",
+          "version": "^2.0"
+        }
+      }
+    },
+    {
+      "name": "choose a theme whose package is missing",
+      "description": "the package and what it needs are added above core",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "primereact"
+        ]
+      },
+      "action": {
+        "kind": "theme",
+        "theme": "Material Ocean"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "material-themes",
+          "primereact"
+        ],
+        "added": [
+          "tailwind",
+          "material",
+          "material-themes"
+        ],
+        "removed": [],
+        "message": "Theme 'Material Ocean' needs Material Themes, which was added.",
+        "theme": "Material Ocean"
+      }
+    },
+    {
+      "name": "choose a theme whose package is listed",
+      "description": "nothing is added",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "material-themes"
+        ]
+      },
+      "action": {
+        "kind": "theme",
+        "theme": "Material Ocean"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "material-themes"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "",
+        "theme": "Material Ocean"
+      }
+    },
+    {
+      "name": "choose the theme that is already chosen",
+      "description": "nothing changes",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "material-themes"
+        ],
+        "theme": "Material Ocean"
+      },
+      "action": {
+        "kind": "theme",
+        "theme": "Material Ocean"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "core",
+          "tailwind",
+          "material",
+          "material-themes"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "",
+        "theme": "Material Ocean"
+      }
+    },
+    {
+      "name": "choose a theme no package ships",
+      "description": "the theme is set as chosen; the theme rules report it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "action": {
+        "kind": "theme",
+        "theme": "Nowhere"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "",
+        "theme": "Nowhere"
+      }
+    }
+  ]
+}
