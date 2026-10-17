@@ -9,3 +9,5 @@ export * from './resolveEffectiveShell';
 export * from './ShellOutletAction';
 export * from './ShellSwitchPlan';
 export * from './planShellSwitch';
+export * from './ShellSwitchApplication';
+export * from './applyShellSwitch';

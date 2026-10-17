@@ -335,6 +335,47 @@ function checkScreens(shell: EffectiveShell, context: ShellResolutionContext, te
     }
 }
 
+/** Where a screen template sits in the shell: the outermost template of its chain and the outlet that template fits. */
+export interface TemplatePlacement {
+    /** The name of the outermost template of the chain - the one whose `fitsSlot` names the outlet. */
+    template: string;
+
+    /** The outlet of the shell it fits (a name the shell may not have). */
+    outlet: string;
+
+    /** The qualifier of its `fitsSlot` (`Shell.outlet`), when it has one. */
+    qualifier?: string;
+}
+
+/**
+ * Where a screen template lands in the shell: follows `fitsSlot` from template to containing template until the slot is an outlet of the
+ * shell - qualified with the shell's name, or one no template of the chain declares. A template without `fitsSlot` is placed explicitly
+ * and has no placement.
+ *
+ * @param templateName The screen template the chain starts at.
+ * @param shellName The name of the shell the template is placed in.
+ * @param templates The screen templates a screen can be built from ({@link placeableScreenTemplates}).
+ * @returns The placement, or undefined when the chain is placed explicitly, is cyclic or starts at an unknown template.
+ */
+export function templatePlacement(templateName: string, shellName: string, templates: readonly ScreenTemplate[]): TemplatePlacement | undefined {
+    let current = templates.find(template => template.name === templateName);
+    const visited = new Set<string>();
+    while (current !== undefined && !visited.has(current.name)) {
+        visited.add(current.name);
+        if (current.fitsSlot === undefined) return undefined;
+        const separator = current.fitsSlot.lastIndexOf('.');
+        const qualifier = separator < 0 ? undefined : current.fitsSlot.slice(0, separator);
+        const slot = separator < 0 ? current.fitsSlot : current.fitsSlot.slice(separator + 1);
+        if (qualifier === shellName) return { template: current.name, outlet: slot, qualifier };
+        const self: ScreenTemplate = current;
+        const container = templates.find(template => template !== self && (qualifier === undefined || template.name === qualifier) && template.slots.some(candidate => candidate.name === slot));
+        if (container === undefined) return { template: current.name, outlet: slot, qualifier };
+        current = container;
+    }
+
+    return undefined;
+}
+
 /**
  * The outlets of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
  *
@@ -348,20 +389,6 @@ export function outletsUsedBy(screen: Screen, shellName: string, templates: read
         return Object.entries(screen.slotContent ?? {}).filter(([, content]) => content.length > 0).map(([slot]) => slot);
     }
 
-    let current = templates.find(template => template.name === screen.screenTemplate);
-    const visited = new Set<string>();
-    while (current !== undefined && !visited.has(current.name)) {
-        visited.add(current.name);
-        if (current.fitsSlot === undefined) return [];
-        const separator = current.fitsSlot.lastIndexOf('.');
-        const qualifier = separator < 0 ? undefined : current.fitsSlot.slice(0, separator);
-        const slot = separator < 0 ? current.fitsSlot : current.fitsSlot.slice(separator + 1);
-        if (qualifier === shellName) return [slot];
-        const self: ScreenTemplate = current;
-        const container = templates.find(template => template !== self && (qualifier === undefined || template.name === qualifier) && template.slots.some(candidate => candidate.name === slot));
-        if (container === undefined) return [slot];
-        current = container;
-    }
-
-    return [];
+    const placement = templatePlacement(screen.screenTemplate, shellName, templates);
+    return placement === undefined ? [] : [placement.outlet];
 }

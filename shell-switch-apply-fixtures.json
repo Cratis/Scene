@@ -1,0 +1,1320 @@
+{
+  "description": "Shared by the TypeScript (applyShellSwitch) and C# (ShellSwitchApplier) engines. Each case plans the switch between two shells of shell-switch-fixtures.json's libraries.default (the profile, roots and remaps as there), then applies the plan to `document`. `expected` is the projection both engines produce: every screen's slot content as element ids in key order, every template's fitsSlot, and the changes.",
+  "cases": [
+    {
+      "name": "keep",
+      "description": "every outlet the new shell has stays where it is",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "c1"
+                }
+              ],
+              "sidebar": [
+                {
+                  "type": "test",
+                  "id": "c2"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "content": [
+                "o1"
+              ]
+            }
+          },
+          {
+            "name": "Customers",
+            "slotContent": {
+              "subject": [
+                "c1"
+              ],
+              "sidebar": [
+                "c2"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": []
+      }
+    },
+    {
+      "name": "same shell",
+      "description": "switching to the shell in place changes nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                },
+                {
+                  "type": "test",
+                  "id": "o2"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "content": [
+                "o1",
+                "o2"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": []
+      }
+    },
+    {
+      "name": "outlet nobody uses",
+      "description": "an empty outlet the new shell lacks is left alone",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "subject": [],
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "subject": [],
+              "content": [
+                "o1"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": []
+      }
+    },
+    {
+      "name": "primary follows",
+      "description": "the primary outlet's content follows to the new shell's primary outlet, after what is already there",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnFrame"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                },
+                {
+                  "type": "test",
+                  "id": "o2"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "c1"
+                }
+              ],
+              "main": [
+                {
+                  "type": "test",
+                  "id": "c2"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Home",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                "o1",
+                "o2"
+              ]
+            }
+          },
+          {
+            "name": "Customers",
+            "slotContent": {
+              "main": [
+                "c2",
+                "c1"
+              ]
+            }
+          },
+          {
+            "name": "Home",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [],
+        "changes": [
+          {
+            "kind": "content",
+            "screen": "Orders",
+            "outlet": "content",
+            "action": "primary",
+            "target": "main",
+            "count": 2,
+            "description": "The 2 elements of 'Orders' in outlet 'content' move into 'main'"
+          },
+          {
+            "kind": "content",
+            "screen": "Customers",
+            "outlet": "content",
+            "action": "primary",
+            "target": "main",
+            "count": 1,
+            "description": "The 1 element of 'Customers' in outlet 'content' moves into 'main'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "move into the primary outlet",
+      "description": "a lost outlet moves into the occupied primary outlet, appended in order; a screen with only the lost outlet gets the primary outlet",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "moveToPrimary"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "c1"
+                }
+              ],
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "c2"
+                },
+                {
+                  "type": "test",
+                  "id": "c3"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Tickets",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "t1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Customers",
+            "slotContent": {
+              "content": [
+                "c1",
+                "c2",
+                "c3"
+              ]
+            }
+          },
+          {
+            "name": "Tickets",
+            "slotContent": {
+              "content": [
+                "t1"
+              ]
+            }
+          },
+          {
+            "name": "Orders",
+            "slotContent": {
+              "content": [
+                "o1"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": [
+          {
+            "kind": "content",
+            "screen": "Customers",
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 2,
+            "description": "The 2 elements of 'Customers' in outlet 'subject' move into 'content'"
+          },
+          {
+            "kind": "content",
+            "screen": "Tickets",
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 1,
+            "description": "The 1 element of 'Tickets' in outlet 'subject' moves into 'content'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "map to other outlets",
+      "description": "several lost outlets map into the outlets of the new shell, kept outlets first, then what arrived in outlet order",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "mapTo",
+          "target": "sidebar"
+        },
+        "aside": {
+          "action": "moveToPrimary"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Mixed",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "x1"
+                }
+              ],
+              "aside": [
+                {
+                  "type": "test",
+                  "id": "x2"
+                }
+              ],
+              "sidebar": [
+                {
+                  "type": "test",
+                  "id": "x3"
+                }
+              ],
+              "content": [
+                {
+                  "type": "test",
+                  "id": "x4"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Mixed",
+            "slotContent": {
+              "sidebar": [
+                "x3",
+                "x1"
+              ],
+              "content": [
+                "x4",
+                "x2"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": [
+          {
+            "kind": "content",
+            "screen": "Mixed",
+            "outlet": "subject",
+            "action": "mapTo",
+            "target": "sidebar",
+            "count": 1,
+            "description": "The 1 element of 'Mixed' in outlet 'subject' moves into 'sidebar'"
+          },
+          {
+            "kind": "content",
+            "screen": "Mixed",
+            "outlet": "aside",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 1,
+            "description": "The 1 element of 'Mixed' in outlet 'aside' moves into 'content'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "two lost outlets into one new outlet",
+      "description": "content from two outlets that land in the same new outlet is appended in the order the outlets are declared on the screen",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "moveToPrimary"
+        },
+        "aside": {
+          "action": "moveToPrimary"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Both",
+            "layout": "x",
+            "slotContent": {
+              "aside": [
+                {
+                  "type": "test",
+                  "id": "a1"
+                },
+                {
+                  "type": "test",
+                  "id": "a2"
+                }
+              ],
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "s1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Both",
+            "slotContent": {
+              "content": [
+                "a1",
+                "a2",
+                "s1"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": [
+          {
+            "kind": "content",
+            "screen": "Both",
+            "outlet": "aside",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 2,
+            "description": "The 2 elements of 'Both' in outlet 'aside' move into 'content'"
+          },
+          {
+            "kind": "content",
+            "screen": "Both",
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 1,
+            "description": "The 1 element of 'Both' in outlet 'subject' moves into 'content'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "drop",
+      "description": "dropped content is removed; a screen left without content keeps its place with no slots",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "drop"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "c1"
+                },
+                {
+                  "type": "test",
+                  "id": "c2"
+                }
+              ],
+              "content": [
+                {
+                  "type": "test",
+                  "id": "c3"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Tickets",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "t1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Customers",
+            "slotContent": {
+              "content": [
+                "c3"
+              ]
+            }
+          },
+          {
+            "name": "Tickets",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [],
+        "changes": [
+          {
+            "kind": "content",
+            "screen": "Customers",
+            "outlet": "subject",
+            "action": "drop",
+            "count": 2,
+            "description": "The 2 elements of 'Customers' in outlet 'subject' are dropped"
+          },
+          {
+            "kind": "content",
+            "screen": "Tickets",
+            "outlet": "subject",
+            "action": "drop",
+            "count": 1,
+            "description": "The 1 element of 'Tickets' in outlet 'subject' is dropped"
+          }
+        ]
+      }
+    },
+    {
+      "name": "template fits the lost outlet",
+      "description": "the template's own placement moves with it; the screen built from it is untouched",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "moveToPrimary"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "body": [
+                {
+                  "type": "test",
+                  "id": "b1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Subject Panel"
+          },
+          {
+            "name": "Orders",
+            "layout": "x",
+            "slotContent": {
+              "content": [
+                {
+                  "type": "test",
+                  "id": "o1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel",
+            "slots": [],
+            "fitsSlot": "subject"
+          },
+          {
+            "name": "Plain Page",
+            "slots": [],
+            "fitsSlot": "content"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Customers",
+            "screenTemplate": "Subject Panel",
+            "slotContent": {
+              "body": [
+                "b1"
+              ]
+            }
+          },
+          {
+            "name": "Orders",
+            "slotContent": {
+              "content": [
+                "o1"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel",
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Plain Page",
+            "fitsSlot": "content"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "Subject Panel",
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 1,
+            "description": "'Subject Panel' moves from outlet 'subject' to 'content'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "template mapped to another outlet",
+      "description": "a template that fits a lost outlet follows a mapTo",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "mapTo",
+          "target": "sidebar"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Subject Panel"
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel",
+            "slots": [],
+            "fitsSlot": "subject"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Customers",
+            "screenTemplate": "Subject Panel",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel",
+            "fitsSlot": "sidebar"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "Subject Panel",
+            "outlet": "subject",
+            "action": "mapTo",
+            "target": "sidebar",
+            "count": 1,
+            "description": "'Subject Panel' moves from outlet 'subject' to 'sidebar'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "template dropped",
+      "description": "dropping the outlet a template fits leaves it placed explicitly, without a fitsSlot",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "drop"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Subject Panel"
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel",
+            "slots": [],
+            "fitsSlot": "subject"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Customers",
+            "screenTemplate": "Subject Panel",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Subject Panel"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "Subject Panel",
+            "outlet": "subject",
+            "action": "drop",
+            "count": 1,
+            "description": "'Subject Panel' no longer fits outlet 'subject': it is placed explicitly"
+          }
+        ]
+      }
+    },
+    {
+      "name": "qualified template moves",
+      "description": "a template that fits ToolShell.subject fits OwnShell.content after moveToPrimary",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {
+        "subject": {
+          "action": "moveToPrimary"
+        }
+      },
+      "document": {
+        "screens": [
+          {
+            "name": "Notes",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Aside Note"
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Aside Note",
+            "slots": [],
+            "fitsSlot": "ToolShell.subject"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Notes",
+            "screenTemplate": "Aside Note",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Aside Note",
+            "fitsSlot": "OwnShell.content"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "Aside Note",
+            "outlet": "subject",
+            "action": "moveToPrimary",
+            "target": "content",
+            "count": 1,
+            "description": "'Aside Note' moves from outlet 'subject' to 'content'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "qualified template kept",
+      "description": "a qualified placement is requalified with the new shell's name when the outlet is kept",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "DeskShell"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Notes",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Aside Note"
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Aside Note",
+            "slots": [],
+            "fitsSlot": "ToolShell.subject"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Notes",
+            "screenTemplate": "Aside Note",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "Aside Note",
+            "fitsSlot": "DeskShell.subject"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "Aside Note",
+            "outlet": "subject",
+            "action": "keep",
+            "target": "subject",
+            "count": 1,
+            "description": "'Aside Note' stays in outlet 'subject' of shell 'DeskShell'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "only the outermost template moves",
+      "description": "a nested chain moves by its outermost template; the inner template fits a slot of the outer one and stays",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnFrame"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Deals",
+            "layout": "x",
+            "slotContent": {},
+            "forms": [],
+            "contributions": [],
+            "screenTemplate": "Pipeline Board"
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "CRM Workspace",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "fitsSlot": "content"
+          },
+          {
+            "name": "Pipeline Board",
+            "slots": [],
+            "fitsSlot": "body"
+          }
+        ]
+      },
+      "expected": {
+        "applied": true,
+        "screens": [
+          {
+            "name": "Deals",
+            "screenTemplate": "Pipeline Board",
+            "slotContent": {}
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "CRM Workspace",
+            "fitsSlot": "main"
+          },
+          {
+            "name": "Pipeline Board",
+            "fitsSlot": "body"
+          }
+        ],
+        "changes": [
+          {
+            "kind": "placement",
+            "template": "CRM Workspace",
+            "outlet": "content",
+            "action": "primary",
+            "target": "main",
+            "count": 1,
+            "description": "'CRM Workspace' moves from outlet 'content' to 'main'"
+          }
+        ]
+      }
+    },
+    {
+      "name": "blocked plan is not applied",
+      "description": "a plan with an undecided outlet changes nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "ToolShell"
+      },
+      "candidateRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "remaps": {},
+      "document": {
+        "screens": [
+          {
+            "name": "Customers",
+            "layout": "x",
+            "slotContent": {
+              "subject": [
+                {
+                  "type": "test",
+                  "id": "c1"
+                }
+              ]
+            },
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "screenTemplates": []
+      },
+      "expected": {
+        "applied": false,
+        "screens": [
+          {
+            "name": "Customers",
+            "slotContent": {
+              "subject": [
+                "c1"
+              ]
+            }
+          }
+        ],
+        "screenTemplates": [],
+        "changes": []
+      }
+    }
+  ]
+}
