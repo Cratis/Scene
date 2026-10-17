@@ -129,6 +129,37 @@ import { GalleryScreenPreview } from '@cratis/scene.blueprint.default';
 <GalleryScreenPreview screenName='CrudList' />;
 ```
 
+## Configuring a template from the screen that uses it
+
+A screen that fills a template does not copy it, and the template's author decides what the screen may change. The owner (an application's template, or a
+layout) lists what it **exposes** - a component's property, or a collection with the operations and fields a consumer is granted - and the consuming screen
+stores values for exactly that, apart from the template, in an **instance** block. In Screenplay:
+
+```screenplay excerpt
+exposure for Module
+  component navigation
+    items operations add reorder fields label icon destination
+
+instance Orders
+  items navigation.items
+    item reports label "Reports" icon chart destination Orders.Reports
+```
+
+The engine's `resolveEffectiveConfiguration` merges the chain (layout, templates, screen) and `composeApplicationScreen` applies it, which is why Studio's preview,
+the live Stage and a generated React application draw the same configured screen. What the screen was not exposed stays the template's, and a value for something not
+(or no longer) exposed is kept but ignored and reported - see [exposure and configuration](../editing/exposure-and-configuration.md). The templates the default
+blueprint ships expose nothing themselves: a screen filling `MasterDetail`, `Dashboard` or `ProfileSettings` changes the **content of the slots** the template declares
+(`slotContent`), and an application wraps the shipped template in its own template when it wants to expose more.
+
+### One package set from the template browser to the rendered vector
+
+A host never hand-registers the components of a preview. It names the packages of a UI profile and `resolvePackageHost` resolves the effective set - the packages, their
+dependencies (the default blueprint needs `PrimeReact` and `Cratis.Components`), their components, and the template catalog a template browser lists
+(`host.templates`, each with compatibility, attribution and license). The vector that renders `MasterDetail`, `Dashboard` and `ProfileSettings` on the live Stage and as a
+generated React application lists `Cratis.Blueprint.Default` in its `ui profile`; `for_templatePreviewStates/when_previewing_the_templates_through_the_host_package_set`
+renders the same three templates through the set that profile resolves to - no findings, every template offered as usable, the same components as the audited registry,
+and the slot contents the vector asserts by id - so the previews Studio's template browser shows and the pages the vector renders are made of the same packages.
+
 ## Preview states
 
 `GalleryScreenPreview` takes a `state`: `populated` (the seeded records, the default), `empty`, `loading` or
