@@ -11,7 +11,7 @@ import { useUrlState } from './urlState';
 /**
  * The `globalSearch` component: a search box for the topbar or a list's toolbar.
  *
- * It is a `search` landmark around a labelled field; the text is the `value` output and, with `urlKey`, is kept in the address so a search is
+ * It is a `search` landmark, named by its label so several on one page stay distinguishable, around a labelled field; the text is the `value` output and, with `urlKey`, is kept in the address so a search is
  * a shareable link. Pressing Escape clears it. The placeholder and the accessible name come from `placeholder` and `label`, and from the
  * strings table when absent, so nothing is hard-coded.
  */
@@ -23,7 +23,7 @@ export function GlobalSearch({ element, interactions, bindingOutputs }: Register
     useValueOutput(bindingOutputs, text ?? '');
 
     return (
-        <form role='search' className='foundation foundation-search' data-scene-id={element.id} onSubmit={event => { event.preventDefault(); interactions?.onChange?.(); }}>
+        <form role='search' aria-label={label} className='foundation foundation-search' data-scene-id={element.id} onSubmit={event => { event.preventDefault(); interactions?.onChange?.(); }}>
             <FoundationIcon name='filter' />
             <input type='search' aria-label={label} placeholder={readOptionalString(element, 'placeholder') ?? strings.searchPlaceholder} value={text ?? ''}
                 onChange={event => { setText(event.target.value); interactions?.onChange?.(); }}
