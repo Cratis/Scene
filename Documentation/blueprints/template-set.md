@@ -136,13 +136,16 @@ layout) lists what it **exposes** - a component's property, or a collection with
 stores values for exactly that, apart from the template, in an **instance** block. In Screenplay:
 
 ```screenplay excerpt
-exposure for Module
-  component navigation
-    items operations add reorder fields label icon destination
+exposure for InspectionShell
+  property "inspection:checklist".columns label "Columns"
+  property "inspection:checklist".items label "Checks" operations add, remove, reorder fields label, required
 
-instance Orders
-  items navigation.items
-    item reports label "Reports" icon chart destination Orders.Reports
+instance RecordInspection
+  set "inspection:checklist".columns = 2
+  items "inspection:checklist".items
+    item site
+      label = "Site"
+      required = true
 ```
 
 The engine's `resolveEffectiveConfiguration` merges the chain (layout, templates, screen) and `composeApplicationScreen` applies it, which is why Studio's preview,
