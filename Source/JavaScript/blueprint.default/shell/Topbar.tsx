@@ -52,5 +52,5 @@ export function Topbar({ element, slots }: RegisteredComponentProps) {
 }
 
 function togglesSidebar(mode: LayoutMode): boolean {
-    return mode === LayoutMode.Static || mode === LayoutMode.Overlay;
+    return mode === LayoutMode.Static || mode === LayoutMode.Overlay || mode === LayoutMode.Drawer;
 }

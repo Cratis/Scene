@@ -39,6 +39,10 @@ export function layoutWrapperClasses(state: LayoutConfigState): string[] {
         classes.push('layout-overlay-active');
     }
 
+    if (mode === LayoutMode.Drawer && state.isSidebarOpen && !state.isMobile) {
+        classes.push('layout-drawer-active');
+    }
+
     if (isPointerRevealMode(mode) && state.isSidebarRevealed) {
         classes.push('layout-sidebar-active');
     }
@@ -64,5 +68,5 @@ export function layoutWrapperClasses(state: LayoutConfigState): string[] {
  * sidebar covers nothing and must not dim anything.
  */
 export function isLayoutMaskVisible(state: LayoutConfigState): boolean {
-    return effectiveLayoutMode(state) === LayoutMode.Overlay && state.isSidebarOpen;
+    return effectiveLayoutMode(state) === LayoutMode.Drawer && state.isSidebarOpen;
 }

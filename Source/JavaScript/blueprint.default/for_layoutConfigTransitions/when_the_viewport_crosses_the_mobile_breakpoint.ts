@@ -24,9 +24,9 @@ describe('when the viewport crosses the mobile breakpoint', () => {
         isMobileWidth(mobileBreakpoint + 1).should.be.false;
     });
 
-    it('should force every mode off-canvas below the breakpoint', () => {
+    it('should make every mode a drawer below the breakpoint', () => {
         for (const mode of layoutModes) {
-            effectiveLayoutMode(withMobile(withMode(desktop, mode), true)).should.equal(LayoutMode.Overlay);
+            effectiveLayoutMode(withMobile(withMode(desktop, mode), true)).should.equal(LayoutMode.Drawer);
         }
     });
 

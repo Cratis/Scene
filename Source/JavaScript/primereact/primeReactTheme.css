@@ -71,6 +71,7 @@
 
     /* Geometry and focus */
     --scene-content-border-radius: var(--p-content-border-radius);
+    --scene-text-font-family: var(--p-font-family, inherit);
     --scene-focus-ring: var(--p-focus-ring-shadow);
 }
 

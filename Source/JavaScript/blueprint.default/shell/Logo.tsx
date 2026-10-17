@@ -3,8 +3,14 @@
 
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { useSceneTheme } from '@cratis/scene.react';
-import { readOptionalString, readString } from './elementProperties';
+import { ProfileRegion } from '@cratis/scene.engine';
+import { readBoolean, readOptionalString, readString } from './elementProperties';
 import { useShellLink } from './useShellLink';
+
+/** The primeicons class of each logo icon the profile can choose. */
+const logoIconClass: Record<string, string> = {
+    box: 'pi-box', layers: 'pi-clone', home: 'pi-home', users: 'pi-users', receipt: 'pi-receipt', package: 'pi-gift', database: 'pi-database', palette: 'pi-palette',
+};
 
 /**
  * The brand mark.
@@ -20,13 +26,17 @@ export function Logo({ element }: RegisteredComponentProps) {
     const lightSource = readOptionalString(element, 'lightImageUrl');
     const darkSource = readOptionalString(element, 'darkImageUrl');
     const source = theme?.isDark ? darkSource ?? lightSource : lightSource ?? darkSource;
+    const iconName = readOptionalString(element, 'iconName');
+    const showName = readBoolean(element, 'showName', true);
     const targetScreen = readString(element, 'targetScreen', 'Dashboard');
     const link = useShellLink(targetScreen === '' ? undefined : targetScreen, { source: 'logo', id: element.id, label });
 
     return (
-        <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id}>
-            {source ? <img src={source} alt={label} height={28} /> : <span className='layout-logo-mark'>{initials}</span>}
-            <span>{label}</span>
+        <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id} data-scene-region={ProfileRegion.Identity} aria-label={showName ? undefined : label}>
+            {source ? <img src={source} alt={label} height={28} />
+                : iconName ? <span className='layout-logo-mark'><i className={`pi ${logoIconClass[iconName] ?? 'pi-box'}`} aria-hidden='true' /></span>
+                    : <span className='layout-logo-mark'>{initials}</span>}
+            {showName && <span className='layout-logo-name'>{label}</span>}
         </a>
     );
 }

@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import type { ApplicationLogo } from '@cratis/scene.model';
+import { LogoKind, type ApplicationLogo } from '@cratis/scene.model';
+import type { ResolvedProfileIdentity } from '@cratis/scene.engine';
 import type { SceneElement } from '@cratis/scene.model';
 import { ComponentName } from '../ComponentName';
 import { externalComponent } from '../gallery/elements';
@@ -15,9 +16,18 @@ import { SlotName } from '../layouts';
  * @param logo The application's logo, when it has one.
  * @returns The slot content to give the shell.
  */
-export function defaultApplicationChrome(logo?: ApplicationLogo): Record<string, SceneElement[]> {
+export function defaultApplicationChrome(logo?: ApplicationLogo, identity?: ResolvedProfileIdentity): Record<string, SceneElement[]> {
     const slots: Record<string, SceneElement[]> = {};
-    if (logo) {
+    if (identity) {
+        slots.logo = [externalComponent('topbar-logo', ComponentName.Logo, {
+            label: identity.name,
+            initials: identity.initials,
+            iconName: identity.kind === LogoKind.Icon ? identity.icon : undefined,
+            lightImageUrl: identity.kind === LogoKind.Image ? identity.image : undefined,
+            showName: identity.showName,
+            targetScreen: '',
+        })];
+    } else if (logo) {
         slots.logo = [externalComponent('topbar-logo', ComponentName.Logo, {
             label: logo.title,
             initials: logo.title.slice(0, 1).toUpperCase(),

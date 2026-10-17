@@ -44,16 +44,17 @@ describe('when rendering each mode', () => {
     });
 
     it('should mark an anchored sidebar anchored', () => {
-        layoutWrapperClasses(withSidebarAnchored(withMode(started, LayoutMode.Drawer), true)).should.contain('layout-sidebar-anchored');
+        layoutWrapperClasses(withSidebarAnchored(withMode(started, LayoutMode.Reveal), true)).should.contain('layout-sidebar-anchored');
     });
 
-    it('should not mark a static sidebar anchored, since only reveal and drawer answer to the pointer', () => {
+    it('should not mark a static sidebar anchored, since only reveal answers to the pointer', () => {
         layoutWrapperClasses(withSidebarAnchored(withMode(started, LayoutMode.Static), true)).should.not.contain('layout-sidebar-anchored');
     });
 
-    it('should show the mask only while a floating sidebar is open', () => {
-        isLayoutMaskVisible(toggleSidebar(withMode(started, LayoutMode.Overlay))).should.be.true;
-        isLayoutMaskVisible(withMode(started, LayoutMode.Overlay)).should.be.false;
+    it('should show the mask only while a drawer is open', () => {
+        isLayoutMaskVisible(toggleSidebar(withMode(started, LayoutMode.Drawer))).should.be.true;
+        isLayoutMaskVisible(withMode(started, LayoutMode.Drawer)).should.be.false;
+        isLayoutMaskVisible(toggleSidebar(withMode(started, LayoutMode.Overlay))).should.be.false;
         isLayoutMaskVisible(withMode(started, LayoutMode.Static)).should.be.false;
     });
 

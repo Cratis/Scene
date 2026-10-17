@@ -45,23 +45,23 @@ export function defaultLayoutConfigState(): LayoutConfigState {
 /**
  * The mode the shell actually renders, as opposed to the one the user picked.
  *
- * Below the mobile breakpoint every mode collapses to {@link LayoutMode.Overlay}: a docked 18rem sidebar,
+ * Below the mobile breakpoint every mode collapses to {@link LayoutMode.Drawer}: a docked 18rem sidebar,
  * an icon rail or a horizontal menu strip are all unusable on a phone, so the template line forces
  * off-canvas there and hides the mode picker. Deriving it rather than overwriting `mode` is what lets the
  * chosen mode come back untouched when the viewport grows again.
  */
 export function effectiveLayoutMode(state: LayoutConfigState): LayoutMode {
-    return state.isMobile ? LayoutMode.Overlay : state.mode;
+    return state.isMobile ? LayoutMode.Drawer : state.mode;
 }
 
 /** Whether the mode keeps the sidebar off-canvas until something opens it. */
 export function isOffCanvasMode(mode: LayoutMode): boolean {
-    return mode === LayoutMode.Overlay;
+    return mode === LayoutMode.Overlay || mode === LayoutMode.Drawer;
 }
 
-/** Whether the mode is one of the two that react to the pointer - `reveal` slides in, `drawer` grows. */
+/** Whether the mode reacts to the pointer: `reveal` slides in over the content when the rail is hovered. */
 export function isPointerRevealMode(mode: LayoutMode): boolean {
-    return mode === LayoutMode.Reveal || mode === LayoutMode.Drawer;
+    return mode === LayoutMode.Reveal;
 }
 
 /**
