@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Engine.SampleData;
 
 /// <summary>
@@ -16,6 +18,7 @@ namespace Cratis.Scene.Engine.SampleData;
 /// <param name="Columns">The columns of the pack's main table, in order.</param>
 /// <param name="StatusColumn">The column drawn as status pills.</param>
 /// <param name="Statuses">The classification of the status column's values.</param>
+[method: JsonConstructor]
 public record SampleDataCatalogEntry(
     string Id,
     bool IsGenerated,
@@ -26,4 +29,20 @@ public record SampleDataCatalogEntry(
     string? Description = null,
     IReadOnlyList<string>? Columns = null,
     string? StatusColumn = null,
-    Cratis.Scene.Model.SampleData.SampleStatusClassification? Statuses = null);
+    Cratis.Scene.Model.SampleData.SampleStatusClassification? Statuses = null)
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SampleDataCatalogEntry"/> record with the members it had before the description, columns and statuses.
+    /// Kept so a package compiled against an earlier version still finds the constructor it was built with.
+    /// </summary>
+    /// <param name="id">The pack identity.</param>
+    /// <param name="isGenerated">Whether this is the generated entry.</param>
+    /// <param name="name">The pack's name within its group.</param>
+    /// <param name="label">The full label.</param>
+    /// <param name="selected">Whether it is the active pack.</param>
+    /// <param name="locale">The locale tag.</param>
+    public SampleDataCatalogEntry(string id, bool isGenerated, string name, string label, bool selected, string? locale)
+        : this(id, isGenerated, name, label, selected, locale, null, null, null, null)
+    {
+    }
+}

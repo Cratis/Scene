@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 using Cratis.Scene.Model.Structure;
 
 namespace Cratis.Scene.Model.Screens;
@@ -27,6 +29,7 @@ namespace Cratis.Scene.Model.Screens;
 /// <param name="DefaultMenuMode">For a shell: the navigation mode the application starts in when the shell is chosen; the author can change it afterwards.</param>
 /// <param name="DisplayName">For a shell offered as a card: its title. Falls back to the template's name.</param>
 /// <param name="Description">For a shell offered as a card: its one-line description.</param>
+[method: JsonConstructor]
 public record TemplateMetadata(
     string? Type = null,
     string? Category = null,
@@ -41,4 +44,36 @@ public record TemplateMetadata(
     string? PrimaryOutlet = null,
     string? DefaultMenuMode = null,
     string? DisplayName = null,
-    string? Description = null);
+    string? Description = null)
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TemplateMetadata"/> record with the members it had before the default menu mode, title and description.
+    /// Kept so a package compiled against an earlier version still finds the constructor it was built with.
+    /// </summary>
+    /// <param name="type">The template's type.</param>
+    /// <param name="category">The gallery category.</param>
+    /// <param name="scopes">The scopes the template can be used at.</param>
+    /// <param name="compatibility">The versions it is compatible with.</param>
+    /// <param name="attribution">Who made it.</param>
+    /// <param name="license">The license.</param>
+    /// <param name="licenseUrl">Where the license text is.</param>
+    /// <param name="sliceKinds">The slice kinds it can host.</param>
+    /// <param name="thumbnail">The gallery thumbnail.</param>
+    /// <param name="role">A structural role.</param>
+    /// <param name="primaryOutlet">For a shell: the slot content is placed in.</param>
+    public TemplateMetadata(
+        string? type,
+        string? category,
+        IReadOnlyList<TemplateScope>? scopes,
+        TemplateCompatibility? compatibility,
+        TemplateAttribution? attribution,
+        string? license,
+        string? licenseUrl,
+        IReadOnlyList<SliceKind>? sliceKinds,
+        string? thumbnail,
+        TemplateRole? role,
+        string? primaryOutlet)
+        : this(type, category, scopes, compatibility, attribution, license, licenseUrl, sliceKinds, thumbnail, role, primaryOutlet, null, null, null)
+    {
+    }
+}
