@@ -1117,13 +1117,25 @@
 /* A grid item defaults to min-width: auto, so a widget holding a wide table pushed its track past the window: on a phone the page scrolled sideways, and on a desktop the primary
    column overlapped the secondary one. The item shrinks to its track and the table scrolls inside its own container. */
 .scene-template-slot > * { min-width: 0; }
-/* PrimeReact's Lara tag severities paint white on a mid-tone in the light scheme (2.3 to 3.8:1, WCAG AA wants 4.5:1); the blueprint darkens them. The dark scheme's values are Lara's own. */
+/* PrimeReact's Lara tag severities paint white on a mid-tone in the light scheme (2.3 to 3.8:1, WCAG AA wants 4.5:1); the blueprint darkens them. The dark scheme's values are Lara's own.
+   The scheme is the Scene configuration's attribute, not light-dark(): a host's CSS pipeline lowers light-dark() for older browsers into a pair of custom properties that stays
+   unset here, which left the tag with no background at all (white on the page, 1.09:1) in the Stage. */
 .layout-wrapper,
 .layout-full-page {
-    --p-tag-info-background: light-dark(#0369a1, #38bdf8);
-    --p-tag-success-background: light-dark(#15803d, #4ade80);
-    --p-tag-warn-background: light-dark(#b45309, #fb923c);
-    --p-tag-danger-background: light-dark(#b91c1c, #f87171);
+    --p-tag-info-background: #0369a1;
+    --p-tag-success-background: #15803d;
+    --p-tag-warn-background: #b45309;
+    --p-tag-danger-background: #b91c1c;
+}
+
+.layout-wrapper[data-scene-color-scheme='dark'],
+.layout-full-page[data-scene-color-scheme='dark'],
+[data-scene-color-scheme='dark'] .layout-wrapper,
+[data-scene-color-scheme='dark'] .layout-full-page {
+    --p-tag-info-background: #38bdf8;
+    --p-tag-success-background: #4ade80;
+    --p-tag-warn-background: #fb923c;
+    --p-tag-danger-background: #f87171;
 }
 
 /* The minimum vocabulary's button is a bare <button>; the shell must still give it a comfortable target (WCAG 2.2 2.5.8, 24 by 24 CSS pixels at least). */

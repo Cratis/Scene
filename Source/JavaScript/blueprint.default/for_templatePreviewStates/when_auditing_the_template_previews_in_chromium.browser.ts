@@ -1,6 +1,9 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
 import { FoundationPage, landmarkRules, openFoundationPage, viewports } from '../for_foundation/given/a_foundation_page';
 import { TemplatePreviewState, galleryScreenTemplates } from '../gallery';
 
@@ -75,5 +78,31 @@ describe('when auditing the template previews in Chromium', () => {
             return result.violations.flatMap(violation => violation.nodes.map(node => node.target.join(' '))).filter(target => target.includes('tag-probe'));
         });
         found.should.deep.equal([]);
+    });
+
+    it('should not use light-dark() in the shell stylesheet, which a host pipeline lowers into custom properties that stay unset (a tag with no background in the Stage)', () => {
+        const css = readFileSync(fileURLToPath(new URL('../shell/layout.css', import.meta.url)), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+        css.includes('light-dark(').should.be.false;
+    });
+
+    it('should keep Lara\'s own tag colours in the dark scheme', async () => {
+        await chromium.page.setViewportSize(viewports.desktop);
+        await chromium.auditPreview('MasterDetail', TemplatePreviewState.Populated, 'dark');
+        const warn = await chromium.page.evaluate(() => {
+            const wrapper = document.querySelector('.layout-wrapper')!;
+            const scheme = wrapper.closest('[data-scene-color-scheme]') ?? wrapper;
+            scheme.setAttribute('data-scene-color-scheme', 'dark');
+            return getComputedStyle(wrapper).getPropertyValue('--p-tag-warn-background').trim();
+        });
+        warn.should.equal('#fb923c');
+    });
+
+    it('should draw the scheme it is asked for every time, so the dark audit is not the light page again', async () => {
+        const seen: string[] = [];
+        for (const theme of ['light', 'dark', 'light', 'dark'] as const) {
+            await chromium.auditPreview('MasterDetail', TemplatePreviewState.Populated, theme);
+            seen.push(await chromium.page.evaluate(() => document.querySelector('.layout-wrapper')!.closest('[data-scene-color-scheme]')?.getAttribute('data-scene-color-scheme') ?? 'none'));
+        }
+        seen.should.deep.equal(['light', 'dark', 'light', 'dark']);
     });
 });
