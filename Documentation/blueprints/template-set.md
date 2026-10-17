@@ -163,6 +163,7 @@ finding, so a clean audit is never vacuous.
 
 The audit found, and the blueprint now fixes: the bare `core:button` was 21 pixels high (the shell gives a button in the content area a 2rem minimum, in the application and the
 full-page shell), and two `search` landmarks on one page (the topbar's and a list's) had no names to tell them apart (`foundation:globalSearch` names its form with its label).
-PrimeReact 11 renders unstyled primitives (a 13 pixel checkbox input, a 6 pixel date-picker trigger) that the host's Tailwind stylesheet sizes; the browser page has no Tailwind,
-so the target size of those primitives is not judged there - everything else about them, contrast included, is.
+The page renders PrimeReact's unstyled primitives (`primereact/<component>`: a 13 pixel checkbox input, a 6 pixel date-picker trigger, a severity tag with no colour of its own);
+the Stage swaps in the styled `@primereact/ui` components, so the target size of the primitives is not judged here, and a styled control's contrast is judged in the
+vector rendered on the live Stage and as a generated React application (Cratis/Scene#95), which audits the same templates with the styled components.
 

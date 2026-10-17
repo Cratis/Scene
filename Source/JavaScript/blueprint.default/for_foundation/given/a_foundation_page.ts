@@ -18,7 +18,8 @@ import { GalleryScreenPreview } from './gallery/GalleryScreenPreview';
 import { GalleryDialogPreview } from './gallery/GalleryDialogPreview';
 import { defaultBlueprint } from './defaultBlueprint';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
-import { primeReactPackage, primeReactTheme, usePrimeReactTheme } from '@cratis/scene.primereact';
+import { primeReactPackage } from '@cratis/scene.primereact';
+import Lara from '@primeuix/themes/lara';
 import { PrimeReactProvider } from '@primereact/core';
 
 let root;
@@ -28,15 +29,15 @@ window.showScreen = (screen, pack, theme, forceState) => {
     flushSync(() => root.render(<PrimeReactProvider><GalleryScreenPreview screenName={screen} registry={registry} pack={pack} forceState={forceState} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PrimeReactProvider>));
 };
 const packageBacked = mergePackageRegistries([corePackage, primeReactPackage, defaultBlueprint]);
-// A host with PrimeReact in its package set hands PrimeReactProvider a preset (what usePrimeReactTheme resolves from one of the package's themes) and puts the
-// dark-mode class on its root; without them the PrimeReact controls are unstyled primitives (a 13px checkbox) and nothing real is being audited.
-const PreviewHost = ({ theme, children }) => {
-    const config = usePrimeReactTheme(primeReactTheme(theme === 'dark' ? 'aura-dark-indigo' : 'aura-light-indigo'));
-    return <PrimeReactProvider {...config}><div className={theme === 'dark' ? 'scene-dark' : undefined}>{children}</div></PrimeReactProvider>;
-};
+// The PrimeReact theme the Stage hands its provider (Stage's stageTheme.ts): the Lara preset, dark where the Scene configuration says so, so the blueprint's own
+// stylesheet reads real `--p-*` tokens. PrimeReact itself stays the unstyled primitives here (`primereact/<component>`): the Stage swaps in the styled `@primereact/ui`
+// components (its styledPrimeReact plugin), so what a styled control looks like - its contrast and size - is judged where it is styled, in the vector rendered on the
+// live Stage and as a generated React application (Cratis/Scene#95). PrimeReactProvider takes the theme as a prop.
+const hostTheme = { preset: Lara, options: { darkModeSelector: "[data-scene-color-scheme='dark']" } };
+const PreviewHost = ({ children }) => <PrimeReactProvider theme={hostTheme}>{children}</PrimeReactProvider>;
 window.showPreview = (screen, state, theme) => {
     root ??= createRoot(document.getElementById('root'));
-    flushSync(() => root.render(<PreviewHost theme={theme}><GalleryScreenPreview screenName={screen} state={state} registry={packageBacked} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PreviewHost>));
+    flushSync(() => root.render(<PreviewHost><GalleryScreenPreview screenName={screen} state={state} registry={packageBacked} initialConfig={{ colorScheme: theme === 'dark' ? 'dark' : 'light', themeName: theme === 'dark' ? 'Scene Default Dark' : 'Scene Default Light' }} /></PreviewHost>));
 };
 window.showDialog = (dialog, pack, theme) => {
     root ??= createRoot(document.getElementById('root'));
@@ -141,8 +142,8 @@ export async function openFoundationPage(): Promise<FoundationPage> {
             const wcag = await window_.axe.run(document.body, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] }, rules: { region: { enabled: false } } });
             const landmarks = await window_.axe.run(document.body, { runOnly: { type: 'rule', values: landmarkRules } });
             const overflow = document.documentElement.scrollWidth > window.innerWidth ? [`overflow: the page is ${document.documentElement.scrollWidth}px wide in a ${window.innerWidth}px viewport`] : [];
-            // PrimeReact 11 renders unstyled primitives (a 13px checkbox input, a 6px date-picker trigger) that the host's Tailwind stylesheet sizes; this page has no
-            // Tailwind, so their target size says nothing about a real host and is not judged here. Everything else on the page, colour contrast included, is.
+            // PrimeReact 11's primitives are unstyled in this page (a 13px checkbox input, a 6px date-picker trigger) and a host sizes them with its styled components, so
+            // their target size says nothing about a real host and is not judged here; the vector on the live Stage judges them styled. Everything else on the page is.
             const insidePrimitive = (node: { target: unknown[] }) => (document.querySelector(node.target.join(' '))?.closest('[data-scope]') ?? null) !== null;
             const judged = [...wcag.violations, ...landmarks.violations].map(violation => ({ id: violation.id, nodes: violation.id === 'target-size' ? violation.nodes.filter(node => !insidePrimitive(node)) : violation.nodes })).filter(violation => violation.nodes.length > 0);
             return [...overflow, ...judged.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
