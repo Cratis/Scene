@@ -5,7 +5,8 @@ import { createRef } from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach } from 'vitest';
 import { CornerStyle, LogoKind, UiProfile } from '@cratis/scene.model';
-import { ProfileRegion } from '@cratis/scene.engine';
+import { ProfileRegion, resolveProfileIdentity } from '@cratis/scene.engine';
+import { galleryApplication, galleryCompositionFor } from '../galleryApplication';
 import { PreviewRegionHandle } from '../previewRegions';
 import { ordersApplication } from './given';
 import { preview } from './when_previewing_a_module';
@@ -145,5 +146,25 @@ describe('when designing the preview', () => {
         it('should set the corner radius token', () => host().style.getPropertyValue('--scene-content-border-radius').should.equal('18px'));
         it('should set the accent token', () => host().style.getPropertyValue('--scene-primary-color').should.equal('#0a7a4b'));
         it('should set the font token', () => host().style.getPropertyValue('--scene-text-font-family').should.contain('Inter'));
+    });
+});
+
+describe('when the gallery application is composed with the identity of the profile', () => {
+    beforeAll(() => {
+        globalThis.ResizeObserver ??= class { observe = nothing; unobserve = nothing; disconnect = nothing; } as unknown as typeof ResizeObserver;
+        window.matchMedia ??= (() => ({ matches: false, addEventListener: nothing, removeEventListener: nothing, addListener: nothing, removeListener: nothing })) as unknown as typeof window.matchMedia;
+    });
+
+    afterEach(cleanup);
+
+    const identity = resolveProfileIdentity({ name: 'Fjord', targetPlatform: 'web', packages: [], identity: { name: 'Fjord Books', logo: { kind: LogoKind.Icon, icon: 'database' }, showName: true } }, 'Fjord');
+    const drawn = () => preview({ document: galleryApplication(), composition: galleryCompositionFor(identity), target: { application: 'Gallery' } });
+
+    describe('and the shell is drawn', () => {
+        beforeEach(() => render(drawn()));
+
+        it('should draw the name of the application in the sidebar and the top bar, not the gallery\'s', () => document.querySelector('.layout-logo')!.textContent!.should.contain('Fjord Books'));
+        it('should draw the icon the profile chose', () => document.querySelector('.layout-logo-mark i')!.className.should.contain('pi-database'));
+        it('should not leave the gallery\'s brand anywhere', () => document.body.textContent!.should.not.contain('Contoso'));
     });
 });

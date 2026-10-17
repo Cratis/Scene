@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { BindingSourceKind, SceneElement } from '@cratis/scene.model';
+import { BindingSourceKind, LogoKind, SceneElement } from '@cratis/scene.model';
+import type { ResolvedProfileIdentity } from '@cratis/scene.engine';
 import { ComponentName } from '../ComponentName';
 import { SlotName } from '../layouts';
 import { defaultBlueprintThemes } from '../themes';
@@ -17,9 +18,20 @@ import { entriesInGroup, navigationElement, navigationGroups } from './navigatio
  * would mean editing twenty files, and nineteen of them would eventually be missed.
  */
 
-/** The brand mark, shared by the topbar and the sidebar header. */
-function logo(id: string): SceneElement {
-    return externalComponent(id, ComponentName.Logo, { label: 'Contoso', initials: 'C', targetScreen: 'Dashboard' });
+/**
+ * The brand mark, shared by the topbar and the sidebar header. The profile's identity - its name, initials, icon or image and whether the name shows - is
+ * drawn when there is one; otherwise it is the gallery's own Contoso.
+ */
+function logo(id: string, identity?: ResolvedProfileIdentity): SceneElement {
+    if (identity === undefined) return externalComponent(id, ComponentName.Logo, { label: 'Contoso', initials: 'C', targetScreen: 'Dashboard' });
+    return externalComponent(id, ComponentName.Logo, {
+        label: identity.name,
+        initials: identity.initials,
+        iconName: identity.kind === LogoKind.Icon ? identity.icon : undefined,
+        lightImageUrl: identity.kind === LogoKind.Image ? identity.image : undefined,
+        showName: identity.showName,
+        targetScreen: 'Dashboard',
+    });
 }
 
 /** One menu section per navigation group, each holding that group's entries. */
@@ -59,9 +71,10 @@ export interface BreadcrumbEntry {
  *
  * @param activeScreen The screen being rendered, so its menu entry is marked current.
  * @param breadcrumb The trail above the content.
+ * @param identity The profile's resolved identity, drawn in place of the gallery's own brand when given.
  * @returns Slot content keyed by the {@link SlotName}s the `AppShell` layout declares.
  */
-export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEntry[]): Record<string, SceneElement[]> {
+export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEntry[], identity?: ResolvedProfileIdentity): Record<string, SceneElement[]> {
     return {
         [SlotName.Topbar]: [
             externalComponent(
@@ -69,7 +82,7 @@ export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEn
                 ComponentName.Topbar,
                 {},
                 {
-                    logo: [logo('topbar-logo')],
+                    logo: [logo('topbar-logo', identity)],
                     end: [
                         // The topbar of Part B 2.1: logo, search, notifications, the environment, and the user. The search and the bell are the foundation
                         // components, so they work everywhere the shell does; the unread count is a query result, never a value.
@@ -90,7 +103,7 @@ export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEn
                 },
             ),
         ],
-        [SlotName.Sidebar]: [externalComponent('sidebar', ComponentName.Sidebar, { title: 'Contoso' }, { logo: [logo('sidebar-logo')] })],
+        [SlotName.Sidebar]: [externalComponent('sidebar', ComponentName.Sidebar, { title: identity?.name ?? 'Contoso' }, { logo: [logo('sidebar-logo', identity)] })],
         [SlotName.Menu]: menuSections(activeScreen),
         [SlotName.Breadcrumb]: [
             externalComponent('breadcrumb', ComponentName.Breadcrumb, {
@@ -98,7 +111,7 @@ export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEn
                 items: breadcrumb,
             }),
         ],
-        [SlotName.Footer]: [externalComponent('footer', ComponentName.Footer, { text: '© Contoso · Built with Cratis Scene' })],
+        [SlotName.Footer]: [externalComponent('footer', ComponentName.Footer, { text: `© ${identity?.name ?? 'Contoso'} · Built with Cratis Scene` })],
         [SlotName.ConfigPanel]: [configPanel()],
     };
 }
