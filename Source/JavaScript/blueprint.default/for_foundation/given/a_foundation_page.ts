@@ -30,7 +30,7 @@ window.showScreen = (screen, pack, theme, forceState) => {
 };
 const packageBacked = mergePackageRegistries([corePackage, primeReactPackage, defaultBlueprint]);
 // The PrimeReact theme the Stage hands its provider (Stage's stageTheme.ts): the Lara preset, dark where the Scene configuration says so, so the blueprint's own
-// stylesheet reads real `--p-*` tokens. PrimeReact itself stays the unstyled primitives here (primereact/<component>): the Stage swaps in the styled `@primereact/ui`
+// stylesheet reads real --p-* tokens. PrimeReact itself stays the unstyled primitives here (primereact/<component>): the Stage swaps in the styled `@primereact/ui`
 // components (its styledPrimeReact plugin), so what a styled control looks like - its contrast and size - is judged where it is styled, in the vector rendered on the
 // live Stage and as a generated React application (Cratis/Scene#95). PrimeReactProvider takes the theme as a prop.
 const hostTheme = { preset: Lara, options: { darkModeSelector: "[data-scene-color-scheme='dark']" } };
