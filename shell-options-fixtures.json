@@ -1,0 +1,391 @@
+{
+  "description": "Typed shell options: the eight navigation modes, the menu themes, legacy string mapping, the touch regime and the mode after a shell switch. Asserted by both engines.",
+  "modes": [
+    {
+      "id": "static",
+      "label": "Static",
+      "description": "240 px sidebar, always visible",
+      "presentation": "sidebar",
+      "width": 240,
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "overlay",
+      "label": "Overlay",
+      "description": "Menu hidden; the hamburger slides it over the content with no dimming",
+      "presentation": "hidden",
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "slim",
+      "label": "Slim",
+      "description": "68 px rail with icons only",
+      "presentation": "rail",
+      "width": 68,
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "slimPlus",
+      "label": "Slim+",
+      "description": "92 px rail with an icon and a small label under it",
+      "presentation": "rail",
+      "width": 92,
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "compact",
+      "label": "Compact",
+      "description": "190 px sidebar, tighter rows, smaller type",
+      "presentation": "sidebar",
+      "width": 190,
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "horizontal",
+      "label": "Horizontal",
+      "description": "Items in the top bar; the sidebar disappears",
+      "presentation": "topBar",
+      "scrim": false,
+      "needsHover": false
+    },
+    {
+      "id": "reveal",
+      "label": "Reveal",
+      "description": "Slim rail that expands to the full menu on hover",
+      "presentation": "reveal",
+      "width": 68,
+      "scrim": false,
+      "needsHover": true
+    },
+    {
+      "id": "drawer",
+      "label": "Drawer",
+      "description": "Menu hidden; the hamburger opens it with a dimmed scrim; clicking the scrim closes it",
+      "presentation": "hidden",
+      "scrim": true,
+      "needsHover": false
+    }
+  ],
+  "menuThemes": [
+    {
+      "id": "light",
+      "label": "Light",
+      "description": "A light menu surface"
+    },
+    {
+      "id": "dark",
+      "label": "Dark",
+      "description": "A dark menu surface"
+    },
+    {
+      "id": "primary",
+      "label": "Primary",
+      "description": "The menu surface uses the accent colour"
+    }
+  ],
+  "normalize": [
+    {
+      "input": "slim-plus",
+      "expected": "slimPlus"
+    },
+    {
+      "input": "Slim+",
+      "expected": "slimPlus"
+    },
+    {
+      "input": "SlimPlus",
+      "expected": "slimPlus"
+    },
+    {
+      "input": "STATIC",
+      "expected": "static"
+    },
+    {
+      "input": "reveal",
+      "expected": "reveal"
+    },
+    {
+      "input": "Drawer",
+      "expected": "drawer"
+    },
+    {
+      "input": "menu",
+      "expected": null
+    },
+    {
+      "input": "",
+      "expected": null
+    }
+  ],
+  "behavior": [
+    {
+      "mode": "static",
+      "touch": false,
+      "expected": {
+        "mode": "static",
+        "presentation": "sidebar",
+        "scrim": false,
+        "effectiveMode": "static",
+        "width": 240
+      }
+    },
+    {
+      "mode": "static",
+      "touch": true,
+      "expected": {
+        "mode": "static",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "overlay",
+      "touch": false,
+      "expected": {
+        "mode": "overlay",
+        "presentation": "hidden",
+        "scrim": false,
+        "effectiveMode": "overlay"
+      }
+    },
+    {
+      "mode": "overlay",
+      "touch": true,
+      "expected": {
+        "mode": "overlay",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "slim",
+      "touch": false,
+      "expected": {
+        "mode": "slim",
+        "presentation": "rail",
+        "scrim": false,
+        "effectiveMode": "slim",
+        "width": 68
+      }
+    },
+    {
+      "mode": "slim",
+      "touch": true,
+      "expected": {
+        "mode": "slim",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "slimPlus",
+      "touch": false,
+      "expected": {
+        "mode": "slimPlus",
+        "presentation": "rail",
+        "scrim": false,
+        "effectiveMode": "slimPlus",
+        "width": 92
+      }
+    },
+    {
+      "mode": "slimPlus",
+      "touch": true,
+      "expected": {
+        "mode": "slimPlus",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "compact",
+      "touch": false,
+      "expected": {
+        "mode": "compact",
+        "presentation": "sidebar",
+        "scrim": false,
+        "effectiveMode": "compact",
+        "width": 190
+      }
+    },
+    {
+      "mode": "compact",
+      "touch": true,
+      "expected": {
+        "mode": "compact",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "horizontal",
+      "touch": false,
+      "expected": {
+        "mode": "horizontal",
+        "presentation": "topBar",
+        "scrim": false,
+        "effectiveMode": "horizontal"
+      }
+    },
+    {
+      "mode": "horizontal",
+      "touch": true,
+      "expected": {
+        "mode": "horizontal",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "On a touch screen the menu is always a drawer"
+      }
+    },
+    {
+      "mode": "reveal",
+      "touch": false,
+      "expected": {
+        "mode": "reveal",
+        "presentation": "reveal",
+        "scrim": false,
+        "effectiveMode": "reveal",
+        "width": 68
+      }
+    },
+    {
+      "mode": "reveal",
+      "touch": true,
+      "expected": {
+        "mode": "reveal",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer",
+        "note": "Reveal needs hover, so a touch screen shows a drawer instead"
+      }
+    },
+    {
+      "mode": "drawer",
+      "touch": false,
+      "expected": {
+        "mode": "drawer",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer"
+      }
+    },
+    {
+      "mode": "drawer",
+      "touch": true,
+      "expected": {
+        "mode": "drawer",
+        "presentation": "hidden",
+        "scrim": true,
+        "effectiveMode": "drawer"
+      }
+    }
+  ],
+  "switch": [
+    {
+      "name": "minimal sets slim",
+      "current": "static",
+      "shellDefault": "slim",
+      "shellName": "Minimal Blueprint",
+      "expected": {
+        "mode": "slim",
+        "changed": true,
+        "message": "Menu mode set to Slim by Minimal Blueprint"
+      }
+    },
+    {
+      "name": "dashboard sets horizontal",
+      "current": "slim",
+      "shellDefault": "horizontal",
+      "shellName": "Dashboard Blueprint",
+      "expected": {
+        "mode": "horizontal",
+        "changed": true,
+        "message": "Menu mode set to Horizontal by Dashboard Blueprint"
+      }
+    },
+    {
+      "name": "default sets static",
+      "current": "horizontal",
+      "shellDefault": "static",
+      "shellName": "Cratis Default",
+      "expected": {
+        "mode": "static",
+        "changed": true,
+        "message": "Menu mode set to Static by Cratis Default"
+      }
+    },
+    {
+      "name": "same mode is not a change",
+      "current": "slim",
+      "shellDefault": "slim",
+      "shellName": "Minimal Blueprint",
+      "expected": {
+        "mode": "slim",
+        "changed": false
+      }
+    },
+    {
+      "name": "legacy current string",
+      "current": "slim-plus",
+      "shellDefault": "slimPlus",
+      "shellName": "Minimal Blueprint",
+      "expected": {
+        "mode": "slimPlus",
+        "changed": false
+      }
+    },
+    {
+      "name": "no default declared keeps the mode",
+      "current": "compact",
+      "shellName": "My own shell",
+      "expected": {
+        "mode": "compact",
+        "changed": false
+      }
+    },
+    {
+      "name": "unknown default is ignored",
+      "current": "compact",
+      "shellDefault": "bogus",
+      "shellName": "X",
+      "expected": {
+        "mode": "compact",
+        "changed": false
+      }
+    },
+    {
+      "name": "no current starts at static",
+      "shellDefault": "slim",
+      "shellName": "Minimal Blueprint",
+      "expected": {
+        "mode": "slim",
+        "changed": true,
+        "message": "Menu mode set to Slim by Minimal Blueprint"
+      }
+    },
+    {
+      "name": "nothing known",
+      "shellName": "X",
+      "expected": {
+        "mode": "static",
+        "changed": false
+      }
+    }
+  ]
+}

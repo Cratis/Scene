@@ -57,8 +57,11 @@ export interface TemplateMetadata {
 
     /** For a shell: the name of the slot every screen's content is placed in. Absent means `content`. */
     primaryOutlet?: string;
+
+    /** For a shell: the navigation mode the application starts in when the shell is chosen. The author can change it afterwards. */
+    defaultMenuMode?: string;
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet', 'defaultMenuMode',
 ];

@@ -342,7 +342,8 @@
       "sliceKinds",
       "thumbnail",
       "role",
-      "primaryOutlet"
+      "primaryOutlet",
+      "defaultMenuMode"
     ],
     "GridLength": [
       "value",

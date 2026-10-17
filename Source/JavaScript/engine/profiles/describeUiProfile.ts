@@ -5,6 +5,8 @@ import {
     ColorScheme,
     ComponentCategory,
     ComponentDescriptor,
+    CornerStyle,
+    LogoKind,
     PropertyChoice,
     PropertyDescriptor,
     PropertyEditorKind,
@@ -15,6 +17,8 @@ import {
 } from '@cratis/scene.model';
 import { EffectiveShell } from '../shell/EffectiveShell';
 import { incompatiblePackages } from '../themeCompatibility';
+import { fontCatalog, fontSampleLine } from './fontCatalog';
+import { shellOptionDescriptors } from './shellOptions';
 import { UiProfileNodeKind } from './UiProfileNodeKind';
 
 /** What a UI profile's descriptors are built from: the choices the application has. Everything is optional; an absent list leaves the property free-form. */
@@ -97,7 +101,37 @@ function describeApplication(context: UiProfileDescriptorContext): ComponentDesc
             editorKind: PropertyEditorKind.Template, editorOptions: { kinds: ['screenTemplate'] },
             description: 'The screen template a new screen starts from. Leave it out to start from an empty screen.',
         },
+        ...identityProperties(),
     ]);
+}
+
+function identityProperties(): PropertyDescriptor[] {
+    return [
+        {
+            path: 'identity.name', label: 'Application name', group: 'Identity', valueType: PropertyValueType.String,
+            description: 'The name shown next to the logo. Leave it out to use the profile name.',
+        },
+        {
+            path: 'identity.showName', label: 'Show the name', group: 'Identity', valueType: PropertyValueType.Boolean, default: true,
+            description: 'Whether the name is drawn next to the logo where there is room.',
+        },
+        {
+            path: 'identity.logo.kind', label: 'Logo', group: 'Identity', valueType: PropertyValueType.Enum, choices: enumChoices(LogoKind),
+            description: 'Initials, one of the built-in icons, or an image you provide.',
+        },
+        {
+            path: 'identity.logo.initials', label: 'Initials', group: 'Identity', valueType: PropertyValueType.String,
+            description: 'One or two letters drawn as the logo.', constraints: { maximumLength: 2 },
+        },
+        {
+            path: 'identity.logo.icon', label: 'Icon', group: 'Identity', valueType: PropertyValueType.Icon,
+            description: 'One of the built-in logo icons.',
+        },
+        {
+            path: 'identity.logo.image', label: 'Image', group: 'Identity', valueType: PropertyValueType.String,
+            description: 'An inline PNG, JPG, SVG or WebP image, up to 400 KB.',
+        },
+    ];
 }
 
 function describeShell(context: UiProfileDescriptorContext): ComponentDescriptor {
@@ -109,17 +143,14 @@ function describeShell(context: UiProfileDescriptorContext): ComponentDescriptor
         },
     ];
 
-    if (context.shell !== undefined || context.shellOptions !== undefined || context.navigationModes !== undefined) {
-        properties.push({
-            path: shellOptionPath('navigationMode'), label: 'Navigation mode', group: 'Shell options',
-            valueType: context.navigationModes === undefined ? PropertyValueType.String : PropertyValueType.Enum,
-            ...(context.navigationModes === undefined ? {} : { choices: choicesOf(context.navigationModes) }),
-            description: 'How the shell presents the application\'s navigation.',
-        });
+    const typed = shellOptionDescriptors();
+    for (const option of typed) {
+        const choices = option.path === 'navigationMode' && context.navigationModes !== undefined ? choicesOf(context.navigationModes) : option.choices;
+        properties.push({ ...option, path: shellOptionPath(option.path), group: 'Menu', choices });
     }
 
     for (const option of context.shellOptions ?? []) {
-        if (option.path === 'navigationMode') continue;
+        if (option.path === 'navigationMode' || option.path === 'menuTheme') continue;
         properties.push({ ...option, path: shellOptionPath(option.path), group: option.group || 'Shell options' });
     }
 
@@ -156,6 +187,15 @@ function describeTheme(profile: UiProfile, context: UiProfileDescriptorContext):
             path: 'appearance.accent', label: 'Accent', group: 'Appearance', valueType: PropertyValueType.String, editorKind: PropertyEditorKind.Color,
             description: 'The accent colour. Leave it out to keep the theme\'s accent.',
             constraints: { pattern: '^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$' },
+        },
+        {
+            path: 'appearance.corners', label: 'Corners', group: 'Appearance', valueType: PropertyValueType.Enum, choices: enumChoices(CornerStyle),
+            description: 'Sharp, the theme\'s own corners, or round. Leave it out to use the theme\'s own.',
+        },
+        {
+            path: 'appearance.font', label: 'Font', group: 'Appearance', valueType: PropertyValueType.Enum,
+            choices: fontCatalog.map((font): PropertyChoice => ({ value: font.id, label: font.displayName, description: fontSampleLine })),
+            description: 'The font the application uses. Leave it out to use the theme\'s own.',
         },
     ]);
 }

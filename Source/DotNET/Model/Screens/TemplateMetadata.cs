@@ -24,6 +24,7 @@ namespace Cratis.Scene.Model.Screens;
 /// <param name="Thumbnail">The package-relative path of the template's gallery thumbnail (<c language="csharp">thumbnails/&lt;name&gt;.png|webp|jpg|svg</c>); required of every template of a domain blueprint.</param>
 /// <param name="Role">A structural role beyond the template's kind. <see cref="TemplateRole.Root"/> marks a screen template that can be an application's shell.</param>
 /// <param name="PrimaryOutlet">For a shell: the name of the slot every screen's content is placed in. <see langword="null"/> means <c language="csharp">content</c>.</param>
+/// <param name="DefaultMenuMode">For a shell: the navigation mode the application starts in when the shell is chosen; the author can change it afterwards.</param>
 public record TemplateMetadata(
     string? Type = null,
     string? Category = null,
@@ -35,4 +36,5 @@ public record TemplateMetadata(
     IReadOnlyList<SliceKind>? SliceKinds = null,
     string? Thumbnail = null,
     TemplateRole? Role = null,
-    string? PrimaryOutlet = null);
+    string? PrimaryOutlet = null,
+    string? DefaultMenuMode = null);
