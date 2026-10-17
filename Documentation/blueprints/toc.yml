@@ -6,6 +6,8 @@
   href: root-template.md
 - name: UI profile designer contract
   href: ui-profile-designer-contract.md
+- name: UI profile designer prototype
+  href: ui-profile-designer-prototype/index.md
 - name: Screen and dialog templates
   href: screen-templates.md
 - name: Types, categories and applicability

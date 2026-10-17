@@ -8,6 +8,8 @@ new screens start from. A *designer* for it - Studio's UI profile page is one - 
 properties panel. It owns **no rule**. Every question it asks has one answer in Scene, shared by Stage and generated React, so what the
 designer shows is what runs.
 
+The reference design for how a designer behaves - the interactive prototype, its walkthrough and a screenshot of every state - is in [the UI profile designer prototype](ui-profile-designer-prototype/index.md).
+
 ## Who answers what
 
 | Question | Answered by | Package |
