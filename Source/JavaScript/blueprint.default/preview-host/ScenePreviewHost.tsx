@@ -1,13 +1,17 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { CSSProperties, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, ReactNode, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SliceKind, Theme } from '@cratis/scene.model';
-import { ApplicationStructureIndex, EffectiveNavItem, resolveToolbarButton } from '@cratis/scene.engine';
+import {
+    ApplicationStructureIndex, EffectiveNavItem, ProfileRegion, defaultNavigationMode, navigationModes, normalizeNavigationMode, resolveAppearance, resolveProfileIdentity, resolveToolbarButton,
+} from '@cratis/scene.engine';
 import {
     ComponentRegistry, NavigationActivation, NavigationActivationRequest, NavigationMode, SceneHistory, SceneThemeProvider, SliceCommandFieldsProvider, SliceCommandFieldsSource, SliceInvoker,
-    SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, sliceDialogDestination, useSceneNavigation,
+    SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, sliceDialogDestination, themeTokenProperty, useSceneNavigation,
 } from '@cratis/scene.react';
+import { ColorScheme as ProfileColorScheme } from '@cratis/scene.model';
+import { ColorScheme, LayoutMode, MenuTheme } from '../configuration';
 import { ComponentName } from '../ComponentName';
 import { externalComponent } from '../gallery/elements';
 import { LayoutName, SlotName } from '../layouts';
@@ -21,6 +25,7 @@ import { PreviewProblemsView } from './PreviewProblemsView';
 import { PreviewSampleData, createPreviewSampleData } from './previewSampleData';
 import { findSliceFragment } from './PreviewSliceFragment';
 import { PreviewTarget } from './PreviewTarget';
+import { PreviewRegionHandle, markRegions, measureRegion, regionOf } from './previewRegions';
 import { PreviewInvocation, PreviewToast } from './PreviewToast';
 import { PreviewPlan } from './resolvePreviewPlan';
 
@@ -96,9 +101,27 @@ export interface ScenePreviewHostProps {
     /** Called when Escape is pressed with no dialog open: the host exits the preview (PRV7). */
     onExit?(): void;
 
+    /**
+     * The width of the viewport the preview is laid out for - a device preview's, not the window's. At a mobile width the menu is always a
+     * drawer with a scrim, whatever the menu mode.
+     */
+    viewportWidth?: number;
+
+    /** Called when the pointer enters a region (`identity`, `shell`, `menu`, `content`, `accent`) and with `null` when it leaves every region (N9). */
+    onRegionHover?(region: ProfileRegion | null): void;
+
+    /** Called when a region is clicked or chosen with Enter. A click on a navigation item still navigates, and also reports `menu` (N9). */
+    onRegionActivate?(region: ProfileRegion): void;
+
+    /** Filled with what a design host asks about regions: where one is drawn now (`regionRect`). */
+    regions?: Ref<PreviewRegionHandle>;
+
     /** Extra content inside the host, such as a design layer's strip. */
     children?: ReactNode;
 }
+
+/** The colour scheme of the shell's wrapper for the profile's resolved scheme. */
+const shellScheme = (scheme: ProfileColorScheme): ColorScheme => scheme === ProfileColorScheme.Dark ? ColorScheme.Dark : ColorScheme.Light;
 
 const previewPageScreen = '#preview-page';
 const noNavigation: NavigationModel = { application: { regions: [] }, modules: [] };
@@ -132,10 +155,63 @@ function minimalPage(layout: string, content: Screen['slotContent'][string]): Sc
  */
 export function ScenePreviewHost({
     document: application, structure, navigation = noNavigation, target, initialDestination, navigationMode, onActivate, onNavigate, sampleData, registry, invoker, onInvoked, fieldsFor, composition = {},
-    theme, isVisible, history, onProblems, onSelectProblem, onBreadcrumbChange, onExit, children,
+    theme, isVisible, history, onProblems, onSelectProblem, onBreadcrumbChange, onExit, viewportWidth, onRegionHover, onRegionActivate, regions, children,
 }: ScenePreviewHostProps) {
     const index = useMemo(() => structure instanceof ApplicationStructureIndex ? structure : new ApplicationStructureIndex(structure), [structure]);
-    const compose = useMemo<CompositionOptions>(() => ({ logo: navigation.application.logo, ...composition }), [composition, navigation.application.logo]);
+    const profile = useMemo(() => previewProfile(application.uiProfiles), [application.uiProfiles]);
+    const identity = useMemo(() => resolveProfileIdentity(profile, navigation.application.logo?.title ?? profile.name), [navigation.application.logo?.title, profile]);
+    const appearance = useMemo(() => resolveAppearance({ appearance: profile.appearance, theme }), [profile.appearance, theme]);
+    const compose = useMemo<CompositionOptions>(() => ({ logo: navigation.application.logo, ...(profile.identity === undefined ? {} : { identity }), ...composition }), [composition, identity, navigation.application.logo, profile.identity]);
+    const layoutConfig = useMemo(() => {
+        const mode = normalizeNavigationMode(profile.root?.options?.navigationMode) ?? defaultNavigationMode;
+        const menuTheme = profile.root?.options?.menuTheme;
+        return {
+            mode: (navigationModes.find(candidate => candidate.id === mode)?.legacy ?? LayoutMode.Static) as LayoutMode,
+            menuTheme: (typeof menuTheme === 'string' && Object.values(MenuTheme).includes(menuTheme as MenuTheme) ? menuTheme : MenuTheme.Light) as MenuTheme,
+            colorScheme: shellScheme(appearance.colorScheme),
+        };
+    }, [appearance.colorScheme, profile.root?.options]);
+    const appearanceStyle = useMemo<CSSProperties>(
+        () => Object.fromEntries(Object.entries(appearance.tokens).map(([token, value]) => [themeTokenProperty(token), value])) as CSSProperties,
+        [appearance.tokens]);
+
+    const hostRef = useRef<HTMLDivElement>(null);
+    useImperativeHandle(regions, () => ({ regionRect: region => hostRef.current ? measureRegion(hostRef.current, region) : undefined }), []);
+    const designing = onRegionHover !== undefined || onRegionActivate !== undefined;
+    useEffect(() => {
+        const root = hostRef.current;
+        if (!root) return;
+        markRegions(root, designing);
+        if (typeof MutationObserver === 'undefined') return;
+        const observer = new MutationObserver(() => markRegions(root, designing));
+        observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
+        return () => observer.disconnect();
+    });
+
+    const hovered = useRef<ProfileRegion | null>(null);
+    const onMouseOver = useCallback((event: ReactMouseEvent) => {
+        const region = regionOf(event.target) ?? null;
+        if (region === hovered.current) return;
+        hovered.current = region;
+        onRegionHover?.(region);
+    }, [onRegionHover]);
+    const onMouseLeave = useCallback(() => {
+        if (hovered.current === null) return;
+        hovered.current = null;
+        onRegionHover?.(null);
+    }, [onRegionHover]);
+    const onClick = useCallback((event: ReactMouseEvent) => {
+        const region = regionOf(event.target);
+        if (region !== undefined) onRegionActivate?.(region);
+    }, [onRegionActivate]);
+    const onRegionKeyDown = useCallback((event: ReactKeyboardEvent) => {
+        // Enter selects the region whose own tab stop has the focus; inside a region it belongs to the control that has it.
+        if (event.key !== 'Enter' || !(event.target as Element).hasAttribute?.('data-scene-region')) return;
+        const region = regionOf(event.target);
+        if (region === undefined) return;
+        event.preventDefault();
+        onRegionActivate?.(region);
+    }, [onRegionActivate]);
     const diagnosis = useMemo(
         () => diagnosePreview({ document: application, structure: index, navigation, target, initialDestination, packs: sampleData?.packs, composition: compose }),
         [application, compose, index, initialDestination, navigation, sampleData?.packs, target]);
@@ -223,7 +299,16 @@ export function ScenePreviewHost({
     const body = (
         <SliceInvokerProvider invoker={invoker ?? dryRun} warnEmptySlices={false}>
             <SliceCommandFieldsProvider fieldsFor={fields}>
-                <div className='scene-preview-host' data-scene-preview={diagnosis.plan?.kind} data-preview-breadcrumb={breadcrumb?.join(' › ')}>
+                <div
+                    ref={hostRef}
+                    className='scene-preview-host'
+                    style={appearanceStyle}
+                    data-scene-preview={diagnosis.plan?.kind}
+                    data-preview-breadcrumb={breadcrumb?.join(' › ')}
+                    onMouseOver={designing ? onMouseOver : undefined}
+                    onMouseLeave={designing ? onMouseLeave : undefined}
+                    onClick={designing ? onClick : undefined}
+                    onKeyDown={designing ? onRegionKeyDown : undefined}>
                     <ApplicationHost
                         application={hostApplication}
                         composition={compose}
@@ -232,6 +317,8 @@ export function ScenePreviewHost({
                         initialScreen={page.initial}
                         history={history ?? memoryHistory}
                         navigationPolicy={policy}
+                        layoutConfig={layoutConfig}
+                        viewportWidth={viewportWidth}
                         resolveBinding={samples.resolveBinding}
                         queryResults={samples.queryResults}>
                         {diagnosis.plan?.kind === 'stateChange' && <OpenSliceDialog index={index} plan={diagnosis.plan} />}

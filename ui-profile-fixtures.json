@@ -335,6 +335,151 @@
         }
       },
       "canonical": "{\"name\":\"Future\",\"targetPlatform\":\"web\",\"packages\":[\"core\"],\"root\":{\"template\":{\"source\":\"Own\",\"id\":\"A\"}}}"
+    },
+    {
+      "name": "identity with initials logo",
+      "description": "name, initials logo and the name hidden beside the mark",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "identity": {
+          "showName": false,
+          "name": "Contoso",
+          "logo": {
+            "initials": "CO",
+            "kind": "Initials"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"identity\":{\"name\":\"Contoso\",\"logo\":{\"kind\":\"Initials\",\"initials\":\"CO\"},\"showName\":false}}"
+    },
+    {
+      "name": "identity with an icon logo",
+      "description": "the icon logo keeps its icon, and members of other kinds that were entered earlier",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "identity": {
+          "name": "Contoso",
+          "logo": {
+            "kind": "Icon",
+            "icon": "building",
+            "initials": "C"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"identity\":{\"name\":\"Contoso\",\"logo\":{\"kind\":\"Icon\",\"initials\":\"C\",\"icon\":\"building\"}}}"
+    },
+    {
+      "name": "identity with an image logo",
+      "description": "the image travels inline as a data URI",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "identity": {
+          "logo": {
+            "kind": "image",
+            "image": "data:image/svg+xml;base64,PHN2Zy8+"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"identity\":{\"logo\":{\"kind\":\"Image\",\"image\":\"data:image/svg+xml;base64,PHN2Zy8+\"}}}"
+    },
+    {
+      "name": "identity with an unknown member",
+      "description": "unknown identity and logo members are ignored",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "identity": {
+          "name": "Contoso",
+          "tagline": "x",
+          "logo": {
+            "kind": "Initials",
+            "color": "red"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"identity\":{\"name\":\"Contoso\",\"logo\":{\"kind\":\"Initials\"}}}"
+    },
+    {
+      "name": "appearance with corners and font",
+      "description": "corners and font are written after the accent",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "appearance": {
+          "font": "inter",
+          "corners": "round",
+          "accent": "#0d9488",
+          "colorScheme": "dark"
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"appearance\":{\"colorScheme\":\"Dark\",\"accent\":\"#0d9488\",\"corners\":\"Round\",\"font\":\"inter\"}}"
+    },
+    {
+      "name": "appearance with a case-insensitive corner style",
+      "description": "enum values are matched case-insensitively and written by declared name",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "appearance": {
+          "corners": "SHARP"
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"appearance\":{\"corners\":\"Sharp\"}}"
+    },
+    {
+      "name": "identity and appearance with the full profile",
+      "description": "identity is written last, after defaults",
+      "input": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "Cratis.Components"
+        ],
+        "theme": "Scene Default Dark",
+        "identity": {
+          "name": "Contoso",
+          "showName": true
+        },
+        "appearance": {
+          "colorScheme": "Dark",
+          "font": "system-ui"
+        },
+        "defaults": {
+          "newScreenTemplate": {
+            "source": "Own",
+            "id": "Blank"
+          }
+        }
+      },
+      "canonical": "{\"name\":\"Desktop\",\"targetPlatform\":\"web\",\"packages\":[\"core\",\"Cratis.Components\"],\"theme\":\"Scene Default Dark\",\"appearance\":{\"colorScheme\":\"Dark\",\"font\":\"system-ui\"},\"defaults\":{\"newScreenTemplate\":{\"source\":\"Own\",\"id\":\"Blank\"}},\"identity\":{\"name\":\"Contoso\",\"showName\":true}}"
     }
   ]
 }

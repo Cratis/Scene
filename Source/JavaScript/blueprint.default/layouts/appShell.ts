@@ -104,5 +104,40 @@ export const appShellLayout: Layout = {
         { name: SlotName.ConfigPanel },
     ],
     arrangement: appShellArrangement,
-    metadata: { ...sakaiCompositionProvenance, category: 'Foundation / Shell' },
+    metadata: {
+        ...sakaiCompositionProvenance,
+        category: 'Foundation / Shell',
+        displayName: 'Cratis Default',
+        description: 'A sidebar with search and breadcrumbs: the shell most applications start from.',
+        thumbnail: 'thumbnails/AppShell.svg',
+        defaultMenuMode: 'static',
+    },
+};
+
+/** The shell with its navigation in the top bar. It shares the application shell's slots and arrangement; only what choosing it sets differs. */
+export const dashboardShellLayout: Layout = {
+    ...appShellLayout,
+    name: LayoutName.DashboardShell,
+    metadata: {
+        ...sakaiCompositionProvenance,
+        category: 'Foundation / Shell',
+        displayName: 'Dashboard',
+        description: 'Navigation across the top bar, with the whole width left for dashboards.',
+        thumbnail: 'thumbnails/DashboardShell.svg',
+        defaultMenuMode: 'horizontal',
+    },
+};
+
+/** The shell reduced to a slim icon rail. It shares the application shell's slots and arrangement; only what choosing it sets differs. */
+export const minimalShellLayout: Layout = {
+    ...appShellLayout,
+    name: LayoutName.MinimalShell,
+    metadata: {
+        ...sakaiCompositionProvenance,
+        category: 'Foundation / Shell',
+        displayName: 'Minimal',
+        description: 'A slim icon rail that keeps nearly all of the screen for the content.',
+        thumbnail: 'thumbnails/MinimalShell.svg',
+        defaultMenuMode: 'slim',
+    },
 };

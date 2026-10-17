@@ -53,7 +53,8 @@ describe('when describing the nodes of a profile', () => {
         [pattern.test('#4f46e5'), pattern.test('#fff'), pattern.test('indigo'), pattern.test('#12')].should.deep.equal([true, true, false, false]);
     });
 
-    it('should offer only the root template when no shell options are known', () => pathsOf(nodeOf(descriptors, UiProfileNodeKind.Shell)).should.deep.equal(['root.template']));
+    it('should offer the root template and the typed menu options when no other shell options are known', () =>
+        pathsOf(nodeOf(descriptors, UiProfileNodeKind.Shell)).should.deep.equal(['root.template', shellOptionPath('navigationMode'), shellOptionPath('menuTheme')]));
 });
 
 describe('when describing a profile with the choices of the application', () => {
@@ -71,12 +72,12 @@ describe('when describing a profile with the choices of the application', () => 
     });
 
     it('should offer the shell options under root.options', () =>
-        pathsOf(nodeOf(descriptors, UiProfileNodeKind.Shell)).should.deep.equal(['root.template', shellOptionPath('navigationMode'), shellOptionPath('density')]));
+        pathsOf(nodeOf(descriptors, UiProfileNodeKind.Shell)).should.deep.equal(['root.template', shellOptionPath('navigationMode'), shellOptionPath('menuTheme'), shellOptionPath('density')]));
 
     it('should offer the navigation modes as a choice', () =>
         nodeOf(descriptors, UiProfileNodeKind.Shell).properties[1].choices!.map(choice => choice.value).should.deep.equal(['Sidebar', 'Top']));
 
-    it('should give an option without a group the shell options group', () => nodeOf(descriptors, UiProfileNodeKind.Shell).properties[2].group.should.equal('Shell options'));
+    it('should give an option without a group the shell options group', () => nodeOf(descriptors, UiProfileNodeKind.Shell).properties[3].group.should.equal('Shell options'));
 
     it('should offer every theme and say why one does not fit, with names', () => {
         const choices = nodeOf(descriptors, UiProfileNodeKind.Theme).properties[0].choices!;

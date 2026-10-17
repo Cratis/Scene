@@ -36,5 +36,20 @@ public enum ProfileBlockerCode
     UsedSlotUnavailable = 8,
 
     /// <summary>The shell cannot be the application's shell. The shell's own code is in <see cref="ProfileBlocker.ShellCode"/>.</summary>
-    ShellUnusable = 9
+    ShellUnusable = 9,
+
+    /// <summary>The selected theme comes from a package that is not in the list.</summary>
+    ThemeNeedsPackage = 10,
+
+    /// <summary>The accent is too light for white button text.</summary>
+    AccentTooLight = 11,
+
+    /// <summary>"My own shell" is chosen and names nothing.</summary>
+    OwnShellHasNoValue = 12,
+
+    /// <summary>The logo is an image and no image is chosen.</summary>
+    LogoImageMissing = 13,
+
+    /// <summary>The target is a touch size class while the menu mode is Reveal.</summary>
+    RevealNeedsHover = 14
 }

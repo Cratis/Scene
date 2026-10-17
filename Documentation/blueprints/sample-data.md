@@ -73,6 +73,14 @@ A `Blueprint` package declares its packs in its manifest and ships each as `samp
 sampleData: [{ id: 'crm-nordic-smb', title: 'CRM · Nordic SMB', locale: 'nb-NO', path: 'sampleData/crm-nordic-smb.json' }]
 ```
 
+A reference also describes the pack for a picker and a preview: a one-line `description`, the ordered `columns` of its main table, the `statusColumn` and the `statuses` - which values of that column
+are `good`, `pending`, `bad` or `neutral`. A host draws pills from `classifySampleStatus(statuses, value)` (C#: `SampleStatuses.Classify`); values are compared without regard to letter case, the same
+way in every locale, so a pack lists the words of its own language, and a value it does not name is neutral. The **generic** pack - what a preview uses when none is chosen - is described the same way
+(`Name`, `Amount`, `Date`, `Status` with *Active*, *Pending* and *Inactive*), and `describeSampleDataCatalog` carries all of it on every entry.
+
+> **Production builds never include sample data.** It exists for the preview only; this is the help text a designer shows beside the choice (`sampleDataNeverShipsNote`). A preview's caption is
+> composed by the host from the pack title and the package-list answer: *Nordic SMB sample data - DataTable from Cratis Components* (the pack's title and the package that supplies the component).
+
 `validateSampleDataPackages` (C#: `SampleDataValidation.ValidatePackages`) checks what packages ship: only a Blueprint package may ship packs; each reference needs a valid id, title, locale and path with nothing repeated; each loaded pack must be valid, match its reference, be owned by a blueprint and be one the manifest references. `validateSampleDataSelection` checks a profile's `sampleData` against the packs available. `describeSampleDataCatalog` builds the selector's content (generated, own, then each blueprint's group) for the UI profile's property editor and the preview strip, with the same *own first, then Blueprints* menu pattern as the template picker.
 
 The pack files stay in `sampleData/` of the package and never in `dist/`, so a runtime bundle cannot carry them; `yarn verify-packages` fails when they do.

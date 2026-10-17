@@ -29,8 +29,8 @@ export const approvalsBlueprintManifest: ScenePackage = {
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
     sampleData: [
-        { id: 'approvals-general', title: 'Approvals · General', locale: 'en-GB', path: 'sampleData/approvals-general.json' },
-        { id: 'approvals-nordic', title: 'Approvals · Nordic', locale: 'nb-NO', path: 'sampleData/approvals-nordic.json' },
+        { id: 'approvals-general', title: 'Approvals · General', locale: 'en-GB', path: 'sampleData/approvals-general.json', description: 'English requests moving through draft, review and decision.', columns: ['Reference', 'Title', 'Type', 'Requester', 'Approver'], statusColumn: 'Status', statuses: { good: ['Approved'], pending: ['Changes requested', 'Draft', 'Submitted'], bad: ['Rejected'] } },
+        { id: 'approvals-nordic', title: 'Approvals · Nordic', locale: 'nb-NO', path: 'sampleData/approvals-nordic.json', description: 'Norwegian requests moving through draft, review and decision.', columns: ['Reference', 'Title', 'Type', 'Requester', 'Approver'], statusColumn: 'Status', statuses: { good: ['Godkjent'], pending: ['Endringer ønskes', 'Sendt inn', 'Utkast'], bad: ['Avslått'] } },
     ],
     blueprint: {
         domain: 'approvals',

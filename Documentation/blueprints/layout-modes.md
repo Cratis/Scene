@@ -12,21 +12,21 @@ recognizes it.
 | Mode | `LayoutMode` | Wrapper class | Sidebar width | Choose it when |
 | --- | --- | --- | --- | --- |
 | Static | `Static` | `layout-static` | 18rem | Navigation is used constantly and screens are wide. The default. |
-| Overlay | `Overlay` | `layout-overlay` | 18rem, off-canvas | Content needs the full width and navigation is occasional. |
+| Overlay | `Overlay` | `layout-overlay` | 18rem, off-canvas | Content needs the full width and navigation is occasional. The menu slides over the content with no dimming. |
 | Slim | `Slim` | `layout-slim` | 5rem | The icons are learnable and every pixel of width matters. |
 | Slim+ | `SlimPlus` | `layout-slim-plus` | 7rem | Same, but the icons are not self-explanatory enough to go unlabeled. |
 | Compact | `Compact` | `layout-compact` | 5rem | The slim rail, with square buttons and a topbar shifted by the rail. |
 | Horizontal | `Horizontal` | `layout-horizontal` | none | Few top-level areas, and vertical space is the scarce one. |
 | Reveal | `Reveal` | `layout-reveal` | 4.25rem strip → 18rem | Full labels on demand without permanently paying for them. |
-| Drawer | `Drawer` | `layout-drawer` | 5.25rem → 18rem | Same as reveal, but the content should never be covered mid-hover. |
+| Drawer | `Drawer` | `layout-drawer` | 18rem, off-canvas | Same as overlay, but the menu opens over a dimming scrim; clicking the scrim closes it. The mode every touch screen gets. |
 
 ## What each one actually does
 
 **Static** docks the sidebar and gives the content a matching `margin-left`. The topbar toggle slides the
 sidebar out and drops the margin. Content is pushed, never covered.
 
-**Overlay** parks the sidebar off-canvas. Opening it floats it over the content at a high z-index with a
-`.layout-mask` scrim behind it; clicking the scrim closes it.
+**Overlay** parks the sidebar off-canvas. Opening it floats it over the content at a high z-index, with
+no scrim: the content stays as bright as it was.
 
 **Slim** collapses the sidebar to an icon-only rail with root items as circular buttons. Submenus pop out
 as a floating panel anchored at the rail's width.
@@ -44,8 +44,13 @@ Submenus become absolute drop-downs, and the content margin goes to zero.
 panel in *over* the content. The pin button anchors it open, which switches it from covering the content to
 pushing it out to the full 18rem.
 
-**Drawer** is the same interaction with a different mechanic: a collapsed 5.25rem rail that *animates its
-width* to full on hover. Reveal slides; drawer grows. It pins the same way.
+**Drawer** parks the sidebar off-canvas like overlay, and opens it over a `.layout-mask` scrim that dims the
+content; clicking the scrim closes it. Drawer is the mode a touch screen always gets (see below).
+
+> **Changed.** Until the UI profile designer, `Drawer` was a collapsed rail that grew on hover and `Overlay`
+> had the scrim. The profile's menu modes are the eight in the table above, so the rail that reacts to the
+> pointer is `Reveal` alone, `Overlay` no longer dims, and `Drawer` is the dimmed, off-canvas menu. A stored
+> `navigationMode` keeps its name; only what `drawer` does differs.
 
 ## State classes
 
@@ -55,26 +60,28 @@ Modes are not the only thing on the wrapper. `layoutWrapperClasses` also emits:
 | --- | --- |
 | `layout-static-inactive` | static, and the sidebar has been toggled closed |
 | `layout-overlay-active` | overlay, the sidebar is open, and the viewport is not mobile |
-| `layout-sidebar-active` | reveal or drawer, and the sidebar is currently out |
-| `layout-sidebar-anchored` | reveal or drawer, and the sidebar is pinned |
+| `layout-drawer-active` | drawer, the sidebar is open, and the viewport is not mobile |
+| `layout-sidebar-active` | reveal, and the sidebar is currently out |
+| `layout-sidebar-anchored` | reveal, and the sidebar is pinned |
 | `layout-mobile` | the viewport is at or below the breakpoint |
 | `layout-mobile-active` | mobile, and the sidebar has been opened |
 | `layout-menu-light` / `-dark` / `-primary` | the chosen menu tint |
 | `layout-color-scheme-light` / `-dark` | the chosen color scheme |
 
 The mode class always reflects the **effective** mode, so the off-canvas rules a phone needs come from the
-same `layout-overlay` block a desktop overlay uses rather than a parallel mobile-only ruleset. The mode the
+same `layout-drawer` block a desktop drawer uses rather than a parallel mobile-only ruleset. The mode the
 user actually chose is emitted separately as `data-layout-mode`, so a configurator can show it even while
 the viewport overrides it.
 
 ## Mobile is not a mode
 
-At or below **991px** every mode renders off-canvas. This is not user-selectable and never appears in the
-picker as a ninth option.
+At or below **991px** - the touch regime - every mode renders as a drawer with a scrim, and a mode that needs
+hover (`Reveal`) shows a drawer instead. This is not user-selectable and never appears in the picker as a
+ninth option. A preview that is not the width of the window passes `viewportWidth` to `ScenePreviewHost`.
 
 ```ts
 export function effectiveLayoutMode(state: LayoutConfigState): LayoutMode {
-    return state.isMobile ? LayoutMode.Overlay : state.mode;
+    return state.isMobile ? LayoutMode.Drawer : state.mode;
 }
 ```
 
@@ -125,3 +132,21 @@ error to explain it.
 
 - [Regions and slots](./regions-and-slots.md) - what the modes are moving around.
 - [Theme tokens](./theme-tokens.md) - how the modes get their colors.
+
+## The typed options and the touch regime
+
+A profile chooses the mode and the menu theme through two typed shell options, `root.options.navigationMode` and `root.options.menuTheme`. They are enumerated, so a host draws a picker instead
+of a text box (`shellOptionDescriptors()`; the same two are in `describeUiProfile`).
+
+| Option | Choices | Default |
+| --- | --- | --- |
+| `navigationMode` | `static`, `overlay`, `slim`, `slimPlus`, `compact`, `horizontal`, `reveal`, `drawer` | `static` |
+| `menuTheme` | `light`, `dark`, `primary` (**Primary uses the accent colour**) | `light` |
+
+The legacy `slim-plus` and every letter case read as the new choice (`normalizeNavigationMode`), so no stored profile is rewritten. What a mode does - its width, whether it dims, whether it needs hover -
+is `ShellOptions.NavigationModes` (C#) / `navigationModes` (TypeScript); `describeMenuBehavior(mode, touch)` answers it for a regime, so a host previews it faithfully. The menu theme changes
+only the menu surface; the rest of the application keeps its scheme.
+
+Each shell declares the mode it starts in (`metadata.defaultMenuMode`): **Cratis Default** `static`, **Dashboard** `horizontal`, **Minimal** `slim`. Choosing a shell sets the mode to it
+(`menuModeAfterShellSwitch` says so in a line a status bar can show: *Menu mode set to Slim by Minimal*), and the author can change it afterwards. Whether a blueprint *owns* the mode or only
+*suggests* it is [decided in the designer contract](ui-profile-designer-contract.md#decisions-and-open-questions). The eight schematics a picker draws are `menuModeCards` of the default blueprint.

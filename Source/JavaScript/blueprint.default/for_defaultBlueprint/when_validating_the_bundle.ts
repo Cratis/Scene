@@ -26,7 +26,7 @@ describe('when validating the bundle', () => {
     });
 
     it('should declare only application shells as layouts', () => {
-        defaultBlueprintManifest.layouts.should.deep.equal(['AppShell', 'FullPage']);
+        defaultBlueprintManifest.layouts.should.deep.equal(['AppShell', 'DashboardShell', 'MinimalShell', 'FullPage']);
     });
 
     it('should declare a screen template for every one it provides', () => {

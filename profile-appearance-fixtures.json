@@ -1,0 +1,706 @@
+{
+  "description": "Shared by both engines: resolving the appearance of a UI profile into effective tokens.",
+  "cases": [
+    {
+      "name": "nothing set",
+      "description": "a light theme and no appearance changes nothing",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "no theme",
+      "description": "without a theme there are no tokens, only the appearance",
+      "theme": null,
+      "appearance": {
+        "corners": "Round"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "content.borderRadius": "18px"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "dark theme sets the scheme",
+      "description": "the scheme follows the theme when the appearance states none",
+      "theme": {
+        "name": "D",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": true,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        }
+      },
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Dark",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "system follows the system, light",
+      "description": "System resolves to light when the system is light",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "colorScheme": "System"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "system follows the system, dark",
+      "description": "System resolves to dark when the system is dark; a light theme under it is a mismatch",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "colorScheme": "System"
+      },
+      "systemIsDark": true,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Dark",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": [
+          {
+            "code": "themeSchemeMismatch",
+            "message": "The theme 'L' is a light theme, but the colour scheme is dark."
+          }
+        ]
+      }
+    },
+    {
+      "name": "scheme and theme agree",
+      "description": "a dark theme under the dark scheme is fine",
+      "theme": {
+        "name": "D",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": true,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        }
+      },
+      "appearance": {
+        "colorScheme": "Dark"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Dark",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "scheme and theme disagree",
+      "description": "a dark theme under the light scheme is applied as chosen, with a diagnostic",
+      "theme": {
+        "name": "D",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": true,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        }
+      },
+      "appearance": {
+        "colorScheme": "Light"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        },
+        "diagnostics": [
+          {
+            "code": "themeSchemeMismatch",
+            "message": "The theme 'D' is a dark theme, but the colour scheme is light."
+          }
+        ]
+      }
+    },
+    {
+      "name": "accent",
+      "description": "the accent replaces the primary colour and tints the focus ring",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "accent": "#0d9488"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#0d9488",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "short accent",
+      "description": "three-digit hex colours are expanded for the ring",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "accent": "#f80"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#f80",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(255 136 0 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "accent with alpha",
+      "description": "eight-digit hex colours are accepted",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "accent": "#0d948880"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#0d948880",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "empty accent",
+      "description": "an empty accent keeps the theme's",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "accent": ""
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "invalid accent",
+      "description": "a colour name is not a hex colour; the theme's accent stays",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "accent": "teal"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": [
+          {
+            "code": "accentInvalid",
+            "message": "The accent 'teal' is not a hex colour such as #4f46e5, so the theme's accent is kept."
+          }
+        ]
+      }
+    },
+    {
+      "name": "sharp corners",
+      "description": "4 px",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "corners": "Sharp"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "4px",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "default corners",
+      "description": "the theme's own radius stays",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "corners": "Default"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "round corners",
+      "description": "18 px",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "corners": "Round"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "18px",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "hosted font",
+      "description": "a hosted font sets the family token and says which stylesheet to load",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111",
+          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+        },
+        "font": "inter",
+        "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "system font",
+      "description": "the system font needs no stylesheet",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "font": "system-ui"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111",
+          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        },
+        "font": "system-ui",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "unknown font",
+      "description": "a font that is not in the catalog falls back to the system font",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "font": "comic"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111",
+          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        },
+        "font": "system-ui",
+        "diagnostics": [
+          {
+            "code": "fontUnavailable",
+            "message": "The font 'comic' is not available, so the system font is used."
+          }
+        ]
+      }
+    },
+    {
+      "name": "font the host cannot use",
+      "description": "a catalog font the host does not offer falls back to the system font",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": [
+        "system-ui"
+      ],
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111",
+          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        },
+        "font": "system-ui",
+        "diagnostics": [
+          {
+            "code": "fontUnavailable",
+            "message": "The font 'inter' is not available, so the system font is used."
+          }
+        ]
+      }
+    },
+    {
+      "name": "font the host offers",
+      "description": "a catalog font the host offers is used",
+      "theme": {
+        "name": "L",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111"
+        }
+      },
+      "appearance": {
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": [
+        "inter",
+        "system-ui"
+      ],
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#111111",
+          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+        },
+        "font": "inter",
+        "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "everything at once",
+      "description": "scheme, accent, corners and font together",
+      "theme": {
+        "name": "D",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": true,
+        "tokens": {
+          "primary.color": "#4f46e5",
+          "content.borderRadius": "0.5rem",
+          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "text.color": "#eeeeee"
+        }
+      },
+      "appearance": {
+        "colorScheme": "Dark",
+        "accent": "#ff0000",
+        "corners": "Sharp",
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Dark",
+        "tokens": {
+          "primary.color": "#ff0000",
+          "content.borderRadius": "4px",
+          "focus.ring": "0 0 0 2px rgb(255 0 0 / 0.4)",
+          "text.color": "#eeeeee",
+          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+        },
+        "font": "inter",
+        "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        "diagnostics": []
+      }
+    }
+  ]
+}

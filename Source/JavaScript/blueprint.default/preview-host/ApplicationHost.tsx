@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { DialogTemplate, SceneElement, type EffectiveConfiguration } from '@cratis/scene.model';
 import { BindingResolver, BindingScope } from '@cratis/scene.engine';
 import {
@@ -9,7 +9,7 @@ import {
     SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, shellOutletOwner, navigationDestinations,
     sceneRoutesFrom, sliceDialogParameters, useSceneHistoryNavigation,
 } from '@cratis/scene.react';
-import { LayoutConfigProvider } from '../configuration';
+import { LayoutConfigProvider, LayoutConfigState, useLayoutConfig } from '../configuration';
 import { ApplicationDocument } from './ApplicationDocument';
 import { previewComponents } from './PreviewTemplate';
 import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen, effectiveShellOf } from './composeApplication';
@@ -81,6 +81,15 @@ export interface ApplicationHostProps {
      */
     layoutConfigStorage?: Storage | null;
 
+    /**
+     * What the shell starts with and is kept at: the profile's menu mode and menu theme. A change is applied to the running shell, so a
+     * design host sees a menu mode switch without remounting the application.
+     */
+    layoutConfig?: Partial<Pick<LayoutConfigState, 'mode' | 'menuTheme' | 'colorScheme'>>;
+
+    /** The width of the viewport the shell is laid out for, when it is not the window's - a device preview. Below the mobile width the menu is a drawer. */
+    viewportWidth?: number;
+
     /** Rendered inside the host's providers, after the application. */
     children?: ReactNode;
 }
@@ -92,7 +101,7 @@ export interface ApplicationHostProps {
  * button or a dialog destination opened shown over it - one place for all of it (spec PRV9), so a behaviour that differs between
  * the two hosts is a bug in the host, not a second implementation.
  */
-export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, navigationPolicy, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, layoutConfigStorage = null, children }: ApplicationHostProps) {
+export function ApplicationHost({ application, composition = {}, navigationModel, registry: hostRegistry, initialScreen, history, navigationPolicy, resolveBinding, queryResults, renderScreen, renderDialog, renderDialogTemplate, scope, layoutConfigStorage = null, layoutConfig, viewportWidth, children }: ApplicationHostProps) {
     const [memoryHistory] = useState(() => createMemorySceneHistory());
     const registry = useMemo(() => ({ ...previewComponents, ...hostRegistry }), [hostRegistry]);
     const hostHistory = history ?? memoryHistory;
@@ -159,7 +168,8 @@ export function ApplicationHost({ application, composition = {}, navigationModel
             <SceneOutletContext.Provider value={outletContext}>
                 <SceneNavigationModelProvider model={navigationModel}>
                     {/* The shell reads its layout configuration from a provider; nothing is saved unless the host gives it somewhere to. */}
-                    <LayoutConfigProvider storage={layoutConfigStorage}>
+                    <LayoutConfigProvider storage={layoutConfigStorage} initialConfig={layoutConfig} viewportWidth={viewportWidth}>
+                        <FollowLayoutConfig config={layoutConfig} />
                         <NavigationActivationProvider {...navigationPolicy}>
                             {scope ? scope(navigation, body) : body}
                             {children}
@@ -169,6 +179,16 @@ export function ApplicationHost({ application, composition = {}, navigationModel
             </SceneOutletContext.Provider>
         </SceneNavigationProvider>
     );
+}
+
+/** Applies the profile's menu mode, menu theme and colour scheme to the running shell whenever they change. */
+function FollowLayoutConfig({ config }: { config?: ApplicationHostProps['layoutConfig'] }) {
+    const { setMode, setMenuTheme, setColorScheme } = useLayoutConfig();
+    const { mode, menuTheme, colorScheme } = config ?? {};
+    useEffect(() => { if (mode !== undefined) setMode(mode); }, [mode]);
+    useEffect(() => { if (menuTheme !== undefined) setMenuTheme(menuTheme); }, [menuTheme]);
+    useEffect(() => { if (colorScheme !== undefined) setColorScheme(colorScheme); }, [colorScheme]);
+    return null;
 }
 
 /** Calls what a host draws as part of this component, so a hook it uses runs under the providers the host put in scope. */

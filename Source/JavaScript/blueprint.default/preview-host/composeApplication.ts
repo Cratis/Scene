@@ -6,7 +6,7 @@ import {
     type ApplicationLogo, type EffectiveConfiguration,
 } from '@cratis/scene.model';
 import {
-    DescriptorCatalog, EffectiveShell, PackageCatalog, ShellKind, ShellOrigin, TemplateLibrary, resolveEffectiveConfiguration, resolveEffectiveShell,
+    DescriptorCatalog, EffectiveShell, PackageCatalog, ResolvedProfileIdentity, ShellKind, ShellOrigin, TemplateLibrary, resolveEffectiveConfiguration, resolveEffectiveShell,
     resolveScreenTemplates, resolveTemplateChain,
 } from '@cratis/scene.engine';
 import { defaultBlueprintManifest } from '../defaultBlueprint';
@@ -54,6 +54,9 @@ export interface CompositionOptions {
 
     /** The application's logo, shown in the default chrome's topbar. */
     logo?: ApplicationLogo;
+
+    /** The resolved identity of the profile - name and logo - which the default chrome draws in place of `logo` when given. */
+    identity?: ResolvedProfileIdentity;
 
     /**
      * Outlets the shell declares that navigation renders screens into - a navigation item authored with `slot side`. Each one the shell
@@ -268,7 +271,7 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
     const shell = shellComponentOf(effective, screen, profile.root !== undefined);
     const chrome = options.chrome
         ? options.chrome(screen, shell)
-        : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo);
+        : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo, options.identity);
     const screenSlots: Record<string, SceneElement[]> = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primaryOutlet ? options.trailing ?? [] : [])] };
     for (const name of hostedShellOutlets(effective, options)) {
         screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`outlet-${name}`, 'core:outlet', { name, closable: true })];

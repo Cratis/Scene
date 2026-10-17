@@ -26,6 +26,7 @@ public class when_running_the_shared_corpus : Specification
     List<(string Name, IReadOnlyList<string> Expected, IReadOnlyList<string> Actual)> _selectionValidation = null!;
     List<(string Name, IReadOnlyList<string> Expected, IReadOnlyList<string> Actual)> _packageValidation = null!;
     List<(string Name, JsonNode? Expected, JsonNode? Actual)> _catalog = null!;
+    List<(string Name, string Expected, string Actual)> _statuses = null!;
 
     void Establish()
     {
@@ -58,6 +59,19 @@ public class when_running_the_shared_corpus : Specification
             Problems(fixture),
             SampleDataValidation.ValidatePackages(fixture.GetProperty("sources").Deserialize<List<SampleDataPackSource>>(_options)!)))];
         _catalog = [.. _corpus.GetProperty("catalog").EnumerateArray().Select(DescribeCatalog)];
+        _statuses = [.. _corpus.GetProperty("statusClassification").EnumerateArray().Select(item =>
+        {
+            var classification = item.GetProperty("classification").ValueKind == JsonValueKind.Null ? null : item.GetProperty("classification").Deserialize<SampleStatusClassification>(_options);
+            var value = item.GetProperty("value").ValueKind == JsonValueKind.String ? item.GetProperty("value").GetString() : null;
+            return (item.GetProperty("value").ToString(), item.GetProperty("expected").GetString()!, SampleStatuses.Classify(classification, value).ToString().ToLowerInvariant());
+        })];
+    }
+
+    [Fact]
+    void should_classify_every_status_like_the_typescript_engine()
+    {
+        _statuses.Count.ShouldBeGreaterThan(10);
+        _statuses.Where(item => item.Expected != item.Actual).Select(item => $"{item.Name}: expected {item.Expected} but was {item.Actual}").ShouldBeEmpty();
     }
 
     [Fact]

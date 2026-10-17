@@ -28,7 +28,7 @@ export const inventoryBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.inventory',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
-    sampleData: [{ id: 'inventory-warehouse', title: 'Inventory · Warehouse', locale: 'en-GB', path: 'sampleData/inventory-warehouse.json' }],
+    sampleData: [{ id: 'inventory-warehouse', title: 'Inventory · Warehouse', locale: 'en-GB', path: 'sampleData/inventory-warehouse.json', description: 'Warehouse items, stock levels, locations and suppliers.', columns: ['Sku', 'Name', 'Category', 'Location', 'Quantity'], statusColumn: 'Status', statuses: { good: ['Active', 'In stock'], pending: ['Low stock', 'On hold'], bad: ['Out of stock'] } }],
     blueprint: {
         domain: 'inventory',
         description,

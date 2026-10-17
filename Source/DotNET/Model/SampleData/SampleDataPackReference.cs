@@ -11,4 +11,16 @@ namespace Cratis.Scene.Model.SampleData;
 /// <param name="Title">The display name shown in a selector.</param>
 /// <param name="Locale">The BCP 47 locale tag of the pack's data.</param>
 /// <param name="Path">The package-relative path of the pack file, under <c language="csharp">sampleData/</c> and ending in <c language="csharp">.json</c>.</param>
-public record SampleDataPackReference(string Id, string Title, string Locale, string Path);
+/// <param name="Description">One line saying what the pack is, shown under its name in a selector.</param>
+/// <param name="Columns">The names of the pack's main table's columns, in the order a preview shows them.</param>
+/// <param name="StatusColumn">The column whose values are drawn as status pills.</param>
+/// <param name="Statuses">Which values of the status column are good, pending, bad or neutral; any other value is neutral.</param>
+public record SampleDataPackReference(
+    string Id,
+    string Title,
+    string Locale,
+    string Path,
+    string? Description = null,
+    IReadOnlyList<string>? Columns = null,
+    string? StatusColumn = null,
+    SampleStatusClassification? Statuses = null);

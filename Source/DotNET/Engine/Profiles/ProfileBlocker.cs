@@ -12,4 +12,14 @@ namespace Cratis.Scene.Engine.Profiles;
 /// <param name="Subject">The package, layout, template or slot that is the problem.</param>
 /// <param name="Message">A sentence with the real names, ready to show. Never an id or a placeholder.</param>
 /// <param name="ShellCode">For <see cref="ProfileBlockerCode.ShellUnusable"/>: the shell's own code.</param>
-public record ProfileBlocker(ProfileBlockerCode Code, string Subject, string Message, ShellDiagnosticCode? ShellCode = null);
+/// <param name="Severity">How seriously the problem stops the profile.</param>
+/// <param name="Section">The section of the designer the problem belongs to.</param>
+/// <param name="Fix">The one-click fix, when there is one.</param>
+public record ProfileBlocker(
+    ProfileBlockerCode Code,
+    string Subject,
+    string Message,
+    ShellDiagnosticCode? ShellCode = null,
+    ProblemSeverity Severity = ProblemSeverity.Blocker,
+    ProfileSection Section = ProfileSection.Packages,
+    ProfileFix? Fix = null);

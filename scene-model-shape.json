@@ -209,7 +209,8 @@
       "sampleData",
       "root",
       "appearance",
-      "defaults"
+      "defaults",
+      "identity"
     ],
     "RootTemplate": [
       "template",
@@ -217,10 +218,23 @@
     ],
     "ProfileAppearance": [
       "colorScheme",
-      "accent"
+      "accent",
+      "corners",
+      "font"
     ],
     "ProfileDefaults": [
       "newScreenTemplate"
+    ],
+    "ProfileIdentity": [
+      "name",
+      "logo",
+      "showName"
+    ],
+    "ProfileLogo": [
+      "kind",
+      "initials",
+      "icon",
+      "image"
     ],
     "Theme": [
       "name",
@@ -328,7 +342,10 @@
       "sliceKinds",
       "thumbnail",
       "role",
-      "primaryOutlet"
+      "primaryOutlet",
+      "defaultMenuMode",
+      "displayName",
+      "description"
     ],
     "GridLength": [
       "value",
@@ -553,7 +570,17 @@
       "id",
       "title",
       "locale",
-      "path"
+      "path",
+      "description",
+      "columns",
+      "statusColumn",
+      "statuses"
+    ],
+    "SampleStatusClassification": [
+      "good",
+      "pending",
+      "bad",
+      "neutral"
     ],
     "SampleDataMapping": [
       "shape",
@@ -830,6 +857,22 @@
       "Light",
       "Dark",
       "System"
+    ],
+    "CornerStyle": [
+      "Sharp",
+      "Default",
+      "Round"
+    ],
+    "SampleStatus": [
+      "Good",
+      "Pending",
+      "Bad",
+      "Neutral"
+    ],
+    "LogoKind": [
+      "Initials",
+      "Icon",
+      "Image"
     ],
     "TemplateRole": [
       "Root"

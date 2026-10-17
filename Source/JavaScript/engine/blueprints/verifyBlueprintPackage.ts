@@ -3,6 +3,7 @@
 
 import { PackageKind, ScreenTemplate } from '@cratis/scene.model';
 import { isValidVersion } from '../packageVersionRange';
+import { navigationModes, normalizeNavigationMode } from '../profiles/shellOptions';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
 import { validateSampleDataPackages } from '../sampleData/validateSampleDataPackages';
 import { describeTemplateCatalog } from '../templates/describeTemplateCatalog';
@@ -136,7 +137,7 @@ function isOwnAncestor(name: string, set: { name: string; parent?: string }[]): 
 function templateProblems(source: BlueprintSource, library: readonly TemplateSource[], domain: boolean): string[] {
     const problems: string[] = [];
     const described = [...(source.screenTemplates ?? []), ...(source.dialogTemplates ?? [])];
-    const everyTemplate: { name: string; displayName?: string; description?: string; metadata?: { type?: string; category?: string; thumbnail?: string }; describable: boolean }[] = [
+    const everyTemplate: { name: string; displayName?: string; description?: string; metadata?: { type?: string; category?: string; thumbnail?: string; defaultMenuMode?: string; displayName?: string; description?: string }; describable: boolean }[] = [
         ...(source.layouts ?? []).map(layout => ({ name: layout.name, metadata: layout.metadata, describable: false })),
         ...described.map(template => ({ name: template.name, displayName: template.displayName, description: template.description, metadata: template.metadata, describable: true })),
     ];
@@ -150,6 +151,7 @@ function templateProblems(source: BlueprintSource, library: readonly TemplateSou
         const owner = `Template '${template.name}'`;
         if (template.describable && (template.displayName ?? '').trim() === '') problems.push(`${owner} declares no display name`);
         if (template.describable && (template.description ?? '').trim() === '') problems.push(`${owner} declares no description`);
+        problems.push(...shellCardProblems(owner, template, source.files));
         if (!domain) continue;
 
         const metadata = template.metadata;
@@ -163,6 +165,19 @@ function templateProblems(source: BlueprintSource, library: readonly TemplateSou
         problems.push(...thumbnailProblems(owner, metadata?.thumbnail, source.files));
     }
 
+    return problems;
+}
+
+/** A shell that declares a default menu mode is offered as a card, so it needs a valid mode, a title, a description and a wireframe thumbnail. */
+function shellCardProblems(owner: string, template: { displayName?: string; description?: string; metadata?: { thumbnail?: string; defaultMenuMode?: string; displayName?: string; description?: string } }, files: string[] | undefined): string[] {
+    const mode = template.metadata?.defaultMenuMode;
+    if (mode === undefined) return [];
+
+    const problems: string[] = [];
+    if (normalizeNavigationMode(mode) === undefined) problems.push(`${owner} declares default menu mode '${mode}', which is not one of ${navigationModes.map(candidate => candidate.id).join(', ')}`);
+    if ((template.metadata?.displayName ?? template.displayName ?? '').trim() === '') problems.push(`${owner} is offered as a shell card but declares no title`);
+    if ((template.metadata?.description ?? template.description ?? '').trim() === '') problems.push(`${owner} is offered as a shell card but declares no description`);
+    problems.push(...thumbnailProblems(owner, template.metadata?.thumbnail, files));
     return problems;
 }
 

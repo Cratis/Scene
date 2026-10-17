@@ -23,6 +23,7 @@ rely on.
 | `surface.overlay` | `--scene-surface-overlay` | floating submenus and popups |
 | `text.color` | `--scene-text-color` | body text |
 | `text.mutedColor` | `--scene-text-muted-color` | secondary text, footer, section titles |
+| `text.fontFamily` | `--scene-text-font-family` | the font of the whole application; set by the profile's `appearance.font`, otherwise the theme's own |
 | `highlight.background` | `--scene-highlight-background` | the current menu item's background |
 | `highlight.color` | `--scene-highlight-color` | the current menu item's text |
 | `content.borderRadius` | `--scene-content-border-radius` | every rounded corner |

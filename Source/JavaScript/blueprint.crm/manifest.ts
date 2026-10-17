@@ -29,8 +29,8 @@ export const crmBlueprintManifest: ScenePackage = {
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
     sampleData: [
-        { id: 'crm-enterprise-en', title: 'CRM · Enterprise', locale: 'en-GB', path: 'sampleData/crm-enterprise-en.json' },
-        { id: 'crm-nordic-smb', title: 'CRM · Nordic SMB', locale: 'nb-NO', path: 'sampleData/crm-nordic-smb.json' },
+        { id: 'crm-enterprise-en', title: 'CRM · Enterprise', locale: 'en-GB', path: 'sampleData/crm-enterprise-en.json', description: 'An enterprise sales pipeline in English: leads, contacts, companies and activities.', columns: ['Name', 'Company', 'Owner', 'Status', 'Source'], statusColumn: 'Status', statuses: { good: ['Customer', 'Done', 'Qualified'], pending: ['Contacted', 'New', 'Planned', 'Prospect'], bad: ['Inactive', 'Overdue', 'Unqualified'], neutral: ['Partner'] } },
+        { id: 'crm-nordic-smb', title: 'CRM · Nordic SMB', locale: 'nb-NO', path: 'sampleData/crm-nordic-smb.json', description: 'A Nordic small-business sales pipeline in Norwegian: leads, contacts, companies and activities.', columns: ['Name', 'Company', 'Owner', 'Status', 'Source'], statusColumn: 'Status', statuses: { good: ['Kunde', 'Kvalifisert', 'Utført'], pending: ['Kontaktet', 'Ny', 'Planlagt', 'Potensiell'], bad: ['Forfalt', 'Ikke kvalifisert', 'Inaktiv'], neutral: ['Partner'] } },
     ],
     blueprint: {
         domain: 'crm',

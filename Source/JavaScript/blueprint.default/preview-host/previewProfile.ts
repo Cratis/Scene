@@ -46,5 +46,6 @@ export function previewProfile(profiles: UiProfile[] | undefined, additionalPack
         root: declared?.root,
         appearance: declared?.appearance,
         defaults: declared?.defaults,
+        identity: declared?.identity,
     };
 }

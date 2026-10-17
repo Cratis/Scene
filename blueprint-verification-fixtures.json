@@ -4492,6 +4492,310 @@
         "foundationPackage": "Acme.Foundation"
       },
       "expectedProblems": []
+    },
+    {
+      "name": "a shell offered as a card declares its mode, title, description and thumbnail",
+      "source": {
+        "manifest": {
+          "name": "Cratis.Blueprint.Default",
+          "version": "4.32.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "AppShell",
+            "MinimalShell"
+          ],
+          "screenTemplates": [
+            "ListScreen"
+          ],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell"
+            }
+          },
+          {
+            "name": "MinimalShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell",
+              "displayName": "Minimal",
+              "description": "A slim icon rail",
+              "thumbnail": "thumbnails/MinimalShell.svg",
+              "defaultMenuMode": "slim"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "ListScreen",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "ListScreen",
+            "description": "The ListScreen template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / List",
+              "type": "List"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/MinimalShell.svg"
+        ]
+      },
+      "library": [],
+      "expectedProblems": []
+    },
+    {
+      "name": "a shell card with a wrong mode, no title, no description and a thumbnail that is not in the package",
+      "source": {
+        "manifest": {
+          "name": "Cratis.Blueprint.Default",
+          "version": "4.32.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "AppShell",
+            "MinimalShell"
+          ],
+          "screenTemplates": [
+            "ListScreen"
+          ],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell"
+            }
+          },
+          {
+            "name": "MinimalShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell",
+              "thumbnail": "thumbnails/Missing.svg",
+              "defaultMenuMode": "sideways"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "ListScreen",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "ListScreen",
+            "description": "The ListScreen template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / List",
+              "type": "List"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/MinimalShell.svg"
+        ]
+      },
+      "library": [],
+      "expectedProblems": [
+        "Template 'MinimalShell' declares default menu mode 'sideways', which is not one of static, overlay, slim, slimPlus, compact, horizontal, reveal, drawer",
+        "Template 'MinimalShell' is offered as a shell card but declares no title",
+        "Template 'MinimalShell' is offered as a shell card but declares no description",
+        "Template 'MinimalShell' declares thumbnail 'thumbnails/Missing.svg', which is not in the package"
+      ]
+    },
+    {
+      "name": "a shell card without a thumbnail",
+      "source": {
+        "manifest": {
+          "name": "Cratis.Blueprint.Default",
+          "version": "4.32.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "AppShell",
+            "MinimalShell"
+          ],
+          "screenTemplates": [
+            "ListScreen"
+          ],
+          "dialogTemplates": [],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell"
+            }
+          },
+          {
+            "name": "MinimalShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell",
+              "displayName": "Minimal",
+              "description": "A slim icon rail",
+              "defaultMenuMode": "slim"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "ListScreen",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "ListScreen",
+            "description": "The ListScreen template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / List",
+              "type": "List"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/MinimalShell.svg"
+        ]
+      },
+      "library": [],
+      "expectedProblems": [
+        "Template 'MinimalShell' declares no thumbnail"
+      ]
     }
   ],
   "catalog": [

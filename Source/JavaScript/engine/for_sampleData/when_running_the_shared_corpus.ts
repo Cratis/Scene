@@ -3,13 +3,14 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { SampleDataPack, SampleDataSelection, SampleShape, SampleShapeField } from '@cratis/scene.model';
+import { SampleDataPack, SampleDataSelection, SampleShape, SampleShapeField, SampleStatusClassification } from '@cratis/scene.model';
 import {
     SampleDataCatalog,
     SampleDataContext,
     SampleDataPackSource,
     SampleDataRequest,
     SampleDataResolution,
+    classifySampleStatus,
     describeSampleDataCatalog,
     generateSample,
     inferSampleFieldKind,
@@ -36,7 +37,7 @@ interface PackageValidationCase { name: string; sources: SampleDataPackSource[];
 interface CatalogCase {
     name: string;
     sources: SampleDataPackSource[];
-    ownPacks: { id: string; title: string; locale: string }[];
+    ownPacks: { id: string; title: string; locale: string; description?: string; columns?: string[] }[];
     activePack?: string;
     expected: SampleDataCatalog;
 }
@@ -49,6 +50,7 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../sa
     selectionValidation: SelectionValidationCase[];
     packageValidation: PackageValidationCase[];
     catalog: CatalogCase[];
+    statusClassification: { classification?: SampleStatusClassification; value: unknown; expected: string }[];
 };
 
 // Compared as serialized text: the corpus promises byte-identical rows in the C# and TypeScript engines.
@@ -116,5 +118,11 @@ for (const fixture of corpus.catalog) {
     describe(`when describing the sample data catalog for ${fixture.name}`, () => {
         it('should describe the same catalog as the C# engine', () =>
             serialize(describeSampleDataCatalog(fixture.sources, fixture.ownPacks, fixture.activePack)).should.equal(serialize(fixture.expected)));
+    });
+}
+
+for (const fixture of corpus.statusClassification) {
+    describe(`when classifying the status ${JSON.stringify(fixture.value)} against ${JSON.stringify(fixture.classification ?? null)}`, () => {
+        it('should classify it as the corpus says', () => classifySampleStatus(fixture.classification ?? undefined, fixture.value).should.equal(fixture.expected));
     });
 }

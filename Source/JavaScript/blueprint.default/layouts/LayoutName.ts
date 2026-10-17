@@ -13,6 +13,12 @@ export enum LayoutName {
     /** Topbar, sidebar, breadcrumb, content, footer and an optional right panel - the shell an application signs in to. */
     AppShell = 'AppShell',
 
+    /** The application shell with the menu in the top bar: a dashboard's navigation. Starts in the Horizontal menu mode. */
+    DashboardShell = 'DashboardShell',
+
+    /** The application shell reduced to a slim icon rail. Starts in the Slim menu mode. */
+    MinimalShell = 'MinimalShell',
+
     /** No chrome at all: content, an optional branding aside, and the configurator. */
     FullPage = 'FullPage',
 }

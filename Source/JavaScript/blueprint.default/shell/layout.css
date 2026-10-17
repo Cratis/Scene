@@ -47,7 +47,6 @@
     --layout-slim-plus-width: 7rem;
     --layout-compact-width: 5rem;
     --layout-reveal-strip-width: 4.25rem;
-    --layout-drawer-collapsed-width: 5.25rem;
     --layout-gap: 1rem;
     --layout-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -71,7 +70,7 @@
     min-height: 100vh;
     color: var(--layout-text);
     background: var(--layout-background);
-    font-family: inherit;
+    font-family: var(--scene-text-font-family, inherit);
 }
 
 .layout-wrapper *,
@@ -623,37 +622,19 @@
 }
 
 /* ---------------------------------------------------------------------------
- * drawer - a collapsed rail that grows its width on hover. Reveal slides a
- * fixed-width panel; drawer animates the width itself.
+ * drawer - the sidebar is parked off-canvas; the hamburger opens it over the
+ * content with a dimming scrim behind it, and clicking the scrim closes it.
  * ------------------------------------------------------------------------ */
 
-.layout-drawer {
-    --layout-content-offset: var(--layout-drawer-collapsed-width);
-}
-
-.layout-drawer .layout-topbar {
-    inset-inline-start: var(--layout-drawer-collapsed-width);
-}
-
 .layout-drawer .layout-sidebar {
-    width: var(--layout-drawer-collapsed-width);
-}
-
-.layout-drawer.layout-sidebar-active .layout-sidebar {
-    width: var(--layout-sidebar-width);
+    inset-block-start: 0;
+    z-index: var(--layout-z-sidebar);
+    transform: translateX(-100%);
     box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
 }
 
-.layout-drawer.layout-sidebar-anchored {
-    --layout-content-offset: var(--layout-sidebar-width);
-}
-
-.layout-drawer.layout-sidebar-anchored .layout-topbar {
-    inset-inline-start: var(--layout-sidebar-width);
-}
-
-.layout-drawer.layout-sidebar-anchored .layout-sidebar {
-    box-shadow: none;
+.layout-drawer-active .layout-sidebar {
+    transform: translateX(0);
 }
 
 /* ---------------------------------------------------------------------------
@@ -736,6 +717,13 @@
     font-weight: 700;
     color: inherit;
     text-decoration: none;
+}
+
+/* The rail modes have no room for the name: Slim, Slim+ and a collapsed Reveal show the mark only. */
+.layout-slim .layout-logo-name,
+.layout-slim-plus .layout-logo-name,
+.layout-reveal:not(.layout-sidebar-active):not(.layout-sidebar-anchored) .layout-logo-name {
+    display: none;
 }
 
 .layout-logo-mark {

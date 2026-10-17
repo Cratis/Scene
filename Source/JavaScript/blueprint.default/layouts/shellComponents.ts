@@ -14,6 +14,8 @@ import { LayoutName } from './LayoutName';
  */
 const shellComponents: Record<LayoutName, ComponentName> = {
     [LayoutName.AppShell]: ComponentName.AppShell,
+    [LayoutName.DashboardShell]: ComponentName.AppShell,
+    [LayoutName.MinimalShell]: ComponentName.AppShell,
     [LayoutName.FullPage]: ComponentName.FullPageShell,
 };
 

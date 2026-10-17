@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactNode } from 'react';
+import { ProfileRegion } from '@cratis/scene.engine';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { LayoutConfigProvider, isPointerRevealMode, useLayoutConfig, useOptionalLayoutConfig } from '../configuration';
 import { SlotName } from '../layouts';
@@ -39,11 +40,12 @@ function AppShellSurface({ elementId, slots }: AppShellSurfaceProps) {
 
     return (
         <div className={wrapperClasses.join(' ')} data-scene-id={elementId} data-layout-mode={config.mode}>
-            {filled(slots, SlotName.Topbar) && <header className='layout-topbar'>{slots[SlotName.Topbar]}</header>}
+            {filled(slots, SlotName.Topbar) && <header className='layout-topbar' data-scene-region={ProfileRegion.Shell}>{slots[SlotName.Topbar]}</header>}
 
             {hasSidebar && (
                 <aside
                     className='layout-sidebar'
+                    data-scene-region={ProfileRegion.Menu}
                     onMouseEnter={revealsOnPointer ? () => setSidebarRevealed(true) : undefined}
                     onMouseLeave={revealsOnPointer ? () => setSidebarRevealed(false) : undefined}>
                     {slots[SlotName.Sidebar]}
@@ -53,7 +55,7 @@ function AppShellSurface({ elementId, slots }: AppShellSurfaceProps) {
 
             <div className='layout-main'>
                 {filled(slots, SlotName.Breadcrumb) && <div className='layout-breadcrumb'>{slots[SlotName.Breadcrumb]}</div>}
-                <main className='layout-content'>{slots[SlotName.Content]}</main>
+                <main className='layout-content' data-scene-region={ProfileRegion.Content}>{slots[SlotName.Content]}</main>
                 {filled(slots, SlotName.Footer) && <footer className='layout-footer'>{slots[SlotName.Footer]}</footer>}
             </div>
 

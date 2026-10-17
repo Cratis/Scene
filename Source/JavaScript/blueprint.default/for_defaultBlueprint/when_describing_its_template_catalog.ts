@@ -52,8 +52,8 @@ describe('when describing its template catalog', () => {
         entries.every(entry => entry.license === manifest.license && entry.licenseUrl === manifest.licenseUrl).should.be.true;
     });
 
-    it('should credit the Sakai arrangement on the shell and the dashboard only', () => {
-        entries.filter(entry => entry.attribution?.notice?.includes('Sakai')).map(entry => entry.name).should.deep.equal(['AppShell', 'Dashboard']);
+    it('should credit the Sakai arrangement on the shells and the dashboard only', () => {
+        entries.filter(entry => entry.attribution?.notice?.includes('Sakai')).map(entry => entry.name).should.deep.equal(['AppShell', 'DashboardShell', 'MinimalShell', 'Dashboard']);
     });
 
     it('should be incompatible with a Scene that predates template provenance', () => {

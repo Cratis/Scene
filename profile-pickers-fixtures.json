@@ -1,0 +1,1037 @@
+{
+  "description": "Picker metadata a designer draws from: shell (blueprint) cards, theme cards, the colour scheme switch, the version rule and its status, and the value of my own shell. Asserted by both engines.",
+  "themes": [
+    {
+      "name": "Scene Default Light",
+      "compatibleWith": [],
+      "isDark": false,
+      "description": "The default light palette",
+      "tokens": {
+        "primary.color": "#4f46e5",
+        "content.borderRadius": "0.5rem"
+      }
+    },
+    {
+      "name": "Scene Default Dark",
+      "compatibleWith": [],
+      "isDark": true,
+      "description": "The default dark palette",
+      "tokens": {
+        "primary.color": "#818cf8",
+        "content.borderRadius": "0.5rem"
+      }
+    },
+    {
+      "name": "Material Light",
+      "compatibleWith": [],
+      "isDark": false,
+      "description": "Material look",
+      "tokens": {
+        "primary.color": "#6750a4",
+        "content.borderRadius": "10px"
+      }
+    },
+    {
+      "name": "Material Dark",
+      "compatibleWith": [],
+      "isDark": true,
+      "tokens": {
+        "primary.color": "#d0bcff"
+      }
+    }
+  ],
+  "packages": [
+    {
+      "name": "default-blueprint",
+      "version": "1.0.0",
+      "kind": "Blueprint",
+      "dependencies": [],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [
+        "Scene Default Light",
+        "Scene Default Dark"
+      ]
+    },
+    {
+      "name": "material-themes",
+      "version": "1.0.0",
+      "kind": "Styling",
+      "dependencies": [],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [
+        "Material Light",
+        "Material Dark"
+      ],
+      "displayName": "Material Themes"
+    }
+  ],
+  "themeCards": [
+    {
+      "name": "every theme, one selected, one needing a package",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Scene Default Light"
+      },
+      "expected": [
+        {
+          "name": "Scene Default Light",
+          "scheme": "light",
+          "accent": "#4f46e5",
+          "corners": "8px corners",
+          "description": "The default light palette",
+          "selected": true,
+          "available": true
+        },
+        {
+          "name": "Scene Default Dark",
+          "scheme": "dark",
+          "accent": "#818cf8",
+          "corners": "8px corners",
+          "description": "The default dark palette",
+          "selected": false,
+          "available": true
+        },
+        {
+          "name": "Material Light",
+          "scheme": "light",
+          "accent": "#6750a4",
+          "corners": "10px corners",
+          "description": "Material look",
+          "selected": false,
+          "available": false,
+          "package": "material-themes",
+          "reason": "Needs Material Themes. Selecting it adds the package."
+        },
+        {
+          "name": "Material Dark",
+          "scheme": "dark",
+          "accent": "#d0bcff",
+          "selected": false,
+          "available": false,
+          "package": "material-themes",
+          "reason": "Needs Material Themes. Selecting it adds the package."
+        }
+      ]
+    },
+    {
+      "name": "light themes only",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Scene Default Light"
+      },
+      "scheme": "Light",
+      "expected": [
+        {
+          "name": "Scene Default Light",
+          "scheme": "light",
+          "accent": "#4f46e5",
+          "corners": "8px corners",
+          "description": "The default light palette",
+          "selected": true,
+          "available": true
+        },
+        {
+          "name": "Material Light",
+          "scheme": "light",
+          "accent": "#6750a4",
+          "corners": "10px corners",
+          "description": "Material look",
+          "selected": false,
+          "available": false,
+          "package": "material-themes",
+          "reason": "Needs Material Themes. Selecting it adds the package."
+        }
+      ]
+    },
+    {
+      "name": "dark themes only",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Scene Default Dark"
+      },
+      "scheme": "Dark",
+      "expected": [
+        {
+          "name": "Scene Default Dark",
+          "scheme": "dark",
+          "accent": "#818cf8",
+          "corners": "8px corners",
+          "description": "The default dark palette",
+          "selected": true,
+          "available": true
+        },
+        {
+          "name": "Material Dark",
+          "scheme": "dark",
+          "accent": "#d0bcff",
+          "selected": false,
+          "available": false,
+          "package": "material-themes",
+          "reason": "Needs Material Themes. Selecting it adds the package."
+        }
+      ]
+    },
+    {
+      "name": "a theme whose package is listed is available",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint",
+          "material-themes"
+        ],
+        "theme": "Material Light"
+      },
+      "expected": [
+        {
+          "name": "Scene Default Light",
+          "scheme": "light",
+          "accent": "#4f46e5",
+          "corners": "8px corners",
+          "description": "The default light palette",
+          "selected": false,
+          "available": true
+        },
+        {
+          "name": "Scene Default Dark",
+          "scheme": "dark",
+          "accent": "#818cf8",
+          "corners": "8px corners",
+          "description": "The default dark palette",
+          "selected": false,
+          "available": true
+        },
+        {
+          "name": "Material Light",
+          "scheme": "light",
+          "accent": "#6750a4",
+          "corners": "10px corners",
+          "description": "Material look",
+          "selected": true,
+          "available": true
+        },
+        {
+          "name": "Material Dark",
+          "scheme": "dark",
+          "accent": "#d0bcff",
+          "selected": false,
+          "available": true
+        }
+      ]
+    },
+    {
+      "name": "no theme chosen",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ]
+      },
+      "scheme": "Dark",
+      "expected": [
+        {
+          "name": "Scene Default Dark",
+          "scheme": "dark",
+          "accent": "#818cf8",
+          "corners": "8px corners",
+          "description": "The default dark palette",
+          "selected": false,
+          "available": true
+        },
+        {
+          "name": "Material Dark",
+          "scheme": "dark",
+          "accent": "#d0bcff",
+          "selected": false,
+          "available": false,
+          "package": "material-themes",
+          "reason": "Needs Material Themes. Selecting it adds the package."
+        }
+      ]
+    }
+  ],
+  "colorSchemeSwitch": [
+    {
+      "name": "light to dark moves a light theme to the dark default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Scene Default Light"
+      },
+      "scheme": "Dark",
+      "expected": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "default-blueprint"
+          ],
+          "theme": "Scene Default Dark",
+          "appearance": {
+            "colorScheme": "Dark"
+          }
+        },
+        "themeChanged": true,
+        "message": "Theme changed to Scene Default Dark to match the dark scheme"
+      }
+    },
+    {
+      "name": "dark to light moves a dark theme to the light default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Material Dark",
+        "appearance": {
+          "accent": "#0a7a4b"
+        }
+      },
+      "scheme": "Light",
+      "expected": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "default-blueprint"
+          ],
+          "theme": "Scene Default Light",
+          "appearance": {
+            "accent": "#0a7a4b",
+            "colorScheme": "Light"
+          }
+        },
+        "themeChanged": true,
+        "message": "Theme changed to Scene Default Light to match the light scheme"
+      }
+    },
+    {
+      "name": "the same scheme keeps the theme",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Scene Default Light"
+      },
+      "scheme": "Light",
+      "expected": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "default-blueprint"
+          ],
+          "theme": "Scene Default Light",
+          "appearance": {
+            "colorScheme": "Light"
+          }
+        },
+        "themeChanged": false,
+        "message": ""
+      }
+    },
+    {
+      "name": "no theme chosen only sets the scheme",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ]
+      },
+      "scheme": "Dark",
+      "expected": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "default-blueprint"
+          ],
+          "appearance": {
+            "colorScheme": "Dark"
+          }
+        },
+        "themeChanged": false,
+        "message": ""
+      }
+    },
+    {
+      "name": "an unknown theme is kept",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "default-blueprint"
+        ],
+        "theme": "Mystery"
+      },
+      "scheme": "Dark",
+      "expected": {
+        "profile": {
+          "name": "Desktop",
+          "targetPlatform": "web",
+          "packages": [
+            "default-blueprint"
+          ],
+          "theme": "Mystery",
+          "appearance": {
+            "colorScheme": "Dark"
+          }
+        },
+        "themeChanged": false,
+        "message": ""
+      }
+    }
+  ],
+  "versionRules": [
+    {
+      "name": "no rule follows and is up to date",
+      "installed": "1.2.0",
+      "latest": "1.2.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "follow",
+        "status": {
+          "tone": "good",
+          "text": "Up to date"
+        }
+      }
+    },
+    {
+      "name": "a compatible update",
+      "installed": "1.2.0",
+      "latest": "1.3.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "follow",
+        "status": {
+          "tone": "info",
+          "text": "Version 1.3.0 is available and compatible"
+        }
+      }
+    },
+    {
+      "name": "a breaking update is not allowed by following",
+      "installed": "1.2.0",
+      "latest": "2.0.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "follow",
+        "status": {
+          "tone": "warning",
+          "text": "Version 2.0.0 is available but ^1.2.0 does not allow it"
+        }
+      }
+    },
+    {
+      "name": "a pin blocks an update",
+      "pin": "1.2.0",
+      "installed": "1.2.0",
+      "latest": "1.2.1",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "pin",
+        "status": {
+          "tone": "warning",
+          "text": "Version 1.2.1 is available but 1.2.0 does not allow it"
+        }
+      }
+    },
+    {
+      "name": "a pin with equals",
+      "pin": "=1.2.0",
+      "installed": "1.2.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "pin",
+        "status": {
+          "tone": "good",
+          "text": "Up to date"
+        }
+      }
+    },
+    {
+      "name": "always the latest takes a breaking update",
+      "pin": "*",
+      "installed": "1.2.0",
+      "latest": "2.0.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "latest",
+        "status": {
+          "tone": "info",
+          "text": "Version 2.0.0 is available and compatible"
+        }
+      }
+    },
+    {
+      "name": "a range of the author's own",
+      "pin": "~1.2.0",
+      "installed": "1.2.0",
+      "latest": "1.2.5",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "status": {
+          "tone": "info",
+          "text": "Version 1.2.5 is available and compatible"
+        }
+      }
+    },
+    {
+      "name": "a rule the installed version does not satisfy",
+      "pin": "^2.0.0",
+      "installed": "1.2.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "status": {
+          "tone": "bad",
+          "text": "Version 1.2.0 is installed but the reference pins ^2.0.0"
+        }
+      }
+    },
+    {
+      "name": "a rule that is not a rule",
+      "pin": "banana",
+      "installed": "1.2.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "status": {
+          "tone": "bad",
+          "text": "Pin 'banana' is not a version range"
+        }
+      }
+    },
+    {
+      "name": "caret of the installed version is the follow rule",
+      "pin": "^1.2.0",
+      "installed": "1.2.0",
+      "latest": "1.2.0",
+      "expected": {
+        "choices": [
+          {
+            "kind": "follow",
+            "label": "Follow compatible versions",
+            "description": "Takes updates that ^1.2.0 allows",
+            "pin": "^1.2.0"
+          },
+          {
+            "kind": "pin",
+            "label": "Pin to 1.2.0",
+            "description": "Stays on exactly this version",
+            "pin": "1.2.0"
+          },
+          {
+            "kind": "latest",
+            "label": "Always the latest",
+            "description": "Takes every new version, including breaking ones",
+            "pin": "*"
+          }
+        ],
+        "selected": "follow",
+        "status": {
+          "tone": "good",
+          "text": "Up to date"
+        }
+      }
+    }
+  ],
+  "ownShell": [
+    {
+      "value": "@acme/shell",
+      "expected": {
+        "valid": true,
+        "kind": "package",
+        "message": ""
+      }
+    },
+    {
+      "value": "acme-shell",
+      "expected": {
+        "valid": true,
+        "kind": "package",
+        "message": ""
+      }
+    },
+    {
+      "value": "./shell",
+      "expected": {
+        "valid": true,
+        "kind": "path",
+        "message": ""
+      }
+    },
+    {
+      "value": "../shells/main",
+      "expected": {
+        "valid": true,
+        "kind": "path",
+        "message": ""
+      }
+    },
+    {
+      "value": "/opt/shell",
+      "expected": {
+        "valid": true,
+        "kind": "path",
+        "message": ""
+      }
+    },
+    {
+      "value": "~/shell",
+      "expected": {
+        "valid": true,
+        "kind": "path",
+        "message": ""
+      }
+    },
+    {
+      "value": "",
+      "expected": {
+        "valid": false,
+        "message": "Enter a package name or a path"
+      }
+    },
+    {
+      "value": "   ",
+      "expected": {
+        "valid": false,
+        "message": "Enter a package name or a path"
+      }
+    },
+    {
+      "value": "My Shell",
+      "expected": {
+        "valid": false,
+        "message": "'My Shell' is neither a package name nor a path"
+      }
+    },
+    {
+      "value": "C:\\shell",
+      "expected": {
+        "valid": false,
+        "message": "'C:\\shell' is neither a package name nor a path"
+      }
+    },
+    {
+      "value": "shell!",
+      "expected": {
+        "valid": false,
+        "message": "'shell!' is neither a package name nor a path"
+      }
+    },
+    {
+      "value": "./my shell",
+      "expected": {
+        "valid": false,
+        "message": "'./my shell' is neither a package name nor a path"
+      }
+    }
+  ],
+  "shellCards": [
+    {
+      "name": "own shell first, then the blueprint shells that declare a default mode",
+      "library": {
+        "own": {
+          "manifest": {
+            "name": "app",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "dependencies": [],
+            "components": [],
+            "layouts": [],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "OwnShell",
+              "slots": [
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "displayName": "Our shell",
+                "description": "The shell we built",
+                "thumbnail": "thumbnails/OwnShell.svg",
+                "defaultMenuMode": "compact"
+              }
+            }
+          ]
+        },
+        "blueprints": [
+          {
+            "manifest": {
+              "name": "default-blueprint",
+              "version": "1.0.0",
+              "kind": "Blueprint",
+              "dependencies": [],
+              "components": [],
+              "layouts": [],
+              "screenTemplates": [],
+              "dialogTemplates": [],
+              "themes": []
+            },
+            "layouts": [
+              {
+                "name": "AppShell",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "displayName": "Cratis Default",
+                  "description": "Sidebar with search and breadcrumbs",
+                  "thumbnail": "thumbnails/AppShell.svg",
+                  "defaultMenuMode": "static"
+                }
+              },
+              {
+                "name": "DashboardShell",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "displayName": "Dashboard",
+                  "description": "Horizontal navigation",
+                  "thumbnail": "thumbnails/DashboardShell.svg",
+                  "defaultMenuMode": "horizontal"
+                }
+              },
+              {
+                "name": "MinimalShell",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "displayName": "Minimal",
+                  "description": "A slim icon rail",
+                  "thumbnail": "thumbnails/MinimalShell.svg",
+                  "defaultMenuMode": "slim"
+                }
+              },
+              {
+                "name": "FullPage",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "category": "Foundation / Shell"
+                }
+              },
+              {
+                "name": "NoThumbnail",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "defaultMenuMode": "slim-plus"
+                }
+              },
+              {
+                "name": "BadMode",
+                "slots": [
+                  {
+                    "name": "content"
+                  }
+                ],
+                "metadata": {
+                  "displayName": "Bad",
+                  "defaultMenuMode": "sideways"
+                }
+              }
+            ],
+            "screenTemplates": [
+              {
+                "name": "RootFrame",
+                "slots": [
+                  {
+                    "name": "main"
+                  }
+                ],
+                "displayName": "Root frame",
+                "description": "A frame as the root",
+                "metadata": {
+                  "role": "Root",
+                  "primaryOutlet": "main",
+                  "defaultMenuMode": "reveal",
+                  "thumbnail": "thumbnails/RootFrame.svg"
+                }
+              },
+              {
+                "name": "Plain",
+                "slots": [],
+                "metadata": {
+                  "defaultMenuMode": "static"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "expected": [
+        {
+          "blueprint": "",
+          "id": "OwnShell",
+          "title": "Our shell",
+          "description": "The shell we built",
+          "thumbnail": "thumbnails/OwnShell.svg",
+          "defaultMenuMode": "compact"
+        },
+        {
+          "blueprint": "default-blueprint",
+          "id": "AppShell",
+          "title": "Cratis Default",
+          "description": "Sidebar with search and breadcrumbs",
+          "thumbnail": "thumbnails/AppShell.svg",
+          "defaultMenuMode": "static"
+        },
+        {
+          "blueprint": "default-blueprint",
+          "id": "DashboardShell",
+          "title": "Dashboard",
+          "description": "Horizontal navigation",
+          "thumbnail": "thumbnails/DashboardShell.svg",
+          "defaultMenuMode": "horizontal"
+        },
+        {
+          "blueprint": "default-blueprint",
+          "id": "MinimalShell",
+          "title": "Minimal",
+          "description": "A slim icon rail",
+          "thumbnail": "thumbnails/MinimalShell.svg",
+          "defaultMenuMode": "slim"
+        },
+        {
+          "blueprint": "default-blueprint",
+          "id": "NoThumbnail",
+          "title": "NoThumbnail",
+          "description": "",
+          "thumbnail": "",
+          "defaultMenuMode": "slimPlus"
+        },
+        {
+          "blueprint": "default-blueprint",
+          "id": "RootFrame",
+          "title": "Root frame",
+          "description": "A frame as the root",
+          "thumbnail": "thumbnails/RootFrame.svg",
+          "defaultMenuMode": "reveal"
+        }
+      ]
+    },
+    {
+      "name": "an empty library has no cards",
+      "library": {
+        "blueprints": []
+      },
+      "expected": []
+    }
+  ]
+}

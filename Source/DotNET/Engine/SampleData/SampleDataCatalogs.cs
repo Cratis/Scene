@@ -32,7 +32,8 @@ public static class SampleDataCatalogs
         IReadOnlyList<SampleDataPackReference>? ownPacks = null,
         string? activePack = null)
     {
-        SampleDataCatalogEntry Entry(string id, string name, string label, string locale) => new(id, false, name, label, id == activePack, locale);
+        SampleDataCatalogEntry Entry(string id, string name, string label, string locale, SampleDataPackReference? reference = null) =>
+            new(id, false, name, label, id == activePack, locale, reference?.Description, reference?.Columns, reference?.StatusColumn, reference?.Statuses);
 
         var blueprints = new List<SampleDataCatalogGroup>();
         foreach (var source in sources)
@@ -50,13 +51,13 @@ public static class SampleDataCatalogs
                 [.. references.Select(reference =>
                 {
                     var name = reference.Title.StartsWith(prefix, StringComparison.Ordinal) ? reference.Title[prefix.Length..] : reference.Title;
-                    return Entry(reference.Id, name, $"{group}{LabelSeparator}{name}", reference.Locale);
+                    return Entry(reference.Id, name, $"{group}{LabelSeparator}{name}", reference.Locale, reference);
                 })]));
         }
 
         return new SampleDataCatalog(
-            new SampleDataCatalogEntry(string.Empty, true, GeneratedName, GeneratedName, string.IsNullOrEmpty(activePack)),
-            [.. (ownPacks ?? []).Select(pack => Entry(pack.Id, pack.Title, pack.Title, pack.Locale))],
+            new SampleDataCatalogEntry(string.Empty, true, GeneratedName, GeneratedName, string.IsNullOrEmpty(activePack), null, SampleStatuses.GenericDescription, SampleStatuses.GenericColumns, SampleStatuses.GenericStatusColumn, SampleStatuses.GenericStatuses),
+            [.. (ownPacks ?? []).Select(pack => Entry(pack.Id, pack.Title, pack.Title, pack.Locale, pack))],
             blueprints,
             SampleDataValidation.ValidatePackages(sources));
     }

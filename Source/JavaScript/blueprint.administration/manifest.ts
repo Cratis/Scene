@@ -28,7 +28,7 @@ export const administrationBlueprintManifest: ScenePackage = {
     module: '@cratis/scene.blueprint.administration',
     license: 'MIT',
     licenseUrl: 'https://github.com/Cratis/Scene/blob/main/LICENSE',
-    sampleData: [{ id: 'admin-default', title: 'Administration · Default', locale: 'en-GB', path: 'sampleData/admin-default.json' }],
+    sampleData: [{ id: 'admin-default', title: 'Administration · Default', locale: 'en-GB', path: 'sampleData/admin-default.json', description: 'Administration users, roles and permissions of a small workspace.', columns: ['Name', 'Email', 'Role', 'Status', 'Last active'], statusColumn: 'Status', statuses: { good: ['Active'], pending: ['Invited'], bad: ['Suspended'] } }],
     blueprint: {
         domain: 'administration',
         description,

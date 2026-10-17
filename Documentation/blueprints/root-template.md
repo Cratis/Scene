@@ -45,8 +45,14 @@ semver range such as `^4.5`. Absent `version` accepts any version.
 
 - `Root.Options` are the shell's own configurable items, keyed by the shell's exposed option name (navigation mode, whether to
   show the footer, density...). The values are JSON; which names are valid is the shell's business, not the profile's.
-- `Appearance` holds the colour scheme (`Light`, `Dark`, `System`) and the accent colour, which sit beside the theme rather than
-  inside it. Either may be absent to keep the theme's own value.
+- `Appearance` holds the colour scheme (`Light`, `Dark`, `System`), the accent colour, the **corners** (`Sharp` 4 px, `Default` the theme's own, `Round` 18 px) and the **font** (an id of the font
+  catalog: `inter`, `ibm-plex-sans`, `source-serif-4`, `system-ui`), which sit beside the theme rather than inside it. Every member may be absent to keep the theme's own value.
+  `resolveAppearance` (C#: `AppearanceResolver`) turns it into the tokens a host applies - `primary.color`, `content.borderRadius`, `text.fontFamily` - and degrades a font that is not
+  available to the system font with a diagnostic.
+- `Identity` is the application's **name** and **logo**: initials (up to two characters), one of the eight logo icons (`box`, `layers`, `home`, `users`, `receipt`, `package`, `database`,
+  `palette`) or an inline image (`data:` URI of PNG, JPG, SVG or WebP, up to 400 KB), and whether the name is shown beside it. `resolveProfileIdentity` (C#: `ProfileIdentityResolver`) answers
+  what is drawn, with the diagnostics `initialsTooLong`, `iconUnknown`, `imageUnsupported` and `imageTooLarge`.
+- `root.options.navigationMode` and `root.options.menuTheme` are typed, enumerated options; see [the layout modes](layout-modes.md#the-typed-options-and-the-touch-regime).
 - `Defaults.NewScreenTemplate` is the template a newly created screen starts from.
 
 ## Legacy `layout`
@@ -238,6 +244,21 @@ dropping, a template that fits the lost outlet (moved, mapped and dropped), qual
 | `defaultScreenTemplateUnavailable` | the template new screens start from exists nowhere |
 | `usedLayoutUnavailable` / `usedScreenTemplateUnavailable` / `usedDialogTemplateUnavailable` / `usedSlotUnavailable` | a screen relies on something the packages no longer provide |
 
+`findProfileProblems(profile, context)` (C#: `ProfileBlockers.FindProblems`) returns those blockers and then the problems the profile can still be applied with. Every problem carries a
+`severity` (`blocker`, `warning`, `info`), the `section` of the designer it belongs to and, when there is one, a `fix` the host applies as **one undoable edit** with
+`applyProfileFix` (C#: `ProfileBlockers.ApplyFix`) - the same profile in both engines.
+
+| Code | When | Severity | Fix |
+| --- | --- | --- | --- |
+| `themeNeedsPackage` | the theme comes from a package that is not in the list (for example after removing Material Themes) | warning | `addPackage` |
+| `accentTooLight` | the accent has less than **3:1** contrast against white button text | warning | `useThemeAccent` |
+| `ownShellHasNoValue` | *my own shell* is chosen and names nothing | warning | `useDefaultBlueprint` |
+| `logoImageMissing` | the logo is an image and none is chosen | warning | `useInitials` |
+| `revealNeedsHover` | the target is a touch size class and the menu mode is Reveal | info | `switchToDrawer` |
+
+Removing a package that a theme needs **raises the problem and never changes the theme**: the profile stays as chosen. `contrastAgainstWhite(color)` (C#: `Contrast.AgainstWhite`) gives the ratio and
+the grade - **AAA** from 7, **AA** from 4.5, **large text only** from 3, **fails** below - for a three- or six-digit hex colour, and a message for anything else.
+
 Each blocker carries `code`, `subject` and a `message` with real names (*Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide*). Icon impact stays with
 `analyzeIconImpact`, which already lives in the engine.
 
@@ -249,4 +270,19 @@ existing descriptor format, so a host renders them with the property-editor regi
 choices the application has (themes, packages, platforms, sample-data packs, the shell's options and navigation modes); an absent list leaves a property free-form. A theme the profile's packages do
 not support is still offered, with the reason in the choice's description.
 
-The shared corpora are `shell-switch-fixtures.json` and `profile-blockers-fixtures.json`; each is asserted by both engines.
+## Pickers
+
+A host draws its pickers from Scene's metadata alone:
+
+| Picker | Answered by |
+| --- | --- |
+| Shell cards (title, description, wireframe, default mode) | `describeShellCards(library)` (C#: `ShellCards.Describe`); a shell is a card when it declares `metadata.defaultMenuMode`, and `verifyBlueprintPackage` fails one without a title, a description or a thumbnail |
+| Theme cards (scheme, accent, corners, the package selecting it adds) | `describeThemeCards` (C#: `ThemeCards.Describe`) |
+| Switching the colour scheme moves a theme of the other scheme to the matching *Scene Default* theme | `switchColorScheme` (C#: `ThemeCards.SwitchColorScheme`) |
+| The version rule - *follow compatible versions*, *pin*, *always the latest* - and the status chip | `describeVersionRule` (C#: `VersionRules.Describe`), from the package resolver |
+| The value of *my own shell* - a package name or a path | `describeOwnShellValue` (C#: `OwnShells.Describe`) |
+| The package list - reasons, locks, what can be added, moves | `describePackageList` and the edits (C#: `PackageList`) |
+| The eight menu mode schematics | `menuModeCards` of `@cratis/scene.blueprint.default` |
+
+The shared corpora are `shell-switch-fixtures.json`, `profile-blockers-fixtures.json`, `profile-pickers-fixtures.json`, `package-list-fixtures.json`, `shell-options-fixtures.json`,
+`shell-regions-fixtures.json`, `profile-identity-fixtures.json` and `profile-appearance-fixtures.json`; each is asserted by both engines.

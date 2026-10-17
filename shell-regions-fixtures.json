@@ -1,0 +1,1199 @@
+{
+  "description": "Which regions (designer contract rule N9) a shell exposes in each menu mode, regime and menu state. The menu is not drawn while it is hidden and closed, and then falls back to the shell. Asserted by both engines.",
+  "cases": [
+    {
+      "mode": "static",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "static",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "static",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "static",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slim",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slim",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slim",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slim",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slimPlus",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slimPlus",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slimPlus",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "slimPlus",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "compact",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "compact",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "compact",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "compact",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "horizontal",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "horizontal",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "horizontal",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "horizontal",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "reveal",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "reveal",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "reveal",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "reveal",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "drawer",
+      "touch": false,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "drawer",
+      "touch": false,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "drawer",
+      "touch": true,
+      "menuOpen": false,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": false,
+          "fallback": "shell"
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    },
+    {
+      "mode": "drawer",
+      "touch": true,
+      "menuOpen": true,
+      "expected": [
+        {
+          "id": "identity",
+          "label": "App name and logo",
+          "section": "app",
+          "drawn": true
+        },
+        {
+          "id": "shell",
+          "label": "Shell",
+          "section": "shell",
+          "drawn": true
+        },
+        {
+          "id": "menu",
+          "label": "Menu",
+          "section": "menu",
+          "drawn": true
+        },
+        {
+          "id": "content",
+          "label": "Sample data",
+          "section": "sampleData",
+          "drawn": true
+        },
+        {
+          "id": "accent",
+          "label": "Look and accent",
+          "section": "look",
+          "drawn": true
+        }
+      ]
+    }
+  ]
+}

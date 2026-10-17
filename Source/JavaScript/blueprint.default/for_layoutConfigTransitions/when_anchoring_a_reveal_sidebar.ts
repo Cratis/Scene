@@ -14,9 +14,9 @@ describe('when anchoring a reveal sidebar', () => {
     const reveal = withMode(defaultLayoutConfigState(), LayoutMode.Reveal);
     const anchored = toggleSidebarAnchor(reveal);
 
-    it('should recognize reveal and drawer as the pointer-driven modes', () => {
+    it('should recognize reveal as the only pointer-driven mode', () => {
         isPointerRevealMode(LayoutMode.Reveal).should.be.true;
-        isPointerRevealMode(LayoutMode.Drawer).should.be.true;
+        isPointerRevealMode(LayoutMode.Drawer).should.be.false;
         isPointerRevealMode(LayoutMode.Static).should.be.false;
     });
 

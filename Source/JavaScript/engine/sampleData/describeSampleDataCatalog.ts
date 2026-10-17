@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SampleDataPackReference, ScenePackage } from '@cratis/scene.model';
+import { SampleDataPackReference, SampleStatusClassification, ScenePackage } from '@cratis/scene.model';
+import { genericSampleDataColumns, genericSampleDataDescription, genericSampleDataStatusColumn, genericSampleDataStatuses } from './sampleStatus';
 import { SampleDataPackSource } from './SampleDataPackSource';
 import { validateSampleDataPackages } from './validateSampleDataPackages';
 
@@ -27,6 +28,18 @@ export interface SampleDataCatalogEntry {
 
     /** Whether it is the active pack (the generated entry is selected when no pack is active). */
     selected: boolean;
+
+    /** One line saying what the pack is. */
+    description?: string;
+
+    /** The columns of the pack's main table, in order. */
+    columns?: string[];
+
+    /** The column drawn as status pills. */
+    statusColumn?: string;
+
+    /** The classification of the status column's values. */
+    statuses?: SampleStatusClassification;
 }
 
 /** A blueprint's packs, one group of the Blueprints submenu. */
@@ -67,11 +80,15 @@ export const generatedSampleDataName = 'Generic (typed by field kind)';
  */
 export function describeSampleDataCatalog(
     sources: readonly SampleDataPackSource[],
-    ownPacks: readonly Pick<SampleDataPackReference, 'id' | 'title' | 'locale'>[] = [],
+    ownPacks: readonly (Pick<SampleDataPackReference, 'id' | 'title' | 'locale'> & Partial<SampleDataPackReference>)[] = [],
     activePack?: string,
 ): SampleDataCatalog {
-    const entry = (id: string, name: string, label: string, locale: string): SampleDataCatalogEntry => ({
+    const entry = (id: string, name: string, label: string, locale: string, reference?: Partial<SampleDataPackReference>): SampleDataCatalogEntry => ({
         id, isGenerated: false, name, label, locale, selected: id === activePack,
+        ...(reference?.description === undefined ? {} : { description: reference.description }),
+        ...(reference?.columns === undefined ? {} : { columns: [...reference.columns] }),
+        ...(reference?.statusColumn === undefined ? {} : { statusColumn: reference.statusColumn }),
+        ...(reference?.statuses === undefined ? {} : { statuses: reference.statuses }),
     });
 
     const blueprints: SampleDataCatalogGroup[] = [];
@@ -84,7 +101,7 @@ export function describeSampleDataCatalog(
             blueprint: group,
             packs: references.map(reference => {
                 const name = reference.title.startsWith(prefix) ? reference.title.slice(prefix.length) : reference.title;
-                return entry(reference.id, name, `${group}${sampleDataLabelSeparator}${name}`, reference.locale);
+                return entry(reference.id, name, `${group}${sampleDataLabelSeparator}${name}`, reference.locale, reference);
             }),
         });
     }
@@ -96,8 +113,12 @@ export function describeSampleDataCatalog(
             name: generatedSampleDataName,
             label: generatedSampleDataName,
             selected: activePack === undefined || activePack === null || activePack === '',
+            description: genericSampleDataDescription,
+            columns: [...genericSampleDataColumns],
+            statusColumn: genericSampleDataStatusColumn,
+            statuses: genericSampleDataStatuses,
         },
-        own: ownPacks.map(pack => entry(pack.id, pack.title, pack.title, pack.locale)),
+        own: ownPacks.map(pack => entry(pack.id, pack.title, pack.title, pack.locale, pack)),
         blueprints,
         problems: validateSampleDataPackages(sources),
     };
