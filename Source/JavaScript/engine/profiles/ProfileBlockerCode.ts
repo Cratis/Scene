@@ -32,4 +32,19 @@ export enum ProfileBlockerCode {
 
     /** The shell cannot be the application's shell. The shell's own code is in `ProfileBlocker.shellCode`. */
     ShellUnusable = 'shellUnusable',
+
+    /** The selected theme comes from a package that is not in the list. */
+    ThemeNeedsPackage = 'themeNeedsPackage',
+
+    /** The accent is too light for white button text. */
+    AccentTooLight = 'accentTooLight',
+
+    /** "My own shell" is chosen and names nothing. */
+    OwnShellHasNoValue = 'ownShellHasNoValue',
+
+    /** The logo is an image and no image is chosen. */
+    LogoImageMissing = 'logoImageMissing',
+
+    /** The target is a touch size class while the menu mode is Reveal. */
+    RevealNeedsHover = 'revealNeedsHover',
 }

@@ -16,3 +16,8 @@ export * from './fontCatalog';
 export * from './resolveAppearance';
 export * from './packageList';
 export * from './shellOptions';
+export * from './ProblemSeverity';
+export * from './ProfileSection';
+export * from './ProfileFix';
+export * from './contrast';
+export * from './findProfileProblems';

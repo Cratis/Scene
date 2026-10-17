@@ -1,5 +1,5 @@
 {
-  "description": "Shared fixture corpus for finding what stops a UI profile from being applied: the C# engine (ProfileBlockers.Find) and the TypeScript engine (findProfileBlockers) must give the same blockers, in the same order, with the same messages. The shell is resolved from profile.root against the library, as a host does.",
+  "description": "Shared fixture corpus for finding what stops, and what is worth a warning, a UI profile from being applied: the C# engine (ProfileBlockers.FindProblems) and the TypeScript engine (findProfileProblems) must give the same problems, in the same order, with the same messages. The shell is resolved from profile.root against the library, as a host does.",
   "libraries": {
     "default": {
       "own": {
@@ -392,6 +392,19 @@
       "screenTemplates": [],
       "dialogTemplates": [],
       "themes": []
+    },
+    {
+      "name": "material-themes",
+      "version": "1.0.0",
+      "kind": "Styling",
+      "dependencies": [],
+      "components": [],
+      "layouts": [],
+      "screenTemplates": [],
+      "dialogTemplates": [],
+      "themes": [
+        "Material Light"
+      ]
     }
   ],
   "cases": [
@@ -465,7 +478,10 @@
           "code": "missingDependency",
           "subject": "ghost",
           "message": "Package 'needy' needs 'ghost', which is not available",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -487,7 +503,10 @@
           "code": "versionConflict",
           "subject": "core",
           "message": "Package 'hr' needs 'core' ^2.0, but version 1.0.0 is what is available",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -509,7 +528,10 @@
           "code": "dependencyCycle",
           "subject": "a → b",
           "message": "Packages depend on each other in a circle: a → b",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -537,7 +559,10 @@
           "code": "shellUnusable",
           "subject": "Nowhere",
           "message": "Root template 'Nowhere' cannot be used: Own template 'Nowhere' does not exist",
-          "shellCode": "rootTemplateUnknown"
+          "shellCode": "rootTemplateUnknown",
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         }
       ]
     },
@@ -567,7 +592,10 @@
           "code": "shellUnusable",
           "subject": "CrmShell",
           "message": "Template 'CrmShell' was chosen from blueprint 'crm' ^2.0 but version 1.4.2 is installed",
-          "shellCode": "rootTemplateVersionNotSatisfied"
+          "shellCode": "rootTemplateVersionNotSatisfied",
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         }
       ]
     },
@@ -595,7 +623,10 @@
           "code": "shellUnusable",
           "subject": "HeaderOnlyShell",
           "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it",
-          "shellCode": "rootTemplateMissingContentSlot"
+          "shellCode": "rootTemplateMissingContentSlot",
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         }
       ]
     },
@@ -622,7 +653,10 @@
           "code": "themeIncompatible",
           "subject": "Slate",
           "message": "Theme 'Slate' is not marked compatible with 'crm', which profile 'Desktop' uses",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "look",
+          "fix": null
         }
       ]
     },
@@ -650,13 +684,19 @@
           "code": "versionConflict",
           "subject": "core",
           "message": "Package 'hr' needs 'core' ^2.0, but version 1.0.0 is what is available",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "themeIncompatible",
           "subject": "Slate",
           "message": "Theme 'Slate' is not marked compatible with 'crm', 'hr', which profile 'Desktop' uses",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "look",
+          "fix": null
         }
       ]
     },
@@ -728,7 +768,10 @@
           "code": "defaultScreenTemplateUnavailable",
           "subject": "Nope",
           "message": "Screen template 'Nope', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         }
       ]
     },
@@ -756,7 +799,10 @@
           "code": "defaultScreenTemplateUnavailable",
           "subject": "Dashboard Page",
           "message": "Screen template 'Dashboard Page', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         }
       ]
     },
@@ -788,7 +834,10 @@
           "code": "usedLayoutUnavailable",
           "subject": "HrShell",
           "message": "Screen 'Orders' uses layout 'HrShell', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -819,7 +868,10 @@
           "code": "usedScreenTemplateUnavailable",
           "subject": "CRM Workspace",
           "message": "Screen 'Customers' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -850,7 +902,10 @@
           "code": "usedDialogTemplateUnavailable",
           "subject": "CrmDialog",
           "message": "Screen 'Customers' uses dialog template 'CrmDialog', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -887,7 +942,10 @@
           "code": "usedSlotUnavailable",
           "subject": "OwnShell.subject",
           "message": "Screen 'Tickets' places content in slot 'subject' of 'OwnShell', which no longer has it",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -923,7 +981,10 @@
           "code": "usedLayoutUnavailable",
           "subject": "CrmShell",
           "message": "Screen 'Tickets' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -972,19 +1033,28 @@
           "code": "usedLayoutUnavailable",
           "subject": "CrmShell",
           "message": "Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "usedLayoutUnavailable",
           "subject": "CrmShell",
           "message": "Screen 'Customers' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "usedScreenTemplateUnavailable",
           "subject": "CRM Workspace",
           "message": "Screen 'Quotes' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
     },
@@ -1040,51 +1110,553 @@
           "code": "missingDependency",
           "subject": "ghost",
           "message": "Package 'needy' needs 'ghost', which is not available",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "shellUnusable",
           "subject": "Nowhere",
           "message": "Root template 'Nowhere' cannot be used: Own template 'Nowhere' does not exist",
-          "shellCode": "rootTemplateUnknown"
+          "shellCode": "rootTemplateUnknown",
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         },
         {
           "code": "themeIncompatible",
           "subject": "Slate",
           "message": "Theme 'Slate' is not marked compatible with 'core', 'needy', which profile 'Desktop' uses",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "look",
+          "fix": null
         },
         {
           "code": "defaultScreenTemplateUnavailable",
           "subject": "Nope",
           "message": "Screen template 'Nope', the default for new screens of profile 'Desktop', is not provided by the application or its packages",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
         },
         {
           "code": "usedLayoutUnavailable",
           "subject": "CrmShell",
           "message": "Screen 'Orders' uses layout 'CrmShell', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "usedScreenTemplateUnavailable",
           "subject": "CRM Workspace",
           "message": "Screen 'Orders' uses screen template 'CRM Workspace', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "usedDialogTemplateUnavailable",
           "subject": "CrmDialog",
           "message": "Screen 'Orders' uses dialog template 'CrmDialog', which the packages of profile 'Desktop' do not provide",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         },
         {
           "code": "usedSlotUnavailable",
           "subject": "OwnShell.subject",
           "message": "Screen 'Orders' places content in slot 'subject' of 'OwnShell', which no longer has it",
-          "shellCode": null
+          "shellCode": null,
+          "severity": "blocker",
+          "section": "packages",
+          "fix": null
         }
       ]
+    },
+    {
+      "name": "theme needs a package",
+      "description": "the theme comes from a package that was removed from the list: the theme stays, a problem is raised",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "theme": "Material Light"
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "themeNeedsPackage",
+          "subject": "Material Light",
+          "message": "Theme 'Material Light' comes from 'material-themes', which is not in the package list",
+          "shellCode": null,
+          "severity": "warning",
+          "section": "look",
+          "fix": {
+            "kind": "addPackage",
+            "label": "Add package",
+            "package": "material-themes"
+          }
+        }
+      ],
+      "fixed": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "material-themes"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "theme": "Material Light"
+      }
+    },
+    {
+      "name": "theme package present",
+      "description": "the theme's package is in the list",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "material-themes"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "theme": "Material Light"
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    },
+    {
+      "name": "accent too light",
+      "description": "a yellow accent has too little contrast against white button text",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "appearance": {
+          "accent": "#ffeb3b"
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "accentTooLight",
+          "subject": "#ffeb3b",
+          "message": "Accent #ffeb3b is too light for white button text (1.22:1; it needs at least 3:1)",
+          "shellCode": null,
+          "severity": "warning",
+          "section": "look",
+          "fix": {
+            "kind": "useThemeAccent",
+            "label": "Use theme accent"
+          }
+        }
+      ],
+      "fixed": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "appearance": {}
+      }
+    },
+    {
+      "name": "accent dark enough",
+      "description": "an indigo accent is fine",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "appearance": {
+          "accent": "#4f46e5"
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    },
+    {
+      "name": "accent not a colour",
+      "description": "an accent the engine cannot read raises nothing here; the contrast function reports it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "appearance": {
+          "accent": "#12"
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    },
+    {
+      "name": "own shell without a value",
+      "description": "'my own shell' is chosen and names nothing",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": ""
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "shellUnusable",
+          "subject": "",
+          "message": "Root template '' cannot be used: A template reference must name a template",
+          "shellCode": "rootTemplateUnknown",
+          "severity": "blocker",
+          "section": "shell",
+          "fix": null
+        },
+        {
+          "code": "ownShellHasNoValue",
+          "subject": "root",
+          "message": "My own shell is chosen but names nothing; enter a package name or a path",
+          "shellCode": null,
+          "severity": "warning",
+          "section": "shell",
+          "fix": {
+            "kind": "useDefaultBlueprint",
+            "label": "Use default blueprint"
+          }
+        }
+      ],
+      "fixed": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ]
+      }
+    },
+    {
+      "name": "logo image missing",
+      "description": "the logo is an image and none is chosen",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "identity": {
+          "logo": {
+            "kind": "Image"
+          }
+        }
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "logoImageMissing",
+          "subject": "logo",
+          "message": "The logo is an image, but no image is chosen",
+          "shellCode": null,
+          "severity": "warning",
+          "section": "app",
+          "fix": {
+            "kind": "useInitials",
+            "label": "Use initials"
+          }
+        }
+      ],
+      "fixed": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          }
+        },
+        "identity": {
+          "logo": {
+            "kind": "Initials"
+          }
+        }
+      }
+    },
+    {
+      "name": "reveal on a touch target",
+      "description": "Reveal needs hover and the target is a touch size class",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          },
+          "options": {
+            "navigationMode": "reveal"
+          }
+        },
+        "defaultSizeClass": "Compact"
+      },
+      "theme": null,
+      "usages": [],
+      "expected": [
+        {
+          "code": "revealNeedsHover",
+          "subject": "navigationMode",
+          "message": "Reveal needs a pointer that can hover, so a touch screen shows a drawer instead",
+          "shellCode": null,
+          "severity": "info",
+          "section": "menu",
+          "fix": {
+            "kind": "switchToDrawer",
+            "label": "Switch to Drawer"
+          }
+        }
+      ],
+      "fixed": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          },
+          "options": {
+            "navigationMode": "drawer"
+          }
+        },
+        "defaultSizeClass": "Compact"
+      }
+    },
+    {
+      "name": "reveal with a pointer",
+      "description": "Reveal is fine on a regular target",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Own",
+            "id": "OwnShell"
+          },
+          "options": {
+            "navigationMode": "reveal"
+          }
+        },
+        "defaultSizeClass": "Regular"
+      },
+      "theme": null,
+      "usages": [],
+      "expected": []
+    }
+  ],
+  "contrast": [
+    {
+      "color": "#ffffff",
+      "expected": {
+        "valid": true,
+        "ratio": 1,
+        "grade": "fails"
+      }
+    },
+    {
+      "color": "#000",
+      "expected": {
+        "valid": true,
+        "ratio": 21,
+        "grade": "aaa"
+      }
+    },
+    {
+      "color": "#000000",
+      "expected": {
+        "valid": true,
+        "ratio": 21,
+        "grade": "aaa"
+      }
+    },
+    {
+      "color": "4f46e5",
+      "expected": {
+        "valid": true,
+        "ratio": 6.29,
+        "grade": "aa"
+      }
+    },
+    {
+      "color": "#767676",
+      "expected": {
+        "valid": true,
+        "ratio": 4.54,
+        "grade": "aa"
+      }
+    },
+    {
+      "color": "#777",
+      "expected": {
+        "valid": true,
+        "ratio": 4.48,
+        "grade": "largeTextOnly"
+      }
+    },
+    {
+      "color": "#949494",
+      "expected": {
+        "valid": true,
+        "ratio": 3.03,
+        "grade": "largeTextOnly"
+      }
+    },
+    {
+      "color": "#ffeb3b",
+      "expected": {
+        "valid": true,
+        "ratio": 1.22,
+        "grade": "fails"
+      }
+    },
+    {
+      "color": "#0a7",
+      "expected": {
+        "valid": true,
+        "ratio": 2.99,
+        "grade": "fails"
+      }
+    },
+    {
+      "color": "#12",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
+    },
+    {
+      "color": "#1234",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
+    },
+    {
+      "color": "#12345678",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
+    },
+    {
+      "color": "red",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
+    },
+    {
+      "color": "#gg0000",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
+    },
+    {
+      "color": "",
+      "expected": {
+        "valid": false,
+        "message": "Enter a 3- or 6-digit hex colour, like #0a7 or #00aa77"
+      }
     }
   ]
 }

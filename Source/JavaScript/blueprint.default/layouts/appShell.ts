@@ -104,5 +104,5 @@ export const appShellLayout: Layout = {
         { name: SlotName.ConfigPanel },
     ],
     arrangement: appShellArrangement,
-    metadata: { ...sakaiCompositionProvenance, category: 'Foundation / Shell' },
+    metadata: { ...sakaiCompositionProvenance, category: 'Foundation / Shell', defaultMenuMode: 'static' },
 };

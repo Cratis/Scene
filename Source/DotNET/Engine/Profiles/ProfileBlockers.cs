@@ -1,10 +1,15 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Globalization;
+using System.Text.Json.Nodes;
 using Cratis.Scene.Engine.Packages;
 using Cratis.Scene.Engine.Shell;
 using Cratis.Scene.Engine.Templates;
+using Cratis.Scene.Model.Packages;
 using Cratis.Scene.Model.Profiles;
+using Cratis.Scene.Model.Screens;
+using Cratis.Scene.Model.SizeClasses;
 
 namespace Cratis.Scene.Engine.Profiles;
 
@@ -106,8 +111,124 @@ public static class ProfileBlockers
             }
         }
 
-        return blockers;
+        return [.. blockers.Select(blocker => blocker with { Severity = ProblemSeverity.Blocker, Section = SectionOf(blocker.Code) })];
     }
+
+    /// <summary>
+    /// Finds everything worth telling the author about a profile: the blockers first, then the warnings and information the profile can be applied with.
+    /// Removing a package never changes the theme: a theme that needed the package becomes <see cref="ProfileBlockerCode.ThemeNeedsPackage"/>.
+    /// </summary>
+    /// <param name="profile">The profile.</param>
+    /// <param name="context">What it is checked against.</param>
+    /// <returns>The problems, blockers first.</returns>
+    public static IReadOnlyList<ProfileBlocker> FindProblems(UiProfile profile, ProfileBlockerContext context)
+    {
+        var problems = Find(profile, context).ToList();
+
+        var theme = profile.Theme ?? context.Theme?.Name;
+        if (theme is not null)
+        {
+            var suppliers = context.Packages.Where(candidate => candidate.Themes.Contains(theme)).ToList();
+            if (suppliers.Count > 0 && !suppliers.Exists(supplier => profile.Packages.Contains(supplier.Name)))
+            {
+                problems.Add(Advisory(
+                    ProfileBlockerCode.ThemeNeedsPackage,
+                    theme,
+                    ProblemSeverity.Warning,
+                    $"Theme '{theme}' comes from '{suppliers[0].Name}', which is not in the package list",
+                    new ProfileFix(ProfileFixKind.AddPackage, "Add package", suppliers[0].Name)));
+            }
+        }
+
+        var accent = profile.Appearance?.Accent;
+        if (!string.IsNullOrEmpty(accent))
+        {
+            var contrast = Contrast.AgainstWhite(accent);
+            if (contrast.Valid && contrast.Ratio < Contrast.MinimumAccent)
+            {
+                problems.Add(Advisory(
+                    ProfileBlockerCode.AccentTooLight,
+                    accent,
+                    ProblemSeverity.Warning,
+                    $"Accent {accent} is too light for white button text ({contrast.Ratio.Value.ToString("0.00", CultureInfo.InvariantCulture)}:1; it needs at least {Contrast.MinimumAccent.ToString(CultureInfo.InvariantCulture)}:1)",
+                    new ProfileFix(ProfileFixKind.UseThemeAccent, "Use theme accent")));
+            }
+        }
+
+        var template = profile.Root?.Template;
+        if (template is not null && template.Source == TemplateReferenceSource.Own && string.IsNullOrWhiteSpace(template.Id))
+        {
+            problems.Add(Advisory(
+                ProfileBlockerCode.OwnShellHasNoValue,
+                "root",
+                ProblemSeverity.Warning,
+                "My own shell is chosen but names nothing; enter a package name or a path",
+                new ProfileFix(ProfileFixKind.UseDefaultBlueprint, "Use default blueprint")));
+        }
+
+        var logo = profile.Identity?.Logo;
+        if (logo?.Kind == LogoKind.Image && string.IsNullOrEmpty(logo.Image))
+        {
+            problems.Add(Advisory(
+                ProfileBlockerCode.LogoImageMissing,
+                "logo",
+                ProblemSeverity.Warning,
+                "The logo is an image, but no image is chosen",
+                new ProfileFix(ProfileFixKind.UseInitials, "Use initials")));
+        }
+
+        if (profile.DefaultSizeClass == TargetSizeClass.Compact && ShellOptions.Normalize(ModeOf(profile)) == NavigationMode.Reveal)
+        {
+            problems.Add(Advisory(
+                ProfileBlockerCode.RevealNeedsHover,
+                "navigationMode",
+                ProblemSeverity.Info,
+                "Reveal needs a pointer that can hover, so a touch screen shows a drawer instead",
+                new ProfileFix(ProfileFixKind.SwitchToDrawer, "Switch to Drawer")));
+        }
+
+        return problems;
+    }
+
+    /// <summary>
+    /// Applies a problem's fix. One function for every host, so the same fix gives the same profile in C# and TypeScript.
+    /// </summary>
+    /// <param name="profile">The profile.</param>
+    /// <param name="fix">The fix.</param>
+    /// <param name="catalog">Every package that could be selected.</param>
+    /// <returns>The profile after the fix.</returns>
+    public static UiProfile ApplyFix(UiProfile profile, ProfileFix fix, IReadOnlyList<ScenePackage> catalog) => fix.Kind switch
+    {
+        ProfileFixKind.AddPackage => fix.Package is null ? profile : PackageList.Add(profile, catalog, fix.Package).Profile,
+        ProfileFixKind.UseThemeAccent => profile.Appearance is null ? profile : profile with { Appearance = profile.Appearance with { Accent = null } },
+        ProfileFixKind.UseDefaultBlueprint => profile with { Root = null },
+        ProfileFixKind.UseInitials => profile with { Identity = (profile.Identity ?? new ProfileIdentity()) with { Logo = (profile.Identity?.Logo ?? new ProfileLogo()) with { Kind = LogoKind.Initials } } },
+        ProfileFixKind.SwitchToDrawer => profile.Root is null
+            ? profile
+            : profile with
+            {
+                Root = profile.Root with
+                {
+                    Options = new Dictionary<string, JsonNode?>(profile.Root.Options ?? new Dictionary<string, JsonNode?>()) { ["navigationMode"] = JsonValue.Create("drawer") }
+                }
+            },
+        _ => profile
+    };
+
+    static string? ModeOf(UiProfile profile) =>
+        profile.Root?.Options is not null && profile.Root.Options.TryGetValue("navigationMode", out var mode) && mode is JsonValue value && value.TryGetValue<string>(out var text) ? text : null;
+
+    static ProfileBlocker Advisory(ProfileBlockerCode code, string subject, ProblemSeverity severity, string message, ProfileFix fix) =>
+        new(code, subject, message, null, severity, SectionOf(code), fix);
+
+    static ProfileSection SectionOf(ProfileBlockerCode code) => code switch
+    {
+        ProfileBlockerCode.ThemeIncompatible or ProfileBlockerCode.ThemeNeedsPackage or ProfileBlockerCode.AccentTooLight => ProfileSection.Look,
+        ProfileBlockerCode.DefaultScreenTemplateUnavailable or ProfileBlockerCode.ShellUnusable or ProfileBlockerCode.OwnShellHasNoValue => ProfileSection.Shell,
+        ProfileBlockerCode.LogoImageMissing => ProfileSection.App,
+        ProfileBlockerCode.RevealNeedsHover => ProfileSection.Menu,
+        _ => ProfileSection.Packages
+    };
 
     sealed class Vocabulary
     {

@@ -8,7 +8,9 @@ import { ShellDiagnosticCode } from '../shell/ShellDiagnosticCode';
 import { TemplateLibrary } from '../templates/TemplateLibrary';
 import { incompatiblePackages } from '../themeCompatibility';
 import { ProfileBlocker } from './ProfileBlocker';
+import { ProblemSeverity } from './ProblemSeverity';
 import { ProfileBlockerCode } from './ProfileBlockerCode';
+import { ProfileSection } from './ProfileSection';
 import { ProfileUsage } from './ProfileUsage';
 
 /** What a profile is checked against. */
@@ -28,6 +30,25 @@ export interface ProfileBlockerContext {
     /** What existing screens rely on. */
     usages?: readonly ProfileUsage[];
 }
+
+/** The section of the designer each problem belongs to. */
+export const sectionOf: Record<ProfileBlockerCode, ProfileSection> = {
+    [ProfileBlockerCode.MissingDependency]: ProfileSection.Packages,
+    [ProfileBlockerCode.VersionConflict]: ProfileSection.Packages,
+    [ProfileBlockerCode.DependencyCycle]: ProfileSection.Packages,
+    [ProfileBlockerCode.ThemeIncompatible]: ProfileSection.Look,
+    [ProfileBlockerCode.DefaultScreenTemplateUnavailable]: ProfileSection.Shell,
+    [ProfileBlockerCode.UsedLayoutUnavailable]: ProfileSection.Packages,
+    [ProfileBlockerCode.UsedScreenTemplateUnavailable]: ProfileSection.Packages,
+    [ProfileBlockerCode.UsedDialogTemplateUnavailable]: ProfileSection.Packages,
+    [ProfileBlockerCode.UsedSlotUnavailable]: ProfileSection.Packages,
+    [ProfileBlockerCode.ShellUnusable]: ProfileSection.Shell,
+    [ProfileBlockerCode.ThemeNeedsPackage]: ProfileSection.Look,
+    [ProfileBlockerCode.AccentTooLight]: ProfileSection.Look,
+    [ProfileBlockerCode.OwnShellHasNoValue]: ProfileSection.Shell,
+    [ProfileBlockerCode.LogoImageMissing]: ProfileSection.App,
+    [ProfileBlockerCode.RevealNeedsHover]: ProfileSection.Menu,
+};
 
 const unusableShell = new Set<ShellDiagnosticCode>([
     ShellDiagnosticCode.RootTemplateUnknown,
@@ -50,7 +71,7 @@ const unusableShell = new Set<ShellDiagnosticCode>([
  * @returns The blockers, empty when the profile can be applied.
  */
 export function findProfileBlockers(profile: UiProfile, context: ProfileBlockerContext): ProfileBlocker[] {
-    const blockers: ProfileBlocker[] = [];
+    const blockers: Omit<ProfileBlocker, 'severity' | 'section'>[] = [];
     const name = profile.name;
 
     const selection = resolvePackageDependencies(profile.packages, [...context.packages]);
@@ -118,7 +139,7 @@ export function findProfileBlockers(profile: UiProfile, context: ProfileBlockerC
         }
     }
 
-    return blockers;
+    return blockers.map(blocker => ({ ...blocker, severity: ProblemSeverity.Blocker, section: sectionOf[blocker.code] }));
 }
 
 interface Vocabulary {
