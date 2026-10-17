@@ -719,6 +719,13 @@
     text-decoration: none;
 }
 
+/* The rail modes have no room for the name: Slim, Slim+ and a collapsed Reveal show the mark only. */
+.layout-slim .layout-logo-name,
+.layout-slim-plus .layout-logo-name,
+.layout-reveal:not(.layout-sidebar-active):not(.layout-sidebar-anchored) .layout-logo-name {
+    display: none;
+}
+
 .layout-logo-mark {
     display: grid;
     place-items: center;
