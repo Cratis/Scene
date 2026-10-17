@@ -3,6 +3,7 @@
 
 import { PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { corePackage, coreDescriptors } from '../../index';
+import { toolbarItemMode } from '../CoreToolbar';
 
 describe('when describing the core package', () => {
     it('should describe components', () => {
@@ -38,7 +39,7 @@ describe('when describing the core package', () => {
 
     it('should describe a toolbar button as a title, a state change slice, an emphasis and an icon', () => {
         const button = coreDescriptors.find(descriptor => descriptor.component === 'core:toolbarItem')!;
-        button.properties.map(property => property.path).should.deep.equal(['label', 'slice', 'emphasis', 'icon', 'target']);
+        button.properties.map(property => property.path).should.deep.equal(['label', 'slice', 'emphasis', 'icon', 'presentation', 'target']);
 
         const slice = button.properties.find(property => property.path === 'slice')!;
         slice.editorKind!.should.equal(PropertyEditorKind.Slice);
@@ -48,5 +49,18 @@ describe('when describing the core package', () => {
         emphasis.valueType.should.equal(PropertyValueType.Enum);
         emphasis.choices!.map(choice => choice.value).should.deep.equal([ToolbarEmphasis.Primary, ToolbarEmphasis.Secondary, ToolbarEmphasis.Quiet]);
         (emphasis.default as string).should.equal(ToolbarEmphasis.Secondary);
+    });
+
+    it('should describe a toolbar item\'s presentation as the hints the toolbar reads, keeping the ones it does not describe', () => {
+        const presentation = coreDescriptors.find(descriptor => descriptor.component === 'core:toolbarItem')!.properties.find(property => property.path === 'presentation')!;
+        presentation.valueType.should.equal(PropertyValueType.Object);
+        presentation.open!.should.be.true;
+        presentation.properties!.map(field => field.path).should.deep.equal(['mode', 'placement']);
+        presentation.properties![0].choices!.map(choice => choice.value).should.deep.equal(['both', 'icon', 'text']);
+    });
+
+    it('should offer, as modes of presentation, exactly the ones the toolbar renders', () => {
+        const modes = coreDescriptors.find(descriptor => descriptor.component === 'core:toolbarItem')!.properties.find(property => property.path === 'presentation')!.properties![0].choices!.map(choice => choice.value);
+        modes.map(mode => toolbarItemMode({ mode })).should.deep.equal(['both', 'icon', 'text']);
     });
 });

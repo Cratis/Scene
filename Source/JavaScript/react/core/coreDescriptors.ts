@@ -68,6 +68,17 @@ const describedCore: ComponentDescriptor[] = [
             },
             { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
             {
+                path: 'presentation', label: 'Presentation', group: 'Appearance', valueType: PropertyValueType.Object, open: true,
+                description: 'How the item is shown: what it displays (icon, text or both) and the placement hint a host or theme can style by. Hints other than these are kept as authored.',
+                properties: [
+                    {
+                        path: 'mode', label: 'Shows', group: 'Appearance', valueType: PropertyValueType.Enum, default: 'both', editorKind: PropertyEditorKind.Enum,
+                        choices: [{ value: 'both', label: 'Icon and text' }, { value: 'icon', label: 'Icon only' }, { value: 'text', label: 'Text only' }],
+                    },
+                    { path: 'placement', label: 'Placement', group: 'Appearance', valueType: PropertyValueType.String, description: 'A hint such as `primary` or `overflow` a host or theme can place the item by.' },
+                ],
+            },
+            {
                 path: 'target', label: 'Command (legacy)', group: 'Behavior', valueType: PropertyValueType.String, editorKind: 'stateChangeReference',
                 description: 'A hand-typed command for a button that has no slice. It is converted to the slice that accepts the command when exactly one does; prefer a slice.',
             },
