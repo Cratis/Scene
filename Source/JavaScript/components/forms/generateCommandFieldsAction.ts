@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { elementNodeId } from '@cratis/scene.engine';
 import { DesignTimeAction, DesignTimeActionContext, DesignTimeActionResult } from '@cratis/scene.react';
 import { DesignTimeActionPlacement, SceneEditKind } from '@cratis/scene.model';
 
@@ -32,9 +33,11 @@ function generateCommandFields(context: DesignTimeActionContext): DesignTimeActi
         diagnostics: [],
         edits: [{
             kind: SceneEditKind.SetProperty,
-            nodeId: context.element.id,
+            nodeId: elementNodeId(context.element.id),
             path: 'inputs',
+            // A collection item is addressed by its id, so an item without one is refused by the editing engine and nothing is generated.
             value: properties.map((property, index) => ({
+                id: property.name,
                 property: property.name,
                 type: property.type === 'Guid' || property.type === 'guid' ? 'guid' : 'string',
                 label: property.label ?? humanize(property.name),

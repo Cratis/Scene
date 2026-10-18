@@ -21,7 +21,7 @@ describe('when arranging command form fields with the keyboard', () => {
 
     it('should move a field with an arrow key as one canonical edit', () => {
         fireEvent.keyDown(screen.getByRole('button', { name: /^name:/ }), { key: 'ArrowRight' });
-        edits.should.deep.equal([[{ kind: SceneEditKind.SetProperty, nodeId: 'form', path: 'layout', value: { ...layout, placements: [{ field: 'name', row: 1, column: 2 }] } }]]);
+        edits.should.deep.equal([[{ kind: SceneEditKind.SetProperty, nodeId: 'element:form', path: 'layout', value: { ...layout, placements: [{ field: 'name', row: 1, column: 2 }] } }]]);
         values.length.should.equal(1);
     });
 

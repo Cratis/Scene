@@ -3,7 +3,7 @@
 
 import { KeyboardEvent, useState } from 'react';
 import { CommandFormLayout, SceneEditKind } from '@cratis/scene.model';
-import { CommandFormLayoutKey, applyCommandFormLayoutKey } from '@cratis/scene.engine';
+import { CommandFormLayoutKey, applyCommandFormLayoutKey, elementNodeId } from '@cratis/scene.engine';
 import { DesignTimePropertyEditorProps } from '@cratis/scene.react';
 import { commandFormLayout } from './commandFormLayout';
 
@@ -35,7 +35,7 @@ export function CommandFormLayoutEditor({ context, property, value, setValue }: 
 
     const commit = (next: CommandFormLayout) => {
         setValue(next);
-        context.submitEdits([{ kind: SceneEditKind.SetProperty, nodeId: context.element.id, path: property.path, value: next }]);
+        context.submitEdits([{ kind: SceneEditKind.SetProperty, nodeId: elementNodeId(context.element.id), path: property.path, value: next }]);
     };
 
     return <div role='group' aria-label={property.label} aria-describedby={`${context.element.id}-layout-help`}>
