@@ -183,7 +183,7 @@ const [theme, setTheme] = useState(primeReactTheme('lara-light-blue'));
 const configuration = usePrimeReactTheme(theme);
 
 return (
-    <PrimeReactProvider value={configuration}>
+    <PrimeReactProvider {...configuration}>
         <SceneThemeProvider theme={theme}>{children}</SceneThemeProvider>
     </PrimeReactProvider>
 );

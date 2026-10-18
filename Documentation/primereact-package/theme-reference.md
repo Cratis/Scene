@@ -101,7 +101,7 @@ The check runs in `PrimeReactProvider` on mount, with an empty dependency array 
 provider:
 
 ```tsx
-<PrimeReactProvider value={{ ...configuration, license: 'your-key' }}>
+<PrimeReactProvider {...configuration} license="your-key">
 ```
 
 - **[Community License](https://primeui.dev/licenses/community)** — free, and covers individuals, students,

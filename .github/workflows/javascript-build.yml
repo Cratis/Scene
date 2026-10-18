@@ -89,6 +89,7 @@ jobs:
 
       - name: Browser specifications
         run: |
+          yarn workspace @cratis/scene.primereact test:browser
           yarn workspace @cratis/scene.blueprint.default test:browser
           yarn workspace @cratis/scene.blueprint.crm test:browser
           yarn workspace @cratis/scene.blueprint.ticketing test:browser
