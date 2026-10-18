@@ -148,10 +148,11 @@ function defaultForm(screenName: string, form: Form): SceneElement {
     });
 }
 
+/** Later fills replace a slot's seed, including an explicitly empty fill; absent slots keep their content. */
 function mergeSlots(...sources: (Record<string, SceneElement[]> | undefined)[]): Record<string, SceneElement[]> {
     const merged: Record<string, SceneElement[]> = {};
     for (const source of sources) {
-        for (const [slot, elements] of Object.entries(source ?? {})) merged[slot] = [...(merged[slot] ?? []), ...elements];
+        for (const [slot, elements] of Object.entries(source ?? {})) merged[slot] = [...elements];
     }
 
     return merged;
@@ -232,8 +233,9 @@ export function screenContent(application: ApplicationDocument, screen: Screen, 
     for (let index = chain.length - 1; index >= 0; index--) {
         const template = chain[index];
         const slots = index === chain.length - 1
-            ? mergeSlots(template.content, screen.slotContent, { forms })
+            ? mergeSlots(template.content, screen.slotContent)
             : mergeSlots(template.content, { [slotName(chain[index + 1])]: [inner!] });
+        if (index === chain.length - 1 && forms.length > 0) slots.forms = [...(slots.forms ?? []), ...forms];
         inner = externalComponent(`template-${screen.name}-${template.name}`, previewTemplateComponent, { arrangement: template.arrangement }, slots);
     }
 
