@@ -33,7 +33,7 @@ const withTheme: Decorator = (Story) => {
     const configuration = usePrimeReactTheme(primeReactTheme('lara-light-blue'));
 
     return (
-        <PrimeReactProvider value={configuration}>
+        <PrimeReactProvider {...configuration}>
             <QuillLoaderProvider loader={loadQuill}>
                 <Story />
             </QuillLoaderProvider>

@@ -15,7 +15,7 @@ import { PrimeReactPreset, primeReactThemePreset } from './primeReactThemePreset
 export const primeReactDarkModeClass = 'scene-dark';
 
 /**
- * The shape `PrimeReactProvider` takes through its `value` prop, narrowed to the part this package sets.
+ * The props spread into `PrimeReactProvider`, narrowed to the part this package sets.
  *
  * Deliberately not imported from `@primereact/core`: the provider's config type is broad and mostly about
  * concerns Scene does not own (locale, ripple, z-index, filter match modes). Naming only the theme slice
@@ -66,7 +66,7 @@ export interface PrimeReactThemeConfiguration {
  * const configuration = usePrimeReactTheme(theme);
  *
  * return (
- *     <PrimeReactProvider value={configuration}>
+ *     <PrimeReactProvider {...configuration}>
  *         <SceneThemeProvider theme={theme}>{children}</SceneThemeProvider>
  *     </PrimeReactProvider>
  * );

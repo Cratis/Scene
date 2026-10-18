@@ -54,7 +54,7 @@ export const ThemedScreen = ({ children }: { children: React.ReactNode }) => {
     const configuration = usePrimeReactTheme(theme);
 
     return (
-        <PrimeReactProvider value={configuration}>
+        <PrimeReactProvider {...configuration}>
             <SceneThemeProvider theme={theme}>
                 <select value={theme?.name} onChange={(event) => setTheme(primeReactTheme(event.target.value))}>
                     {primeReactThemes.map((candidate) => (
