@@ -35,7 +35,9 @@ function generateCommandFields(context: DesignTimeActionContext): DesignTimeActi
             kind: SceneEditKind.SetProperty,
             nodeId: elementNodeId(context.element.id),
             path: 'inputs',
+            // A collection item is addressed by its id, so an item without one is refused by the editing engine and nothing is generated.
             value: properties.map((property, index) => ({
+                id: property.name,
                 property: property.name,
                 type: property.type === 'Guid' || property.type === 'guid' ? 'guid' : 'string',
                 label: property.label ?? humanize(property.name),
