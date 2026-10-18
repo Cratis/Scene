@@ -121,6 +121,8 @@ const products: Screen = {
 };
 ```
 
+Each `slotContent` entry replaces that slot's seeded content in full; entries are not appended to the seed. Slots absent from `slotContent` keep their seeded content, and an explicit empty array clears a slot. For example, filling `ListScreen`'s `header` and `list` shows the application's header and records instead of the seeded Deals header and list, while leaving its unauthored toolbar and filters intact.
+
 To look at the shipped one first, boot its gallery screen:
 
 ```tsx
