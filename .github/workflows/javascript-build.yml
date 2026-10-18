@@ -99,3 +99,10 @@ jobs:
           yarn workspace @cratis/scene.blueprint.administration test:browser
           yarn workspace @cratis/scene.blueprint.project-tracker test:browser
           yarn workspace @cratis/scene.blueprint.orders test:browser
+          yarn workspace @cratis/scene.blueprint.catalog test:browser
+          yarn workspace @cratis/scene.blueprint.vendors test:browser
+          yarn workspace @cratis/scene.blueprint.invoicing test:browser
+          yarn workspace @cratis/scene.blueprint.customer-portal test:browser
+          yarn workspace @cratis/scene.blueprint.contracts test:browser
+          yarn workspace @cratis/scene.blueprint.work-orders test:browser
+          yarn workspace @cratis/scene.blueprint.bookings test:browser

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="BookingsCalendar">
+    <rect x="0" y="0" width="320" height="200" rx="4" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#db2777"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="224" height="148" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="90" y="70" width="26" height="24" rx="4" fill="#db2777"/>
+    <rect x="120" y="70" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="150" y="70" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="180" y="70" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="210" y="70" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="240" y="70" width="26" height="24" rx="4" fill="#db2777"/>
+    <rect x="270" y="70" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="90" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="120" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="150" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="180" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="210" y="98" width="26" height="24" rx="4" fill="#db2777"/>
+    <rect x="240" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="270" y="98" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="90" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="120" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="150" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="180" y="126" width="26" height="24" rx="4" fill="#db2777"/>
+    <rect x="210" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="240" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="270" y="126" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="90" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="120" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="150" y="154" width="26" height="24" rx="4" fill="#db2777"/>
+    <rect x="180" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="210" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="240" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+    <rect x="270" y="154" width="26" height="24" rx="4" fill="#eef0f3"/>
+</svg>

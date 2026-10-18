@@ -1,0 +1,945 @@
+{
+    "id": "customer-portal-en",
+    "title": "Customer portal · English",
+    "locale": "en-GB",
+    "owner": "blueprint:customer-portal",
+    "sets": [
+        {
+            "shape": "CustomerPortalSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrders",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "number": "SO-1042",
+                    "placed": "2026-10-12",
+                    "delivery": "2026-10-19",
+                    "items": 4,
+                    "total": 1284.5,
+                    "status": "In progress"
+                },
+                {
+                    "id": "order-2",
+                    "number": "SO-1038",
+                    "placed": "2026-10-08",
+                    "delivery": "2026-10-16",
+                    "items": 7,
+                    "total": 2410,
+                    "status": "Shipped"
+                },
+                {
+                    "id": "order-3",
+                    "number": "SO-1031",
+                    "placed": "2026-10-01",
+                    "delivery": "2026-10-09",
+                    "items": 3,
+                    "total": 689.75,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "order-4",
+                    "number": "SO-1027",
+                    "placed": "2026-09-26",
+                    "delivery": "2026-10-03",
+                    "items": 12,
+                    "total": 4120,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "order-5",
+                    "number": "SO-1019",
+                    "placed": "2026-09-18",
+                    "delivery": "2026-09-25",
+                    "items": 5,
+                    "total": 1530,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "order-6",
+                    "number": "SO-1012",
+                    "placed": "2026-09-09",
+                    "delivery": "2026-09-16",
+                    "items": 2,
+                    "total": 318.4,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "order-7",
+                    "number": "SO-1004",
+                    "placed": "2026-08-30",
+                    "delivery": "2026-09-05",
+                    "items": 9,
+                    "total": 2975,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "order-8",
+                    "number": "SO-0998",
+                    "placed": "2026-08-21",
+                    "delivery": "2026-08-28",
+                    "items": 6,
+                    "total": 1745.5,
+                    "status": "Cancelled"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Order"
+                },
+                {
+                    "field": "placed",
+                    "header": "Placed",
+                    "kind": "date"
+                },
+                {
+                    "field": "delivery",
+                    "header": "Delivery",
+                    "kind": "date"
+                },
+                {
+                    "field": "items",
+                    "header": "Items",
+                    "kind": "number"
+                },
+                {
+                    "field": "total",
+                    "header": "Total",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "In progress": "warning",
+                        "Shipped": "info",
+                        "Delivered": "success",
+                        "Cancelled": "neutral"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "In progress",
+                        "Shipped",
+                        "Delivered",
+                        "Cancelled"
+                    ]
+                },
+                {
+                    "name": "placed",
+                    "label": "Placed",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All orders"
+                },
+                {
+                    "id": "open",
+                    "label": "Open orders"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Order",
+                    "locked": true
+                },
+                {
+                    "id": "placed",
+                    "label": "Placed"
+                },
+                {
+                    "id": "delivery",
+                    "label": "Delivery"
+                },
+                {
+                    "id": "items",
+                    "label": "Items"
+                },
+                {
+                    "id": "total",
+                    "label": "Total"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderSelection",
+            "rows": []
+        },
+        {
+            "shape": "PortalOrderQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "Reorder",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "order",
+                            "label": "Order to repeat",
+                            "type": "select",
+                            "options": [
+                                "SO-1042",
+                                "SO-1038",
+                                "SO-1031",
+                                "SO-1027",
+                                "SO-1019",
+                                "SO-1012",
+                                "SO-1004",
+                                "SO-0998"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "delivery",
+                            "label": "Delivery date",
+                            "type": "date",
+                            "required": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderRecord",
+            "rows": [
+                {
+                    "id": "order-1",
+                    "number": "SO-1042",
+                    "placed": "2026-10-12",
+                    "delivery": "2026-10-19",
+                    "items": 4,
+                    "total": 1284.5,
+                    "status": "In progress",
+                    "summary": "Two pallets of fittings for the Bergen depot",
+                    "shipTo": "Bergen depot, Strandgaten 12",
+                    "payment": "Invoice, 30 days",
+                    "contact": "Grace Hopper",
+                    "daysToDelivery": 4
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderSections",
+            "rows": [
+                {
+                    "id": "portalorder",
+                    "title": "Order details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "number",
+                            "label": "Order"
+                        },
+                        {
+                            "name": "placed",
+                            "label": "Placed",
+                            "type": "date"
+                        },
+                        {
+                            "name": "delivery",
+                            "label": "Delivery",
+                            "type": "date"
+                        },
+                        {
+                            "name": "payment",
+                            "label": "Payment"
+                        },
+                        {
+                            "name": "contact",
+                            "label": "Your contact"
+                        },
+                        {
+                            "name": "items",
+                            "label": "Items"
+                        },
+                        {
+                            "name": "shipTo",
+                            "label": "Ship to",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderSummary",
+            "rows": [
+                {
+                    "status": "In progress",
+                    "tone": "warning",
+                    "total": 1284.5,
+                    "items": 4,
+                    "daysToDelivery": 4
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "started picking your order",
+                    "kind": "status",
+                    "at": "2026-10-15T13:05:00Z",
+                    "body": "It will leave the warehouse on Friday"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Alan Turing",
+                    "action": "confirmed the payment terms",
+                    "kind": "comment",
+                    "at": "2026-10-12T09:40:00Z",
+                    "body": "Invoice, 30 days."
+                },
+                {
+                    "id": "a2",
+                    "actor": "You",
+                    "action": "placed the order",
+                    "kind": "created",
+                    "at": "2026-10-12T08:15:00Z",
+                    "body": "Through the web shop"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "lines",
+                    "label": "Order lines"
+                },
+                {
+                    "id": "tracking",
+                    "label": "Tracking"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderLines",
+            "rows": [
+                {
+                    "id": "l1",
+                    "name": "Compression fitting 22 mm",
+                    "quantity": 40,
+                    "price": 12.5,
+                    "amount": 500
+                },
+                {
+                    "id": "l2",
+                    "name": "Pipe cutter, 3-35 mm",
+                    "quantity": 6,
+                    "price": 34,
+                    "amount": 204
+                },
+                {
+                    "id": "l3",
+                    "name": "Safety glasses, clear",
+                    "quantity": 100,
+                    "price": 4.2,
+                    "amount": 420
+                },
+                {
+                    "id": "l4",
+                    "name": "Freight",
+                    "quantity": 1,
+                    "price": 160.5,
+                    "amount": 160.5
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderLinesColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Product"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Qty",
+                    "kind": "number"
+                },
+                {
+                    "field": "price",
+                    "header": "Price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderTracking",
+            "rows": [
+                {
+                    "id": "t1",
+                    "carrier": "DHL Freight",
+                    "reference": "DHL-77120",
+                    "status": "Packed",
+                    "eta": "2026-10-19"
+                }
+            ]
+        },
+        {
+            "shape": "PortalOrderTrackingColumns",
+            "rows": [
+                {
+                    "field": "carrier",
+                    "header": "Carrier"
+                },
+                {
+                    "field": "reference",
+                    "header": "Reference"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                },
+                {
+                    "field": "eta",
+                    "header": "Arrives",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoices",
+            "rows": [
+                {
+                    "id": "invoice-1",
+                    "number": "INV-2041",
+                    "issued": "2026-10-12",
+                    "due": "2026-11-11",
+                    "amount": 4820,
+                    "status": "Unpaid"
+                },
+                {
+                    "id": "invoice-2",
+                    "number": "INV-2038",
+                    "issued": "2026-09-28",
+                    "due": "2026-10-12",
+                    "amount": 7845.25,
+                    "status": "Overdue"
+                },
+                {
+                    "id": "invoice-3",
+                    "number": "INV-2035",
+                    "issued": "2026-09-10",
+                    "due": "2026-10-10",
+                    "amount": 3690.75,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-4",
+                    "number": "INV-2034",
+                    "issued": "2026-09-03",
+                    "due": "2026-10-03",
+                    "amount": 9120,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-5",
+                    "number": "INV-2032",
+                    "issued": "2026-08-21",
+                    "due": "2026-09-20",
+                    "amount": 6275,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-6",
+                    "number": "INV-2029",
+                    "issued": "2026-08-07",
+                    "due": "2026-09-06",
+                    "amount": 2985.5,
+                    "status": "Paid"
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoiceColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Invoice"
+                },
+                {
+                    "field": "issued",
+                    "header": "Issued",
+                    "kind": "date"
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Unpaid": "info",
+                        "Overdue": "danger",
+                        "Paid": "success"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoiceFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Unpaid",
+                        "Overdue",
+                        "Paid"
+                    ]
+                },
+                {
+                    "name": "issued",
+                    "label": "Issued",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoiceViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All invoices"
+                },
+                {
+                    "id": "unpaid",
+                    "label": "Unpaid invoices"
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoiceColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Invoice",
+                    "locked": true
+                },
+                {
+                    "id": "issued",
+                    "label": "Issued"
+                },
+                {
+                    "id": "due",
+                    "label": "Due"
+                },
+                {
+                    "id": "amount",
+                    "label": "Amount"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "PortalInvoiceSelection",
+            "rows": []
+        },
+        {
+            "shape": "PortalKpis",
+            "rows": [
+                {
+                    "value": 2,
+                    "change": 0
+                },
+                {
+                    "value": 12665.25,
+                    "change": 8.9
+                },
+                {
+                    "value": 1,
+                    "change": 0
+                }
+            ]
+        },
+        {
+            "shape": "PortalSpendByMonth",
+            "rows": [
+                {
+                    "categories": [
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct"
+                    ],
+                    "series": [
+                        {
+                            "name": "Spend",
+                            "values": [
+                                3120,
+                                4870,
+                                2640,
+                                6275,
+                                12810,
+                                6094.5
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "PortalActivity",
+            "rows": [
+                {
+                    "id": "h0",
+                    "actor": "Grace Hopper",
+                    "action": "started picking order SO-1042",
+                    "kind": "status",
+                    "at": "2026-10-15T13:05:00Z",
+                    "body": "It will leave the warehouse on Friday"
+                },
+                {
+                    "id": "h1",
+                    "actor": "Katherine Johnson",
+                    "action": "sent invoice INV-2041",
+                    "kind": "created",
+                    "at": "2026-10-12T10:05:00Z",
+                    "body": "GBP 4,820.00, due 11 November"
+                },
+                {
+                    "id": "h2",
+                    "actor": "Alan Turing",
+                    "action": "replied to your question about SO-1038",
+                    "kind": "comment",
+                    "at": "2026-10-10T15:30:00Z",
+                    "body": "It is with the carrier"
+                }
+            ]
+        },
+        {
+            "shape": "PortalMessages",
+            "rows": [
+                {
+                    "id": "m1",
+                    "title": "Where is my order SO-1038?",
+                    "summary": "It is with the carrier, due Friday",
+                    "sender": "Alan Turing",
+                    "received": "2026-10-14T15:30:00Z",
+                    "category": "Order",
+                    "tone": "info",
+                    "unread": true
+                },
+                {
+                    "id": "m2",
+                    "title": "Invoice INV-2038 is overdue",
+                    "summary": "A payment reminder from accounts",
+                    "sender": "Accounts",
+                    "received": "2026-10-13T09:00:00Z",
+                    "category": "Invoice",
+                    "tone": "danger",
+                    "unread": true
+                },
+                {
+                    "id": "m3",
+                    "title": "Your quote for pipe cutters",
+                    "summary": "Valid until the end of the month",
+                    "sender": "Grace Hopper",
+                    "received": "2026-10-08T11:20:00Z",
+                    "category": "Quote",
+                    "tone": "success"
+                },
+                {
+                    "id": "m4",
+                    "title": "Opening hours over the holidays",
+                    "summary": "We are open until noon on 24 December",
+                    "sender": "Customer care",
+                    "received": "2026-10-01T08:00:00Z",
+                    "category": "Notice",
+                    "tone": "neutral"
+                }
+            ]
+        },
+        {
+            "shape": "PortalMessageSections",
+            "rows": [
+                {
+                    "id": "message",
+                    "title": "Message",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "Subject"
+                        },
+                        {
+                            "name": "sender",
+                            "label": "From"
+                        },
+                        {
+                            "name": "category",
+                            "label": "About"
+                        },
+                        {
+                            "name": "received",
+                            "label": "Received",
+                            "type": "date"
+                        },
+                        {
+                            "name": "summary",
+                            "label": "Summary",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "PortalMessageValues",
+            "rows": [
+                {
+                    "title": "Where is my order SO-1038?",
+                    "sender": "Alan Turing",
+                    "category": "Order",
+                    "received": "2026-10-14",
+                    "summary": "It is with the carrier, due Friday"
+                }
+            ]
+        },
+        {
+            "shape": "PortalMessageHistory",
+            "rows": [
+                {
+                    "id": "r0",
+                    "actor": "Alan Turing",
+                    "action": "replied",
+                    "kind": "comment",
+                    "at": "2026-10-14T15:30:00Z",
+                    "body": "It is with the carrier and due on Friday."
+                },
+                {
+                    "id": "r1",
+                    "actor": "You",
+                    "action": "asked a question",
+                    "kind": "created",
+                    "at": "2026-10-14T10:05:00Z",
+                    "body": "Can you tell me where my order is?"
+                }
+            ]
+        },
+        {
+            "shape": "PortalProfileValues",
+            "rows": [
+                {
+                    "name": "Grace Hopper",
+                    "role": "Purchasing manager, Northwind Traders",
+                    "status": "Active",
+                    "email": "grace@northwind.example",
+                    "phone": "+47 55 55 01 42",
+                    "since": "2022-03-14",
+                    "emailDigest": "Only when it ships",
+                    "shipTo": "Bergen depot, Strandgaten 12"
+                }
+            ]
+        },
+        {
+            "shape": "PortalProfileTabs",
+            "rows": [
+                {
+                    "id": "details",
+                    "label": "Details"
+                },
+                {
+                    "id": "preferences",
+                    "label": "Preferences"
+                },
+                {
+                    "id": "security",
+                    "label": "Security"
+                }
+            ]
+        },
+        {
+            "shape": "PortalProfileSections",
+            "rows": [
+                {
+                    "id": "details",
+                    "title": "Details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Name",
+                            "required": true
+                        },
+                        {
+                            "name": "role",
+                            "label": "Role"
+                        },
+                        {
+                            "name": "email",
+                            "label": "E-mail"
+                        },
+                        {
+                            "name": "phone",
+                            "label": "Phone"
+                        },
+                        {
+                            "name": "shipTo",
+                            "label": "Default delivery address",
+                            "span": 2
+                        }
+                    ]
+                },
+                {
+                    "id": "preferences",
+                    "title": "Preferences",
+                    "fields": [
+                        {
+                            "name": "emailDigest",
+                            "label": "E-mail me about my orders",
+                            "type": "select",
+                            "options": [
+                                "Every change",
+                                "Only when it ships",
+                                "Never"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "PortalPeople",
+            "rows": [
+                {
+                    "name": "Grace Hopper"
+                },
+                {
+                    "name": "Alan Turing"
+                },
+                {
+                    "name": "Katherine Johnson"
+                }
+            ]
+        },
+        {
+            "shape": "PortalProfileActivity",
+            "rows": [
+                {
+                    "id": "p0",
+                    "actor": "You",
+                    "action": "changed the default delivery address",
+                    "kind": "change",
+                    "at": "2026-10-02T09:10:00Z",
+                    "body": "Bergen depot"
+                },
+                {
+                    "id": "p1",
+                    "actor": "You",
+                    "action": "turned on order e-mails",
+                    "kind": "change",
+                    "at": "2026-09-14T16:00:00Z"
+                }
+            ]
+        },
+        {
+            "shape": "PortalNewSupportRequestSections",
+            "rows": [
+                {
+                    "id": "form",
+                    "title": "Ask for help",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "subject",
+                            "label": "Subject",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "topic",
+                            "label": "Topic",
+                            "type": "select",
+                            "options": [
+                                "An order",
+                                "An invoice",
+                                "A product",
+                                "My account"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "message",
+                            "label": "How can we help?",
+                            "type": "textarea",
+                            "required": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CustomerPortalFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

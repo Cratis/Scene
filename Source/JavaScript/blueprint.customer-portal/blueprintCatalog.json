@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.CustomerPortal",
+      "version": "1.0.0",
+      "domain": "customer-portal",
+      "displayName": "Customer portal",
+      "description": "A self-service portal for customers: an account home, their orders and invoices, a support inbox and their own profile.",
+      "thumbnail": "thumbnails/customer-portal.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "portal.home",
+          "title": "Home",
+          "description": "Your account at a glance: open orders, what you owe and what happened lately.",
+          "template": "PortalHome",
+          "order": 0
+        },
+        {
+          "name": "portal.orders",
+          "title": "Orders",
+          "description": "Your orders and where each one is.",
+          "template": "PortalOrdersList",
+          "order": 1
+        },
+        {
+          "name": "portal.order",
+          "title": "Order",
+          "description": "One order: key facts, its lines, tracking and what happened to it.",
+          "template": "PortalOrderPage",
+          "parent": "portal.orders"
+        },
+        {
+          "name": "portal.invoices",
+          "title": "Invoices",
+          "description": "Your invoices and which ones are still to pay.",
+          "template": "PortalInvoicesList",
+          "order": 2
+        },
+        {
+          "name": "portal.support",
+          "title": "Support",
+          "description": "Your conversations with us: questions, reminders and quotes.",
+          "template": "PortalSupport",
+          "order": 3
+        },
+        {
+          "name": "portal.profile",
+          "title": "Profile",
+          "description": "Your details, delivery address and preferences.",
+          "template": "PortalProfile",
+          "order": 4
+        }
+      ],
+      "templates": [
+        {
+          "name": "PortalHome",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal home",
+          "description": "Open orders, what is owed, open support requests, spend by month, your latest orders and what happened lately.",
+          "type": "Dashboard",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalHome.svg"
+        },
+        {
+          "name": "PortalOrdersList",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal orders list",
+          "description": "The customer's own orders with placed and delivery dates, total and status, filtered by status and date.",
+          "type": "List",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalOrdersList.svg"
+        },
+        {
+          "name": "PortalOrderPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal order page",
+          "description": "One of your orders: status, total, items and days to delivery, its details, lines and tracking, and what happened to it.",
+          "type": "Detail",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalOrderPage.svg"
+        },
+        {
+          "name": "PortalInvoicesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal invoices list",
+          "description": "The customer's invoices with issue and due dates, amount and whether each is paid, filtered by status and date.",
+          "type": "List",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalInvoicesList.svg"
+        },
+        {
+          "name": "PortalSupport",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal support inbox",
+          "description": "Conversations with the supplier: the queue grouped by day with unread told in words, the open message and its history.",
+          "type": "Inbox",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalSupport.svg"
+        },
+        {
+          "name": "PortalProfile",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal profile",
+          "description": "The signed-in customer contact: their team, tabbed details, preferences and security, and recent activity.",
+          "type": "Profile",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalProfile.svg"
+        },
+        {
+          "name": "PortalQuickCreateReorder",
+          "kind": "DialogTemplate",
+          "displayName": "Customer portal quick create order",
+          "description": "A short form that creates one order without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalQuickCreateReorder.svg"
+        },
+        {
+          "name": "PortalNewSupportRequest",
+          "kind": "DialogTemplate",
+          "displayName": "Customer portal quick create support request",
+          "description": "A short form that creates one support request without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalNewSupportRequest.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "customer-portal-en",
+          "title": "Customer portal · English",
+          "locale": "en-GB",
+          "path": "sampleData/customer-portal-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

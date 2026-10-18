@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Catalog",
+      "version": "1.0.0",
+      "domain": "catalog",
+      "displayName": "Catalog",
+      "description": "Products and categories for a sales team: a catalog overview, a product list, a product page with its variants and price history, and the categories they sit in.",
+      "thumbnail": "thumbnails/catalog.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "catalog.overview",
+          "title": "Overview",
+          "description": "How the catalog is doing: what is live, what is out of stock and what changed lately.",
+          "template": "CatalogOverview",
+          "order": 0
+        },
+        {
+          "name": "catalog.products",
+          "title": "Products",
+          "description": "Every product with its price, stock and status.",
+          "template": "ProductsList",
+          "order": 1
+        },
+        {
+          "name": "catalog.record",
+          "title": "Product",
+          "description": "One product: key facts, its variants, its price history and its activity.",
+          "template": "ProductPage",
+          "parent": "catalog.products"
+        },
+        {
+          "name": "catalog.categories",
+          "title": "Categories",
+          "description": "The categories products sit in and who owns them.",
+          "template": "CategoriesList",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "CatalogOverview",
+          "kind": "ScreenTemplate",
+          "displayName": "Catalog overview",
+          "description": "Active products, products out of stock, average margin, products by category, stock health and the latest changes.",
+          "type": "Dashboard",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogOverview.svg"
+        },
+        {
+          "name": "ProductsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Products list",
+          "description": "Every product with its SKU, category, price, stock and status, filtered by category, status, brand and date.",
+          "type": "List",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/ProductsList.svg"
+        },
+        {
+          "name": "ProductPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Product page",
+          "description": "One product: status, price, stock and margin, its details, variants and price history, and its activity.",
+          "type": "Detail",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/ProductPage.svg"
+        },
+        {
+          "name": "CategoriesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Categories list",
+          "description": "The categories products sit in, with how many products each holds, its owner and whether it is visible.",
+          "type": "List",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CategoriesList.svg"
+        },
+        {
+          "name": "CatalogQuickCreateProduct",
+          "kind": "DialogTemplate",
+          "displayName": "Catalog quick create product",
+          "description": "A short form that creates one product without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogQuickCreateProduct.svg"
+        },
+        {
+          "name": "CatalogQuickCreateCategory",
+          "kind": "DialogTemplate",
+          "displayName": "Catalog quick create category",
+          "description": "A short form that creates one category without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogQuickCreateCategory.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "catalog-en",
+          "title": "Catalog · English",
+          "locale": "en-GB",
+          "path": "sampleData/catalog-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

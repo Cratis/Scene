@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="NewBookingWizard">
+    <rect x="0" y="0" width="320" height="200" rx="4" fill="#f4f5f7"/>
+    <rect x="12" y="12" width="296" height="20" rx="4" fill="#db2777"/>
+    <rect x="12" y="40" width="64" height="148" rx="4" fill="#d5d9df"/>
+    <rect x="84" y="40" width="224" height="24" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <circle cx="100" cy="52" r="6" fill="#db2777"/>
+    <circle cx="160" cy="52" r="6" fill="#db2777"/>
+    <circle cx="220" cy="52" r="6" fill="#d5d9df"/>
+    <circle cx="280" cy="52" r="6" fill="#d5d9df"/>
+    <rect x="84" y="72" width="224" height="90" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+    <rect x="96" y="84" width="120" height="8" rx="3" fill="#9aa3b2"/>
+    <rect x="96" y="102" width="190" height="14" rx="4" fill="#eef0f3"/>
+    <rect x="96" y="126" width="190" height="14" rx="4" fill="#eef0f3"/>
+    <rect x="236" y="168" width="72" height="18" rx="4" fill="#db2777"/>
+</svg>

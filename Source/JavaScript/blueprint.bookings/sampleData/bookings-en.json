@@ -1,0 +1,1057 @@
+{
+    "id": "bookings-en",
+    "title": "Bookings · English",
+    "locale": "en-GB",
+    "owner": "blueprint:bookings",
+    "sets": [
+        {
+            "shape": "BookingsSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Bookings",
+            "rows": [
+                {
+                    "id": "booking-1",
+                    "reference": "BK-4410",
+                    "resource": "Fjord meeting room",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-15",
+                    "from": "09:00",
+                    "until": "11:00",
+                    "people": 8,
+                    "status": "Checked in"
+                },
+                {
+                    "id": "booking-2",
+                    "reference": "BK-4411",
+                    "resource": "Projector kit",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-15",
+                    "from": "09:00",
+                    "until": "11:00",
+                    "people": 1,
+                    "status": "Checked in"
+                },
+                {
+                    "id": "booking-3",
+                    "reference": "BK-4412",
+                    "resource": "Workshop studio",
+                    "bookedBy": "Alan Turing",
+                    "date": "2026-10-16",
+                    "from": "13:00",
+                    "until": "16:00",
+                    "people": 18,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "booking-4",
+                    "reference": "BK-4413",
+                    "resource": "Pool car, electric",
+                    "bookedBy": "Katherine Johnson",
+                    "date": "2026-10-16",
+                    "from": "08:00",
+                    "until": "17:00",
+                    "people": 2,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "booking-5",
+                    "reference": "BK-4414",
+                    "resource": "Aurora meeting room",
+                    "bookedBy": "Alan Turing",
+                    "date": "2026-10-19",
+                    "from": "10:00",
+                    "until": "11:30",
+                    "people": 5,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "booking-6",
+                    "reference": "BK-4415",
+                    "resource": "Conference camera",
+                    "bookedBy": "Katherine Johnson",
+                    "date": "2026-10-19",
+                    "from": "10:00",
+                    "until": "11:30",
+                    "people": 1,
+                    "status": "Requested"
+                },
+                {
+                    "id": "booking-7",
+                    "reference": "BK-4416",
+                    "resource": "Fjord meeting room",
+                    "bookedBy": "Katherine Johnson",
+                    "date": "2026-10-20",
+                    "from": "14:00",
+                    "until": "15:00",
+                    "people": 10,
+                    "status": "Requested"
+                },
+                {
+                    "id": "booking-8",
+                    "reference": "BK-4417",
+                    "resource": "Quiet room",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-21",
+                    "from": "09:30",
+                    "until": "10:30",
+                    "people": 2,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "booking-9",
+                    "reference": "BK-4418",
+                    "resource": "Workshop studio",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-22",
+                    "from": "09:00",
+                    "until": "12:00",
+                    "people": 20,
+                    "status": "Requested"
+                },
+                {
+                    "id": "booking-10",
+                    "reference": "BK-4419",
+                    "resource": "Pool car, electric",
+                    "bookedBy": "Alan Turing",
+                    "date": "2026-10-23",
+                    "from": "07:30",
+                    "until": "12:00",
+                    "people": 2,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "booking-11",
+                    "reference": "BK-4409",
+                    "resource": "Aurora meeting room",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-14",
+                    "from": "15:00",
+                    "until": "16:00",
+                    "people": 4,
+                    "status": "Completed"
+                },
+                {
+                    "id": "booking-12",
+                    "reference": "BK-4408",
+                    "resource": "Fjord meeting room",
+                    "bookedBy": "Alan Turing",
+                    "date": "2026-10-13",
+                    "from": "10:00",
+                    "until": "12:00",
+                    "people": 9,
+                    "status": "Cancelled"
+                }
+            ]
+        },
+        {
+            "shape": "BookingColumns",
+            "rows": [
+                {
+                    "field": "reference",
+                    "header": "Booking"
+                },
+                {
+                    "field": "resource",
+                    "header": "Resource"
+                },
+                {
+                    "field": "bookedBy",
+                    "header": "Booked by"
+                },
+                {
+                    "field": "date",
+                    "header": "Date",
+                    "kind": "date"
+                },
+                {
+                    "field": "from",
+                    "header": "From"
+                },
+                {
+                    "field": "until",
+                    "header": "Until"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Requested": "info",
+                        "Confirmed": "info",
+                        "Checked in": "success",
+                        "Completed": "success",
+                        "Cancelled": "neutral"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "BookingFilterFields",
+            "rows": [
+                {
+                    "name": "resource",
+                    "label": "Resource",
+                    "type": "select",
+                    "options": [
+                        "Fjord meeting room",
+                        "Aurora meeting room",
+                        "Workshop studio",
+                        "Quiet room",
+                        "Projector kit",
+                        "Conference camera",
+                        "Pool car, electric",
+                        "Cargo van"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Requested",
+                        "Confirmed",
+                        "Checked in",
+                        "Completed",
+                        "Cancelled"
+                    ]
+                },
+                {
+                    "name": "bookedBy",
+                    "label": "Booked by",
+                    "type": "select",
+                    "options": [
+                        "Grace Hopper",
+                        "Alan Turing",
+                        "Katherine Johnson"
+                    ]
+                },
+                {
+                    "name": "date",
+                    "label": "Date",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "BookingViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All bookings"
+                },
+                {
+                    "id": "mine",
+                    "label": "My bookings"
+                },
+                {
+                    "id": "requested",
+                    "label": "Waiting for confirmation"
+                }
+            ]
+        },
+        {
+            "shape": "BookingColumnChoices",
+            "rows": [
+                {
+                    "id": "reference",
+                    "label": "Booking",
+                    "locked": true
+                },
+                {
+                    "id": "resource",
+                    "label": "Resource"
+                },
+                {
+                    "id": "bookedBy",
+                    "label": "Booked by"
+                },
+                {
+                    "id": "date",
+                    "label": "Date"
+                },
+                {
+                    "id": "from",
+                    "label": "From"
+                },
+                {
+                    "id": "until",
+                    "label": "Until"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "BookingSelection",
+            "rows": []
+        },
+        {
+            "shape": "BookingQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "Quick booking",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "resource",
+                            "label": "Resource",
+                            "type": "select",
+                            "options": [
+                                "Fjord meeting room",
+                                "Aurora meeting room",
+                                "Workshop studio",
+                                "Quiet room",
+                                "Projector kit",
+                                "Conference camera",
+                                "Pool car, electric",
+                                "Cargo van"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "date",
+                            "label": "Date",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "from",
+                            "label": "From",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "until",
+                            "label": "Until",
+                            "type": "text",
+                            "required": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingRecord",
+            "rows": [
+                {
+                    "id": "booking-1",
+                    "reference": "BK-4410",
+                    "resource": "Fjord meeting room",
+                    "bookedBy": "Grace Hopper",
+                    "date": "2026-10-15",
+                    "from": "09:00",
+                    "until": "11:00",
+                    "people": 8,
+                    "status": "Checked in",
+                    "summary": "Weekly planning with the Bergen team",
+                    "location": "Floor 2",
+                    "setup": "Boardroom layout, video call ready",
+                    "notes": "Coffee and water for eight please",
+                    "hours": 2
+                }
+            ]
+        },
+        {
+            "shape": "BookingSections",
+            "rows": [
+                {
+                    "id": "booking",
+                    "title": "Booking details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "reference",
+                            "label": "Booking"
+                        },
+                        {
+                            "name": "resource",
+                            "label": "Resource"
+                        },
+                        {
+                            "name": "bookedBy",
+                            "label": "Booked by"
+                        },
+                        {
+                            "name": "location",
+                            "label": "Location"
+                        },
+                        {
+                            "name": "date",
+                            "label": "Date",
+                            "type": "date"
+                        },
+                        {
+                            "name": "from",
+                            "label": "From"
+                        },
+                        {
+                            "name": "until",
+                            "label": "Until"
+                        },
+                        {
+                            "name": "setup",
+                            "label": "Setup"
+                        },
+                        {
+                            "name": "notes",
+                            "label": "Notes",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingSummary",
+            "rows": [
+                {
+                    "status": "Checked in",
+                    "tone": "success",
+                    "date": "2026-10-15",
+                    "hours": 2,
+                    "people": 8
+                }
+            ]
+        },
+        {
+            "shape": "BookingActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "checked in",
+                    "kind": "status",
+                    "at": "2026-10-15T08:55:00Z",
+                    "body": "Room was ready"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Alan Turing",
+                    "action": "confirmed the booking",
+                    "kind": "comment",
+                    "at": "2026-10-13T11:20:00Z",
+                    "body": "Projector kit added"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Grace Hopper",
+                    "action": "requested the booking",
+                    "kind": "created",
+                    "at": "2026-10-12T16:45:00Z",
+                    "body": "Through the booking wizard"
+                }
+            ]
+        },
+        {
+            "shape": "BookingTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "attendees",
+                    "label": "Attendees"
+                },
+                {
+                    "id": "extras",
+                    "label": "Extras"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "BookingAttendees",
+            "rows": [
+                {
+                    "id": "at1",
+                    "name": "Grace Hopper",
+                    "team": "Purchasing",
+                    "response": "Organizer"
+                },
+                {
+                    "id": "at2",
+                    "name": "Eleanor Marsh",
+                    "team": "Bergen depot",
+                    "response": "Accepted"
+                },
+                {
+                    "id": "at3",
+                    "name": "Tobias Reed",
+                    "team": "Bergen depot",
+                    "response": "Accepted"
+                },
+                {
+                    "id": "at4",
+                    "name": "Priya Nair",
+                    "team": "Finance",
+                    "response": "Maybe"
+                }
+            ]
+        },
+        {
+            "shape": "BookingAttendeesColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Name"
+                },
+                {
+                    "field": "team",
+                    "header": "Team"
+                },
+                {
+                    "field": "response",
+                    "header": "Response"
+                }
+            ]
+        },
+        {
+            "shape": "BookingExtras",
+            "rows": [
+                {
+                    "id": "x1",
+                    "item": "Projector kit",
+                    "quantity": 1,
+                    "status": "Confirmed"
+                },
+                {
+                    "id": "x2",
+                    "item": "Coffee and water",
+                    "quantity": 8,
+                    "status": "Requested"
+                }
+            ]
+        },
+        {
+            "shape": "BookingExtrasColumns",
+            "rows": [
+                {
+                    "field": "item",
+                    "header": "Item"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Qty",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "Resources",
+            "rows": [
+                {
+                    "id": "resource-1",
+                    "name": "Fjord meeting room",
+                    "type": "Room",
+                    "capacity": 12,
+                    "location": "Floor 2",
+                    "status": "Booked"
+                },
+                {
+                    "id": "resource-2",
+                    "name": "Aurora meeting room",
+                    "type": "Room",
+                    "capacity": 6,
+                    "location": "Floor 2",
+                    "status": "Available"
+                },
+                {
+                    "id": "resource-3",
+                    "name": "Workshop studio",
+                    "type": "Room",
+                    "capacity": 24,
+                    "location": "Floor 1",
+                    "status": "Available"
+                },
+                {
+                    "id": "resource-4",
+                    "name": "Quiet room",
+                    "type": "Room",
+                    "capacity": 2,
+                    "location": "Floor 3",
+                    "status": "Available"
+                },
+                {
+                    "id": "resource-5",
+                    "name": "Projector kit",
+                    "type": "Equipment",
+                    "capacity": 1,
+                    "location": "Reception",
+                    "status": "Booked"
+                },
+                {
+                    "id": "resource-6",
+                    "name": "Conference camera",
+                    "type": "Equipment",
+                    "capacity": 1,
+                    "location": "Reception",
+                    "status": "Available"
+                },
+                {
+                    "id": "resource-7",
+                    "name": "Pool car, electric",
+                    "type": "Vehicle",
+                    "capacity": 4,
+                    "location": "Basement",
+                    "status": "Booked"
+                },
+                {
+                    "id": "resource-8",
+                    "name": "Cargo van",
+                    "type": "Vehicle",
+                    "capacity": 2,
+                    "location": "Basement",
+                    "status": "Maintenance"
+                }
+            ]
+        },
+        {
+            "shape": "ResourceColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Resource"
+                },
+                {
+                    "field": "type",
+                    "header": "Type"
+                },
+                {
+                    "field": "capacity",
+                    "header": "Capacity",
+                    "kind": "number"
+                },
+                {
+                    "field": "location",
+                    "header": "Location"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Available": "success",
+                        "Booked": "warning",
+                        "Maintenance": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ResourceFilterFields",
+            "rows": [
+                {
+                    "name": "type",
+                    "label": "Type",
+                    "type": "select",
+                    "options": [
+                        "Room",
+                        "Equipment",
+                        "Vehicle"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Available",
+                        "Booked",
+                        "Maintenance"
+                    ]
+                },
+                {
+                    "name": "location",
+                    "label": "Location",
+                    "type": "select",
+                    "options": [
+                        "Floor 1",
+                        "Floor 2",
+                        "Floor 3",
+                        "Reception",
+                        "Basement"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ResourceViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All resources"
+                },
+                {
+                    "id": "free",
+                    "label": "Available now"
+                }
+            ]
+        },
+        {
+            "shape": "ResourceColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Resource",
+                    "locked": true
+                },
+                {
+                    "id": "type",
+                    "label": "Type"
+                },
+                {
+                    "id": "capacity",
+                    "label": "Capacity"
+                },
+                {
+                    "id": "location",
+                    "label": "Location"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "ResourceSelection",
+            "rows": []
+        },
+        {
+            "shape": "BookingEvents",
+            "rows": [
+                {
+                    "id": "event-1",
+                    "title": "BK-4410 · Fjord meeting room",
+                    "start": "2026-10-15",
+                    "end": "2026-10-15",
+                    "category": "Checked in",
+                    "tone": "success",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "event-2",
+                    "title": "BK-4411 · Projector kit",
+                    "start": "2026-10-15",
+                    "end": "2026-10-15",
+                    "category": "Checked in",
+                    "tone": "success",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "event-3",
+                    "title": "BK-4412 · Workshop studio",
+                    "start": "2026-10-16",
+                    "end": "2026-10-16",
+                    "category": "Confirmed",
+                    "tone": "success",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "event-4",
+                    "title": "BK-4413 · Pool car, electric",
+                    "start": "2026-10-16",
+                    "end": "2026-10-16",
+                    "category": "Confirmed",
+                    "tone": "success",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "event-5",
+                    "title": "BK-4414 · Aurora meeting room",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Confirmed",
+                    "tone": "success",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "event-6",
+                    "title": "BK-4415 · Conference camera",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Requested",
+                    "tone": "warning",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "event-7",
+                    "title": "BK-4416 · Fjord meeting room",
+                    "start": "2026-10-20",
+                    "end": "2026-10-20",
+                    "category": "Requested",
+                    "tone": "warning",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "event-8",
+                    "title": "BK-4417 · Quiet room",
+                    "start": "2026-10-21",
+                    "end": "2026-10-21",
+                    "category": "Confirmed",
+                    "tone": "success",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "event-9",
+                    "title": "BK-4418 · Workshop studio",
+                    "start": "2026-10-22",
+                    "end": "2026-10-22",
+                    "category": "Requested",
+                    "tone": "warning",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "event-10",
+                    "title": "BK-4419 · Pool car, electric",
+                    "start": "2026-10-23",
+                    "end": "2026-10-23",
+                    "category": "Confirmed",
+                    "tone": "success",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "event-11",
+                    "title": "BK-4409 · Aurora meeting room",
+                    "start": "2026-10-14",
+                    "end": "2026-10-14",
+                    "category": "Completed",
+                    "tone": "neutral",
+                    "person": "Grace Hopper"
+                }
+            ]
+        },
+        {
+            "shape": "BookingEventColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Booking"
+                },
+                {
+                    "field": "start",
+                    "header": "Date",
+                    "kind": "date"
+                },
+                {
+                    "field": "category",
+                    "header": "Status"
+                },
+                {
+                    "field": "person",
+                    "header": "Booked by"
+                }
+            ]
+        },
+        {
+            "shape": "BookingWizardSteps",
+            "rows": [
+                {
+                    "id": "resource",
+                    "label": "Resource"
+                },
+                {
+                    "id": "when",
+                    "label": "When"
+                },
+                {
+                    "id": "details",
+                    "label": "Details"
+                },
+                {
+                    "id": "review",
+                    "label": "Review"
+                }
+            ]
+        },
+        {
+            "shape": "BookingResourceSections",
+            "rows": [
+                {
+                    "id": "resource",
+                    "title": "What do you need?",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "type",
+                            "label": "Type",
+                            "type": "select",
+                            "options": [
+                                "Room",
+                                "Equipment",
+                                "Vehicle"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "resource",
+                            "label": "Resource",
+                            "type": "select",
+                            "options": [
+                                "Fjord meeting room",
+                                "Aurora meeting room",
+                                "Workshop studio",
+                                "Quiet room",
+                                "Projector kit",
+                                "Conference camera",
+                                "Pool car, electric",
+                                "Cargo van"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "people",
+                            "label": "Number of people",
+                            "type": "number"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingWhenSections",
+            "rows": [
+                {
+                    "id": "when",
+                    "title": "When do you need it?",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "date",
+                            "label": "Date",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "from",
+                            "label": "From",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "until",
+                            "label": "Until",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "repeat",
+                            "label": "Repeat",
+                            "type": "select",
+                            "options": [
+                                "Does not repeat",
+                                "Every week",
+                                "Every month"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingDetailSections",
+            "rows": [
+                {
+                    "id": "details",
+                    "title": "A few details",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "What is it for?",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "attendees",
+                            "label": "Attendees",
+                            "type": "multiSelect",
+                            "options": [
+                                "Grace Hopper",
+                                "Alan Turing",
+                                "Katherine Johnson"
+                            ]
+                        },
+                        {
+                            "name": "notes",
+                            "label": "Notes",
+                            "type": "textarea"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingReviewSections",
+            "rows": [
+                {
+                    "id": "review",
+                    "title": "Check your booking",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "resource",
+                            "label": "Resource"
+                        },
+                        {
+                            "name": "date",
+                            "label": "Date",
+                            "type": "date"
+                        },
+                        {
+                            "name": "from",
+                            "label": "From"
+                        },
+                        {
+                            "name": "until",
+                            "label": "Until"
+                        },
+                        {
+                            "name": "title",
+                            "label": "What is it for?",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "BookingReviewValues",
+            "rows": [
+                {
+                    "resource": "Aurora meeting room",
+                    "date": "2026-10-19",
+                    "from": "10:00",
+                    "until": "11:30",
+                    "title": "Design review"
+                }
+            ]
+        },
+        {
+            "shape": "BookingsFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

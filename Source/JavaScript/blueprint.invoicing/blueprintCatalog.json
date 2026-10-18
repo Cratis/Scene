@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Invoicing",
+      "version": "1.0.0",
+      "domain": "invoicing",
+      "displayName": "Invoicing",
+      "description": "Invoices for a finance team: a receivables overview, an invoice list, an invoice page with its lines and payments, the payments received and a due-date calendar.",
+      "thumbnail": "thumbnails/invoicing.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "invoicing.overview",
+          "title": "Overview",
+          "description": "What is owed, what is overdue and what came in this month.",
+          "template": "InvoicingOverview",
+          "order": 0
+        },
+        {
+          "name": "invoicing.list",
+          "title": "Invoices",
+          "description": "Every invoice with what is owed and its status.",
+          "template": "InvoicesList",
+          "order": 1
+        },
+        {
+          "name": "invoicing.record",
+          "title": "Invoice",
+          "description": "One invoice: key facts, its lines, its payments and its activity.",
+          "template": "InvoicePage",
+          "parent": "invoicing.list"
+        },
+        {
+          "name": "invoicing.payments",
+          "title": "Payments",
+          "description": "The payments received and the invoices they settled.",
+          "template": "PaymentsList",
+          "order": 2
+        },
+        {
+          "name": "invoicing.due",
+          "title": "Due dates",
+          "description": "The day each invoice falls due, on a calendar.",
+          "template": "InvoicingDueDates",
+          "order": 3
+        }
+      ],
+      "templates": [
+        {
+          "name": "InvoicingOverview",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoicing overview",
+          "description": "Outstanding, overdue and collected this month, receivables by age, invoiced against collected and the invoices to chase.",
+          "type": "Dashboard",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingOverview.svg"
+        },
+        {
+          "name": "InvoicesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoices list",
+          "description": "Every invoice with its customer, issue and due dates, amount and status, filtered by customer, status and date.",
+          "type": "List",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicesList.svg"
+        },
+        {
+          "name": "InvoicePage",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoice page",
+          "description": "One invoice: status, total, paid and balance due, its details, lines and payments, and its activity.",
+          "type": "Detail",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicePage.svg"
+        },
+        {
+          "name": "PaymentsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Payments list",
+          "description": "The payments received with the invoice each settled, when and how, filtered by method and date.",
+          "type": "List",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/PaymentsList.svg"
+        },
+        {
+          "name": "InvoicingDueDates",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoicing due-date calendar",
+          "description": "The day each invoice falls due, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingDueDates.svg"
+        },
+        {
+          "name": "InvoicingQuickCreateInvoice",
+          "kind": "DialogTemplate",
+          "displayName": "Invoicing quick create invoice",
+          "description": "A short form that creates one invoice without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingQuickCreateInvoice.svg"
+        },
+        {
+          "name": "InvoicingRecordPayment",
+          "kind": "DialogTemplate",
+          "displayName": "Invoicing quick create payment",
+          "description": "A short form that creates one payment without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingRecordPayment.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "invoicing-en",
+          "title": "Invoicing · English",
+          "locale": "en-GB",
+          "path": "sampleData/invoicing-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Vendors",
+      "version": "1.0.0",
+      "domain": "vendors",
+      "displayName": "Vendors",
+      "description": "Vendors for a purchasing team: a vendor list, a vendor page with its contacts, orders and certificates, an onboarding board and a performance dashboard.",
+      "thumbnail": "thumbnails/vendors.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "vendors.list",
+          "title": "Vendors",
+          "description": "Every vendor with what you spend with them and how they perform.",
+          "template": "VendorsList",
+          "order": 0
+        },
+        {
+          "name": "vendors.record",
+          "title": "Vendor",
+          "description": "One vendor: key facts, contacts, purchase orders, certificates and activity.",
+          "template": "VendorPage",
+          "parent": "vendors.list"
+        },
+        {
+          "name": "vendors.onboarding",
+          "title": "Onboarding",
+          "description": "Vendors in a column for each onboarding step: prospect, in review, approved and active.",
+          "template": "VendorsOnboardingBoard",
+          "order": 1
+        },
+        {
+          "name": "vendors.performance",
+          "title": "Performance",
+          "description": "How vendors perform: spend, on-time delivery and the vendors to watch.",
+          "template": "VendorsPerformance",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "VendorsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors list",
+          "description": "Every vendor with its category, country, spend, rating and status, filtered by category, status, country and account manager.",
+          "type": "List",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsList.svg"
+        },
+        {
+          "name": "VendorPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendor page",
+          "description": "One vendor: status, spend, rating and open orders, its details, contacts, purchase orders and certificates, and its activity.",
+          "type": "Detail",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorPage.svg"
+        },
+        {
+          "name": "VendorsOnboardingBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors onboarding board",
+          "description": "Vendors as cards in a column for each onboarding step, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsOnboardingBoard.svg"
+        },
+        {
+          "name": "VendorsPerformance",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors performance",
+          "description": "Active vendors, spend this year, on-time delivery, spend by category, delivery over the quarters and the vendors to watch.",
+          "type": "Dashboard",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsPerformance.svg"
+        },
+        {
+          "name": "VendorsQuickCreateVendor",
+          "kind": "DialogTemplate",
+          "displayName": "Vendors quick create vendor",
+          "description": "A short form that creates one vendor without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsQuickCreateVendor.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "vendors-en",
+          "title": "Vendors · English",
+          "locale": "en-GB",
+          "path": "sampleData/vendors-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

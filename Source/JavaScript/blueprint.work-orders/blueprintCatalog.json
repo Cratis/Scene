@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.WorkOrders",
+      "version": "1.0.0",
+      "domain": "work-orders",
+      "displayName": "Work orders",
+      "description": "Work orders for a maintenance or field-service team: a work order list, a work order page with its tasks, parts and time, a board by step and a schedule of visits.",
+      "thumbnail": "thumbnails/work-orders.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "workorders.list",
+          "title": "Work orders",
+          "description": "Every work order with its site, priority, assignee and status.",
+          "template": "WorkOrdersList",
+          "order": 0
+        },
+        {
+          "name": "workorders.record",
+          "title": "Work order",
+          "description": "One work order: key facts, its tasks, the parts used, the time logged and its activity.",
+          "template": "WorkOrderPage",
+          "parent": "workorders.list"
+        },
+        {
+          "name": "workorders.board",
+          "title": "Board",
+          "description": "Work orders in a column for each step: new, scheduled, in progress and done.",
+          "template": "WorkOrdersBoard",
+          "order": 1
+        },
+        {
+          "name": "workorders.schedule",
+          "title": "Schedule",
+          "description": "The day each work order is planned, on a calendar.",
+          "template": "WorkOrdersSchedule",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "WorkOrdersList",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders list",
+          "description": "Every work order with its site, priority, assignee, due date and status, filtered by status, priority, site and assignee.",
+          "type": "List",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersList.svg"
+        },
+        {
+          "name": "WorkOrderPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Work order page",
+          "description": "One work order: status, priority, days to its due date and hours logged, its details, tasks, parts and time, and its activity.",
+          "type": "Detail",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrderPage.svg"
+        },
+        {
+          "name": "WorkOrdersBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders board",
+          "description": "Work orders as cards in a column for each step, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersBoard.svg"
+        },
+        {
+          "name": "WorkOrdersSchedule",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders schedule",
+          "description": "The day of each planned visit, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersSchedule.svg"
+        },
+        {
+          "name": "WorkOrdersQuickCreateWorkOrder",
+          "kind": "DialogTemplate",
+          "displayName": "Work orders quick create work order",
+          "description": "A short form that creates one work order without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersQuickCreateWorkOrder.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "work-orders-en",
+          "title": "Work orders · English",
+          "locale": "en-GB",
+          "path": "sampleData/work-orders-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

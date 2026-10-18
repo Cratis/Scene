@@ -1,0 +1,892 @@
+{
+    "id": "contracts-en",
+    "title": "Contracts · English",
+    "locale": "en-GB",
+    "owner": "blueprint:contracts",
+    "sets": [
+        {
+            "shape": "ContractsSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Contracts",
+            "rows": [
+                {
+                    "id": "contract-1",
+                    "number": "CT-2026-014",
+                    "title": "Annual supply of fittings",
+                    "counterparty": "Hartwell Supply",
+                    "type": "Supply",
+                    "start": "2026-01-01",
+                    "end": "2026-12-31",
+                    "value": 184000,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "contract-2",
+                    "number": "CT-2026-013",
+                    "title": "Freight and warehousing",
+                    "counterparty": "Quayside Logistics",
+                    "type": "Service",
+                    "start": "2026-03-01",
+                    "end": "2027-02-28",
+                    "value": 215000,
+                    "status": "Active",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "contract-3",
+                    "number": "CT-2026-012",
+                    "title": "Managed IT service",
+                    "counterparty": "Lumen IT Services",
+                    "type": "Service",
+                    "start": "2025-11-01",
+                    "end": "2026-10-31",
+                    "value": 74000,
+                    "status": "Expiring",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "contract-4",
+                    "number": "CT-2026-011",
+                    "title": "Head office lease",
+                    "counterparty": "Strand Property",
+                    "type": "Lease",
+                    "start": "2024-01-01",
+                    "end": "2028-12-31",
+                    "value": 520000,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "contract-5",
+                    "number": "CT-2026-010",
+                    "title": "Safety equipment framework",
+                    "counterparty": "Norsk Vern",
+                    "type": "Supply",
+                    "start": "2026-02-01",
+                    "end": "2027-01-31",
+                    "value": 62000,
+                    "status": "Active",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "contract-6",
+                    "number": "CT-2026-009",
+                    "title": "Mutual non-disclosure",
+                    "counterparty": "Atlas Steel",
+                    "type": "NDA",
+                    "start": "2026-09-15",
+                    "end": "2029-09-14",
+                    "value": 0,
+                    "status": "In review",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "contract-7",
+                    "number": "CT-2026-008",
+                    "title": "Office cleaning",
+                    "counterparty": "Meridian Cleaning",
+                    "type": "Service",
+                    "start": "2026-04-01",
+                    "end": "2027-03-31",
+                    "value": 19000,
+                    "status": "Active",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "contract-8",
+                    "number": "CT-2026-007",
+                    "title": "Packaging supply",
+                    "counterparty": "Fjord Pack",
+                    "type": "Supply",
+                    "start": "2025-10-15",
+                    "end": "2026-11-14",
+                    "value": 42000,
+                    "status": "Expiring",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "contract-9",
+                    "number": "CT-2026-006",
+                    "title": "Electrical components",
+                    "counterparty": "Voltaire Electric",
+                    "type": "Supply",
+                    "start": "2025-06-01",
+                    "end": "2026-08-31",
+                    "value": 128000,
+                    "status": "Expired",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "contract-10",
+                    "number": "CT-2026-005",
+                    "title": "Pilot with Solstice Energy",
+                    "counterparty": "Solstice Energy",
+                    "type": "Service",
+                    "start": "2026-10-20",
+                    "end": "2027-04-19",
+                    "value": 36000,
+                    "status": "Draft",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "contract-11",
+                    "number": "CT-2026-004",
+                    "title": "Fastener supply",
+                    "counterparty": "Bolten Fasteners",
+                    "type": "Supply",
+                    "start": "2025-03-01",
+                    "end": "2026-06-30",
+                    "value": 37500,
+                    "status": "Terminated",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "contract-12",
+                    "number": "CT-2026-003",
+                    "title": "Reseller agreement",
+                    "counterparty": "Northwind Traders",
+                    "type": "Reseller",
+                    "start": "2026-05-01",
+                    "end": "2028-04-30",
+                    "value": 0,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                }
+            ]
+        },
+        {
+            "shape": "ContractColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Contract"
+                },
+                {
+                    "field": "title",
+                    "header": "Title"
+                },
+                {
+                    "field": "counterparty",
+                    "header": "Counterparty"
+                },
+                {
+                    "field": "type",
+                    "header": "Type"
+                },
+                {
+                    "field": "end",
+                    "header": "Ends",
+                    "kind": "date"
+                },
+                {
+                    "field": "value",
+                    "header": "Value",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Draft": "neutral",
+                        "In review": "info",
+                        "Active": "success",
+                        "Expiring": "warning",
+                        "Expired": "danger",
+                        "Terminated": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ContractFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Draft",
+                        "In review",
+                        "Active",
+                        "Expiring",
+                        "Expired",
+                        "Terminated"
+                    ]
+                },
+                {
+                    "name": "type",
+                    "label": "Type",
+                    "type": "select",
+                    "options": [
+                        "Supply",
+                        "Service",
+                        "Lease",
+                        "NDA",
+                        "Reseller"
+                    ]
+                },
+                {
+                    "name": "owner",
+                    "label": "Owner",
+                    "type": "select",
+                    "options": [
+                        "Grace Hopper",
+                        "Alan Turing",
+                        "Katherine Johnson"
+                    ]
+                },
+                {
+                    "name": "end",
+                    "label": "Ends",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ContractViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All contracts"
+                },
+                {
+                    "id": "expiring",
+                    "label": "Expiring soon"
+                },
+                {
+                    "id": "mine",
+                    "label": "Owned by me"
+                }
+            ]
+        },
+        {
+            "shape": "ContractColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Contract",
+                    "locked": true
+                },
+                {
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "id": "counterparty",
+                    "label": "Counterparty"
+                },
+                {
+                    "id": "type",
+                    "label": "Type"
+                },
+                {
+                    "id": "end",
+                    "label": "Ends"
+                },
+                {
+                    "id": "value",
+                    "label": "Value"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "ContractSelection",
+            "rows": []
+        },
+        {
+            "shape": "ContractQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New contract",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "Title",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "counterparty",
+                            "label": "Counterparty",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "type",
+                            "label": "Type",
+                            "type": "select",
+                            "options": [
+                                "Supply",
+                                "Service",
+                                "Lease",
+                                "NDA",
+                                "Reseller"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "start",
+                            "label": "Starts",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "end",
+                            "label": "Ends",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "value",
+                            "label": "Value",
+                            "type": "currency"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ContractRecord",
+            "rows": [
+                {
+                    "id": "contract-1",
+                    "number": "CT-2026-014",
+                    "title": "Annual supply of fittings",
+                    "counterparty": "Hartwell Supply",
+                    "type": "Supply",
+                    "start": "2026-01-01",
+                    "end": "2026-12-31",
+                    "value": 184000,
+                    "status": "Active",
+                    "owner": "Grace Hopper",
+                    "summary": "Fittings and fixings for every depot, priced per quarter",
+                    "renewal": "Renews for one year unless notice is given",
+                    "governingLaw": "England and Wales",
+                    "billing": "Quarterly in arrears",
+                    "daysToEnd": 77,
+                    "noticeDays": 90
+                }
+            ]
+        },
+        {
+            "shape": "ContractSections",
+            "rows": [
+                {
+                    "id": "contract",
+                    "title": "Contract details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "number",
+                            "label": "Contract"
+                        },
+                        {
+                            "name": "title",
+                            "label": "Title"
+                        },
+                        {
+                            "name": "counterparty",
+                            "label": "Counterparty"
+                        },
+                        {
+                            "name": "type",
+                            "label": "Type"
+                        },
+                        {
+                            "name": "start",
+                            "label": "Starts",
+                            "type": "date"
+                        },
+                        {
+                            "name": "end",
+                            "label": "Ends",
+                            "type": "date"
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Owner"
+                        },
+                        {
+                            "name": "governingLaw",
+                            "label": "Governing law"
+                        },
+                        {
+                            "name": "billing",
+                            "label": "Billing"
+                        },
+                        {
+                            "name": "renewal",
+                            "label": "Renewal",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ContractSummary",
+            "rows": [
+                {
+                    "status": "Active",
+                    "tone": "success",
+                    "value": 184000,
+                    "daysToEnd": 77,
+                    "noticeDays": 90
+                }
+            ]
+        },
+        {
+            "shape": "ContractActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "asked for a price review before renewal",
+                    "kind": "comment",
+                    "at": "2026-10-10T10:15:00Z",
+                    "body": "Notice is due by 2 October next year"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Katherine Johnson",
+                    "action": "signed amendment 2",
+                    "kind": "status",
+                    "at": "2026-07-01T09:00:00Z",
+                    "body": "New price list from 1 July"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Alan Turing",
+                    "action": "uploaded the signed contract",
+                    "kind": "created",
+                    "at": "2025-12-19T15:30:00Z",
+                    "body": "Both parties have signed"
+                }
+            ]
+        },
+        {
+            "shape": "ContractTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "parties",
+                    "label": "Parties"
+                },
+                {
+                    "id": "obligations",
+                    "label": "Obligations"
+                },
+                {
+                    "id": "amendments",
+                    "label": "Amendments"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "ContractParties",
+            "rows": [
+                {
+                    "id": "p1",
+                    "name": "Cratis Trading Ltd",
+                    "role": "Buyer",
+                    "signatory": "Grace Hopper",
+                    "signed": "2025-12-18"
+                },
+                {
+                    "id": "p2",
+                    "name": "Hartwell Supply",
+                    "role": "Supplier",
+                    "signatory": "Eleanor Marsh",
+                    "signed": "2025-12-19"
+                }
+            ]
+        },
+        {
+            "shape": "ContractPartiesColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Party"
+                },
+                {
+                    "field": "role",
+                    "header": "Role"
+                },
+                {
+                    "field": "signatory",
+                    "header": "Signatory"
+                },
+                {
+                    "field": "signed",
+                    "header": "Signed",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ContractObligations",
+            "rows": [
+                {
+                    "id": "o1",
+                    "clause": "4.1",
+                    "summary": "Quarterly price review",
+                    "owner": "Grace Hopper",
+                    "due": "2026-12-15"
+                },
+                {
+                    "id": "o2",
+                    "clause": "6.3",
+                    "summary": "Delivery within five working days",
+                    "owner": "Alan Turing",
+                    "due": "2026-10-31"
+                },
+                {
+                    "id": "o3",
+                    "clause": "9.2",
+                    "summary": "Insurance certificate renewed every year",
+                    "owner": "Katherine Johnson",
+                    "due": "2026-11-30"
+                }
+            ]
+        },
+        {
+            "shape": "ContractObligationsColumns",
+            "rows": [
+                {
+                    "field": "clause",
+                    "header": "Clause"
+                },
+                {
+                    "field": "summary",
+                    "header": "What is promised"
+                },
+                {
+                    "field": "owner",
+                    "header": "Owner"
+                },
+                {
+                    "field": "due",
+                    "header": "Next due",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ContractAmendments",
+            "rows": [
+                {
+                    "id": "m1",
+                    "number": "Amendment 2",
+                    "date": "2026-07-01",
+                    "change": "New price list"
+                },
+                {
+                    "id": "m2",
+                    "number": "Amendment 1",
+                    "date": "2026-03-10",
+                    "change": "Added the Bergen depot"
+                }
+            ]
+        },
+        {
+            "shape": "ContractAmendmentsColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Amendment"
+                },
+                {
+                    "field": "date",
+                    "header": "Signed",
+                    "kind": "date"
+                },
+                {
+                    "field": "change",
+                    "header": "What changed"
+                }
+            ]
+        },
+        {
+            "shape": "ContractTimelineItems",
+            "rows": [
+                {
+                    "id": "term-1",
+                    "title": "Annual supply of fittings",
+                    "start": "2026-01-01",
+                    "end": "2026-12-31",
+                    "lane": "Hartwell Supply",
+                    "progress": 79,
+                    "tone": "success"
+                },
+                {
+                    "id": "term-2",
+                    "title": "Freight and warehousing",
+                    "start": "2026-03-01",
+                    "end": "2027-02-28",
+                    "lane": "Quayside Logistics",
+                    "progress": 63,
+                    "tone": "success"
+                },
+                {
+                    "id": "term-3",
+                    "title": "Managed IT service",
+                    "start": "2025-11-01",
+                    "end": "2026-10-31",
+                    "lane": "Lumen IT Services",
+                    "progress": 96,
+                    "tone": "warning"
+                },
+                {
+                    "id": "term-4",
+                    "title": "Head office lease",
+                    "start": "2024-01-01",
+                    "end": "2028-12-31",
+                    "lane": "Strand Property",
+                    "progress": 56,
+                    "tone": "success"
+                },
+                {
+                    "id": "term-5",
+                    "title": "Safety equipment framework",
+                    "start": "2026-02-01",
+                    "end": "2027-01-31",
+                    "lane": "Norsk Vern",
+                    "progress": 70,
+                    "tone": "success"
+                },
+                {
+                    "id": "term-6",
+                    "title": "Mutual non-disclosure",
+                    "start": "2026-09-15",
+                    "end": "2029-09-14",
+                    "lane": "Atlas Steel",
+                    "progress": 3,
+                    "tone": "info"
+                },
+                {
+                    "id": "term-7",
+                    "title": "Office cleaning",
+                    "start": "2026-04-01",
+                    "end": "2027-03-31",
+                    "lane": "Meridian Cleaning",
+                    "progress": 54,
+                    "tone": "success"
+                },
+                {
+                    "id": "term-8",
+                    "title": "Packaging supply",
+                    "start": "2025-10-15",
+                    "end": "2026-11-14",
+                    "lane": "Fjord Pack",
+                    "progress": 92,
+                    "tone": "warning"
+                },
+                {
+                    "id": "term-9",
+                    "title": "Pilot with Solstice Energy",
+                    "start": "2026-10-20",
+                    "end": "2027-04-19",
+                    "lane": "Solstice Energy",
+                    "progress": 0,
+                    "tone": "info"
+                },
+                {
+                    "id": "term-10",
+                    "title": "Reseller agreement",
+                    "start": "2026-05-01",
+                    "end": "2028-04-30",
+                    "lane": "Northwind Traders",
+                    "progress": 23,
+                    "tone": "success"
+                },
+                {
+                    "id": "notice-1",
+                    "title": "Notice date: Freight and warehousing",
+                    "start": "2026-11-30",
+                    "end": "2026-11-30",
+                    "lane": "Quayside Logistics",
+                    "milestone": true,
+                    "tone": "neutral",
+                    "dependsOn": [
+                        "term-2"
+                    ]
+                },
+                {
+                    "id": "notice-2",
+                    "title": "Notice date: Managed IT service",
+                    "start": "2026-07-31",
+                    "end": "2026-07-31",
+                    "lane": "Lumen IT Services",
+                    "milestone": true,
+                    "tone": "warning",
+                    "dependsOn": [
+                        "term-3"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ContractTimelineColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Term"
+                },
+                {
+                    "field": "lane",
+                    "header": "Counterparty"
+                },
+                {
+                    "field": "start",
+                    "header": "Starts",
+                    "kind": "date"
+                },
+                {
+                    "field": "end",
+                    "header": "Ends",
+                    "kind": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ContractMessages",
+            "rows": [
+                {
+                    "id": "m1",
+                    "title": "Review: Mutual non-disclosure with Atlas Steel",
+                    "summary": "Legal needs your comments by Friday",
+                    "sender": "Alan Turing",
+                    "received": "2026-10-15T08:30:00Z",
+                    "category": "Review",
+                    "tone": "warning",
+                    "unread": true
+                },
+                {
+                    "id": "m2",
+                    "title": "Signature: Pilot with Solstice Energy",
+                    "summary": "Waiting for the second signatory",
+                    "sender": "DocuSign",
+                    "received": "2026-10-14T16:10:00Z",
+                    "category": "Signature",
+                    "tone": "info",
+                    "unread": true
+                },
+                {
+                    "id": "m3",
+                    "title": "Renewal: Managed IT service ends 31 October",
+                    "summary": "Notice date has passed, renews unless you act",
+                    "sender": "Contracts",
+                    "received": "2026-10-12T09:00:00Z",
+                    "category": "Renewal",
+                    "tone": "danger"
+                },
+                {
+                    "id": "m4",
+                    "title": "Amendment 2 signed: Annual supply of fittings",
+                    "summary": "New price list from 1 July",
+                    "sender": "Katherine Johnson",
+                    "received": "2026-07-01T09:00:00Z",
+                    "category": "Notice",
+                    "tone": "success"
+                }
+            ]
+        },
+        {
+            "shape": "ContractMessageSections",
+            "rows": [
+                {
+                    "id": "message",
+                    "title": "Message",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "Subject"
+                        },
+                        {
+                            "name": "sender",
+                            "label": "From"
+                        },
+                        {
+                            "name": "category",
+                            "label": "What is needed"
+                        },
+                        {
+                            "name": "received",
+                            "label": "Received",
+                            "type": "date"
+                        },
+                        {
+                            "name": "summary",
+                            "label": "Summary",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ContractMessageValues",
+            "rows": [
+                {
+                    "title": "Review: Mutual non-disclosure with Atlas Steel",
+                    "sender": "Alan Turing",
+                    "category": "Review",
+                    "received": "2026-10-15",
+                    "summary": "Legal needs your comments by Friday"
+                }
+            ]
+        },
+        {
+            "shape": "ContractMessageHistory",
+            "rows": [
+                {
+                    "id": "h0",
+                    "actor": "Alan Turing",
+                    "action": "asked for your comments",
+                    "kind": "comment",
+                    "at": "2026-10-15T08:30:00Z",
+                    "body": "Clause 7 on the term is the open point."
+                },
+                {
+                    "id": "h1",
+                    "actor": "Atlas Steel",
+                    "action": "sent their draft",
+                    "kind": "created",
+                    "at": "2026-10-09T13:00:00Z",
+                    "body": "Version 3, three years"
+                }
+            ]
+        },
+        {
+            "shape": "ContractsFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

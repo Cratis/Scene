@@ -74,3 +74,10 @@ screen templates, three dialog templates and two themes.
 - **[The Administration blueprint](administration-blueprint.md)** — users, roles and permissions, settings and an audit log.
 - **[The Project and Task Tracker blueprint](project-tracker-blueprint.md)** — projects as cards, a project page, a task board with swimlanes, my tasks and a task side sheet.
 - **[The Orders blueprint](orders-blueprint.md)** — sales orders from placing to delivery: a list, an order page, a fulfilment board and a delivery calendar.
+- **[The Catalog blueprint](catalog-blueprint.md)** — products and categories for a sales team: a catalog overview, a product list, a product page with its variants and price history, and the categories they sit in.
+- **[The Vendors blueprint](vendors-blueprint.md)** — vendors for a purchasing team: a vendor list, a vendor page with its contacts, orders and certificates, an onboarding board and a performance dashboard.
+- **[The Invoicing blueprint](invoicing-blueprint.md)** — invoices for a finance team: a receivables overview, an invoice list, an invoice page with its lines and payments, the payments received and a due-date calendar.
+- **[The Customer portal blueprint](customer-portal-blueprint.md)** — a self-service portal for customers: an account home, their orders and invoices, a support inbox and their own profile.
+- **[The Contracts blueprint](contracts-blueprint.md)** — contracts for a legal or procurement team: a contract list, a contract page with its parties, obligations and amendments, a timeline of terms and an inbox for what needs review or signature.
+- **[The Work orders blueprint](work-orders-blueprint.md)** — work orders for a maintenance or field-service team: a work order list, a work order page with its tasks, parts and time, a board by step and a schedule of visits.
+- **[The Bookings blueprint](bookings-blueprint.md)** — bookings for shared rooms, equipment and vehicles: a booking calendar, a booking list, a booking page, the resources and a wizard that books one in four steps.
