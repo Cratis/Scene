@@ -26,5 +26,5 @@ jobs:
     if: ${{ !cancelled() }}
     uses: Cratis/Workflows/.github/workflows/verify-pull-request-policy.yml@main
     with:
-      runs-on: ${{ vars.RUNNER_GATE || 'cratis-arc-small' }}
+      runs-on: ${{ vars.RUNNER_GATE || 'ubuntu-latest' }}
       release-intent: true
