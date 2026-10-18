@@ -28,7 +28,7 @@ describe('when generating fields', () => {
         });
 
         result.diagnostics.should.be.empty;
-        result.edits.should.deep.equal([{ kind: SceneEditKind.SetProperty, nodeId: 'form', path: 'inputs', value: [
+        result.edits.should.deep.equal([{ kind: SceneEditKind.SetProperty, nodeId: 'element:form', path: 'inputs', value: [
             { property: 'invoiceId', type: 'guid', label: 'Invoice Id', column: 1, width: '1fr' },
             { property: 'customerName', type: 'string', label: 'Customer', column: 2, width: '1fr' },
         ] }]);

@@ -33,6 +33,6 @@ describe('when using generic context', () => {
         const Editor = cratisComponentsPackage.designTime!.propertyEditors!.commandBinding;
         render(<Editor context={context} property={{ path: 'command', label: 'Command', group: 'Command', valueType: PropertyValueType.String }} value='' setValue={() => undefined} />);
         fireEvent.change(screen.getByLabelText('Command'), { target: { value: 'RecordInvoice' } });
-        submitted.at(-1)!.should.deep.equal([{ kind: SceneEditKind.SetProperty, nodeId: 'form', path: 'command', value: 'RecordInvoice' }]);
+        submitted.at(-1)!.should.deep.equal([{ kind: SceneEditKind.SetProperty, nodeId: 'element:form', path: 'command', value: 'RecordInvoice' }]);
     });
 });
