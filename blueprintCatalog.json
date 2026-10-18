@@ -295,6 +295,337 @@
       ]
     },
     {
+      "package": "Cratis.Blueprint.Bookings",
+      "version": "1.0.0",
+      "domain": "bookings",
+      "displayName": "Bookings",
+      "description": "Bookings for shared rooms, equipment and vehicles: a booking calendar, a booking list, a booking page, the resources and a wizard that books one in four steps.",
+      "thumbnail": "thumbnails/bookings.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "bookings.calendar",
+          "title": "Calendar",
+          "description": "Every booking on a calendar: who has what, and when.",
+          "template": "BookingsCalendar",
+          "order": 0
+        },
+        {
+          "name": "bookings.list",
+          "title": "Bookings",
+          "description": "Every booking with its resource, time and status.",
+          "template": "BookingsList",
+          "order": 1
+        },
+        {
+          "name": "bookings.record",
+          "title": "Booking",
+          "description": "One booking: key facts, its attendees, its extras and its activity.",
+          "template": "BookingPage",
+          "parent": "bookings.list"
+        },
+        {
+          "name": "bookings.resources",
+          "title": "Resources",
+          "description": "The rooms, equipment and vehicles that can be booked.",
+          "template": "ResourcesList",
+          "order": 2
+        },
+        {
+          "name": "bookings.new",
+          "title": "New booking",
+          "description": "Book a room, equipment or a vehicle in four short steps.",
+          "template": "NewBookingWizard",
+          "order": 3
+        }
+      ],
+      "templates": [
+        {
+          "name": "BookingsCalendar",
+          "kind": "ScreenTemplate",
+          "displayName": "Bookings calendar",
+          "description": "Every booking on the day it falls, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsCalendar.svg"
+        },
+        {
+          "name": "BookingsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Bookings list",
+          "description": "Every booking with its resource, who booked it, date and time and status, filtered by resource, status, person and date.",
+          "type": "List",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsList.svg"
+        },
+        {
+          "name": "BookingPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Booking page",
+          "description": "One booking: status, date, hours and people, its details, attendees and extras, and its activity.",
+          "type": "Detail",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingPage.svg"
+        },
+        {
+          "name": "ResourcesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Resources list",
+          "description": "The rooms, equipment and vehicles that can be booked, with their capacity, location and whether each is free.",
+          "type": "List",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/ResourcesList.svg"
+        },
+        {
+          "name": "NewBookingWizard",
+          "kind": "ScreenTemplate",
+          "displayName": "New booking wizard",
+          "description": "Resource, time, details, then review and book; the step survives a refresh and an invalid step blocks Next and says why.",
+          "type": "Wizard",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/NewBookingWizard.svg"
+        },
+        {
+          "name": "BookingsQuickCreateBooking",
+          "kind": "DialogTemplate",
+          "displayName": "Bookings quick create booking",
+          "description": "A short form that creates one booking without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsQuickCreateBooking.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "bookings-en",
+          "title": "Bookings · English",
+          "locale": "en-GB",
+          "path": "sampleData/bookings-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
+      "package": "Cratis.Blueprint.Catalog",
+      "version": "1.0.0",
+      "domain": "catalog",
+      "displayName": "Catalog",
+      "description": "Products and categories for a sales team: a catalog overview, a product list, a product page with its variants and price history, and the categories they sit in.",
+      "thumbnail": "thumbnails/catalog.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "catalog.overview",
+          "title": "Overview",
+          "description": "How the catalog is doing: what is live, what is out of stock and what changed lately.",
+          "template": "CatalogOverview",
+          "order": 0
+        },
+        {
+          "name": "catalog.products",
+          "title": "Products",
+          "description": "Every product with its price, stock and status.",
+          "template": "ProductsList",
+          "order": 1
+        },
+        {
+          "name": "catalog.record",
+          "title": "Product",
+          "description": "One product: key facts, its variants, its price history and its activity.",
+          "template": "ProductPage",
+          "parent": "catalog.products"
+        },
+        {
+          "name": "catalog.categories",
+          "title": "Categories",
+          "description": "The categories products sit in and who owns them.",
+          "template": "CategoriesList",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "CatalogOverview",
+          "kind": "ScreenTemplate",
+          "displayName": "Catalog overview",
+          "description": "Active products, products out of stock, average margin, products by category, stock health and the latest changes.",
+          "type": "Dashboard",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogOverview.svg"
+        },
+        {
+          "name": "ProductsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Products list",
+          "description": "Every product with its SKU, category, price, stock and status, filtered by category, status, brand and date.",
+          "type": "List",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/ProductsList.svg"
+        },
+        {
+          "name": "ProductPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Product page",
+          "description": "One product: status, price, stock and margin, its details, variants and price history, and its activity.",
+          "type": "Detail",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/ProductPage.svg"
+        },
+        {
+          "name": "CategoriesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Categories list",
+          "description": "The categories products sit in, with how many products each holds, its owner and whether it is visible.",
+          "type": "List",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CategoriesList.svg"
+        },
+        {
+          "name": "CatalogQuickCreateProduct",
+          "kind": "DialogTemplate",
+          "displayName": "Catalog quick create product",
+          "description": "A short form that creates one product without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogQuickCreateProduct.svg"
+        },
+        {
+          "name": "CatalogQuickCreateCategory",
+          "kind": "DialogTemplate",
+          "displayName": "Catalog quick create category",
+          "description": "A short form that creates one category without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Catalog",
+          "thumbnail": "thumbnails/CatalogQuickCreateCategory.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "catalog-en",
+          "title": "Catalog · English",
+          "locale": "en-GB",
+          "path": "sampleData/catalog-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
+      "package": "Cratis.Blueprint.Contracts",
+      "version": "1.0.0",
+      "domain": "contracts",
+      "displayName": "Contracts",
+      "description": "Contracts for a legal or procurement team: a contract list, a contract page with its parties, obligations and amendments, a timeline of terms and an inbox for what needs review or signature.",
+      "thumbnail": "thumbnails/contracts.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "contracts.list",
+          "title": "Contracts",
+          "description": "Every contract with who it is with, when it ends and what it is worth.",
+          "template": "ContractsList",
+          "order": 0
+        },
+        {
+          "name": "contracts.record",
+          "title": "Contract",
+          "description": "One contract: key facts, parties, obligations, amendments and activity.",
+          "template": "ContractPage",
+          "parent": "contracts.list"
+        },
+        {
+          "name": "contracts.timeline",
+          "title": "Timeline",
+          "description": "Every live contract on a schedule, in a lane for each counterparty, with its notice dates.",
+          "template": "ContractsTimeline",
+          "order": 1
+        },
+        {
+          "name": "contracts.review",
+          "title": "Needs attention",
+          "description": "What needs your review, your signature or a renewal decision.",
+          "template": "ContractsReview",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "ContractsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts list",
+          "description": "Every contract with its counterparty, type, end date, value and status, filtered by status, type, owner and date.",
+          "type": "List",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsList.svg"
+        },
+        {
+          "name": "ContractPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Contract page",
+          "description": "One contract: status, value, days to its end and notice period, its details, parties, obligations and amendments, and its activity.",
+          "type": "Detail",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractPage.svg"
+        },
+        {
+          "name": "ContractsTimeline",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts timeline",
+          "description": "Every live contract as a bar from start to end in a lane for each counterparty, with how far through it is and the notice dates that matter.",
+          "type": "Timeline",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsTimeline.svg"
+        },
+        {
+          "name": "ContractsReview",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts review inbox",
+          "description": "What needs review, signature or a renewal decision: the queue grouped by day with unread told in words, the open message and its history.",
+          "type": "Inbox",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsReview.svg"
+        },
+        {
+          "name": "ContractsQuickCreateContract",
+          "kind": "DialogTemplate",
+          "displayName": "Contracts quick create contract",
+          "description": "A short form that creates one contract without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsQuickCreateContract.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "contracts-en",
+          "title": "Contracts · English",
+          "locale": "en-GB",
+          "path": "sampleData/contracts-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
       "package": "Cratis.Blueprint.Crm",
       "version": "1.0.0",
       "domain": "crm",
@@ -697,6 +1028,149 @@
       ]
     },
     {
+      "package": "Cratis.Blueprint.CustomerPortal",
+      "version": "1.0.0",
+      "domain": "customer-portal",
+      "displayName": "Customer portal",
+      "description": "A self-service portal for customers: an account home, their orders and invoices, a support inbox and their own profile.",
+      "thumbnail": "thumbnails/customer-portal.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "portal.home",
+          "title": "Home",
+          "description": "Your account at a glance: open orders, what you owe and what happened lately.",
+          "template": "PortalHome",
+          "order": 0
+        },
+        {
+          "name": "portal.orders",
+          "title": "Orders",
+          "description": "Your orders and where each one is.",
+          "template": "PortalOrdersList",
+          "order": 1
+        },
+        {
+          "name": "portal.order",
+          "title": "Order",
+          "description": "One order: key facts, its lines, tracking and what happened to it.",
+          "template": "PortalOrderPage",
+          "parent": "portal.orders"
+        },
+        {
+          "name": "portal.invoices",
+          "title": "Invoices",
+          "description": "Your invoices and which ones are still to pay.",
+          "template": "PortalInvoicesList",
+          "order": 2
+        },
+        {
+          "name": "portal.support",
+          "title": "Support",
+          "description": "Your conversations with us: questions, reminders and quotes.",
+          "template": "PortalSupport",
+          "order": 3
+        },
+        {
+          "name": "portal.profile",
+          "title": "Profile",
+          "description": "Your details, delivery address and preferences.",
+          "template": "PortalProfile",
+          "order": 4
+        }
+      ],
+      "templates": [
+        {
+          "name": "PortalHome",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal home",
+          "description": "Open orders, what is owed, open support requests, spend by month, your latest orders and what happened lately.",
+          "type": "Dashboard",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalHome.svg"
+        },
+        {
+          "name": "PortalOrdersList",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal orders list",
+          "description": "The customer's own orders with placed and delivery dates, total and status, filtered by status and date.",
+          "type": "List",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalOrdersList.svg"
+        },
+        {
+          "name": "PortalOrderPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal order page",
+          "description": "One of your orders: status, total, items and days to delivery, its details, lines and tracking, and what happened to it.",
+          "type": "Detail",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalOrderPage.svg"
+        },
+        {
+          "name": "PortalInvoicesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal invoices list",
+          "description": "The customer's invoices with issue and due dates, amount and whether each is paid, filtered by status and date.",
+          "type": "List",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalInvoicesList.svg"
+        },
+        {
+          "name": "PortalSupport",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal support inbox",
+          "description": "Conversations with the supplier: the queue grouped by day with unread told in words, the open message and its history.",
+          "type": "Inbox",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalSupport.svg"
+        },
+        {
+          "name": "PortalProfile",
+          "kind": "ScreenTemplate",
+          "displayName": "Portal profile",
+          "description": "The signed-in customer contact: their team, tabbed details, preferences and security, and recent activity.",
+          "type": "Profile",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalProfile.svg"
+        },
+        {
+          "name": "PortalQuickCreateReorder",
+          "kind": "DialogTemplate",
+          "displayName": "Customer portal quick create order",
+          "description": "A short form that creates one order without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalQuickCreateReorder.svg"
+        },
+        {
+          "name": "PortalNewSupportRequest",
+          "kind": "DialogTemplate",
+          "displayName": "Customer portal quick create support request",
+          "description": "A short form that creates one support request without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Customer portal",
+          "thumbnail": "thumbnails/PortalNewSupportRequest.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "customer-portal-en",
+          "title": "Customer portal · English",
+          "locale": "en-GB",
+          "path": "sampleData/customer-portal-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
       "package": "Cratis.Blueprint.Hr",
       "version": "1.0.0",
       "domain": "hr",
@@ -1052,6 +1526,133 @@
           "title": "Inventory · Warehouse",
           "locale": "en-GB",
           "path": "sampleData/inventory-warehouse.json",
+          "default": true
+        }
+      ]
+    },
+    {
+      "package": "Cratis.Blueprint.Invoicing",
+      "version": "1.0.0",
+      "domain": "invoicing",
+      "displayName": "Invoicing",
+      "description": "Invoices for a finance team: a receivables overview, an invoice list, an invoice page with its lines and payments, the payments received and a due-date calendar.",
+      "thumbnail": "thumbnails/invoicing.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "invoicing.overview",
+          "title": "Overview",
+          "description": "What is owed, what is overdue and what came in this month.",
+          "template": "InvoicingOverview",
+          "order": 0
+        },
+        {
+          "name": "invoicing.list",
+          "title": "Invoices",
+          "description": "Every invoice with what is owed and its status.",
+          "template": "InvoicesList",
+          "order": 1
+        },
+        {
+          "name": "invoicing.record",
+          "title": "Invoice",
+          "description": "One invoice: key facts, its lines, its payments and its activity.",
+          "template": "InvoicePage",
+          "parent": "invoicing.list"
+        },
+        {
+          "name": "invoicing.payments",
+          "title": "Payments",
+          "description": "The payments received and the invoices they settled.",
+          "template": "PaymentsList",
+          "order": 2
+        },
+        {
+          "name": "invoicing.due",
+          "title": "Due dates",
+          "description": "The day each invoice falls due, on a calendar.",
+          "template": "InvoicingDueDates",
+          "order": 3
+        }
+      ],
+      "templates": [
+        {
+          "name": "InvoicingOverview",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoicing overview",
+          "description": "Outstanding, overdue and collected this month, receivables by age, invoiced against collected and the invoices to chase.",
+          "type": "Dashboard",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingOverview.svg"
+        },
+        {
+          "name": "InvoicesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoices list",
+          "description": "Every invoice with its customer, issue and due dates, amount and status, filtered by customer, status and date.",
+          "type": "List",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicesList.svg"
+        },
+        {
+          "name": "InvoicePage",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoice page",
+          "description": "One invoice: status, total, paid and balance due, its details, lines and payments, and its activity.",
+          "type": "Detail",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicePage.svg"
+        },
+        {
+          "name": "PaymentsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Payments list",
+          "description": "The payments received with the invoice each settled, when and how, filtered by method and date.",
+          "type": "List",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/PaymentsList.svg"
+        },
+        {
+          "name": "InvoicingDueDates",
+          "kind": "ScreenTemplate",
+          "displayName": "Invoicing due-date calendar",
+          "description": "The day each invoice falls due, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingDueDates.svg"
+        },
+        {
+          "name": "InvoicingQuickCreateInvoice",
+          "kind": "DialogTemplate",
+          "displayName": "Invoicing quick create invoice",
+          "description": "A short form that creates one invoice without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingQuickCreateInvoice.svg"
+        },
+        {
+          "name": "InvoicingRecordPayment",
+          "kind": "DialogTemplate",
+          "displayName": "Invoicing quick create payment",
+          "description": "A short form that creates one payment without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Invoicing",
+          "thumbnail": "thumbnails/InvoicingRecordPayment.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "invoicing-en",
+          "title": "Invoicing · English",
+          "locale": "en-GB",
+          "path": "sampleData/invoicing-en.json",
           "default": true
         }
       ]
@@ -1543,6 +2144,210 @@
           "locale": "de-DE",
           "path": "sampleData/ticketing-service-desk-de.json",
           "default": false
+        }
+      ]
+    },
+    {
+      "package": "Cratis.Blueprint.Vendors",
+      "version": "1.0.0",
+      "domain": "vendors",
+      "displayName": "Vendors",
+      "description": "Vendors for a purchasing team: a vendor list, a vendor page with its contacts, orders and certificates, an onboarding board and a performance dashboard.",
+      "thumbnail": "thumbnails/vendors.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "vendors.list",
+          "title": "Vendors",
+          "description": "Every vendor with what you spend with them and how they perform.",
+          "template": "VendorsList",
+          "order": 0
+        },
+        {
+          "name": "vendors.record",
+          "title": "Vendor",
+          "description": "One vendor: key facts, contacts, purchase orders, certificates and activity.",
+          "template": "VendorPage",
+          "parent": "vendors.list"
+        },
+        {
+          "name": "vendors.onboarding",
+          "title": "Onboarding",
+          "description": "Vendors in a column for each onboarding step: prospect, in review, approved and active.",
+          "template": "VendorsOnboardingBoard",
+          "order": 1
+        },
+        {
+          "name": "vendors.performance",
+          "title": "Performance",
+          "description": "How vendors perform: spend, on-time delivery and the vendors to watch.",
+          "template": "VendorsPerformance",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "VendorsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors list",
+          "description": "Every vendor with its category, country, spend, rating and status, filtered by category, status, country and account manager.",
+          "type": "List",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsList.svg"
+        },
+        {
+          "name": "VendorPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendor page",
+          "description": "One vendor: status, spend, rating and open orders, its details, contacts, purchase orders and certificates, and its activity.",
+          "type": "Detail",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorPage.svg"
+        },
+        {
+          "name": "VendorsOnboardingBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors onboarding board",
+          "description": "Vendors as cards in a column for each onboarding step, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsOnboardingBoard.svg"
+        },
+        {
+          "name": "VendorsPerformance",
+          "kind": "ScreenTemplate",
+          "displayName": "Vendors performance",
+          "description": "Active vendors, spend this year, on-time delivery, spend by category, delivery over the quarters and the vendors to watch.",
+          "type": "Dashboard",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsPerformance.svg"
+        },
+        {
+          "name": "VendorsQuickCreateVendor",
+          "kind": "DialogTemplate",
+          "displayName": "Vendors quick create vendor",
+          "description": "A short form that creates one vendor without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Vendors",
+          "thumbnail": "thumbnails/VendorsQuickCreateVendor.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "vendors-en",
+          "title": "Vendors · English",
+          "locale": "en-GB",
+          "path": "sampleData/vendors-en.json",
+          "default": true
+        }
+      ]
+    },
+    {
+      "package": "Cratis.Blueprint.WorkOrders",
+      "version": "1.0.0",
+      "domain": "work-orders",
+      "displayName": "Work orders",
+      "description": "Work orders for a maintenance or field-service team: a work order list, a work order page with its tasks, parts and time, a board by step and a schedule of visits.",
+      "thumbnail": "thumbnails/work-orders.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "workorders.list",
+          "title": "Work orders",
+          "description": "Every work order with its site, priority, assignee and status.",
+          "template": "WorkOrdersList",
+          "order": 0
+        },
+        {
+          "name": "workorders.record",
+          "title": "Work order",
+          "description": "One work order: key facts, its tasks, the parts used, the time logged and its activity.",
+          "template": "WorkOrderPage",
+          "parent": "workorders.list"
+        },
+        {
+          "name": "workorders.board",
+          "title": "Board",
+          "description": "Work orders in a column for each step: new, scheduled, in progress and done.",
+          "template": "WorkOrdersBoard",
+          "order": 1
+        },
+        {
+          "name": "workorders.schedule",
+          "title": "Schedule",
+          "description": "The day each work order is planned, on a calendar.",
+          "template": "WorkOrdersSchedule",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "WorkOrdersList",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders list",
+          "description": "Every work order with its site, priority, assignee, due date and status, filtered by status, priority, site and assignee.",
+          "type": "List",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersList.svg"
+        },
+        {
+          "name": "WorkOrderPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Work order page",
+          "description": "One work order: status, priority, days to its due date and hours logged, its details, tasks, parts and time, and its activity.",
+          "type": "Detail",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrderPage.svg"
+        },
+        {
+          "name": "WorkOrdersBoard",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders board",
+          "description": "Work orders as cards in a column for each step, moved by dragging or by menu.",
+          "type": "Board",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersBoard.svg"
+        },
+        {
+          "name": "WorkOrdersSchedule",
+          "kind": "ScreenTemplate",
+          "displayName": "Work orders schedule",
+          "description": "The day of each planned visit, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersSchedule.svg"
+        },
+        {
+          "name": "WorkOrdersQuickCreateWorkOrder",
+          "kind": "DialogTemplate",
+          "displayName": "Work orders quick create work order",
+          "description": "A short form that creates one work order without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Work orders",
+          "thumbnail": "thumbnails/WorkOrdersQuickCreateWorkOrder.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "work-orders-en",
+          "title": "Work orders · English",
+          "locale": "en-GB",
+          "path": "sampleData/work-orders-en.json",
+          "default": true
         }
       ]
     }

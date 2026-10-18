@@ -1,0 +1,838 @@
+{
+    "id": "catalog-en",
+    "title": "Catalog · English",
+    "locale": "en-GB",
+    "owner": "blueprint:catalog",
+    "sets": [
+        {
+            "shape": "CatalogSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Products",
+            "rows": [
+                {
+                    "id": "product-1",
+                    "sku": "FIT-210",
+                    "name": "Compression fitting 22 mm",
+                    "category": "Fittings",
+                    "price": 12.5,
+                    "stock": 420,
+                    "status": "Active",
+                    "brand": "Hartwell",
+                    "updated": "2026-10-14"
+                },
+                {
+                    "id": "product-2",
+                    "sku": "FIT-215",
+                    "name": "Compression fitting 15 mm",
+                    "category": "Fittings",
+                    "price": 8.9,
+                    "stock": 1180,
+                    "status": "Active",
+                    "brand": "Hartwell",
+                    "updated": "2026-10-13"
+                },
+                {
+                    "id": "product-3",
+                    "sku": "TOL-310",
+                    "name": "Pipe cutter, 3-35 mm",
+                    "category": "Tools",
+                    "price": 34,
+                    "stock": 64,
+                    "status": "Active",
+                    "brand": "Kestrel",
+                    "updated": "2026-10-12"
+                },
+                {
+                    "id": "product-4",
+                    "sku": "TOL-322",
+                    "name": "Adjustable wrench 300 mm",
+                    "category": "Tools",
+                    "price": 21.75,
+                    "stock": 9,
+                    "status": "Low stock",
+                    "brand": "Kestrel",
+                    "updated": "2026-10-11"
+                },
+                {
+                    "id": "product-5",
+                    "sku": "SAF-120",
+                    "name": "Safety glasses, clear",
+                    "category": "Safety",
+                    "price": 4.2,
+                    "stock": 860,
+                    "status": "Active",
+                    "brand": "Norsk Vern",
+                    "updated": "2026-10-10"
+                },
+                {
+                    "id": "product-6",
+                    "sku": "SAF-140",
+                    "name": "Cut-resistant gloves, size L",
+                    "category": "Safety",
+                    "price": 7.95,
+                    "stock": 0,
+                    "status": "Low stock",
+                    "brand": "Norsk Vern",
+                    "updated": "2026-10-09"
+                },
+                {
+                    "id": "product-7",
+                    "sku": "ELE-501",
+                    "name": "Cable clip, 6 mm (100 pack)",
+                    "category": "Electrical",
+                    "price": 5.5,
+                    "stock": 540,
+                    "status": "Active",
+                    "brand": "Voltaire",
+                    "updated": "2026-10-08"
+                },
+                {
+                    "id": "product-8",
+                    "sku": "ELE-515",
+                    "name": "Junction box, IP65",
+                    "category": "Electrical",
+                    "price": 11.3,
+                    "stock": 210,
+                    "status": "Active",
+                    "brand": "Voltaire",
+                    "updated": "2026-10-07"
+                },
+                {
+                    "id": "product-9",
+                    "sku": "PAC-010",
+                    "name": "Cardboard box, 400 x 300",
+                    "category": "Packaging",
+                    "price": 1.35,
+                    "stock": 3200,
+                    "status": "Active",
+                    "brand": "Fjord Pack",
+                    "updated": "2026-10-06"
+                },
+                {
+                    "id": "product-10",
+                    "sku": "PAC-022",
+                    "name": "Bubble wrap roll, 50 m",
+                    "category": "Packaging",
+                    "price": 14.9,
+                    "stock": 37,
+                    "status": "Draft",
+                    "brand": "Fjord Pack",
+                    "updated": "2026-10-14"
+                },
+                {
+                    "id": "product-11",
+                    "sku": "FAS-801",
+                    "name": "Stainless screw M6 x 40 (50 pack)",
+                    "category": "Fasteners",
+                    "price": 9.6,
+                    "stock": 760,
+                    "status": "Active",
+                    "brand": "Bolten",
+                    "updated": "2026-10-13"
+                },
+                {
+                    "id": "product-12",
+                    "sku": "FAS-840",
+                    "name": "Zinc washer M8 (200 pack)",
+                    "category": "Fasteners",
+                    "price": 6.25,
+                    "stock": 0,
+                    "status": "Discontinued",
+                    "brand": "Bolten",
+                    "updated": "2026-10-12"
+                }
+            ]
+        },
+        {
+            "shape": "ProductColumns",
+            "rows": [
+                {
+                    "field": "sku",
+                    "header": "SKU"
+                },
+                {
+                    "field": "name",
+                    "header": "Product"
+                },
+                {
+                    "field": "category",
+                    "header": "Category"
+                },
+                {
+                    "field": "price",
+                    "header": "Price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "stock",
+                    "header": "In stock",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Active": "success",
+                        "Draft": "info",
+                        "Low stock": "warning",
+                        "Discontinued": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "ProductFilterFields",
+            "rows": [
+                {
+                    "name": "category",
+                    "label": "Category",
+                    "type": "select",
+                    "options": [
+                        "Fittings",
+                        "Tools",
+                        "Safety",
+                        "Electrical",
+                        "Packaging",
+                        "Fasteners"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Active",
+                        "Draft",
+                        "Low stock",
+                        "Discontinued"
+                    ]
+                },
+                {
+                    "name": "brand",
+                    "label": "Brand",
+                    "type": "select",
+                    "options": [
+                        "Hartwell",
+                        "Kestrel",
+                        "Norsk Vern",
+                        "Voltaire",
+                        "Fjord Pack",
+                        "Bolten"
+                    ]
+                },
+                {
+                    "name": "updated",
+                    "label": "Updated",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "ProductViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All products"
+                },
+                {
+                    "id": "low",
+                    "label": "Low or no stock"
+                },
+                {
+                    "id": "draft",
+                    "label": "Drafts"
+                }
+            ]
+        },
+        {
+            "shape": "ProductColumnChoices",
+            "rows": [
+                {
+                    "id": "sku",
+                    "label": "SKU",
+                    "locked": true
+                },
+                {
+                    "id": "name",
+                    "label": "Product"
+                },
+                {
+                    "id": "category",
+                    "label": "Category"
+                },
+                {
+                    "id": "price",
+                    "label": "Price"
+                },
+                {
+                    "id": "stock",
+                    "label": "In stock"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "ProductSelection",
+            "rows": []
+        },
+        {
+            "shape": "ProductQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New product",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Product name",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "sku",
+                            "label": "SKU",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category",
+                            "type": "select",
+                            "options": [
+                                "Fittings",
+                                "Tools",
+                                "Safety",
+                                "Electrical",
+                                "Packaging",
+                                "Fasteners"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "price",
+                            "label": "Price",
+                            "type": "currency",
+                            "required": true
+                        },
+                        {
+                            "name": "status",
+                            "label": "Status",
+                            "type": "select",
+                            "options": [
+                                "Draft",
+                                "Active"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ProductRecord",
+            "rows": [
+                {
+                    "id": "product-1",
+                    "sku": "FIT-210",
+                    "name": "Compression fitting 22 mm",
+                    "category": "Fittings",
+                    "price": 12.5,
+                    "stock": 420,
+                    "status": "Active",
+                    "brand": "Hartwell",
+                    "updated": "2026-10-14",
+                    "summary": "Brass compression fitting for 22 mm copper pipe",
+                    "cost": 6.4,
+                    "supplier": "Hartwell Supply",
+                    "description": "Brass body with an olive and nut, pressure tested to 10 bar.",
+                    "margin": 48.8
+                }
+            ]
+        },
+        {
+            "shape": "ProductSections",
+            "rows": [
+                {
+                    "id": "product",
+                    "title": "Product details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "sku",
+                            "label": "SKU"
+                        },
+                        {
+                            "name": "name",
+                            "label": "Product"
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category"
+                        },
+                        {
+                            "name": "brand",
+                            "label": "Brand"
+                        },
+                        {
+                            "name": "price",
+                            "label": "Price",
+                            "type": "currency"
+                        },
+                        {
+                            "name": "cost",
+                            "label": "Cost",
+                            "type": "currency"
+                        },
+                        {
+                            "name": "supplier",
+                            "label": "Supplier"
+                        },
+                        {
+                            "name": "updated",
+                            "label": "Updated",
+                            "type": "date"
+                        },
+                        {
+                            "name": "description",
+                            "label": "Description",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ProductSummary",
+            "rows": [
+                {
+                    "status": "Active",
+                    "tone": "success",
+                    "price": 12.5,
+                    "stock": 420,
+                    "margin": 48.8
+                }
+            ]
+        },
+        {
+            "shape": "ProductActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "raised the price to GBP 12.50",
+                    "kind": "change",
+                    "at": "2026-10-12T09:10:00Z",
+                    "body": "Supplier increase from 1 October"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Alan Turing",
+                    "action": "added a 15 mm variant",
+                    "kind": "created",
+                    "at": "2026-10-05T14:20:00Z",
+                    "body": "Same olive, smaller nut"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Katherine Johnson",
+                    "action": "published the product",
+                    "kind": "status",
+                    "at": "2026-09-28T08:00:00Z",
+                    "body": "Visible in every channel"
+                }
+            ]
+        },
+        {
+            "shape": "ProductTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "variants",
+                    "label": "Variants"
+                },
+                {
+                    "id": "pricehistory",
+                    "label": "Price history"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "ProductVariants",
+            "rows": [
+                {
+                    "id": "v1",
+                    "sku": "FIT-210",
+                    "option": "22 mm, brass",
+                    "price": 12.5,
+                    "stock": 420
+                },
+                {
+                    "id": "v2",
+                    "sku": "FIT-210-N",
+                    "option": "22 mm, nickel",
+                    "price": 14.2,
+                    "stock": 95
+                },
+                {
+                    "id": "v3",
+                    "sku": "FIT-210-10",
+                    "option": "22 mm, brass, 10 pack",
+                    "price": 112,
+                    "stock": 38
+                }
+            ]
+        },
+        {
+            "shape": "ProductVariantsColumns",
+            "rows": [
+                {
+                    "field": "sku",
+                    "header": "SKU"
+                },
+                {
+                    "field": "option",
+                    "header": "Option"
+                },
+                {
+                    "field": "price",
+                    "header": "Price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "stock",
+                    "header": "In stock",
+                    "kind": "number"
+                }
+            ]
+        },
+        {
+            "shape": "ProductPriceHistory",
+            "rows": [
+                {
+                    "id": "p1",
+                    "changed": "2026-10-12",
+                    "price": 12.5,
+                    "by": "Grace Hopper"
+                },
+                {
+                    "id": "p2",
+                    "changed": "2026-04-01",
+                    "price": 11.9,
+                    "by": "Alan Turing"
+                },
+                {
+                    "id": "p3",
+                    "changed": "2025-10-01",
+                    "price": 11.2,
+                    "by": "Alan Turing"
+                }
+            ]
+        },
+        {
+            "shape": "ProductPriceHistoryColumns",
+            "rows": [
+                {
+                    "field": "changed",
+                    "header": "Changed",
+                    "kind": "date"
+                },
+                {
+                    "field": "price",
+                    "header": "Price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "by",
+                    "header": "Changed by"
+                }
+            ]
+        },
+        {
+            "shape": "Categories",
+            "rows": [
+                {
+                    "id": "category-1",
+                    "name": "Fittings",
+                    "products": 2,
+                    "owner": "Grace Hopper",
+                    "status": "Visible"
+                },
+                {
+                    "id": "category-2",
+                    "name": "Tools",
+                    "products": 2,
+                    "owner": "Alan Turing",
+                    "status": "Visible"
+                },
+                {
+                    "id": "category-3",
+                    "name": "Safety",
+                    "products": 2,
+                    "owner": "Katherine Johnson",
+                    "status": "Visible"
+                },
+                {
+                    "id": "category-4",
+                    "name": "Electrical",
+                    "products": 2,
+                    "owner": "Alan Turing",
+                    "status": "Visible"
+                },
+                {
+                    "id": "category-5",
+                    "name": "Packaging",
+                    "products": 2,
+                    "owner": "Grace Hopper",
+                    "status": "Visible"
+                },
+                {
+                    "id": "category-6",
+                    "name": "Fasteners",
+                    "products": 2,
+                    "owner": "Katherine Johnson",
+                    "status": "Hidden"
+                }
+            ]
+        },
+        {
+            "shape": "CategoryColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Category"
+                },
+                {
+                    "field": "products",
+                    "header": "Products",
+                    "kind": "number"
+                },
+                {
+                    "field": "owner",
+                    "header": "Owner"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Visible": "success",
+                        "Hidden": "neutral"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "CategoryFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Visible",
+                        "Hidden"
+                    ]
+                },
+                {
+                    "name": "owner",
+                    "label": "Owner",
+                    "type": "select",
+                    "options": [
+                        "Grace Hopper",
+                        "Alan Turing",
+                        "Katherine Johnson"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CategoryViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All categories"
+                },
+                {
+                    "id": "hidden",
+                    "label": "Hidden categories"
+                }
+            ]
+        },
+        {
+            "shape": "CategoryColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Category",
+                    "locked": true
+                },
+                {
+                    "id": "products",
+                    "label": "Products"
+                },
+                {
+                    "id": "owner",
+                    "label": "Owner"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "CategorySelection",
+            "rows": []
+        },
+        {
+            "shape": "CategoryQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New category",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Category name",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Owner",
+                            "type": "select",
+                            "options": [
+                                "Grace Hopper",
+                                "Alan Turing",
+                                "Katherine Johnson"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CatalogKpis",
+            "rows": [
+                {
+                    "value": 1284,
+                    "change": 3.2
+                },
+                {
+                    "value": 23,
+                    "change": -12.5
+                },
+                {
+                    "value": 41.6,
+                    "change": 1.4
+                }
+            ]
+        },
+        {
+            "shape": "CatalogProductsByCategory",
+            "rows": [
+                {
+                    "categories": [
+                        "Fittings",
+                        "Tools",
+                        "Safety",
+                        "Electrical",
+                        "Packaging",
+                        "Fasteners"
+                    ],
+                    "series": [
+                        {
+                            "name": "Products",
+                            "values": [
+                                312,
+                                184,
+                                146,
+                                268,
+                                97,
+                                277
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CatalogStockHealth",
+            "rows": [
+                {
+                    "categories": [
+                        "In stock",
+                        "Low stock",
+                        "Out of stock"
+                    ],
+                    "series": [
+                        {
+                            "name": "Products",
+                            "values": [
+                                1190,
+                                71,
+                                23
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "CatalogActivity",
+            "rows": [
+                {
+                    "id": "c0",
+                    "actor": "Grace Hopper",
+                    "action": "raised the price of FIT-210",
+                    "kind": "change",
+                    "at": "2026-10-12T09:10:00Z",
+                    "body": "GBP 11.90 to GBP 12.50"
+                },
+                {
+                    "id": "c1",
+                    "actor": "Alan Turing",
+                    "action": "published PAC-022 as a draft",
+                    "kind": "created",
+                    "at": "2026-10-11T15:00:00Z",
+                    "body": "Waiting for photos"
+                },
+                {
+                    "id": "c2",
+                    "actor": "Katherine Johnson",
+                    "action": "hid the Fasteners category",
+                    "kind": "status",
+                    "at": "2026-10-09T10:30:00Z",
+                    "body": "Until the new range arrives"
+                }
+            ]
+        },
+        {
+            "shape": "CatalogFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

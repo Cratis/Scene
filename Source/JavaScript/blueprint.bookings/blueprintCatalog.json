@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Bookings",
+      "version": "1.0.0",
+      "domain": "bookings",
+      "displayName": "Bookings",
+      "description": "Bookings for shared rooms, equipment and vehicles: a booking calendar, a booking list, a booking page, the resources and a wizard that books one in four steps.",
+      "thumbnail": "thumbnails/bookings.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "bookings.calendar",
+          "title": "Calendar",
+          "description": "Every booking on a calendar: who has what, and when.",
+          "template": "BookingsCalendar",
+          "order": 0
+        },
+        {
+          "name": "bookings.list",
+          "title": "Bookings",
+          "description": "Every booking with its resource, time and status.",
+          "template": "BookingsList",
+          "order": 1
+        },
+        {
+          "name": "bookings.record",
+          "title": "Booking",
+          "description": "One booking: key facts, its attendees, its extras and its activity.",
+          "template": "BookingPage",
+          "parent": "bookings.list"
+        },
+        {
+          "name": "bookings.resources",
+          "title": "Resources",
+          "description": "The rooms, equipment and vehicles that can be booked.",
+          "template": "ResourcesList",
+          "order": 2
+        },
+        {
+          "name": "bookings.new",
+          "title": "New booking",
+          "description": "Book a room, equipment or a vehicle in four short steps.",
+          "template": "NewBookingWizard",
+          "order": 3
+        }
+      ],
+      "templates": [
+        {
+          "name": "BookingsCalendar",
+          "kind": "ScreenTemplate",
+          "displayName": "Bookings calendar",
+          "description": "Every booking on the day it falls, on a month, a week or as an agenda, with the status told in words.",
+          "type": "Calendar",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsCalendar.svg"
+        },
+        {
+          "name": "BookingsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Bookings list",
+          "description": "Every booking with its resource, who booked it, date and time and status, filtered by resource, status, person and date.",
+          "type": "List",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsList.svg"
+        },
+        {
+          "name": "BookingPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Booking page",
+          "description": "One booking: status, date, hours and people, its details, attendees and extras, and its activity.",
+          "type": "Detail",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingPage.svg"
+        },
+        {
+          "name": "ResourcesList",
+          "kind": "ScreenTemplate",
+          "displayName": "Resources list",
+          "description": "The rooms, equipment and vehicles that can be booked, with their capacity, location and whether each is free.",
+          "type": "List",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/ResourcesList.svg"
+        },
+        {
+          "name": "NewBookingWizard",
+          "kind": "ScreenTemplate",
+          "displayName": "New booking wizard",
+          "description": "Resource, time, details, then review and book; the step survives a refresh and an invalid step blocks Next and says why.",
+          "type": "Wizard",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/NewBookingWizard.svg"
+        },
+        {
+          "name": "BookingsQuickCreateBooking",
+          "kind": "DialogTemplate",
+          "displayName": "Bookings quick create booking",
+          "description": "A short form that creates one booking without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Bookings",
+          "thumbnail": "thumbnails/BookingsQuickCreateBooking.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "bookings-en",
+          "title": "Bookings · English",
+          "locale": "en-GB",
+          "path": "sampleData/bookings-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

@@ -52,6 +52,20 @@
         href: project-tracker-blueprint.md
       - name: The Orders blueprint
         href: orders-blueprint.md
+      - name: The Catalog blueprint
+        href: catalog-blueprint.md
+      - name: The Vendors blueprint
+        href: vendors-blueprint.md
+      - name: The Invoicing blueprint
+        href: invoicing-blueprint.md
+      - name: The Customer portal blueprint
+        href: customer-portal-blueprint.md
+      - name: The Contracts blueprint
+        href: contracts-blueprint.md
+      - name: The Work orders blueprint
+        href: work-orders-blueprint.md
+      - name: The Bookings blueprint
+        href: bookings-blueprint.md
 
 - name: Understand
   items:

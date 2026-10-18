@@ -1,0 +1,863 @@
+{
+    "id": "vendors-en",
+    "title": "Vendors · English",
+    "locale": "en-GB",
+    "owner": "blueprint:vendors",
+    "sets": [
+        {
+            "shape": "VendorsSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Vendors",
+            "rows": [
+                {
+                    "id": "vendor-1",
+                    "name": "Hartwell Supply",
+                    "category": "Materials",
+                    "country": "United Kingdom",
+                    "spend": 184200,
+                    "rating": 4.6,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "vendor-2",
+                    "name": "Kestrel Tools",
+                    "category": "Equipment",
+                    "country": "Germany",
+                    "spend": 96400,
+                    "rating": 4.2,
+                    "status": "Active",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "vendor-3",
+                    "name": "Norsk Vern",
+                    "category": "Safety",
+                    "country": "Norway",
+                    "spend": 61800,
+                    "rating": 4.8,
+                    "status": "Active",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "vendor-4",
+                    "name": "Voltaire Electric",
+                    "category": "Materials",
+                    "country": "France",
+                    "spend": 128900,
+                    "rating": 3.9,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "vendor-5",
+                    "name": "Fjord Pack",
+                    "category": "Packaging",
+                    "country": "Norway",
+                    "spend": 42100,
+                    "rating": 4.4,
+                    "status": "Active",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "vendor-6",
+                    "name": "Bolten Fasteners",
+                    "category": "Materials",
+                    "country": "Germany",
+                    "spend": 37500,
+                    "rating": 3.4,
+                    "status": "Suspended",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "vendor-7",
+                    "name": "Quayside Logistics",
+                    "category": "Logistics",
+                    "country": "Netherlands",
+                    "spend": 215600,
+                    "rating": 4.1,
+                    "status": "Active",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "vendor-8",
+                    "name": "Lumen IT Services",
+                    "category": "Services",
+                    "country": "United Kingdom",
+                    "spend": 74300,
+                    "rating": 4.5,
+                    "status": "Active",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "vendor-9",
+                    "name": "Meridian Cleaning",
+                    "category": "Services",
+                    "country": "Sweden",
+                    "spend": 18900,
+                    "rating": 4,
+                    "status": "Approved",
+                    "owner": "Katherine Johnson"
+                },
+                {
+                    "id": "vendor-10",
+                    "name": "Atlas Steel",
+                    "category": "Materials",
+                    "country": "Poland",
+                    "spend": 0,
+                    "rating": 0,
+                    "status": "In review",
+                    "owner": "Grace Hopper"
+                },
+                {
+                    "id": "vendor-11",
+                    "name": "Pinewood Furniture",
+                    "category": "Equipment",
+                    "country": "Denmark",
+                    "spend": 0,
+                    "rating": 0,
+                    "status": "Prospect",
+                    "owner": "Alan Turing"
+                },
+                {
+                    "id": "vendor-12",
+                    "name": "Solstice Energy",
+                    "category": "Services",
+                    "country": "United Kingdom",
+                    "spend": 0,
+                    "rating": 0,
+                    "status": "In review",
+                    "owner": "Katherine Johnson"
+                }
+            ]
+        },
+        {
+            "shape": "VendorColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Vendor"
+                },
+                {
+                    "field": "category",
+                    "header": "Category"
+                },
+                {
+                    "field": "country",
+                    "header": "Country"
+                },
+                {
+                    "field": "spend",
+                    "header": "Spend this year",
+                    "kind": "currency"
+                },
+                {
+                    "field": "rating",
+                    "header": "Rating",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Prospect": "neutral",
+                        "In review": "info",
+                        "Approved": "info",
+                        "Active": "success",
+                        "Suspended": "danger"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "VendorFilterFields",
+            "rows": [
+                {
+                    "name": "category",
+                    "label": "Category",
+                    "type": "select",
+                    "options": [
+                        "Materials",
+                        "Equipment",
+                        "Safety",
+                        "Packaging",
+                        "Logistics",
+                        "Services"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Prospect",
+                        "In review",
+                        "Approved",
+                        "Active",
+                        "Suspended"
+                    ]
+                },
+                {
+                    "name": "country",
+                    "label": "Country",
+                    "type": "select",
+                    "options": [
+                        "United Kingdom",
+                        "Germany",
+                        "Norway",
+                        "France",
+                        "Netherlands",
+                        "Sweden",
+                        "Poland",
+                        "Denmark"
+                    ]
+                },
+                {
+                    "name": "owner",
+                    "label": "Account manager",
+                    "type": "select",
+                    "options": [
+                        "Grace Hopper",
+                        "Alan Turing",
+                        "Katherine Johnson"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All vendors"
+                },
+                {
+                    "id": "active",
+                    "label": "Active vendors"
+                },
+                {
+                    "id": "review",
+                    "label": "Waiting for review"
+                }
+            ]
+        },
+        {
+            "shape": "VendorColumnChoices",
+            "rows": [
+                {
+                    "id": "name",
+                    "label": "Vendor",
+                    "locked": true
+                },
+                {
+                    "id": "category",
+                    "label": "Category"
+                },
+                {
+                    "id": "country",
+                    "label": "Country"
+                },
+                {
+                    "id": "spend",
+                    "label": "Spend this year"
+                },
+                {
+                    "id": "rating",
+                    "label": "Rating"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "VendorSelection",
+            "rows": []
+        },
+        {
+            "shape": "VendorQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New vendor",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Vendor name",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category",
+                            "type": "select",
+                            "options": [
+                                "Materials",
+                                "Equipment",
+                                "Safety",
+                                "Packaging",
+                                "Logistics",
+                                "Services"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "country",
+                            "label": "Country",
+                            "type": "text"
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Account manager",
+                            "type": "select",
+                            "options": [
+                                "Grace Hopper",
+                                "Alan Turing",
+                                "Katherine Johnson"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorRecord",
+            "rows": [
+                {
+                    "id": "vendor-1",
+                    "name": "Hartwell Supply",
+                    "category": "Materials",
+                    "country": "United Kingdom",
+                    "spend": 184200,
+                    "rating": 4.6,
+                    "status": "Active",
+                    "owner": "Grace Hopper",
+                    "summary": "Brass and copper fittings, supplier since 2019",
+                    "terms": "Net 30",
+                    "vat": "GB 123 4567 89",
+                    "website": "hartwell-supply.example",
+                    "address": "Unit 4, Mill Lane, Sheffield S1 2AB",
+                    "openOrders": 3
+                }
+            ]
+        },
+        {
+            "shape": "VendorSections",
+            "rows": [
+                {
+                    "id": "vendor",
+                    "title": "Vendor details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "name",
+                            "label": "Vendor"
+                        },
+                        {
+                            "name": "category",
+                            "label": "Category"
+                        },
+                        {
+                            "name": "country",
+                            "label": "Country"
+                        },
+                        {
+                            "name": "owner",
+                            "label": "Account manager"
+                        },
+                        {
+                            "name": "terms",
+                            "label": "Payment terms"
+                        },
+                        {
+                            "name": "vat",
+                            "label": "VAT number"
+                        },
+                        {
+                            "name": "website",
+                            "label": "Website"
+                        },
+                        {
+                            "name": "address",
+                            "label": "Address",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorSummary",
+            "rows": [
+                {
+                    "status": "Active",
+                    "tone": "success",
+                    "spend": 184200,
+                    "rating": 4.6,
+                    "openOrders": 3
+                }
+            ]
+        },
+        {
+            "shape": "VendorActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "approved purchase order PO-5521",
+                    "kind": "status",
+                    "at": "2026-10-13T11:00:00Z",
+                    "body": "GBP 12,480 for fittings"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Katherine Johnson",
+                    "action": "renewed the ISO 9001 certificate",
+                    "kind": "change",
+                    "at": "2026-10-02T09:45:00Z",
+                    "body": "Valid until October 2028"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Alan Turing",
+                    "action": "set the payment terms to net 30",
+                    "kind": "comment",
+                    "at": "2026-09-18T14:10:00Z",
+                    "body": "Agreed in the annual review"
+                }
+            ]
+        },
+        {
+            "shape": "VendorTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "contacts",
+                    "label": "Contacts"
+                },
+                {
+                    "id": "orders",
+                    "label": "Purchase orders"
+                },
+                {
+                    "id": "certificates",
+                    "label": "Certificates"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "VendorContacts",
+            "rows": [
+                {
+                    "id": "c1",
+                    "name": "Eleanor Marsh",
+                    "role": "Key account manager",
+                    "email": "eleanor@hartwell-supply.example",
+                    "phone": "+44 114 555 0142"
+                },
+                {
+                    "id": "c2",
+                    "name": "Tobias Reed",
+                    "role": "Dispatch",
+                    "email": "dispatch@hartwell-supply.example",
+                    "phone": "+44 114 555 0177"
+                },
+                {
+                    "id": "c3",
+                    "name": "Priya Nair",
+                    "role": "Accounts",
+                    "email": "accounts@hartwell-supply.example",
+                    "phone": "+44 114 555 0190"
+                }
+            ]
+        },
+        {
+            "shape": "VendorContactsColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Name"
+                },
+                {
+                    "field": "role",
+                    "header": "Role"
+                },
+                {
+                    "field": "email",
+                    "header": "E-mail"
+                },
+                {
+                    "field": "phone",
+                    "header": "Phone"
+                }
+            ]
+        },
+        {
+            "shape": "VendorOrders",
+            "rows": [
+                {
+                    "id": "o1",
+                    "number": "PO-5521",
+                    "placed": "2026-10-13",
+                    "amount": 12480,
+                    "status": "Approved"
+                },
+                {
+                    "id": "o2",
+                    "number": "PO-5498",
+                    "placed": "2026-09-29",
+                    "amount": 8650,
+                    "status": "Delivered"
+                },
+                {
+                    "id": "o3",
+                    "number": "PO-5460",
+                    "placed": "2026-09-11",
+                    "amount": 15320,
+                    "status": "Delivered"
+                }
+            ]
+        },
+        {
+            "shape": "VendorOrdersColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Order"
+                },
+                {
+                    "field": "placed",
+                    "header": "Placed",
+                    "kind": "date"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "VendorCertificates",
+            "rows": [
+                {
+                    "id": "k1",
+                    "name": "ISO 9001 quality management",
+                    "expires": "2028-10-02",
+                    "status": "Valid"
+                },
+                {
+                    "id": "k2",
+                    "name": "ISO 14001 environment",
+                    "expires": "2026-12-15",
+                    "status": "Expiring"
+                }
+            ]
+        },
+        {
+            "shape": "VendorCertificatesColumns",
+            "rows": [
+                {
+                    "field": "name",
+                    "header": "Certificate"
+                },
+                {
+                    "field": "expires",
+                    "header": "Expires",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingColumns",
+            "rows": [
+                {
+                    "id": "prospect",
+                    "label": "Prospect"
+                },
+                {
+                    "id": "review",
+                    "label": "In review",
+                    "limit": 3
+                },
+                {
+                    "id": "approved",
+                    "label": "Approved"
+                },
+                {
+                    "id": "active",
+                    "label": "Active"
+                }
+            ]
+        },
+        {
+            "shape": "OnboardingCards",
+            "rows": [
+                {
+                    "id": "vendor-11",
+                    "title": "Pinewood Furniture",
+                    "column": "prospect",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Equipment"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "Denmark"
+                        }
+                    ],
+                    "badges": [
+                        "Prospect"
+                    ]
+                },
+                {
+                    "id": "vendor-10",
+                    "title": "Atlas Steel",
+                    "column": "review",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Materials"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "Poland"
+                        }
+                    ],
+                    "badges": [
+                        "Audit due"
+                    ]
+                },
+                {
+                    "id": "vendor-12",
+                    "title": "Solstice Energy",
+                    "column": "review",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Services"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "United Kingdom"
+                        }
+                    ],
+                    "badges": [
+                        "Documents"
+                    ]
+                },
+                {
+                    "id": "vendor-9",
+                    "title": "Meridian Cleaning",
+                    "column": "approved",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Services"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "Sweden"
+                        }
+                    ],
+                    "badges": [
+                        "First order"
+                    ]
+                },
+                {
+                    "id": "vendor-1",
+                    "title": "Hartwell Supply",
+                    "column": "active",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Materials"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "United Kingdom"
+                        }
+                    ],
+                    "badges": [
+                        "Preferred"
+                    ]
+                },
+                {
+                    "id": "vendor-3",
+                    "title": "Norsk Vern",
+                    "column": "active",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Safety"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "Norway"
+                        }
+                    ],
+                    "badges": [
+                        "Preferred"
+                    ]
+                },
+                {
+                    "id": "vendor-7",
+                    "title": "Quayside Logistics",
+                    "column": "active",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Category",
+                            "value": "Logistics"
+                        },
+                        {
+                            "label": "Country",
+                            "value": "Netherlands"
+                        }
+                    ],
+                    "badges": [
+                        "Contract"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorsKpis",
+            "rows": [
+                {
+                    "value": 9,
+                    "change": 12.5
+                },
+                {
+                    "value": 859700,
+                    "change": 6.8
+                },
+                {
+                    "value": 92.4,
+                    "change": 1.9
+                }
+            ]
+        },
+        {
+            "shape": "VendorsSpendByCategory",
+            "rows": [
+                {
+                    "categories": [
+                        "Materials",
+                        "Equipment",
+                        "Safety",
+                        "Packaging",
+                        "Logistics",
+                        "Services"
+                    ],
+                    "series": [
+                        {
+                            "name": "Spend",
+                            "values": [
+                                350600,
+                                170700,
+                                61800,
+                                42100,
+                                215600,
+                                93200
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorsOnTimeDelivery",
+            "rows": [
+                {
+                    "categories": [
+                        "Q4 2025",
+                        "Q1 2026",
+                        "Q2 2026",
+                        "Q3 2026"
+                    ],
+                    "series": [
+                        {
+                            "name": "On time",
+                            "values": [
+                                88.2,
+                                90.1,
+                                91.5,
+                                92.4
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "VendorsActivity",
+            "rows": [
+                {
+                    "id": "v0",
+                    "actor": "Grace Hopper",
+                    "action": "approved purchase order PO-5521",
+                    "kind": "status",
+                    "at": "2026-10-13T11:00:00Z",
+                    "body": "Hartwell Supply"
+                },
+                {
+                    "id": "v1",
+                    "actor": "Katherine Johnson",
+                    "action": "asked Solstice Energy for insurance papers",
+                    "kind": "comment",
+                    "at": "2026-10-10T16:20:00Z",
+                    "body": "Needed before the audit"
+                },
+                {
+                    "id": "v2",
+                    "actor": "Alan Turing",
+                    "action": "suspended Bolten Fasteners",
+                    "kind": "change",
+                    "at": "2026-10-08T08:30:00Z",
+                    "body": "Two late deliveries in a row"
+                }
+            ]
+        },
+        {
+            "shape": "VendorsFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

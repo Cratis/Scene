@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "blueprints": [
+    {
+      "package": "Cratis.Blueprint.Contracts",
+      "version": "1.0.0",
+      "domain": "contracts",
+      "displayName": "Contracts",
+      "description": "Contracts for a legal or procurement team: a contract list, a contract page with its parties, obligations and amendments, a timeline of terms and an inbox for what needs review or signature.",
+      "thumbnail": "thumbnails/contracts.svg",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/Cratis/Scene/blob/main/LICENSE",
+      "dependencies": [
+        {
+          "name": "Cratis.Blueprint.Default",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "screens": [
+        {
+          "name": "contracts.list",
+          "title": "Contracts",
+          "description": "Every contract with who it is with, when it ends and what it is worth.",
+          "template": "ContractsList",
+          "order": 0
+        },
+        {
+          "name": "contracts.record",
+          "title": "Contract",
+          "description": "One contract: key facts, parties, obligations, amendments and activity.",
+          "template": "ContractPage",
+          "parent": "contracts.list"
+        },
+        {
+          "name": "contracts.timeline",
+          "title": "Timeline",
+          "description": "Every live contract on a schedule, in a lane for each counterparty, with its notice dates.",
+          "template": "ContractsTimeline",
+          "order": 1
+        },
+        {
+          "name": "contracts.review",
+          "title": "Needs attention",
+          "description": "What needs your review, your signature or a renewal decision.",
+          "template": "ContractsReview",
+          "order": 2
+        }
+      ],
+      "templates": [
+        {
+          "name": "ContractsList",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts list",
+          "description": "Every contract with its counterparty, type, end date, value and status, filtered by status, type, owner and date.",
+          "type": "List",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsList.svg"
+        },
+        {
+          "name": "ContractPage",
+          "kind": "ScreenTemplate",
+          "displayName": "Contract page",
+          "description": "One contract: status, value, days to its end and notice period, its details, parties, obligations and amendments, and its activity.",
+          "type": "Detail",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractPage.svg"
+        },
+        {
+          "name": "ContractsTimeline",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts timeline",
+          "description": "Every live contract as a bar from start to end in a lane for each counterparty, with how far through it is and the notice dates that matter.",
+          "type": "Timeline",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsTimeline.svg"
+        },
+        {
+          "name": "ContractsReview",
+          "kind": "ScreenTemplate",
+          "displayName": "Contracts review inbox",
+          "description": "What needs review, signature or a renewal decision: the queue grouped by day with unread told in words, the open message and its history.",
+          "type": "Inbox",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsReview.svg"
+        },
+        {
+          "name": "ContractsQuickCreateContract",
+          "kind": "DialogTemplate",
+          "displayName": "Contracts quick create contract",
+          "description": "A short form that creates one contract without leaving the page.",
+          "type": "Dialog",
+          "category": "Business / Contracts",
+          "thumbnail": "thumbnails/ContractsQuickCreateContract.svg"
+        }
+      ],
+      "sampleData": [
+        {
+          "id": "contracts-en",
+          "title": "Contracts · English",
+          "locale": "en-GB",
+          "path": "sampleData/contracts-en.json",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,953 @@
+{
+    "id": "work-orders-en",
+    "title": "Work orders · English",
+    "locale": "en-GB",
+    "owner": "blueprint:work-orders",
+    "sets": [
+        {
+            "shape": "WorkOrdersSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrders",
+            "rows": [
+                {
+                    "id": "workorder-1",
+                    "number": "WO-3108",
+                    "title": "Replace the boiler pressure valve",
+                    "site": "Bergen depot",
+                    "priority": "Urgent",
+                    "assignee": "Grace Hopper",
+                    "due": "2026-10-16",
+                    "status": "In progress"
+                },
+                {
+                    "id": "workorder-2",
+                    "number": "WO-3107",
+                    "title": "Service the forklift",
+                    "site": "Oslo warehouse",
+                    "priority": "High",
+                    "assignee": "Alan Turing",
+                    "due": "2026-10-19",
+                    "status": "Scheduled"
+                },
+                {
+                    "id": "workorder-3",
+                    "number": "WO-3106",
+                    "title": "Fix the loading bay door",
+                    "site": "Bergen depot",
+                    "priority": "High",
+                    "assignee": "Katherine Johnson",
+                    "due": "2026-10-20",
+                    "status": "Scheduled"
+                },
+                {
+                    "id": "workorder-4",
+                    "number": "WO-3105",
+                    "title": "Replace the lights in aisle 4",
+                    "site": "Oslo warehouse",
+                    "priority": "Normal",
+                    "assignee": "Alan Turing",
+                    "due": "2026-10-22",
+                    "status": "New"
+                },
+                {
+                    "id": "workorder-5",
+                    "number": "WO-3104",
+                    "title": "Inspect the fire extinguishers",
+                    "site": "Head office",
+                    "priority": "Normal",
+                    "assignee": "Katherine Johnson",
+                    "due": "2026-10-23",
+                    "status": "Scheduled"
+                },
+                {
+                    "id": "workorder-6",
+                    "number": "WO-3103",
+                    "title": "Repair the pallet racking",
+                    "site": "Trondheim store",
+                    "priority": "High",
+                    "assignee": "Grace Hopper",
+                    "due": "2026-10-14",
+                    "status": "On hold"
+                },
+                {
+                    "id": "workorder-7",
+                    "number": "WO-3102",
+                    "title": "Clear the roof drains",
+                    "site": "Head office",
+                    "priority": "Low",
+                    "assignee": "Alan Turing",
+                    "due": "2026-10-30",
+                    "status": "New"
+                },
+                {
+                    "id": "workorder-8",
+                    "number": "WO-3101",
+                    "title": "Calibrate the packing scale",
+                    "site": "Oslo warehouse",
+                    "priority": "Normal",
+                    "assignee": "Katherine Johnson",
+                    "due": "2026-10-13",
+                    "status": "Done"
+                },
+                {
+                    "id": "workorder-9",
+                    "number": "WO-3100",
+                    "title": "Paint the dock markings",
+                    "site": "Trondheim store",
+                    "priority": "Low",
+                    "assignee": "Grace Hopper",
+                    "due": "2026-10-09",
+                    "status": "Done"
+                },
+                {
+                    "id": "workorder-10",
+                    "number": "WO-3099",
+                    "title": "Replace the printer toner",
+                    "site": "Head office",
+                    "priority": "Low",
+                    "assignee": "Alan Turing",
+                    "due": "2026-10-08",
+                    "status": "Done"
+                },
+                {
+                    "id": "workorder-11",
+                    "number": "WO-3098",
+                    "title": "Test the backup generator",
+                    "site": "Bergen depot",
+                    "priority": "High",
+                    "assignee": "Katherine Johnson",
+                    "due": "2026-10-21",
+                    "status": "In progress"
+                },
+                {
+                    "id": "workorder-12",
+                    "number": "WO-3097",
+                    "title": "Fit new door locks",
+                    "site": "Head office",
+                    "priority": "Normal",
+                    "assignee": "Grace Hopper",
+                    "due": "2026-10-17",
+                    "status": "New"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Work order"
+                },
+                {
+                    "field": "title",
+                    "header": "Title"
+                },
+                {
+                    "field": "site",
+                    "header": "Site"
+                },
+                {
+                    "field": "priority",
+                    "header": "Priority"
+                },
+                {
+                    "field": "assignee",
+                    "header": "Assignee"
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "New": "info",
+                        "Scheduled": "info",
+                        "In progress": "warning",
+                        "On hold": "danger",
+                        "Done": "success"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderFilterFields",
+            "rows": [
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "New",
+                        "Scheduled",
+                        "In progress",
+                        "On hold",
+                        "Done"
+                    ]
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "type": "select",
+                    "options": [
+                        "Low",
+                        "Normal",
+                        "High",
+                        "Urgent"
+                    ]
+                },
+                {
+                    "name": "site",
+                    "label": "Site",
+                    "type": "select",
+                    "options": [
+                        "Bergen depot",
+                        "Oslo warehouse",
+                        "Trondheim store",
+                        "Head office"
+                    ]
+                },
+                {
+                    "name": "assignee",
+                    "label": "Assignee",
+                    "type": "select",
+                    "options": [
+                        "Grace Hopper",
+                        "Alan Turing",
+                        "Katherine Johnson"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All work orders"
+                },
+                {
+                    "id": "mine",
+                    "label": "Assigned to me"
+                },
+                {
+                    "id": "urgent",
+                    "label": "Urgent and high"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Work order",
+                    "locked": true
+                },
+                {
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "id": "site",
+                    "label": "Site"
+                },
+                {
+                    "id": "priority",
+                    "label": "Priority"
+                },
+                {
+                    "id": "assignee",
+                    "label": "Assignee"
+                },
+                {
+                    "id": "due",
+                    "label": "Due"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderSelection",
+            "rows": []
+        },
+        {
+            "shape": "WorkOrderQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New work order",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "title",
+                            "label": "What needs doing",
+                            "type": "text",
+                            "required": true
+                        },
+                        {
+                            "name": "site",
+                            "label": "Site",
+                            "type": "select",
+                            "options": [
+                                "Bergen depot",
+                                "Oslo warehouse",
+                                "Trondheim store",
+                                "Head office"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "priority",
+                            "label": "Priority",
+                            "type": "select",
+                            "options": [
+                                "Low",
+                                "Normal",
+                                "High",
+                                "Urgent"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "due",
+                            "label": "Needed by",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "assignee",
+                            "label": "Assign to",
+                            "type": "select",
+                            "options": [
+                                "Grace Hopper",
+                                "Alan Turing",
+                                "Katherine Johnson"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderRecord",
+            "rows": [
+                {
+                    "id": "workorder-1",
+                    "number": "WO-3108",
+                    "title": "Replace the boiler pressure valve",
+                    "site": "Bergen depot",
+                    "priority": "Urgent",
+                    "assignee": "Grace Hopper",
+                    "due": "2026-10-16",
+                    "status": "In progress",
+                    "summary": "The valve is leaking at 4 bar and must be replaced before the weekend",
+                    "requestedBy": "Eleanor Marsh",
+                    "asset": "Boiler B-2",
+                    "description": "Isolate the boiler, replace the pressure valve and test at 6 bar.",
+                    "hoursLogged": 3.5,
+                    "daysToDue": 1
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderSections",
+            "rows": [
+                {
+                    "id": "workorder",
+                    "title": "Work order details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "number",
+                            "label": "Work order"
+                        },
+                        {
+                            "name": "title",
+                            "label": "Title"
+                        },
+                        {
+                            "name": "site",
+                            "label": "Site"
+                        },
+                        {
+                            "name": "asset",
+                            "label": "Asset"
+                        },
+                        {
+                            "name": "priority",
+                            "label": "Priority"
+                        },
+                        {
+                            "name": "assignee",
+                            "label": "Assignee"
+                        },
+                        {
+                            "name": "requestedBy",
+                            "label": "Requested by"
+                        },
+                        {
+                            "name": "due",
+                            "label": "Needed by",
+                            "type": "date"
+                        },
+                        {
+                            "name": "description",
+                            "label": "What needs doing",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderSummary",
+            "rows": [
+                {
+                    "status": "In progress",
+                    "tone": "warning",
+                    "priority": "Urgent",
+                    "daysToDue": 1,
+                    "hoursLogged": 3.5
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Grace Hopper",
+                    "action": "started the work",
+                    "kind": "status",
+                    "at": "2026-10-15T07:40:00Z",
+                    "body": "Boiler isolated, valve removed"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Alan Turing",
+                    "action": "ordered the replacement valve",
+                    "kind": "comment",
+                    "at": "2026-10-14T14:00:00Z",
+                    "body": "Arrives tomorrow morning"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Eleanor Marsh",
+                    "action": "raised the work order",
+                    "kind": "created",
+                    "at": "2026-10-14T09:25:00Z",
+                    "body": "Marked urgent"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "tasks",
+                    "label": "Tasks"
+                },
+                {
+                    "id": "parts",
+                    "label": "Parts used"
+                },
+                {
+                    "id": "time",
+                    "label": "Time logged"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderTasks",
+            "rows": [
+                {
+                    "id": "t1",
+                    "task": "Isolate the boiler",
+                    "assignee": "Grace Hopper",
+                    "hours": 0.5,
+                    "status": "Done"
+                },
+                {
+                    "id": "t2",
+                    "task": "Remove the old valve",
+                    "assignee": "Grace Hopper",
+                    "hours": 1,
+                    "status": "Done"
+                },
+                {
+                    "id": "t3",
+                    "task": "Fit the new valve",
+                    "assignee": "Grace Hopper",
+                    "hours": 1.5,
+                    "status": "In progress"
+                },
+                {
+                    "id": "t4",
+                    "task": "Pressure test at 6 bar",
+                    "assignee": "Alan Turing",
+                    "hours": 0.5,
+                    "status": "To do"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderTasksColumns",
+            "rows": [
+                {
+                    "field": "task",
+                    "header": "Task"
+                },
+                {
+                    "field": "assignee",
+                    "header": "Assignee"
+                },
+                {
+                    "field": "hours",
+                    "header": "Hours",
+                    "kind": "number"
+                },
+                {
+                    "field": "status",
+                    "header": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderParts",
+            "rows": [
+                {
+                    "id": "p1",
+                    "part": "Pressure relief valve 3/4 inch",
+                    "quantity": 1,
+                    "cost": 86.4
+                },
+                {
+                    "id": "p2",
+                    "part": "PTFE tape",
+                    "quantity": 2,
+                    "cost": 3.8
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderPartsColumns",
+            "rows": [
+                {
+                    "field": "part",
+                    "header": "Part"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Qty",
+                    "kind": "number"
+                },
+                {
+                    "field": "cost",
+                    "header": "Cost",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderTime",
+            "rows": [
+                {
+                    "id": "h1",
+                    "technician": "Grace Hopper",
+                    "date": "2026-10-15",
+                    "hours": 3
+                },
+                {
+                    "id": "h2",
+                    "technician": "Alan Turing",
+                    "date": "2026-10-14",
+                    "hours": 0.5
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrderTimeColumns",
+            "rows": [
+                {
+                    "field": "technician",
+                    "header": "Technician"
+                },
+                {
+                    "field": "date",
+                    "header": "Date",
+                    "kind": "date"
+                },
+                {
+                    "field": "hours",
+                    "header": "Hours",
+                    "kind": "number"
+                }
+            ]
+        },
+        {
+            "shape": "BoardColumns",
+            "rows": [
+                {
+                    "id": "new",
+                    "label": "New"
+                },
+                {
+                    "id": "scheduled",
+                    "label": "Scheduled"
+                },
+                {
+                    "id": "progress",
+                    "label": "In progress",
+                    "limit": 3
+                },
+                {
+                    "id": "done",
+                    "label": "Done"
+                }
+            ]
+        },
+        {
+            "shape": "BoardCards",
+            "rows": [
+                {
+                    "id": "workorder-1",
+                    "title": "WO-3108",
+                    "column": "progress",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Replace the boiler pressure valve"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Bergen depot"
+                        }
+                    ],
+                    "badges": [
+                        "Urgent"
+                    ]
+                },
+                {
+                    "id": "workorder-2",
+                    "title": "WO-3107",
+                    "column": "scheduled",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Service the forklift"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Oslo warehouse"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "workorder-3",
+                    "title": "WO-3106",
+                    "column": "scheduled",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Fix the loading bay door"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Bergen depot"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "workorder-4",
+                    "title": "WO-3105",
+                    "column": "new",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Replace the lights in aisle 4"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Oslo warehouse"
+                        }
+                    ],
+                    "badges": [
+                        "Normal"
+                    ]
+                },
+                {
+                    "id": "workorder-5",
+                    "title": "WO-3104",
+                    "column": "scheduled",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Inspect the fire extinguishers"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Head office"
+                        }
+                    ],
+                    "badges": [
+                        "Normal"
+                    ]
+                },
+                {
+                    "id": "workorder-7",
+                    "title": "WO-3102",
+                    "column": "new",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Clear the roof drains"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Head office"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "workorder-8",
+                    "title": "WO-3101",
+                    "column": "done",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Calibrate the packing scale"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Oslo warehouse"
+                        }
+                    ],
+                    "badges": [
+                        "Normal"
+                    ]
+                },
+                {
+                    "id": "workorder-9",
+                    "title": "WO-3100",
+                    "column": "done",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Paint the dock markings"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Trondheim store"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "workorder-10",
+                    "title": "WO-3099",
+                    "column": "done",
+                    "assignee": "Alan Turing",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Replace the printer toner"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Head office"
+                        }
+                    ],
+                    "badges": [
+                        "Low"
+                    ]
+                },
+                {
+                    "id": "workorder-11",
+                    "title": "WO-3098",
+                    "column": "progress",
+                    "assignee": "Katherine Johnson",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Test the backup generator"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Bergen depot"
+                        }
+                    ],
+                    "badges": [
+                        "High"
+                    ]
+                },
+                {
+                    "id": "workorder-12",
+                    "title": "WO-3097",
+                    "column": "new",
+                    "assignee": "Grace Hopper",
+                    "fields": [
+                        {
+                            "label": "Job",
+                            "value": "Fit new door locks"
+                        },
+                        {
+                            "label": "Site",
+                            "value": "Head office"
+                        }
+                    ],
+                    "badges": [
+                        "Normal"
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "ScheduleVisits",
+            "rows": [
+                {
+                    "id": "visit-1",
+                    "title": "WO-3108 · Replace the boiler pressure valve",
+                    "start": "2026-10-16",
+                    "end": "2026-10-16",
+                    "category": "In progress",
+                    "tone": "warning",
+                    "person": "Grace Hopper"
+                },
+                {
+                    "id": "visit-2",
+                    "title": "WO-3107 · Service the forklift",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Scheduled",
+                    "tone": "info",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "visit-3",
+                    "title": "WO-3106 · Fix the loading bay door",
+                    "start": "2026-10-20",
+                    "end": "2026-10-20",
+                    "category": "Scheduled",
+                    "tone": "info",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "visit-4",
+                    "title": "WO-3105 · Replace the lights in aisle 4",
+                    "start": "2026-10-22",
+                    "end": "2026-10-22",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "visit-5",
+                    "title": "WO-3104 · Inspect the fire extinguishers",
+                    "start": "2026-10-23",
+                    "end": "2026-10-23",
+                    "category": "Scheduled",
+                    "tone": "info",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "visit-6",
+                    "title": "WO-3102 · Clear the roof drains",
+                    "start": "2026-10-30",
+                    "end": "2026-10-30",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Alan Turing"
+                },
+                {
+                    "id": "visit-7",
+                    "title": "WO-3098 · Test the backup generator",
+                    "start": "2026-10-21",
+                    "end": "2026-10-21",
+                    "category": "In progress",
+                    "tone": "warning",
+                    "person": "Katherine Johnson"
+                },
+                {
+                    "id": "visit-8",
+                    "title": "WO-3097 · Fit new door locks",
+                    "start": "2026-10-17",
+                    "end": "2026-10-17",
+                    "category": "New",
+                    "tone": "info",
+                    "person": "Grace Hopper"
+                }
+            ]
+        },
+        {
+            "shape": "ScheduleColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Work order"
+                },
+                {
+                    "field": "start",
+                    "header": "Visit",
+                    "kind": "date"
+                },
+                {
+                    "field": "category",
+                    "header": "Status"
+                },
+                {
+                    "field": "person",
+                    "header": "Assignee"
+                }
+            ]
+        },
+        {
+            "shape": "WorkOrdersFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}

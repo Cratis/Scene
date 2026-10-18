@@ -1,0 +1,988 @@
+{
+    "id": "invoicing-en",
+    "title": "Invoicing · English",
+    "locale": "en-GB",
+    "owner": "blueprint:invoicing",
+    "sets": [
+        {
+            "shape": "InvoicingSettings",
+            "rows": [
+                {
+                    "locale": "en-GB",
+                    "currency": "GBP",
+                    "today": "2026-10-15",
+                    "firstDay": 1
+                }
+            ]
+        },
+        {
+            "shape": "Invoices",
+            "rows": [
+                {
+                    "id": "invoice-1",
+                    "number": "INV-2041",
+                    "customer": "Northwind Traders",
+                    "issued": "2026-10-12",
+                    "due": "2026-11-11",
+                    "amount": 4820,
+                    "status": "Sent"
+                },
+                {
+                    "id": "invoice-2",
+                    "number": "INV-2040",
+                    "customer": "Contoso Ltd",
+                    "issued": "2026-10-09",
+                    "due": "2026-11-08",
+                    "amount": 12650.5,
+                    "status": "Sent"
+                },
+                {
+                    "id": "invoice-3",
+                    "number": "INV-2039",
+                    "customer": "Fabrikam Inc",
+                    "issued": "2026-10-05",
+                    "due": "2026-10-19",
+                    "amount": 2310,
+                    "status": "Sent"
+                },
+                {
+                    "id": "invoice-4",
+                    "number": "INV-2038",
+                    "customer": "Adventure Works",
+                    "issued": "2026-09-28",
+                    "due": "2026-10-12",
+                    "amount": 7845.25,
+                    "status": "Overdue"
+                },
+                {
+                    "id": "invoice-5",
+                    "number": "INV-2037",
+                    "customer": "Tailspin Toys",
+                    "issued": "2026-09-22",
+                    "due": "2026-10-06",
+                    "amount": 1960,
+                    "status": "Overdue"
+                },
+                {
+                    "id": "invoice-6",
+                    "number": "INV-2036",
+                    "customer": "Wingtip Supplies",
+                    "issued": "2026-09-18",
+                    "due": "2026-10-18",
+                    "amount": 5430,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-7",
+                    "number": "INV-2035",
+                    "customer": "Northwind Traders",
+                    "issued": "2026-09-10",
+                    "due": "2026-10-10",
+                    "amount": 3690.75,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-8",
+                    "number": "INV-2034",
+                    "customer": "Contoso Ltd",
+                    "issued": "2026-09-03",
+                    "due": "2026-10-03",
+                    "amount": 9120,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-9",
+                    "number": "INV-2033",
+                    "customer": "Fabrikam Inc",
+                    "issued": "2026-08-29",
+                    "due": "2026-09-12",
+                    "amount": 860,
+                    "status": "Overdue"
+                },
+                {
+                    "id": "invoice-10",
+                    "number": "INV-2032",
+                    "customer": "Adventure Works",
+                    "issued": "2026-08-21",
+                    "due": "2026-09-20",
+                    "amount": 6275,
+                    "status": "Paid"
+                },
+                {
+                    "id": "invoice-11",
+                    "number": "INV-2031",
+                    "customer": "Tailspin Toys",
+                    "issued": "2026-08-14",
+                    "due": "2026-09-13",
+                    "amount": 2480,
+                    "status": "Void"
+                },
+                {
+                    "id": "invoice-12",
+                    "number": "INV-2042",
+                    "customer": "Wingtip Supplies",
+                    "issued": "2026-10-14",
+                    "due": "2026-11-13",
+                    "amount": 3150,
+                    "status": "Draft"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceColumns",
+            "rows": [
+                {
+                    "field": "number",
+                    "header": "Invoice"
+                },
+                {
+                    "field": "customer",
+                    "header": "Customer"
+                },
+                {
+                    "field": "issued",
+                    "header": "Issued",
+                    "kind": "date"
+                },
+                {
+                    "field": "due",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                },
+                {
+                    "field": "status",
+                    "header": "Status",
+                    "kind": "status",
+                    "tones": {
+                        "Draft": "neutral",
+                        "Sent": "info",
+                        "Overdue": "danger",
+                        "Paid": "success",
+                        "Void": "warning"
+                    }
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceFilterFields",
+            "rows": [
+                {
+                    "name": "customer",
+                    "label": "Customer",
+                    "type": "select",
+                    "options": [
+                        "Northwind Traders",
+                        "Contoso Ltd",
+                        "Fabrikam Inc",
+                        "Adventure Works",
+                        "Tailspin Toys",
+                        "Wingtip Supplies"
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "type": "select",
+                    "options": [
+                        "Draft",
+                        "Sent",
+                        "Overdue",
+                        "Paid",
+                        "Void"
+                    ]
+                },
+                {
+                    "name": "issued",
+                    "label": "Issued",
+                    "type": "date"
+                },
+                {
+                    "name": "due",
+                    "label": "Due",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All invoices"
+                },
+                {
+                    "id": "open",
+                    "label": "Open invoices"
+                },
+                {
+                    "id": "overdue",
+                    "label": "Overdue invoices"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceColumnChoices",
+            "rows": [
+                {
+                    "id": "number",
+                    "label": "Invoice",
+                    "locked": true
+                },
+                {
+                    "id": "customer",
+                    "label": "Customer"
+                },
+                {
+                    "id": "issued",
+                    "label": "Issued"
+                },
+                {
+                    "id": "due",
+                    "label": "Due"
+                },
+                {
+                    "id": "amount",
+                    "label": "Amount"
+                },
+                {
+                    "id": "status",
+                    "label": "Status"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceSelection",
+            "rows": []
+        },
+        {
+            "shape": "InvoiceQuickSections",
+            "rows": [
+                {
+                    "id": "quick",
+                    "title": "New invoice",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "customer",
+                            "label": "Customer",
+                            "type": "select",
+                            "options": [
+                                "Northwind Traders",
+                                "Contoso Ltd",
+                                "Fabrikam Inc",
+                                "Adventure Works",
+                                "Tailspin Toys",
+                                "Wingtip Supplies"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "issued",
+                            "label": "Issue date",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due date",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "amount",
+                            "label": "Amount",
+                            "type": "currency",
+                            "required": true
+                        },
+                        {
+                            "name": "notes",
+                            "label": "Notes",
+                            "type": "textarea"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceRecord",
+            "rows": [
+                {
+                    "id": "invoice-1",
+                    "number": "INV-2041",
+                    "customer": "Northwind Traders",
+                    "issued": "2026-10-12",
+                    "due": "2026-11-11",
+                    "amount": 4820,
+                    "status": "Sent",
+                    "summary": "Fittings and fixings for the Bergen depot",
+                    "terms": "Net 30",
+                    "poNumber": "PO-77120",
+                    "contact": "Grace Hopper",
+                    "billTo": "Northwind Traders, Strandgaten 12, 5013 Bergen",
+                    "paid": 0,
+                    "balance": 4820,
+                    "daysToDue": 27
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceSections",
+            "rows": [
+                {
+                    "id": "invoice",
+                    "title": "Invoice details",
+                    "columns": 2,
+                    "fields": [
+                        {
+                            "name": "number",
+                            "label": "Invoice"
+                        },
+                        {
+                            "name": "customer",
+                            "label": "Customer"
+                        },
+                        {
+                            "name": "issued",
+                            "label": "Issued",
+                            "type": "date"
+                        },
+                        {
+                            "name": "due",
+                            "label": "Due",
+                            "type": "date"
+                        },
+                        {
+                            "name": "terms",
+                            "label": "Payment terms"
+                        },
+                        {
+                            "name": "poNumber",
+                            "label": "Customer order"
+                        },
+                        {
+                            "name": "contact",
+                            "label": "Contact"
+                        },
+                        {
+                            "name": "billTo",
+                            "label": "Bill to",
+                            "span": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceSummary",
+            "rows": [
+                {
+                    "status": "Sent",
+                    "tone": "info",
+                    "total": 4820,
+                    "paid": 0,
+                    "balance": 4820,
+                    "daysToDue": 27
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceActivity",
+            "rows": [
+                {
+                    "id": "a0",
+                    "actor": "Katherine Johnson",
+                    "action": "sent the invoice",
+                    "kind": "status",
+                    "at": "2026-10-12T10:05:00Z",
+                    "body": "To accounts@northwind.example"
+                },
+                {
+                    "id": "a1",
+                    "actor": "Grace Hopper",
+                    "action": "approved the invoice",
+                    "kind": "comment",
+                    "at": "2026-10-12T09:30:00Z",
+                    "body": "Matches the delivery note"
+                },
+                {
+                    "id": "a2",
+                    "actor": "Alan Turing",
+                    "action": "created the invoice from order SO-1042",
+                    "kind": "created",
+                    "at": "2026-10-12T08:50:00Z",
+                    "body": "Four lines"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceTabs",
+            "rows": [
+                {
+                    "id": "overview",
+                    "label": "Overview"
+                },
+                {
+                    "id": "lines",
+                    "label": "Invoice lines"
+                },
+                {
+                    "id": "payments",
+                    "label": "Payments"
+                },
+                {
+                    "id": "activity",
+                    "label": "Activity"
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceLines",
+            "rows": [
+                {
+                    "id": "l1",
+                    "description": "Compression fitting 22 mm",
+                    "quantity": 200,
+                    "price": 12.5,
+                    "amount": 2500
+                },
+                {
+                    "id": "l2",
+                    "description": "Pipe cutter, 3-35 mm",
+                    "quantity": 20,
+                    "price": 34,
+                    "amount": 680
+                },
+                {
+                    "id": "l3",
+                    "description": "Safety glasses, clear",
+                    "quantity": 150,
+                    "price": 4.2,
+                    "amount": 630
+                },
+                {
+                    "id": "l4",
+                    "description": "Freight to Bergen",
+                    "quantity": 1,
+                    "price": 1010,
+                    "amount": 1010
+                }
+            ]
+        },
+        {
+            "shape": "InvoiceLinesColumns",
+            "rows": [
+                {
+                    "field": "description",
+                    "header": "Description"
+                },
+                {
+                    "field": "quantity",
+                    "header": "Qty",
+                    "kind": "number"
+                },
+                {
+                    "field": "price",
+                    "header": "Unit price",
+                    "kind": "currency"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "InvoicePayments",
+            "rows": [
+                {
+                    "id": "pay-none",
+                    "reference": "No payment yet",
+                    "received": "2026-10-15",
+                    "method": "Due 11 Nov",
+                    "amount": 0
+                }
+            ]
+        },
+        {
+            "shape": "InvoicePaymentsColumns",
+            "rows": [
+                {
+                    "field": "reference",
+                    "header": "Payment"
+                },
+                {
+                    "field": "received",
+                    "header": "Received",
+                    "kind": "date"
+                },
+                {
+                    "field": "method",
+                    "header": "Method"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "Payments",
+            "rows": [
+                {
+                    "id": "payment-1",
+                    "reference": "PAY-3318",
+                    "invoice": "INV-2036",
+                    "received": "2026-10-14",
+                    "method": "Bank transfer",
+                    "amount": 5430
+                },
+                {
+                    "id": "payment-2",
+                    "reference": "PAY-3317",
+                    "invoice": "INV-2035",
+                    "received": "2026-10-09",
+                    "method": "Card",
+                    "amount": 3690.75
+                },
+                {
+                    "id": "payment-3",
+                    "reference": "PAY-3316",
+                    "invoice": "INV-2034",
+                    "received": "2026-10-02",
+                    "method": "Bank transfer",
+                    "amount": 9120
+                },
+                {
+                    "id": "payment-4",
+                    "reference": "PAY-3315",
+                    "invoice": "INV-2032",
+                    "received": "2026-09-19",
+                    "method": "Bank transfer",
+                    "amount": 6275
+                },
+                {
+                    "id": "payment-5",
+                    "reference": "PAY-3314",
+                    "invoice": "INV-2030",
+                    "received": "2026-09-15",
+                    "method": "Card",
+                    "amount": 1740
+                },
+                {
+                    "id": "payment-6",
+                    "reference": "PAY-3313",
+                    "invoice": "INV-2029",
+                    "received": "2026-09-08",
+                    "method": "Direct debit",
+                    "amount": 2985.5
+                },
+                {
+                    "id": "payment-7",
+                    "reference": "PAY-3312",
+                    "invoice": "INV-2028",
+                    "received": "2026-09-02",
+                    "method": "Bank transfer",
+                    "amount": 4410
+                },
+                {
+                    "id": "payment-8",
+                    "reference": "PAY-3311",
+                    "invoice": "INV-2027",
+                    "received": "2026-08-26",
+                    "method": "Card",
+                    "amount": 920
+                }
+            ]
+        },
+        {
+            "shape": "PaymentColumns",
+            "rows": [
+                {
+                    "field": "reference",
+                    "header": "Payment"
+                },
+                {
+                    "field": "invoice",
+                    "header": "Invoice"
+                },
+                {
+                    "field": "received",
+                    "header": "Received",
+                    "kind": "date"
+                },
+                {
+                    "field": "method",
+                    "header": "Method"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "PaymentFilterFields",
+            "rows": [
+                {
+                    "name": "method",
+                    "label": "Method",
+                    "type": "select",
+                    "options": [
+                        "Bank transfer",
+                        "Card",
+                        "Direct debit"
+                    ]
+                },
+                {
+                    "name": "received",
+                    "label": "Received",
+                    "type": "date"
+                }
+            ]
+        },
+        {
+            "shape": "PaymentViews",
+            "rows": [
+                {
+                    "id": "all",
+                    "label": "All payments"
+                },
+                {
+                    "id": "month",
+                    "label": "This month"
+                }
+            ]
+        },
+        {
+            "shape": "PaymentColumnChoices",
+            "rows": [
+                {
+                    "id": "reference",
+                    "label": "Payment",
+                    "locked": true
+                },
+                {
+                    "id": "invoice",
+                    "label": "Invoice"
+                },
+                {
+                    "id": "received",
+                    "label": "Received"
+                },
+                {
+                    "id": "method",
+                    "label": "Method"
+                },
+                {
+                    "id": "amount",
+                    "label": "Amount"
+                }
+            ]
+        },
+        {
+            "shape": "PaymentSelection",
+            "rows": []
+        },
+        {
+            "shape": "InvoicingKpis",
+            "rows": [
+                {
+                    "value": 39495.25,
+                    "change": 4.1
+                },
+                {
+                    "value": 10665.25,
+                    "change": 18.6
+                },
+                {
+                    "value": 24620.75,
+                    "change": -3.2
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingAging",
+            "rows": [
+                {
+                    "categories": [
+                        "Not due",
+                        "Up to 7 days",
+                        "8 to 30 days",
+                        "Over 30 days"
+                    ],
+                    "series": [
+                        {
+                            "name": "Outstanding",
+                            "values": [
+                                22780.5,
+                                1960,
+                                7845.25,
+                                860
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingInvoicedAndCollected",
+            "rows": [
+                {
+                    "categories": [
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct"
+                    ],
+                    "series": [
+                        {
+                            "name": "Invoiced",
+                            "values": [
+                                31200,
+                                28900,
+                                35400,
+                                29800,
+                                33600,
+                                30340
+                            ]
+                        },
+                        {
+                            "name": "Collected",
+                            "values": [
+                                29800,
+                                30100,
+                                31200,
+                                33500,
+                                30900,
+                                24620
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingActivity",
+            "rows": [
+                {
+                    "id": "i0",
+                    "actor": "Katherine Johnson",
+                    "action": "sent INV-2041 to Northwind Traders",
+                    "kind": "status",
+                    "at": "2026-10-12T10:05:00Z",
+                    "body": "GBP 4,820.00"
+                },
+                {
+                    "id": "i1",
+                    "actor": "Grace Hopper",
+                    "action": "chased INV-2038 for payment",
+                    "kind": "comment",
+                    "at": "2026-10-14T13:40:00Z",
+                    "body": "Promised for Friday"
+                },
+                {
+                    "id": "i2",
+                    "actor": "Alan Turing",
+                    "action": "recorded a payment for INV-2036",
+                    "kind": "created",
+                    "at": "2026-10-14T09:15:00Z",
+                    "body": "GBP 5,430.00 by bank transfer"
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingDueDates",
+            "rows": [
+                {
+                    "id": "due-1",
+                    "title": "INV-2041 · Northwind Traders",
+                    "start": "2026-11-11",
+                    "end": "2026-11-11",
+                    "category": "Sent",
+                    "tone": "info",
+                    "person": "Northwind Traders",
+                    "amount": 4820
+                },
+                {
+                    "id": "due-2",
+                    "title": "INV-2040 · Contoso Ltd",
+                    "start": "2026-11-08",
+                    "end": "2026-11-08",
+                    "category": "Sent",
+                    "tone": "info",
+                    "person": "Contoso Ltd",
+                    "amount": 12650.5
+                },
+                {
+                    "id": "due-3",
+                    "title": "INV-2039 · Fabrikam Inc",
+                    "start": "2026-10-19",
+                    "end": "2026-10-19",
+                    "category": "Sent",
+                    "tone": "info",
+                    "person": "Fabrikam Inc",
+                    "amount": 2310
+                },
+                {
+                    "id": "due-4",
+                    "title": "INV-2038 · Adventure Works",
+                    "start": "2026-10-12",
+                    "end": "2026-10-12",
+                    "category": "Overdue",
+                    "tone": "danger",
+                    "person": "Adventure Works",
+                    "amount": 7845.25
+                },
+                {
+                    "id": "due-5",
+                    "title": "INV-2037 · Tailspin Toys",
+                    "start": "2026-10-06",
+                    "end": "2026-10-06",
+                    "category": "Overdue",
+                    "tone": "danger",
+                    "person": "Tailspin Toys",
+                    "amount": 1960
+                },
+                {
+                    "id": "due-6",
+                    "title": "INV-2036 · Wingtip Supplies",
+                    "start": "2026-10-18",
+                    "end": "2026-10-18",
+                    "category": "Paid",
+                    "tone": "success",
+                    "person": "Wingtip Supplies",
+                    "amount": 5430
+                },
+                {
+                    "id": "due-7",
+                    "title": "INV-2035 · Northwind Traders",
+                    "start": "2026-10-10",
+                    "end": "2026-10-10",
+                    "category": "Paid",
+                    "tone": "success",
+                    "person": "Northwind Traders",
+                    "amount": 3690.75
+                },
+                {
+                    "id": "due-8",
+                    "title": "INV-2034 · Contoso Ltd",
+                    "start": "2026-10-03",
+                    "end": "2026-10-03",
+                    "category": "Paid",
+                    "tone": "success",
+                    "person": "Contoso Ltd",
+                    "amount": 9120
+                },
+                {
+                    "id": "due-9",
+                    "title": "INV-2033 · Fabrikam Inc",
+                    "start": "2026-09-12",
+                    "end": "2026-09-12",
+                    "category": "Overdue",
+                    "tone": "danger",
+                    "person": "Fabrikam Inc",
+                    "amount": 860
+                },
+                {
+                    "id": "due-10",
+                    "title": "INV-2032 · Adventure Works",
+                    "start": "2026-09-20",
+                    "end": "2026-09-20",
+                    "category": "Paid",
+                    "tone": "success",
+                    "person": "Adventure Works",
+                    "amount": 6275
+                },
+                {
+                    "id": "due-11",
+                    "title": "INV-2042 · Wingtip Supplies",
+                    "start": "2026-11-13",
+                    "end": "2026-11-13",
+                    "category": "Draft",
+                    "tone": "neutral",
+                    "person": "Wingtip Supplies",
+                    "amount": 3150
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingDueColumns",
+            "rows": [
+                {
+                    "field": "title",
+                    "header": "Invoice"
+                },
+                {
+                    "field": "start",
+                    "header": "Due",
+                    "kind": "date"
+                },
+                {
+                    "field": "category",
+                    "header": "Status"
+                },
+                {
+                    "field": "amount",
+                    "header": "Amount",
+                    "kind": "currency"
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingRecordPaymentSections",
+            "rows": [
+                {
+                    "id": "form",
+                    "title": "Record a payment",
+                    "columns": 1,
+                    "fields": [
+                        {
+                            "name": "received",
+                            "label": "Received",
+                            "type": "date",
+                            "required": true
+                        },
+                        {
+                            "name": "amount",
+                            "label": "Amount",
+                            "type": "currency",
+                            "required": true
+                        },
+                        {
+                            "name": "method",
+                            "label": "Method",
+                            "type": "select",
+                            "options": [
+                                "Bank transfer",
+                                "Card",
+                                "Direct debit"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "reference",
+                            "label": "Reference",
+                            "type": "text"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "shape": "InvoicingFormErrors",
+            "rows": [
+                {}
+            ]
+        }
+    ]
+}
