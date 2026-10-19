@@ -2410,6 +2410,14 @@
     background: var(--foundation-surface);
 }
 
+tr[data-selectable='true'] {
+    cursor: pointer;
+}
+
+.foundation-card-row[data-selectable='true'] {
+    cursor: pointer;
+}
+
 .foundation-card-row[data-selected='true'] {
     border-color: var(--foundation-primary);
 }

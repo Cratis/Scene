@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { readOptionalString } from '../shell/elementProperties';
 import { ComponentState, readComponentState } from './ComponentState';
@@ -88,7 +88,27 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     useEffect(() => { if (Number(pageText) !== page.page && pageText !== undefined) setPageText(String(page.page)); }, [page.page, pageText, setPageText]);
     useValueOutput(bindingOutputs, multiple ? selected : selected[0]);
 
-    const select = (id: string) => { setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); interactions?.onSelect?.(); };
+    // What `on select` reads - `component.<id>.value`, the selected row - travels: the render that draws the selection publishes it, the host takes it in on the
+    // next render and hands the handlers that read it on the one after. A selection the person made is therefore announced two renders after it is drawn, with
+    // the handlers that see the value; each step is a render of this list, so it takes no timer and follows however quickly the host takes the value in.
+    const latestInteractions = useRef(interactions);
+    latestInteractions.current = interactions;
+    const selectionKey = selected.join(',');
+    const selectionMade = useRef(false);
+    const [announcement, setAnnouncement] = useState(0);
+    useEffect(() => {
+        if (!selectionMade.current) return;
+        selectionMade.current = false;
+        setAnnouncement(1);
+    }, [selectionKey]);
+    useEffect(() => {
+        if (announcement === 1) setAnnouncement(2);
+        if (announcement === 2) {
+            setAnnouncement(0);
+            latestInteractions.current?.onSelect?.();
+        }
+    }, [announcement]);
+    const select = (id: string) => { selectionMade.current = true; setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); };
     const run = (action: string, id: string) => { bindingOutputs?.setOutput('action', { action, row: id }); interactions?.onClick?.({ stopPropagation: () => undefined }); };
     const sortLabel = (column: ListColumn) => (sort?.field === column.field ? `${column.header}, ${sort.descending ? strings.listSortedDescending : strings.listSortedAscending}` : column.header);
     const nameOf = (row: ListRow, index: number) => textOf(row, titleField) || rowId(row, index, idField);
@@ -156,7 +176,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                         const index = offset + position;
                         const id = rowId(row, index, idField);
                         return (
-                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)} data-tone={toneOf(row)}>
+                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)} data-selectable={selectable} data-tone={toneOf(row)}
+                                onClick={selectable && !multiple ? event => { if (!(event.target as HTMLElement).closest('input, button, a')) select(id); } : undefined}>
                                 {selectable && <td className='foundation-table-select'>{checkbox(row, index)}</td>}
                                 {columns.map((column, columnIndex) => columnIndex === 0
                                     ? <th key={column.field} scope='row'><Cell column={column} row={row} locale={locale} /></th>
@@ -176,7 +197,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                 const index = offset + position;
                 const id = rowId(row, index, idField);
                 return (
-                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)} data-tone={toneOf(row)}>
+                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)} data-selectable={selectable} data-tone={toneOf(row)}
+                        onClick={selectable && !multiple ? event => { if (!(event.target as HTMLElement).closest('input, button, a')) select(id); } : undefined}>
                         {picture(row, index)}
                         <div className='foundation-card-head'>{checkbox(row, index)}<strong>{nameOf(row, index)}</strong></div>
                         <dl>

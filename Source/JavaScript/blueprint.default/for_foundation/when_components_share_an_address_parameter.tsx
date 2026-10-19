@@ -42,6 +42,22 @@ describe('when components share an address parameter', () => {
             screen.getAllByRole('listitem').length.should.equal(1);
         });
 
+        it('should select a card when the card itself is pressed', () => {
+            cleanup();
+            window.history.replaceState(null, '', '/');
+            render(<DataList element={foundationElement('dataList', { label: 'Cards', rows, columns, titleField: 'name', variant: 'cards', selectionMode: 'single', urlKey: 'cards' })} slots={{}} />);
+            fireEvent.click(screen.getByText('Hand truck'));
+            new URLSearchParams(window.location.search).get('cardsselected')!.should.equal('2');
+        });
+
+        it('should select a table row when the row itself is pressed', () => {
+            cleanup();
+            window.history.replaceState(null, '', '/');
+            render(<DataList element={foundationElement('dataList', { label: 'Rows', rows, columns, idField: 'id', selectionMode: 'single', urlKey: 'rows' })} slots={{}} />);
+            fireEvent.click(screen.getByText('Hand truck'));
+            new URLSearchParams(window.location.search).get('rowsselected')!.should.equal('2');
+        });
+
         it('should show every row again when the search is cleared', () => {
             fireEvent.change(screen.getByRole('searchbox', { name: 'Search items' }), { target: { value: 'truck' } });
             fireEvent.change(screen.getByRole('searchbox', { name: 'Search items' }), { target: { value: '' } });
