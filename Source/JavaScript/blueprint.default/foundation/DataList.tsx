@@ -165,7 +165,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                         const index = offset + position;
                         const id = rowId(row, index, idField);
                         return (
-                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)} data-tone={toneOf(row)}>
+                            <tr key={id} aria-selected={selectable ? selected.includes(id) : undefined} data-selected={selected.includes(id)} data-selectable={selectable} data-tone={toneOf(row)}
+                                onClick={selectable && !multiple ? event => { if (!(event.target as HTMLElement).closest('input, button, a')) select(id); } : undefined}>
                                 {selectable && <td className='foundation-table-select'>{checkbox(row, index)}</td>}
                                 {columns.map((column, columnIndex) => columnIndex === 0
                                     ? <th key={column.field} scope='row'><Cell column={column} row={row} locale={locale} /></th>
