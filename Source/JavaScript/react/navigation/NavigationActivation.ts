@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { DestinationReference } from '@cratis/scene.model';
-import { EffectiveNavItem } from '@cratis/scene.engine';
+import { EffectiveNavButton, EffectiveNavItem } from '@cratis/scene.engine';
 import { DestinationResolution } from './DestinationResolution';
 import { NavigationMode } from './NavigationMode';
 
@@ -17,11 +17,14 @@ export interface NavigationActivationRequest {
     /** What the control says. */
     label?: string;
 
-    /** The kind of control, for a host that treats them differently: `region`, `menu`, `breadcrumb`, `logo`, `userMenu`. */
+    /** The kind of control, for a host that treats them differently: `region`, `regionButton`, `menu`, `breadcrumb`, `logo`, `userMenu`. */
     source: string;
 
     /** The effective navigation item, for an item of a navigation region. */
     item?: EffectiveNavItem;
+
+    /** The effective application toolbar button, for a button of a navigation region. */
+    button?: EffectiveNavButton;
 }
 
 /** What happened when a control was activated; handed to the host's `onActivate`. */

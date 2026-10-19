@@ -9,6 +9,7 @@ import { coreComponents } from '../core';
 import { NavigationRegionView } from '../navigation/region/NavigationRegionView';
 import { SceneNavigationHost } from '../navigation/SceneNavigationHost';
 import { SceneNavigationModel } from '../navigation/region/SceneNavigationModel';
+import { NavigationActivationProvider } from '../navigation/NavigationActivationContext';
 import { SliceCommandFieldsProvider } from '../slices/SliceCommandFieldsContext';
 
 const structure = {
@@ -71,6 +72,26 @@ describe('when a region declares application toolbar buttons', () => {
 
         it('should open the slice as a task dialog over the current page', () =>
             [screen.getByRole('dialog').getAttribute('aria-label'), screen.queryByText('products') !== null].should.deep.equal(['New product', true]));
+    });
+
+    describe('and a design host selects instead of navigating', () => {
+        const selected: { source: string; id?: string; navigated: boolean }[] = [];
+        const pressed: string[] = [];
+
+        beforeEach(() => {
+            selected.length = 0;
+            pressed.length = 0;
+            const model: SceneNavigationModel = { structure: new ApplicationStructureIndex(structure), navigation };
+            render(<SliceCommandFieldsProvider fieldsFor={() => []}>
+                <SceneNavigationHost navigationModel={model} initialScreen='catalog.products' registry={coreComponents} screens={{ 'catalog.products': text('products') }}
+                    frame={content => <NavigationActivationProvider mode='select' onActivate={activation => selected.push({ source: activation.request.source, id: activation.request.id, navigated: activation.navigated })}>
+                        <NavigationRegionView region={NavigationRegionKind.Topbar} onActivateButton={button => pressed.push(button.id)} />{content}
+                    </NavigationActivationProvider>} />
+            </SliceCommandFieldsProvider>);
+            fireEvent.click(screen.getByRole('button', { name: 'New product' }));
+        });
+
+        it('should select the button, not open its dialog', () => [screen.queryByRole('dialog'), selected, pressed].should.deep.equal([null, [{ source: 'regionButton', id: 'new-product', navigated: false }], ['new-product']]));
     });
 
     describe('and a policy is checked', () => {
