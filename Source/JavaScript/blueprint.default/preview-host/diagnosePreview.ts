@@ -7,7 +7,7 @@ import {
     toolbarButtonFromItem, validateSampleDataSelection, validateToolbarButtons,
 } from '@cratis/scene.engine';
 import { ApplicationDocument } from './ApplicationDocument';
-import { CompositionOptions, findLayout, templatePoolFor, templatesOf } from './composeApplication';
+import { CompositionOptions, effectiveShellOf, findLayout, shellLayout, templatePoolFor, templatesOf } from './composeApplication';
 import { PreviewPlan, resolvePreviewPlan } from './resolvePreviewPlan';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity } from './PreviewProblem';
@@ -128,7 +128,9 @@ function diagnoseScreen(document: ApplicationDocument, screen: Screen, options: 
     }
 
     if (layout) {
-        const resolution = resolveScreenTemplates(layout, templatePoolFor(document, screen, options));
+        // The templates are placed against the shell the screen is composed in (the profile's root template when it has one), exactly as the
+        // composition does: a root template that declares the same slot names as the screen's layout is then the one container, not a second one.
+        const resolution = resolveScreenTemplates(shellLayout(effectiveShellOf(document, screen, options)), templatePoolFor(document, screen, options));
         const unplaced = resolution.unplaced.find(candidate => candidate.template === screen.screenTemplate);
         if (unplaced) {
             problems.push(make(PreviewProblemCode.TemplateUnplaced, PreviewProblemSeverity.Error, `The template '${unplaced.template}' fits the slot '${unplaced.slot}', which ${unplaced.candidates.length === 0 ? 'nothing declares' : `${unplaced.candidates.join(' and ')} all declare`}.`, unplaced.template));

@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { TemplateReferenceSource, TemplateRole } from '@cratis/scene.model';
 import { diagnosePreview } from '../diagnosePreview';
 import { navigation, ordersApplication, structure } from '../for_ScenePreviewHost/given';
 
@@ -88,4 +89,22 @@ describe('when diagnosing a preview', () => {
 
         it('should warn about the structure', () => problems.filter(problem => problem.code === 'structureInvalid').length.should.equal(1));
     });
+});
+
+describe('when diagnosing a preview of an application with its own root template', () => {
+    // Cratis/Scene#225: the screen's layout and the root template both declare 'content'; the screen is composed inside the root template,
+    // so a template that fits 'content' has the root template as its one container and is not reported unplaced.
+    const document = ordersApplication();
+    document.screenTemplates = [
+        {
+            name: 'Frame', slots: [{ name: 'topbar' }, { name: 'content' }, { name: 'footer' }],
+            metadata: { role: TemplateRole.Root, primaryOutlet: 'content' },
+        },
+        { name: 'Side', fitsSlot: 'content', slots: [{ name: 'main' }, { name: 'summary' }] },
+    ];
+    document.uiProfiles = [{ ...document.uiProfiles![0], root: { template: { source: TemplateReferenceSource.Own, id: 'Frame' } } }];
+    document.screens = document.screens.map(screen => screen.name === 'sales.orders' ? { ...screen, screenTemplate: 'Side' } : screen);
+    const { problems } = diagnosePreview({ document, structure, navigation, target: { module: 'sales' } });
+
+    it('should find no blocking problem', () => problems.filter(problem => problem.severity === 'error').should.deep.equal([]));
 });

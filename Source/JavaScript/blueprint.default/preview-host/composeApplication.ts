@@ -124,7 +124,7 @@ export function effectiveShellOf(application: ApplicationDocument, screen: Scree
 }
 
 /** The shell as the layout the templates are placed into: its name and outlets. */
-function shellLayout(shell: EffectiveShell): Layout {
+export function shellLayout(shell: EffectiveShell): Layout {
     return { name: shell.name, slots: shell.outlets.map(name => ({ name })) };
 }
 
