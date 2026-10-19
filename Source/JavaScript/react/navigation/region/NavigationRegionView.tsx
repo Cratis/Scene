@@ -62,6 +62,9 @@ export interface NavigationRegionViewProps {
 
     /** Called after an item has been activated and the host has navigated. */
     onActivate?(item: EffectiveNavItem, destination: DestinationReference): void;
+
+    /** Called after an application toolbar button has been pressed and the host has opened its dialog - or selected it, as a design host does. */
+    onActivateButton?(button: EffectiveNavButton): void;
 }
 
 function itemKey(path: string[]): string {
@@ -83,7 +86,7 @@ function containsActive(item: EffectiveNavItem, isActive: (item: EffectiveNavIte
  *   the `outlet` of the destination; outside a host it announces `cratis.scene.navigate`.
  * - **Buttons**: the application-level toolbar buttons the region declares follow the same inherit/extend/override rules. A
  *   button with a slice opens that slice's task dialog over the current page through the navigation host - the way a screen's
- *   toolbar button does - and, outside a host, announces the slice with `cratis.scene.command`. A button without a slice is
+ *   toolbar button does, after the host's activation policy had its say - and, outside a host, announces the slice with `cratis.scene.command`. A button without a slice is
  *   shown disabled.
  * - **Authorization**: `isVisible` of the model hides items, and `isAuthorized` hides a button that names a policy; neither disables.
  * - **Keyboard**: arrows (left/right in a topbar, up/down in a sidebar), Home and End move between items; in a sidebar
@@ -91,7 +94,7 @@ function containsActive(item: EffectiveNavItem, isActive: (item: EffectiveNavIte
  *
  * Nothing here draws design chrome: items carry `data-read-only` and `data-origin` for a design layer to style.
  */
-export function NavigationRegionView({ region, module, application = false, model: modelProp, label, expand = 'active', classNames, renderIcon, renderAdornment, hrefFor, onActivate }: NavigationRegionViewProps) {
+export function NavigationRegionView({ region, module, application = false, model: modelProp, label, expand = 'active', classNames, renderIcon, renderAdornment, hrefFor, onActivate, onActivateButton }: NavigationRegionViewProps) {
     const contextModel = useSceneNavigationModel();
     const model = modelProp ?? contextModel;
     if (!model) throw new Error('NavigationRegionView needs a navigation model: pass `model` or render it inside a SceneNavigationModelProvider.');
@@ -118,11 +121,13 @@ export function NavigationRegionView({ region, module, application = false, mode
     const isAuthorized = model.isAuthorized;
     const buttons = useMemo(() => resolved.buttons.filter(button => button.authorize === undefined || (isAuthorized?.(button.authorize) ?? true)), [resolved, isAuthorized]);
 
-    const press = (button: EffectiveNavButton) => {
+    const press = (button: EffectiveNavButton, event?: Pick<MouseEvent, 'altKey' | 'metaKey' | 'ctrlKey' | 'shiftKey'>) => {
         if (button.slice === undefined) return;
         const dialog = sliceDialogDestination(resolveToolbarButton(index, { id: button.id, title: button.title, slice: button.slice, emphasis: button.emphasis, icon: button.icon }));
-        if (dialog && navigation) {
-            navigation.navigate(dialog);
+        if (dialog && activator.hosted) {
+            // The one way a control navigates: the host's policy - a design host selects instead - has its say, as it does for an item.
+            const activation = activator.activate({ destination: dialog, id: button.id, label: button.title, source: 'regionButton', button }, event);
+            if (activation.navigated || activation.mode === 'select') onActivateButton?.(button);
             return;
         }
 
@@ -259,7 +264,7 @@ export function NavigationRegionView({ region, module, application = false, mode
         {buttons.length > 0 && <div className={names.buttons} role='group' aria-label={`${label ?? (sidebar ? 'Sidebar' : 'Topbar')} actions`} data-scene-nav-buttons={region}>
             {buttons.map(button => <button key={button.id} type='button' className={`${names.button} scene-toolbar-button scene-toolbar-button-${button.emphasis}`} data-scene-nav-button={button.id}
                 data-scene-emphasis={button.emphasis} data-scene-slice={button.slice} data-scene-authorize={button.authorize} data-origin={button.origin} data-read-only={button.readOnly}
-                aria-haspopup={button.slice ? 'dialog' : undefined} disabled={button.slice === undefined} onClick={() => press(button)}>
+                aria-haspopup={button.slice ? 'dialog' : undefined} disabled={button.slice === undefined} onClick={event => press(button, event)}>
                 {buttonIcon(button)}
                 <span className={names.label}>{button.title}</span>
             </button>)}
