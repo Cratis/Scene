@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { readOptionalString } from '../shell/elementProperties';
 import { ComponentState, readComponentState } from './ComponentState';
@@ -37,6 +37,9 @@ function Cell({ column, row, locale }: { column: ListColumn; row: ListRow; local
         default: return <>{text}</>;
     }
 }
+
+/** How long after a selection the `on select` behaviors run: the time its published value needs to reach the bindings they read. */
+const selectNotificationDelay = 60;
 
 /**
  * The `dataList` component: the records of a collection as a table, as cards, or grouped with subtotals, with search, sort, paging and
@@ -88,7 +91,13 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     useEffect(() => { if (Number(pageText) !== page.page && pageText !== undefined) setPageText(String(page.page)); }, [page.page, pageText, setPageText]);
     useValueOutput(bindingOutputs, multiple ? selected : selected[0]);
 
-    const select = (id: string) => { setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); interactions?.onSelect?.(); };
+    // What `on select` reads - `component.<id>.value`, the selected row - is published after the selection is drawn, so the behaviors run once it is: with the handlers of the render that sees it.
+    const latestInteractions = useRef(interactions);
+    latestInteractions.current = interactions;
+    const select = (id: string) => {
+        setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined);
+        setTimeout(() => latestInteractions.current?.onSelect?.(), selectNotificationDelay);
+    };
     const run = (action: string, id: string) => { bindingOutputs?.setOutput('action', { action, row: id }); interactions?.onClick?.({ stopPropagation: () => undefined }); };
     const sortLabel = (column: ListColumn) => (sort?.field === column.field ? `${column.header}, ${sort.descending ? strings.listSortedDescending : strings.listSortedAscending}` : column.header);
     const nameOf = (row: ListRow, index: number) => textOf(row, titleField) || rowId(row, index, idField);
@@ -176,7 +185,8 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
                 const index = offset + position;
                 const id = rowId(row, index, idField);
                 return (
-                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)} data-tone={toneOf(row)}>
+                    <li key={id} className='foundation-card-row' data-selected={selected.includes(id)} data-selectable={selectable} data-tone={toneOf(row)}
+                        onClick={selectable && !multiple ? event => { if (!(event.target as HTMLElement).closest('input, button, a')) select(id); } : undefined}>
                         {picture(row, index)}
                         <div className='foundation-card-head'>{checkbox(row, index)}<strong>{nameOf(row, index)}</strong></div>
                         <dl>
