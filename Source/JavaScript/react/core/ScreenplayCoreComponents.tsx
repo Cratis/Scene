@@ -9,6 +9,12 @@ function textProperty(properties: Record<string, unknown>, name: string, fallbac
     return typeof properties[name] === 'string' ? properties[name] : fallback;
 }
 
+/** Reads a modeled name as words: `ChangeBasketQuantity` becomes `Change basket quantity`. */
+function humanizeName(name: string): string {
+    const words = name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_-]+/g, ' ').trim();
+    return words.length === 0 ? words : words[0].toUpperCase() + words.slice(1).toLowerCase();
+}
+
 /** Carries a Screenplay data declaration without adding visual chrome. */
 export function CoreData({ element }: RegisteredComponentProps) {
     return <span hidden data-scene-id={element.id} data-scene-data={textProperty(element.properties, 'typeName')} />;
@@ -30,7 +36,7 @@ interface ArgumentMapping {
  */
 export function CoreAction({ element }: RegisteredComponentProps) {
     const command = textProperty(element.properties, 'command');
-    const label = textProperty(element.properties, 'label', command);
+    const label = textProperty(element.properties, 'label') || humanizeName(command);
     const scope = useRenderBindingScope();
     const invoke = () => {
         const mapping = Array.isArray(element.properties.arguments) ? element.properties.arguments as ArgumentMapping[] : [];
