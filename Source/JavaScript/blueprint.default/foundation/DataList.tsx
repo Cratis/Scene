@@ -88,15 +88,27 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     useEffect(() => { if (Number(pageText) !== page.page && pageText !== undefined) setPageText(String(page.page)); }, [page.page, pageText, setPageText]);
     useValueOutput(bindingOutputs, multiple ? selected : selected[0]);
 
-    // What `on select` reads - `component.<id>.value`, the selected row - is published by an effect of the render that draws the selection, and the page
-    // takes it in on the render after. The behaviors therefore run one render later still: with the handlers that see the published value.
+    // What `on select` reads - `component.<id>.value`, the selected row - travels: the render that draws the selection publishes it, the host takes it in on the
+    // next render and hands the handlers that read it on the one after. A selection the person made is therefore announced two renders after it is drawn, with
+    // the handlers that see the value; each step is a render of this list, so it takes no timer and follows however quickly the host takes the value in.
     const latestInteractions = useRef(interactions);
     latestInteractions.current = interactions;
-    const [selectionRequested, setSelectionRequested] = useState(0);
-    const [selectionPublished, setSelectionPublished] = useState(0);
-    useEffect(() => { if (selectionRequested > 0) setSelectionPublished(selectionRequested); }, [selectionRequested]);
-    useEffect(() => { if (selectionPublished > 0) latestInteractions.current?.onSelect?.(); }, [selectionPublished]);
-    const select = (id: string) => { setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); setSelectionRequested(count => count + 1); };
+    const selectionKey = selected.join(',');
+    const selectionMade = useRef(false);
+    const [announcement, setAnnouncement] = useState(0);
+    useEffect(() => {
+        if (!selectionMade.current) return;
+        selectionMade.current = false;
+        setAnnouncement(1);
+    }, [selectionKey]);
+    useEffect(() => {
+        if (announcement === 1) setAnnouncement(2);
+        if (announcement === 2) {
+            setAnnouncement(0);
+            latestInteractions.current?.onSelect?.();
+        }
+    }, [announcement]);
+    const select = (id: string) => { selectionMade.current = true; setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); };
     const run = (action: string, id: string) => { bindingOutputs?.setOutput('action', { action, row: id }); interactions?.onClick?.({ stopPropagation: () => undefined }); };
     const sortLabel = (column: ListColumn) => (sort?.field === column.field ? `${column.header}, ${sort.descending ? strings.listSortedDescending : strings.listSortedAscending}` : column.header);
     const nameOf = (row: ListRow, index: number) => textOf(row, titleField) || rowId(row, index, idField);
