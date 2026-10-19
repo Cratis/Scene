@@ -73,6 +73,36 @@ export function collectQueryNames(value: unknown): string[] {
     return [...names];
 }
 
+/**
+ * The read models a Screenplay screen shows - the `typeName` of its data, table and summary elements - and, for a data element, the query it names. A pack's
+ * shapes are the rows of a read model by its name, so these are what a table or summary is given rows by; the query a data element names is given the same rows.
+ */
+export function collectTypeNames(value: unknown): { typeNames: string[]; queries: Record<string, string> } {
+    const typeNames = new Set<string>();
+    const queries: Record<string, string> = {};
+    const visit = (candidate: unknown) => {
+        if (candidate === null || typeof candidate !== 'object') return;
+        if (Array.isArray(candidate)) {
+            candidate.forEach(visit);
+            return;
+        }
+
+        const properties = (candidate as { properties?: unknown }).properties;
+        if (properties !== null && typeof properties === 'object') {
+            const { typeName, query } = properties as { typeName?: unknown; query?: unknown };
+            if (typeof typeName === 'string' && typeName.length > 0) {
+                typeNames.add(typeName);
+                if (typeof query === 'string' && query.length > 0) queries[query] = typeName;
+            }
+        }
+
+        Object.values(candidate as Record<string, unknown>).forEach(visit);
+    };
+
+    visit(value);
+    return { typeNames: [...typeNames], queries };
+}
+
 function readPath(source: unknown, path: string): unknown {
     if (!path) return source;
     return path.split('.').reduce<unknown>((current, segment) => {
@@ -124,6 +154,17 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
     for (const name of collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts])) {
         const resolved = rows(name);
         if (resolved.rows.length > 0) queryResults[name] = resolved.rows;
+    }
+
+    // A table or a summary of a Screenplay screen shows a read model by name, so it is given that read model's rows; the query its data element names too.
+    const shown = collectTypeNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts]);
+    for (const typeName of shown.typeNames) {
+        const resolved = rows(typeName);
+        if (resolved.rows.length > 0) queryResults[typeName] = resolved.rows;
+    }
+
+    for (const [query, typeName] of Object.entries(shown.queries)) {
+        if (queryResults[query] === undefined && queryResults[typeName] !== undefined) queryResults[query] = queryResults[typeName];
     }
 
     return {

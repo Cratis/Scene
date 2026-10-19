@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { resolveArgumentSource } from '@cratis/scene.engine';
+import type { ExternalComponent } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
 
 function textProperty(properties: Record<string, unknown>, name: string, fallback = ''): string {
@@ -59,9 +60,40 @@ export function CoreTitle({ element }: RegisteredComponentProps) {
     return <h1 data-scene-id={element.id}>{textProperty(element.properties, 'text')}</h1>;
 }
 
-/** Renders the structural shell of a Screenplay table. Query data is supplied by the host. */
+/** The rows a host supplied for a read model: the query results keyed by the type name a table or summary shows. */
+function rowsOf(queryResults: Record<string, unknown> | undefined, typeName: string): Record<string, unknown>[] {
+    const rows = typeName ? queryResults?.[typeName] : undefined;
+    return Array.isArray(rows) ? rows.filter((row): row is Record<string, unknown> => row !== null && typeof row === 'object') : [];
+}
+
+function childrenOf(element: ExternalComponent, slot: string): ExternalComponent[] {
+    return (element.slots?.[slot] ?? []) as ExternalComponent[];
+}
+
+function cell(value: unknown): string {
+    if (value === null || value === undefined) return '';
+    return typeof value === 'object' ? JSON.stringify(value) : String(value);
+}
+
+/**
+ * Renders a Screenplay table: the column headings, and a row for each of the rows the host supplied for the read model the table shows (`typeName`) - a
+ * preview supplies the sample data, a running host its query results. With none supplied only the headings are drawn.
+ */
 export function CoreTable({ element, slots }: RegisteredComponentProps) {
-    return <section data-scene-id={element.id} role='table'><header role='row'>{slots.columns}</header></section>;
+    const scope = useRenderBindingScope();
+    const columns = childrenOf(element, 'columns');
+    const rows = rowsOf(scope.queryResults, textProperty(element.properties, 'typeName'));
+    const grid = { display: 'grid', gridTemplateColumns: `repeat(${Math.max(columns.length, 1)}, minmax(0, 1fr))`, gap: '0.25rem 1rem' };
+    return (
+        <section data-scene-id={element.id} role='table' style={grid}>
+            <header role='row' style={{ display: 'contents', fontWeight: 600 }}>{slots.columns}</header>
+            {rows.map((row, index) => (
+                <div key={index} role='row' style={{ display: 'contents' }}>
+                    {columns.map(column => <span key={column.id} role='cell'>{cell(row[textProperty(column.properties, 'property')])}</span>)}
+                </div>
+            ))}
+        </section>
+    );
 }
 
 /** Renders a Screenplay table-column heading. */
@@ -70,9 +102,23 @@ export function CoreColumn({ element }: RegisteredComponentProps) {
     return <span data-scene-id={element.id} role='columnheader'>{textProperty(element.properties, 'label', property)}</span>;
 }
 
-/** Renders the structural shell of a Screenplay summary. Query data is supplied by the host. */
-export function CoreSummary({ element, slots }: RegisteredComponentProps) {
-    return <dl data-scene-id={element.id}>{slots.fields}</dl>;
+/** Renders a Screenplay summary: each field's label and, when the host supplied a row for the read model (`typeName`), its value in the first row. */
+export function CoreSummary({ element }: RegisteredComponentProps) {
+    const scope = useRenderBindingScope();
+    const first = rowsOf(scope.queryResults, textProperty(element.properties, 'typeName'))[0];
+    return (
+        <dl data-scene-id={element.id}>
+            {childrenOf(element, 'fields').map(field => {
+                const property = textProperty(field.properties, 'property');
+                return (
+                    <div key={field.id}>
+                        <dt data-scene-id={field.id}>{textProperty(field.properties, 'label', property)}</dt>
+                        {first && <dd>{cell(first[property])}</dd>}
+                    </div>
+                );
+            })}
+        </dl>
+    );
 }
 
 /** Renders a Screenplay summary field label. */
