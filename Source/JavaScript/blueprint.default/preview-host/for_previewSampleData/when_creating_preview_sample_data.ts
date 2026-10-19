@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { createPreviewSampleData, collectQueryNames } from '../previewSampleData';
+import { createPreviewSampleData, collectQueryNames, collectTypeNames } from '../previewSampleData';
 import { nordicPack, otherPack, ordersApplication } from '../for_ScenePreviewHost/given';
 
 const fields = [{ name: 'customer', type: 'string' }, { name: 'quantity', type: 'number' }];
@@ -49,5 +49,18 @@ describe('when creating preview sample data', () => {
 
     describe('and no row supplies a field', () => {
         it('should leave the field as it is', () => createPreviewSampleData(ordersApplication(), { packs: [nordicPack] }).commandFields('PlaceOrder', [{ name: 'ghost', type: 'string' }]).should.deep.equal([{ name: 'ghost', type: 'string' }]));
+    });
+
+    describe('and a Screenplay screen shows a read model by its type name', () => {
+        const screens = [{ name: 'Orders', slotContent: { list: [
+            { id: 'data', componentName: 'core:data', properties: { typeName: 'PlaceOrder', isCollection: true, query: 'AllOrders', by: null }, slots: {} },
+            { id: 'table', componentName: 'core:table', properties: { typeName: 'PlaceOrder' }, slots: { columns: [] } },
+        ] } }];
+        const source = createPreviewSampleData({ ...ordersApplication(), screens } as never, { packs: [nordicPack] });
+
+        it('should find the read models the screens show', () => collectTypeNames(screens).typeNames.should.deep.equal(['PlaceOrder']));
+        it('should find the query a data element names for a read model', () => collectTypeNames(screens).queries.should.deep.equal({ AllOrders: 'PlaceOrder' }));
+        it('should give the read model its rows from the pack', () => (source.queryResults.PlaceOrder as { customer: string }[])[0].customer.should.equal('Fjordline AS'));
+        it('should give the query the data element names the same rows', () => (source.queryResults.AllOrders as unknown[]).should.deep.equal(source.queryResults.PlaceOrder as unknown[]));
     });
 });
