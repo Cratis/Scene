@@ -32,7 +32,7 @@ export function Logo({ element }: RegisteredComponentProps) {
     const link = useShellLink(targetScreen === '' ? undefined : targetScreen, { source: 'logo', id: element.id, label });
 
     return (
-        <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id} data-scene-region={ProfileRegion.Identity} aria-label={showName ? undefined : label}>
+        <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id} data-scene-region={ProfileRegion.Identity} aria-label={label}>
             {source ? <img src={source} alt={label} height={28} />
                 : iconName ? <span className='layout-logo-mark'><i className={`pi ${logoIconClass[iconName] ?? 'pi-box'}`} aria-hidden='true' /></span>
                     : <span className='layout-logo-mark'>{initials}</span>}
