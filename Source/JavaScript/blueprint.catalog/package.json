@@ -65,8 +65,8 @@
         "@primereact/headless": "11.2.0",
         "primeicons": "8.0.2",
         "primereact": "11.2.0",
-        "react": "^19.3.0",
-        "react-dom": "^19.3.0"
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1"
     },
     "peerDependencies": {
         "@cratis/components": "^4.1.1",
