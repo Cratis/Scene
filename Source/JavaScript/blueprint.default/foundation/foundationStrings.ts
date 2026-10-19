@@ -176,6 +176,8 @@ export const foundationStrings = {
     notificationsLabel: 'Notifications',
     notificationsCount: '{count} unread',
     notificationsNone: 'No new notifications',
+    indicatorCount: '{label}: {count}',
+    indicatorNone: '{label}: none',
     boardMoveTo: 'Move to…',
     boardMoveCard: 'Move {title}',
     boardMoved: '{title} moved to {column}',

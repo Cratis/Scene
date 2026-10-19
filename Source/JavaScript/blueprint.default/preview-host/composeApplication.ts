@@ -6,7 +6,7 @@ import {
     type ApplicationLogo, type EffectiveConfiguration,
 } from '@cratis/scene.model';
 import {
-    DescriptorCatalog, EffectiveShell, PackageCatalog, ResolvedProfileIdentity, ShellKind, ShellOrigin, TemplateLibrary, resolveEffectiveConfiguration, resolveEffectiveShell,
+    DescriptorCatalog, EffectiveShell, PackageCatalog, ResolvedProfileIdentity, ShellKind, ShellOrigin, ShellSource, TemplateLibrary, resolveEffectiveConfiguration, resolveEffectiveShell,
     resolveScreenTemplates, resolveTemplateChain,
 } from '@cratis/scene.engine';
 import { defaultBlueprintManifest } from '../defaultBlueprint';
@@ -279,9 +279,10 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
         screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`outlet-${name}`, 'core:outlet', { name, closable: true })];
     }
 
+    // An own root template that fills a slot itself - the storefront's topbar with its basket - says what is drawn there: the host's default chrome only seeds the slots the application's template leaves empty. A blueprint's root template content is placeholder seed, which the host's chrome replaces.
     const rootTemplate = effective.kind === ShellKind.ScreenTemplate ? effective.template as ScreenTemplate : undefined;
     const composed = rootTemplate !== undefined
-        ? externalComponent(`screen-${screen.name}`, previewTemplateComponent, { arrangement: rootTemplate.arrangement }, mergeSlots(rootTemplate.content, chrome, screenSlots))
+        ? externalComponent(`screen-${screen.name}`, previewTemplateComponent, { arrangement: rootTemplate.arrangement }, mergeSlots(...(effective.source === ShellSource.Own ? [chrome, rootTemplate.content] : [rootTemplate.content, chrome]), screenSlots))
         : externalComponent(`screen-${screen.name}`, shell, { screenName: screen.name }, { ...chrome, ...screenSlots });
 
     return { element: finish(composed, profile, previewCatalog(options), options), configuration: configurationOf(application, screen, options), templates };

@@ -122,7 +122,7 @@ describe('when replacing seeded slot content', () => {
         }).element).slots;
 
         it('should replace the primary seed and keep host chrome and trailing content once', () => ids(slots.main).should.deep.equal(['host-main', 'orders', 'order-list', 'status']));
-        it('should replace seeded chrome with host chrome', () => ids(slots.topbar).should.deep.equal(['host-topbar']));
+        it('should keep what the application\'s own root template says in a chrome slot over the host chrome', () => ids(slots.topbar).should.deep.equal(['seed-topbar']));
         it('should keep an unfilled roots content', () => ids(slots.rail).should.deep.equal(['seed-rail']));
         it('should replace a hosted outlets seed', () => ids(slots.side).should.deep.equal(['outlet-side']));
     });

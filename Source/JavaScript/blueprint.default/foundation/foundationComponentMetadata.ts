@@ -34,6 +34,7 @@ export const foundationComponentMetadata: Record<string, ComponentMetadata> = {
     [ComponentName.BulkBar]: m('Bulk bar', ComponentCategory.Actions, 'check-check', ['selection', 'bulk', 'batch', 'actions']),
     [ComponentName.GlobalSearch]: m('Search', ComponentCategory.Input, 'search', ['search', 'find', 'query']),
     [ComponentName.NotificationsButton]: m('Notifications button', ComponentCategory.Actions, 'bell', ['bell', 'alerts', 'unread']),
+    [ComponentName.IndicatorButton]: m('Indicator button', ComponentCategory.Actions, 'shopping-cart', ['basket', 'cart', 'badge', 'count', 'tray']),
     [ComponentName.KanbanBoard]: m('Kanban board', ComponentCategory.DataDisplay, 'kanban', ['board', 'kanban', 'columns', 'pipeline', 'cards']),
     [ComponentName.WizardProgress]: m('Wizard', ComponentCategory.Navigation, 'footprints', ['wizard', 'steps', 'stepper', 'multi-step']),
     [ComponentName.FormScreenBody]: m('Form', ComponentCategory.Forms, 'text-cursor-input', ['form', 'fields', 'sections', 'validation']),

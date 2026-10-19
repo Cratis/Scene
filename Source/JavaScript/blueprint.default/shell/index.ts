@@ -7,6 +7,7 @@ export * from './ThemeOption';
 export * from './AppShell';
 export * from './FullPageShell';
 export * from './Topbar';
+export * from './Bar';
 export * from './Sidebar';
 export * from './Menu';
 export * from './MenuItem';

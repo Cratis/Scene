@@ -34,6 +34,14 @@ describe('when components share an address parameter', () => {
             window.location.search.should.equal('?itemsq=truck');
         });
 
+        it('should find a row by its title although the title is not a column', () => {
+            cleanup();
+            window.history.replaceState(null, '', '/?titledq=barcode');
+            render(<DataList element={foundationElement('dataList', { label: 'Titled', rows, columns: [{ field: 'location', header: 'Location' }], titleField: 'name', variant: 'cards', urlKey: 'titled' })} slots={{}} />);
+            screen.getAllByRole('listitem').map(item => item.textContent).join(' ').should.contain('Barcode scanner');
+            screen.getAllByRole('listitem').length.should.equal(1);
+        });
+
         it('should show every row again when the search is cleared', () => {
             fireEvent.change(screen.getByRole('searchbox', { name: 'Search items' }), { target: { value: 'truck' } });
             fireEvent.change(screen.getByRole('searchbox', { name: 'Search items' }), { target: { value: '' } });
