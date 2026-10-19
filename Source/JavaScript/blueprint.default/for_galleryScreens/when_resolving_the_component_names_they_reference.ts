@@ -52,7 +52,8 @@ describe('when resolving the component names they reference', () => {
 
     it('should reference every shell component the blueprint registers except the ones a host places itself', () => {
         const referenced = new Set(names);
-        const placedByAHostRatherThanATemplate = [ComponentName.Mask, ComponentName.ThemeSwitcher, ComponentName.LayoutModeSwitcher, ComponentName.RightPanel];
+        // The bar is placed by an application's own shell (its root template), not by a gallery template.
+        const placedByAHostRatherThanATemplate = [ComponentName.Mask, ComponentName.ThemeSwitcher, ComponentName.LayoutModeSwitcher, ComponentName.RightPanel, ComponentName.Bar];
         Object.values(ComponentName)
             .filter(name => !placedByAHostRatherThanATemplate.includes(name))
             // The foundation composites are content a screen places, not shell; the foundation screen templates reference them.

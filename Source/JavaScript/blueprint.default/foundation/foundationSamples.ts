@@ -137,6 +137,7 @@ export const foundationSamples: Record<string, FoundationSample> = {
     [ComponentName.BulkBar]: { properties: { selection: ['1', '2'], actions: ['Assign', 'Archive'] }, data: [], stateful: false },
     [ComponentName.GlobalSearch]: { properties: { placeholder: 'Search accounts', label: 'Search accounts' }, data: [], stateful: false },
     [ComponentName.NotificationsButton]: { properties: { count: 3 }, data: [], stateful: false },
+    [ComponentName.IndicatorButton]: { properties: { icon: 'cart', label: 'Basket', count: 3 }, data: [], stateful: false },
     [ComponentName.KanbanBoard]: {
         properties: {
             columns: [{ id: 'new', label: 'New', limit: 2 }, { id: 'qualified', label: 'Qualified' }, { id: 'won', label: 'Won' }],

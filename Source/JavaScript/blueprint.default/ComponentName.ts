@@ -19,6 +19,9 @@ export enum ComponentName {
     /** The fixed strip across the top of the application shell. */
     Topbar = 'topbar',
 
+    /** A horizontal bar an application's own shell fills: brand at the start, navigation in the middle, actions at the end. */
+    Bar = 'bar',
+
     /** The sidebar's own chrome, inside the shell-positioned panel. */
     Sidebar = 'sidebar',
 
@@ -129,6 +132,9 @@ export enum ComponentName {
 
     /** The topbar bell with the unread count. */
     NotificationsButton = 'notificationsButton',
+
+    /** An icon button with a live count badge - the basket of a shop's topbar, a message tray: the count is a query result, the click navigates. */
+    IndicatorButton = 'indicatorButton',
 
     /** Columns mapped to a status with cards that move between them. */
     KanbanBoard = 'kanbanBoard',

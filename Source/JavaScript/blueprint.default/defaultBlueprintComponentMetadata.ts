@@ -11,6 +11,7 @@ export const defaultBlueprintComponentMetadata: Record<string, ComponentMetadata
     appShell: m('Application shell', ComponentCategory.Layout, 'app-window', ['layout', 'frame', 'chrome']),
     fullPageShell: m('Full page shell', ComponentCategory.Layout, 'maximize', ['layout', 'fullscreen', 'frame']),
     topbar: m('Topbar', ComponentCategory.Navigation, 'panel-top', ['header', 'top bar', 'navigation'], 'Tp', navigationDesignMode()),
+    bar: m('Bar', ComponentCategory.Navigation, 'panel-top', ['header', 'toolbar', 'brand', 'actions', 'storefront'], 'Br', navigationDesignMode()),
     sidebar: m('Side bar', ComponentCategory.Navigation, 'panel-left', ['navigation', 'menu', 'side panel'], 'Sb', navigationDesignMode({ sidebar: true })),
     menu: m('Menu', ComponentCategory.Navigation, 'menu', ['navigation', 'list', 'links']),
     menuItem: m('Menu item', ComponentCategory.Navigation, 'minus', ['link', 'entry', 'navigation']),

@@ -49,6 +49,7 @@ export * from './ActionButtonControl';
 export * from './BulkBar';
 export * from './GlobalSearch';
 export * from './NotificationsButton';
+export * from './IndicatorButton';
 export * from './boardModel';
 export * from './KanbanBoard';
 export * from './wizardModel';

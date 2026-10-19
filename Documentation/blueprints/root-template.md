@@ -41,6 +41,15 @@ semver range such as `^4.5`. Absent `version` accepts any version.
 }
 ```
 
+## An application's own shell
+
+An application that needs a shell the blueprint does not ship - a storefront with its brand, search, basket and account in a bar across the top - declares its own root template: a screen template with the root role (in Screenplay, `scopes application`) that declares the slots it needs and fills them with `content <slot>`. The host composes the shell from that template, and what the template fills **wins over the host's default chrome**: the host only seeds the slots the template leaves empty (a blueprint root template is different - its content is placeholder seed, which the host's chrome replaces).
+
+Two components of the default blueprint exist for this:
+
+- `bar` - a horizontal bar that needs no sidebar and no layout configuration. Its `start` slot holds the brand (`logo`), its `end` slot the actions, and its middle is the `center` slot - or, when that is empty, the topbar navigation region of the module on the page.
+- `indicatorButton` - an icon button with a live count badge (`icon`, `label`, `count`). The count is a query result (`{ kind: 'queryResult', query, path }`), so the badge follows the read model; pressing it runs the behaviors attached to the element, such as a navigation to the basket.
+
 ## Options, appearance and defaults
 
 - `Root.Options` are the shell's own configurable items, keyed by the shell's exposed option name (navigation mode, whether to

@@ -515,6 +515,18 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         ],
     },
     {
+        component: key(ComponentName.IndicatorButton),
+        displayName: 'Indicator button',
+        description: 'An icon button with a live count badge - a shop\'s basket in the topbar, a message tray. The count is said in words as well as in the badge; pressing it runs the behaviors attached to the element.',
+        properties: [
+            choice('icon', 'Icon', 'Appearance', { cart: 'Basket', bell: 'Bell', inbox: 'Tray', user: 'Person' }, 'cart'),
+            text('label', 'Label', 'Accessibility', 'What the count counts, said before the number: "Basket".'),
+            number('count', 'Count', 'Data', 'Bind to a query result.', { constraints: { minimum: 0, integer: true } }),
+            text('locale', 'Locale', 'Content'),
+            { path: 'strings', label: 'Text overrides', group: 'Content', valueType: PropertyValueType.Object, editorKind: PropertyEditorKind.StringMap },
+        ],
+    },
+    {
         component: key(ComponentName.KanbanBoard),
         displayName: 'Kanban board',
         description: 'Columns mapped to a status, with cards that move by dragging or by their own Move-to menu. The new arrangement is the value output.',

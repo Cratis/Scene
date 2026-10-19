@@ -65,6 +65,19 @@ describe('when composing with a root template', () => {
         it('should place the screen in the primary outlet', () => (asComponent(composed.element).slots.main ?? []).map(value => (value as ExternalComponent).id).should.include('orders'));
     });
 
+    describe('and the root screen template fills its own topbar', () => {
+        const shop: ScreenTemplate = {
+            name: 'ShopFrame', slots: [{ name: 'topbar' }, { name: 'breadcrumb' }, { name: 'content' }], content: { topbar: [element('shop-topbar', 'test:topbar')] },
+            metadata: { role: TemplateRole.Root, primaryOutlet: 'content' },
+        };
+        const application = withRoot({ template: { source: TemplateReferenceSource.Own, id: 'ShopFrame' } }, [], [shop]);
+        const composed = composeApplicationScreen(application, application.screens[1]);
+        const ids = (slot: string) => (asComponent(composed.element).slots[slot] ?? []).map(value => (value as ExternalComponent).id);
+
+        it('should draw what the template put in the topbar instead of the default chrome', () => ids('topbar').should.deep.equal(['shop-topbar']));
+        it('should still seed the slots the template leaves empty with the default chrome', () => ids('breadcrumb').should.deep.equal(['breadcrumb']));
+    });
+
     describe('and the profile has no root', () => {
         const application = ordersApplication();
 

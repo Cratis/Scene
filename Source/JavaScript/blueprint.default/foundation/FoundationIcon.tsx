@@ -4,7 +4,7 @@
 /** The icons the foundation components draw themselves, so none of them depends on an icon font being loaded. */
 export type FoundationIconName =
     | 'check' | 'close' | 'arrow-up' | 'arrow-down' | 'minus' | 'alert' | 'info' | 'lock' | 'clock' | 'inbox' | 'refresh'
-    | 'plus' | 'chevron-right' | 'chevron-down' | 'upload' | 'file' | 'user' | 'columns' | 'filter' | 'star' | 'circle';
+    | 'plus' | 'chevron-right' | 'chevron-down' | 'upload' | 'file' | 'user' | 'columns' | 'filter' | 'star' | 'circle' | 'cart' | 'bell';
 
 const paths: Record<FoundationIconName, string> = {
     check: 'M5 13l4 4L19 7',
@@ -28,6 +28,8 @@ const paths: Record<FoundationIconName, string> = {
     filter: 'M4 5h16l-6 8v6l-4-2v-4L4 5z',
     star: 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z',
     circle: 'M12 20a8 8 0 100-16 8 8 0 000 16z',
+    cart: 'M3 4h2.2l2.1 10.2a1 1 0 001 .8h8.6a1 1 0 001-.8L19.6 8H6.2M9.5 19.5a.5.5 0 100-1 .5.5 0 000 1zM16.5 19.5a.5.5 0 100-1 .5.5 0 000 1z',
+    bell: 'M6 16V11a6 6 0 1112 0v5l1.5 2h-15L6 16zM10 20.5a2 2 0 004 0',
 };
 
 /** Whether a name is one of the icons drawn here. */

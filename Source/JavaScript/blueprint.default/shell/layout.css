@@ -754,6 +754,62 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * Bar - the horizontal bar an application's own shell fills (brand, navigation, actions). It carries the
+ * token bridge above itself, so it needs no wrapper: it sits in any slot of a shell the application declares.
+ * ------------------------------------------------------------------------ */
+
+.shell-bar {
+    /* The same aliases of the Scene theme's tokens the shell makes, so a bar looks right outside a shell. */
+    --layout-primary: var(--scene-primary-color, #4f46e5);
+    --layout-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
+    --layout-card: var(--scene-surface-card, #ffffff);
+    --layout-border: var(--scene-surface-border, #e2e5e9);
+    --layout-hover: var(--scene-surface-hover, #eceef1);
+    --layout-text: var(--scene-text-color, #1f2430);
+    --layout-text-muted: var(--scene-text-muted-color, #6b7280);
+    --layout-highlight: var(--scene-highlight-background, #eef2ff);
+    --layout-highlight-text: var(--scene-highlight-color, #3730a3);
+    --layout-radius: var(--scene-content-border-radius, 0.5rem);
+    --layout-focus-ring: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+    --layout-sidebar-text: var(--layout-text);
+    --layout-sidebar-muted: var(--layout-text-muted);
+    --layout-sidebar-hover: var(--layout-hover);
+    --layout-topbar-height: 4rem;
+    --layout-gap: 1rem;
+    --layout-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--layout-gap);
+    inline-size: 100%;
+    min-block-size: var(--layout-topbar-height);
+    padding: 0 1.25rem;
+    background: var(--layout-card);
+    border-block-end: 1px solid var(--layout-border);
+    color: var(--layout-text);
+}
+
+.shell-bar-start,
+.shell-bar-end,
+.shell-bar-center {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.shell-bar-center {
+    flex: 1 1 auto;
+}
+
+.shell-bar-end {
+    margin-inline-start: auto;
+}
+
+.shell-bar .layout-region {
+    display: flex;
+}
+
+/* ---------------------------------------------------------------------------
  * Configurator - a floating trigger plus a panel, present in both shells.
  * ------------------------------------------------------------------------ */
 

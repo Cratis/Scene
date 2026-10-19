@@ -4,7 +4,7 @@
 import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
 import { defaultBlueprintName } from './packageName';
-import { ActionButtonControl, DialogFrame, Notice, BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, CalendarGrid, TimelineGrid, InboxList, StatCard, StatusChip, TrendChip } from './foundation';
+import { ActionButtonControl, DialogFrame, Notice, BulkBar, DataList, FormScreenBody, GlobalSearch, KanbanBoard, NotificationsButton, IndicatorButton, SubNavigation, TabSet, WizardProgress, ActivityFeed, ApprovalChainStepper, AvatarStack, ChartWrapper, ChecklistSection, ColumnChooser, FileUploader, EmptyState, FilterBuilder, OrgTree, PermissionMatrix, SavedViewsMenu, CalendarGrid, TimelineGrid, InboxList, StatCard, StatusChip, TrendChip } from './foundation';
 import {
     AppShell,
     Breadcrumb,
@@ -21,6 +21,7 @@ import {
     Sidebar,
     ThemeSwitcher,
     Topbar,
+    Bar,
     UserMenu,
 } from './shell';
 
@@ -36,6 +37,7 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.AppShell)]: AppShell,
     [componentRegistryKey(defaultBlueprintName, ComponentName.FullPageShell)]: FullPageShell,
     [componentRegistryKey(defaultBlueprintName, ComponentName.Topbar)]: Topbar,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.Bar)]: Bar,
     [componentRegistryKey(defaultBlueprintName, ComponentName.Sidebar)]: Sidebar,
     [componentRegistryKey(defaultBlueprintName, ComponentName.Menu)]: Menu,
     [componentRegistryKey(defaultBlueprintName, ComponentName.MenuItem)]: MenuItem,
@@ -73,6 +75,7 @@ export const defaultBlueprintComponents: ComponentRegistry = {
     [componentRegistryKey(defaultBlueprintName, ComponentName.BulkBar)]: BulkBar,
     [componentRegistryKey(defaultBlueprintName, ComponentName.GlobalSearch)]: GlobalSearch,
     [componentRegistryKey(defaultBlueprintName, ComponentName.NotificationsButton)]: NotificationsButton,
+    [componentRegistryKey(defaultBlueprintName, ComponentName.IndicatorButton)]: IndicatorButton,
     [componentRegistryKey(defaultBlueprintName, ComponentName.KanbanBoard)]: KanbanBoard,
     [componentRegistryKey(defaultBlueprintName, ComponentName.WizardProgress)]: WizardProgress,
     [componentRegistryKey(defaultBlueprintName, ComponentName.FormScreenBody)]: FormScreenBody,
