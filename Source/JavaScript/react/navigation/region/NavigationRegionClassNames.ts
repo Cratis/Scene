@@ -31,6 +31,12 @@ export interface NavigationRegionClassNames {
 
     /** The list of an item's sub-items. */
     submenu: string;
+
+    /** The group of application-level toolbar buttons the region declares. */
+    buttons: string;
+
+    /** One application-level toolbar button; it also carries `scene-toolbar-button-<emphasis>` as the screen toolbar's buttons do. */
+    button: string;
 }
 
 /** The class names used when a host passes none. */
@@ -43,4 +49,6 @@ export const defaultNavigationRegionClassNames: NavigationRegionClassNames = {
     label: 'scene-nav-label',
     toggle: 'scene-nav-toggle',
     submenu: 'scene-nav-submenu',
+    buttons: 'scene-nav-buttons',
+    button: 'scene-nav-button',
 };

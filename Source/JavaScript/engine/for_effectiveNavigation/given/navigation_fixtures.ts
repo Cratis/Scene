@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
 import {
-    ApplicationStructureIndex, EffectiveNavItem, NavigationDiagnostic, NavigationEdit, NavigationEditPlan,
+    ApplicationStructureIndex, EffectiveNavButton, EffectiveNavItem, NavigationDiagnostic, NavigationEdit, NavigationEditPlan,
     addNavItem, effectiveNavigation, setApplicationLogo, switchRegionMode,
 } from '../../index';
 
@@ -13,6 +13,7 @@ export interface ExpectedView {
     mode?: NavigationRegionMode;
     sources: string;
     items: string[];
+    buttons?: string[];
 }
 
 export interface View {
@@ -56,15 +57,19 @@ function lines(items: EffectiveNavItem[], depth: number): string[] {
     ]);
 }
 
+function buttonLines(buttons: EffectiveNavButton[]): string {
+    return buttons.length === 0 ? '' : `\nbuttons\n${buttons.map(button => `${button.id}|${button.origin}|${button.readOnly ? 'locked' : 'editable'}|${button.emphasis}|${button.slice ?? '-'}|${button.icon ?? '-'}|${button.authorize ?? '-'}|${button.reason}`).join('\n')}`;
+}
+
 export function describeView(index: ApplicationStructureIndex, navigation: NavigationModel, view: View): string {
     const region = effectiveNavigation(index, navigation, view.module, view.region);
     const mode = region.mode ? `mode=${region.mode}\n` : '';
-    return `${mode}${region.sources.kind}|${region.sources.label}\n${lines(region.items, 0).join('\n')}`;
+    return `${mode}${region.sources.kind}|${region.sources.label}\n${lines(region.items, 0).join('\n')}${buttonLines(region.buttons)}`;
 }
 
 export function describeExpected(view: View): string {
     const mode = view.expected.mode ? `mode=${view.expected.mode}\n` : '';
-    return `${mode}${view.expected.sources}\n${view.expected.items.join('\n')}`;
+    return `${mode}${view.expected.sources}\n${view.expected.items.join('\n')}${view.expected.buttons?.length ? `\nbuttons\n${view.expected.buttons.join('\n')}` : ''}`;
 }
 
 export function plan(fixture: EditCase): NavigationEditPlan {

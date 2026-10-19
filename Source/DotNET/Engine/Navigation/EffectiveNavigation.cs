@@ -3,6 +3,7 @@
 
 using Cratis.Scene.Engine.Structure;
 using Cratis.Scene.Model.Navigation;
+using Cratis.Scene.Model.Toolbar;
 
 namespace Cratis.Scene.Engine.Navigation;
 
@@ -16,6 +17,7 @@ namespace Cratis.Scene.Engine.Navigation;
 /// <item><see cref="NavigationRegionMode.Extend"/>: the application items, read-only, followed by the module's items.</item>
 /// <item><see cref="NavigationRegionMode.Override"/>: the module's items only.</item>
 /// </list>
+/// The region's application-level toolbar buttons follow the same modes: inherit, extend and override.
 /// Each item carries its origin, whether it is read-only, a reason, and its target resolved against the structure: a module
 /// target goes to the module's first feature. Sub-items belong to the sidebar; a topbar is flat and its sub-items are ignored.
 /// The TypeScript engine (<c language="csharp">effectiveNavigation</c>) returns the same result; both are asserted against
@@ -34,13 +36,15 @@ public static class EffectiveNavigation
     public static EffectiveNavigationRegion Resolve(ApplicationStructureIndex index, NavigationModel navigation, string? module, NavigationRegionKind region)
     {
         var applicationOwned = NavigationRegions.ApplicationItems(navigation.Application, region);
+        var applicationButtons = NavigationRegions.OwnButtons(navigation, null, region);
 
         if (module is null)
         {
             return new(
                 region,
                 new NavigationSources(NavigationSourcesKind.DefinedHere, "defined here"),
-                [.. applicationOwned.Select(item => ResolveItem(index, region, item, NavigationItemOrigin.Application, false, "Defined here."))]);
+                [.. applicationOwned.Select(item => ResolveItem(index, region, item, NavigationItemOrigin.Application, false, "Defined here."))],
+                Buttons: [.. applicationButtons.Select(button => ResolveButton(button, NavigationItemOrigin.Application, false, "Defined here."))]);
         }
 
         var mode = NavigationRegions.ModeOf(navigation, module, region);
@@ -53,13 +57,24 @@ public static class EffectiveNavigation
         List<EffectiveNavItem> Own() =>
             [.. moduleOwned.Select(item => ResolveItem(index, region, item, NavigationItemOrigin.Module, false, $"Defined in {name}."))];
 
+        var moduleButtons = NavigationRegions.OwnButtons(navigation, module, region);
+
+        List<EffectiveNavButton> InheritedButtons() =>
+            [.. applicationButtons.Select(button => ResolveButton(button, NavigationItemOrigin.Application, true, "Inherited from the application; edit it there."))];
+
+        List<EffectiveNavButton> OwnButtonsOf() =>
+            [.. moduleButtons.Select(button => ResolveButton(button, NavigationItemOrigin.Module, false, $"Defined in {name}."))];
+
         return mode switch
         {
-            NavigationRegionMode.Extend => new(region, new(NavigationSourcesKind.Extended, $"Application + {name}"), [.. Inherited(), .. Own()], module, mode),
-            NavigationRegionMode.Override => new(region, new(NavigationSourcesKind.Overridden, $"{name} only"), Own(), module, mode),
-            _ => new(region, new(NavigationSourcesKind.Inherited, "inherited"), Inherited(), module, NavigationRegionMode.Inherit)
+            NavigationRegionMode.Extend => new(region, new(NavigationSourcesKind.Extended, $"Application + {name}"), [.. Inherited(), .. Own()], module, mode, [.. InheritedButtons(), .. OwnButtonsOf()]),
+            NavigationRegionMode.Override => new(region, new(NavigationSourcesKind.Overridden, $"{name} only"), Own(), module, mode, OwnButtonsOf()),
+            _ => new(region, new(NavigationSourcesKind.Inherited, "inherited"), Inherited(), module, NavigationRegionMode.Inherit, InheritedButtons())
         };
     }
+
+    static EffectiveNavButton ResolveButton(NavigationButton button, NavigationItemOrigin origin, bool readOnly, string reason) =>
+        new(button.Id, button.Title, button.Emphasis ?? ToolbarEmphasis.Secondary, origin, readOnly, reason, button.Icon, button.Slice, button.Authorize);
 
     static EffectiveNavItem ResolveItem(ApplicationStructureIndex index, NavigationRegionKind region, NavItem item, NavigationItemOrigin origin, bool readOnly, string reason)
     {

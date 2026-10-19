@@ -24,7 +24,7 @@ public static class NavigationFixtures
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
 
-    public record ExpectedView(string Sources, IReadOnlyList<string> Items, NavigationRegionMode? Mode = null);
+    public record ExpectedView(string Sources, IReadOnlyList<string> Items, NavigationRegionMode? Mode = null, IReadOnlyList<string>? Buttons = null);
 
     public record View(string? Module, NavigationRegionKind Region, ExpectedView Expected);
 
@@ -52,13 +52,13 @@ public static class NavigationFixtures
     {
         var region = EffectiveNavigation.Resolve(index, navigation, view.Module, view.Region);
         var mode = region.Mode is { } value ? $"mode={Camel(value.ToString())}\n" : string.Empty;
-        return $"{mode}{Camel(region.Sources.Kind.ToString())}|{region.Sources.Label}\n{string.Join('\n', Lines(region.Items, 0))}";
+        return $"{mode}{Camel(region.Sources.Kind.ToString())}|{region.Sources.Label}\n{string.Join('\n', Lines(region.Items, 0))}{ButtonLines(region.Buttons ?? [])}";
     }
 
     public static string DescribeExpected(View view)
     {
         var mode = view.Expected.Mode is { } value ? $"mode={Camel(value.ToString())}\n" : string.Empty;
-        return $"{mode}{view.Expected.Sources}\n{string.Join('\n', view.Expected.Items)}";
+        return $"{mode}{view.Expected.Sources}\n{string.Join('\n', view.Expected.Items)}{(view.Expected.Buttons is { Count: > 0 } ? $"\nbuttons\n{string.Join('\n', view.Expected.Buttons)}" : string.Empty)}";
     }
 
     public static IEnumerable<string> DescribeDiagnostics(IEnumerable<NavigationDiagnostic> diagnostics) =>
@@ -102,6 +102,11 @@ public static class NavigationFixtures
         JsonValueKind.Array => "[" + string.Join(',', element.EnumerateArray().Select(Canonical)) + "]",
         _ => element.GetRawText()
     };
+
+    static string ButtonLines(IReadOnlyList<EffectiveNavButton> buttons) =>
+        buttons.Count == 0
+            ? string.Empty
+            : $"\nbuttons\n{string.Join('\n', buttons.Select(button => $"{button.Id}|{button.Origin.ToString().ToLowerInvariant()}|{(button.ReadOnly ? "locked" : "editable")}|{Camel(button.Emphasis.ToString())}|{button.Slice ?? "-"}|{button.Icon ?? "-"}|{button.Authorize ?? "-"}|{button.Reason}"))}";
 
     static IEnumerable<string> Lines(IReadOnlyList<EffectiveNavItem> items, int depth)
     {

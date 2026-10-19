@@ -1,14 +1,15 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode, NavItem } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationButton, NavigationModel, NavigationRegionKind, NavigationRegionMode, NavItem, ToolbarEmphasis } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '../structure';
+import { EffectiveNavButton } from './EffectiveNavButton';
 import { EffectiveNavigationRegion } from './EffectiveNavigationRegion';
 import { EffectiveNavItem } from './EffectiveNavItem';
 import { NavigationItemOrigin } from './NavigationItemOrigin';
 import { NavigationSources } from './NavigationSources';
 import { NavigationSourcesKind } from './NavigationSourcesKind';
-import { applicationItems, findModuleNavigation, findNavigationRegion, modeOfModuleRegion, primarySlot } from './navigationRegions';
+import { applicationItems, findModuleNavigation, findNavigationRegion, modeOfModuleRegion, ownButtons, primarySlot } from './navigationRegions';
 import { ResolvedNavigationTarget } from './ResolvedNavigationTarget';
 
 /**
@@ -18,6 +19,8 @@ import { ResolvedNavigationTarget } from './ResolvedNavigationTarget';
  * - `inherit` (the default at a module): the application items, read-only; the module's own items are cleared.
  * - `extend`: the application items, read-only, followed by the module's items.
  * - `override`: the module's items only.
+ *
+ * The region's application-level toolbar buttons follow the same modes: `inherit`, `extend` and `override`.
  *
  * Each item carries its `origin`, whether it is `readOnly`, a `reason`, and its target resolved against the
  * structure: a module target goes to the module's first feature. Sub-items belong to the sidebar; a topbar is flat
@@ -46,6 +49,7 @@ export function effectiveNavigation(
             region,
             sources: { kind: NavigationSourcesKind.DefinedHere, label: 'defined here' },
             items: applicationOwned.map(item => resolveItem(index, region, item, NavigationItemOrigin.Application, false, 'Defined here.')),
+            buttons: ownButtons(navigation, undefined, region).map(button => resolveButton(button, NavigationItemOrigin.Application, false, 'Defined here.')),
         };
     }
 
@@ -55,13 +59,16 @@ export function effectiveNavigation(
     const inherited = (): EffectiveNavItem[] => applicationOwned.map(item => resolveItem(index, region, item, NavigationItemOrigin.Application, true, 'Inherited from the application; edit it there.'));
     const own = (): EffectiveNavItem[] => moduleOwned.map(item => resolveItem(index, region, item, NavigationItemOrigin.Module, false, `Defined in ${name}.`));
 
+    const inheritedButtons = (): EffectiveNavButton[] => ownButtons(navigation, undefined, region).map(button => resolveButton(button, NavigationItemOrigin.Application, true, 'Inherited from the application; edit it there.'));
+    const ownModuleButtons = (): EffectiveNavButton[] => ownButtons(navigation, module, region).map(button => resolveButton(button, NavigationItemOrigin.Module, false, `Defined in ${name}.`));
+
     switch (mode) {
         case NavigationRegionMode.Extend:
-            return { region, module, mode, sources: sourcesOf(NavigationSourcesKind.Extended, name), items: [...inherited(), ...own()] };
+            return { region, module, mode, sources: sourcesOf(NavigationSourcesKind.Extended, name), items: [...inherited(), ...own()], buttons: [...inheritedButtons(), ...ownModuleButtons()] };
         case NavigationRegionMode.Override:
-            return { region, module, mode, sources: sourcesOf(NavigationSourcesKind.Overridden, name), items: own() };
+            return { region, module, mode, sources: sourcesOf(NavigationSourcesKind.Overridden, name), items: own(), buttons: ownModuleButtons() };
         default:
-            return { region, module, mode: NavigationRegionMode.Inherit, sources: sourcesOf(NavigationSourcesKind.Inherited, name), items: inherited() };
+            return { region, module, mode: NavigationRegionMode.Inherit, sources: sourcesOf(NavigationSourcesKind.Inherited, name), items: inherited(), buttons: inheritedButtons() };
     }
 }
 
@@ -71,6 +78,14 @@ function sourcesOf(kind: NavigationSourcesKind, moduleName: string): NavigationS
         case NavigationSourcesKind.Overridden: return { kind, label: `${moduleName} only` };
         default: return { kind: NavigationSourcesKind.Inherited, label: 'inherited' };
     }
+}
+
+function resolveButton(button: NavigationButton, origin: NavigationItemOrigin, readOnly: boolean, reason: string): EffectiveNavButton {
+    const resolved: EffectiveNavButton = { id: button.id, title: button.title, emphasis: button.emphasis ?? ToolbarEmphasis.Secondary, origin, readOnly, reason };
+    if (button.icon !== undefined) resolved.icon = button.icon;
+    if (button.slice !== undefined) resolved.slice = button.slice;
+    if (button.authorize !== undefined) resolved.authorize = button.authorize;
+    return resolved;
 }
 
 function resolveItem(index: ApplicationStructureIndex, region: NavigationRegionKind, item: NavItem, origin: NavigationItemOrigin, readOnly: boolean, reason: string): EffectiveNavItem {

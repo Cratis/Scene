@@ -17,7 +17,8 @@ items and nothing re-implements the rules.
 | `NavigationModel` | `application`, `modules` |
 | `ApplicationNavigation` | `regions`, `logo?` |
 | `ModuleNavigation` | `module`, `regions` |
-| `NavigationRegion` | `region` (`topbar` \| `sidebar`), `mode?`, `items` |
+| `NavigationRegion` | `region` (`topbar` \| `sidebar`), `mode?`, `items`, `buttons?` |
+| `NavigationButton` | `id`, `title`, `slice?`, `emphasis?`, `icon?`, `authorize?` |
 | `NavItem` | `id`, `title`, `icon?`, `target?`, `slot?`, `children?` |
 | `ApplicationLogo` | `image`, `title` |
 
@@ -48,6 +49,14 @@ An item's **target** is a module, or a module and a feature (`feature` is a dott
 primary outlet - when absent. `children` are sub-items and belong to the sidebar: a topbar is flat, and sub-items
 authored on a topbar item are ignored. A sidebar item that only groups sub-items needs no target of its own.
 
+### Toolbar buttons
+
+A region can also declare **application-level toolbar buttons** (`buttons`) - the Screenplay `button <id> title "..." slice <Slice>` of a
+`navigation topbar` region (Screenplay decision 0098). A button opens the task dialog of its state change `slice` over the current page, as a
+screen's toolbar button does. `emphasis` is `primary`, `secondary` (the default) or `quiet`; `authorize` names the policy the user needs to see it.
+Buttons follow the **same modes as the items**: an application button is shown in every module that inherits or extends the region, a module that
+overrides shows only its own, and a module's own buttons follow the application's when it extends.
+
 ## Effective items
 
 ```ts
@@ -58,7 +67,8 @@ const region = effectiveNavigation(structure, navigation, 'sales', NavigationReg
 var region = EffectiveNavigation.Resolve(index, navigation, "sales", NavigationRegionKind.Sidebar);
 ```
 
-`module` is the module to resolve for; leave it out for the application itself.
+`module` is the module to resolve for; leave it out for the application itself. The result's `buttons` (`EffectiveNavButton`: the
+button, its `origin`, `readOnly` and `reason`, `emphasis` resolved to its default) follow the same rules as `items`.
 
 | Mode | Effective items |
 | --- | --- |
@@ -119,15 +129,15 @@ system:
 ## Diagnostics
 
 `diagnoseNavigationRegions(structure, navigation, { slots })` (`NavigationRegionDiagnostics.Diagnose`) reports, with the
-`entry` `<module|application>:<region>:<itemId>`:
+`entry` `<module|application>:<region>:<itemId>` (`<module|application>:<region>:button:<buttonId>` for a button):
 
 | Code | Meaning |
 | --- | --- |
-| `navTargetMissing` | the item has no target (and no sub-items), or targets a module or feature the structure does not have |
+| `navTargetMissing` | the item has no target (and no sub-items), or targets a module or feature the structure does not have; a button opens a slice the structure does not have |
 | `navTargetOutOfScope` | a module's own item targets a different module (application items may target any module) |
 | `navModuleWithoutFeatures` | a module target whose module has no feature to go to |
 | `navSlotUnknown` | the item's slot is not one of the layout's slots (`content` only unless `slots` says otherwise) |
-| `navDuplicateId` | an id is used twice in one level's region, or an extending module reuses an application item's id |
+| `navDuplicateId` | an id is used twice in one level's region, or an extending module reuses an application item's (or button's) id |
 
 `diagnoseNavigation` runs the same check when its graph carries `structure` and `navigation`. See
 [Navigation diagnostics](navigation-diagnostics.md).
@@ -160,7 +170,11 @@ so nothing about inheritance or hierarchy is re-implemented in a renderer (spec 
 - **Activation.** A click goes through `useNavigationActivation` (`@cratis/scene.react`): the host's `NavigationActivationProvider` policy decides
   whether it navigates or only selects (`navigationMode`, Alt-click) and is told of it (`onActivate`, `onNavigate`). An item with no target is drawn with
   `data-nav-problem="navTargetMissing"`; Enter on it reports a dead-target activation. See [the designer contract](ui-profile-designer-contract.md#navigation-rules).
-- **Authorization.** `isVisible(item)` hides an item (and its sub-items); it never disables it.
+- **Authorization.** `isVisible(item)` hides an item (and its sub-items); it never disables it. `isAuthorized(policy)` of the model hides a toolbar
+  button that names a policy (`authorize`); without it every button is shown.
+- **Buttons.** The region draws its effective `buttons` after the items in a `group` (`data-scene-nav-buttons`), each a `scene-toolbar-button`
+  with its emphasis. Pressing a button with a slice opens the slice's task dialog through the navigation host; outside a host it announces the
+  slice with `cratis.scene.command`. A button without a slice is disabled. Specs: `react/for_NavigationRegionView/when_a_region_declares_toolbar_buttons`.
 - **Read-only hook.** Each item carries `data-origin` and `data-read-only`, and `renderAdornment(item)` lets a host add content (Studio draws the
   lock of an inherited item); Stage ignores it. The component draws no design chrome.
 - **Keyboard and landmarks.** Each region is a labelled `nav` with one roving tab stop; arrows (left/right in a topbar, up/down in a sidebar),

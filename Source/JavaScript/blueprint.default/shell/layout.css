@@ -989,6 +989,21 @@
     box-shadow: var(--layout-focus-ring);
 }
 
+/* Application-level toolbar buttons a navigation region declares; they look like the screen toolbar's buttons. */
+.layout-region-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-inline-start: 0.75rem;
+}
+
+.layout-region-sidebar .layout-region-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    margin-inline-start: 0;
+    margin-block-start: 0.75rem;
+}
+
 /* ---------------------------------------------------------------------------
  * Toolbar slice buttons and their task dialog. The dialog is portalled by the
  * navigation host outside the layout wrapper, so it reads the Scene tokens

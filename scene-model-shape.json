@@ -634,7 +634,16 @@
     "NavigationRegion": [
       "region",
       "mode",
-      "items"
+      "items",
+      "buttons"
+    ],
+    "NavigationButton": [
+      "id",
+      "title",
+      "slice",
+      "emphasis",
+      "icon",
+      "authorize"
     ],
     "ApplicationLogo": [
       "image",

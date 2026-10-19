@@ -3,9 +3,10 @@
 
 import { KeyboardEvent, MouseEvent, ReactNode, useContext, useMemo, useRef, useState } from 'react';
 import { DestinationReference, NavigationRegionKind, parseIconReference } from '@cratis/scene.model';
-import { ApplicationStructureIndex, EffectiveNavItem, EffectiveNavigationRegion, effectiveNavigation } from '@cratis/scene.engine';
+import { ApplicationStructureIndex, EffectiveNavButton, EffectiveNavItem, EffectiveNavigationRegion, effectiveNavigation, resolveToolbarButton } from '@cratis/scene.engine';
 import { SceneIcon } from '../../icons/SceneIcon';
 import { useIconAdapters } from '../../icons/IconAdapterContext';
+import { sliceDialogDestination } from '../../slices/sliceDialogDestination';
 import { resolveDestination } from '../resolveDestination';
 import { SceneNavigationContextInternal } from '../SceneNavigationContext';
 import { useNavigationActivation } from '../NavigationActivationContext';
@@ -80,7 +81,11 @@ function containsActive(item: EffectiveNavItem, isActive: (item: EffectiveNavIte
  *   screen it opens is the one in its slot, so items rendering into different slots are active at once.
  * - **Activation** goes through the enclosing navigation host (`navigate`), which renders the target in the item's slot -
  *   the `outlet` of the destination; outside a host it announces `cratis.scene.navigate`.
- * - **Authorization**: `isVisible` of the model hides items, it does not disable them.
+ * - **Buttons**: the application-level toolbar buttons the region declares follow the same inherit/extend/override rules. A
+ *   button with a slice opens that slice's task dialog over the current page through the navigation host - the way a screen's
+ *   toolbar button does - and, outside a host, announces the slice with `cratis.scene.command`. A button without a slice is
+ *   shown disabled.
+ * - **Authorization**: `isVisible` of the model hides items, and `isAuthorized` hides a button that names a policy; neither disables.
  * - **Keyboard**: arrows (left/right in a topbar, up/down in a sidebar), Home and End move between items; in a sidebar
  *   right expands and left collapses (or goes to the parent).
  *
@@ -109,6 +114,20 @@ export function NavigationRegionView({ region, module, application = false, mode
         const keep = (items: EffectiveNavItem[]): EffectiveNavItem[] => items.filter(isVisible).map(item => item.children ? { ...item, children: keep(item.children) } : item);
         return keep(resolved.items);
     }, [resolved, model.isVisible]);
+
+    const isAuthorized = model.isAuthorized;
+    const buttons = useMemo(() => resolved.buttons.filter(button => button.authorize === undefined || (isAuthorized?.(button.authorize) ?? true)), [resolved, isAuthorized]);
+
+    const press = (button: EffectiveNavButton) => {
+        if (button.slice === undefined) return;
+        const dialog = sliceDialogDestination(resolveToolbarButton(index, { id: button.id, title: button.title, slice: button.slice, emphasis: button.emphasis, icon: button.icon }));
+        if (dialog && navigation) {
+            navigation.navigate(dialog);
+            return;
+        }
+
+        globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command: button.slice, button, arguments: {} } }));
+    };
 
     const activeKey = JSON.stringify([placement.primaryScreen, placement.outlets, scope]);
     const [toggled, setToggled] = useState<{ key: string; state: Record<string, boolean> }>({ key: activeKey, state: {} });
@@ -187,6 +206,15 @@ export function NavigationRegionView({ region, module, application = false, mode
         return drawn === null ? null : <span className={names.icon} aria-hidden='true' data-scene-icon={item.icon}>{drawn}</span>;
     };
 
+    const buttonIcon = (button: EffectiveNavButton) => {
+        if (button.icon === undefined) return null;
+        const drawn = renderIcon ? renderIcon(button.icon) : adapters ? (() => {
+            const reference = parseIconReference(button.icon!);
+            return reference ? <SceneIcon reference={reference} adapters={adapters} /> : null;
+        })() : null;
+        return drawn === null ? null : <span className={names.icon} aria-hidden='true' data-scene-icon={button.icon}>{drawn}</span>;
+    };
+
     const renderItems = (items: EffectiveNavItem[], path: string[], level: number): ReactNode => items.map(item => {
         const key = itemKey([...path, item.id]);
         const destination = navigationItemDestination(item, screenFor);
@@ -228,5 +256,13 @@ export function NavigationRegionView({ region, module, application = false, mode
         data-scene-nav-sources={resolved.sources.kind} data-scene-nav-sources-label={resolved.sources.label} data-scene-nav-module={scope}
         data-scene-nav-mode={resolved.mode} onKeyDown={onKeyDown}>
         <ul className={names.list}>{renderItems(visible, [], 0)}</ul>
+        {buttons.length > 0 && <div className={names.buttons} role='group' aria-label={`${label ?? (sidebar ? 'Sidebar' : 'Topbar')} actions`} data-scene-nav-buttons={region}>
+            {buttons.map(button => <button key={button.id} type='button' className={`${names.button} scene-toolbar-button scene-toolbar-button-${button.emphasis}`} data-scene-nav-button={button.id}
+                data-scene-emphasis={button.emphasis} data-scene-slice={button.slice} data-scene-authorize={button.authorize} data-origin={button.origin} data-read-only={button.readOnly}
+                aria-haspopup={button.slice ? 'dialog' : undefined} disabled={button.slice === undefined} onClick={() => press(button)}>
+                {buttonIcon(button)}
+                <span className={names.label}>{button.title}</span>
+            </button>)}
+        </div>}
     </nav>;
 }
