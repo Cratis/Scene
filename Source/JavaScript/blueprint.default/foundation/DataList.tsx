@@ -77,7 +77,9 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     const toneField = readOptionalString(element, 'toneField');
     const sort = parseSort(sortText, columns);
 
-    const matching = useMemo(() => filterRows(searchRows(rows, columns, searchText ?? ''), element.properties.filter), [rows, columns, searchText, element.properties.filter]);
+    // A search finds a record by what names it as well as by what is shown beside the name: the card of a product is found by its title although the title is not one of the columns.
+    const searchColumns = useMemo(() => columns.some(column => column.field === titleField) ? columns : [...columns, { field: titleField, header: titleField, kind: CellKind.Text, sortable: false, tones: {} }], [columns, titleField]);
+    const matching = useMemo(() => filterRows(searchRows(rows, searchColumns, searchText ?? ''), element.properties.filter), [rows, searchColumns, searchText, element.properties.filter]);
     const sorted = useMemo(() => sortRows(matching, sort, locale), [matching, sort?.field, sort?.descending, locale]);
     const page = paginate(sorted, Number(pageText), variant === ListVariant.Grouped ? 0 : pageSize);
     const selected = parseSelection(selectedText);
