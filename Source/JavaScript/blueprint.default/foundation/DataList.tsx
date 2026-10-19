@@ -38,9 +38,6 @@ function Cell({ column, row, locale }: { column: ListColumn; row: ListRow; local
     }
 }
 
-/** How long after a selection the `on select` behaviors run: the time its published value needs to reach the bindings they read. */
-const selectNotificationDelay = 60;
-
 /**
  * The `dataList` component: the records of a collection as a table, as cards, or grouped with subtotals, with search, sort, paging and
  * selection that live in the address.
@@ -91,13 +88,15 @@ export function DataList({ element, interactions, bindingOutputs }: RegisteredCo
     useEffect(() => { if (Number(pageText) !== page.page && pageText !== undefined) setPageText(String(page.page)); }, [page.page, pageText, setPageText]);
     useValueOutput(bindingOutputs, multiple ? selected : selected[0]);
 
-    // What `on select` reads - `component.<id>.value`, the selected row - is published after the selection is drawn, so the behaviors run once it is: with the handlers of the render that sees it.
+    // What `on select` reads - `component.<id>.value`, the selected row - is published by an effect of the render that draws the selection, and the page
+    // takes it in on the render after. The behaviors therefore run one render later still: with the handlers that see the published value.
     const latestInteractions = useRef(interactions);
     latestInteractions.current = interactions;
-    const select = (id: string) => {
-        setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined);
-        setTimeout(() => latestInteractions.current?.onSelect?.(), selectNotificationDelay);
-    };
+    const [selectionRequested, setSelectionRequested] = useState(0);
+    const [selectionPublished, setSelectionPublished] = useState(0);
+    useEffect(() => { if (selectionRequested > 0) setSelectionPublished(selectionRequested); }, [selectionRequested]);
+    useEffect(() => { if (selectionPublished > 0) latestInteractions.current?.onSelect?.(); }, [selectionPublished]);
+    const select = (id: string) => { setSelectedText(toggleSelection(selected, id, multiple).join(',') || undefined); setSelectionRequested(count => count + 1); };
     const run = (action: string, id: string) => { bindingOutputs?.setOutput('action', { action, row: id }); interactions?.onClick?.({ stopPropagation: () => undefined }); };
     const sortLabel = (column: ListColumn) => (sort?.field === column.field ? `${column.header}, ${sort.descending ? strings.listSortedDescending : strings.listSortedAscending}` : column.header);
     const nameOf = (row: ListRow, index: number) => textOf(row, titleField) || rowId(row, index, idField);
