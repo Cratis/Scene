@@ -61,6 +61,6 @@ describe('when creating preview sample data', () => {
         it('should find the read models the screens show', () => collectTypeNames(screens).typeNames.should.deep.equal(['PlaceOrder']));
         it('should find the query a data element names for a read model', () => collectTypeNames(screens).queries.should.deep.equal({ AllOrders: 'PlaceOrder' }));
         it('should give the read model its rows from the pack', () => (source.queryResults.PlaceOrder as { customer: string }[])[0].customer.should.equal('Fjordline AS'));
-        it('should give the query the data element names the same rows', () => source.queryResults.AllOrders.should.deep.equal(source.queryResults.PlaceOrder));
+        it('should give the query the data element names the same rows', () => (source.queryResults.AllOrders as unknown[]).should.deep.equal(source.queryResults.PlaceOrder as unknown[]));
     });
 });
