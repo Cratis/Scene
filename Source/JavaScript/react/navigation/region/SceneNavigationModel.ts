@@ -33,4 +33,11 @@ export interface SceneNavigationModel {
      * here. Applies to every level of a hierarchical region; hiding a parent hides its children.
      */
     isVisible?(item: EffectiveNavItem): boolean;
+
+    /**
+     * Whether the user satisfies a policy. A toolbar button that names a policy (`authorize`) is hidden, not disabled,
+     * for a user for whom this answers false - Stage plugs permissions here. Without it every button is shown, which
+     * is what a design or preview host wants.
+     */
+    isAuthorized?(policy: string): boolean;
 }

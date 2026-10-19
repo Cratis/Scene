@@ -34,7 +34,7 @@ public static class NavigationRegionDiagnostics
         {
             if (NavigationRegions.Find(navigation.Application.Regions, region) is { } defined)
             {
-                CheckRegion(index, slots, diagnostics, null, defined, []);
+                CheckRegion(index, slots, diagnostics, null, defined, [], []);
             }
         }
 
@@ -50,7 +50,10 @@ public static class NavigationRegionDiagnostics
                 IReadOnlyList<string> inherited = defined.Mode == NavigationRegionMode.Extend
                     ? [.. NavigationRegions.CollectIds(NavigationRegions.ApplicationItems(navigation.Application, region), region)]
                     : [];
-                CheckRegion(index, slots, diagnostics, moduleNavigation.Module, defined, inherited);
+                IReadOnlyList<string> inheritedButtons = defined.Mode == NavigationRegionMode.Extend
+                    ? [.. NavigationRegions.OwnButtons(navigation, null, region).Select(button => button.Id)]
+                    : [];
+                CheckRegion(index, slots, diagnostics, moduleNavigation.Module, defined, inherited, inheritedButtons);
             }
         }
 
@@ -65,7 +68,8 @@ public static class NavigationRegionDiagnostics
         List<NavigationDiagnostic> diagnostics,
         string? owner,
         NavigationRegion defined,
-        IReadOnlyList<string> applicationIds)
+        IReadOnlyList<string> applicationIds,
+        IReadOnlyList<string> applicationButtonIds)
     {
         var scope = owner is null ? "the application" : $"module '{owner}'";
         var region = RegionName(defined.Region);
@@ -104,6 +108,39 @@ public static class NavigationRegionDiagnostics
         }
 
         Visit(defined.Items);
+        CheckButtons(index, diagnostics, owner, scope, region, defined, applicationButtonIds);
+    }
+
+    static void CheckButtons(
+        ApplicationStructureIndex index,
+        List<NavigationDiagnostic> diagnostics,
+        string? owner,
+        string scope,
+        string region,
+        NavigationRegion defined,
+        IReadOnlyList<string> applicationButtonIds)
+    {
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var button in defined.Buttons ?? [])
+        {
+            var entry = $"{owner ?? "application"}:{region}:button:{button.Id}";
+
+            if (seen.Contains(button.Id))
+            {
+                diagnostics.Add(new(NavigationDiagnosticCode.NavDuplicateId, $"Navigation button '{button.Id}' is used more than once in {scope} {region}.", entry));
+            }
+            else if (applicationButtonIds.Contains(button.Id))
+            {
+                diagnostics.Add(new(NavigationDiagnosticCode.NavDuplicateId, $"Navigation button '{button.Id}' in {scope} {region} is also used by an application button, and the region extends the application.", entry));
+            }
+
+            seen.Add(button.Id);
+
+            if (!string.IsNullOrEmpty(button.Slice) && index.FindSlice(button.Slice) is null)
+            {
+                diagnostics.Add(new(NavigationDiagnosticCode.NavTargetMissing, $"Navigation button '{button.Id}' opens slice '{button.Slice}', which does not exist.", entry));
+            }
+        }
     }
 
     static void CheckTarget(ApplicationStructureIndex index, string? owner, NavItem item, Action<NavigationDiagnosticCode, string> report)

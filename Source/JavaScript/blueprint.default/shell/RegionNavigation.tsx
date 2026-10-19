@@ -14,6 +14,8 @@ const classNames: Partial<NavigationRegionClassNames> = {
     label: 'layout-menu-label',
     toggle: 'layout-menu-toggle',
     submenu: 'layout-submenu',
+    buttons: 'layout-region-buttons',
+    button: 'layout-region-button',
 };
 
 /** Whether a navigation model is in scope, so the topbar and sidebar have a region to show. */

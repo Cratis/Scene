@@ -5,7 +5,7 @@ import { ApplicationStructure, NavigationModel, NavigationRegion, NavigationRegi
 import { ApplicationStructureIndex } from '../structure';
 import { NavigationDiagnostic } from './NavigationDiagnostic';
 import { NavigationDiagnosticCode } from './NavigationDiagnosticCode';
-import { applicationItems, collectItemIds, findNavigationRegion, navigationRegionOrder, primarySlot } from './navigationRegions';
+import { applicationItems, collectItemIds, findNavigationRegion, navigationRegionOrder, ownButtons, primarySlot } from './navigationRegions';
 
 /** What the region diagnostics are checked against. */
 export interface NavigationRegionDiagnosticOptions {
@@ -38,7 +38,7 @@ export function diagnoseNavigationRegions(
 
     for (const region of navigationRegionOrder) {
         const defined = findNavigationRegion(navigation.application.regions, region);
-        if (defined) checkRegion(index, slots, diagnostics, undefined, defined, []);
+        if (defined) checkRegion(index, slots, diagnostics, undefined, defined, [], []);
     }
 
     for (const moduleNavigation of navigation.modules) {
@@ -47,7 +47,8 @@ export function diagnoseNavigationRegions(
             if (!defined) continue;
 
             const inherited = defined.mode === NavigationRegionMode.Extend ? collectItemIds(applicationItems(navigation.application, region), region) : [];
-            checkRegion(index, slots, diagnostics, moduleNavigation.module, defined, inherited);
+            const inheritedButtons = defined.mode === NavigationRegionMode.Extend ? ownButtons(navigation, undefined, region).map(button => button.id) : [];
+            checkRegion(index, slots, diagnostics, moduleNavigation.module, defined, inherited, inheritedButtons);
         }
     }
 
@@ -61,6 +62,7 @@ function checkRegion(
     owner: string | undefined,
     defined: NavigationRegion,
     applicationIds: string[],
+    applicationButtonIds: string[],
 ): void {
     const scope = owner === undefined ? 'the application' : `module '${owner}'`;
     const seen = new Set<string>();
@@ -89,6 +91,32 @@ function checkRegion(
     };
 
     visit(defined.items);
+    checkButtons(index, diagnostics, owner, scope, defined, applicationButtonIds);
+}
+
+function checkButtons(
+    index: ApplicationStructureIndex,
+    diagnostics: NavigationDiagnostic[],
+    owner: string | undefined,
+    scope: string,
+    defined: NavigationRegion,
+    applicationButtonIds: string[],
+): void {
+    const seen = new Set<string>();
+    for (const button of defined.buttons ?? []) {
+        const entry = `${owner ?? 'application'}:${defined.region}:button:${button.id}`;
+
+        if (seen.has(button.id)) {
+            diagnostics.push({ code: NavigationDiagnosticCode.NavDuplicateId, message: `Navigation button '${button.id}' is used more than once in ${scope} ${defined.region}.`, entry });
+        } else if (applicationButtonIds.includes(button.id)) {
+            diagnostics.push({ code: NavigationDiagnosticCode.NavDuplicateId, message: `Navigation button '${button.id}' in ${scope} ${defined.region} is also used by an application button, and the region extends the application.`, entry });
+        }
+        seen.add(button.id);
+
+        if (button.slice && !index.findSlice(button.slice)) {
+            diagnostics.push({ code: NavigationDiagnosticCode.NavTargetMissing, message: `Navigation button '${button.id}' opens slice '${button.slice}', which does not exist.`, entry });
+        }
+    }
 }
 
 function checkTarget(index: ApplicationStructureIndex, owner: string | undefined, item: NavItem, report: (code: NavigationDiagnosticCode, message: string) => void): void {

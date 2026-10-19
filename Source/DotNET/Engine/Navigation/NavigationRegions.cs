@@ -68,6 +68,16 @@ static class NavigationRegions
         module is null ? ApplicationItems(navigation.Application, region) : Find(FindModule(navigation, module)?.Regions, region)?.Items ?? [];
 
     /// <summary>
+    /// Gets the buttons a level defines for a region.
+    /// </summary>
+    /// <param name="navigation">The navigation.</param>
+    /// <param name="module">The module, or <see langword="null"/> for the application.</param>
+    /// <param name="region">The region.</param>
+    /// <returns>The buttons.</returns>
+    public static IReadOnlyList<NavigationButton> OwnButtons(NavigationModel navigation, string? module, NavigationRegionKind region) =>
+        (module is null ? Find(navigation.Application.Regions, region) : Find(FindModule(navigation, module)?.Regions, region))?.Buttons ?? [];
+
+    /// <summary>
     /// Collects every id in a list of items, depth first. Sub-items count only in the sidebar.
     /// </summary>
     /// <param name="items">The items.</param>

@@ -9,4 +9,5 @@ namespace Cratis.Scene.Model.Navigation;
 /// <param name="Region">Which region the items belong to.</param>
 /// <param name="Items">The items, in order.</param>
 /// <param name="Mode">How a module's items relate to the application's; absent at the application level, which is the base, and meaning <see cref="NavigationRegionMode.Inherit"/> at a module.</param>
-public record NavigationRegion(NavigationRegionKind Region, IReadOnlyList<NavItem> Items, NavigationRegionMode? Mode = null);
+/// <param name="Buttons">The application-level toolbar buttons the region declares, in order; they follow the same inherit, extend and override rules as the items. Absent when the region has none.</param>
+public record NavigationRegion(NavigationRegionKind Region, IReadOnlyList<NavItem> Items, NavigationRegionMode? Mode = null, IReadOnlyList<NavigationButton>? Buttons = null);

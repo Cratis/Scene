@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { EffectiveNavButton } from './EffectiveNavButton';
 import { EffectiveNavItem } from './EffectiveNavItem';
 import { NavigationSources } from './NavigationSources';
 
@@ -23,4 +24,10 @@ export interface EffectiveNavigationRegion {
 
     /** The items in the order they are shown. */
     items: EffectiveNavItem[];
+
+    /**
+     * The application-level toolbar buttons the region effectively shows, in the order they are shown; the mode applies
+     * to them as it does to the items.
+     */
+    buttons: EffectiveNavButton[];
 }

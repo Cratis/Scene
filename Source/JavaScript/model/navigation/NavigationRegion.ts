@@ -3,6 +3,7 @@
 
 import { NavigationRegionKind } from './NavigationRegionKind';
 import { NavigationRegionMode } from './NavigationRegionMode';
+import { NavigationButton } from './NavigationButton';
 import { NavItem } from './NavItem';
 
 /**
@@ -20,6 +21,12 @@ export interface NavigationRegion {
 
     /** The items, in order. */
     items: NavItem[];
+
+    /**
+     * The application-level toolbar buttons the region declares, in order; they follow the same inherit, extend and
+     * override rules as the items. Absent when the region has none.
+     */
+    buttons?: NavigationButton[];
 }
 
-export const NavigationRegionPropertyNames: (keyof NavigationRegion)[] = ['region', 'mode', 'items'];
+export const NavigationRegionPropertyNames: (keyof NavigationRegion)[] = ['region', 'mode', 'items', 'buttons'];

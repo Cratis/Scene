@@ -13,9 +13,11 @@ namespace Cratis.Scene.Engine.Navigation;
 /// <param name="Items">The items in the order they are shown.</param>
 /// <param name="Module">The module the region is resolved for; <see langword="null"/> for the application itself.</param>
 /// <param name="Mode">The effective mode: <see langword="null"/> at the application level, which is the base.</param>
+/// <param name="Buttons">The application-level toolbar buttons the region effectively shows, in the order they are shown; the mode applies to them as it does to the items.</param>
 public record EffectiveNavigationRegion(
     NavigationRegionKind Region,
     NavigationSources Sources,
     IReadOnlyList<EffectiveNavItem> Items,
     string? Module = null,
-    NavigationRegionMode? Mode = null);
+    NavigationRegionMode? Mode = null,
+    IReadOnlyList<EffectiveNavButton>? Buttons = null);

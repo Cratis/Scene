@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationNavigation, ModuleNavigation, NavigationModel, NavigationRegion, NavigationRegionKind, NavigationRegionMode, NavItem } from '@cratis/scene.model';
+import { ApplicationNavigation, ModuleNavigation, NavigationModel, NavigationRegion, NavigationRegionKind, NavigationRegionMode, NavigationButton, NavItem } from '@cratis/scene.model';
 
 /** The regions in the order every result lists them. */
 export const navigationRegionOrder: NavigationRegionKind[] = [NavigationRegionKind.Topbar, NavigationRegionKind.Sidebar];
@@ -31,6 +31,12 @@ export function modeOfModuleRegion(navigation: NavigationModel, module: string, 
 /** The application-level items of a region. */
 export function applicationItems(application: ApplicationNavigation, region: NavigationRegionKind): NavItem[] {
     return findNavigationRegion(application.regions, region)?.items ?? [];
+}
+
+/** The buttons a level - the application, or a module when `module` is given - defines for a region. */
+export function ownButtons(navigation: NavigationModel, module: string | undefined, region: NavigationRegionKind): NavigationButton[] {
+    const regions = module === undefined ? navigation.application.regions : findModuleNavigation(navigation, module)?.regions;
+    return findNavigationRegion(regions, region)?.buttons ?? [];
 }
 
 /** Every id in a list of items, depth first. Sub-items count only in the sidebar. */

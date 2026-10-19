@@ -14,6 +14,7 @@ export * from './NavigationSourcesKind';
 export * from './NavigationSources';
 export * from './ResolvedNavigationTarget';
 export * from './EffectiveNavItem';
+export * from './EffectiveNavButton';
 export * from './EffectiveNavigationRegion';
 export * from './effectiveNavigation';
 export * from './diagnoseNavigationRegions';

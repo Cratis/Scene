@@ -4,6 +4,7 @@
 export * from './NavigationRegionKind';
 export * from './NavigationRegionMode';
 export * from './NavItem';
+export * from './NavigationButton';
 export * from './NavigationRegion';
 export * from './ApplicationLogo';
 export * from './ApplicationNavigation';
