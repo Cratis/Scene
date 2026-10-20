@@ -1,8 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { BindingExpression, SampleDataPack, SampleShape } from '@cratis/scene.model';
-import { BindingResolver, SampleDataResolution, resolveSampleData } from '@cratis/scene.engine';
+import { BindingExpression, SampleDataPack, SampleFieldKind, SampleShape } from '@cratis/scene.model';
+import { BindingResolver, SampleDataResolution, inferSampleFieldKind, resolveSampleData } from '@cratis/scene.engine';
 import type { SliceCommandField } from '@cratis/scene.react';
 import { ApplicationDocument } from './ApplicationDocument';
 import { effectiveShellOf, templateChainOf } from './composeApplication';
@@ -121,6 +121,28 @@ function scalar(value: unknown): string | number | boolean | undefined {
     return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ? value : undefined;
 }
 
+const codeWords = new Set(['code', 'sku', 'number', 'no', 'reference', 'ref']);
+
+function wordsOf(name: string): string[] {
+    return name.replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(/[^A-Za-z0-9]+/).filter(word => word.length > 0).map(word => word.toLowerCase());
+}
+
+/**
+ * The value a command field starts with when nothing in the application's sample data carries it. Generated free text is words with no meaning
+ * for the property, so a free-text field starts empty; a code-like field (`locationCode`, `sku`, `orderNumber`) starts with a code built from its
+ * name (`LOCATION-1001`); every other kind (an id, a number, a date, a person's name, an email) keeps the generated value.
+ */
+function generatedStart(field: SliceCommandField, index: number, generated: string | number | boolean | undefined): string | number | boolean | undefined {
+    if (generated === undefined || typeof generated !== 'string') return generated;
+    if (inferSampleFieldKind({ name: field.name, type: field.type }) !== SampleFieldKind.Text) return generated;
+
+    const words = wordsOf(field.name);
+    if (words.length === 0 || !codeWords.has(words[words.length - 1])) return undefined;
+
+    const stem = words.length > 1 ? words[0] : words[0] === 'sku' ? 'sku' : 'code';
+    return `${stem.toUpperCase()}-${1001 + index}`;
+}
+
 /**
  * Plugs the sample data resolution into what a preview renders with (PRV6). Nothing here decides what a row looks like - that is
  * `resolveSampleData` - this only asks it, with the application profile's selection, for the queries the document binds and the
@@ -153,6 +175,9 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
 
     const resolvedTemplates = application.screens.map(screen => [templateChainOf(application, screen), effectiveShellOf(application, screen).template]);
     const queryResults: Record<string, unknown> = {};
+    const documentQueries = new Set(collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts]));
+    // Queries only the shell and foundation templates name (a module's navigation sections) are chrome, not the application's data, so a command field never starts from them.
+    const chromeQueries = new Set(collectQueryNames(resolvedTemplates).filter(name => !documentQueries.has(name)));
     for (const name of collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts, resolvedTemplates])) {
         const resolved = rows(name);
         if (resolved.rows.length > 0) queryResults[name] = resolved.rows;
@@ -175,23 +200,25 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
         resolveBinding: (binding: BindingExpression) => binding.query ? readPath(queryResults[binding.query], binding.path) : undefined,
         // A field starts with the value the application's sample data gives it: the command's own sample row when a pack names the command, then the same
         // property in the rows the screens already show (an SKU, a currency, an order number the application seeds), and only then what was generated
-        // from the field's name - words with no meaning for the property.
+        // from the field's name, where that means something for the property (see generatedStart).
         commandFields: (command, fields) => {
             const resolved = rows(command, shapeOfFields(command, fields));
             const own = resolved.source === 'generated' ? undefined : resolved.rows[0];
             const generated = resolved.source === 'generated' ? resolved.rows[0] : undefined;
             if (!own && !generated) return fields;
 
-            const shown = Object.values(queryResults).flatMap(result => Array.isArray(result) ? result as Record<string, unknown>[] : []);
+            const shown = Object.entries(queryResults)
+                .filter(([name]) => !chromeQueries.has(name))
+                .flatMap(([, result]) => Array.isArray(result) ? result as Record<string, unknown>[] : []);
             const valueIn = (row: Record<string, unknown> | undefined, name: string): string | number | boolean | undefined => {
                 const key = row === undefined ? undefined : Object.keys(row).find(candidate => candidate.toLowerCase() === name.toLowerCase());
                 return key === undefined ? undefined : scalar(row![key]);
             };
 
-            return fields.map(field => {
+            return fields.map((field, index) => {
                 const value = valueIn(own, field.name)
                     ?? shown.map(row => valueIn(row, field.name)).find(candidate => candidate !== undefined)
-                    ?? valueIn(generated, field.name);
+                    ?? generatedStart(field, index, valueIn(generated, field.name));
                 return value === undefined ? field : { ...field, initialValue: value };
             });
         },
