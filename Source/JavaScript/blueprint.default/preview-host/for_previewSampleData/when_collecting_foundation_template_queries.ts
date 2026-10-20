@@ -29,6 +29,7 @@ describe('when collecting foundation template queries', () => {
         it('should give ModuleSections the rows of the active pack', () => source.queryResults.should.deep.equal({ ModuleSections: sections }));
         it('should resolve the module navigation binding', () => (source.resolveBinding(fromQuery('ModuleSections')) as unknown[]).should.deep.equal(sections));
         it('should not collect queries of unused blueprint templates', () => Object.hasOwn(source.queryResults, 'Deals').should.equal(false));
+        it('should not start a command field from the module navigation rows', () => (source.commandFields('RenameOrder', [{ name: 'label', type: 'string' }])[0].initialValue === undefined).should.equal(true));
     });
 
     describe('and the pack lacks the foundation query', () => {

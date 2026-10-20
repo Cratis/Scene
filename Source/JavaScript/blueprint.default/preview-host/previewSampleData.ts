@@ -175,6 +175,9 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
 
     const resolvedTemplates = application.screens.map(screen => [templateChainOf(application, screen), effectiveShellOf(application, screen).template]);
     const queryResults: Record<string, unknown> = {};
+    const documentQueries = new Set(collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts]));
+    // Queries only the shell and foundation templates name (a module's navigation sections) are chrome, not the application's data, so a command field never starts from them.
+    const chromeQueries = new Set(collectQueryNames(resolvedTemplates).filter(name => !documentQueries.has(name)));
     for (const name of collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts, resolvedTemplates])) {
         const resolved = rows(name);
         if (resolved.rows.length > 0) queryResults[name] = resolved.rows;
@@ -204,7 +207,9 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
             const generated = resolved.source === 'generated' ? resolved.rows[0] : undefined;
             if (!own && !generated) return fields;
 
-            const shown = Object.values(queryResults).flatMap(result => Array.isArray(result) ? result as Record<string, unknown>[] : []);
+            const shown = Object.entries(queryResults)
+                .filter(([name]) => !chromeQueries.has(name))
+                .flatMap(([, result]) => Array.isArray(result) ? result as Record<string, unknown>[] : []);
             const valueIn = (row: Record<string, unknown> | undefined, name: string): string | number | boolean | undefined => {
                 const key = row === undefined ? undefined : Object.keys(row).find(candidate => candidate.toLowerCase() === name.toLowerCase());
                 return key === undefined ? undefined : scalar(row![key]);
