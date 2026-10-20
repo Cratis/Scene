@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.ticketing",
     "version": "1.0.0",
     "description": "A support desk: dashboard, ticket queue and board, ticket pages, a public portal form and a knowledge base.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

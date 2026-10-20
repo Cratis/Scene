@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.bookings",
     "version": "1.0.0",
     "description": "Bookings for shared rooms, equipment and vehicles: a booking calendar, a booking list, a booking page, the resources and a wizard that books one in four steps.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

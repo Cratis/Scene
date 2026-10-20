@@ -1,7 +1,8 @@
 {
     "name": "@cratis/scene.components",
     "version": "1.0.0",
-    "description": "The Cratis Components package: exposes @cratis/components' Arc-bound data, form and dialog composites as Scene components. Built on PrimeReact and Tailwind, and declares both as dependencies.",
+    "description": "Cratis Components adapters for Cratis Scene: exposes the Arc-bound data, form and dialog composites from @cratis/components as Scene components.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

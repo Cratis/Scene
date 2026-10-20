@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.invoicing",
     "version": "1.0.0",
     "description": "Invoices for a finance team: a receivables overview, an invoice list, an invoice page with its lines and payments, the payments received and a due-date calendar.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

@@ -2,6 +2,7 @@
     "name": "@cratis/scene.model",
     "version": "1.0.0",
     "description": "The TypeScript mirror of Cratis.Scene.Model — the platform-agnostic Screen object model.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

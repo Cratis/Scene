@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.approvals",
     "version": "1.0.0",
     "description": "Requests and approvals: an inbox, my requests, a request wizard, request pages with their approval chain and the request types an organisation offers.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

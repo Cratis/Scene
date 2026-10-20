@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.contracts",
     "version": "1.0.0",
     "description": "Contracts for a legal or procurement team: a contract list, a contract page with its parties, obligations and amendments, a timeline of terms and an inbox for what needs review or signature.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

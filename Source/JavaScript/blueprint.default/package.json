@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.default",
     "version": "1.0.0",
     "description": "The default blueprint: application shell layouts, the screen and dialog templates that go inside them, the components that fill their slots, and two themes.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

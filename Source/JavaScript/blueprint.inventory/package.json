@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.inventory",
     "version": "1.0.0",
     "description": "Items, locations, movements and suppliers for a warehouse.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",
