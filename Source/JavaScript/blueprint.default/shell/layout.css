@@ -990,8 +990,18 @@
 }
 
 /* Application-level toolbar buttons a navigation region declares; they look like the screen toolbar's buttons. */
+/* The topbar region lays its items and its buttons out in one row; the sidebar region keeps them stacked. */
+.layout-region-topbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
 .layout-region-buttons {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     gap: 0.5rem;
     margin-inline-start: 0.75rem;
