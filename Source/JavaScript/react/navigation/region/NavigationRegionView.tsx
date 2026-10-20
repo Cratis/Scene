@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { KeyboardEvent, MouseEvent, ReactNode, useContext, useMemo, useRef, useState } from 'react';
-import { DestinationReference, NavigationRegionKind, parseIconReference } from '@cratis/scene.model';
+import { DestinationReference, NavigationRegionKind, componentIcon, parseIconReference } from '@cratis/scene.model';
 import { ApplicationStructureIndex, EffectiveNavButton, EffectiveNavItem, EffectiveNavigationRegion, effectiveNavigation, resolveToolbarButton } from '@cratis/scene.engine';
 import { SceneIcon } from '../../icons/SceneIcon';
 import { useIconAdapters } from '../../icons/IconAdapterContext';
@@ -202,10 +202,13 @@ export function NavigationRegionView({ region, module, application = false, mode
     const firstKey = visible.length > 0 ? itemKey([visible[0].id]) : undefined;
     const stop = tabStop ?? firstActive(visible, []) ?? firstKey;
 
+    // Screenplay names an icon bare (`icon box`); a bare name is a key of the library the built-in icons come from, so it is drawn like a qualified one.
+    const referenceOf = (text: string) => parseIconReference(text) ?? (text.includes('#') ? undefined : componentIcon(text));
+
     const icon = (item: EffectiveNavItem) => {
         if (item.icon === undefined) return null;
         const drawn = renderIcon ? renderIcon(item.icon) : adapters ? (() => {
-            const reference = parseIconReference(item.icon!);
+            const reference = referenceOf(item.icon!);
             return reference ? <SceneIcon reference={reference} adapters={adapters} /> : null;
         })() : null;
         return drawn === null ? null : <span className={names.icon} aria-hidden='true' data-scene-icon={item.icon}>{drawn}</span>;
@@ -214,7 +217,7 @@ export function NavigationRegionView({ region, module, application = false, mode
     const buttonIcon = (button: EffectiveNavButton) => {
         if (button.icon === undefined) return null;
         const drawn = renderIcon ? renderIcon(button.icon) : adapters ? (() => {
-            const reference = parseIconReference(button.icon!);
+            const reference = referenceOf(button.icon!);
             return reference ? <SceneIcon reference={reference} adapters={adapters} /> : null;
         })() : null;
         return drawn === null ? null : <span className={names.icon} aria-hidden='true' data-scene-icon={button.icon}>{drawn}</span>;
