@@ -114,6 +114,21 @@ header also shows the total of that field over the cards in the column, formatte
 `compact` or a plain number) in the element's `locale`. The totals follow a card when it is moved, by dragging or by its Move-to menu, so a
 pipeline's header always says what each stage is worth.
 
+Cards come from a query, and a query row has the shape of its read model, not of a card: name the row properties instead of reshaping the query. `cardId`, `cardTitle`
+and `cardColumn` (and `cardAssignee`) say which property of each row identifies the card, names it and holds the id of its column; `cardFields` lists up to three more
+properties to show on the card, each as `field` with an optional `label`. A name left out reads the card shape's own (`id`, `title`, `column`, `assignee`), so
+existing boards are unchanged. Columns are the `columns` list (a literal list of the statuses, or a query). In Screenplay:
+
+```screenplay
+component Cratis.Blueprint.Default.kanbanBoard pricingBoard
+  property columns = [{"id":"draft","label":"Draft"},{"id":"approved","label":"Approved"},{"id":"withdrawn","label":"Withdrawn"}]
+  property cards from query AllPricedProducts
+  property cardId = "productId"
+  property cardTitle = "name"
+  property cardColumn = "status"
+  property cardFields = [{"field":"sku","label":"SKU"},{"field":"price","label":"Price"}]
+```
+
 `swimlane: assignee` lays the board out in a lane for each person, across the same columns: lanes appear in the order the people first appear in the cards,
 the unassigned cards last, and a lane has its own heading (a level above its columns', so the outline stays in order). A card moves between columns within
 its lane, by dragging or by its Move-to menu; each column's count and total are for its lane, while the over-the-limit warning counts every lane, since a limit

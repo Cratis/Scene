@@ -3,13 +3,16 @@
 
 import { DragEvent, useEffect, useMemo, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
-import { BoardCard, BoardColumn, BoardLane, cardsOf, lanesByAssignee, moveCard, overLimit, readCards, readColumnsOfBoard, totalOf } from './boardModel';
+import { BoardCard, BoardColumn, BoardLane, cardsOf, lanesByAssignee, moveCard, overLimit, readCardFieldList, readCards, readColumnsOfBoard, totalOf } from './boardModel';
 import { ComponentState, readComponentState } from './ComponentState';
 import { formatNumber, readLocale, readNumberFormat } from './formatting';
 import { FoundationIcon } from './FoundationIcon';
 import { formatText, readFoundationStrings } from './foundationStrings';
 import { readPermissionRule } from './PermissionRule';
 import { FoundationFrame } from './StateFrame';
+
+const optional = <Key extends string>(key: Key, value: unknown): { [Name in Key]?: string } =>
+    (typeof value === 'string' && value.length > 0 ? { [key]: value } : {}) as { [Name in Key]?: string };
 
 /**
  * The `kanbanBoard` component: columns mapped to a status or stage, with cards that move between them.
@@ -21,12 +24,19 @@ import { FoundationFrame } from './StateFrame';
  * as `format` (`currency` with `currency`, for a pipeline of deals) in the `locale`; the totals follow a card as it moves. The new arrangement is published as `value` (the cards with their columns) for the screen to save; with `editPermission` not enabled the
  * board is read-only. A card whose column no longer exists is shown in the first column rather than lost.
  *
+ * Rows that come from a query with a shape of their own need no card shape: `cardId`, `cardTitle`, `cardColumn` and `cardAssignee` name the row properties that
+ * say what a card is, and `cardFields` lists up to three more to show on it (`field`, `label`) - a product's `productId`, `name` and `status`, with its `price`.
+ *
  * `swimlane` set to `assignee` lays the board out in lanes, one for each person (in the order they first appear, the unassigned last), each across the same
  * columns: a task is moved between columns within its lane, by dragging or by its Move-to menu, and each column's total and count are for the lane.
  */
 export function KanbanBoard({ element, interactions, bindingOutputs }: RegisteredComponentProps) {
     const columns = useMemo(() => readColumnsOfBoard(element.properties.columns), [element.properties.columns]);
-    const supplied = useMemo(() => readCards(element.properties.cards), [element.properties.cards]);
+    const mapping = useMemo(() => ({
+        ...optional('id', element.properties.cardId), ...optional('title', element.properties.cardTitle), ...optional('column', element.properties.cardColumn),
+        ...optional('assignee', element.properties.cardAssignee), fields: readCardFieldList(element.properties.cardFields),
+    }), [element.properties.cardId, element.properties.cardTitle, element.properties.cardColumn, element.properties.cardAssignee, element.properties.cardFields]);
+    const supplied = useMemo(() => readCards(element.properties.cards, mapping), [element.properties.cards, mapping]);
     const suppliedKey = JSON.stringify(supplied);
     const [cards, setCards] = useState<BoardCard[]>(supplied);
     const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
