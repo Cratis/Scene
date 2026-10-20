@@ -54,7 +54,24 @@ describe('when creating preview sample data', () => {
 
         it('should start the field with the value the shown rows carry', () => ship[0].initialValue!.should.equal(shown.customer));
         it('should do the same for a number', () => ship[1].initialValue!.should.equal(shown.quantity));
-        it('should still generate a value for a property no row carries', () => (typeof ship[2].initialValue).should.equal('string'));
+        it('should leave a free-text property no row carries empty rather than fill it with generated words', () => (ship[2].initialValue === undefined).should.equal(true));
+    });
+
+    describe('and a command has properties no shown row carries', () => {
+        const source = createPreviewSampleData(ordersApplication(), { packs: [], shapes, seed: 3 });
+        const register = source.commandFields('RegisterLocation', [
+            { name: 'locationCode', type: 'string' },
+            { name: 'label', type: 'string' },
+            { name: 'sku', type: 'string' },
+            { name: 'capacity', type: 'number' },
+            { name: 'locationId', type: 'guid' },
+        ]);
+
+        it('should start a code-like property with a code built from its name', () => register[0].initialValue!.should.equal('LOCATION-1001'));
+        it('should leave a free-text property empty', () => (register[1].initialValue === undefined).should.equal(true));
+        it('should start a bare code word with a code of its own', () => register[2].initialValue!.should.equal('SKU-1003'));
+        it('should still generate a number', () => (typeof register[3].initialValue).should.equal('number'));
+        it('should still generate an id', () => (typeof register[4].initialValue).should.equal('string'));
     });
 
     describe('and no row supplies a field', () => {
