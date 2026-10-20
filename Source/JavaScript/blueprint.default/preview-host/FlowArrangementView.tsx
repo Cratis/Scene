@@ -13,7 +13,8 @@ import { isFlowContainer, isFlowGrid, isFlowSlotLeaf } from '@cratis/scene.engin
  * than one column, rather than every slot's content stacked flat regardless of what the document said.
  *
  * A fixed `width`/`height` on a slot is a known, documented gap in the arrangement it is fed (see
- * the Screenplay converter) - only `grow` and `span` survive conversion. A slot that does not grow
+ * the Screenplay converter) - only `grow` and `span` survive conversion. `grow` sizes a child of a row or column; `span` makes a child
+ * of a grid occupy that many columns. A slot that does not grow
  * therefore sizes to its own content here, which is a reasonable rendering of "not growing" even though
  * the exact pixel the author wrote is not carried this far yet.
  */
@@ -30,7 +31,7 @@ export function FlowArrangementView({ node, slots }: { node: FlowNode; slots: Re
         };
         return (
             <div className='flow-container flow-container--grid' style={style}>
-                {node.children.map((child, index) => <FlowChild key={index} node={child} slots={slots} />)}
+                {node.children.map((child, index) => <FlowChild key={index} node={child} slots={slots} inGrid />)}
             </div>
         );
     }
@@ -47,13 +48,22 @@ export function FlowArrangementView({ node, slots }: { node: FlowNode; slots: Re
     return null;
 }
 
-function FlowChild({ node, slots }: { node: FlowNode; slots: Record<string, ReactNode> }) {
-    const style: CSSProperties = node.grow
-        ? { flex: `${node.grow} 1 0%`, minWidth: 0, minHeight: 0 }
-        : { flex: '0 0 auto' };
+function FlowChild({ node, slots, inGrid = false }: { node: FlowNode; slots: Record<string, ReactNode>; inGrid?: boolean }) {
+    const style = inGrid ? gridChildStyle(node) : flexChildStyle(node);
     return (
         <div className='flow-child' style={style}>
             <FlowArrangementView node={node} slots={slots} />
         </div>
     );
+}
+
+// A grid child occupies `span` columns; flex sizing means nothing to a grid track, so none is applied.
+function gridChildStyle(node: FlowNode): CSSProperties {
+    return node.span ? { gridColumn: `span ${node.span}`, minWidth: 0 } : { minWidth: 0 };
+}
+
+function flexChildStyle(node: FlowNode): CSSProperties {
+    return node.grow
+        ? { flex: `${node.grow} 1 0%`, minWidth: 0, minHeight: 0 }
+        : { flex: '0 0 auto' };
 }
