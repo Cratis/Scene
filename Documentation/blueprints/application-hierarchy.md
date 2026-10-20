@@ -54,6 +54,7 @@ A toolbar button of the screen editor is a `core:toolbarItem` with `kind: Action
 | `emphasis` | `primary`, `secondary` (the default) or `quiet`, edited as chips |
 | `icon` | Qualified icon reference |
 | `target` | The hand-typed command of a legacy button; kept for compatibility |
+| `confirm` | Optional question the user answers before the button runs: an accessible alert dialog with Cancel and the button's title as the accept action. Empty runs at once. Screenplay's `confirm "..."` line on a toolbar item or button, also on the toolbar a feature or module contributes |
 
 `ToolbarButton` (`id`, `title`, `slice?`, `emphasis?`, `icon?`, `target?`) and `Toolbar` (`buttons`) are the model shapes in
 `@cratis/scene.model` and `Cratis.Scene.Model.Toolbar`; `toolbarButtonFromItem` / `ToolbarButtons.FromItem` read a button from

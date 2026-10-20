@@ -106,3 +106,36 @@ describe('when activating toolbar items', () => {
         });
     });
 });
+
+describe('when a toolbar item carries a confirmation', () => {
+    afterEach(cleanup);
+
+    let commands: { command: string }[];
+    const onCommand = (event: Event) => commands.push((event as CustomEvent).detail);
+    const withConfirm = element('cancel', 'core:toolbarItem', { name: 'cancel', kind: 'Action', target: 'CancelOrder', label: 'Cancel order', confirm: 'Cancel this order?' });
+
+    beforeEach(() => {
+        commands = [];
+        globalThis.addEventListener('cratis.scene.command', onCommand);
+        render(<SceneElementView registry={coreComponents} element={withConfirm as never} />);
+    });
+
+    afterEach(() => globalThis.removeEventListener('cratis.scene.command', onCommand));
+
+    it('should ask the question and run nothing when the item is clicked', () => {
+        fireEvent.click(screen.getByRole('button', { name: 'Cancel order' }));
+        [screen.getByRole('alertdialog').textContent!.includes('Cancel this order?'), commands.length].should.deep.equal([true, 0]);
+    });
+
+    it('should run the command once the user confirms', () => {
+        fireEvent.click(screen.getByRole('button', { name: 'Cancel order' }));
+        fireEvent.click(screen.getAllByRole('button', { name: 'Cancel order' })[1]);
+        [commands.map(command => command.command), screen.queryByRole('alertdialog')].should.deep.equal([['CancelOrder'], null]);
+    });
+
+    it('should run nothing when the user declines', () => {
+        fireEvent.click(screen.getByRole('button', { name: 'Cancel order' }));
+        fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        [commands.length, screen.queryByRole('alertdialog')].should.deep.equal([0, null]);
+    });
+});

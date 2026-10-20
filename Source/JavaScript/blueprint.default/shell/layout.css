@@ -1070,6 +1070,38 @@
     border-color: transparent;
 }
 
+.scene-toolbar-confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: rgb(15 23 42 / 0.45);
+}
+
+.scene-toolbar-confirm-card {
+    display: grid;
+    gap: 1rem;
+    min-width: 18rem;
+    max-width: min(28rem, calc(100vw - 2rem));
+    padding: 1.25rem;
+    color: var(--scene-text-color, #1f2430);
+    background: var(--scene-surface-card, #ffffff);
+    border: 1px solid var(--scene-surface-border, #d4d8de);
+    border-radius: var(--scene-content-border-radius, 0.5rem);
+    box-shadow: 0 12px 32px rgb(15 23 42 / 0.25);
+}
+
+.scene-toolbar-confirm-text {
+    margin: 0;
+}
+
+.scene-toolbar-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
 .scene-toolbar-button [data-scene-badge='warning'] {
     display: inline-grid;
     place-items: center;
