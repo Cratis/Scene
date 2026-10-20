@@ -14,6 +14,12 @@ export function CoreData({ element }: RegisteredComponentProps) {
     return <span hidden data-scene-id={element.id} data-scene-data={textProperty(element.properties, 'typeName')} />;
 }
 
+/** Reads a command name as a sentence: `ChangeBasketQuantity` becomes `Change basket quantity`; an acronym keeps its shape. */
+function commandLabel(command: string): string {
+    const words = command.replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(/\s+/).filter(word => word.length > 0);
+    return words.length === 0 ? command : [words[0], ...words.slice(1).map(word => /^[A-Z][a-z]/.test(word) ? `${word[0].toLowerCase()}${word.slice(1)}` : word)].join(' ');
+}
+
 /** One entry of a command action's argument mapping. */
 interface ArgumentMapping {
     name?: unknown;
@@ -27,10 +33,13 @@ interface ArgumentMapping {
  * `component.<id>.<output>` source reads what another element publishes - such as what the user typed into
  * an input - and any other source is a data-context path. Hosts that read the mapping from `element`
  * themselves keep working.
+ *
+ * An action that names no label is labelled with its command read as a sentence (`Change basket quantity`), and is
+ * drawn as a button of the default blueprint's toolbar look (`scene-toolbar-button`) rather than as bare text.
  */
 export function CoreAction({ element }: RegisteredComponentProps) {
     const command = textProperty(element.properties, 'command');
-    const label = textProperty(element.properties, 'label', command);
+    const label = textProperty(element.properties, 'label', commandLabel(command));
     const scope = useRenderBindingScope();
     const invoke = () => {
         const mapping = Array.isArray(element.properties.arguments) ? element.properties.arguments as ArgumentMapping[] : [];
@@ -39,7 +48,7 @@ export function CoreAction({ element }: RegisteredComponentProps) {
             .map(argument => [argument.name, resolveArgumentSource(argument.source, scope)]));
         globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command, element, arguments: args } }));
     };
-    return <button type='button' data-scene-id={element.id} onClick={invoke}>{label}</button>;
+    return <button type='button' className='scene-action scene-toolbar-button' data-scene-id={element.id} data-scene-command={command} onClick={invoke}>{label}</button>;
 }
 
 /** Groups the nested content of a Screenplay section. */
