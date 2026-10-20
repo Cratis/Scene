@@ -35,18 +35,62 @@ export function readColumnsOfBoard(value: unknown): BoardColumn[] {
     });
 }
 
-/** Reads cards, dropping those without an id or a title, keeping at most three key fields. */
-export function readCards(value: unknown): BoardCard[] {
+/**
+ * Which properties of a row say what a card shows, for rows that come from a query with a shape of their own (a product with `productId`, `name`,
+ * `status`) instead of the card shape (`id`, `title`, `column`). A name left out falls back to the card shape's own.
+ */
+export interface BoardCardFields {
+    /** The property that identifies the card. */
+    id?: string;
+
+    /** The property that names the card. */
+    title?: string;
+
+    /** The property that holds the id of the column the card is in. */
+    column?: string;
+
+    /** The property that holds who the card is assigned to. */
+    assignee?: string;
+
+    /** Up to three properties shown on the card, each with the label it is shown under (the property's name when no label is given). */
+    fields?: { field: string; label?: string }[];
+}
+
+const textOfValue = (value: unknown): string | undefined =>
+    typeof value === 'string' ? value : typeof value === 'number' && Number.isFinite(value) ? String(value) : typeof value === 'boolean' ? String(value) : undefined;
+
+/** Reads the mapping of an element's `cardFields` list: entries with a `field`, repeated fields dropped. */
+export function readCardFieldList(value: unknown): { field: string; label?: string }[] {
     const seen = new Set<string>();
     return records(value).flatMap(entry => {
-        if (typeof entry.id !== 'string' || entry.id.length === 0 || seen.has(entry.id) || typeof entry.title !== 'string') return [];
-        seen.add(entry.id);
-        const fields = records(entry.fields).flatMap(field => (typeof field.label === 'string' && typeof field.value === 'string' ? [{ label: field.label, value: field.value }] : [])).slice(0, 3);
+        if (typeof entry.field !== 'string' || entry.field.length === 0 || seen.has(entry.field)) return [];
+        seen.add(entry.field);
+        return [{ field: entry.field, ...(typeof entry.label === 'string' && entry.label.length > 0 ? { label: entry.label } : {}) }];
+    });
+}
+
+/**
+ * Reads cards, dropping those without an id or a title, keeping at most three key fields. With `mapping`, the id, title, column, assignee and the key
+ * fields are read from the named properties of each row, so a query row needs no card shape of its own.
+ */
+export function readCards(value: unknown, mapping: BoardCardFields = {}): BoardCard[] {
+    const seen = new Set<string>();
+    const mapped = (mapping.fields ?? []).length > 0;
+    return records(value).flatMap(entry => {
+        const id = mapping.id ? textOfValue(entry[mapping.id]) : typeof entry.id === 'string' ? entry.id : undefined;
+        const title = mapping.title ? textOfValue(entry[mapping.title]) : typeof entry.title === 'string' ? entry.title : undefined;
+        if (id === undefined || id.length === 0 || seen.has(id) || title === undefined) return [];
+        seen.add(id);
+        const fields = mapped
+            ? (mapping.fields ?? []).flatMap(field => { const shown = textOfValue(entry[field.field]); return shown === undefined ? [] : [{ label: field.label ?? field.field, value: shown }]; }).slice(0, 3)
+            : records(entry.fields).flatMap(field => (typeof field.label === 'string' && typeof field.value === 'string' ? [{ label: field.label, value: field.value }] : [])).slice(0, 3);
+        const column = textOfValue(mapping.column ? entry[mapping.column] : entry.column) ?? '';
+        const assignee = mapping.assignee ? textOfValue(entry[mapping.assignee]) : typeof entry.assignee === 'string' ? entry.assignee : undefined;
         return [{
-            id: entry.id, title: entry.title, column: typeof entry.column === 'string' ? entry.column : '', fields,
+            id, title, column, fields,
             numbers: Object.fromEntries(Object.entries(entry).filter((pair): pair is [string, number] => typeof pair[1] === 'number' && Number.isFinite(pair[1]))),
             badges: Array.isArray(entry.badges) ? entry.badges.filter((badge): badge is string => typeof badge === 'string') : [],
-            ...(typeof entry.assignee === 'string' ? { assignee: entry.assignee } : {}),
+            ...(assignee !== undefined ? { assignee } : {}),
         }];
     });
 }
