@@ -5,6 +5,7 @@ import { BindingExpression, SampleDataPack, SampleShape } from '@cratis/scene.mo
 import { BindingResolver, SampleDataResolution, resolveSampleData } from '@cratis/scene.engine';
 import type { SliceCommandField } from '@cratis/scene.react';
 import { ApplicationDocument } from './ApplicationDocument';
+import { effectiveShellOf, templateChainOf } from './composeApplication';
 import { previewProfile } from './previewProfile';
 
 /**
@@ -150,8 +151,9 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
         return resolveSampleData({ target: short, ...(known === undefined ? {} : { shape: known }) }, context);
     };
 
+    const resolvedTemplates = application.screens.map(screen => [templateChainOf(application, screen), effectiveShellOf(application, screen).template]);
     const queryResults: Record<string, unknown> = {};
-    for (const name of collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts])) {
+    for (const name of collectQueryNames([application.screens, application.screenTemplates, application.dialogTemplates ?? [], application.layouts, resolvedTemplates])) {
         const resolved = rows(name);
         if (resolved.rows.length > 0) queryResults[name] = resolved.rows;
     }
