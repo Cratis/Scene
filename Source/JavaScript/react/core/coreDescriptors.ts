@@ -68,6 +68,10 @@ const describedCore: ComponentDescriptor[] = [
             },
             { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
             {
+                path: 'confirm', label: 'Confirmation', group: 'Behavior', valueType: PropertyValueType.String,
+                description: 'Optional question the user answers before the button runs its command or opens its dialog. Empty means it runs at once.',
+            },
+            {
                 path: 'presentation', label: 'Presentation', group: 'Appearance', valueType: PropertyValueType.Object, open: true,
                 description: 'How the item is shown: what it displays (icon, text or both) and the placement hint a host or theme can style by. Hints other than these are kept as authored.',
                 properties: [

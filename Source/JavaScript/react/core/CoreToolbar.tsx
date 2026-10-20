@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { ApplicationStructureIndex, BindingScope, resolveBindingExpression, resolveToolbarButton, toolbarButtonFromItem } from '@cratis/scene.engine';
 import { BindingExpression, BindingSourceKind, DestinationKind, DestinationReference, ToolbarEmphasis } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
@@ -116,6 +116,8 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
     const kind = textProperty(element.properties, 'kind')?.toLowerCase();
     const target = textProperty(element.properties, 'target') ?? '';
     const label = textProperty(element.properties, 'label') ?? name;
+    const confirm = textProperty(element.properties, 'confirm');
+    const [asking, setAsking] = useState(false);
     const icon = textProperty(element.properties, 'icon');
     const presentation = recordProperty(element.properties, 'presentation');
     const mode = toolbarItemMode(presentation);
@@ -158,7 +160,11 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
         }
     };
 
+    // An item that carries a confirmation asks first; only the user's yes runs what the item does.
+    const onClick = () => (confirm ? setAsking(true) : activate());
+
     return (
+        <>
         <button
             type='button'
             data-scene-id={element.id}
@@ -173,12 +179,25 @@ export function CoreToolbarItem({ element }: RegisteredComponentProps) {
             data-scene-slice={resolved?.slice ?? button?.slice}
             data-scene-warning={warnEmptySlices && empty ? 'emptySlice' : undefined}
             className={`scene-toolbar-button scene-toolbar-button-${emphasis}`}
-            onClick={activate}
+            onClick={onClick}
             {...attributes}
         >
             {mode !== 'text' && icon && <span aria-hidden='true' data-scene-icon-name={icon} />}
             {mode !== 'icon' && label}
             {warnEmptySlices && empty && <span role='img' aria-label='No slice is linked to this button' title='No slice is linked to this button' data-scene-badge='warning'>!</span>}
         </button>
+        {asking && (
+            <div role='alertdialog' aria-modal='true' aria-label={label} aria-describedby={`${element.id}-confirm`} data-scene-confirm={element.id} className='scene-toolbar-confirm'
+                onKeyDown={event => { if (event.key === 'Escape') setAsking(false); }}>
+                <div className='scene-toolbar-confirm-card'>
+                    <p id={`${element.id}-confirm`} className='scene-toolbar-confirm-text'>{confirm}</p>
+                    <div className='scene-toolbar-confirm-actions'>
+                        <button type='button' data-scene-confirm-cancel className='scene-toolbar-button scene-toolbar-button-quiet' onClick={() => setAsking(false)}>Cancel</button>
+                        <button type='button' data-scene-confirm-accept autoFocus className='scene-toolbar-button scene-toolbar-button-primary' onClick={() => { setAsking(false); activate(); }}>{label}</button>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
