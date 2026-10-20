@@ -11,6 +11,7 @@ import { CompositionOptions, effectiveShellOf, findLayout, shellLayout, template
 import { PreviewPlan, resolvePreviewPlan } from './resolvePreviewPlan';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity } from './PreviewProblem';
+import { screensForSlice, screensOwnedBy } from './sliceScreens';
 import { previewProfile } from './previewProfile';
 
 /** What {@link diagnosePreview} reads. */
@@ -76,14 +77,25 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
         problems.push(make(PreviewProblemCode.NavigationInvalid, PreviewProblemSeverity.Warning, `The starting destination '${initial.screen ?? '(none)'}' is not a screen of the document, so the preview starts on its own page.`, initial.screen));
     }
 
+    // A slice is previewed with the screens it owns and the screens nobody owns - never another slice's - so the document the rest of the
+    // diagnosis reads is that one. A module or a feature previews the whole document.
+    const screens = plan?.slice === undefined ? input.document.screens : screensForSlice(input.document.screens, plan.slice);
+    const document: ApplicationDocument = screens === input.document.screens ? input.document : { ...input.document, screens };
+
     let screen: Screen | undefined;
     if (plan?.feature !== undefined) {
-        screen = input.document.screens.find(candidate => candidate.name === plan.feature);
+        // The page of a slice is a screen the slice owns; a slice that owns none is shown over the page of its feature only when that page is
+        // the application's - a screen no slice declared - and never when it is another slice's, which `screens` no longer holds.
+        screen = (plan.slice === undefined ? undefined : screensOwnedBy(screens, plan.slice)[0]) ?? screens.find(candidate => candidate.name === plan.feature);
+        if (plan.slice !== undefined && screen === undefined) {
+            problems.push(make(PreviewProblemCode.SliceScreenMissing, PreviewProblemSeverity.Warning, `The slice '${plan.slice}' owns no screen, so it is shown over a minimal host page.`, plan.slice));
+        }
+
         // A slice is previewed over a minimal host page when its feature has no screen; a module or feature has nothing to show without one.
         if (!screen && plan.slice === undefined) {
             problems.push(make(PreviewProblemCode.ScreenMissing, PreviewProblemSeverity.Error, `The feature '${plan.feature}' has no screen in the document, so there is nothing to render.`, plan.feature));
         } else if (screen) {
-            problems.push(...diagnoseScreen(input.document, screen, options));
+            problems.push(...diagnoseScreen(document, screen, options));
         }
     }
 
@@ -93,7 +105,7 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
         }
     }
 
-    const buttons = input.document.screens.flatMap(candidate => collectComponents(candidate)
+    const buttons = screens.flatMap(candidate => collectComponents(candidate)
         .filter(component => component.componentName.endsWith('toolbarItem'))
         .map(component => toolbarButtonFromItem(component.id, component.properties as Record<string, unknown>))
         .filter((button): button is ToolbarButton => button !== undefined));

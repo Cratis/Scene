@@ -59,6 +59,15 @@ export interface Screen {
      * contributions that happen to list it. Absent or empty for a screen that sits outside any module.
      */
     path?: string[];
+
+    /**
+     * The qualified id of the slice that declared the screen - the dotted path of module, features and slice, such as
+     * `Sales.Orders.PlaceOrder`, the id `ApplicationStructureIndex.findSlice` resolves. Whoever composes the document sets it, because
+     * they know which slice each screen came from; nothing is ever matched by name. It is what a slice preview is scoped by: previewing
+     * a slice loads the screens it owns and the screens nobody owns, never another slice's. Absent for a screen that no slice declared -
+     * the application's own, a blueprint's, a hand-authored one - which belongs to the application and so to every preview.
+     */
+    owner?: string;
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors', 'path'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors', 'path', 'owner'];

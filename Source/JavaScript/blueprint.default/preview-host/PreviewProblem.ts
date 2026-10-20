@@ -18,6 +18,9 @@ export enum PreviewProblemCode {
     /** A State View slice's data fragment was not found, so its feature's page is shown. */
     SliceFragmentMissing = 'sliceFragmentMissing',
 
+    /** The slice owns no screen, so its dialog or fragment is drawn over a minimal host page rather than another slice's page. */
+    SliceScreenMissing = 'sliceScreenMissing',
+
     /** The layout a screen names is neither in the document nor one the blueprint provides. */
     LayoutMissing = 'layoutMissing',
 

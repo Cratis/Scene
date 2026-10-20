@@ -49,4 +49,13 @@ public record Screen(
     /// contributions that happen to list it. Empty for a screen that sits outside any module.
     /// </summary>
     public IReadOnlyList<string> Path { get; init; } = [];
+
+    /// <summary>
+    /// Gets the qualified id of the slice that declared the screen - the dotted path of module, features and slice, such as
+    /// <c language="csharp">Sales.Orders.PlaceOrder</c>. Whoever composes the document sets it, because they know which slice each screen came
+    /// from; nothing is matched by name. It is what a slice preview is scoped by: previewing a slice loads the screens it owns and the
+    /// screens nobody owns, never another slice's. <see langword="null"/> for a screen no slice declared - the application's own, a
+    /// blueprint's, a hand-authored one - which belongs to the application and so to every preview.
+    /// </summary>
+    public string? Owner { get; init; }
 }
