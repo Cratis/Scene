@@ -301,7 +301,8 @@
       "contributions",
       "screenTemplate",
       "behaviors",
-      "path"
+      "path",
+      "owner"
     ],
     "UiStarter": [
       "name",

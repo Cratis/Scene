@@ -28,8 +28,12 @@ import '@cratis/scene.blueprint.default/styles.css';
 | `{ application }` | the application itself (`true`, or its name): the shell with the application's navigation, started on `initialDestination`, else the first destination of the application's navigation, else the document's first screen. Use it for an application with no authored structure - a blueprint's gallery (`galleryApplication()` with `galleryComposition`) |
 | `{ module }` | the application shell with the module's **effective navigation** and its first feature |
 | `{ module, feature }` | that feature in the shell, with navigation |
-| `{ slice }`, State Change | the slice's task dialog over a minimal host page - the feature's own page when it has one |
+| `{ slice }`, State Change | the slice's task dialog over the screen the slice owns - a minimal host page when it owns none |
 | `{ slice }`, State View | the slice's data fragment: the outermost components bound to its read model, in the minimal host page |
+
+### A slice preview loads only that slice
+
+A `Screen` names the slice that declared it in `owner` - the qualified id of the slice, `sales.orders.PlaceOrder`. Whoever composes the document sets it (Stage does, from the slice a screen is written in); nothing is ever matched by name. A slice preview then loads exactly the screens the slice owns and the screens no slice owns (`screensForSlice`): the application's own, a blueprint's or a hand-authored screen has no `owner` and belongs to every preview. The layouts, screen templates and the profile's root template stay in the document, so the shell and the templates the slice's screen is built from still draw. A screen another slice owns is neither composed nor routable. A slice that owns no screen is drawn over a minimal host page and reported as a `sliceScreenMissing` warning. A module or a feature preview loads the whole document as before.
 
 Ids are the qualified ids of the application structure (`sales`, `sales.orders`, `sales.orders.PlaceOrder`); a feature may be given relative to its module. An automation slice has nothing to show and is reported as a problem. `resolvePreviewPlan` resolves a target without rendering.
 
@@ -38,7 +42,7 @@ Ids are the qualified ids of the application structure (`sales`, `sales.orders`,
 The preview has no design affordances and edits nothing. A toolbar button without a slice shows no warning badge here; it is reported as a problem instead. `diagnosePreview` judges the model with the engine's own validators - nothing is judged that the engine does not already judge - and returns `PreviewProblem` entries with a `code`, a `severity`, a `message` and the `nodeId` to link to:
 
 - **errors** stop the preview, and the host shows them (`PreviewProblemsView`) instead of a blank screen: `targetNotFound`, `moduleWithoutFeatures`, `sliceNotPreviewable`, `screenMissing`, `layoutMissing`, `templateMissing`, `templateUnplaced`;
-- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationRegions`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`.
+- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationRegions`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`, `sliceScreenMissing`.
 
 `onProblems` receives every problem, blocking or not, whenever they change; `onSelectProblem` is called when the author follows one to its node.
 

@@ -24,6 +24,7 @@ import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity, hasBlocking
 import { PreviewProblemsView } from './PreviewProblemsView';
 import { PreviewSampleData, createPreviewSampleData } from './previewSampleData';
 import { findSliceFragment } from './PreviewSliceFragment';
+import { screensForSlice } from './sliceScreens';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewRegionHandle, markRegions, measureRegion, regionOf } from './previewRegions';
 import { PreviewInvocation, PreviewToast } from './PreviewToast';
@@ -265,22 +266,26 @@ export function ScenePreviewHost({
             return first === undefined ? undefined : { screens: application.screens, initial: first };
         }
 
+        // A slice previews exactly the screens it owns and the screens nobody owns - never another slice's - so nothing of the rest of the model
+        // is composed, routed or drawn (Cratis/Scene#207).
+        const screens = plan.slice === undefined ? application.screens : screensForSlice(application.screens, plan.slice);
+
         if (!screen) {
-            // A slice whose feature has no screen of its own: a minimal host page, headed with where it is.
+            // A slice that owns no screen, and whose feature has no page of the application's: a minimal host page, headed with where it is.
             if (plan.slice === undefined) return undefined;
             const layout = previewProfile(application.uiProfiles).layout ?? LayoutName.AppShell;
             const header = externalComponent('preview-page-header', ComponentName.PageHeader, { title: plan.breadcrumb.slice(0, -1).join(' › ') || plan.breadcrumb[0] });
-            return { screens: [...application.screens, minimalPage(layout, [header])], initial: previewPageScreen };
+            return { screens: [...screens, minimalPage(layout, [header])], initial: previewPageScreen };
         }
 
         if (plan.kind === 'stateView' && plan.slice) {
             const slice = index.findSlice(plan.slice);
             const fragment = slice ? findSliceFragment(screen, plan.slice, slice) : [];
-            if (fragment.length > 0) return { screens: [...application.screens, minimalPage(screen.layout, fragment)], initial: previewPageScreen };
+            if (fragment.length > 0) return { screens: [...screens, minimalPage(screen.layout, fragment)], initial: previewPageScreen };
         }
 
         const requested = initialDestination?.screen;
-        return { screens: application.screens, initial: requested !== undefined && application.screens.some(candidate => candidate.name === requested) ? requested : screen.name };
+        return { screens, initial: requested !== undefined && screens.some(candidate => candidate.name === requested) ? requested : screen.name };
     }, [application, diagnosis, index, initialDestination, navigation]);
 
     const hostApplication = useMemo(() => page ? { ...application, screens: page.screens } : application, [application, page]);
