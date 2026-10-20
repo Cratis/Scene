@@ -473,6 +473,19 @@
     display: none;
 }
 
+/* A rail is made of icons. An entry that has none keeps its label - small, centred, wrapped - so it is never an empty, unreachable square (Scene#230). */
+.layout-slim .layout-menu-item[data-scene-iconless] > .layout-menu-link .layout-menu-label,
+.layout-compact .layout-menu-item[data-scene-iconless] > .layout-menu-link .layout-menu-label {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.65rem;
+    line-height: 1.1;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
+}
+
 /* ---------------------------------------------------------------------------
  * compact - the icon rail again, with square buttons, and a shifted topbar.
  * ------------------------------------------------------------------------ */

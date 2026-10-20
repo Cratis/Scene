@@ -236,15 +236,16 @@ export function NavigationRegionView({ region, module, application = false, mode
             if (destination) activate(item, event);
             else toggle(key, !expanded);
         };
+        const drawnIcon = icon(item);
         const content = <>
-            {icon(item)}
+            {drawnIcon}
             <span className={names.label}>{item.title}</span>
             {renderAdornment?.(item)}
         </>;
 
         return <li key={item.id} className={names.item} data-scene-nav-item={item.id} data-scene-nav-parent={parent ? 'true' : undefined}
             data-active={active} data-active-descendant={!active && parent && children.some(child => containsActive(child, isActive)) ? true : undefined} data-expanded={parent ? expanded : undefined} data-origin={item.origin} data-read-only={item.readOnly}
-            data-slot={item.slot} data-level={level} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
+            data-slot={item.slot} data-level={level} data-scene-iconless={drawnIcon === null ? 'true' : undefined} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
             {destination || parent
                 ? <a className={names.link} href={href ?? '#'} data-scene-nav-link={key} aria-current={active ? 'page' : undefined}
                     aria-expanded={parent && !destination ? expanded : undefined} tabIndex={key === stop ? 0 : -1}
