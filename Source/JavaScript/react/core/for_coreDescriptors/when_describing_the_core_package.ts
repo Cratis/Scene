@@ -39,7 +39,7 @@ describe('when describing the core package', () => {
 
     it('should describe a toolbar button as a title, a state change slice, an emphasis and an icon', () => {
         const button = coreDescriptors.find(descriptor => descriptor.component === 'core:toolbarItem')!;
-        button.properties.map(property => property.path).should.deep.equal(['label', 'slice', 'emphasis', 'icon', 'presentation', 'target']);
+        button.properties.map(property => property.path).should.deep.equal(['label', 'slice', 'emphasis', 'icon', 'confirm', 'presentation', 'target']);
 
         const slice = button.properties.find(property => property.path === 'slice')!;
         slice.editorKind!.should.equal(PropertyEditorKind.Slice);

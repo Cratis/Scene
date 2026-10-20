@@ -173,13 +173,25 @@ export function createPreviewSampleData(application: ApplicationDocument, sample
         rows,
         queryResults,
         resolveBinding: (binding: BindingExpression) => binding.query ? readPath(queryResults[binding.query], binding.path) : undefined,
+        // A field starts with the value the application's sample data gives it: the command's own sample row when a pack names the command, then the same
+        // property in the rows the screens already show (an SKU, a currency, an order number the application seeds), and only then what was generated
+        // from the field's name - words with no meaning for the property.
         commandFields: (command, fields) => {
-            const first = rows(command, shapeOfFields(command, fields)).rows[0];
-            if (!first) return fields;
+            const resolved = rows(command, shapeOfFields(command, fields));
+            const own = resolved.source === 'generated' ? undefined : resolved.rows[0];
+            const generated = resolved.source === 'generated' ? resolved.rows[0] : undefined;
+            if (!own && !generated) return fields;
+
+            const shown = Object.values(queryResults).flatMap(result => Array.isArray(result) ? result as Record<string, unknown>[] : []);
+            const valueIn = (row: Record<string, unknown> | undefined, name: string): string | number | boolean | undefined => {
+                const key = row === undefined ? undefined : Object.keys(row).find(candidate => candidate.toLowerCase() === name.toLowerCase());
+                return key === undefined ? undefined : scalar(row![key]);
+            };
 
             return fields.map(field => {
-                const key = Object.keys(first).find(candidate => candidate.toLowerCase() === field.name.toLowerCase());
-                const value = key === undefined ? undefined : scalar(first[key]);
+                const value = valueIn(own, field.name)
+                    ?? shown.map(row => valueIn(row, field.name)).find(candidate => candidate !== undefined)
+                    ?? valueIn(generated, field.name);
                 return value === undefined ? field : { ...field, initialValue: value };
             });
         },

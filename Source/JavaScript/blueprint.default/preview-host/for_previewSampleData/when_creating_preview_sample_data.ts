@@ -47,6 +47,16 @@ describe('when creating preview sample data', () => {
         it('should resolve nothing for a binding without a query', () => (source.resolveBinding({ path: 'x' }) === undefined).should.equal(true));
     });
 
+    describe('and a command has no sample row of its own but the screens show rows with the same property', () => {
+        const source = createPreviewSampleData(ordersApplication(), { packs: [], shapes, seed: 3 });
+        const ship = source.commandFields('ShipOrder', [{ name: 'customer', type: 'string' }, { name: 'quantity', type: 'number' }, { name: 'note', type: 'string' }]);
+        const shown = (source.queryResults.Orders as { customer: string; quantity: number }[])[0];
+
+        it('should start the field with the value the shown rows carry', () => ship[0].initialValue!.should.equal(shown.customer));
+        it('should do the same for a number', () => ship[1].initialValue!.should.equal(shown.quantity));
+        it('should still generate a value for a property no row carries', () => (typeof ship[2].initialValue).should.equal('string'));
+    });
+
     describe('and no row supplies a field', () => {
         it('should leave the field as it is', () => createPreviewSampleData(ordersApplication(), { packs: [nordicPack] }).commandFields('PlaceOrder', [{ name: 'ghost', type: 'string' }]).should.deep.equal([{ name: 'ghost', type: 'string' }]));
     });
