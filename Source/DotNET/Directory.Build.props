@@ -4,13 +4,13 @@
     <PropertyGroup>
         <Version>1.0.0</Version>
         <Copyright>Copyright Cratis</Copyright>
-        <Authors>all contributors</Authors>
+        <Authors>Cratis</Authors>
         <DebugType>portable</DebugType>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryType>git</RepositoryType>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryUrl>https://github.com/cratis/scene</RepositoryUrl>
-        <PackageProjectUrl>https://github.com/cratis/scene</PackageProjectUrl>
+        <PackageProjectUrl>https://www.cratis.io/screenplay/</PackageProjectUrl>
 
         <GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
         <GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
@@ -21,6 +21,7 @@
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
         <IsPackable>true</IsPackable>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo.png</PackageIcon>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 
@@ -44,6 +45,7 @@
 
     <ItemGroup>
         <None Include="$(MSBuildThisFileDirectory)/../../README.md" Pack="true" PackagePath="/" />
+        <None Include="$(MSBuildThisFileDirectory)/../../logo.png" Pack="true" PackagePath="/" />
         <Compile Include="$(MSBuildThisFileDirectory)/GlobalAssemblyInfo.cs" />
     </ItemGroup>
 
