@@ -146,7 +146,8 @@ function shellComponentOf(shell: EffectiveShell, screen: Screen, hasRoot: boolea
     return shellComponentForLayout(shell.name) ?? shell.name;
 }
 
-function defaultForm(screenName: string, form: Form): SceneElement {
+/** The element a screen's form becomes when the host does not decide otherwise: the Cratis `commandForm` component. */
+export function defaultForm(screenName: string, form: Form): SceneElement {
     return externalComponent(`form-${screenName}-${form.name}`, 'commandForm', {
         command: form.forCommand,
         label: form.name,

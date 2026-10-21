@@ -12,6 +12,7 @@ import { PreviewPlan, resolvePreviewPlan } from './resolvePreviewPlan';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity } from './PreviewProblem';
 import { screensForSlice, screensOwnedBy } from './sliceScreens';
+import { onNeutralSurface } from './sliceSurface';
 import { previewProfile } from './previewProfile';
 
 /** What {@link diagnosePreview} reads. */
@@ -88,14 +89,15 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
         // the application's - a screen no slice declared - and never when it is another slice's, which `screens` no longer holds.
         screen = (plan.slice === undefined ? undefined : screensOwnedBy(screens, plan.slice)[0]) ?? screens.find(candidate => candidate.name === plan.feature);
         if (plan.slice !== undefined && screen === undefined) {
-            problems.push(make(PreviewProblemCode.SliceScreenMissing, PreviewProblemSeverity.Warning, `The slice '${plan.slice}' owns no screen, so it is shown over a minimal host page.`, plan.slice));
+            problems.push(make(PreviewProblemCode.SliceScreenMissing, PreviewProblemSeverity.Warning, `The slice '${plan.slice}' owns no screen, so it is shown on a minimal host page.`, plan.slice));
         }
 
         // A slice is previewed over a minimal host page when its feature has no screen; a module or feature has nothing to show without one.
         if (!screen && plan.slice === undefined) {
             problems.push(make(PreviewProblemCode.ScreenMissing, PreviewProblemSeverity.Error, `The feature '${plan.feature}' has no screen in the document, so there is nothing to render.`, plan.feature));
         } else if (screen) {
-            problems.push(...diagnoseScreen(document, screen, options));
+            // A slice's screen is drawn in the neutral container, not on the application's shell, so it is the neutral screen that is checked.
+            problems.push(...diagnoseScreen(document, plan.slice === undefined ? screen : onNeutralSurface(screen), options));
         }
     }
 
