@@ -2399,6 +2399,7 @@
 
 .foundation-search input[type='search'] {
     min-inline-size: 12rem;
+    min-block-size: 2rem;
     border: 0;
     background: transparent;
 }
@@ -3410,6 +3411,13 @@ td[data-outside='true'] .foundation-calendar-day {
     border-block-end: 1px solid var(--foundation-border);
 }
 
+/* Both sides may shrink and wrap, so a wide font or a long title never pushes the row past the viewport. */
+.foundation-inbox-item > .foundation-button {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+}
+
 .foundation-inbox-item[data-open='true'] {
     background: var(--foundation-highlight);
     color: var(--foundation-highlight-text);
@@ -3417,6 +3425,8 @@ td[data-outside='true'] .foundation-calendar-day {
 
 .foundation-inbox-message {
     flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
     display: flex;
     flex-direction: column;
     gap: var(--foundation-space-1);
