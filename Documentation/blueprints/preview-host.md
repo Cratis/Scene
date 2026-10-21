@@ -37,10 +37,10 @@ A `Screen` names the slice that declared it in `owner` - the qualified id of the
 
 ### A slice preview draws only the slice, once
 
-The screens of a slice are drawn on the chrome-less full-page layout (`onNeutralSurface`): the profile's root template, the navigation regions and the page of the feature are not drawn around a slice; a module, feature or application preview keeps its shell. The host says how the slice is presented in `data-scene-preview-surface` on `.scene-preview-host`:
+The screens of a slice are drawn on the chrome-less full-page layout (`onNeutralSurface`): the profile's root template, the navigation regions and the page of the feature are not drawn around a slice; a module, feature or application preview keeps its shell. Because the application's own root template is not a container there, a template that fits the slot `content` is placed straight into the layout instead of being unplaced between the layout and the root template that both declare it (`templatePoolFor`). The host says how the slice is presented in `data-scene-preview-surface` on `.scene-preview-host`:
 
 - `page` - a screen the slice owns, inline;
-- `dialog` - the owned screen is built from a dialog template (`metadata.type` `Dialog`), drawn as an opened dialog card on a neutral backdrop;
+- `dialog` - the owned screen is built from a dialog template (`metadata.type` `Dialog`), drawn as an opened dialog card on a neutral backdrop; when the template has a `header` slot the screen leaves empty, the slice's name is the title (`withDialogTitle`);
 - `task-dialog` - the slice owns no screen that presents its command, so the task dialog opens over what it owns or an empty neutral page.
 
 The command is presented **once**. A screen presents it when it hosts a form for it or has an action or a command form that executes it (`presentsCommand`); then the task dialog is not opened. An action that executes the command of a form the same screen hosts is that form's submit: it is left out and the form's submit carries its label (`withoutFormSubmits`). Cratis/Scene#252.

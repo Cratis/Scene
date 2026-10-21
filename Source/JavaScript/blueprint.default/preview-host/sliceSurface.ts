@@ -113,3 +113,17 @@ export function withoutFormSubmits(screen: Screen): WithoutFormSubmits {
 
     return { screen: { ...screen, slotContent: Object.fromEntries(Object.entries(screen.slotContent).map(([slot, content]) => [slot, strip(content)])) }, labels };
 }
+
+/**
+ * A dialog template screen whose header slot is empty, given the name of the slice as the title of the dialog: opened on its own the card would otherwise
+ * start with a blank band where the title belongs (the Screenplay authors the form and the buttons of a dialog, not its heading).
+ *
+ * @param screen The screen a slice owns, drawn from a dialog template.
+ * @param template The dialog template.
+ * @param title The element that is the title.
+ * @returns The screen with the title in its header slot, or the screen itself when the template has no header slot or the screen fills it.
+ */
+export function withDialogTitle(screen: Screen, template: ScreenTemplate | undefined, title: SceneElement): Screen {
+    const hasHeader = template?.slots.some(slot => slot.name === 'header') === true;
+    return hasHeader && (screen.slotContent.header ?? []).length === 0 ? { ...screen, slotContent: { ...screen.slotContent, header: [title] } } : screen;
+}
