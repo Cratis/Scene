@@ -367,7 +367,8 @@
         border-bottom: 1px solid var(--layout-border);
     }
 
-    .layout-static:not(.layout-static-inactive) .layout-topbar .layout-logo {
+    /* The topbar logo gives way only when the sidebar header carries one; a host that puts the application's logo in the topbar alone keeps it. */
+    .layout-static:not(.layout-static-inactive):has(.layout-sidebar .layout-logo) .layout-topbar .layout-logo {
         display: none;
     }
 }
@@ -1517,6 +1518,18 @@
 }
 
 .foundation-trend-chip { display: inline-flex; }
+
+/* A page whose content opens with stat cards lays them out as a responsive row of tiles; everything else keeps the full width. */
+.layout-content:has(> .foundation-stat-card) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--foundation-space-4, 1rem);
+    align-items: start;
+}
+
+.layout-content:has(> .foundation-stat-card) > :not(.foundation-stat-card) {
+    grid-column: 1 / -1;
+}
 
 /* Stat card. */
 .foundation-stat-card {

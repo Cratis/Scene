@@ -46,7 +46,7 @@ describe('when rendering a gallery screen', () => {
 
         it('should render the seeded content rather than a placeholder', () => {
             screen.getAllByText('Revenue').length.should.be.greaterThan(0);
-            screen.getAllByText('$284,120').length.should.be.greaterThan(0);
+            screen.getAllByText('$284,120.00').length.should.be.greaterThan(0);
         });
 
         it('should register the core registry alongside the blueprint one', () => {
