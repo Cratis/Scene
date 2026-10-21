@@ -114,8 +114,7 @@
           "Template 'Future' requires package 'PrimeReact' ^12.0.0 but version 11.1.0 is available"
         ] },
         { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Foreign", "compatible": false, "problems": [
-          "Template 'Foreign' requires package 'Tailwind', which its package 'Acme.Blueprint' does not depend on",
-          "Template 'Foreign' requires package 'Tailwind', which is not available"
+          "Template 'Foreign' requires package 'Tailwind', which this profile does not include. Add `packages Tailwind` to the ui profile, or use a template that does not need it."
         ] },
         { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Pinned", "compatible": true, "problems": [] },
         { "package": "Acme.Blueprint", "kind": "DialogTemplate", "name": "Confirm", "compatible": true, "problems": [] }
@@ -133,6 +132,24 @@
       ],
       "expectedEntries": [
         { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Future", "compatible": true, "problems": [] }
+      ]
+    },
+    {
+      "name": "a template may require a package its owner does not depend on, and is available while that package is present",
+      "sceneVersion": "4.13.2",
+      "sources": [
+        {
+          "manifest": { "name": "Tailwind", "version": "4.0.0", "kind": "Styling", "dependencies": [], "components": [], "layouts": [], "screenTemplates": [], "dialogTemplates": [], "themes": [] }
+        },
+        {
+          "manifest": { "name": "Acme.Blueprint", "version": "2.0.0", "kind": "Blueprint", "dependencies": [], "components": [], "layouts": [], "screenTemplates": ["Optional"], "dialogTemplates": [], "themes": [] },
+          "screenTemplates": [
+            { "name": "Optional", "slots": [], "metadata": { "category": "Sales", "compatibility": { "scene": "^4.0.0", "packages": [{ "name": "Tailwind", "versionRange": "^4.0.0" }] }, "attribution": { "author": "Acme" }, "license": "MIT" } }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        { "package": "Acme.Blueprint", "kind": "ScreenTemplate", "name": "Optional", "compatible": true, "problems": [] }
       ]
     }
   ]

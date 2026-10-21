@@ -9,7 +9,7 @@ import { defaultBlueprint } from '../defaultBlueprint';
 import { GalleryScreenPreview, TemplatePreviewState } from '../gallery';
 
 /**
- * The registry a host with this blueprint's real dependencies loaded renders against: `core`, PrimeReact and
+ * The registry a host opting into the gallery's optional widgets renders against: `core`, PrimeReact and
  * the blueprint itself. Tables, tags, timelines and form fields resolve to PrimeReact's implementations,
  * so a preview shows the package's own data states rather than placeholders.
  */

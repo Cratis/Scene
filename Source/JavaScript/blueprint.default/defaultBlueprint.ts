@@ -21,12 +21,8 @@ import { defaultBlueprintThemes } from './themes';
  * separately is how an application ends up with a sidebar from one design language and a form from
  * another.
  *
- * The dependency list is what makes a blueprint honest about what it is built from. This one declares
- * PrimeReact - the shell's buttons, breadcrumb, overlay menu and drawer are PrimeReact 10 components - and
- * Cratis Components, which its screen templates fill their content with. A profile that activated this
- * blueprint without them would render a shell whose every control was a dashed red placeholder, and
- * `resolvePackageDependencies` exists to catch that when the profile is configured rather than when
- * someone opens the page.
+ * The shell uses Cratis Components. Screen templates that borrow another component library declare
+ * that library in their own compatibility metadata; installing the shell does not activate it.
  *
  * `layouts` lists only true application shells. A dashboard, a CRUD list or a sign-in screen is a screen
  * template, not a layout, and is listed as one.
@@ -35,7 +31,7 @@ export const defaultBlueprintManifest: ScenePackage = {
     name: defaultBlueprintName,
     version: '1.0.0',
     kind: PackageKind.Blueprint,
-    dependencies: [{ name: 'PrimeReact' }, { name: 'Cratis.Components' }],
+    dependencies: [{ name: 'Cratis.Components' }],
     components: Object.values(ComponentName),
     layouts: Object.values(LayoutName),
     screenTemplates: galleryScreenTemplates.map(template => template.name),

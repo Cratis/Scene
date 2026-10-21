@@ -173,6 +173,31 @@ describe('when navigating the shell of a preview', () => {
         });
     });
 
+    describe('and an authored breadcrumb is Alt-clicked', () => {
+        let activations: NavigationActivation[];
+        beforeEach(() => {
+            activations = [];
+            render(galleryPreview({ initialDestination: { screen: 'CrudList' }, onActivate: activation => activations.push(activation) }));
+            fireEvent.click(within(trail()).getByText('Catalog'), { altKey: true });
+        });
+
+        it('should select its target without navigating', () =>
+            [page(), activations.map(activation => [activation.request.source, activation.mode, activation.navigated])].should.deep.equal(['CrudList', [['breadcrumb', 'select', false]]]));
+    });
+
+    describe('and a user-menu destination is Alt-clicked', () => {
+        let activations: NavigationActivation[];
+        beforeEach(() => {
+            activations = [];
+            render(galleryPreview({ initialDestination: { screen: 'Dashboard' }, onActivate: activation => activations.push(activation) }));
+            fireEvent.click(screen.getByRole('button', { name: /Open the menu for/ }));
+            fireEvent.click(within(screen.getByRole('menu')).getByText('Help'), { altKey: true });
+        });
+
+        it('should select its target without navigating', () =>
+            [page(), activations.map(activation => [activation.request.source, activation.mode, activation.navigated])].should.deep.equal(['Dashboard', [['userMenu', 'select', false]]]));
+    });
+
     describe('and every menu entry of the gallery is clicked in turn', () => {
         let before: string;
         beforeEach(() => {

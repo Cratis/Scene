@@ -4,11 +4,7 @@
 /*
  * Cratis Scene - default layout package stylesheet.
  *
- * Every mode this shell implements is hand-written here. PrimeReact 11 does ship a real app-shell
- * `Sidebar` - a genuinely new primitive, not v10's overlay drawer, which is now `Drawer` - and adopting
- * it would replace most of this file. That is a deliberate follow-up rather than something the version
- * bump did: rewriting eight layout modes onto a new primitive is a behavior change. See the README for
- * what such a port collapses and what would stay this package's own.
+ * The shell owns its layout modes; its controls use Cratis Components and React Aria.
  *
  * TOKEN BRIDGE
  * ------------
@@ -24,7 +20,8 @@
  */
 
 .layout-wrapper,
-.layout-full-page {
+.layout-full-page,
+.layout-overlay-theme {
     /* Palette - aliased from the active Scene theme's tokens, never referenced directly below. */
     --layout-primary: var(--scene-primary-color, #4f46e5);
     --layout-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
@@ -168,7 +165,7 @@
 }
 
 /* A crumb that leads somewhere reads as a link in the shell's own text colour, so it holds its contrast in every theme and layout mode. */
-.layout-breadcrumb a[data-part='link'] {
+.layout-breadcrumb a {
     color: var(--layout-text);
     text-decoration: underline;
     text-underline-offset: 0.2em;
@@ -1245,7 +1242,7 @@
 /* A grid item defaults to min-width: auto, so a widget holding a wide table pushed its track past the window: on a phone the page scrolled sideways, and on a desktop the primary
    column overlapped the secondary one. The item shrinks to its track and the table scrolls inside its own container. */
 .scene-template-slot > * { min-width: 0; }
-/* PrimeReact's Lara tag severities paint white on a mid-tone in the light scheme (2.3 to 3.8:1, WCAG AA wants 4.5:1); the blueprint darkens them. The dark scheme's values are Lara's own.
+/* Optional widget tag severities paint white on a mid-tone in the light scheme (2.3 to 3.8:1, WCAG AA wants 4.5:1); the blueprint darkens them. The dark scheme's values are Lara's own.
    The scheme is the Scene configuration's attribute, not light-dark(): a host's CSS pipeline lowers light-dark() for older browsers into a pair of custom properties that stays
    unset here, which left the tag with no background at all (white on the page, 1.09:1) in the Stage. */
 .layout-wrapper,
@@ -3403,4 +3400,174 @@ a[data-nav-problem='navTargetMissing']::after {
     margin-inline-start: auto;
     color: var(--layout-warning, #d97706);
     font-size: 0.85em;
+}
+
+/* Controls and portalled surfaces share the shell's semantic tokens, not a widget-library theme. */
+.layout-overlay-theme {
+    min-height: 0;
+    background: transparent;
+}
+
+.layout-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: middle;
+}
+
+.layout-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: var(--scene-space-2, 0.5rem);
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.layout-icon-button:hover {
+    background: var(--layout-hover);
+}
+
+.layout-icon-button:focus-visible,
+.layout-breadcrumb a:focus-visible,
+.layout-user-action[data-focus-visible] {
+    outline: 2px solid var(--layout-primary);
+    outline-offset: 2px;
+}
+
+.layout-breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--scene-space-2, 0.5rem);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: 0.875rem;
+}
+
+.layout-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--scene-space-2, 0.5rem);
+}
+
+.layout-breadcrumb-item > .layout-icon {
+    width: 0.75rem;
+    color: var(--layout-text-muted);
+}
+
+.layout-user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--layout-highlight-text);
+    background: var(--layout-highlight);
+    border-radius: 50%;
+}
+
+.layout-user-popover {
+    z-index: 1200;
+    outline: none;
+}
+
+.layout-user-actions {
+    min-width: 10rem;
+    padding: var(--scene-space-1, 0.25rem);
+    color: var(--layout-text);
+    background: var(--layout-overlay);
+    border: 1px solid var(--layout-border);
+    border-radius: var(--layout-radius);
+    box-shadow: var(--scene-shadow-overlay, 0 0.5rem 1.5rem rgb(0 0 0 / 0.15));
+    outline: none;
+}
+
+.layout-user-action {
+    display: flex;
+    align-items: center;
+    gap: var(--scene-space-2, 0.5rem);
+    padding: var(--scene-space-2, 0.5rem) var(--scene-space-3, 0.75rem);
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--layout-radius);
+    cursor: pointer;
+    outline: none;
+}
+
+.layout-user-action[data-focused] {
+    background: var(--layout-hover);
+}
+
+.layout-config-button {
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+    border-radius: var(--layout-radius) 0 0 var(--layout-radius);
+}
+
+.layout-config-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    justify-content: flex-end;
+    background: var(--scene-backdrop, rgb(0 0 0 / 0.4));
+}
+
+.layout-config-positioner {
+    display: flex;
+    max-width: 100vw;
+    height: 100%;
+    outline: none;
+}
+
+.layout-config-surface {
+    width: min(24rem, 100vw);
+    max-width: 100vw;
+    height: 100%;
+    overflow-y: auto;
+    color: var(--layout-text);
+    background: var(--layout-card);
+    outline: none;
+}
+
+.layout-config-body {
+    padding: 0 var(--scene-space-5, 1.25rem) var(--scene-space-5, 1.25rem);
+}
+
+.layout-config-surface .cratis-dialog__document {
+    outline: none;
+}
+
+.layout-config-surface .cratis-dialog__busy-scope {
+    display: contents;
+    min-inline-size: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.layout-config-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--scene-space-5, 1.25rem);
+}
+
+.layout-config-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.layout-config-button:hover {
+    color: var(--layout-primary-contrast);
+    background: var(--layout-primary);
+    filter: brightness(0.95);
 }

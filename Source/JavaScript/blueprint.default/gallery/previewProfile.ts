@@ -26,8 +26,7 @@ export const galleryProfile: UiProfile = {
  * The profile a *preview* resolves against, when only some of those packages are actually loaded.
  *
  * Same four packages, different order, and the difference is deliberate. This blueprint takes no npm
- * dependency on PrimeReact's or Cratis Components' bundles - a blueprint declares its dependencies in its
- * manifest, not in its bundler graph - so a preview run from this package has `core` and this blueprint
+ * dependency on the optional widget bundles - each borrowing template declares its own requirements - so a preview run from this package has `core` and this blueprint
  * implemented and nothing else. Ranking `core` above the two libraries means `text`, `button` and `card`
  * resolve to something that exists, and the preview shows real content instead of a wall of placeholders.
  *

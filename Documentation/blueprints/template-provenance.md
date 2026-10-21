@@ -12,7 +12,7 @@ The fields live on `TemplateMetadata`, beside `type`, `category` and `scopes`. L
 | Field | Required | Rules |
 | --- | --- | --- |
 | `compatibility.scene` | Yes | A version range such as `^4.13.0`, in the subset `isVersionSatisfiedBy` understands. |
-| `compatibility.packages` | No | Each entry names a package and, optionally, a valid version range. The package must be the template's own package or one its package depends on. |
+| `compatibility.packages` | No | Each entry names a package and, optionally, a valid version range. The package may be the template's own package, one its package depends on, or any other package. A requirement on a package the owner does not depend on is opt-in: the template is available only while the host or profile provides that package at a satisfying version, and is reported unavailable otherwise. |
 | `attribution.author` | Yes | The person or organization that authored the template. |
 | `attribution.url` | No | An absolute `https` URL. |
 | `attribution.notice` | No | A notice a license requires to travel with the template. |

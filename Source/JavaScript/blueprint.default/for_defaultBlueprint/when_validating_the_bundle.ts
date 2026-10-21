@@ -22,7 +22,7 @@ describe('when validating the bundle', () => {
     });
 
     it('should depend on the component libraries its shells are built from', () => {
-        defaultBlueprintManifest.dependencies.map(dependency => dependency.name).should.deep.equal(['PrimeReact', 'Cratis.Components']);
+        defaultBlueprintManifest.dependencies.map(dependency => dependency.name).should.deep.equal(['Cratis.Components']);
     });
 
     it('should declare only application shells as layouts', () => {

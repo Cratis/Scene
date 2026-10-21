@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import type { Meta, StoryObj } from '@storybook/react';
+import { PrimeReactProvider } from '@primereact/core';
+import Lara from '@primeuix/themes/lara';
+import 'primeicons/primeicons.css';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
@@ -18,6 +21,7 @@ const registry = mergePackageRegistries([corePackage, primeReactPackage, default
 const meta = {
     title: 'Blueprint/Preview states',
     component: GalleryScreenPreview,
+    decorators: [Story => <PrimeReactProvider theme={{ preset: Lara }}><Story /></PrimeReactProvider>],
     parameters: {
         layout: 'fullscreen',
         docs: { description: { component: 'Populated, empty, loading and error states of the data templates, through the real packages.' } },

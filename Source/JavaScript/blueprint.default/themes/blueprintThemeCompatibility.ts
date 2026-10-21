@@ -12,8 +12,8 @@ import { defaultBlueprintName } from '../packageName';
  * so that "compatible with everything active" has to be stated rather than assumed, and a theme shipped by
  * a blueprint is exactly where stating it matters.
  *
- * The rest is the stack the shell is actually built on: this blueprint's own components, the PrimeReact
- * primitives it uses, the Cratis Components library its screen templates draw from, and the styling
- * package those are written against.
+ * The rest covers this blueprint's components, the Cratis Components shell controls, and the optional
+ * PrimeReact/Tailwind widget stack that older gallery templates can opt into. This list declares which
+ * active packages the themes support; it does not load those optional packages.
  */
 export const blueprintThemeCompatibility: string[] = ['core', defaultBlueprintName, 'PrimeReact', 'Cratis.Components', 'Tailwind'];

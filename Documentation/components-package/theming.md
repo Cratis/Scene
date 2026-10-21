@@ -14,7 +14,7 @@ this package joins them, and both stay ignorant.
 
 ## Three layers, resolved in order
 
-`@cratis/components` never references PrimeReact's variables directly. Its own `tokens.css` puts one
+`@cratis/components` is built on React Aria and never references PrimeReact's variables directly; the PrimeReact fallbacks below only serve a profile that opts into the optional PrimeReact package. Its own `tokens.css` puts one
 indirection in front of them, so a single build spans PrimeReact major versions:
 
 ```css

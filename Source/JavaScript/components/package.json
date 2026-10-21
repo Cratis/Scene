@@ -9,7 +9,6 @@
         "react",
         "ui",
         "components",
-        "primereact",
         "tailwind",
         "cqrs",
         "event-sourcing"

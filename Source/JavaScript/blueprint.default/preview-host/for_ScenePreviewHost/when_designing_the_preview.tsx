@@ -136,7 +136,7 @@ describe('when designing the preview', () => {
         beforeEach(() => render(preview({ document: designed({ identity: { name: 'Fjord Books', logo: { kind: LogoKind.Icon, icon: 'database' }, showName: false } }) })));
 
         it('should draw the mark only', () => (document.querySelector('.layout-logo-name') === null).should.equal(true));
-        it('should draw the icon', () => document.querySelector('.layout-logo-mark i')!.className.should.contain('pi-database'));
+        it('should draw the icon', () => (document.querySelector('.layout-logo-mark svg') !== null).should.equal(true));
         it('should keep the name for assistive technology', () => document.querySelector('.layout-logo')!.getAttribute('aria-label')!.should.equal('Fjord Books'));
     });
 
@@ -164,7 +164,7 @@ describe('when the gallery application is composed with the identity of the prof
         beforeEach(() => render(drawn()));
 
         it('should draw the name of the application in the sidebar and the top bar, not the gallery\'s', () => document.querySelector('.layout-logo')!.textContent!.should.contain('Fjord Books'));
-        it('should draw the icon the profile chose', () => document.querySelector('.layout-logo-mark i')!.className.should.contain('pi-database'));
+        it('should draw the icon the profile chose', () => (document.querySelector('.layout-logo-mark svg') !== null).should.equal(true));
         it('should not leave the gallery\'s brand anywhere', () => document.body.textContent!.should.not.contain('Contoso'));
     });
 });

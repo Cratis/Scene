@@ -14,7 +14,7 @@ const dependency = (name: string, version: string): ScenePackageBundle => ({
 });
 
 const host = resolveDesignTimeHost({
-    bundles: [dependency('PrimeReact', '11.1.0'), dependency('Tailwind', '4.3.3'), cratisComponentsPackage],
+    bundles: [dependency('Tailwind', '4.3.3'), cratisComponentsPackage],
     profile: { name: 'studio', targetPlatform: 'web', packages: ['Cratis.Components'] },
     policy: { allowExecutableImports: true, allowNetworkAssets: false, loadDesignTime: true },
 });

@@ -40,7 +40,7 @@ public static class TemplateCatalog
                     (source.Manifest.Kind == PackageKind.Blueprint ? problems : warnings).Add(missingCategory);
                 }
 
-                problems.AddRange(RequirementProblems(name, metadata, source.Manifest, versions, sceneVersion));
+                problems.AddRange(RequirementProblems(name, metadata, versions, sceneVersion));
                 entries.Add(new(source.Manifest.Name, source.Manifest.Version, kind, name, displayName, description, metadata, problems.Count == 0, problems, warnings));
             }
         }
@@ -48,7 +48,7 @@ public static class TemplateCatalog
         return entries;
     }
 
-    static List<string> RequirementProblems(string name, TemplateMetadata? metadata, ScenePackage owner, Dictionary<string, string> versions, string? sceneVersion)
+    static List<string> RequirementProblems(string name, TemplateMetadata? metadata, Dictionary<string, string> versions, string? sceneVersion)
     {
         var problems = new List<string>();
         var compatibility = metadata?.Compatibility;
@@ -61,14 +61,11 @@ public static class TemplateCatalog
 
         foreach (var requirement in (compatibility.Packages ?? []).Where(requirement => !string.IsNullOrWhiteSpace(requirement.Name)))
         {
-            if (requirement.Name != owner.Name && !owner.Dependencies.Any(dependency => dependency.Name == requirement.Name))
-            {
-                problems.Add($"Template '{name}' requires package '{requirement.Name}', which its package '{owner.Name}' does not depend on");
-            }
-
+            // A template may require a package its owner does not depend on: that requirement is opt-in, and the template is
+            // available only while the host or profile provides the package. The checks below make it unavailable otherwise.
             if (!versions.TryGetValue(requirement.Name, out var version))
             {
-                problems.Add($"Template '{name}' requires package '{requirement.Name}', which is not available");
+                problems.Add($"Template '{name}' requires package '{requirement.Name}', which this profile does not include. Add `packages {requirement.Name}` to the ui profile, or use a template that does not need it.");
             }
             else if (!PackageVersionRange.IsSatisfiedBy(version, requirement.VersionRange))
             {

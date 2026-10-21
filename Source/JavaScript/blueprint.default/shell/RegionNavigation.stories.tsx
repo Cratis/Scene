@@ -3,7 +3,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from 'storybook/test';
-import { PrimeReactProvider } from '@primereact/core';
 import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement, Visibility } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
@@ -60,7 +59,7 @@ const screens: Record<string, SceneElement> = {
 };
 
 function Application({ initialScreen }: { initialScreen: string }) {
-    return <PrimeReactProvider><LayoutConfigProvider>
+    return <LayoutConfigProvider>
         <SceneNavigationHost screens={screens} initialScreen={initialScreen} registry={{ 'story:page': Page, 'core:outlet': CoreOutlet }}
             navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation }}
             frame={content => <div className='layout-wrapper layout-static'>
@@ -68,7 +67,7 @@ function Application({ initialScreen }: { initialScreen: string }) {
                 <div className='layout-sidebar'><Sidebar element={element('sidebar', 'sidebar')} slots={{}} /></div>
                 <div className='layout-content-wrapper'>{content}</div>
             </div>} />
-    </LayoutConfigProvider></PrimeReactProvider>;
+    </LayoutConfigProvider>;
 }
 
 /**

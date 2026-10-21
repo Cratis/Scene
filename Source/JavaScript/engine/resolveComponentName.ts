@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { UiProfile } from '@cratis/scene.model';
+import { PackageKind, UiProfile } from '@cratis/scene.model';
 import { ComponentResolution } from './ComponentResolution';
 
 /** The name of the package that is always present as the final fallback, regardless of what a {@link UiProfile} lists in its own `packages`. */
@@ -20,6 +20,39 @@ export type PackageCatalog = Record<string, string[]>;
  */
 export function effectivePackages(profile: UiProfile): string[] {
     return profile.packages.includes(corePackage) ? profile.packages : [corePackage, ...profile.packages];
+}
+
+/** What {@link hostProfilePackages} needs to know about the packages a host has. */
+export interface HostProfilePackagesOptions {
+    /** The component library every host provides whether or not a profile lists it (`Cratis.Components`). */
+    baseline: string;
+
+    /** The `kind` each known package's manifest declares, by name. A package not listed is treated as a component library. */
+    catalog: Record<string, PackageKind>;
+}
+
+/**
+ * Orders the packages a host renders with, in ascending priority, so that every host (Stage, Studio, a preview) agrees on
+ * which library wins a bare name. Resolution itself is unchanged - {@link resolveComponentName} still lets the last package
+ * win - this only decides the order it walks. The tiers are:
+ *
+ * 1. {@link corePackage}, the fallback;
+ * 2. the baseline library, which a host always has;
+ * 3. the component libraries the profile lists (PrimeReact, a custom set), in the order listed;
+ * 4. blueprints, so a shell keeps its own names (`sidebar`, `breadcrumb`) whatever libraries are active.
+ *
+ * The tier comes from the manifest `kind`, never from where the profile happened to list a package, so `core` can never
+ * outrank a library the profile asked for.
+ *
+ * @param declared The packages the profile lists, in the order listed.
+ * @param options The baseline library and the kind of each known package.
+ * @returns The packages in ascending priority order, each once.
+ */
+export function hostProfilePackages(declared: string[], options: HostProfilePackagesOptions): string[] {
+    const fixed = [corePackage, options.baseline];
+    const listed = declared.filter((name, index) => !fixed.includes(name) && declared.indexOf(name) === index);
+    const isBlueprint = (name: string) => options.catalog[name] === PackageKind.Blueprint;
+    return [...fixed, ...listed.filter(name => !isBlueprint(name)), ...listed.filter(isBlueprint)];
 }
 
 /**

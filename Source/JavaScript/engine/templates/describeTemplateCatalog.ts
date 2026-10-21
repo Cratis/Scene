@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PackageKind, ScenePackage, TemplateMetadata } from '@cratis/scene.model';
+import { PackageKind, TemplateMetadata } from '@cratis/scene.model';
 import { isVersionSatisfiedBy } from '../packageVersionRange';
 import { TemplateCatalogEntry } from './TemplateCatalogEntry';
 import { TemplateCatalogKind } from './TemplateCatalogKind';
@@ -36,7 +36,7 @@ export function describeTemplateCatalog(sources: TemplateSource[], sceneVersion?
             const warnings: string[] = [];
             const missingCategory = validateTemplateCategory(template.name, metadata);
             if (missingCategory) (source.manifest.kind === PackageKind.Blueprint ? problems : warnings).push(missingCategory);
-            problems.push(...requirementProblems(template.name, metadata, source.manifest, versions, sceneVersion));
+            problems.push(...requirementProblems(template.name, metadata, versions, sceneVersion));
 
             entries.push({
                 package: source.manifest.name,
@@ -66,7 +66,6 @@ export function describeTemplateCatalog(sources: TemplateSource[], sceneVersion?
 function requirementProblems(
     name: string,
     metadata: TemplateMetadata | undefined,
-    owner: ScenePackage,
     versions: Map<string, string>,
     sceneVersion: string | undefined,
 ): string[] {
@@ -80,13 +79,11 @@ function requirementProblems(
 
     for (const requirement of compatibility.packages ?? []) {
         if (!requirement.name?.trim()) continue;
-        if (requirement.name !== owner.name && !owner.dependencies.some(dependency => dependency.name === requirement.name)) {
-            problems.push(`Template '${name}' requires package '${requirement.name}', which its package '${owner.name}' does not depend on`);
-        }
-
+        // A template may require a package its owner does not depend on: that requirement is opt-in, and the template is
+        // available only while the host or profile provides the package. The checks below make it unavailable otherwise.
         const version = versions.get(requirement.name);
         if (version === undefined) {
-            problems.push(`Template '${name}' requires package '${requirement.name}', which is not available`);
+            problems.push(`Template '${name}' requires package '${requirement.name}', which this profile does not include. Add \`packages ${requirement.name}\` to the ui profile, or use a template that does not need it.`);
         } else if (!isVersionSatisfiedBy(version, requirement.versionRange)) {
             problems.push(`Template '${name}' requires package '${requirement.name}' ${requirement.versionRange} but version ${version} is available`);
         }

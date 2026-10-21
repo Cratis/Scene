@@ -1,77 +1,49 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Avatar } from 'primereact/avatar';
-import { Button } from 'primereact/button';
-import { Menu as PrimeMenu } from 'primereact/menu';
-import { RegisteredComponentProps } from '@cratis/scene.react';
-import { MenuEntry } from './MenuEntry';
+import { Avatar } from '@cratis/components/Display';
+import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
+import { RegisteredComponentProps, SceneThemeProvider, useSceneTheme } from '@cratis/scene.react';
 import { readRecords, readString, recordString } from './elementProperties';
+import { ShellIcon } from './ShellIcon';
 import { useShellLink } from './useShellLink';
 
 /**
- * The signed-in user's avatar and menu.
- *
- * The popup is PrimeReact's `Menu` rather than hand-written markup: an overlay that positions itself,
- * traps focus and closes on escape is framework behavior, and re-implementing it in a layout package is
- * how a shell ends up with its own subtly broken menu. The shell hand-writes CSS only where PrimeReact
- * has no primitive at all - the app-shell modes - and uses the library everywhere else.
- *
- * PrimeReact 11 replaced the `model` array with composition, so the entries are rendered here rather than
- * handed over as data - and `primereact/menuitem`, the type that array was made of, went with it, which is
- * why they are mapped into this package's own {@link MenuEntry}. The trade is worth taking: `Menu.Trigger`
- * now owns opening the popup and reporting `aria-haspopup`/`aria-expanded` for it, so the ref, the toggle
- * handler and the hand-maintained aria that used to sit here - and could drift out of step with the popup
- * they described - are gone.
+ * The signed-in user and their actions. Aria owns popup focus, dismissal and keyboard navigation;
+ * Cratis Components has an action menubar, but no popup menu or context-aware menu trigger.
  */
 export function UserMenu({ element }: RegisteredComponentProps) {
+    const theme = useSceneTheme();
     const name = readString(element, 'name');
     const role = readString(element, 'role');
     const initials = readString(element, 'initials', name.slice(0, 1).toUpperCase());
-    const items = readRecords(element, 'items').map(
-        (item): MenuEntry & { screen?: string } => ({
-            label: recordString(item, 'label'),
-            icon: recordString(item, 'icon') || undefined,
-            screen: recordString(item, 'targetScreen') || undefined,
-            url: recordString(item, 'targetScreen') ? `#/${recordString(item, 'targetScreen')}` : undefined,
-        }),
-    );
+    const items = readRecords(element, 'items');
 
     return (
         <div className='layout-user-menu' data-scene-id={element.id}>
-            <Avatar.Root shape='circle'>
-                <Avatar.Fallback>{initials}</Avatar.Fallback>
-            </Avatar.Root>
+            <Avatar label={initials} className='layout-user-avatar' />
             <span className='layout-user-menu-name'>
                 <span>{name}</span>
                 {role && <span className='layout-user-menu-role'>{role}</span>}
             </span>
-            <PrimeMenu.Root>
-                <PrimeMenu.Trigger as={Button} variant='text' rounded iconOnly aria-label={`Open the menu for ${name}`}>
-                    <i className='pi pi-angle-down' aria-hidden='true' />
-                </PrimeMenu.Trigger>
-                <PrimeMenu.Portal>
-                    <PrimeMenu.Positioner>
-                        <PrimeMenu.Popup>
-                            <PrimeMenu.List>
-                                {items.map(item => (
-                                    <UserMenuEntry key={item.label} id={`${element.id}-${item.label}`} entry={item} />
-                                ))}
-                            </PrimeMenu.List>
-                        </PrimeMenu.Popup>
-                    </PrimeMenu.Positioner>
-                </PrimeMenu.Portal>
-            </PrimeMenu.Root>
+            <MenuTrigger>
+                <Button className='layout-icon-button' aria-label={`Open the menu for ${name}`}><ShellIcon name='angle-down' /></Button>
+                <Popover className='layout-user-popover' placement='bottom end'>
+                    <SceneThemeProvider theme={theme} className='layout-overlay-theme'>
+                        <Menu className='layout-user-actions' aria-label={`Menu for ${name}`}>
+                            {items.map((item, index) => <UserMenuEntry key={`${recordString(item, 'label')}-${index}`} id={`${element.id}-${recordString(item, 'label')}`} label={recordString(item, 'label')} icon={recordString(item, 'icon')} screen={recordString(item, 'targetScreen') || undefined} />)}
+                        </Menu>
+                    </SceneThemeProvider>
+                </Popover>
+            </MenuTrigger>
         </div>
     );
 }
 
-function UserMenuEntry({ id, entry }: { id: string; entry: MenuEntry & { screen?: string } }) {
-    const link = useShellLink(entry.screen, { source: 'userMenu', id, label: entry.label });
-    return (
-        <PrimeMenu.Item as='a' href={link.href ?? entry.url} onClick={link.onClick} data-nav-problem={entry.screen && link.dead ? 'navTargetMissing' : undefined}>
-            {entry.icon && <i className={entry.icon} aria-hidden='true' />}
-            <span>{entry.label}</span>
-        </PrimeMenu.Item>
-    );
+function UserMenuEntry({ id, label, icon, screen }: { id: string; label: string; icon: string; screen?: string }) {
+    const link = useShellLink(screen, { source: 'userMenu', id, label });
+    return <MenuItem id={id} textValue={label} href={link.href} onClick={link.onClick} className='layout-user-action' data-nav-problem={screen && link.dead ? 'navTargetMissing' : undefined}>
+        {icon && <ShellIcon name={icon} />}
+        <span>{label}</span>
+    </MenuItem>;
 }

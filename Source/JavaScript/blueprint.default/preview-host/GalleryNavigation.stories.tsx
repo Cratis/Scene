@@ -4,6 +4,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from 'storybook/test';
 import { PrimeReactProvider } from '@primereact/core';
+import Lara from '@primeuix/themes/lara';
+import 'primeicons/primeicons.css';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
@@ -18,7 +20,7 @@ const noStructure = { modules: [] };
 
 function Application({ initial, mode }: { initial: string; mode: 'navigate' | 'select' }) {
     return (
-        <PrimeReactProvider>
+        <PrimeReactProvider theme={{ preset: Lara }}>
             <ScenePreviewHost document={document} structure={noStructure} target={{ application: 'Gallery' }} registry={registry} composition={galleryComposition}
                 initialDestination={{ screen: initial }} navigationMode={mode} />
         </PrimeReactProvider>

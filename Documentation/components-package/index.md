@@ -54,26 +54,23 @@ ui profile Desktop
   packages
     core
     Tailwind
-    PrimeReact
     Cratis.Components
 ```
 
-Every component in `@cratis/components` is a wrapper over a PrimeReact widget, and its styling is a compiled
-Tailwind utility sheet plus the `--cratis-*` token layer. List it without PrimeReact and nothing renders;
-list it without Tailwind and everything renders unstyled. So it declares both:
+`@cratis/components` is built on React Aria Components; it needs no other component library. Its styling is a
+compiled Tailwind utility sheet plus the `--cratis-*` token layer, so list it without Tailwind and everything
+renders unstyled. It declares that dependency:
 
 ```typescript
 dependencies: [
-    { name: 'PrimeReact', versionRange: '>=10.9.0' },
     { name: 'Tailwind', versionRange: '^4.0.0' },
 ],
 ```
 
 `resolvePackageDependencies(['Cratis.Components'], catalog)` expands that to
-`['Tailwind', 'PrimeReact', 'Cratis.Components']` — which is also the correct override priority, since this
-package layers on both. The version ranges are the real ones: `>=10.9.0` because the `--cratis-*` tokens
-resolve PrimeReact 11's design tokens first and fall back to version 10's theme variables, and `^4.0.0`
-because the utility sheet is compiled against Tailwind 4.
+`['Tailwind', 'Cratis.Components']`. The range is the real one: `^4.0.0` because the utility sheet is compiled
+against Tailwind 4. PrimeReact is not a dependency; a profile that wants PrimeReact widgets lists the optional
+`PrimeReact` package ([`@cratis/scene.primereact`](../primereact-package/index.md)) itself.
 
 ## The one thing you have to know
 
