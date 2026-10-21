@@ -67,6 +67,23 @@ describe('when composing a screen', () => {
         });
     });
 
+    describe('and the screen names a template inside another and the host composes only the named template', () => {
+        const { application, inner } = nested();
+        const screen = application.screens[1];
+        const options = { namedTemplateOnly: true };
+        const composed = composeApplicationScreen(application, screen, options);
+        const content = asComponent(composed.element).slots.content;
+
+        it('should find only the named template', () => templateChainOf(application, screen, options).map(template => template.name).should.deep.equal([inner.name]));
+        it('should report only the named template', () => composed.templates.should.deep.equal(['Section']));
+        it('should place the named template in the content slot without the outer template or its seeded content', () =>
+            [content.length, asComponent(content[0]).id].should.deep.equal([1, 'template-sales.orders-Section']));
+        it('should give the named template the content of the screen and its own seeds', () => {
+            const section = asComponent(content[0]);
+            [ids(section.slots.toolbar), ids(section.slots.list)].should.deep.equal([['section-toolbar'], ['orders-list']]);
+        });
+    });
+
     describe('and the screen names a template of the blueprint the document does not declare', () => {
         it('should compose it as the document would its own', () => {
             const application = ordersApplication();

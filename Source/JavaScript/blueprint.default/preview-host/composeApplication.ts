@@ -66,6 +66,14 @@ export interface CompositionOptions {
     hostedOutlets?: string[];
 
     /**
+     * Composes a screen with only the template it names, not inside the templates that template fits. A modeled screen fills only
+     * the slots of its own template, so the templates around it could only draw their seeded content - a workspace's module
+     * navigation beside a master/detail, for instance. Hosts that render modeled screens (Stage, Studio Play) set it; the gallery
+     * and the preview keep the chain. Absent, the whole chain is composed.
+     */
+    namedTemplateOnly?: boolean;
+
+    /**
      * The templates the shell is resolved against: the application's own and the blueprints that are installed. Absent, the
      * document's own layouts and templates, and the default blueprint's.
      */
@@ -199,6 +207,7 @@ export function templateChainOf(application: ApplicationDocument, screen: Screen
     const templates = templatePoolFor(application, screen, options);
     const own = templates.find(candidate => candidate.name === screen.screenTemplate);
     if (!own) return [];
+    if (options.namedTemplateOnly) return [own];
 
     const layout = shellLayout(effectiveShellOf(application, screen, options));
     const placements = resolveScreenTemplates(layout, templates).placements;
