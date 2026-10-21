@@ -53,6 +53,13 @@ describe('when previewing a slice that owns screens', () => {
         it('should draw the data of the slice and nothing of the screens of other slices', () => [document.querySelector('[data-grid="OrderList"]') !== null, pages()].should.deep.equal([true, []]));
     });
 
+    describe('and the navigation leads to screens the preview leaves out', () => {
+        beforeEach(() => { render(preview({ document: composedApplication(), target: { slice: 'sales.orders.PlaceOrder' } })); });
+
+        it('should draw no navigation item with the warning marker (Cratis/StudioIssues#1021)', () => document.querySelectorAll('[data-nav-problem]').length.should.equal(0));
+        it('should still draw the navigation items', () => (document.querySelectorAll('nav li').length > 0).should.equal(true));
+    });
+
     describe('and a navigation item leads to a feature of another slice', () => {
         it('should not have loaded that slice\'s screens to draw it', () => {
             render(preview({ document: composedApplication(), target: { slice: 'sales.orders.PlaceOrder' } }));

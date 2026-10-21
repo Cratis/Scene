@@ -56,6 +56,8 @@ Navigation keeps to an in-memory history (`createMemorySceneHistory`), so a prev
 
 **An entry with nowhere to go is marked** (N8): a control whose target is not a screen the host renders, or an item with no target at all, is drawn with `data-nav-problem="navTargetMissing"` (a warning glyph) and does nothing when clicked.
 
+**A preview of one slice leaves the other screens out on purpose**: it draws only the screens the slice owns and the ones nobody owns, so a navigation item that leads to another slice's screen is not a problem there. The host's `NavigationActivationPolicy.leftOut` says so: such an item resolves (no `navTargetMissing` marker) and, when clicked, is reported with `navigated` false. Module, feature and application previews draw every screen, so a missing target is still marked there, and the Problems tab and the UI profile designer report a target the whole application lacks.
+
 ### Selecting versus navigating
 
 A design host does not always want a click to leave the page. Two props decide:
