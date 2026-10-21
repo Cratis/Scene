@@ -19,7 +19,7 @@ function CommandForm({ element: form }: RegisteredComponentProps) {
 
 const quickCreate: ScreenTemplate = {
     name: 'QuickCreate',
-    slots: [{ name: 'body' }, { name: 'actions' }, { name: 'forms' }],
+    slots: [{ name: 'header' }, { name: 'body' }, { name: 'actions' }, { name: 'forms' }],
     content: {},
     metadata: { type: 'Dialog', category: 'Foundation / Dialog' } as ScreenTemplate['metadata'],
 };
@@ -59,6 +59,12 @@ describe('when previewing a slice on a neutral surface', () => {
         it('should leave the action out, because it is the submit of that form', () => document.querySelectorAll('[data-action="PlaceOrder"]').length.should.equal(0));
         it('should give the one submit button the label of the action', () => Array.from(document.querySelectorAll('button')).map(button => button.textContent).should.deep.equal(['Place it']));
         it('should not open the task dialog on top of it', () => (screen.queryByRole('dialog') === null).should.equal(true));
+    });
+
+    describe('and the dialog template screen leaves the header of the dialog empty', () => {
+        beforeEach(() => { render(previewOf(dialogScreen())); });
+
+        it('should title the dialog with the name of the slice', () => document.querySelector('[data-slot="header"]')!.textContent!.should.contain('Place order'));
     });
 
     describe('and the slice owns a page screen that hosts the form of its command', () => {

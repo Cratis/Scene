@@ -189,9 +189,20 @@ export function templatesOf(application: ApplicationDocument, options: Compositi
  * the same slot name, which would make every slot ambiguous.
  */
 export function templatePoolFor(application: ApplicationDocument, screen: Screen, options: CompositionOptions = {}): ScreenTemplate[] {
-    return application.screenTemplates.some(candidate => candidate.name === screen.screenTemplate)
+    const pool = application.screenTemplates.some(candidate => candidate.name === screen.screenTemplate)
         ? application.screenTemplates
         : templatesOf(application, options);
+    return screen.layout === LayoutName.FullPage ? pool.filter(candidate => candidate.name !== ownRootTemplateOf(application, options)) : pool;
+}
+
+/**
+ * The name of the application's own template that is the profile's root, when the root is one. A screen on the chrome-less full-page layout opts out of
+ * the root, so the root is not a container its template could be placed in: a template that fits the slot `content` goes into the layout, not unplaced
+ * between the layout and the root template that both declare `content` (a slice preview draws its screen there).
+ */
+function ownRootTemplateOf(application: ApplicationDocument, options: CompositionOptions): string | undefined {
+    const root = profileOf(application, options).root?.template;
+    return root !== undefined && String(root.source).toLowerCase() === 'own' ? root.id : undefined;
 }
 
 /** The slot of the layout a template chain's outermost template fits: its declared slot, or `content`. */

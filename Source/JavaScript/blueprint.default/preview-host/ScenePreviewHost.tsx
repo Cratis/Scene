@@ -25,7 +25,7 @@ import { PreviewProblemsView } from './PreviewProblemsView';
 import { PreviewSampleData, createPreviewSampleData } from './previewSampleData';
 import { findSliceFragment } from './PreviewSliceFragment';
 import { screensForSlice, screensOwnedBy } from './sliceScreens';
-import { SliceSurface, isDialogScreen, onNeutralSurface, presentsCommand, withoutFormSubmits } from './sliceSurface';
+import { SliceSurface, isDialogScreen, onNeutralSurface, presentsCommand, withDialogTitle, withoutFormSubmits } from './sliceSurface';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewRegionHandle, markRegions, measureRegion, regionOf } from './previewRegions';
 import { PreviewInvocation, PreviewToast } from './PreviewToast';
@@ -396,10 +396,13 @@ function slicePage(plan: PreviewPlan, screen: Screen | undefined, screens: Scree
 
         const labels = Object.assign({}, ...stripped.map(candidate => candidate.labels)) as Record<string, string>;
         const templates = templatesOf(application, composition);
+        const dialog = isDialogScreen(owned[0], templates);
+        const title = externalComponent('slice-dialog-title', ComponentName.PageHeader, { title: plan.breadcrumb[plan.breadcrumb.length - 1] });
+        const drawn = (candidate: Screen) => dialog && candidate.name === owned[0].name ? withDialogTitle(candidate, templates.find(template => template.name === candidate.screenTemplate), title) : candidate;
         return {
-            screens: [...stripped.map(candidate => onNeutralSurface(candidate.screen)), ...unowned],
+            screens: [...stripped.map(candidate => onNeutralSurface(drawn(candidate.screen))), ...unowned],
             initial: owned[0].name,
-            surface: isDialogScreen(owned[0], templates) ? SliceSurface.Dialog : SliceSurface.Page,
+            surface: dialog ? SliceSurface.Dialog : SliceSurface.Page,
             submitLabels: labels,
         };
     }
