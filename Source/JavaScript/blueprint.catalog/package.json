@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.catalog",
     "version": "1.0.0",
     "description": "Products and categories for a sales team: a catalog overview, a product list, a product page with its variants and price history, and the categories they sit in.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

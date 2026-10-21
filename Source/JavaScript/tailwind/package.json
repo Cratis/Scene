@@ -2,6 +2,7 @@
     "name": "@cratis/scene.tailwind",
     "version": "1.0.0",
     "description": "The Tailwind styling package: a Scene package declaring the utility CSS system component libraries are written against, plus the themes that ride on it.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

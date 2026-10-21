@@ -2,6 +2,7 @@
     "name": "@cratis/scene.react",
     "version": "1.0.0",
     "description": "The React renderer implementing Scene.Engine's Renderer contract against real React/DOM.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

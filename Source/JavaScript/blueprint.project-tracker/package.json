@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.project-tracker",
     "version": "1.0.0",
     "description": "Projects, tasks and a board for a team.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

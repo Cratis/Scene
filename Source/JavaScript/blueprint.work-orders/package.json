@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.work-orders",
     "version": "1.0.0",
     "description": "Work orders for a maintenance or field-service team: a work order list, a work order page with its tasks, parts and time, a board by step and a schedule of visits.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.customer-portal",
     "version": "1.0.0",
     "description": "A self-service portal for customers: an account home, their orders and invoices, a support inbox and their own profile.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",
