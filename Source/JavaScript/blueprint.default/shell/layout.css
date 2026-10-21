@@ -1114,6 +1114,34 @@
     border-radius: 999px;
 }
 
+/* ---------------------------------------------------------------------------
+ * Slice preview surface (Cratis/Scene#252) - a previewed slice is drawn alone, on the chrome-less full-page
+ * layout: a neutral ground, the page inline, or the slice's dialog template as an opened dialog card.
+ * ------------------------------------------------------------------------ */
+
+.scene-preview-host[data-scene-preview-surface] {
+    min-height: 100%;
+    background: var(--scene-surface-ground, #e9ebf0);
+}
+
+.scene-preview-host[data-scene-preview-surface] .layout-full-page {
+    min-height: 100%;
+}
+
+.scene-preview-host[data-scene-preview-surface='page'] .layout-full-page-content {
+    justify-content: flex-start;
+}
+
+.scene-preview-host[data-scene-preview-surface='dialog'] .layout-full-page-content > .scene-template {
+    width: min(30rem, 100%);
+    margin-inline: auto;
+    padding: 1.5rem;
+    color: var(--scene-text-color, #1f2430);
+    background: var(--scene-surface-overlay, #ffffff);
+    border-radius: 1rem;
+    box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.3);
+}
+
 [data-scene-dialog]:has(> .scene-slice-dialog) {
     position: fixed;
     inset: 0;

@@ -43,7 +43,7 @@ describe('when previewing a slice that owns screens', () => {
 
         it('should draw the screen the slice owns', () => pages().should.deep.equal(['place-order-page']));
         it('should open the task dialog of the slice over it', () => screen.getByRole('dialog').getAttribute('aria-label')!.should.equal('Place order'));
-        it('should draw the shell around it', () => (document.querySelector('.layout-topbar') !== null).should.equal(true));
+        it('should draw no shell around it (Cratis/Scene#252)', () => [document.querySelector('.layout-topbar'), document.querySelector('nav')].should.deep.equal([null, null]));
         it('should find nothing to warn about', () => problems.should.deep.equal([]));
     });
 
@@ -53,11 +53,11 @@ describe('when previewing a slice that owns screens', () => {
         it('should draw the data of the slice and nothing of the screens of other slices', () => [document.querySelector('[data-grid="OrderList"]') !== null, pages()].should.deep.equal([true, []]));
     });
 
-    describe('and the navigation leads to screens the preview leaves out', () => {
+    describe('and the navigation of the application leads to screens the preview leaves out', () => {
         beforeEach(() => { render(preview({ document: composedApplication(), target: { slice: 'sales.orders.PlaceOrder' } })); });
 
         it('should draw no navigation item with the warning marker (Cratis/StudioIssues#1021)', () => document.querySelectorAll('[data-nav-problem]').length.should.equal(0));
-        it('should still draw the navigation items', () => (document.querySelectorAll('nav li').length > 0).should.equal(true));
+        it('should draw no navigation at all', () => document.querySelectorAll('nav').length.should.equal(0));
     });
 
     describe('and a navigation item leads to a feature of another slice', () => {
@@ -83,7 +83,7 @@ describe('when previewing a slice that owns screens', () => {
                 render(preview({ document: { ...composedApplication(), screens: composedApplication().screens.filter(candidate => candidate.owner !== 'sales.customers.Register') }, target: { slice: 'sales.customers.Register' }, onProblems: found => problems = found }));
             });
 
-            it('should draw no screen of any other slice, over a minimal host page', () => [pages(), document.querySelector('.layout-topbar') !== null].should.deep.equal([[], true]));
+            it('should draw no screen of any other slice and no shell, with the task dialog over an empty page', () => [pages(), document.querySelector('.layout-topbar'), screen.getByRole('dialog').getAttribute('aria-label')].should.deep.equal([[], null, 'Register']));
             it('should say the slice owns no screen', () => problems.map(problem => [problem.code, problem.severity, problem.nodeId]).should.deep.equal([['sliceScreenMissing', 'warning', 'sales.customers.Register']]));
         });
     });

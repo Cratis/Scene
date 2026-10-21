@@ -28,12 +28,22 @@ import '@cratis/scene.blueprint.default/styles.css';
 | `{ application }` | the application itself (`true`, or its name): the shell with the application's navigation, started on `initialDestination`, else the first destination of the application's navigation, else the document's first screen. Use it for an application with no authored structure - a blueprint's gallery (`galleryApplication()` with `galleryComposition`) |
 | `{ module }` | the application shell with the module's **effective navigation** and its first feature |
 | `{ module, feature }` | that feature in the shell, with navigation |
-| `{ slice }`, State Change | the slice's task dialog over the screen the slice owns - a minimal host page when it owns none |
-| `{ slice }`, State View | the slice's data fragment: the outermost components bound to its read model, in the minimal host page |
+| `{ slice }`, State Change | the slice's own UI, once, in a neutral container (no shell): the screen it owns when that screen presents the command - drawn as an opened dialog card when it is built from a dialog template - else the task dialog over what it owns, or over an empty neutral page |
+| `{ slice }`, State View | the slice's data fragment: the outermost components bound to its read model, in a minimal page with no shell |
 
 ### A slice preview loads only that slice
 
-A `Screen` names the slice that declared it in `owner` - the qualified id of the slice, `sales.orders.PlaceOrder`. Whoever composes the document sets it (Stage does, from the slice a screen is written in); nothing is ever matched by name. A slice preview then loads exactly the screens the slice owns and the screens no slice owns (`screensForSlice`): the application's own, a blueprint's or a hand-authored screen has no `owner` and belongs to every preview. The layouts, screen templates and the profile's root template stay in the document, so the shell and the templates the slice's screen is built from still draw. A screen another slice owns is neither composed nor routable. A slice that owns no screen is drawn over a minimal host page and reported as a `sliceScreenMissing` warning. A module or a feature preview loads the whole document as before.
+A `Screen` names the slice that declared it in `owner` - the qualified id of the slice, `sales.orders.PlaceOrder`. Whoever composes the document sets it (Stage does, from the slice a screen is written in); nothing is ever matched by name. A slice preview then loads exactly the screens the slice owns and the screens no slice owns (`screensForSlice`): the application's own, a blueprint's or a hand-authored screen has no `owner` and belongs to every preview. The layouts and screen templates stay in the document, so the templates the slice's screen is built from still draw. A screen another slice owns is neither composed nor routable. A slice that owns no screen is reported as a `sliceScreenMissing` warning. A module or a feature preview loads the whole document as before.
+
+### A slice preview draws only the slice, once
+
+The screens of a slice are drawn on the chrome-less full-page layout (`onNeutralSurface`): the profile's root template, the navigation regions and the page of the feature are not drawn around a slice; a module, feature or application preview keeps its shell. The host says how the slice is presented in `data-scene-preview-surface` on `.scene-preview-host`:
+
+- `page` - a screen the slice owns, inline;
+- `dialog` - the owned screen is built from a dialog template (`metadata.type` `Dialog`), drawn as an opened dialog card on a neutral backdrop;
+- `task-dialog` - the slice owns no screen that presents its command, so the task dialog opens over what it owns or an empty neutral page.
+
+The command is presented **once**. A screen presents it when it hosts a form for it or has an action or a command form that executes it (`presentsCommand`); then the task dialog is not opened. An action that executes the command of a form the same screen hosts is that form's submit: it is left out and the form's submit carries its label (`withoutFormSubmits`). Cratis/Scene#252.
 
 Ids are the qualified ids of the application structure (`sales`, `sales.orders`, `sales.orders.PlaceOrder`); a feature may be given relative to its module. An automation slice has nothing to show and is reported as a problem. `resolvePreviewPlan` resolves a target without rendering.
 

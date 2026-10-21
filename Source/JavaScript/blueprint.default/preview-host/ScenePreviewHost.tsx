@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { CSSProperties, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, ReactNode, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SliceKind, Theme } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, SceneElement, Screen, SliceKind, Theme } from '@cratis/scene.model';
 import {
     ApplicationStructureIndex, EffectiveNavItem, ProfileRegion, defaultNavigationMode, navigationModes, normalizeNavigationMode, resolveAppearance, resolveProfileIdentity, resolveToolbarButton,
 } from '@cratis/scene.engine';
@@ -18,13 +18,14 @@ import { LayoutName, SlotName } from '../layouts';
 import { previewProfile } from './previewProfile';
 import { ApplicationDocument } from './ApplicationDocument';
 import { ApplicationHost } from './ApplicationHost';
-import { CompositionOptions } from './composeApplication';
+import { CompositionOptions, defaultForm, templatesOf } from './composeApplication';
 import { diagnosePreview } from './diagnosePreview';
 import { PreviewProblem, PreviewProblemCode, PreviewProblemSeverity, hasBlockingProblem } from './PreviewProblem';
 import { PreviewProblemsView } from './PreviewProblemsView';
 import { PreviewSampleData, createPreviewSampleData } from './previewSampleData';
 import { findSliceFragment } from './PreviewSliceFragment';
-import { screensForSlice } from './sliceScreens';
+import { screensForSlice, screensOwnedBy } from './sliceScreens';
+import { SliceSurface, isDialogScreen, onNeutralSurface, presentsCommand, withoutFormSubmits } from './sliceSurface';
 import { PreviewTarget } from './PreviewTarget';
 import { PreviewRegionHandle, markRegions, measureRegion, regionOf } from './previewRegions';
 import { PreviewInvocation, PreviewToast } from './PreviewToast';
@@ -270,25 +271,18 @@ export function ScenePreviewHost({
         // is composed, routed or drawn (Cratis/Scene#207).
         const screens = plan.slice === undefined ? application.screens : screensForSlice(application.screens, plan.slice);
 
-        if (!screen) {
-            // A slice that owns no screen, and whose feature has no page of the application's: a minimal host page, headed with where it is.
-            if (plan.slice === undefined) return undefined;
-            const layout = previewProfile(application.uiProfiles).layout ?? LayoutName.AppShell;
-            const header = externalComponent('preview-page-header', ComponentName.PageHeader, { title: plan.breadcrumb.slice(0, -1).join(' › ') || plan.breadcrumb[0] });
-            return { screens: [...screens, minimalPage(layout, [header])], initial: previewPageScreen };
-        }
+        // And it previews only itself: its own UI once, in a neutral container - no root template, no navigation, no page of the feature around it
+        // (Cratis/Scene#252). The command is presented once: by the screen the slice owns when that screen presents it, else by the task dialog.
+        if (plan.slice !== undefined) return slicePage(plan, screen, screens, application, index, compose);
 
-        if (plan.kind === 'stateView' && plan.slice) {
-            const slice = index.findSlice(plan.slice);
-            const fragment = slice ? findSliceFragment(screen, plan.slice, slice) : [];
-            if (fragment.length > 0) return { screens: [...screens, minimalPage(screen.layout, fragment)], initial: previewPageScreen };
-        }
+        if (!screen) return undefined;
 
         const requested = initialDestination?.screen;
         return { screens, initial: requested !== undefined && screens.some(candidate => candidate.name === requested) ? requested : screen.name };
-    }, [application, diagnosis, index, initialDestination, navigation]);
+    }, [application, compose, diagnosis, index, initialDestination, navigation]);
 
     const hostApplication = useMemo(() => page ? { ...application, screens: page.screens } : application, [application, page]);
+    const hostComposition = useMemo<CompositionOptions>(() => page?.submitLabels === undefined ? compose : { ...compose, form: formWithSubmitLabels(compose, page.submitLabels) }, [compose, page?.submitLabels]);
     const navigationModel = useMemo(() => ({ structure: index, navigation, isVisible }), [index, isVisible, navigation]);
 
     // A preview of one slice draws only that slice's screens, so every other screen the navigation leads to is left out on purpose, not missing
@@ -315,13 +309,14 @@ export function ScenePreviewHost({
                     style={appearanceStyle}
                     data-scene-preview={diagnosis.plan?.kind}
                     data-preview-breadcrumb={breadcrumb?.join(' › ')}
+                    data-scene-preview-surface={page?.surface}
                     onMouseOver={designing ? onMouseOver : undefined}
                     onMouseLeave={designing ? onMouseLeave : undefined}
                     onClick={designing ? onClick : undefined}
                     onKeyDown={designing ? onRegionKeyDown : undefined}>
                     <ApplicationHost
                         application={hostApplication}
-                        composition={compose}
+                        composition={hostComposition}
                         navigationModel={navigationModel}
                         registry={registry}
                         initialScreen={page.initial}
@@ -331,7 +326,7 @@ export function ScenePreviewHost({
                         viewportWidth={viewportWidth}
                         resolveBinding={samples.resolveBinding}
                         queryResults={samples.queryResults}>
-                        {diagnosis.plan?.kind === 'stateChange' && <OpenSliceDialog index={index} plan={diagnosis.plan} />}
+                        {diagnosis.plan?.kind === 'stateChange' && page?.surface === SliceSurface.TaskDialog && <OpenSliceDialog index={index} plan={diagnosis.plan} />}
                         <OpenInitialDialog destination={initialDestination} />
                         <ReportNavigation onNavigate={onNavigate} />
                         <EscapeToExit onKeyDown={onKeyDown} enabled={onExit !== undefined} />
@@ -344,6 +339,77 @@ export function ScenePreviewHost({
     );
 
     return theme ? <SceneThemeProvider theme={theme}>{body}</SceneThemeProvider> : body;
+}
+
+/** What the host draws for the target: the screens, the one it starts on, and - for a slice - how the slice is presented. */
+interface PreviewPage {
+    screens: Screen[];
+    initial: string;
+
+    /** How a slice's own UI is presented; absent for an application, a module and a feature. */
+    surface?: SliceSurface;
+
+    /** The labels of the actions that became the submit of the form of their command, by command. */
+    submitLabels?: Record<string, string>;
+}
+
+/** A form element that carries the label of the action that was its submit. */
+function formWithSubmitLabels(composition: CompositionOptions, labels: Record<string, string>): NonNullable<CompositionOptions['form']> {
+    return (screenName, form) => {
+        const element = (composition.form ?? defaultForm)(screenName, form);
+        const label = labels[form.forCommand];
+        return label === undefined || (element as { properties?: unknown }).properties === undefined
+            ? element
+            : { ...element, properties: { ...(element as { properties: Record<string, unknown> }).properties, submitLabel: label } } as SceneElement;
+    };
+}
+
+/**
+ * What a slice preview draws (Cratis/Scene#252): the slice's own UI and nothing of the application around it.
+ *
+ * - The screens the slice owns go on the chrome-less full-page layout, so no root template, navigation or feature page is drawn.
+ * - A screen that presents the slice's command - hosts its form or an action that executes it - is that presentation, and the task dialog does not open
+ *   on top of it. A screen drawn from a dialog template is drawn as an opened dialog on a neutral backdrop; any other inline.
+ * - A State Change slice whose screens do not present its command - or that owns none - opens its task dialog over what it owns, or over an empty neutral page.
+ * - A State View slice shows the data fragment of its screen, or - owning none - of the feature page it is bound on; with nothing bound, that page whole
+ *   (diagnosed as a warning), or a minimal page headed with where it is.
+ */
+function slicePage(plan: PreviewPlan, screen: Screen | undefined, screens: Screen[], application: ApplicationDocument, index: ApplicationStructureIndex, composition: CompositionOptions): PreviewPage {
+    const slice = plan.slice!;
+    const unowned = screens.filter(candidate => candidate.owner === undefined).map(onNeutralSurface);
+    const owned = screensOwnedBy(screens, slice);
+    const layout = LayoutName.FullPage;
+    const header = () => externalComponent('preview-page-header', ComponentName.PageHeader, { title: plan.breadcrumb.slice(0, -1).join(' › ') || plan.breadcrumb[0] });
+    const fragmentPage = (content: Screen['slotContent'][string]): Screen => minimalPage(layout, content);
+
+    if (plan.kind === 'stateChange') {
+        const stripped = owned.map(candidate => withoutFormSubmits(candidate));
+        const presented = plan.command !== undefined && presentsCommand(owned, plan.command);
+        if (!presented) {
+            // Whatever the slice owns stays, but it does not present the command: the command is the task dialog, over that or - when the slice owns nothing - over an empty page.
+            return {
+                screens: [...stripped.map(candidate => onNeutralSurface(candidate.screen)), ...unowned, ...(owned.length === 0 ? [fragmentPage([])] : [])],
+                initial: owned.length === 0 ? previewPageScreen : owned[0].name,
+                surface: SliceSurface.TaskDialog,
+            };
+        }
+
+        const labels = Object.assign({}, ...stripped.map(candidate => candidate.labels)) as Record<string, string>;
+        const templates = templatesOf(application, composition);
+        return {
+            screens: [...stripped.map(candidate => onNeutralSurface(candidate.screen)), ...unowned],
+            initial: owned[0].name,
+            surface: isDialogScreen(owned[0], templates) ? SliceSurface.Dialog : SliceSurface.Page,
+            submitLabels: labels,
+        };
+    }
+
+    const slicePosition = index.findSlice(slice);
+    const fragment = screen && slicePosition ? findSliceFragment(screen, slice, slicePosition) : [];
+    if (fragment.length > 0) return { screens: [...owned.map(onNeutralSurface), ...unowned, fragmentPage(fragment)], initial: previewPageScreen, surface: SliceSurface.Page };
+    if (owned.length > 0) return { screens: [...owned.map(onNeutralSurface), ...unowned], initial: owned[0].name, surface: SliceSurface.Page };
+    if (screen) return { screens: [...unowned], initial: screen.name, surface: SliceSurface.Page };
+    return { screens: [...unowned, fragmentPage([header()])], initial: previewPageScreen, surface: SliceSurface.Page };
 }
 
 /**

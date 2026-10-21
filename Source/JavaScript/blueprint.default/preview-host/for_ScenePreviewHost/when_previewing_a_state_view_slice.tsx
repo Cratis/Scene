@@ -15,7 +15,7 @@ describe('when previewing a State View slice', () => {
         it('should render the data fragment of the slice', () => document.querySelector('[data-grid="OrderList"]')!.textContent!.should.equal('OrderList'));
         it('should leave the rest of the page out', () => (document.querySelector('[data-page="orders"]') === null).should.equal(true));
         it('should open no dialog', () => (screen.queryByRole('dialog') === null).should.equal(true));
-        it('should host it in the minimal page of the shell', () => (document.querySelector('.layout-topbar') !== null).should.equal(true));
+        it('should host it in a minimal page without a shell', () => [document.querySelector('.layout-topbar'), document.querySelector('nav')].should.deep.equal([null, null]));
     });
 
     describe('and nothing on the page is bound to it', () => {
@@ -27,7 +27,7 @@ describe('when previewing a State View slice', () => {
             render(preview({ document: bare, target: { slice: 'sales.orders.OrderList' }, onProblems: found => problems = found }));
         });
 
-        it('should warn and show the page of the feature', () => [problems.filter(problem => problem.code === 'sliceFragmentMissing').map(problem => problem.severity), globalThis.document.querySelector('.layout-topbar') !== null].should.deep.equal([['warning'], true]));
+        it('should warn and show the page of the feature, without the shell', () => [problems.filter(problem => problem.code === 'sliceFragmentMissing').map(problem => problem.severity), globalThis.document.querySelector('.layout-topbar'), globalThis.document.querySelector('[data-scene-screen="sales.orders"]') !== null].should.deep.equal([['warning'], null, true]));
     });
 
     describe('and the slice is an automation', () => {
