@@ -35,7 +35,7 @@ describe('when a rail hides the label', () => {
     const hideLabels = () => document.querySelectorAll<HTMLElement>('[data-scene-nav-link] > span:not([aria-hidden])').forEach(span => { span.style.display = 'none'; });
 
     it('should give the link the title as its tooltip', () => link('stock').getAttribute('title')!.should.equal('Stock'));
-    it('should name an item without a target in its tooltip', () => link('ghost').getAttribute('title')!.should.contain('Ghost'));
+    it('should name an item without a target in its tooltip', () => link('ghost').getAttribute('title')!.should.equal('Ghost: this item has no target to go to.'));
     it('should keep the link findable by the title when the label is hidden', () => {
         hideLabels();
         (screen.getByRole('link', { name: 'Stock' }) === link('stock')).should.equal(true);
