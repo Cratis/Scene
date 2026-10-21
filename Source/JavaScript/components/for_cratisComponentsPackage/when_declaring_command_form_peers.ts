@@ -8,7 +8,7 @@ import { expect } from 'vitest';
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8')) as {
     name: string;
     peerDependencies: Record<string, string>;
-    peerDependenciesMeta: Record<string, { optional?: boolean }>;
+    peerDependenciesMeta?: Record<string, { optional?: boolean }>;
 };
 
 describe('when declaring native command form peers', () => {
@@ -19,8 +19,7 @@ describe('when declaring native command form peers', () => {
         expect(packageJson.peerDependencies['@cratis/arc.react']).toBe('^22.19.1');
     });
 
-    it('keeps Arc optional for an unbound design-time preview', () => {
-        expect(packageJson.peerDependenciesMeta['@cratis/arc'].optional).toBe(true);
-        expect(packageJson.peerDependenciesMeta['@cratis/arc.react'].optional).toBe(true);
+    it('requires Arc, because @cratis/components loads it at module load', () => {
+        expect(packageJson.peerDependenciesMeta).toBeUndefined();
     });
 });

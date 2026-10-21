@@ -88,16 +88,5 @@
         "@cratis/fundamentals": "^7.19.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
-    },
-    "peerDependenciesMeta": {
-        "@cratis/arc": {
-            "optional": true
-        },
-        "@cratis/arc.react": {
-            "optional": true
-        },
-        "@cratis/fundamentals": {
-            "optional": true
-        }
     }
 }
