@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.vendors",
     "version": "1.0.0",
     "description": "Vendors for a purchasing team: a vendor list, a vendor page with its contacts, orders and certificates, an onboarding board and a performance dashboard.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",

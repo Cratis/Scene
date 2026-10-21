@@ -2,6 +2,7 @@
     "name": "@cratis/scene.blueprint.administration",
     "version": "1.0.0",
     "description": "Users, roles and permissions, settings and an audit log for an administrator.",
+    "homepage": "https://www.cratis.io/screenplay/",
     "keywords": [
         "cratis",
         "scene",
