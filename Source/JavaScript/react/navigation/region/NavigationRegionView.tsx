@@ -250,10 +250,11 @@ export function NavigationRegionView({ region, module, application = false, mode
             data-active={active} data-active-descendant={!active && parent && children.some(child => containsActive(child, isActive)) ? true : undefined} data-expanded={parent ? expanded : undefined} data-origin={item.origin} data-read-only={item.readOnly}
             data-slot={item.slot} data-level={level} data-scene-iconless={drawnIcon === null ? 'true' : undefined} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
             {destination || parent
-                ? <a className={names.link} href={href ?? '#'} data-scene-nav-link={key} aria-current={active ? 'page' : undefined}
+                // A rail (slim, compact) hides the label and shows only the icon, so the link carries the title as its tooltip, which is also its accessible name when the label is hidden (Scene#229).
+                ? <a className={names.link} href={href ?? '#'} data-scene-nav-link={key} aria-current={active ? 'page' : undefined} title={item.title}
                     aria-expanded={parent && !destination ? expanded : undefined} tabIndex={key === stop ? 0 : -1}
                     onClick={onClick} onFocus={() => setFocused(key)}>{content}</a>
-                : <span className={names.link} aria-disabled='true' data-scene-nav-link={key} tabIndex={key === stop ? 0 : -1} title='This item has no target to go to.'
+                : <span className={names.link} aria-disabled='true' data-scene-nav-link={key} tabIndex={key === stop ? 0 : -1} title={`${item.title}: this item has no target to go to.`}
                     onClick={event => activate(item, event)} onKeyDown={event => { if (event.key === 'Enter') activate(item, event); }} onFocus={() => setFocused(key)}>{content}</span>}
             {parent && <button type='button' className={names.toggle} tabIndex={-1} aria-expanded={expanded} aria-controls={`${key}-items`}
                 aria-label={`${expanded ? 'Collapse' : 'Expand'} ${item.title}`} onClick={() => toggle(key, !expanded)} />}

@@ -33,7 +33,7 @@ export function MenuItem({ element, slots }: RegisteredComponentProps) {
     return (
         <li className='layout-menu-item' data-scene-id={element.id} data-active={isActive} data-target-screen={targetScreen} data-scene-iconless={icon ? undefined : 'true'} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
             <a className='layout-menu-link' href={link.href ?? (targetScreen ? `#/${targetScreen}` : undefined)} aria-current={isActive ? 'page' : undefined} onClick={link.onClick}
-                title={dead ? 'This entry has no target to go to.' : undefined}>
+                title={dead ? `${label}: this entry has no target to go to.` : label}>
                 {icon && <i className={`layout-menu-icon ${icon}`} aria-hidden='true' />}
                 <span className='layout-menu-label'>{label}</span>
                 {badge && <span className='layout-menu-badge'>{badge}</span>}
