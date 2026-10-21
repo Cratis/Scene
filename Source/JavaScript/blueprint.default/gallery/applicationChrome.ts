@@ -103,7 +103,7 @@ export function applicationChrome(activeScreen: string, breadcrumb: BreadcrumbEn
                 },
             ),
         ],
-        [SlotName.Sidebar]: [externalComponent('sidebar', ComponentName.Sidebar, { title: identity?.name ?? 'Contoso' }, { logo: [logo('sidebar-logo', identity)] })],
+        [SlotName.Sidebar]: [externalComponent('sidebar', ComponentName.Sidebar, {}, { logo: [logo('sidebar-logo', identity)] })],
         [SlotName.Menu]: menuSections(activeScreen),
         [SlotName.Breadcrumb]: [
             externalComponent('breadcrumb', ComponentName.Breadcrumb, {

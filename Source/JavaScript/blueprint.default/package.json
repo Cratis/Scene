@@ -29,7 +29,11 @@
         "**/*.ts",
         "**/*.tsx",
         "shell/layout.css",
-        "!**/for_*/**"
+        "!**/for_*/**",
+        "!for_*/**",
+        "!**/*.stories.*",
+        "!**/PrimeReactStoryProvider.*",
+        "!.storybook/**"
     ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
@@ -60,15 +64,21 @@
     "dependencies": {
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
-        "@cratis/scene.react": "1.0.0"
+        "@cratis/scene.react": "1.0.0",
+        "react-aria-components": "1.21.1"
     },
     "devDependencies": {
+        "@cratis/arc": "22.128.1",
+        "@cratis/arc.react": "22.128.1",
+        "@cratis/components": "4.34.0",
+        "@cratis/fundamentals": "7.25.2",
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
         "@cratis/scene.primereact": "1.0.0",
         "@cratis/scene.react": "1.0.0",
         "@primereact/core": "11.2.0",
         "@primereact/headless": "11.2.0",
+        "@primereact/ui": "11.2.0",
         "@primeuix/themes": "^3.0.1",
         "@storybook/addon-links": "^10.6.2",
         "@storybook/react": "^10.6.2",
@@ -77,14 +87,16 @@
         "primereact": "11.2.0",
         "react": "^19.3.1",
         "react-dom": "^19.3.1",
+        "reflect-metadata": "0.2.2",
         "storybook": "^10.6.2"
     },
     "peerDependencies": {
-        "@primereact/core": "^11.0.0",
-        "@primereact/headless": "^11.0.0",
-        "primeicons": "^8.0.0",
-        "primereact": "^11.0.0",
+        "@cratis/arc": ">=20.3.1 <23",
+        "@cratis/arc.react": ">=20.3.1 <23",
+        "@cratis/components": "^4.34.0",
+        "@cratis/fundamentals": "^7.10.3",
         "react": "^19.0.0",
-        "react-dom": "^19.0.0"
+        "react-dom": "^19.0.0",
+        "reflect-metadata": "0.2.2"
     }
 }

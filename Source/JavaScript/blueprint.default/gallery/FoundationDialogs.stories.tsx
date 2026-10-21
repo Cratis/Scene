@@ -4,14 +4,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SampleDataPack } from '@cratis/scene.model';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
-import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
 import { ComponentState } from '../foundation';
 import { GalleryDialogPreview } from './GalleryDialogPreview';
 import { GalleryScreenPreview } from './GalleryScreenPreview';
 import { TemplatePreviewState } from './TemplatePreviewState';
 
-const registry = mergePackageRegistries([corePackage, primeReactPackage, defaultBlueprint]);
+const registry = mergePackageRegistries([corePackage, defaultBlueprint]);
 /** The foundation sample-data pack, fetched from where the package ships it (`sampleData/`), as a host's loader would. */
 const packUrl = new URL('../sampleData/foundation-en.json', import.meta.url).href;
 const loadPack = async () => ({ pack: await (await fetch(packUrl)).json() as SampleDataPack });

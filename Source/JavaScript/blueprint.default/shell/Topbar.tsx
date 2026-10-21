@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Button } from 'primereact/button';
+import { IconButton } from '@cratis/components/Common';
+import { ShellIcon } from './ShellIcon';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { LayoutMode, useLayoutConfig } from '../configuration';
 import { NavigationRegionKind } from '@cratis/scene.model';
@@ -31,16 +32,15 @@ export function Topbar({ element, slots }: RegisteredComponentProps) {
         <>
             <div className='layout-topbar-start' data-scene-id={element.id}>
                 {showsToggle && (
-                    <Button
+                    <IconButton
                         type='button'
-                        variant='text'
-                        rounded
-                        iconOnly
+                        variant='ghost'
+                        shape='pill'
+                        className='layout-icon-button'
                         aria-label={config.isSidebarOpen ? 'Close the menu' : 'Open the menu'}
                         aria-expanded={config.isSidebarOpen}
-                        onClick={toggleSidebar}>
-                        <i className='pi pi-bars' aria-hidden='true' />
-                    </Button>
+                        icon={<ShellIcon name='bars' />}
+                        onClick={toggleSidebar} />
                 )}
                 {slots.logo}
                 {slots.start}

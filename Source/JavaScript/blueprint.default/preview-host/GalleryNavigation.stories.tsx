@@ -3,9 +3,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from 'storybook/test';
-import { PrimeReactProvider } from '@primereact/core';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { primeReactPackage } from '@cratis/scene.primereact';
+import { PrimeReactStoryProvider } from './PrimeReactStoryProvider';
 import { defaultBlueprint } from '../defaultBlueprint';
 import { ScenePreviewHost } from './ScenePreviewHost';
 import { galleryApplication, galleryComposition } from './galleryApplication';
@@ -18,10 +18,10 @@ const noStructure = { modules: [] };
 
 function Application({ initial, mode }: { initial: string; mode: 'navigate' | 'select' }) {
     return (
-        <PrimeReactProvider>
+        <PrimeReactStoryProvider>
             <ScenePreviewHost document={document} structure={noStructure} target={{ application: 'Gallery' }} registry={registry} composition={galleryComposition}
                 initialDestination={{ screen: initial }} navigationMode={mode} />
-        </PrimeReactProvider>
+        </PrimeReactStoryProvider>
     );
 }
 

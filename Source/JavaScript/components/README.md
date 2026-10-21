@@ -3,6 +3,10 @@
 The Scene package that exposes [`@cratis/components`](https://www.npmjs.com/package/@cratis/components) — the
 Cratis React component library — as resolvable Scene components.
 
+`@cratis/components` is built on React Aria Components. The `Cratis.Components` package declares a dependency on
+Tailwind only; PrimeReact is not a dependency. A UI profile that wants PrimeReact widgets lists the optional
+`PrimeReact` package (`@cratis/scene.primereact`) itself.
+
 User-facing documentation lives in [`Documentation/components-package/`](../../../Documentation/components-package/index.md).
 This file is the contributor's note: how the package is laid out, and why the load-bearing decisions were
 made the way they were.
@@ -192,7 +196,7 @@ browser's implicit Enter algorithm.
 Bare names are `lowerCamelCase` and abstract — `dataTable`, not `DataTableForQuery` — registered under
 `componentRegistryKey('Cratis.Components', name)`.
 
-`table` and `dialog` deliberately reuse names `core` and `PrimeReact` declare. A profile listing
+`table` and `dialog` deliberately reuse names `core` and the optional `PrimeReact` package declare. A profile listing
 `core`, `PrimeReact`, `Cratis.Components` in that order resolves both here and records the others as
 shadowed. Both replacements are better for a Cratis application: `DataTableForQuery` performs the query
 rather than being handed rows, and the Cratis `Dialog` resolves its result through Arc's dialog context.

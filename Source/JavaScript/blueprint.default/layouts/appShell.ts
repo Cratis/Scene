@@ -5,7 +5,7 @@ import { FlowArrangement, HeightSizeClass, Layout, WidthSizeClass } from '@crati
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
-import { sakaiCompositionProvenance } from '../templateProvenance';
+import { sakaiShellProvenance } from '../templateProvenance';
 
 /**
  * The tree at a regular width and height: a topbar across the top, the sidebar column beside the main
@@ -105,7 +105,7 @@ export const appShellLayout: Layout = {
     ],
     arrangement: appShellArrangement,
     metadata: {
-        ...sakaiCompositionProvenance,
+        ...sakaiShellProvenance,
         category: 'Foundation / Shell',
         displayName: 'Cratis Default',
         description: 'A sidebar with search and breadcrumbs: the shell most applications start from.',
@@ -119,7 +119,7 @@ export const dashboardShellLayout: Layout = {
     ...appShellLayout,
     name: LayoutName.DashboardShell,
     metadata: {
-        ...sakaiCompositionProvenance,
+        ...sakaiShellProvenance,
         category: 'Foundation / Shell',
         displayName: 'Dashboard',
         description: 'Navigation across the top bar, with the whole width left for dashboards.',
@@ -133,7 +133,7 @@ export const minimalShellLayout: Layout = {
     ...appShellLayout,
     name: LayoutName.MinimalShell,
     metadata: {
-        ...sakaiCompositionProvenance,
+        ...sakaiShellProvenance,
         category: 'Foundation / Shell',
         displayName: 'Minimal',
         description: 'A slim icon rail that keeps nearly all of the screen for the content.',

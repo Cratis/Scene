@@ -2,24 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { render, screen } from '@testing-library/react';
-import { PrimeReactProvider } from '@primereact/core';
 import { SceneElementView, coreComponents, corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { defaultBlueprint } from '../defaultBlueprint';
 import { composeScreenElement, galleryComponentCatalog, galleryPreviewProfile, galleryScreen, resolveElementComponentNames } from '../gallery';
 
 const registry = mergePackageRegistries([corePackage, defaultBlueprint]);
 
-// PrimeReact 11 components resolve their configuration through `PrimeReactProvider` and throw without
-// one, and these screens render five of them - the topbar toggle, the sidebar pin, the user menu, the
-// breadcrumb and the configurator's drawer. No preset is handed over: these specs assert structure and
-// text, and a theme would only add runtime CSS nothing here reads.
 function renderGalleryScreen(name: string) {
     const galleryItem = galleryScreen(name)!;
     const element = resolveElementComponentNames(composeScreenElement(galleryItem), galleryPreviewProfile, galleryComponentCatalog);
     render(
-        <PrimeReactProvider>
+        <>
             <SceneElementView element={element} registry={registry} resolveBinding={() => undefined} />
-        </PrimeReactProvider>,
+        </>,
     );
 }
 
@@ -51,7 +46,7 @@ describe('when rendering a gallery screen', () => {
 
         it('should render the seeded content rather than a placeholder', () => {
             screen.getAllByText('Revenue').length.should.be.greaterThan(0);
-            screen.getAllByText('$284,120').length.should.be.greaterThan(0);
+            screen.getAllByText('$284,120.00').length.should.be.greaterThan(0);
         });
 
         it('should register the core registry alongside the blueprint one', () => {

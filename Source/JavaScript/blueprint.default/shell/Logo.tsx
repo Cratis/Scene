@@ -5,9 +5,10 @@ import { RegisteredComponentProps } from '@cratis/scene.react';
 import { useSceneTheme } from '@cratis/scene.react';
 import { ProfileRegion } from '@cratis/scene.engine';
 import { readBoolean, readOptionalString, readString } from './elementProperties';
+import { ShellIcon } from './ShellIcon';
 import { useShellLink } from './useShellLink';
 
-/** The primeicons class of each logo icon the profile can choose. */
+/** The shell icon of each logo the profile can choose. */
 const logoIconClass: Record<string, string> = {
     box: 'pi-box', layers: 'pi-clone', home: 'pi-home', users: 'pi-users', receipt: 'pi-receipt', package: 'pi-gift', database: 'pi-database', palette: 'pi-palette',
 };
@@ -34,7 +35,7 @@ export function Logo({ element }: RegisteredComponentProps) {
     return (
         <a className='layout-logo' href={link.href ?? `#/${targetScreen}`} onClick={link.onClick} data-scene-id={element.id} data-scene-region={ProfileRegion.Identity} aria-label={showName ? undefined : label}>
             {source ? <img src={source} alt={label} height={28} />
-                : iconName ? <span className='layout-logo-mark'><i className={`pi ${logoIconClass[iconName] ?? 'pi-box'}`} aria-hidden='true' /></span>
+                : iconName ? <span className='layout-logo-mark'><ShellIcon name={logoIconClass[iconName] ?? 'pi-box'} /></span>
                     : <span className='layout-logo-mark'>{initials}</span>}
             {showName && <span className='layout-logo-name'>{label}</span>}
         </a>

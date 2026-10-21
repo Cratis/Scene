@@ -71,5 +71,315 @@
             "requestedName": "Vendor.widget",
             "expected": null
         }
+    ],
+    "hostPackageCases": [
+        {
+            "name": "nothing listed gives core, the baseline and the blueprint",
+            "declared": [
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "Cratis.Blueprint.Default"
+            ]
+        },
+        {
+            "name": "a listed library ranks above the baseline and core, below the blueprint, wherever it was listed",
+            "declared": [
+                "Cratis.Blueprint.Default",
+                "core",
+                "PrimeReact"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "PrimeReact",
+                "Cratis.Blueprint.Default"
+            ]
+        },
+        {
+            "name": "listed libraries keep the order listed",
+            "declared": [
+                "PrimeReact",
+                "Acme.Widgets"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "PrimeReact",
+                "Acme.Widgets"
+            ]
+        },
+        {
+            "name": "a baseline that is also listed is not duplicated and keeps its tier",
+            "declared": [
+                "PrimeReact",
+                "Cratis.Components"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "PrimeReact"
+            ]
+        },
+        {
+            "name": "a package whose kind is unknown is a component library",
+            "declared": [
+                "Acme.Widgets",
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "expected": [
+                "core",
+                "Cratis.Components",
+                "Acme.Widgets",
+                "Cratis.Blueprint.Default"
+            ]
+        }
+    ],
+    "hostResolutionCases": [
+        {
+            "name": "with nothing listed dataTable resolves to Cratis.Components",
+            "declared": [
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "catalog": {
+                "core": [
+                    "button",
+                    "card",
+                    "text",
+                    "table"
+                ],
+                "Cratis.Components": [
+                    "dataTable",
+                    "table",
+                    "dialog"
+                ],
+                "PrimeReact": [
+                    "dataTable",
+                    "table",
+                    "button",
+                    "card",
+                    "sidebar"
+                ],
+                "Cratis.Blueprint.Default": [
+                    "sidebar"
+                ]
+            },
+            "requestedName": "dataTable",
+            "expected": {
+                "name": "dataTable",
+                "package": "Cratis.Components",
+                "shadows": []
+            }
+        },
+        {
+            "name": "with PrimeReact listed dataTable resolves to PrimeReact",
+            "declared": [
+                "Cratis.Blueprint.Default",
+                "PrimeReact"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "catalog": {
+                "core": [
+                    "button",
+                    "card",
+                    "text",
+                    "table"
+                ],
+                "Cratis.Components": [
+                    "dataTable",
+                    "table",
+                    "dialog"
+                ],
+                "PrimeReact": [
+                    "dataTable",
+                    "table",
+                    "button",
+                    "card",
+                    "sidebar"
+                ],
+                "Cratis.Blueprint.Default": [
+                    "sidebar"
+                ]
+            },
+            "requestedName": "dataTable",
+            "expected": {
+                "name": "dataTable",
+                "package": "PrimeReact",
+                "shadows": [
+                    "Cratis.Components"
+                ]
+            }
+        },
+        {
+            "name": "the blueprint still wins sidebar when PrimeReact is listed",
+            "declared": [
+                "PrimeReact",
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "catalog": {
+                "core": [
+                    "button",
+                    "card",
+                    "text",
+                    "table"
+                ],
+                "Cratis.Components": [
+                    "dataTable",
+                    "table",
+                    "dialog"
+                ],
+                "PrimeReact": [
+                    "dataTable",
+                    "table",
+                    "button",
+                    "card",
+                    "sidebar"
+                ],
+                "Cratis.Blueprint.Default": [
+                    "sidebar"
+                ]
+            },
+            "requestedName": "sidebar",
+            "expected": {
+                "name": "sidebar",
+                "package": "Cratis.Blueprint.Default",
+                "shadows": [
+                    "PrimeReact"
+                ]
+            }
+        },
+        {
+            "name": "core never outranks a listed library",
+            "declared": [
+                "PrimeReact",
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "catalog": {
+                "core": [
+                    "button",
+                    "card",
+                    "text",
+                    "table"
+                ],
+                "Cratis.Components": [
+                    "dataTable",
+                    "table",
+                    "dialog"
+                ],
+                "PrimeReact": [
+                    "dataTable",
+                    "table",
+                    "button",
+                    "card",
+                    "sidebar"
+                ],
+                "Cratis.Blueprint.Default": [
+                    "sidebar"
+                ]
+            },
+            "requestedName": "button",
+            "expected": {
+                "name": "button",
+                "package": "PrimeReact",
+                "shadows": [
+                    "core"
+                ]
+            }
+        },
+        {
+            "name": "core still serves a name no library declares",
+            "declared": [
+                "PrimeReact",
+                "Cratis.Blueprint.Default"
+            ],
+            "baseline": "Cratis.Components",
+            "kinds": {
+                "Cratis.Components": "ComponentLibrary",
+                "PrimeReact": "ComponentLibrary",
+                "Cratis.Blueprint.Default": "Blueprint"
+            },
+            "catalog": {
+                "core": [
+                    "button",
+                    "card",
+                    "text",
+                    "table"
+                ],
+                "Cratis.Components": [
+                    "dataTable",
+                    "table",
+                    "dialog"
+                ],
+                "PrimeReact": [
+                    "dataTable",
+                    "table",
+                    "button",
+                    "card",
+                    "sidebar"
+                ],
+                "Cratis.Blueprint.Default": [
+                    "sidebar"
+                ]
+            },
+            "requestedName": "text",
+            "expected": {
+                "name": "text",
+                "package": "core",
+                "shadows": []
+            }
+        }
     ]
 }

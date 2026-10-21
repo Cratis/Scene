@@ -21,10 +21,11 @@ export function pageHeader(id: string, title: string, subtitle: string, actions:
 
 /**
  * One of the four figures across the top of a dashboard - the composition Sakai's dashboard opens with,
- * and the one every template in the line has copied since.
+ * and the one every template in the line has copied since. It is the blueprint's own foundation stat card, so it lays out and styles the
+ * same whichever widget package is active; the delta is a trend chip against `comparison`.
  */
-export function statCard(id: string, label: string, value: string, delta: string, icon: string): SceneElement {
-    return card(id, [text(`${id}-label`, label), text(`${id}-value`, value), text(`${id}-delta`, delta)], { icon, variant: 'stat' });
+export function statCard(id: string, label: string, value: number, change: number, comparison: string, format: 'number' | 'currency' = 'number', goodDirection: 'up' | 'down' = 'up'): SceneElement {
+    return externalComponent(id, ComponentName.StatCard, { label, value, change, comparison, format, currency: 'USD', goodDirection, locale: 'en-US' });
 }
 
 /** A titled surface holding a widget's content. */

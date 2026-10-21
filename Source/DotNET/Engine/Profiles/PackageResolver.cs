@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Model.Packages;
 using Cratis.Scene.Model.Profiles;
 
 namespace Cratis.Scene.Engine.Profiles;
@@ -32,6 +33,26 @@ public static class PackageResolver
     /// </remarks>
     public static IReadOnlyList<string> EffectivePackages(UiProfile profile) =>
         profile.Packages.Contains(Core) ? profile.Packages : [Core, .. profile.Packages];
+
+    /// <summary>
+    /// Orders the packages a host renders with, in ascending priority, so that every host agrees on which library wins a bare
+    /// name. Resolution itself is unchanged - <see cref="Resolve"/> still lets the last package win - this only decides the order.
+    /// </summary>
+    /// <param name="declared">The packages the profile lists, in the order listed.</param>
+    /// <param name="baseline">The component library every host provides whether or not a profile lists it (<c language="csharp">Cratis.Components</c>).</param>
+    /// <param name="catalog">The <see cref="PackageKind"/> each known package's manifest declares, by name. A package not listed is treated as a component library.</param>
+    /// <returns>The packages in ascending priority order, each once: <see cref="Core"/>, the baseline, the listed component libraries in the order listed, then blueprints.</returns>
+    /// <remarks>
+    /// The tier comes from the manifest kind, never from where the profile happened to list a package, so <see cref="Core"/> can
+    /// never outrank a library the profile asked for, and a blueprint keeps its own names whatever libraries are active.
+    /// </remarks>
+    public static IReadOnlyList<string> HostPackages(IEnumerable<string> declared, string baseline, IReadOnlyDictionary<string, PackageKind> catalog)
+    {
+        string[] fixedPackages = [Core, baseline];
+        var listed = declared.Where(name => !fixedPackages.Contains(name)).Distinct().ToList();
+        bool IsBlueprint(string name) => catalog.TryGetValue(name, out var kind) && kind == PackageKind.Blueprint;
+        return [.. fixedPackages, .. listed.Where(name => !IsBlueprint(name)), .. listed.Where(IsBlueprint)];
+    }
 
     /// <summary>
     /// Resolves a component name against a <see cref="UiProfile"/>.

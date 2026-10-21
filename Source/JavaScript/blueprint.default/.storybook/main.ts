@@ -5,6 +5,7 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import type { InlineConfig } from 'vite';
+import { styledPrimeReact } from './styledPrimeReact';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +23,10 @@ const config: StorybookConfig = {
             '@cratis/scene.model': resolve(__dirname, '../../model/index.ts'),
             '@cratis/scene.react': resolve(__dirname, '../../react/index.ts'),
         };
+        // PrimeReact 11 verifies a licence key on mount. Stage supplies it from the PRIMEUI_LICENSE secret at build time; this
+        // is the same variable. Absent (no key configured), the provider falls back to PrimeReact's unlicensed banner.
+        config.define = { ...config.define, 'import.meta.env.SCENE_PRIMEUI_LICENSE': JSON.stringify(process.env.SCENE_PRIMEUI_LICENSE || process.env.PRIMEUI_LICENSE || '') };
+        config.plugins = [...(config.plugins ?? []), styledPrimeReact()];
         return config;
     },
 };

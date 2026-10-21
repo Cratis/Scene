@@ -60,7 +60,7 @@ describe('when resolving its dependencies', () => {
     });
 
     it('should pull in the packages its own dependencies need, transitively', () => {
-        selection.added.should.contain('PrimeReact');
+        selection.added.should.not.contain('PrimeReact');
         selection.added.should.contain('Tailwind');
     });
 

@@ -170,7 +170,7 @@ describe('when composing a screen', () => {
 
 describe('when building the profile of a preview', () => {
     describe('and the document declares none', () => {
-        it('should admit the packages every host renders with', () => previewProfile(undefined).packages.should.deep.equal(['core', 'Cratis.Blueprint.Default']));
+        it('should admit the packages every host renders with', () => previewProfile(undefined).packages.should.deep.equal(['core', 'Cratis.Components', 'Cratis.Blueprint.Default']));
     });
 
     describe('and the document declares a web profile with its own packages', () => {
@@ -180,7 +180,7 @@ describe('when building the profile of a preview', () => {
         ], ['PrimeReact']);
 
         it('should choose the web profile', () => profile.name.should.equal('Web'));
-        it('should keep its packages first and add the required ones after', () => profile.packages.should.deep.equal(['Cratis.Components', 'core', 'Cratis.Blueprint.Default', 'PrimeReact']));
+        it('should order core, the baseline, the listed libraries and then the blueprint', () => profile.packages.should.deep.equal(['core', 'Cratis.Components', 'PrimeReact', 'Cratis.Blueprint.Default']));
         it('should carry the sample data selection', () => profile.sampleData!.activePack!.should.equal('p'));
         it('should carry the theme and layout', () => [profile.theme, profile.layout].should.deep.equal(['Dark', 'AppShell']));
     });

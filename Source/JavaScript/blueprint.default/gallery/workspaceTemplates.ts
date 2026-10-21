@@ -42,10 +42,10 @@ export const dashboardTemplate: ScreenTemplate = {
     },
     content: {
         [TemplateSlotName.Stats]: [
-            statCard('stat-revenue', 'Revenue', '$284,120', '+12.4% this month', 'pi pi-dollar'),
-            statCard('stat-orders', 'Orders', '1,842', '+3.1% this month', 'pi pi-shopping-cart'),
-            statCard('stat-customers', 'Customers', '9,410', '+128 new', 'pi pi-users'),
-            statCard('stat-open', 'Open tickets', '17', '-4 since Monday', 'pi pi-inbox'),
+            statCard('stat-revenue', 'Revenue', 284120, 12.4, 'last month', 'currency'),
+            statCard('stat-orders', 'Orders', 1842, 3.1, 'last month'),
+            statCard('stat-customers', 'Customers', 9410, 1.4, 'last month'),
+            statCard('stat-open', 'Open tickets', 17, -19, 'last week', 'number', 'down'),
         ],
         [TemplateSlotName.Primary]: [
             widget('widget-revenue', 'Revenue over time', [

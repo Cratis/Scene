@@ -28,5 +28,5 @@ describe('when describing its template catalog', () => {
 
     it('should report the missing package when the default blueprint is not available', () =>
         describeTemplateCatalog([cratisComponentsPackage, componentsBlueprint], '4.13.0')
-            .every(entry => entry.problems.some(problem => problem.includes("'Cratis.Blueprint.Default', which is not available"))).should.be.true);
+            .every(entry => entry.problems.some(problem => problem.includes("'Cratis.Blueprint.Default', which this profile does not include."))).should.be.true);
 });

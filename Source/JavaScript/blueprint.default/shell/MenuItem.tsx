@@ -3,6 +3,7 @@
 
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { readBoolean, readOptionalString, readString } from './elementProperties';
+import { ShellIcon } from './ShellIcon';
 import { useShellLink } from './useShellLink';
 
 /**
@@ -34,10 +35,10 @@ export function MenuItem({ element, slots }: RegisteredComponentProps) {
         <li className='layout-menu-item' data-scene-id={element.id} data-active={isActive} data-target-screen={targetScreen} data-scene-iconless={icon ? undefined : 'true'} data-nav-problem={dead ? 'navTargetMissing' : undefined}>
             <a className='layout-menu-link' href={link.href ?? (targetScreen ? `#/${targetScreen}` : undefined)} aria-current={isActive ? 'page' : undefined} onClick={link.onClick}
                 title={dead ? `${label}: this entry has no target to go to.` : label}>
-                {icon && <i className={`layout-menu-icon ${icon}`} aria-hidden='true' />}
+                {icon && <ShellIcon name={icon} className='layout-menu-icon' />}
                 <span className='layout-menu-label'>{label}</span>
                 {badge && <span className='layout-menu-badge'>{badge}</span>}
-                {hasSubmenu && <i className='pi pi-angle-down' aria-hidden='true' />}
+                {hasSubmenu && <ShellIcon name='angle-down' />}
             </a>
             {hasSubmenu && <ul className='layout-submenu'>{slots.items}</ul>}
         </li>

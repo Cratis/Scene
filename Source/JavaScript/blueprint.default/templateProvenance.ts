@@ -4,12 +4,9 @@
 import { TemplateMetadata } from '@cratis/scene.model';
 
 /**
- * The compatibility, attribution and license metadata every template this blueprint ships carries.
- *
- * Templates are written against the Scene model that introduced template provenance, and against the
- * PrimeReact and Cratis Components packages this blueprint depends on - the same dependencies its manifest
- * declares, with the ranges the templates were verified against. `describeTemplateCatalog` checks every
- * template against them, and this package's specs prove each one comes out compatible.
+ * The compatibility, attribution and license of the optional widget-borrowing gallery templates.
+ * These packages are requirements of those templates, not of the shell. A host opts into them in its
+ * profile; a default-only profile offers the foundation templates and reports these as incompatible.
  */
 export const defaultBlueprintTemplateProvenance: Pick<TemplateMetadata, 'compatibility' | 'attribution' | 'license' | 'licenseUrl'> = {
     compatibility: {
@@ -34,4 +31,19 @@ export const sakaiCompositionProvenance: Pick<TemplateMetadata, 'compatibility' 
         ...defaultBlueprintTemplateProvenance.attribution!,
         notice: "Arrangement follows PrimeTek's Sakai React template (https://github.com/primefaces/sakai-react, MIT).",
     },
+};
+
+/** The shell requires only the component library its controls use, not the gallery's optional widgets. */
+export const defaultBlueprintShellProvenance: Pick<TemplateMetadata, 'compatibility' | 'attribution' | 'license' | 'licenseUrl'> = {
+    ...defaultBlueprintTemplateProvenance,
+    compatibility: {
+        scene: defaultBlueprintTemplateProvenance.compatibility!.scene,
+        packages: [{ name: 'Cratis.Components', versionRange: '^3.0.0' }],
+    },
+};
+
+/** The shell follows the Sakai arrangement without depending on its widget library. */
+export const sakaiShellProvenance: Pick<TemplateMetadata, 'compatibility' | 'attribution' | 'license' | 'licenseUrl'> = {
+    ...defaultBlueprintShellProvenance,
+    attribution: sakaiCompositionProvenance.attribution,
 };

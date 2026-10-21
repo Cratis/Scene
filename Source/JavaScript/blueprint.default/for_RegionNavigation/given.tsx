@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactNode } from 'react';
-import { PrimeReactProvider } from '@primereact/core';
 import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
@@ -73,7 +72,7 @@ const shellElement = (id: string, properties: Record<string, unknown> = {}) => e
 
 /** The shell the application runs in: the default blueprint's topbar and sidebar showing the regions of the navigation model. */
 export function renderShell(initialScreen: string, shell: ReactNode = undefined): ReactNode {
-    return <PrimeReactProvider>
+    return <>
         <LayoutConfigProvider>
             <SceneNavigationHost
                 screens={screens()}
@@ -87,5 +86,5 @@ export function renderShell(initialScreen: string, shell: ReactNode = undefined)
                     {shell}
                 </>} />
         </LayoutConfigProvider>
-    </PrimeReactProvider>;
+    </>;
 }

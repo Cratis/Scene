@@ -139,45 +139,27 @@ shell versions win the bare names while PrimeReact's stay reachable as `PrimeRea
 `GalleryScreenPreview` boots one gallery screen through the real path - real `Screen`, real
 `resolveComponentName`, real `SceneElementView`, real registry. Nothing in it is a preview-only code path.
 
-It resolves against `galleryPreviewProfile` rather than `galleryProfile`. Same four packages, different
-order: this package takes no npm dependency on PrimeReact's or Cratis Components' *bundles* (a blueprint
-declares its dependencies in its manifest, not in its bundler graph), so a preview run from here has only
-`core` and this blueprint implemented. Ranking `core` above the two libraries means `text`, `button` and
-`card` resolve to something that exists. Names only the libraries declare still resolve to them, find no
-implementation, and render as `UnresolvedComponent`'s dashed box - which is the honest outcome, not a
-papered-over one. A host with all four bundles uses `galleryProfile` and sees the real widgets.
+It resolves against `galleryPreviewProfile` rather than `galleryProfile`. Both describe the gallery's optional
+widget vocabulary; only a host that explicitly lists `PrimeReact` loads those widgets. A profile naming
+only `Cratis.Blueprint.Default` resolves the shell and Cratis Components, renders the foundation templates,
+and leaves templates requiring the optional package incompatible in the template catalog.
 
-## PrimeReact 11
+## Shell controls and optional widgets
 
-This package builds on PrimeReact 11. Two things about that upgrade are worth knowing before editing any
-shell component.
+The shell imports Cratis Components for its icon buttons and avatar. Its configurator uses the end-placed Cratis Dialog. Its popup menu uses React Aria directly because
+Cratis Components has an action menubar but no popup menu. Its breadcrumb also uses
+React Aria directly: navigation must retain the activation event for Alt-select and modified/new-tab clicks,
+which the Cratis Breadcrumbs destination callback does not expose. Shell icons are SVGs rather than an
+installed icon font. Layout modes, breakpoints, persistence, navigation policies and theme switching are
+unchanged.
 
-**`Sidebar` and `Drawer` swapped meanings, and the swap is silent.** v10's `Sidebar` was an overlay
-drawer; v11 calls that `primereact/drawer` and gives the name `primereact/sidebar` to a genuinely new
-app-shell primitive (`SidebarLayout`, `SidebarAside`, `SidebarPanel`, `SidebarMenu`…). An import that kept
-the v10 name still resolves, still compiles, and quietly renders an app shell where an overlay used to be.
-`ConfigPanel` is the one place here that used it, and it is on `Drawer`. Nothing in this package imports
-`primereact/sidebar` - `shell/Sidebar.tsx` is *this blueprint's own* component for the docked panel's
-chrome and has nothing to do with either.
+The shell and foundation need no `PrimeReactProvider`, widget preset or icon font. Storybook applies none
+globally. Stories that preview optional widgets own their provider, preset and font imports instead.
 
-**Every widget is compositional.** `model` arrays are gone, so the breadcrumb and the user menu render
-their entries as children, and `primereact/menuitem` - the data type those arrays were made of - was
-removed with them. This package owns the replacement shape as `shell/MenuEntry.ts`. `Button` lost `icon`,
-`label`, `text` and `outlined`: an icon is a child, and `text`/`outlined` are values of `variant`.
-
-The app-shell `Sidebar` primitive is a **standing opportunity, not a completed port**. Every mode here is
-still hand-written CSS. Adopting it would collapse:
-
-- the docked/off-canvas rules (`layout-static*`, `layout-overlay*`) into its variant and overlay props;
-- the reveal and drawer hover machinery, and most of `isSidebarRevealed`, into its hover-open behavior;
-- the rail widths (`slim`, `slim-plus`, `compact`) into a collapsible width token;
-- the wrapper-class plumbing in `layoutWrapperClasses` into `SidebarLayout`.
-
-What would **not** collapse, and would stay this package's own: the mobile forcing at 991px, the
-persistence, the menu-theme axis, and `horizontal` (a sidebar that stops being a sidebar is not a sidebar
-variant). That is a deliberate follow-up rather than part of the version bump - rewriting eight layout
-modes onto a new primitive is a behavior change, and doing it inside a dependency upgrade would make both
-impossible to review.
+Older business templates still borrow widgets from `scene.primereact`. Their `templateProvenance` and the
+gallery dependency vocabulary declare that requirement locally; a host opts into the package in its UI
+profile when it chooses such a template. The shell layouts declare only their own component requirement.
+Theme compatibility metadata still supports both kinds of host.
 
 ## Deliberately not built
 

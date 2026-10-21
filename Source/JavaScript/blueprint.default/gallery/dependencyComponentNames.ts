@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 /**
- * The component names the gallery borrows from this blueprint's dependencies.
+ * The component names the optional gallery templates borrow from other packages.
  *
  * A screen template names components by their **bare** name and lets `resolveComponentName` pick the
  * package, which is what makes a template portable across profiles. The cost is that a template can
@@ -15,7 +15,7 @@
  * figures, an image beside a button) rather than referencing something that would not render.
  *
  * This list exists because this package does not take an npm dependency on either of those packages - a
- * blueprint declares its dependencies in its manifest, not in its bundler graph. When a host wires the
+ * template declares its requirements in its provenance, not in the shell's dependency list. When a host wires the
  * real manifests together, it should resolve against those instead, and any name that drifted will fail
  * this blueprint's specs immediately.
  */

@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Button } from 'primereact/button';
+import { IconButton } from '@cratis/components/Common';
+import { ShellIcon } from './ShellIcon';
 import { RegisteredComponentProps } from '@cratis/scene.react';
 import { isPointerRevealMode, useLayoutConfig } from '../configuration';
 import { NavigationRegionKind } from '@cratis/scene.model';
@@ -34,16 +35,15 @@ export function Sidebar({ element, slots }: RegisteredComponentProps) {
                 {slots.logo}
                 {title && <span className='layout-sidebar-title'>{title}</span>}
                 {isPinnable && (
-                    <Button
+                    <IconButton
                         type='button'
-                        variant='text'
-                        rounded
-                        iconOnly
+                        variant='ghost'
+                        shape='pill'
+                        className='layout-icon-button'
                         aria-label={config.isSidebarAnchored ? 'Unpin the menu' : 'Pin the menu open'}
                         aria-pressed={config.isSidebarAnchored}
-                        onClick={toggleSidebarAnchor}>
-                        <i className={config.isSidebarAnchored ? 'pi pi-lock' : 'pi pi-lock-open'} aria-hidden='true' />
-                    </Button>
+                        icon={<ShellIcon name={config.isSidebarAnchored ? 'lock' : 'lock-open'} />}
+                        onClick={toggleSidebarAnchor} />
                 )}
             </div>
             {slots.content?.length ? slots.content : hasRegion && readBoolean(element, 'regionNavigation', true) ? <RegionNavigation region={NavigationRegionKind.Sidebar} label='Sidebar' /> : null}
