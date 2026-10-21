@@ -27,7 +27,10 @@
         "**/*.ts",
         "**/*.tsx",
         "**/*.css",
-        "!**/for_*/**"
+        "!**/for_*/**",
+        "!for_*/**",
+        "!**/*.stories.*",
+        "!.storybook/**"
     ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",

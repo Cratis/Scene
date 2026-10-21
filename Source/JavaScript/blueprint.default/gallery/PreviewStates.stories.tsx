@@ -2,12 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { PrimeReactProvider } from '@primereact/core';
-import Lara from '@primeuix/themes/lara';
-import 'primeicons/primeicons.css';
 import { corePackage, mergePackageRegistries } from '@cratis/scene.react';
 import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
+import { PrimeReactStoryProvider } from '../preview-host/PrimeReactStoryProvider';
 import { GalleryScreenPreview } from './GalleryScreenPreview';
 import { TemplatePreviewState } from './TemplatePreviewState';
 
@@ -21,7 +19,7 @@ const registry = mergePackageRegistries([corePackage, primeReactPackage, default
 const meta = {
     title: 'Blueprint/Preview states',
     component: GalleryScreenPreview,
-    decorators: [Story => <PrimeReactProvider theme={{ preset: Lara }}><Story /></PrimeReactProvider>],
+    decorators: [Story => <PrimeReactStoryProvider><Story /></PrimeReactStoryProvider>],
     parameters: {
         layout: 'fullscreen',
         docs: { description: { component: 'Populated, empty, loading and error states of the data templates, through the real packages.' } },
@@ -52,6 +50,9 @@ export const MasterDetailPopulated: Story = { args: { screenName: 'MasterDetail'
 
 /** Master/detail while loading. */
 export const MasterDetailLoading: Story = { args: { screenName: 'MasterDetail', state: TemplatePreviewState.Loading } };
+
+/** The dashboard with its seeded widgets, in PrimeReact mode. */
+export const DashboardPopulated: Story = { args: { screenName: 'Dashboard', state: TemplatePreviewState.Populated } };
 
 /** The dashboard when its widgets' data failed to load. */
 export const DashboardError: Story = { args: { screenName: 'Dashboard', state: TemplatePreviewState.Error } };
