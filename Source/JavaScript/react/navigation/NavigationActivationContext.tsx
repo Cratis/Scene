@@ -24,6 +24,13 @@ export interface NavigationActivationPolicy {
 
     /** Called after the host has opened a destination. */
     onNavigate?(destination: DestinationReference, activation: NavigationActivation): void;
+
+    /**
+     * Whether the host leaves the screen a destination names out on purpose - a preview scoped to one slice draws only that slice's
+     * screens. Such a destination is not a problem (it resolves, so no `navTargetMissing` marker is drawn for it) but is not opened
+     * either: the activation is reported with `navigated` false.
+     */
+    leftOut?(destination: DestinationReference): boolean;
 }
 
 const PolicyContext = createContext<NavigationActivationPolicy | undefined>(undefined);
@@ -36,8 +43,8 @@ export interface NavigationActivationProviderProps extends NavigationActivationP
  * Tells the navigating controls below it how a host wants their activation handled - the hook with which a design host intercepts
  * clicks (`mode="select"`, or Alt-click) and learns of every navigation (`onNavigate`). Without one, controls navigate.
  */
-export function NavigationActivationProvider({ children, mode, altSelects, onActivate, onNavigate }: NavigationActivationProviderProps) {
-    const value = useMemo(() => ({ mode, altSelects, onActivate, onNavigate }), [altSelects, mode, onActivate, onNavigate]);
+export function NavigationActivationProvider({ children, mode, altSelects, onActivate, onNavigate, leftOut }: NavigationActivationProviderProps) {
+    const value = useMemo(() => ({ mode, altSelects, onActivate, onNavigate, leftOut }), [altSelects, leftOut, mode, onActivate, onNavigate]);
     return <PolicyContext.Provider value={value}>{children}</PolicyContext.Provider>;
 }
 
@@ -69,8 +76,8 @@ export function useNavigationActivation(): NavigationActivator {
         if (destination.kind === DestinationKind.Dialog || destination.dialog || destination.kind === DestinationKind.External) return true;
         const screen = destination.screen ?? destination.slice;
         if (screen === undefined || screen === '') return false;
-        return screens === undefined || screen in screens;
-    }, [screens]);
+        return screens === undefined || screen in screens || policy?.leftOut?.(destination) === true;
+    }, [policy, screens]);
 
     const activate = useCallback((request: NavigationActivationRequest, event?: Pick<MouseEvent, 'altKey' | 'metaKey' | 'ctrlKey' | 'shiftKey'>): NavigationActivation => {
         const requested = typeof policy?.mode === 'function' ? policy.mode(request, event) : policy?.mode ?? 'navigate';
@@ -79,7 +86,8 @@ export function useNavigationActivation(): NavigationActivator {
         const found = resolves(destination);
 
         let activation: NavigationActivation = { request, mode, resolves: found, navigated: false };
-        if (mode === 'navigate' && found && destination) {
+        const opens = found && destination !== undefined && (screens === undefined || destination.kind === DestinationKind.Dialog || destination.dialog || destination.kind === DestinationKind.External || (destination.screen ?? destination.slice ?? '') in screens);
+        if (mode === 'navigate' && opens && destination) {
             if (navigation) {
                 activation = { ...activation, navigated: true, resolution: navigation.navigate(destination) };
             } else {
@@ -90,7 +98,7 @@ export function useNavigationActivation(): NavigationActivator {
         policy?.onActivate?.(activation);
         if (activation.navigated && destination) policy?.onNavigate?.(destination, activation);
         return activation;
-    }, [navigation, policy, resolves]);
+    }, [navigation, policy, resolves, screens]);
 
     return useMemo(() => ({ hosted: navigation !== undefined, resolves, activate }), [activate, navigation, resolves]);
 }

@@ -291,7 +291,12 @@ export function ScenePreviewHost({
     const hostApplication = useMemo(() => page ? { ...application, screens: page.screens } : application, [application, page]);
     const navigationModel = useMemo(() => ({ structure: index, navigation, isVisible }), [index, isVisible, navigation]);
 
-    const policy = useMemo(() => ({ mode: navigationMode, onActivate }), [navigationMode, onActivate]);
+    // A preview of one slice draws only that slice's screens, so every other screen the navigation leads to is left out on purpose, not missing
+    // (Cratis/StudioIssues#1021): the shell draws no problem marker for it. The Problems tab and the profile designer still report a target the
+    // whole application lacks.
+    const scopedToSlice = diagnosis.plan?.slice !== undefined;
+    const leftOut = useMemo(() => scopedToSlice ? () => true : undefined, [scopedToSlice]);
+    const policy = useMemo(() => ({ mode: navigationMode, onActivate, leftOut }), [leftOut, navigationMode, onActivate]);
 
     const onKeyDown = useCallback((event: KeyboardEvent) => {
         if (event.key === 'Escape' && !event.defaultPrevented) onExit?.();
