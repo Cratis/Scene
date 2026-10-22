@@ -113,7 +113,10 @@ not through the `--p-*` properties, which only PrimeReact's own components read.
 
 Inside `SceneThemeProvider`, the bridge maps the active Scene palette onto PrimeReact's semantic and
 component tokens together. Primary buttons, tags and progress labels use the theme's primary/contrast
-pair; cards and panels use its surface/text pair. This also exposes the legacy `--primary-color`,
+pair; cards and panels use its surface/text pair. Shipped PrimeReact themes retain their primary
+foreground when it meets normal-text WCAG AA (4.5:1); otherwise Scene selects black or white against
+the preset's primary fill, keeping small tag text and progress values readable too. Blueprint theme
+pairs are unchanged. This also exposes the legacy `--primary-color`,
 `--primary-color-text`, `--text-color` and surface aliases for older consumers without a second palette.
 Scene's `data-scene-color-scheme` marker is recognized alongside `.scene-dark`.
 
