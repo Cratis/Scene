@@ -75,12 +75,12 @@
     --scene-focus-ring: var(--p-focus-ring-shadow);
 }
 
-.scene-dark {
+.scene-dark,
+[data-scene-color-scheme='dark'] {
     /*
-     * The dark half of the ground. `usePrimeReactTheme` hands `.scene-dark` to the preset as its
-     * `darkModeSelector`, so by the time this rule matches every other `--p-*` has already flipped to its
-     * dark value on its own. The ground is the one token the bridge picks off the ramp by hand, so it is
-     * also the one the bridge has to flip by hand.
+     * The ground follows both the preset's class and the shell's color-scheme marker. It is the one
+     * token the bridge picks off the ramp by hand, so the bridge also flips it by hand. Explicit Scene
+     * surface tokens supplied inline by SceneThemeProvider remain authoritative.
      */
     --scene-surface-background: var(--p-surface-950);
 }
@@ -102,6 +102,52 @@
 
     --p-content-border-radius: var(--scene-content-border-radius);
     --p-focus-ring-shadow: var(--scene-focus-ring);
+
+    /*
+     * Presets resolve component references on :root, before a Scene theme is inherited. Rebinding
+     * only the semantic tokens above therefore leaves, for example, a button emerald and a card
+     * dark while Scene's text is still using the blueprint's palette. Rebind the component pairs
+     * together at the same theme boundary, including the foreground of the progress value.
+     */
+    --p-button-primary-background: var(--scene-primary-color);
+    --p-button-primary-border-color: var(--scene-primary-color);
+    --p-button-primary-color: var(--scene-primary-contrast-color);
+    --p-button-primary-hover-background: color-mix(in srgb, var(--scene-primary-color) 90%, var(--scene-text-color));
+    --p-button-primary-hover-border-color: var(--p-button-primary-hover-background);
+    --p-button-primary-hover-color: var(--scene-primary-contrast-color);
+    --p-button-primary-active-background: color-mix(in srgb, var(--scene-primary-color) 80%, var(--scene-text-color));
+    --p-button-primary-active-border-color: var(--p-button-primary-active-background);
+    --p-button-primary-active-color: var(--scene-primary-contrast-color);
+    --p-button-primary-focus-ring-color: var(--scene-primary-color);
+
+    --p-card-background: var(--scene-surface-card);
+    --p-card-color: var(--scene-text-color);
+    --p-card-subtitle-color: var(--scene-text-muted-color);
+    --p-panel-background: var(--scene-surface-card);
+    --p-panel-color: var(--scene-text-color);
+    --p-panel-border-color: var(--scene-surface-border);
+    --p-panel-header-background: var(--scene-surface-card);
+    --p-panel-header-color: var(--scene-text-color);
+    --p-panel-header-border-color: var(--scene-surface-border);
+
+    --p-tag-primary-background: var(--scene-primary-color);
+    --p-tag-primary-color: var(--scene-primary-contrast-color);
+    --p-progressbar-background: var(--scene-surface-border);
+    --p-progressbar-value-background: var(--scene-primary-color);
+    --p-progressbar-label-color: var(--scene-primary-contrast-color);
+
+    /* Legacy theme consumers use the same vocabulary, not a second palette. */
+    --primary-color: var(--scene-primary-color);
+    --primary-color-text: var(--scene-primary-contrast-color);
+    --text-color: var(--scene-text-color);
+    --text-color-secondary: var(--scene-text-muted-color);
+    --surface-ground: var(--scene-surface-background);
+    --surface-card: var(--scene-surface-card);
+    --surface-border: var(--scene-surface-border);
+    --surface-hover: var(--scene-surface-hover);
+    --surface-overlay: var(--scene-surface-overlay);
+    --highlight-bg: var(--scene-highlight-background);
+    --highlight-text-color: var(--scene-highlight-color);
 
     /*
      * A themed root paints itself, so a preview embedded in a host page reads as the theme rather than

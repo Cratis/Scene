@@ -3,6 +3,7 @@
 
 import { Theme } from '@cratis/scene.model';
 import { themePresets } from './themePresets';
+import { accessiblePrimaryContrast } from './accessiblePrimaryContrast';
 
 /**
  * The packages a PrimeReact theme declares itself compatible with.
@@ -64,6 +65,10 @@ export const primeReactThemeLicenseUrl = 'https://primeui.dev/licenses/community
  */
 export const primeReactThemes: Theme[] = themePresets.map((preset) => ({
     ...preset,
+    tokens: {
+        ...preset.tokens,
+        'primary.contrastColor': accessiblePrimaryContrast(preset.tokens!['primary.color'], preset.tokens!['primary.contrastColor']),
+    },
     compatibleWith: primeReactThemeCompatibility,
     author: 'PrimeTek',
     authorUrl: 'https://primereact.org',

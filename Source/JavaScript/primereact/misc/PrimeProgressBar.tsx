@@ -25,7 +25,9 @@ export function PrimeProgressBar({ element }: RegisteredComponentProps) {
     return (
         <ProgressBar.Root value={value} mode={value === undefined ? 'indeterminate' : 'determinate'}>
             <ProgressBar.Track data-scene-id={element.id} aria-label={stringProperty(element, 'label', 'Progress')} style={{ height: '1rem' }}>
-                <ProgressBar.Indicator>{booleanProperty(element, 'showValue', true) && <ProgressBar.Value />}</ProgressBar.Indicator>
+                <ProgressBar.Indicator>
+                    {booleanProperty(element, 'showValue', true) && <ProgressBar.Label><ProgressBar.Value /></ProgressBar.Label>}
+                </ProgressBar.Indicator>
             </ProgressBar.Track>
         </ProgressBar.Root>
     );
