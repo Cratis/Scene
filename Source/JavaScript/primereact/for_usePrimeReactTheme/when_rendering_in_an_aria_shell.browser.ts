@@ -34,13 +34,21 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
         const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
         try {
             const page = await browser.newPage({ colorScheme: scheme });
+            const errors: string[] = [];
+            page.on('pageerror', error => errors.push(error.message));
+            page.setDefaultTimeout(10000);
             await page.setContent('<!doctype html><html lang="en"><head><title>Mixed libraries</title></head><body><div id="root"></div></body></html>');
             await page.addStyleTag({ content: css });
             await page.addScriptTag({ content: script });
-            await page.waitForSelector('[data-scene-id="progress"] [data-part="value"]');
+            expect(errors).toEqual([]);
+            const progressValue = await page.waitForSelector('[data-scene-id="progress"] [data-part="label"] [data-part="value"]');
+            expect(await progressValue!.textContent()).toBe('65%');
+            expect(await page.locator('[data-scene-id="progress"]').getAttribute('aria-label')).toBe('Import progress');
+            expect(await page.locator('[data-scene-id="progress"]').getAttribute('aria-valuenow')).toBe('65');
             await page.evaluate(value => { document.querySelector<HTMLButtonElement>(`[data-test-theme="${value}"]`)!.click(); }, scheme);
             await page.waitForSelector(`[data-scene-color-scheme="${scheme}"]`);
             await page.waitForFunction(() => document.querySelector('[data-scene-id="progress"] [data-part="indicator"]')!.getBoundingClientRect().width > 100);
+            await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
             const colors = await page.evaluate(() => {
                 const themed = document.querySelector<HTMLElement>('[data-scene-theme-root]')!;
                 const token = (name: string) => getComputedStyle(themed).getPropertyValue(name).trim();
@@ -78,6 +86,7 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
                 return result.violations;
             });
             expect(failures).toEqual([]);
+            expect(errors).toEqual([]);
         } finally {
             await browser.close();
         }
@@ -87,8 +96,13 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
 const application = `
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { flushSync } from 'react-dom';
 import Lara from '@primeuix/themes/lara';
-import { PrimeReactProvider } from 'primereact/config';
+import { PrimeReactProvider } from '@primereact/core';
+import { styles as buttonStyles } from '@primereact/styles/button';
+import { styles as cardStyles } from '@primereact/styles/card';
+import { styles as tagStyles } from '@primereact/styles/tag';
+import { styles as progressBarStyles } from '@primereact/styles/progressbar';
 import { PrimeCard } from './panel/PrimeCard';
 import { SceneThemeProvider } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../blueprint.default/configuration';
@@ -106,9 +120,17 @@ import './primeReactTheme.css';
 const props = (id, properties = {}) => ({ element: { id, properties }, slots: {} });
 function App() {
     const [theme, setTheme] = useState(lightTheme);
-    return <PrimeReactProvider theme={{ preset: Lara, options: { darkModeSelector: "[data-scene-color-scheme='dark']" } }}>
+    // PrimeReact 11.2 separates component styles from the token preset.
+    return <PrimeReactProvider
+        defaults={{
+            Button: { props: { styles: buttonStyles } },
+            'Card.Root': { props: { styles: cardStyles } },
+            Tag: { props: { styles: tagStyles } },
+            'ProgressBar.Root': { props: { styles: progressBarStyles } },
+        }}
+        theme={{ preset: Lara, options: { darkModeSelector: "[data-scene-color-scheme='dark']" } }}>
         <SceneThemeProvider theme={theme}>
-            <LayoutConfigProvider>
+            <LayoutConfigProvider storage={null}>
                 <AppShell {...props('shell')} slots={{
                     topbar: [<Topbar {...props('topbar')} />],
                     content: [<PrimeCard {...props('card')} slots={{ content: [
@@ -124,5 +146,5 @@ function App() {
         </SceneThemeProvider>
     </PrimeReactProvider>;
 }
-createRoot(document.getElementById('root')).render(<App />);
+flushSync(() => createRoot(document.getElementById('root')).render(<App />));
 `;
