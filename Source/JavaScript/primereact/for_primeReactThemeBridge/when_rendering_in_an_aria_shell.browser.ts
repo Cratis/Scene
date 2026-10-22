@@ -2,16 +2,22 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { build } from 'esbuild';
-import { chromium } from 'playwright-core';
+import { Browser, chromium } from 'playwright-core';
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const workspace = resolve(import.meta.dirname, '..');
 const javascript = resolve(workspace, '..');
 let script: string;
 let css: string;
+let axePath: string;
+let browser: Browser;
+
+// A cold CI runner spends most of this spec launching Chromium and running axe, so the browser is
+// launched once for both colour schemes and each test gets an explicit budget above the 30 s default.
+const renderingTimeout = 90000;
 
 beforeAll(async () => {
     const bundle = await build({
@@ -26,14 +32,19 @@ beforeAll(async () => {
     });
     script = bundle.outputFiles.find(file => file.path.endsWith('.js'))!.text;
     css = bundle.outputFiles.find(file => file.path.endsWith('.css'))!.text;
+    axePath = execFileSync('node', ['-p', 'require.resolve("axe-core/axe.min.js")'], { cwd: workspace, encoding: 'utf8' }).trim();
+    const executablePath = process.env.CHROMIUM_PATH ?? (existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined);
+    browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
+});
+
+afterAll(async () => {
+    await browser?.close();
 });
 
 describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s Aria shell theme', scheme => {
     it('should use the blueprint primary, surface and text pairs without contrast failures', async () => {
-        const executablePath = process.env.CHROMIUM_PATH ?? (existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined);
-        const browser = await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox'] });
+        const page = await browser.newPage({ colorScheme: scheme });
         try {
-            const page = await browser.newPage({ colorScheme: scheme });
             const errors: string[] = [];
             page.on('pageerror', error => errors.push(error.message));
             page.setDefaultTimeout(10000);
@@ -48,7 +59,9 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
             await page.evaluate(value => { document.querySelector<HTMLButtonElement>(`[data-test-theme="${value}"]`)!.click(); }, scheme);
             await page.waitForSelector(`[data-scene-color-scheme="${scheme}"]`);
             await page.waitForFunction(() => document.querySelector('[data-scene-id="progress"] [data-part="indicator"]')!.getBoundingClientRect().width > 100);
-            await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
+            await page.evaluate(() => Promise.all(document.getAnimations()
+                .filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity)
+                .map(animation => animation.finished)));
             const colors = await page.evaluate(() => {
                 const themed = document.querySelector<HTMLElement>('[data-scene-theme-root]')!;
                 const token = (name: string) => getComputedStyle(themed).getPropertyValue(name).trim();
@@ -78,7 +91,6 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
             expect(colors.progressText).toBe(rgb(colors.contrast));
             expect(colors.tag).toBe(rgb(colors.primary));
             expect(colors.tagText).toBe(rgb(colors.contrast));
-            const axePath = execFileSync('node', ['-p', 'require.resolve("axe-core/axe.min.js")'], { cwd: workspace, encoding: 'utf8' }).trim();
             await page.addScriptTag({ path: axePath });
             const failures = await page.evaluate(async () => {
                 const axe = Reflect.get(window, 'axe');
@@ -88,9 +100,9 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
             expect(failures).toEqual([]);
             expect(errors).toEqual([]);
         } finally {
-            await browser.close();
+            await page.close();
         }
-    });
+    }, renderingTimeout);
 });
 
 const application = `

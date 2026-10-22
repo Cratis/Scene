@@ -45,7 +45,9 @@ describe.each(primeReactThemes)('when rendering the shipped $name preset', theme
             await page.addScriptTag({ content: script });
             await page.waitForSelector(`[data-scene-theme="${theme.name}"]`);
             await page.waitForFunction(() => document.querySelector('[data-scene-id="progress"] [data-part="indicator"]')!.getBoundingClientRect().width > 100);
-            await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
+            await page.evaluate(() => Promise.all(document.getAnimations()
+                .filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity)
+                .map(animation => animation.finished)));
             const colors = await page.evaluate(() => {
                 const style = (selector: string) => getComputedStyle(document.querySelector(selector)!);
                 const tag = style('[data-scene-id="tag"]');
