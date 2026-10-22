@@ -109,6 +109,14 @@ twenty-fifth theme cannot be added without it. The full attribution table is in
 components - through the semantic token layer `SceneThemeProvider` applies to the whole subtree, though
 not through the `--p-*` properties, which only PrimeReact's own components read.
 
+### Mixed-library themes
+
+Inside `SceneThemeProvider`, the bridge maps the active Scene palette onto PrimeReact's semantic and
+component tokens together. Primary buttons, tags and progress labels use the theme's primary/contrast
+pair; cards and panels use its surface/text pair. This also exposes the legacy `--primary-color`,
+`--primary-color-text`, `--text-color` and surface aliases for older consumers without a second palette.
+Scene's `data-scene-color-scheme` marker is recognized alongside `.scene-dark`.
+
 ## Optional peers
 
 ### Chart.js peer dependency
