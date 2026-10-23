@@ -53,7 +53,7 @@ public class when_reflecting_the_public_shape : Specification
         foreach (var (typeName, expectedProperties) in _expectedTypes)
         {
             _actualTypes.TryGetValue(typeName, out var actualProperties);
-            actualProperties!.ShouldContainOnly(expectedProperties);
+            actualProperties.ShouldContainOnly(expectedProperties);
         }
     }
 
@@ -63,7 +63,7 @@ public class when_reflecting_the_public_shape : Specification
         foreach (var (enumName, expectedMembers) in _expectedEnums)
         {
             _actualEnums.TryGetValue(enumName, out var actualMembers);
-            actualMembers!.ShouldContainOnly(expectedMembers);
+            actualMembers.ShouldContainOnly(expectedMembers);
         }
     }
 

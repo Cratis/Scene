@@ -5,6 +5,9 @@
         <RootNamespace>Cratis.Scene.Engine</RootNamespace>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <!-- xUnit v3 test projects are executables, built for net10.0 only -->
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net10.0</TargetFrameworks>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../Engine/Engine.csproj" />
