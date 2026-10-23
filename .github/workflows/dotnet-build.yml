@@ -36,8 +36,16 @@ on:
       - "Scene.slnx"
       - ".github/workflows/dotnet-build.yml"
 
+# pull_request_target runs in the base repository's context, so the token is write-scoped by default and caches are
+# saved in main's scope. That is safe only for code from this repository's own branches (people with write access,
+# Copilot and bots). The jobs are read-only, checkouts do not keep the token, and the build - which the specs need -
+# does not run pull request code from a fork. A fork contribution is built once a maintainer pushes its branch here.
+permissions:
+  contents: read
+
 jobs:
   dotnet-build:
+    if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -48,6 +56,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
 
       - name: Discover spec projects
         id: discover-specs
@@ -100,6 +109,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
 
       - name: Setup .Net
         uses: actions/setup-dotnet@v4
