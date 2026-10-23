@@ -1,11 +1,7 @@
 name: .NET Build
 
-# The build runs on pull_request_target, where github.ref is the branch being merged into rather than the pull
-# request - refs/heads/main for every one of them. Grouping on it therefore put every open pull request in one
-# group, and cancel-in-progress made each new one cancel the build of whichever was already running. The pull
-# request that lost was left with a cancelled run and no failing job, which reads as though it is still going
-# rather than as though anything is wrong. So the group is the pull request when there is one, and the ref only
-# for the manual runs that have no pull request to name.
+# PR builds run under pull_request and build the PR head. Group by pull request when there is one,
+# otherwise by ref, so a newer PR run cancels only the older run for the same pull request.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -25,7 +21,7 @@ on:
         - info
         - warning
         - debug
-  pull_request_target:
+  pull_request:
     branches:
       - "**"
     paths:
@@ -36,16 +32,13 @@ on:
       - "Scene.slnx"
       - ".github/workflows/dotnet-build.yml"
 
-# pull_request_target runs in the base repository's context, so the token is write-scoped by default and caches are
-# saved in main's scope. That is safe only for code from this repository's own branches (people with write access,
-# Copilot and bots). The jobs are read-only, checkouts do not keep the token, and the build - which the specs need -
-# does not run pull request code from a fork. A fork contribution is built once a maintainer pushes its branch here.
+# PR builds run with a read-only token, and checkouts do not keep credentials.
+# PR runs restore caches but never save them.
 permissions:
   contents: read
 
 jobs:
   dotnet-build:
-    if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -55,7 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
       - name: Discover spec projects
@@ -73,8 +66,8 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
+      - name: Restore NuGet packages
+        uses: actions/cache/restore@v4
         with:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/Directory.*.props') }}
@@ -108,7 +101,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
       - name: Setup .Net
