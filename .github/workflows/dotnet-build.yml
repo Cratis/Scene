@@ -67,6 +67,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore NuGet packages
+        id: nuget-cache
         uses: actions/cache/restore@v4
         with:
           path: ~/.nuget/packages
@@ -76,6 +77,14 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release
+
+      # Only a manual run on main refreshes the shared cache; pull request runs never save it.
+      - name: Save NuGet packages
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && steps.nuget-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ steps.nuget-cache.outputs.cache-primary-key }}
 
       - name: Archive build output
         run: find . -type d -name bin -not -path '*/node_modules/*' -not -path './.git/*' -print0 | tar --null -czf build-output.tar.gz -T -
