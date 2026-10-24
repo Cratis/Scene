@@ -65,6 +65,8 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
 
     useEffect(() => {
         setCards(supplied);
+    }, [suppliedKey]);
+    useEffect(() => {
         setSelectedId(current => selectable && supplied.some(card => card.id === current) ? current : undefined);
     }, [suppliedKey, selectable]);
     useEffect(() => {
@@ -90,6 +92,8 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
         if (event.key !== 'Escape') return;
         if (!(event.target instanceof HTMLElement)) return;
         if (event.target.closest('input, select, textarea, [contenteditable]')) return;
+        if (!selectable || selectedId === undefined) return;
+        event.stopPropagation();
         setSelectedId(undefined);
         setAnnouncement(strings.boardSelectionCleared);
     };

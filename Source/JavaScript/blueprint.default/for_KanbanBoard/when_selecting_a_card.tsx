@@ -3,6 +3,7 @@
 
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach } from 'vitest';
+import sinon from 'sinon';
 import { BindingMode, PropertyValueType } from '@cratis/scene.model';
 import { foundationDescriptors } from '../foundation/foundationDescriptors';
 import { aBoardWithBindingOutputs, cards } from './given/a_board_with_binding_outputs';
@@ -39,6 +40,29 @@ describe('when selecting a card', () => {
         [published.selectedItem, button.getAttribute('aria-pressed')].should.deep.equal([null, 'false']);
         container.querySelectorAll('[data-selected="true"]').length.should.equal(0);
         screen.getByRole('status').textContent!.should.equal('Selection cleared');
+    });
+
+    it('should stop propagation only when Escape clears a selection', () => {
+        const { container } = aBoardWithBindingOutputs();
+        const reached = sinon.spy();
+        document.body.addEventListener('keydown', reached);
+        try {
+            const button = screen.getByRole('button', { name: 'Select First task' });
+            fireEvent.keyDown(button, { key: 'Escape' });
+            reached.callCount.should.equal(1);
+            fireEvent.click(button);
+            fireEvent.keyDown(button, { key: 'Escape' });
+            reached.callCount.should.equal(1);
+        } finally {
+            document.body.removeEventListener('keydown', reached);
+        }
+        container.querySelectorAll('[data-selected="true"]').length.should.equal(0);
+    });
+
+    it('should make no announcement when Escape is pressed with nothing selected', () => {
+        aBoardWithBindingOutputs();
+        fireEvent.keyDown(screen.getByRole('button', { name: 'Select First task' }), { key: 'Escape' });
+        screen.getByRole('status').textContent!.should.equal('');
     });
 
     it('should leave selection alone when Escape is pressed in the move menu', () => {

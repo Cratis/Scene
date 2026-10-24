@@ -3,6 +3,7 @@
 
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach } from 'vitest';
+import sinon from 'sinon';
 import { aBoardWithBindingOutputs } from './given/a_board_with_binding_outputs';
 
 describe('when selection is not enabled', () => {
@@ -25,5 +26,26 @@ describe('when selection is not enabled', () => {
         container.querySelectorAll('[data-selected="true"]').length.should.equal(0);
         update({ selectionMode: 'single' });
         [published.selectedItem].should.deep.equal([null]);
+    });
+
+    it('should make no announcement and not stop propagation when Escape is pressed', () => {
+        const { container } = aBoardWithBindingOutputs({ selectionMode: 'none' });
+        const reached = sinon.spy();
+        document.body.addEventListener('keydown', reached);
+        try {
+            fireEvent.keyDown(container.querySelector('strong')!, { key: 'Escape' });
+        } finally {
+            document.body.removeEventListener('keydown', reached);
+        }
+        reached.callCount.should.equal(1);
+        screen.getByRole('status').textContent!.should.equal('');
+    });
+
+    it('should keep a moved card in its column when selection is toggled', () => {
+        const { update } = aBoardWithBindingOutputs({ selectionMode: 'none', editPermission: 'enabled' });
+        fireEvent.change(screen.getByRole('combobox', { name: 'Move First task' }), { target: { value: 'done' } });
+        (screen.getByRole('combobox', { name: 'Move First task' }) as HTMLSelectElement).value.should.equal('done');
+        update({ selectionMode: 'single' });
+        (screen.getByRole('combobox', { name: 'Move First task' }) as HTMLSelectElement).value.should.equal('done');
     });
 });
