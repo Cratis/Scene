@@ -26,6 +26,8 @@ on:
       - "**"
     paths:
       - "Source/DotNET/**"
+      - ".github/scripts/run-specifications.sh"
+      - ".github/scripts/run-specifications.test.mjs"
       - "Directory.Build.props"
       - "Directory.Packages.props"
       - "global.json"
@@ -126,5 +128,16 @@ jobs:
       - name: Extract build output
         run: tar -xzf build-output.tar.gz
 
-      - name: Test (${{ matrix.project }})
-        run: dotnet test ${{ matrix.project }} --no-build --configuration Release
+      - name: Verify specification runner
+        run: bash .github/scripts/run-specifications.sh --self-test
+
+      - name: Run specification project (${{ matrix.project }})
+        run: bash .github/scripts/run-specifications.sh Release ${{ matrix.project }}
+
+      - name: Upload failed specification results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: specification-results-${{ strategy.job-index }}
+          path: TestResults/
+          if-no-files-found: ignore
