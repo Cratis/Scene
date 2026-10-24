@@ -62,11 +62,15 @@ const textOfValue = (value: unknown): string | undefined =>
 const cardIdOf = (entry: Record<string, unknown>, mapping: BoardCardFields): string | undefined =>
     mapping.id ? textOfValue(entry[mapping.id]) : typeof entry.id === 'string' ? entry.id : undefined;
 
+const cardTitleOf = (entry: Record<string, unknown>, mapping: BoardCardFields): string | undefined =>
+    mapping.title ? textOfValue(entry[mapping.title]) : typeof entry.title === 'string' ? entry.title : undefined;
+
 /** Reads the original query rows by card id, keeping the first row for each id. */
 export function readCardRows(value: unknown, mapping: BoardCardFields = {}): Map<string, Record<string, unknown>> {
     const rows = new Map<string, Record<string, unknown>>();
     for (const entry of records(value)) {
         const id = cardIdOf(entry, mapping);
+        if (cardTitleOf(entry, mapping) === undefined) continue;
         if (id !== undefined && id.length > 0 && !rows.has(id)) rows.set(id, entry);
     }
     return rows;
@@ -91,7 +95,7 @@ export function readCards(value: unknown, mapping: BoardCardFields = {}): BoardC
     const mapped = (mapping.fields ?? []).length > 0;
     return records(value).flatMap(entry => {
         const id = cardIdOf(entry, mapping);
-        const title = mapping.title ? textOfValue(entry[mapping.title]) : typeof entry.title === 'string' ? entry.title : undefined;
+        const title = cardTitleOf(entry, mapping);
         if (id === undefined || id.length === 0 || seen.has(id) || title === undefined) return [];
         seen.add(id);
         const fields = mapped

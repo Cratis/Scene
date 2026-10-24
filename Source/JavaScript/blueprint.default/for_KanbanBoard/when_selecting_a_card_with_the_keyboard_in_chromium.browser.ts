@@ -23,6 +23,10 @@ describe('when selecting a card with the keyboard in Chromium', () => {
             await first.focus();
             await first.press('Enter');
             (await first.getAttribute('aria-pressed'))!.should.equal('true');
+            const move = board.getByRole('combobox', { name: 'Move First task' });
+            await move.focus();
+            await move.press('Escape');
+            (await first.getAttribute('aria-pressed'))!.should.equal('true');
             (await chromium.audit('kanbanBoard', theme, properties)).should.deep.equal([]);
             await second.focus();
             await second.press('Space');
@@ -32,6 +36,7 @@ describe('when selecting a card with the keyboard in Chromium', () => {
             await second.press('Escape');
             (await second.getAttribute('aria-pressed'))!.should.equal('false');
             (await board.locator('[data-selected="true"]').count()).should.equal(0);
+            (await chromium.page.locator('.foundation-visually-hidden[role="status"]').first().textContent())!.should.equal('Selection cleared');
             chromium.errors.should.deep.equal([]);
         });
     }

@@ -183,6 +183,7 @@ export const foundationStrings = {
     boardMoved: '{title} moved to {column}',
     boardSelectCard: 'Select {title}',
     boardSelected: '{title} selected',
+    boardSelectionCleared: 'Selection cleared',
     boardColumn: '{column}, {count} cards',
     boardCollapse: 'Collapse {column}',
     boardExpand: 'Expand {column}',

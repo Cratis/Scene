@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DragEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { DragEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
 import { BoardCard, BoardColumn, BoardLane, cardsOf, lanesByAssignee, moveCard, overLimit, readCardFieldList, readCardRows, readCards, readColumnsOfBoard, totalOf } from './boardModel';
 import { ComponentState, readComponentState } from './ComponentState';
@@ -84,14 +84,21 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
     const select = (card: BoardCard) => {
         const next = selectedId === card.id ? undefined : card.id;
         setSelectedId(next);
-        setAnnouncement(next === undefined ? '' : formatText(strings.boardSelected, { title: card.title }));
+        setAnnouncement(next === undefined ? strings.boardSelectionCleared : formatText(strings.boardSelected, { title: card.title }));
+    };
+    const clearWithEscape = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== 'Escape') return;
+        if (!(event.target instanceof HTMLElement)) return;
+        if (event.target.closest('input, select, textarea, [contenteditable]')) return;
+        setSelectedId(undefined);
+        setAnnouncement(strings.boardSelectionCleared);
     };
     const lanes: BoardLane[] = swimlane ? lanesByAssignee(cards, people) : [];
     const drop = (event: DragEvent, to: string) => { event.preventDefault(); if (dragging) move(dragging, to); setDragging(undefined); };
     const toggle = (id: string) => setCollapsed(current => { const next = new Set(current); if (next.has(id)) next.delete(id); else next.add(id); return next; });
 
     const board = (scope: BoardCard[], Heading: 'h3' | 'h4', laneLabel?: string) => (
-        <div className='foundation-board' onKeyDown={event => { if (event.key === 'Escape') setSelectedId(undefined); }}>
+        <div className='foundation-board' onKeyDown={clearWithEscape}>
             {columns.map((column: BoardColumn) => {
                 const inColumn = cardsOf(columns, scope, column.id);
                 const closed = collapsed.has(column.id);

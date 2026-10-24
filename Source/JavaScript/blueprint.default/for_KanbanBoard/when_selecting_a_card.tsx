@@ -28,6 +28,34 @@ describe('when selecting a card', () => {
         fireEvent.click(button);
         fireEvent.click(button);
         [published.selectedItem, button.getAttribute('aria-pressed')].should.deep.equal([null, 'false']);
+        screen.getByRole('status').textContent!.should.equal('Selection cleared');
+    });
+
+    it('should clear the output and announce it when Escape is pressed on the title', () => {
+        const { published, container } = aBoardWithBindingOutputs();
+        const button = screen.getByRole('button', { name: 'Select First task' });
+        fireEvent.click(button);
+        fireEvent.keyDown(button, { key: 'Escape' });
+        [published.selectedItem, button.getAttribute('aria-pressed')].should.deep.equal([null, 'false']);
+        container.querySelectorAll('[data-selected="true"]').length.should.equal(0);
+        screen.getByRole('status').textContent!.should.equal('Selection cleared');
+    });
+
+    it('should leave selection alone when Escape is pressed in the move menu', () => {
+        const { published } = aBoardWithBindingOutputs();
+        const button = screen.getByRole('button', { name: 'Select First task' });
+        fireEvent.click(button);
+        fireEvent.keyDown(screen.getByRole('combobox', { name: 'Move First task' }), { key: 'Escape' });
+        published.selectedItem!.should.equal(cards[0]);
+        button.getAttribute('aria-pressed')!.should.equal('true');
+        screen.getByRole('status').textContent!.should.equal('First task selected');
+    });
+
+    it('should publish the drawn row rather than an earlier untitled duplicate', () => {
+        const row = { id: 'a', title: 'T', column: 'todo' };
+        const { published } = aBoardWithBindingOutputs({ cards: [{ id: 'a' }, row] });
+        fireEvent.click(screen.getByRole('button', { name: 'Select T' }));
+        published.selectedItem!.should.equal(row);
     });
 
     it('should publish the unmapped query row for a mapped board', () => {
