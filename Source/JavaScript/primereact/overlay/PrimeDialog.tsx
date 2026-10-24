@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useState } from 'react';
+import { useRef, useState, type PointerEvent } from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { RegisteredComponentProps } from '@cratis/scene.react';
@@ -31,6 +31,22 @@ import { booleanProperty, stringProperty } from '../properties';
 export function PrimeDialog({ element, slots }: RegisteredComponentProps) {
     const [visible, setVisible] = useState(booleanProperty(element, 'visible', false));
     const header = stringProperty(element, 'header', 'Dialog');
+    const dismissable = booleanProperty(element, 'dismissable', true);
+    const closeOnEscape = booleanProperty(element, 'closeOnEscape', true);
+    const pointerDownTarget = useRef<EventTarget | null>(null);
+    // Only a press and release on the dialog's own outside surface may dismiss it.
+    // React events from portaled children still bubble through the positioner.
+    const outsidePointerProps = {
+        onPointerDown: (event: PointerEvent<HTMLElement>) => { pointerDownTarget.current = isPopoverAtPoint(event) ? null : event.target; },
+        onPointerUp: (event: PointerEvent<HTMLElement>) => {
+            const outsideClick = event.target === event.currentTarget && pointerDownTarget.current === event.currentTarget;
+            pointerDownTarget.current = null;
+            if (!dismissable || !outsideClick) return;
+            if (isPopoverAtPoint(event)) return;
+            setVisible(false);
+        },
+        onPointerCancel: () => { pointerDownTarget.current = null; },
+    };
     return (
         <div data-scene-id={element.id}>
             <Button onClick={() => setVisible(true)}>{stringProperty(element, 'triggerLabel', header)}</Button>
@@ -38,14 +54,14 @@ export function PrimeDialog({ element, slots }: RegisteredComponentProps) {
                 open={visible}
                 modal={booleanProperty(element, 'modal', true)}
                 draggable={booleanProperty(element, 'draggable', false)}
-                dismissable
-                closeOnEscape
+                dismissable={false}
+                closeOnEscape={closeOnEscape}
                 onOpenChange={(event) => {
                     if (!event.value) setVisible(false);
                 }}>
                 <Dialog.Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
+                    <Dialog.Backdrop {...outsidePointerProps} />
+                    <Dialog.Positioner {...outsidePointerProps}>
                         <Dialog.Popup style={{ width: stringProperty(element, 'width', '32rem') }}>
                             <Dialog.Header>
                                 <Dialog.Title>{header}</Dialog.Title>
@@ -60,4 +76,10 @@ export function PrimeDialog({ element, slots }: RegisteredComponentProps) {
             </Dialog.Root>
         </div>
     );
+}
+
+function isPopoverAtPoint(event: PointerEvent<HTMLElement>): boolean {
+    // A dialog layer can receive the event even when it covers a portaled Cratis popover.
+    const hits = event.currentTarget.ownerDocument.elementsFromPoint?.(event.clientX, event.clientY) ?? [];
+    return hits.some(node => node.closest('[data-cratis-part="popover"]') !== null);
 }

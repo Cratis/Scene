@@ -113,6 +113,8 @@ from the earlier .NET chart enum, and reports any other type instead of drawing 
 | `sidebar` | `overlay/PrimeSidebar.tsx` | `primereact/button`, `primereact/drawer` |
 | `tooltip` | `overlay/PrimeTooltip.tsx` | `primereact/tooltip` |
 
+For `PrimeReact:dialog`, set `element.properties.dismissable` to `false` to prevent outside clicks from closing the dialog, or `element.properties.closeOnEscape` to `false` to prevent Escape from closing it. Both properties default to `true` and work independently. The close button remains available. Interactions at a portaled Cratis popover do not dismiss the dialog, even if the dialog layer covers the popover at the click point; this guard does not change the popover's stacking order.
+
 ## Menu
 
 | Name | Adapter | Backed by |
