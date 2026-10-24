@@ -59,6 +59,23 @@ export interface BoardCardFields {
 const textOfValue = (value: unknown): string | undefined =>
     typeof value === 'string' ? value : typeof value === 'number' && Number.isFinite(value) ? String(value) : typeof value === 'boolean' ? String(value) : undefined;
 
+const cardIdOf = (entry: Record<string, unknown>, mapping: BoardCardFields): string | undefined =>
+    mapping.id ? textOfValue(entry[mapping.id]) : typeof entry.id === 'string' ? entry.id : undefined;
+
+const cardTitleOf = (entry: Record<string, unknown>, mapping: BoardCardFields): string | undefined =>
+    mapping.title ? textOfValue(entry[mapping.title]) : typeof entry.title === 'string' ? entry.title : undefined;
+
+/** Reads the original query rows by card id, keeping the first row for each id. */
+export function readCardRows(value: unknown, mapping: BoardCardFields = {}): Map<string, Record<string, unknown>> {
+    const rows = new Map<string, Record<string, unknown>>();
+    for (const entry of records(value)) {
+        const id = cardIdOf(entry, mapping);
+        if (cardTitleOf(entry, mapping) === undefined) continue;
+        if (id !== undefined && id.length > 0 && !rows.has(id)) rows.set(id, entry);
+    }
+    return rows;
+}
+
 /** Reads the mapping of an element's `cardFields` list: entries with a `field`, repeated fields dropped. */
 export function readCardFieldList(value: unknown): { field: string; label?: string }[] {
     const seen = new Set<string>();
@@ -77,8 +94,8 @@ export function readCards(value: unknown, mapping: BoardCardFields = {}): BoardC
     const seen = new Set<string>();
     const mapped = (mapping.fields ?? []).length > 0;
     return records(value).flatMap(entry => {
-        const id = mapping.id ? textOfValue(entry[mapping.id]) : typeof entry.id === 'string' ? entry.id : undefined;
-        const title = mapping.title ? textOfValue(entry[mapping.title]) : typeof entry.title === 'string' ? entry.title : undefined;
+        const id = cardIdOf(entry, mapping);
+        const title = cardTitleOf(entry, mapping);
         if (id === undefined || id.length === 0 || seen.has(id) || title === undefined) return [];
         seen.add(id);
         const fields = mapped

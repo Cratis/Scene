@@ -1,9 +1,9 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DragEvent, useEffect, useMemo, useState } from 'react';
+import { DragEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { RegisteredComponentProps, useValueOutput } from '@cratis/scene.react';
-import { BoardCard, BoardColumn, BoardLane, cardsOf, lanesByAssignee, moveCard, overLimit, readCardFieldList, readCards, readColumnsOfBoard, totalOf } from './boardModel';
+import { BoardCard, BoardColumn, BoardLane, cardsOf, lanesByAssignee, moveCard, overLimit, readCardFieldList, readCardRows, readCards, readColumnsOfBoard, totalOf } from './boardModel';
 import { ComponentState, readComponentState } from './ComponentState';
 import { formatNumber, readLocale, readNumberFormat } from './formatting';
 import { FoundationIcon } from './FoundationIcon';
@@ -29,6 +29,9 @@ const optional = <Key extends string>(key: Key, value: unknown): { [Name in Key]
  *
  * `swimlane` set to `assignee` lays the board out in lanes, one for each person (in the order they first appear, the unassigned last), each across the same
  * columns: a task is moved between columns within its lane, by dragging or by its Move-to menu, and each column's total and count are for the lane.
+ *
+ * `selectionMode` set to `single` makes each card's title a toggle button (mouse, Enter or Space; Escape clears). `selectedItem` publishes the original
+ * query row, even with mapped fields and after a move, or null when cleared or removed from the supplied cards. Selection defaults to `none`.
  */
 export function KanbanBoard({ element, interactions, bindingOutputs }: RegisteredComponentProps) {
     const columns = useMemo(() => readColumnsOfBoard(element.properties.columns), [element.properties.columns]);
@@ -38,6 +41,14 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
     }), [element.properties.cardId, element.properties.cardTitle, element.properties.cardColumn, element.properties.cardAssignee, element.properties.cardFields]);
     const supplied = useMemo(() => readCards(element.properties.cards, mapping), [element.properties.cards, mapping]);
     const suppliedKey = JSON.stringify(supplied);
+    const rows = useMemo(() => readCardRows(element.properties.cards, mapping), [element.properties.cards, mapping]);
+    const selectable = element.properties.selectionMode === 'single';
+    const [selectedId, setSelectedId] = useState<string | undefined>();
+    const selectedCard = selectable ? supplied.find(card => card.id === selectedId) : undefined;
+    const selectedItem = selectedCard ? rows.get(selectedCard.id) ?? null : null;
+    const selectedKey = JSON.stringify(selectedItem);
+    const latestSelection = useRef(selectedItem);
+    latestSelection.current = selectedItem;
     const [cards, setCards] = useState<BoardCard[]>(supplied);
     const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
     const [announcement, setAnnouncement] = useState('');
@@ -52,7 +63,13 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
     const swimlane = element.properties.swimlane === 'assignee';
     const people = useMemo(() => supplied.flatMap(card => (card.assignee ? [card.assignee] : [])), [suppliedKey]);
 
-    useEffect(() => setCards(supplied), [suppliedKey]);
+    useEffect(() => {
+        setCards(supplied);
+        setSelectedId(current => selectable && supplied.some(card => card.id === current) ? current : undefined);
+    }, [suppliedKey, selectable]);
+    useEffect(() => {
+        bindingOutputs?.setOutput('selectedItem', latestSelection.current);
+    }, [bindingOutputs, selectedKey]);
     useValueOutput(bindingOutputs, cards.map(card => ({ id: card.id, column: card.column })));
 
     const move = (id: string, to: string) => {
@@ -64,12 +81,24 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
         setAnnouncement(formatText(strings.boardMoved, { title: card.title, column: target.label }));
         interactions?.onChange?.();
     };
+    const select = (card: BoardCard) => {
+        const next = selectedId === card.id ? undefined : card.id;
+        setSelectedId(next);
+        setAnnouncement(next === undefined ? strings.boardSelectionCleared : formatText(strings.boardSelected, { title: card.title }));
+    };
+    const clearWithEscape = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== 'Escape') return;
+        if (!(event.target instanceof HTMLElement)) return;
+        if (event.target.closest('input, select, textarea, [contenteditable]')) return;
+        setSelectedId(undefined);
+        setAnnouncement(strings.boardSelectionCleared);
+    };
     const lanes: BoardLane[] = swimlane ? lanesByAssignee(cards, people) : [];
     const drop = (event: DragEvent, to: string) => { event.preventDefault(); if (dragging) move(dragging, to); setDragging(undefined); };
     const toggle = (id: string) => setCollapsed(current => { const next = new Set(current); if (next.has(id)) next.delete(id); else next.add(id); return next; });
 
     const board = (scope: BoardCard[], Heading: 'h3' | 'h4', laneLabel?: string) => (
-        <div className='foundation-board'>
+        <div className='foundation-board' onKeyDown={clearWithEscape}>
             {columns.map((column: BoardColumn) => {
                 const inColumn = cardsOf(columns, scope, column.id);
                 const closed = collapsed.has(column.id);
@@ -90,8 +119,8 @@ export function KanbanBoard({ element, interactions, bindingOutputs }: Registere
                             <ul className='foundation-board-cards'>
                                 {inColumn.length === 0 && <li className='foundation-count'>{strings.boardNoCards}</li>}
                                 {inColumn.map(card => (
-                                    <li key={card.id} className='foundation-board-card' draggable={!locked} onDragStart={() => setDragging(card.id)} onDragEnd={() => setDragging(undefined)}>
-                                        <strong>{card.title}</strong>
+                                    <li key={card.id} className='foundation-board-card' data-selected={selectedCard?.id === card.id} draggable={!locked} onDragStart={() => setDragging(card.id)} onDragEnd={() => setDragging(undefined)}>
+                                        {selectable ? <button type='button' className='foundation-board-card-select' aria-label={formatText(strings.boardSelectCard, { title: card.title })} aria-pressed={selectedCard?.id === card.id} onClick={() => select(card)}>{card.title}</button> : <strong>{card.title}</strong>}
                                         {card.assignee && <span className='foundation-count'><FoundationIcon name='user' /> {card.assignee}</span>}
                                         {card.fields.map(field => <span key={field.label} className='foundation-board-field'><span className='foundation-count'>{field.label}</span> {field.value}</span>)}
                                         {card.badges.length > 0 && <span className='foundation-board-badges'>{card.badges.map(badge => <span key={badge} className='foundation-chip' data-tone='neutral'>{badge}</span>)}</span>}
