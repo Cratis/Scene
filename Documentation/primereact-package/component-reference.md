@@ -113,6 +113,8 @@ from the earlier .NET chart enum, and reports any other type instead of drawing 
 | `sidebar` | `overlay/PrimeSidebar.tsx` | `primereact/button`, `primereact/drawer` |
 | `tooltip` | `overlay/PrimeTooltip.tsx` | `primereact/tooltip` |
 
+For `PrimeReact:dialog`, set `element.properties.dismissable` to `false` to prevent outside clicks from closing the dialog. It defaults to `true`. The close button and Escape key remain available, and interactions inside portaled content such as a calendar popover do not dismiss the dialog.
+
 ## Menu
 
 | Name | Adapter | Backed by |
