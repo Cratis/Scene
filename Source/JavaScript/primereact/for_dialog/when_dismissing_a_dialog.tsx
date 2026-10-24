@@ -109,9 +109,35 @@ describe('when dismissing a dialog', () => {
         await shouldBeClosed();
     });
 
-    it('should keep Escape dismissal available when outside dismissal is disabled', async () => {
+    it('should dismiss on Escape by default independently of outside dismissal', async () => {
         renderDialog({ dismissable: false });
         fireEvent.keyDown(document, { key: 'Escape' });
+        await shouldBeClosed();
+    });
+
+    it('should dismiss on Escape when explicitly enabled', async () => {
+        renderDialog({ closeOnEscape: true });
+        fireEvent.keyDown(document, { key: 'Escape' });
+        await shouldBeClosed();
+    });
+
+    it('should retain the dialog and draft when Escape dismissal is disabled', () => {
+        renderDialog({ closeOnEscape: false });
+        fireEvent.change(screen.getByRole('textbox', { name: 'Name' }), { target: { value: 'Unsaved draft' } });
+        fireEvent.keyDown(document, { key: 'Escape' });
+        shouldBeOpen();
+        (screen.getByRole('textbox', { name: 'Name' }) as HTMLInputElement).value.should.equal('Unsaved draft');
+    });
+
+    it('should keep outside dismissal independent of Escape dismissal', async () => {
+        renderDialog({ closeOnEscape: false });
+        pointerClick(positioner());
+        await shouldBeClosed();
+    });
+
+    it('should keep the explicit close button available when both dismissal gestures are disabled', async () => {
+        renderDialog({ dismissable: false, closeOnEscape: false });
+        fireEvent.click(screen.getByRole('button', { name: 'Close' }));
         await shouldBeClosed();
     });
 
@@ -125,7 +151,6 @@ describe('when dismissing a dialog', () => {
         fireEvent.pointerDown(positioner());
         fireEvent.pointerUp(day);
         shouldBeOpen();
-        pointerClick(day);
         fireEvent.click(day);
         shouldBeOpen();
         (screen.getByRole('combobox', { name: 'Due date' }) as HTMLInputElement).value.should.contain('16');
