@@ -2717,6 +2717,23 @@ tr[data-selectable='true'] {
     background: var(--foundation-surface);
 }
 
+.foundation-board-card[data-selected='true'] {
+    border-color: var(--foundation-primary);
+    box-shadow: var(--foundation-focus);
+}
+
+.foundation-board-card-select {
+    color: var(--foundation-text);
+    background: var(--foundation-surface);
+    border: 1px solid var(--foundation-border);
+    border-radius: var(--foundation-radius);
+    padding: var(--foundation-space-2);
+    font: inherit;
+    font-weight: 600;
+    text-align: start;
+    cursor: pointer;
+}
+
 .foundation-board-card[draggable='true'] {
     cursor: grab;
 }

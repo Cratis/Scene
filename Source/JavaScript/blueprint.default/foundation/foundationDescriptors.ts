@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { BindingSourceKind, ComponentDescriptor, PropertyDescriptor, PropertyEditorKind, PropertyValueType } from '@cratis/scene.model';
+import { BindingMode, BindingSourceKind, ComponentDescriptor, PropertyDescriptor, PropertyEditorKind, PropertyValueType } from '@cratis/scene.model';
 import { componentRegistryKey, valueOutputProperty } from '@cratis/scene.react';
 import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
@@ -563,6 +563,12 @@ export const foundationDescriptors: ComponentDescriptor[] = [
             choice('format', 'Total format', 'Appearance', { number: 'Number', currency: 'Currency', percent: 'Percent', compact: 'Compact' }, 'number'),
             text('currency', 'Currency', 'Appearance', 'The ISO 4217 code of a currency total.'),
             rule('editPermission', 'Move permission', 'Enabled lets cards move; otherwise the board is read-only.'),
+            choice('selectionMode', 'Selection', 'Behavior', { none: 'None', single: 'Single' }, 'none', 'Lets a host read the selected card as its original query row.'),
+            {
+                path: 'selectedItem', label: 'Selected item', group: 'Outputs', valueType: PropertyValueType.Object, readOnly: true,
+                output: true, bindingMode: BindingMode.OneWay,
+                description: 'The currently selected row, or null after selection is cleared.',
+            },
             valueOutputProperty(PropertyValueType.Json, 'Each card\'s id and column, published as cards move.'),
             ...standardStateProperties,
         ],

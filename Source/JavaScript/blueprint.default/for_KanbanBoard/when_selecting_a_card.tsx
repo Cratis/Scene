@@ -1,0 +1,77 @@
+// Copyright (c) Cratis. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { afterEach } from 'vitest';
+import { BindingMode, PropertyValueType } from '@cratis/scene.model';
+import { foundationDescriptors } from '../foundation/foundationDescriptors';
+import { aBoardWithBindingOutputs, cards } from './given/a_board_with_binding_outputs';
+
+describe('when selecting a card', () => {
+    afterEach(cleanup);
+
+    it('should publish the original row and announce its title with an accessible pressed state', () => {
+        const { published, container, onSelect } = aBoardWithBindingOutputs();
+        [published.selectedItem].should.deep.equal([null]);
+        const button = screen.getByRole('button', { name: 'Select First task' });
+        fireEvent.click(button);
+        published.selectedItem!.should.equal(cards[0]);
+        button.getAttribute('aria-pressed')!.should.equal('true');
+        container.querySelectorAll('.foundation-board-card[data-selected="true"]').length.should.equal(1);
+        screen.getByRole('status').textContent!.should.equal('First task selected');
+        onSelect.callCount.should.equal(0);
+    });
+
+    it('should clear the output when the title is pressed again', () => {
+        const { published } = aBoardWithBindingOutputs();
+        const button = screen.getByRole('button', { name: 'Select First task' });
+        fireEvent.click(button);
+        fireEvent.click(button);
+        [published.selectedItem, button.getAttribute('aria-pressed')].should.deep.equal([null, 'false']);
+    });
+
+    it('should publish the unmapped query row for a mapped board', () => {
+        const row = { productId: 42, name: 'Mug', status: 'todo', sku: 'ACM-1000' };
+        const { published } = aBoardWithBindingOutputs({ cards: [row], cardId: 'productId', cardTitle: 'name', cardColumn: 'status' });
+        fireEvent.click(screen.getByRole('button', { name: 'Select Mug' }));
+        published.selectedItem!.should.equal(row);
+    });
+
+    it('should keep the selected original row after moving and still publish the move value', () => {
+        const { published, onChange } = aBoardWithBindingOutputs();
+        fireEvent.click(screen.getByRole('button', { name: 'Select First task' }));
+        fireEvent.change(screen.getByRole('combobox', { name: 'Move First task' }), { target: { value: 'done' } });
+        published.selectedItem!.should.equal(cards[0]);
+        published.value!.should.deep.equal([{ id: 'two', column: 'done' }, { id: 'one', column: 'done' }]);
+        screen.getByRole('button', { name: 'Select First task' }).getAttribute('aria-pressed')!.should.equal('true');
+        onChange.callCount.should.equal(1);
+    });
+
+    it('should publish selection by value rather than republishing an unchanged row', () => {
+        const { setOutput, update, published } = aBoardWithBindingOutputs();
+        fireEvent.click(screen.getByRole('button', { name: 'Select First task' }));
+        const count = () => setOutput.getCalls().filter(call => call.args[0] === 'selectedItem').length;
+        count().should.equal(2);
+        update({ cards: cards.map(card => ({ ...card })) });
+        count().should.equal(2);
+        update({ cards: [{ ...cards[0], ownerId: 'charlie' }, cards[1]] });
+        count().should.equal(3);
+        published.selectedItem!.should.deep.equal({ ...cards[0], ownerId: 'charlie' });
+    });
+
+    it('should allow selection even when moving is disabled', () => {
+        const { published } = aBoardWithBindingOutputs({ editPermission: 'disabled' });
+        fireEvent.click(screen.getByRole('button', { name: 'Select First task' }));
+        published.selectedItem!.should.equal(cards[0]);
+        screen.queryAllByRole('combobox').length.should.equal(0);
+    });
+
+    it('should describe the same selected item output contract as tables and default selection to none', () => {
+        const descriptor = foundationDescriptors.find(item => item.displayName === 'Kanban board')!;
+        const output = descriptor.properties!.find(property => property.path === 'selectedItem')!;
+        [output.valueType, output.readOnly, output.output, output.bindingMode, output.description].should.deep.equal([
+            PropertyValueType.Object, true, true, BindingMode.OneWay, 'The currently selected row, or null after selection is cleared.',
+        ]);
+        descriptor.properties!.find(property => property.path === 'selectionMode')!.default!.should.equal('none');
+    });
+});

@@ -109,6 +109,11 @@ the matrix publishes are always the whole set.
 
 ## Boards
 
+Card selection is opt-in: set `selectionMode` to `single` (`none` by default). Each title becomes a pressed-state toggle button: click, Enter or Space selects
+it, pressing it again or Escape clears it. The board announces the selected title. Bind to `selectedItem` to read the original query row, including properties
+not drawn on the card, or `null` when nothing is selected. Field mappings do not reshape this output. Removing the selected card from `cards` clears selection;
+moving it between columns keeps the same original row selected. The existing `value` output remains the list of card ids and columns for saving moves.
+
 `kanbanBoard` shows a count and the over-limit warning in each column header. Name a numeric card field in `totalField` (a deal's `amount`) and the
 header also shows the total of that field over the cards in the column, formatted by `format` (`currency` with a `currency` code, `percent`,
 `compact` or a plain number) in the element's `locale`. The totals follow a card when it is moved, by dragging or by its Move-to menu, so a
