@@ -21,11 +21,17 @@ on:
       - "**"
     paths:
       - "Source/JavaScript/**"
+      - ".github/workflows/javascript-build.yml"
+      - ".github/scripts/summarize-spec-reports.*"
+      - ".github/scripts/browser-spec-shards.*"
+      - "vite.base.ts"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      browser-shards: ${{ steps.browser-shards.outputs.matrix }}
 
     steps:
       - name: Checkout code
@@ -50,10 +56,21 @@ jobs:
       - name: Yarn install
         run: yarn
 
+      - name: Verify specification reporting and sharding
+        run: node --test .github/scripts/summarize-spec-reports.test.mjs .github/scripts/browser-spec-shards.test.mjs
+
+      - name: Discover browser specification shards
+        id: browser-shards
+        run: |
+          matrix=$(node .github/scripts/browser-spec-shards.mjs 3)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
       - name: Build JS/TS
         run: |
           export NODE_OPTIONS="--max-old-space-size=4096"
           yarn ci
+        env:
+          SPEC_REPORTS_DIR: ${{ github.workspace }}/spec-reports
 
       - name: Verify packed packages hold no specifications
         run: yarn verify-packages
@@ -65,6 +82,8 @@ jobs:
 
       # The generator all domain blueprints start from must keep producing a package that is done, without edits.
       - name: Scaffold a blueprint and verify it
+        env:
+          SPEC_REPORTS_DIR: ${{ github.workspace }}/spec-reports
         run: |
           # The cache holds every node_modules folder, including one a previous run left in the scaffold's folder.
           rm -rf Source/JavaScript/blueprint.ci-scaffold
@@ -82,27 +101,98 @@ jobs:
       - name: Build Storybook
         run: yarn build-storybook
 
-      # The foundation components are audited in a real Chromium at desktop, tablet and phone widths in both themes,
-      # with colour contrast, which jsdom cannot judge (spec Part B 6). A regression fails the build.
+      - name: Archive JavaScript build output
+        run: tar -czf js-dist.tar.gz Source/JavaScript/*/dist
+
+      - name: Upload JavaScript build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: js-dist
+          path: js-dist.tar.gz
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Upload specification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-reports-unit
+          path: spec-reports/
+          retention-days: 3
+          if-no-files-found: ignore
+
+      - name: Summarize specification reports
+        if: always()
+        run: node .github/scripts/summarize-spec-reports.mjs spec-reports >> "$GITHUB_STEP_SUMMARY"
+
+  browser-specs:
+    needs: [build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.build.outputs.browser-shards) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.x
+          registry-url: "https://registry.npmjs.org"
+
+      - uses: actions/cache@v4
+        id: yarn-cache
+        with:
+          path: |
+            .yarn/cache
+            **/node_modules
+            **/.eslintcache
+            **/yarn.lock
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+
+      - name: Yarn install
+        run: yarn
+
+      - name: Download JavaScript build output
+        uses: actions/download-artifact@v4
+        with:
+          name: js-dist
+
+      - name: Extract JavaScript build output
+        run: tar -xzf js-dist.tar.gz
+
+      # Audit every blueprint in real Chromium, including contrast, which jsdom cannot judge.
       - name: Install Chromium
         run: npx playwright-core install --with-deps chromium
 
       - name: Browser specifications
+        env:
+          WORKSPACES: ${{ matrix.workspaces }}
+          SPEC_REPORTS_DIR: ${{ github.workspace }}/spec-reports
+          SPEC_REPORT_SUFFIX: .browser
         run: |
-          yarn workspace @cratis/scene.primereact test:browser
-          yarn workspace @cratis/scene.blueprint.default test:browser
-          yarn workspace @cratis/scene.blueprint.crm test:browser
-          yarn workspace @cratis/scene.blueprint.ticketing test:browser
-          yarn workspace @cratis/scene.blueprint.approvals test:browser
-          yarn workspace @cratis/scene.blueprint.hr test:browser
-          yarn workspace @cratis/scene.blueprint.inventory test:browser
-          yarn workspace @cratis/scene.blueprint.administration test:browser
-          yarn workspace @cratis/scene.blueprint.project-tracker test:browser
-          yarn workspace @cratis/scene.blueprint.orders test:browser
-          yarn workspace @cratis/scene.blueprint.catalog test:browser
-          yarn workspace @cratis/scene.blueprint.vendors test:browser
-          yarn workspace @cratis/scene.blueprint.invoicing test:browser
-          yarn workspace @cratis/scene.blueprint.customer-portal test:browser
-          yarn workspace @cratis/scene.blueprint.contracts test:browser
-          yarn workspace @cratis/scene.blueprint.work-orders test:browser
-          yarn workspace @cratis/scene.blueprint.bookings test:browser
+          failed=()
+          for w in $WORKSPACES; do
+            yarn workspace "$w" test:browser || failed+=("$w")
+          done
+          if (( ${#failed[@]} )); then
+            printf 'Failed browser workspace: %s\n' "${failed[@]}"
+            exit 1
+          fi
+
+      - name: Upload specification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-reports-browser-${{ matrix.shard }}
+          path: spec-reports/
+          retention-days: 3
+          if-no-files-found: ignore
+
+      - name: Summarize specification reports
+        if: always()
+        run: node .github/scripts/summarize-spec-reports.mjs spec-reports >> "$GITHUB_STEP_SUMMARY"
