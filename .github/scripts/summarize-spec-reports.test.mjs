@@ -89,3 +89,37 @@ test('refuses an empty report directory', t => {
     assert.equal(result.status, 2);
     assert.match(result.stderr, /No specification reports found/);
 });
+
+test('refuses reports that record no tests', t => {
+    const directory = fixture(t);
+    for (const [file, xml] of [
+        ['zero.junit.xml', '<testsuites><testsuite name="none" tests="0" time="0"/></testsuites>'],
+        ['zero.trx', '<TestRun><Results/><ResultSummary><Counters total="0"/></ResultSummary></TestRun>']
+    ]) {
+        const report = join(directory, file);
+        writeFileSync(report, xml);
+        const result = summarize(directory);
+        assert.equal(result.status, 2);
+        assert.match(result.stderr, /No tests recorded/);
+        assert.equal(result.stdout, '');
+        rmSync(report);
+    }
+});
+
+test('refuses non-numeric or negative counts and durations', t => {
+    const directory = fixture(t);
+    for (const [file, xml, error] of [
+        ['count.junit.xml', '<testsuites><testsuite name="bad" tests="invalid" time="1"/></testsuites>', /Invalid tests/],
+        ['negative.junit.xml', '<testsuites><testsuite name="bad" tests="1" failures="-1" time="1"/></testsuites>', /Invalid failures/],
+        ['time.junit.xml', '<testsuites><testsuite name="bad" tests="1" time="soon"/></testsuites>', /Invalid duration/],
+        ['count.trx', '<TestRun><Results/><ResultSummary><Counters total="many"/></ResultSummary></TestRun>', /Invalid total/]
+    ]) {
+        const report = join(directory, file);
+        writeFileSync(report, xml);
+        const result = summarize(directory);
+        assert.equal(result.status, 2);
+        assert.match(result.stderr, error);
+        assert.equal(result.stdout, '');
+        rmSync(report);
+    }
+});

@@ -20,6 +20,19 @@ function seconds(duration = '0') {
     return duration.split(':').reduce((total, part) => total * 60 + Number(part), 0);
 }
 
+function count(value, attribute, name) {
+    const number = Number(value ?? 0);
+    if (!Number.isInteger(number) || number < 0) throw new Error(`Invalid ${attribute} "${value}" in ${name}`);
+    return number;
+}
+
+function validated(report) {
+    const durations = [report.duration, ...report.slow.map(item => item.duration)];
+    if (durations.some(duration => !Number.isFinite(duration) || duration < 0)) throw new Error(`Invalid duration in ${report.name}`);
+    if (report.tests === 0) throw new Error(`No tests recorded in ${report.name}`);
+    return report;
+}
+
 function cell(value) {
     return String(value).replace(/\|/g, '\\|').replace(/[\r\n]/g, ' ');
 }
@@ -28,9 +41,9 @@ function junit(document, name) {
     const suites = document.testsuite;
     if (!suites.length) throw new Error(`No test suites found in ${name}`);
     const totals = suites.reduce((sum, suite) => ({
-        tests: sum.tests + Number(suite.tests ?? 0),
-        failed: sum.failed + Number(suite.failures ?? 0) + Number(suite.errors ?? 0),
-        skipped: sum.skipped + Number(suite.skipped ?? 0),
+        tests: sum.tests + count(suite.tests, 'tests', name),
+        failed: sum.failed + count(suite.failures, 'failures', name) + count(suite.errors, 'errors', name),
+        skipped: sum.skipped + count(suite.skipped, 'skipped', name),
         duration: sum.duration + seconds(suite.time)
     }), { tests: 0, failed: 0, skipped: 0, duration: 0 });
     return { name, ...totals, slow: suites.map(suite => ({ name: suite.name ?? name, duration: seconds(suite.time) })) };
@@ -44,9 +57,9 @@ function trx(document, name) {
     const slow = results.map(result => ({ name: result.testName ?? name, duration: seconds(result.duration) }));
     return {
         name,
-        tests: Number(counters.total ?? results.length),
-        failed: Number(counters.failed ?? 0) + Number(counters.error ?? 0) + Number(counters.timeout ?? 0) + Number(counters.aborted ?? 0),
-        skipped: Number(counters.notExecuted ?? 0),
+        tests: count(counters.total ?? results.length, 'total', name),
+        failed: count(counters.failed, 'failed', name) + count(counters.error, 'error', name) + count(counters.timeout, 'timeout', name) + count(counters.aborted, 'aborted', name),
+        skipped: count(counters.notExecuted, 'notExecuted', name),
         duration: times.start && times.finish ? (Date.parse(times.finish) - Date.parse(times.start)) / 1000 : slow.reduce((sum, test) => sum + test.duration, 0),
         slow
     };
@@ -64,7 +77,7 @@ if (!files.length) {
     const reports = files.map(file => {
         const path = join(directory, file);
         const document = readReport(path);
-        return file.endsWith('.trx') ? trx(document, relative(directory, path)) : junit(document, basename(file, '.junit.xml'));
+        return validated(file.endsWith('.trx') ? trx(document, relative(directory, path)) : junit(document, basename(file, '.junit.xml')));
     });
     console.log('## Specification results\n\n| Workspace / project | Tests | Failed | Skipped | Seconds |\n| --- | ---: | ---: | ---: | ---: |');
     for (const report of reports) {
