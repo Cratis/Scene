@@ -25,7 +25,6 @@ on:
       - ".github/scripts/summarize-spec-reports.*"
       - ".github/scripts/browser-spec-shards.*"
       - "vite.base.ts"
-      - "vitest.browser.global-setup.ts"
 
 jobs:
   build:
