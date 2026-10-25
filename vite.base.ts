@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { basename, join } from 'node:path';
 import commonjs from 'vite-plugin-commonjs';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -15,6 +16,12 @@ export function createConfig() {
             },
         },
         test: {
+            ...(process.env.SPEC_REPORTS_DIR ? {
+                reporters: ['default', 'junit'],
+                outputFile: {
+                    junit: join(process.env.SPEC_REPORTS_DIR, `${basename(process.cwd())}${process.env.SPEC_REPORT_SUFFIX ?? ''}.junit.xml`)
+                }
+            } : {}),
             globals: true,
             environment: 'node',
             sourcemap: false,

@@ -28,6 +28,8 @@ on:
       - "Source/DotNET/**"
       - ".github/scripts/run-specifications.sh"
       - ".github/scripts/run-specifications.test.mjs"
+      - ".github/scripts/summarize-spec-reports.mjs"
+      - ".github/scripts/summarize-spec-reports.test.mjs"
       - "Directory.Build.props"
       - "Directory.Packages.props"
       - "global.json"
@@ -134,10 +136,15 @@ jobs:
       - name: Run specification project (${{ matrix.project }})
         run: bash .github/scripts/run-specifications.sh Release ${{ matrix.project }}
 
-      - name: Upload failed specification results
-        if: failure()
+      - name: Upload specification results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: specification-results-${{ strategy.job-index }}
           path: TestResults/
+          retention-days: 3
           if-no-files-found: ignore
+
+      - name: Summarize specification results
+        if: always()
+        run: node .github/scripts/summarize-spec-reports.mjs TestResults >> "$GITHUB_STEP_SUMMARY"
