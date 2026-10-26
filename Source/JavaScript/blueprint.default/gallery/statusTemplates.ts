@@ -7,7 +7,7 @@ import { SlotName } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, panel, text } from './elements';
 import { widget } from './widgets';
-import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
+import { defaultBlueprintTemplateProvenance, neutralGalleryTemplateProvenance } from '../templateProvenance';
 
 /**
  * The four screens that are not part of anyone's plan: a server error, a refusal, a wrong address, and the
@@ -116,7 +116,7 @@ export const landingTemplate: ScreenTemplate = {
     },
     displayName: 'Landing',
     description: 'The marketing front door, with its own navigation because it has no application chrome.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Landing' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Landing' },
 };
 
 /** The four status and marketing templates. */

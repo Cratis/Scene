@@ -7,7 +7,7 @@ import { SlotName, column, slotLeaf } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, externalComponent } from './elements';
 import { pageHeader } from './widgets';
-import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
+import { neutralGalleryTemplateProvenance } from '../templateProvenance';
 
 /**
  * A worked three-level chain, from the application layout down to a slice.
@@ -37,7 +37,7 @@ export const moduleWorkspaceTemplate: ScreenTemplate = {
     },
     displayName: 'Module workspace',
     description: 'Module level: fits the application layout content slot and offers a body for one feature.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Workspace' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Workspace' },
 };
 
 /**
@@ -58,7 +58,7 @@ export const featureSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Feature section',
     description: 'Feature level: fits a module workspace body slot and brings the action toolbar.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /**
@@ -79,7 +79,7 @@ export const sliceSectionTemplate: ScreenTemplate = {
     },
     displayName: 'Slice section',
     description: 'Slice level: fits a feature section body slot and hosts one behavior.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /** The chain, outermost first - what a spec walks to prove `fitsSlot` resolves at every level. */

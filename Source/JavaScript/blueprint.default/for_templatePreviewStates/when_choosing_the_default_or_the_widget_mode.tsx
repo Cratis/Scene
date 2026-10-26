@@ -9,7 +9,7 @@ import { ScenePackageBundle, corePackage, resolvePackageHost } from '@cratis/sce
 import { primeReactPackage } from '@cratis/scene.primereact';
 import { defaultBlueprint } from '../defaultBlueprint';
 import { defaultBlueprintName } from '../packageName';
-import { galleryComponentCatalog, galleryScreenTemplates, GalleryScreenPreview, TemplatePreviewState } from '../gallery';
+import { galleryComponentCatalog, galleryDialogTemplates, galleryScreenTemplates, GalleryScreenPreview, TemplatePreviewState } from '../gallery';
 import { provideBrowserApis } from './given';
 
 const empty = (name: string, kind: PackageKind): ScenePackageBundle => ({
@@ -37,6 +37,14 @@ describe('when choosing the default or the widget mode', () => {
 
         it('should not activate PrimeReact', () => host.bundles.some(bundle => bundle.manifest.name === 'PrimeReact').should.equal(false));
         it('should offer every foundation template as compatible', () => host.templates.filter(entry => foundation.some(template => template.name === entry.name) && !entry.compatible).map(entry => entry.name).should.deep.equal([]));
+        it('should offer exactly the five neutral templates without PrimeReact among the former gallery templates', () => {
+            const neutral = ['Landing', 'ModuleWorkspace', 'FeatureSection', 'SliceSection'];
+            neutral.every(name => foundation.some(template => template.name === name)).should.equal(true);
+            borrowing.map(template => template.name).should.not.include.members(neutral);
+            const confirm = host.templates.find(entry => entry.name === 'ConfirmDialog' && entry.package === defaultBlueprintName);
+            (confirm?.compatible === true).should.equal(true);
+            (galleryDialogTemplates.find(template => template.name === 'ConfirmDialog')!.metadata?.compatibility?.packages ?? []).should.be.empty;
+        });
         it('should offer every widget-borrowing template as unavailable with an actionable message', () => {
             const entries = host.templates.filter(entry => borrowing.some(template => template.name === entry.name));
             entries.length.should.equal(borrowing.length);
