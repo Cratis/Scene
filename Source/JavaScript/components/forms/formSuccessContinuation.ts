@@ -6,10 +6,11 @@ import { commandResponseContext, runActions } from '@cratis/scene.engine';
 import { InteractionScopeValue } from '@cratis/scene.react';
 
 export function formSuccessContinuation(actions: InteractionAction[] | undefined, command: string, scope: InteractionScopeValue | undefined) {
-    return (response: unknown) => {
-        if (!scope || !actions?.length) return;
+    if (!actions?.length) return {};
+    return { onSuccess: (response: unknown) => {
+        if (!scope) return;
         void runActions(actions, scope.dispatcher, commandResponseContext(scope.context, command, response))
             .then(result => { if (result.findings.length) scope.onFindings?.(result.findings); })
             .catch(() => scope.onFindings?.([{ kind: 'invalidResponseBinding', detail: 'Unable to run the form success continuation.' }]));
-    };
+    } };
 }

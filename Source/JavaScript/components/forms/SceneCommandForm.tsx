@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { lazy } from 'react';
-import { InteractionAction, WidthSizeClass } from '@cratis/scene.model';
+import { FormPropertyNames, InteractionAction, WidthSizeClass } from '@cratis/scene.model';
 import { formSuccessContinuation } from './formSuccessContinuation';
 import { RegisteredComponentProps, useInteractionScope } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
@@ -33,7 +33,7 @@ function commandKey(command: BoundConstructor): number {
 export function SceneCommandForm({ element }: RegisteredComponentProps) {
     const scope = useInteractionScope();
     const { name, target } = resolveElementBinding(element, BindingKind.Command);
-    const onSuccess = formSuccessContinuation(element.properties.onSubmit as InteractionAction[] | undefined, name ?? '', scope);
+    const continuation = formSuccessContinuation(element.properties[FormPropertyNames.onSubmit] as InteractionAction[] | undefined, name ?? '', scope);
     if (!target) return <MissingBinding element={element} kind={BindingKind.Command} name={name} />;
 
     const mode = unionProperty(element.properties, 'mode', ['auto', 'manual'] as const) ?? (Object.hasOwn(element.properties, 'inputs') ? 'manual' : 'auto');
@@ -45,7 +45,7 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
             <CommandFormRuntime
                 key={commandKey(target)}
                 command={target}
-                onSuccess={onSuccess}
+                {...continuation}
                 inputs={inputs}
                 exclude={stringArrayProperty(element.properties, 'exclude')}
                 submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}
