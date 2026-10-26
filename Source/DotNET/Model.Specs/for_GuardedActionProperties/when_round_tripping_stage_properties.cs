@@ -6,12 +6,12 @@ using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Guards;
 using Cratis.Scene.Model.Interactions;
 
-namespace Cratis.Scene.Model.for_SceneModelShape;
+namespace Cratis.Scene.Model.for_GuardedActionProperties;
 
-public class when_round_tripping_a_guarded_action : Specification
+public class when_round_tripping_stage_properties : Specification
 {
     const string StageProperties = """
-        {"label":"Approve","alternatives":[{"command":"Approve","condition":{"kind":"logical","operator":"And","left":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Pending","enumeration":["Pending","Approved"]},"right":{"kind":"comparison","left":{"subject":"item.amount"},"operator":"GreaterThan","right":0}},"arguments":{"id":{"subject":"item.id"}}}],"item":{"kind":"componentProperty","componentId":"orders","componentPropertyPath":"selectedItem","path":"selectedItem"},"otherwise":{"outcome":"Hidden"},"navigateToScreen":"detail","navigateByParameter":"id"}
+        {"label":"Approve","alternatives":[{"command":"Approve","condition":{"kind":"logical","operator":"And","left":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Pending","enumeration":["Pending","Approved"]},"right":{"kind":"comparison","left":{"subject":"item.amount"},"operator":"GreaterThan","right":0}},"arguments":{"id":{"subject":"item.id"}}}],"otherwise":{"outcome":"Hidden"},"navigateToScreen":"detail","navigateByParameter":"id"}
         """;
     readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
     GuardedActionProperties _properties = null!;
@@ -32,7 +32,7 @@ public class when_round_tripping_a_guarded_action : Specification
     }
 
     [Fact] void should_preserve_the_command() => _roundTrip.Alternatives[0].Command.ShouldEqual("Approve");
-    [Fact] void should_preserve_the_subject_binding() => _roundTrip.Item!.ComponentId.ShouldEqual("orders");
+    [Fact] void should_accept_stage_properties_without_a_subject_binding() => _roundTrip.Item.ShouldBeNull();
     [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments!["id"].Subject.ShouldEqual("item.id");
     [Fact] void should_preserve_the_nested_guard() => _roundTrip.Alternatives[0].Condition.ShouldBeOfExactType<LogicalGuardCondition>();
     [Fact] void should_preserve_interaction_branches() => _interaction.GetProperty("alternatives").GetArrayLength().ShouldEqual(1);

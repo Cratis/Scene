@@ -39,6 +39,7 @@ export * from './buildStarterProfile';
 export * from './incompatibleStarterThemes';
 export * from './ActionDispatcher';
 export * from './runActions';
+export * from './guards';
 export * from './resolveBehaviors';
 export * from './resolveStrings';
 export * from './navigation';

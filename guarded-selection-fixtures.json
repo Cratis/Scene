@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "stage": {
+    "componentName": "core:action",
+    "properties": {
+      "label": "Approve",
+      "alternatives": [
+        {"command": "ApproveOrder", "condition": {"kind": "comparison", "left": {"subject": "item.status"}, "operator": "Equal", "right": "Pending", "enumeration": ["Pending", "Approved"]}, "arguments": {"orderId": {"subject": "item.id"}}}
+      ],
+      "otherwise": {"outcome": "Hidden"},
+      "navigateToScreen": "details",
+      "navigateByParameter": "id"
+    }
+  },
+  "cases": [
+    {"name":"string equality", "condition":{"kind":"comparison","left":{"subject":"item.name"},"operator":"Equal","right":"A"}, "item":{"name":"A"}, "evaluable":true,"result":true},
+    {"name":"numeric equality", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2}, "item":{"value":2.0}, "evaluable":true,"result":true},
+    {"name":"boolean equality", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":false}, "item":{"value":false}, "evaluable":true,"result":true},
+    {"name":"strict types", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2}, "item":{"value":"2"}, "evaluable":true,"result":false},
+    {"name":"inequality", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"NotEqual","right":true}, "item":{"value":false}, "evaluable":true,"result":true},
+    {"name":"strict inequality", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"NotEqual","right":2}, "item":{"value":"2"}, "evaluable":true,"result":false},
+    {"name":"greater", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"GreaterThan","right":2}, "item":{"value":3}, "evaluable":true,"result":true},
+    {"name":"greater equal", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"GreaterThanOrEqual","right":2}, "item":{"value":2}, "evaluable":true,"result":true},
+    {"name":"less", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"LessThan","right":2}, "item":{"value":1}, "evaluable":true,"result":true},
+    {"name":"less equal", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"LessThanOrEqual","right":2}, "item":{"value":2}, "evaluable":true,"result":true},
+    {"name":"numeric left does not coerce", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"LessThan","right":2}, "item":{"value":"1"}, "evaluable":true,"result":false},
+    {"name":"contains string", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Contains","right":"pen"}, "item":{"value":"pending"}, "evaluable":true,"result":true},
+    {"name":"contains array", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Contains","right":2}, "item":{"value":[1,2,3]}, "evaluable":true,"result":true},
+    {"name":"contains array strict", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Contains","right":2}, "item":{"value":["2"]}, "evaluable":true,"result":false},
+    {"name":"starts with", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"StartsWith","right":"pen"}, "item":{"value":"pending"}, "evaluable":true,"result":true},
+    {"name":"case sensitive", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"StartsWith","right":"Pen"}, "item":{"value":"pending"}, "evaluable":true,"result":false},
+    {"name":"nested path", "condition":{"kind":"comparison","left":{"subject":"item.customer.name"},"operator":"Equal","right":"A"}, "item":{"customer":{"name":"A"}}, "evaluable":true,"result":true},
+    {"name":"missing field", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"NotEqual","right":2}, "item":{}, "evaluable":true,"result":false},
+    {"name":"null field", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":null}, "item":{"value":null}, "evaluable":true,"result":true},
+    {"name":"unknown operator", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Execute","right":2}, "item":{"value":2}, "evaluable":false,"result":null},
+    {"name":"unknown node", "condition":{"kind":"script","source":"true"}, "item":{}, "evaluable":false,"result":null},
+    {"name":"unusable subject reference", "condition":{"kind":"comparison","left":{"subject":"window.value"},"operator":"Equal","right":2}, "item":{"value":2}, "evaluable":false,"result":null},
+    {"name":"prototype path", "condition":{"kind":"comparison","left":{"subject":"item.__proto__.value"},"operator":"Equal","right":2}, "item":{}, "evaluable":false,"result":null},
+    {"name":"empty path segment", "condition":{"kind":"comparison","left":{"subject":"item..value"},"operator":"Equal","right":2}, "item":{}, "evaluable":false,"result":null},
+    {"name":"bad numeric literal", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"GreaterThan","right":"2"}, "item":{"value":3}, "evaluable":false,"result":null},
+    {"name":"enum name", "condition":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Approved","enumeration":["Pending","Approved"]}, "item":{"status":"Approved"}, "evaluable":true,"result":true},
+    {"name":"enum ignores case", "condition":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"approved","enumeration":["Pending","Approved"]}, "item":{"status":"APPROVED"}, "evaluable":true,"result":true},
+    {"name":"present null inequality", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"NotEqual","right":2}, "item":{"value":null}, "evaluable":true,"result":false},
+    {"name":"missing versus null", "condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":null}, "item":{}, "evaluable":true,"result":false},
+    {"name":"enum ordinal", "condition":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Approved","enumeration":["Pending","Approved"]}, "item":{"status":1}, "evaluable":true,"result":true},
+    {"name":"enum invalid ordinal", "condition":{"kind":"comparison","left":{"subject":"item.status"},"operator":"NotEqual","right":"Approved","enumeration":["Pending","Approved"]}, "item":{"status":-1}, "evaluable":true,"result":false},
+    {"name":"enum invalid name", "condition":{"kind":"comparison","left":{"subject":"item.status"},"operator":"NotEqual","right":"Approved","enumeration":["Pending","Approved"]}, "item":{"status":"Unknown"}, "evaluable":true,"result":false},
+    {"name":"and", "condition":{"kind":"logical","operator":"And","left":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2},"right":{"kind":"comparison","left":{"subject":"item.value"},"operator":"GreaterThan","right":1}}, "item":{"value":2}, "evaluable":true,"result":true},
+    {"name":"or", "condition":{"kind":"logical","operator":"Or","left":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":1},"right":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2}}, "item":{"value":2}, "evaluable":true,"result":true},
+    {"name":"unknown in unselected logical branch", "condition":{"kind":"logical","operator":"Or","left":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2},"right":{"kind":"script"}}, "item":{"value":2}, "evaluable":false,"result":null}
+  ],
+  "interactions": [
+    {"name":"unmatched without otherwise", "item":{}, "alternatives":[],"hasOtherwise":false,"expected":{"kind":"unmatched"}},
+    {"name":"unmatched with otherwise", "item":{}, "alternatives":[],"hasOtherwise":true,"expected":{"kind":"otherwise"}},
+    {"name":"no subject with otherwise", "item":null, "alternatives":[],"hasOtherwise":true,"expected":{"kind":"noSubject"}}
+  ],
+  "selections": [
+    {"name":"first match", "item":{"value":2}, "alternatives":[{"condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2}},{"condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"GreaterThan","right":1}}],"expected":{"kind":"alternative","index":0}},
+    {"name":"hidden by default", "item":{"value":1}, "alternatives":[{"condition":{"kind":"comparison","left":{"subject":"item.value"},"operator":"Equal","right":2}}],"expected":{"kind":"hidden"}},
+    {"name":"hidden fallback", "item":{}, "alternatives":[],"otherwise":{"outcome":"Hidden"},"expected":{"kind":"hidden"}},
+    {"name":"execute fallback", "item":{}, "alternatives":[],"otherwise":{"outcome":"Execute","command":"Fallback"},"expected":{"kind":"otherwise"}},
+    {"name":"unknown cannot select fallback", "item":{}, "alternatives":[{"condition":{"kind":"script"}}],"otherwise":{"outcome":"Execute","command":"Fallback"},"expected":{"kind":"unevaluable"}},
+    {"name":"missing subject cannot select fallback", "item":null, "alternatives":[],"otherwise":{"outcome":"Execute","command":"Fallback"},"expected":{"kind":"noSubject"}}
+  ]
+}
