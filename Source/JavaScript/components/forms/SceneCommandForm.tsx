@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { lazy } from 'react';
-import { WidthSizeClass } from '@cratis/scene.model';
-import { RegisteredComponentProps } from '@cratis/scene.react';
+import { InteractionAction, WidthSizeClass } from '@cratis/scene.model';
+import { formSuccessContinuation } from './formSuccessContinuation';
+import { RegisteredComponentProps, useInteractionScope } from '@cratis/scene.react';
 import { ArcRuntimeBoundary, BindingKind, MissingBinding, resolveElementBinding } from '../bindings';
 import type { BoundConstructor } from '../bindings';
 import { numberProperty, stringArrayProperty, stringProperty, unionProperty } from '../properties';
@@ -30,7 +31,9 @@ function commandKey(command: BoundConstructor): number {
  * inside a single native Arc form. Neither mode consumes the content slot.
  */
 export function SceneCommandForm({ element }: RegisteredComponentProps) {
+    const scope = useInteractionScope();
     const { name, target } = resolveElementBinding(element, BindingKind.Command);
+    const onSuccess = formSuccessContinuation(element.properties.onSubmit as InteractionAction[] | undefined, name ?? '', scope);
     if (!target) return <MissingBinding element={element} kind={BindingKind.Command} name={name} />;
 
     const mode = unionProperty(element.properties, 'mode', ['auto', 'manual'] as const) ?? (Object.hasOwn(element.properties, 'inputs') ? 'manual' : 'auto');
@@ -42,6 +45,7 @@ export function SceneCommandForm({ element }: RegisteredComponentProps) {
             <CommandFormRuntime
                 key={commandKey(target)}
                 command={target}
+                onSuccess={onSuccess}
                 inputs={inputs}
                 exclude={stringArrayProperty(element.properties, 'exclude')}
                 submitLabel={stringProperty(element.properties, 'submitLabel') ?? 'Submit'}

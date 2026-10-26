@@ -150,6 +150,7 @@ function shellComponentOf(shell: EffectiveShell, screen: Screen, hasRoot: boolea
 export function defaultForm(screenName: string, form: Form): SceneElement {
     return externalComponent(`form-${screenName}-${form.name}`, 'commandForm', {
         command: form.forCommand,
+        onSubmit: form.onSubmit,
         label: form.name,
         generationMode: form.generationMode,
         layout: form.layout,
