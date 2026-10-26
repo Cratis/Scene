@@ -30,6 +30,7 @@
 export const primeReactComponentNames: string[] = [
     'avatar',
     'breadcrumb',
+    'button',
     'calendar',
     'card',
     'checkbox',

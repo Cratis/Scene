@@ -1,16 +1,34 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { PrimeReactProvider } from '@primereact/core';
-import { SceneElementView } from '@cratis/scene.react';
-import { galleryComponentCatalog, galleryDialogTemplates, galleryPreviewProfile, queryResultsOf, resolveElementComponentNames } from '../gallery';
+import { InteractionScope, SceneElementView, createBrowserDispatcher } from '@cratis/scene.react';
+import { galleryComponentCatalog, galleryDialogTemplates, galleryPreviewProfile, galleryProfile, previewProfileFor, queryResultsOf, resolveElementComponentNames } from '../gallery';
 import { foundationPack } from '../for_foundationTemplates/given';
 import { packageBackedRegistry, provideBrowserApis } from './given';
 
 describe('when previewing the dialog templates', () => {
     beforeEach(provideBrowserApis);
     afterEach(cleanup);
+
+    it('should dispatch CloseDialog when Cancel is clicked with the complete PrimeReact registry', async () => {
+        const registry = { ...packageBackedRegistry, 'Cratis.Components:dataPage': () => undefined };
+        const profile = previewProfileFor(registry);
+        expect(profile).toBe(galleryProfile);
+        const closeDialog = vi.fn();
+        const template = galleryDialogTemplates.find(candidate => candidate.name === 'FormDialog')!;
+        const elements = Object.values(template.content ?? {}).flat()
+            .map(element => resolveElementComponentNames(element, profile, galleryComponentCatalog));
+        render(<PrimeReactProvider>
+            <InteractionScope dispatcher={createBrowserDispatcher({ closeDialog })} attachments={[]}>
+                {elements.map(element => <SceneElementView key={element.id} element={element} registry={registry} resolveBinding={() => undefined} />)}
+            </InteractionScope>
+        </PrimeReactProvider>);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        await waitFor(() => expect(closeDialog).toHaveBeenCalledTimes(1));
+    });
 
     for (const template of galleryDialogTemplates) {
         it(`should render ${template.name} through the real packages, with a named field and an action for every choice`, () => {

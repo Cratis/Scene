@@ -460,6 +460,7 @@ export const foundationDescriptors: ComponentDescriptor[] = [
         description: 'One action, drawn as every action of the foundation is, that is enabled, disabled with its reason, or hidden by the permission of the user.',
         properties: [
             text('label', 'Label', 'Content', 'What it does - a verb, never "OK".', { constraints: { required: true } }),
+            text('icon', 'Icon', 'Appearance', 'Optional decorative PrimeIcons classes; the label remains the accessible name.'),
             choice('emphasis', 'Emphasis', 'Appearance', { primary: 'Primary', secondary: 'Secondary', quiet: 'Quiet', danger: 'Destructive' }, 'primary'),
             rule('permission', 'Permission', 'Whether the action works, refuses with a reason or is not shown.'),
             text('disabledReason', 'Reason when disabled', 'Permissions'),

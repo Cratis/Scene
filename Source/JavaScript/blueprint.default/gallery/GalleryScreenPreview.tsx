@@ -11,7 +11,7 @@ import { ComponentState, foundationSamples } from '../foundation';
 import { defaultBlueprintName } from '../packageName';
 import { LayoutThemeProvider, defaultBlueprintThemes } from '../themes';
 import { composeScreenElement } from './composeScreen';
-import { galleryComponentCatalog, galleryPreviewProfile } from './previewProfile';
+import { galleryComponentCatalog, previewProfileFor } from './previewProfile';
 import { resolveElementComponentNames } from './resolveElementNames';
 import { galleryScreen } from './screens';
 import { TemplatePreviewState } from './TemplatePreviewState';
@@ -118,9 +118,9 @@ export function GalleryScreenPreview({ screenName, initialConfig, themes = defau
             throw new Error(`The gallery has no screen named '${screenName}'.`);
         }
 
-        const resolved = applyTemplatePreviewState(resolveElementComponentNames(composeScreenElement(screen), galleryPreviewProfile, galleryComponentCatalog), state);
+        const resolved = applyTemplatePreviewState(resolveElementComponentNames(composeScreenElement(screen), previewProfileFor(registry), galleryComponentCatalog), state);
         return forceState ? forceComponentState(resolved, forceState) : resolved;
-    }, [screenName, state, forceState]);
+    }, [screenName, state, forceState, registry]);
 
     return (
         <LayoutConfigProvider initialConfig={initialConfig} storage={null}>

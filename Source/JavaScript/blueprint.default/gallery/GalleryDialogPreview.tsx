@@ -10,7 +10,7 @@ import { LayoutThemeProvider, defaultBlueprintThemes } from '../themes';
 import { externalComponent } from './elements';
 import { ForcedComponentState, forceComponentState, galleryPreviewRegistry, queryResultsOf } from './GalleryScreenPreview';
 import { galleryDialogTemplates } from './dialogTemplates';
-import { galleryComponentCatalog, galleryPreviewProfile } from './previewProfile';
+import { galleryComponentCatalog, previewProfileFor } from './previewProfile';
 import { resolveElementComponentNames } from './resolveElementNames';
 import { TemplatePreviewState } from './TemplatePreviewState';
 
@@ -51,9 +51,9 @@ export function GalleryDialogPreview({ dialogName, initialConfig, themes = defau
 
     const element = useMemo(() => {
         const composed = externalComponent(`dialog-${template.name}`, previewTemplateComponent, {}, template.content ?? {});
-        const resolved = resolveElementComponentNames(composed, galleryPreviewProfile, galleryComponentCatalog);
+        const resolved = resolveElementComponentNames(composed, previewProfileFor(registry), galleryComponentCatalog);
         return forceState ? forceComponentState(resolved, forceState) : resolved;
-    }, [template, forceState]);
+    }, [template, forceState, registry]);
     const full = useMemo(() => ({ ...registry, ...previewComponents }), [registry]);
 
     return (

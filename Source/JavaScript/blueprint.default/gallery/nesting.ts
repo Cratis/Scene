@@ -2,12 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ScreenTemplate } from '@cratis/scene.model';
-import { ComponentName } from '../ComponentName';
 import { SlotName, column, slotLeaf } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
-import { button, externalComponent } from './elements';
+import { actionButton } from '../foundation/templates/dialogTemplates';
 import { pageHeader } from './widgets';
-import { defaultBlueprintTemplateProvenance } from '../templateProvenance';
+import { neutralGalleryTemplateProvenance } from '../templateProvenance';
 
 /**
  * A worked three-level chain, from the application layout down to a slice.
@@ -37,7 +36,7 @@ export const moduleWorkspaceTemplate: ScreenTemplate = {
     },
     displayName: 'Module workspace',
     description: 'Module level: fits the application layout content slot and offers a body for one feature.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Workspace' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Workspace' },
 };
 
 /**
@@ -52,13 +51,13 @@ export const featureSectionTemplate: ScreenTemplate = {
     slots: [{ name: TemplateSlotName.Toolbar }, { name: TemplateSlotName.Body }],
     content: {
         [TemplateSlotName.Toolbar]: [
-            button('feature-new', 'New', { severity: 'primary', icon: 'pi pi-plus' }),
-            button('feature-export', 'Export', { severity: 'secondary', icon: 'pi pi-download' }),
+            actionButton('feature-new', { label: 'New', emphasis: 'primary', icon: 'pi pi-plus' }),
+            actionButton('feature-export', { label: 'Export', emphasis: 'secondary', icon: 'pi pi-download' }),
         ],
     },
     displayName: 'Feature section',
     description: 'Feature level: fits a module workspace body slot and brings the action toolbar.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /**
@@ -75,11 +74,11 @@ export const sliceSectionTemplate: ScreenTemplate = {
         root: column([slotLeaf(TemplateSlotName.Body, { grow: 1 }), slotLeaf(TemplateSlotName.Actions)]),
     },
     content: {
-        [TemplateSlotName.Body]: [externalComponent('slice-body', ComponentName.PageHeader, { title: 'Adjustment', subtitle: 'One behavior, one surface' })],
+        [TemplateSlotName.Body]: [pageHeader('slice-body', 'Adjustment', 'One behavior, one surface')],
     },
     displayName: 'Slice section',
     description: 'Slice level: fits a feature section body slot and hosts one behavior.',
-    metadata: { ...defaultBlueprintTemplateProvenance, category: 'Foundation / Section' },
+    metadata: { ...neutralGalleryTemplateProvenance, category: 'Foundation / Section' },
 };
 
 /** The chain, outermost first - what a spec walks to prove `fitsSlot` resolves at every level. */

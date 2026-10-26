@@ -9,6 +9,7 @@ import {
     distinctComponentNames,
     galleryComponentCatalog,
     galleryDialogTemplates,
+    galleryPreviewProfile,
     galleryProfile,
     galleryScreens,
 } from '../gallery';
@@ -60,5 +61,15 @@ describe('when resolving the component names they reference', () => {
             .filter(name => !(name in foundationComponentMetadata))
             .filter(name => !referenced.has(name))
             .should.be.empty;
+    });
+
+    it('should let PrimeReact provide the shared names it declares in the full gallery profile', () => {
+        ['text', 'button', 'card'].map(name => resolveComponentName(name, galleryProfile, galleryComponentCatalog)!.package)
+            .should.deep.equal(['PrimeReact', 'PrimeReact', 'PrimeReact']);
+    });
+
+    it('should let core provide the shared names in the partial-bundle preview profile', () => {
+        ['text', 'button', 'card'].map(name => resolveComponentName(name, galleryPreviewProfile, galleryComponentCatalog)!.package)
+            .should.deep.equal(['core', 'core', 'core']);
     });
 });

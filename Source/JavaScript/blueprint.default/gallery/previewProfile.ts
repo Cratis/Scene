@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { UiProfile } from '@cratis/scene.model';
+import { ComponentRegistry, componentRegistryKey } from '@cratis/scene.react';
 import { PackageCatalog } from '@cratis/scene.engine';
 import { ComponentName } from '../ComponentName';
 import { defaultBlueprintName } from '../packageName';
@@ -23,7 +24,7 @@ export const galleryProfile: UiProfile = {
 };
 
 /**
- * The profile a *preview* resolves against, when only some of those packages are actually loaded.
+ * The profile a *preview* resolves against, when only some of those packages are actually loaded (see {@link previewProfileFor}).
  *
  * Same four packages, different order, and the difference is deliberate. This blueprint takes no npm
  * dependency on the optional widget bundles - each borrowing template declares its own requirements - so a preview run from this package has `core` and this blueprint
@@ -33,13 +34,29 @@ export const galleryProfile: UiProfile = {
  * Names only the libraries declare - `dataTable`, `timeline`, `tag` - still resolve to them, find no
  * implementation, and render as `UnresolvedComponent`'s dashed box naming what is missing. That is the
  * right outcome rather than a papered-over one: previewing a blueprint against half a profile *should*
- * look visibly incomplete. A host with all four bundles loaded uses {@link galleryProfile} and sees the
- * real widgets.
+ * look visibly incomplete. A preview whose registry implements all four packages uses {@link galleryProfile}
+ * instead and sees the real widgets.
  */
 export const galleryPreviewProfile: UiProfile = {
     name: 'Gallery preview',
     targetPlatform: 'web',
     packages: ['PrimeReact', 'Cratis.Components', 'core', defaultBlueprintName],
+};
+
+/**
+ * The profile a preview resolves against for the registry it renders with.
+ *
+ * {@link galleryProfile} when every package it declares is implemented in the registry: this blueprint, core and
+ * Cratis Components by at least one component, and PrimeReact by *every* component name the gallery borrows from it
+ * (the catalog's PrimeReact subset), so PrimeReact's `text` and `card` win over core's. Otherwise
+ * {@link galleryPreviewProfile}, which keeps partial bundles resolving to what exists. A package that is only partly
+ * registered must not win a name it cannot render, or the preview would show placeholders.
+ */
+export const previewProfileFor = (registry: ComponentRegistry): UiProfile => {
+    const keys = Object.keys(registry);
+    const loaded = (name: string) => keys.some(key => key.startsWith(componentRegistryKey(name, '')));
+    const primeReactComplete = primeReactComponentNames.every(name => componentRegistryKey('PrimeReact', name) in registry);
+    return galleryProfile.packages.every(loaded) && primeReactComplete ? galleryProfile : galleryPreviewProfile;
 };
 
 /**

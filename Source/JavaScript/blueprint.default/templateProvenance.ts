@@ -22,6 +22,15 @@ export const defaultBlueprintTemplateProvenance: Pick<TemplateMetadata, 'compati
 };
 
 /**
+ * The provenance of gallery templates built only from `core` and this blueprint's own components. They require no component
+ * library, so a default-only profile offers them as compatible.
+ */
+export const neutralGalleryTemplateProvenance: Pick<TemplateMetadata, 'compatibility' | 'attribution' | 'license' | 'licenseUrl'> = {
+    ...defaultBlueprintTemplateProvenance,
+    compatibility: { scene: defaultBlueprintTemplateProvenance.compatibility!.scene },
+};
+
+/**
  * The provenance of the shell and the dashboard, whose arrangement follows PrimeTek's free Sakai template.
  * The arrangement is followed; no Sakai source or asset is part of this package.
  */
