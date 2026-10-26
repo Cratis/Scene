@@ -9,7 +9,7 @@ import { projectResponseType, responseValueMatches } from './validateResponseBin
 export class ResponseBindingUnavailable extends Error {}
 
 function readMember(value: unknown, segment: string): unknown {
-    if (typeof value !== 'object' || Array.isArray(value)) throw new ResponseBindingUnavailable('The command response member is missing.');
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) throw new ResponseBindingUnavailable('The command response member is missing.');
     if (!Object.hasOwn(value, segment)) throw new ResponseBindingUnavailable('The command response member is missing.');
     return (value as Record<string, unknown>)[segment];
 }
