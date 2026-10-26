@@ -6,6 +6,7 @@ import { ComponentRegistry, corePackage } from '@cratis/scene.react';
 import { defaultBlueprintComponents } from '../defaultBlueprintComponents';
 import { defaultBlueprintName } from '../packageName';
 import { GalleryScreenPreview, TemplatePreviewState, galleryComponentCatalog, galleryPreviewProfile, galleryProfile, previewProfileFor } from '../gallery';
+import { primeReactComponentNames } from '../gallery/dependencyComponentNames';
 import { resolveComponentName } from '@cratis/scene.engine';
 import { provideBrowserApis } from '../for_templatePreviewStates/given';
 
@@ -20,7 +21,8 @@ describe('when choosing the profile for a registry', () => {
     afterEach(cleanup);
 
     it('should use the full gallery profile when every package it declares is implemented', () => previewProfileFor(full).should.equal(galleryProfile));
-    it('should let PrimeReact provide the shared names with the full registry', () => providers(full).should.deep.equal(['PrimeReact', 'PrimeReact', 'PrimeReact']));
+    it('should let PrimeReact provide the shared names it declares with the full registry', () => providers(full).should.deep.equal(['PrimeReact', 'core', 'PrimeReact']));
+    it('should resolve differently from the partial registry for every shared name PrimeReact declares', () => primeReactComponentNames.filter(name => sharedNames.includes(name)).forEach(name => resolveComponentName(name, previewProfileFor(full), galleryComponentCatalog)!.package.should.not.equal(resolveComponentName(name, previewProfileFor(partial), galleryComponentCatalog)!.package)));
     it('should keep the partial profile with core and the blueprint only', () => previewProfileFor(partial).should.equal(galleryPreviewProfile));
     it('should let core provide the shared names with a partial registry', () => providers(partial).should.deep.equal(['core', 'core', 'core']));
     it('should keep the partial profile when a listed package implements nothing', () => previewProfileFor({ ...partial, 'PrimeReact:text': stand }).should.equal(galleryPreviewProfile));

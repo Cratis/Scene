@@ -63,9 +63,10 @@ describe('when resolving the component names they reference', () => {
             .should.be.empty;
     });
 
-    it('should let PrimeReact provide the shared names in the full gallery profile', () => {
+    it('should let PrimeReact provide the shared names it declares in the full gallery profile', () => {
+        // PrimeReact declares text and card but not button, so button stays with core.
         ['text', 'button', 'card'].map(name => resolveComponentName(name, galleryProfile, galleryComponentCatalog)!.package)
-            .should.deep.equal(['PrimeReact', 'PrimeReact', 'PrimeReact']);
+            .should.deep.equal(['PrimeReact', 'core', 'PrimeReact']);
     });
 
     it('should let core provide the shared names in the partial-bundle preview profile', () => {
