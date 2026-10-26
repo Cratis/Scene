@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Model.Guards;
 
 /// <summary>
@@ -10,4 +12,8 @@ namespace Cratis.Scene.Model.Guards;
 /// <param name="Operator">The comparison.</param>
 /// <param name="Right">A string, number, boolean or null literal.</param>
 /// <param name="Enumeration">The member names, in ordinal order.</param>
-public record ComparisonGuardCondition(SubjectReference Left, GuardOperator Operator, object? Right, IReadOnlyList<string>? Enumeration = null) : GuardCondition;
+public record ComparisonGuardCondition(
+    SubjectReference Left,
+    GuardOperator Operator,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.Never)] object? Right,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<string>? Enumeration = null) : GuardCondition;

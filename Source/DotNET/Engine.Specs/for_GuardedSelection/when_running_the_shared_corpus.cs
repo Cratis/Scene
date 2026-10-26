@@ -3,6 +3,7 @@
 
 using System.Text.Json;
 using Cratis.Scene.Engine.Guards;
+using Cratis.Scene.Model.Guards;
 
 namespace Cratis.Scene.Engine.for_GuardedSelection;
 
@@ -15,6 +16,20 @@ public class when_running_the_shared_corpus : Specification
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
         _corpus = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "guarded-selection-fixtures.json"))).RootElement;
+    }
+
+    [Fact]
+    void should_preserve_present_nulls_when_evaluating_a_typed_guard()
+    {
+        var condition = new ComparisonGuardCondition(new("item.value"), GuardOperator.Equal, null);
+        GuardConditions.Evaluate(condition, new { value = (string?)null }).ShouldEqual(true);
+    }
+
+    [Fact]
+    void should_evaluate_a_typed_enum_comparison()
+    {
+        var condition = new ComparisonGuardCondition(new("item.status"), GuardOperator.Equal, "approved", ["Pending", "Approved"]);
+        GuardConditions.Evaluate(condition, new { status = 1 }).ShouldEqual(true);
     }
 
     [Fact]

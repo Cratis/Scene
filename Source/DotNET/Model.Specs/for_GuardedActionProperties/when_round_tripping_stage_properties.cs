@@ -31,6 +31,14 @@ public class when_round_tripping_stage_properties : Specification
         _interaction = JsonSerializer.SerializeToElement(binding, _options);
     }
 
+    [Fact]
+    void should_preserve_a_null_literal_when_writing_the_property_bag()
+    {
+        var properties = new GuardedActionProperties("Check", [new("Check", new ComparisonGuardCondition(new("item.value"), GuardOperator.Equal, null))]);
+        var json = JsonSerializer.SerializeToElement(properties.ToProperties(), _options);
+        json.GetProperty("alternatives")[0].GetProperty("condition").GetProperty("right").ValueKind.ShouldEqual(JsonValueKind.Null);
+    }
+
     [Fact] void should_preserve_the_command() => _roundTrip.Alternatives[0].Command.ShouldEqual("Approve");
     [Fact] void should_accept_stage_properties_without_a_subject_binding() => _roundTrip.Item.ShouldBeNull();
     [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments!["id"].Subject.ShouldEqual("item.id");

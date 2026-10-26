@@ -11,7 +11,7 @@ namespace Cratis.Scene.Engine.Guards;
 /// </summary>
 public static class GuardConditions
 {
-    static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web) { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull };
+    static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
     static readonly HashSet<string> _forbidden = ["__proto__", "prototype", "constructor"];
 
     /// <summary>
