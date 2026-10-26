@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { useCallback, useEffect, useMemo } from 'react';
-import { BehaviorAttachment, resolveBehaviors, resolveIntervalBehaviors, runBindings } from '@cratis/scene.engine';
+import { BehaviorAttachment, InteractionContext, resolveBehaviors, resolveIntervalBehaviors, runBindings } from '@cratis/scene.engine';
 import { Behavior, InteractionTriggerKind } from '@cratis/scene.model';
 import { attachmentFor, useInteractionScope } from './InteractionScope';
+import { useRenderBindingScope } from '../renderer/RenderBindingScopeContext';
 
 /**
  * The DOM handlers an element should spread onto whatever it renders.
@@ -29,6 +30,10 @@ const domTriggers: [keyof InteractionHandlers, InteractionTriggerKind][] = [
     ['onSelect', InteractionTriggerKind.Select],
 ];
 
+function gestureContext(context: InteractionContext, dataContext: unknown): InteractionContext {
+    return { ...context, subject: () => context.subject?.() ?? dataContext };
+}
+
 /**
  * Wires the behaviors attached to an element to the events that start them.
  *
@@ -47,6 +52,7 @@ const domTriggers: [keyof InteractionHandlers, InteractionTriggerKind][] = [
  */
 export function useInteractions(level: string, behaviors?: Behavior[]): InteractionHandlers {
     const scope = useInteractionScope();
+    const bindingScope = useRenderBindingScope();
 
     const attachments = useMemo<BehaviorAttachment[]>(
         () => [...(scope?.attachments ?? []), ...attachmentFor(level, behaviors)],
@@ -55,7 +61,7 @@ export function useInteractions(level: string, behaviors?: Behavior[]): Interact
     const run = useCallback(async (kind: InteractionTriggerKind) => {
         if (!scope) return;
 
-        const result = await runBindings(resolveBehaviors(attachments, kind), scope.dispatcher, scope.context);
+        const result = await runBindings(resolveBehaviors(attachments, kind), scope.dispatcher, gestureContext(scope.context, bindingScope.dataContext));
         if (result.findings.length > 0) scope.onFindings?.(result.findings);
     }, [scope, attachments]);
 
@@ -84,7 +90,7 @@ export function useInteractions(level: string, behaviors?: Behavior[]): Interact
         });
 
         return () => timers.forEach(clearInterval);
-    }, [attachments, scope]);
+    }, [attachments, scope, bindingScope]);
 
     return useMemo(() => {
         const handlers: InteractionHandlers = {};

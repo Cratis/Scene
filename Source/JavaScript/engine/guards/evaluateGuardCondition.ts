@@ -4,21 +4,48 @@
 import { SubjectReference } from '@cratis/scene.model';
 
 const forbidden = new Set(['__proto__', 'prototype', 'constructor']);
-const operators = new Set(['Equal', 'NotEqual', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual', 'Contains', 'StartsWith']);
 const numericOperators = new Set(['GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual']);
+type Comparison = (left: unknown, right: unknown) => boolean;
+
+function numbers(left: unknown, right: unknown, compare: (first: number, second: number) => boolean): boolean {
+    if (typeof left !== 'number' || typeof right !== 'number') return false;
+    return compare(left, right);
+}
+
+function contains(left: unknown, right: unknown): boolean {
+    if (typeof left === 'string') return typeof right === 'string' && left.includes(right);
+    return Array.isArray(left) && left.some(value => scalar(value) && value === right);
+}
+
+const comparisons: Record<string, Comparison> = {
+    Equal: (left, right) => scalar(left) && left === right,
+    NotEqual: (left, right) => scalar(left) && typeof left === typeof right && left !== right,
+    GreaterThan: (left, right) => numbers(left, right, (first, second) => first > second),
+    GreaterThanOrEqual: (left, right) => numbers(left, right, (first, second) => first >= second),
+    LessThan: (left, right) => numbers(left, right, (first, second) => first < second),
+    LessThanOrEqual: (left, right) => numbers(left, right, (first, second) => first <= second),
+    Contains: contains,
+    StartsWith: (left, right) => typeof left === 'string' && typeof right === 'string' && left.startsWith(right),
+};
 
 function record(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 function scalar(value: unknown): value is string | number | boolean | null {
-    return value === null || typeof value === 'string' || typeof value === 'boolean' || (typeof value === 'number' && Number.isFinite(value));
+    return value === null || ['string', 'boolean'].includes(typeof value) || (typeof value === 'number' && Number.isFinite(value));
+}
+
+function safeSegment(part: string): boolean {
+    return /^[A-Za-z_][A-Za-z0-9_]*$/.test(part) && !forbidden.has(part);
 }
 
 function subjectPath(reference: unknown): string[] | undefined {
-    if (!record(reference) || typeof reference.subject !== 'string' || !reference.subject.startsWith('item.')) return undefined;
+    if (!record(reference)) return undefined;
+    if (typeof reference.subject !== 'string') return undefined;
+    if (!reference.subject.startsWith('item.')) return undefined;
     const parts = reference.subject.slice(5).split('.');
-    return parts.every(part => /^[A-Za-z_][A-Za-z0-9_]*$/.test(part) && !forbidden.has(part)) ? parts : undefined;
+    return parts.every(safeSegment) ? parts : undefined;
 }
 
 export function resolveSubjectReference(reference: SubjectReference, item: unknown): unknown {
@@ -32,22 +59,41 @@ export function resolveSubjectReference(reference: SubjectReference, item: unkno
     return value;
 }
 
+function validEnumeration(value: unknown): boolean {
+    if (value === undefined) return true;
+    if (!Array.isArray(value) || value.length === 0) return false;
+    return value.every(member => typeof member === 'string') && new Set(value).size === value.length;
+}
+
+function validLiteral(operator: string, right: unknown): boolean {
+    if (!scalar(right)) return false;
+    if (numericOperators.has(operator)) return typeof right === 'number';
+    return operator !== 'StartsWith' || typeof right === 'string';
+}
+
+function validComparison(condition: Record<string, unknown>): boolean {
+    if (!subjectPath(condition.left)) return false;
+    if (typeof condition.operator !== 'string') return false;
+    if (!Object.hasOwn(comparisons, condition.operator)) return false;
+    return validEnumeration(condition.enumeration) && validLiteral(condition.operator, condition.right);
+}
+
 export function canEvaluateGuard(condition: unknown): boolean {
     if (!record(condition)) return false;
-    if (condition.kind === 'logical') {
-        return (condition.operator === 'And' || condition.operator === 'Or') && canEvaluateGuard(condition.left) && canEvaluateGuard(condition.right);
-    }
-    if (condition.kind !== 'comparison' || !subjectPath(condition.left) || typeof condition.operator !== 'string' || !operators.has(condition.operator) || !scalar(condition.right)) return false;
-    const enumeration = condition.enumeration;
-    if (enumeration !== undefined && (!Array.isArray(enumeration) || enumeration.length === 0 || !enumeration.every(value => typeof value === 'string') || new Set(enumeration).size !== enumeration.length)) return false;
-    if (numericOperators.has(condition.operator) && typeof condition.right !== 'number') return false;
-    if (condition.operator === 'StartsWith' && typeof condition.right !== 'string') return false;
-    return true;
+    if (condition.kind === 'comparison') return validComparison(condition);
+    if (condition.kind !== 'logical') return false;
+    if (condition.operator !== 'And' && condition.operator !== 'Or') return false;
+    return canEvaluateGuard(condition.left) && canEvaluateGuard(condition.right);
+}
+
+function ordinal(value: unknown, length: number): value is number {
+    if (typeof value !== 'number' || !Number.isInteger(value)) return false;
+    return value >= 0 && value < length;
 }
 
 function normalize(value: unknown, enumeration: unknown): unknown {
     if (!Array.isArray(enumeration) || value === null) return value;
-    if (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < enumeration.length) return enumeration[value];
+    if (ordinal(value, enumeration.length)) return enumeration[value];
     if (typeof value === 'string') return enumeration.find(member => member.toLowerCase() === value.toLowerCase());
     return undefined;
 }
@@ -56,18 +102,8 @@ function compare(condition: Record<string, unknown>, item: unknown): boolean {
     const left = normalize(resolveSubjectReference(condition.left as SubjectReference, item), condition.enumeration);
     const right = normalize(condition.right, condition.enumeration);
     if (left === undefined || right === undefined) return false;
-    if (left === null || right === null) return condition.operator === 'Equal' && left === null && right === null;
-    switch (condition.operator) {
-        case 'Equal': return scalar(left) && left === right;
-        case 'NotEqual': return scalar(left) && typeof left === typeof right && left !== right;
-        case 'GreaterThan': return typeof left === 'number' && typeof right === 'number' && left > right;
-        case 'GreaterThanOrEqual': return typeof left === 'number' && typeof right === 'number' && left >= right;
-        case 'LessThan': return typeof left === 'number' && typeof right === 'number' && left < right;
-        case 'LessThanOrEqual': return typeof left === 'number' && typeof right === 'number' && left <= right;
-        case 'Contains': return typeof left === 'string' ? typeof right === 'string' && left.includes(right) : Array.isArray(left) && left.some(value => scalar(value) && value === right);
-        case 'StartsWith': return typeof left === 'string' && left.startsWith(right as string);
-        default: return false;
-    }
+    if (left === null || right === null) return condition.operator === 'Equal' && left === right;
+    return comparisons[condition.operator as string](left, right);
 }
 
 export function evaluateGuard(condition: unknown, item: unknown): boolean | undefined {

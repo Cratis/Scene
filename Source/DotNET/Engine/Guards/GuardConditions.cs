@@ -34,12 +34,8 @@ public static class GuardConditions
         var left = Get(condition, "left");
         var right = Get(condition, "right");
         if (kind == "logical") return (operation == "And" || operation == "Or") && CanEvaluate(left) && CanEvaluate(right);
-        if (kind != "comparison" || !ValidPath(Text(Get(left, "subject"))) || !Scalar(right)) return false;
-        if (!Enum.TryParse<GuardOperator>(operation, out var parsed) || !Enum.IsDefined(parsed) || operation != parsed.ToString()) return false;
-        var enumeration = Get(condition, "enumeration");
-        if (enumeration.ValueKind != JsonValueKind.Undefined && (enumeration.ValueKind != JsonValueKind.Array || enumeration.GetArrayLength() == 0 || enumeration.EnumerateArray().Any(value => value.ValueKind != JsonValueKind.String) || enumeration.EnumerateArray().Select(value => value.GetString()).Distinct().Count() != enumeration.GetArrayLength())) return false;
-        if (parsed is GuardOperator.GreaterThan or GuardOperator.GreaterThanOrEqual or GuardOperator.LessThan or GuardOperator.LessThanOrEqual) return right.ValueKind == JsonValueKind.Number;
-        return parsed != GuardOperator.StartsWith || right.ValueKind == JsonValueKind.String;
+        if (kind != "comparison") return false;
+        return ValidComparison(condition, operation);
     }
 
     /// <summary>
@@ -56,6 +52,29 @@ public static class GuardConditions
         var left = Evaluate(Get(condition, "left"), item) == true;
         var right = Evaluate(Get(condition, "right"), item) == true;
         return operation == "And" ? left && right : left || right;
+    }
+
+    static bool ValidComparison(JsonElement condition, string operation)
+    {
+        if (!ValidPath(Text(Get(Get(condition, "left"), "subject")))) return false;
+        if (!Enum.TryParse<GuardOperator>(operation, out var parsed)) return false;
+        if (!Enum.IsDefined(parsed) || operation != parsed.ToString()) return false;
+        return ValidEnumeration(Get(condition, "enumeration")) && ValidLiteral(parsed, Get(condition, "right"));
+    }
+
+    static bool ValidEnumeration(JsonElement value)
+    {
+        if (value.ValueKind == JsonValueKind.Undefined) return true;
+        if (value.ValueKind != JsonValueKind.Array || value.GetArrayLength() == 0) return false;
+        if (value.EnumerateArray().Any(member => member.ValueKind != JsonValueKind.String)) return false;
+        return value.EnumerateArray().Select(member => member.GetString()).Distinct().Count() == value.GetArrayLength();
+    }
+
+    static bool ValidLiteral(GuardOperator operation, JsonElement right)
+    {
+        if (!Scalar(right)) return false;
+        if (operation is GuardOperator.GreaterThan or GuardOperator.GreaterThanOrEqual or GuardOperator.LessThan or GuardOperator.LessThanOrEqual) return right.ValueKind == JsonValueKind.Number;
+        return operation != GuardOperator.StartsWith || right.ValueKind == JsonValueKind.String;
     }
 
     static bool ValidPath(string path) => path.StartsWith("item.", StringComparison.Ordinal) && path[5..].Split('.').All(part => part.Length > 0 && (char.IsAsciiLetter(part[0]) || part[0] == '_') && part.All(character => char.IsAsciiLetterOrDigit(character) || character == '_') && !_forbidden.Contains(part));
@@ -75,7 +94,10 @@ public static class GuardConditions
         var right = Normalize(Get(condition, "right"), enumeration);
         if (left.ValueKind == JsonValueKind.Undefined || right.ValueKind == JsonValueKind.Undefined) return false;
         if (left.ValueKind == JsonValueKind.Null || right.ValueKind == JsonValueKind.Null) return operation == "Equal" && left.ValueKind == JsonValueKind.Null && right.ValueKind == JsonValueKind.Null;
-        return operation switch
+        return CompareValues(left, right, operation);
+    }
+
+    static bool CompareValues(JsonElement left, JsonElement right, string operation) => operation switch
         {
             "Equal" => Same(left, right),
             "NotEqual" => Scalar(left) && Compatible(left, right) && !Same(left, right),
@@ -83,14 +105,24 @@ public static class GuardConditions
             "StartsWith" => left.ValueKind == JsonValueKind.String && right.ValueKind == JsonValueKind.String && left.GetString()!.StartsWith(right.GetString()!, StringComparison.Ordinal),
             _ => Numeric(left, right, operation)
         };
-    }
 
     static JsonElement Normalize(JsonElement value, JsonElement enumeration)
     {
         if (enumeration.ValueKind != JsonValueKind.Array || value.ValueKind == JsonValueKind.Null) return value;
-        if (value.ValueKind == JsonValueKind.Number && value.TryGetDouble(out var number) && number == Math.Truncate(number) && number >= 0 && number < enumeration.GetArrayLength()) return enumeration[(int)number];
+        if (Ordinal(value, enumeration.GetArrayLength(), out var ordinal)) return enumeration[ordinal];
         if (value.ValueKind == JsonValueKind.String) return enumeration.EnumerateArray().FirstOrDefault(member => string.Equals(member.GetString(), value.GetString(), StringComparison.OrdinalIgnoreCase));
         return default;
+    }
+
+    static bool Ordinal(JsonElement value, int length, out int ordinal)
+    {
+        ordinal = 0;
+        if (value.ValueKind != JsonValueKind.Number) return false;
+        var number = value.GetDouble();
+        if (number != Math.Truncate(number)) return false;
+        if (number < 0 || number >= length) return false;
+        ordinal = (int)number;
+        return true;
     }
 
     static bool Numeric(JsonElement left, JsonElement right, string operation)
@@ -98,7 +130,10 @@ public static class GuardConditions
         if (left.ValueKind != JsonValueKind.Number || right.ValueKind != JsonValueKind.Number) return false;
         var first = left.GetDouble();
         var second = right.GetDouble();
-        return operation switch
+        return CompareNumbers(first, second, operation);
+    }
+
+    static bool CompareNumbers(double first, double second, string operation) => operation switch
         {
             "GreaterThan" => first > second,
             "GreaterThanOrEqual" => first >= second,
@@ -106,7 +141,6 @@ public static class GuardConditions
             "LessThanOrEqual" => first <= second,
             _ => false
         };
-    }
 
     static bool Contains(JsonElement left, JsonElement right) => left.ValueKind switch
     {

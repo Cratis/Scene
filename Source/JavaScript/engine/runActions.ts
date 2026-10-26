@@ -20,6 +20,7 @@ import {
 
 import { ActionDispatcher } from './ActionDispatcher';
 import { BindingResolver } from './BindingResolver';
+import { selectGuardedInteraction } from './guards';
 
 /**
  * Why an interaction stopped before running everything it was given.
@@ -45,7 +46,7 @@ export enum InteractionStop {
  * application, and 'this application produced no findings' has to be checkable rather than a matter of opinion.
  */
 export interface InteractionFinding {
-    kind: 'unknownAction' | 'unresolvedMessage' | 'unresolvedCondition';
+    kind: 'unknownAction' | 'unresolvedMessage' | 'unresolvedCondition' | 'unevaluableCondition';
     detail: string;
 }
 
@@ -64,6 +65,7 @@ export interface InteractionRun {
  */
 export interface InteractionContext {
     resolve: BindingResolver;
+    subject?: () => unknown;
     /** Looks up a localization key. Returns the key itself when the host has no catalogue for it. */
     localize?: (key: string) => string;
 }
@@ -258,7 +260,9 @@ export async function runBindings(
     for (const candidate of bindings) {
         if (!applies(candidate.binding, context, run)) continue;
 
-        await runSequence(candidate.binding.actions ?? [], dispatcher, context, run);
+        const actions = branchActions(candidate.binding, context, run);
+        if (!actions) continue;
+        await runSequence(actions, dispatcher, context, run);
 
         // A navigation or a declined confirm ends the interaction, not merely the binding that caused it.
         // The screen the later bindings were attached to is gone, or the gate they sat behind was refused.
@@ -266,6 +270,19 @@ export async function runBindings(
     }
 
     return run;
+}
+
+function branchActions(binding: InteractionBinding, context: InteractionContext, run: InteractionRun): InteractionAction[] | undefined {
+    if (binding.alternatives === undefined) return binding.actions ?? [];
+    if ((binding.actions?.length ?? 0) > 0) {
+        run.findings.push({ kind: 'unevaluableCondition', detail: 'SCENE-GUARD-001: An interaction cannot combine actions and alternatives' });
+        return undefined;
+    }
+    const selected = selectGuardedInteraction(binding.alternatives, context.subject?.() ?? context.resolve({ path: 'item' }), binding.otherwise !== undefined);
+    if (selected.kind === 'alternative') return binding.alternatives[selected.index].actions;
+    if (selected.kind === 'otherwise') return binding.otherwise;
+    if (selected.kind === 'unevaluable') run.findings.push({ kind: 'unevaluableCondition', detail: 'SCENE-GUARD-001: The structured guard could not be resolved' });
+    return undefined;
 }
 
 function applies(binding: InteractionBinding, context: InteractionContext, run: InteractionRun): boolean {
