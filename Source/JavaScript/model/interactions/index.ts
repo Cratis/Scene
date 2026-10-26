@@ -23,4 +23,5 @@ export * from './NotifyAction';
 export * from './ConfirmAction';
 export * from './RaiseTriggerAction';
 export * from './InteractionBinding';
+export * from './InteractionAlternative';
 export * from './Behavior';

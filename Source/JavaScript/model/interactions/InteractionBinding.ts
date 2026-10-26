@@ -3,6 +3,7 @@
 
 import { BindingExpression } from '../common';
 import { InteractionAction } from './InteractionAction';
+import { InteractionAlternative } from './InteractionAlternative';
 import { InteractionTrigger } from './InteractionTrigger';
 
 /**
@@ -12,6 +13,8 @@ export interface InteractionBinding {
     trigger: InteractionTrigger;
     actions: InteractionAction[];
     condition?: BindingExpression;
+    alternatives?: InteractionAlternative[];
+    otherwise?: InteractionAction[];
 }
 
-export const InteractionBindingPropertyNames: (keyof InteractionBinding)[] = ['trigger', 'actions', 'condition'];
+export const InteractionBindingPropertyNames: (keyof InteractionBinding)[] = ['trigger', 'actions', 'condition', 'alternatives', 'otherwise'];

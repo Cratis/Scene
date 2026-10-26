@@ -1,6 +1,14 @@
 {
   "description": "Shared shape contract between Cratis.Scene.Model (C#, source of truth) and @cratis/scene.model (the hand-maintained TypeScript mirror). Both a C# spec (Model.Specs/for_SceneModelShape) and a TypeScript spec (model/for_shape) assert their own side's reflected/declared shape against this file independently, so a desync on either side fails its own build rather than only the other one's.",
   "types": {
+    "GuardCondition": [],
+    "SubjectReference": ["subject"],
+    "ComparisonGuardCondition": ["left", "operator", "right", "enumeration"],
+    "LogicalGuardCondition": ["left", "operator", "right"],
+    "GuardedActionAlternative": ["command", "condition", "arguments"],
+    "GuardedActionFallback": ["outcome", "command", "arguments"],
+    "GuardedActionProperties": ["label", "alternatives", "item", "otherwise", "navigateToScreen", "navigateByParameter"],
+    "InteractionAlternative": ["condition", "actions"],
     "Color": [
       "red",
       "green",
@@ -386,7 +394,9 @@
     "InteractionBinding": [
       "trigger",
       "actions",
-      "condition"
+      "condition",
+      "alternatives",
+      "otherwise"
     ],
     "InteractionTrigger": [],
     "BuiltInInteractionTrigger": [
@@ -691,6 +701,9 @@
     ]
   },
   "enums": {
+    "GuardOperator": ["Equal", "NotEqual", "GreaterThan", "GreaterThanOrEqual", "LessThan", "LessThanOrEqual", "Contains", "StartsWith"],
+    "LogicalGuardOperator": ["And", "Or"],
+    "GuardedActionFallbackOutcome": ["Hidden", "Execute"],
     "TemplateScope": [
       "Application",
       "Module",

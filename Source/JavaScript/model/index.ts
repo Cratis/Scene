@@ -12,6 +12,7 @@ export * from './icons';
 export * from './packages';
 export * from './sampleData';
 export * from './interactions';
+export * from './guards';
 export * from './screens';
 export * from './starters';
 export * from './queries';

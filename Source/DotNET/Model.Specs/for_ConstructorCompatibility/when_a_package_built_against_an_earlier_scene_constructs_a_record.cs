@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Model.Common;
+using Cratis.Scene.Model.Interactions;
 using Cratis.Scene.Model.Profiles;
 using Cratis.Scene.Model.SampleData;
 using Cratis.Scene.Model.Screens;
@@ -20,6 +22,7 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
     [
         (typeof(UiProfile), [typeof(string), typeof(string), typeof(IReadOnlyList<string>), typeof(TargetSizeClass?), typeof(string), typeof(string), typeof(SampleDataSelection), typeof(RootTemplate), typeof(ProfileAppearance), typeof(ProfileDefaults)]),
         (typeof(ProfileAppearance), [typeof(ColorScheme?), typeof(string)]),
+        (typeof(InteractionBinding), [typeof(InteractionTrigger), typeof(IReadOnlyList<InteractionAction>), typeof(BindingExpression)]),
         (typeof(SampleDataPackReference), [typeof(string), typeof(string), typeof(string), typeof(string)]),
         (typeof(TemplateMetadata), [typeof(string), typeof(string), typeof(IReadOnlyList<TemplateScope>), typeof(TemplateCompatibility), typeof(TemplateAttribution), typeof(string), typeof(string), typeof(IReadOnlyList<SliceKind>), typeof(string), typeof(TemplateRole?), typeof(string)])
     ];
@@ -29,6 +32,33 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
     void Because() => _missing = [.. _constructors.Where(candidate => candidate.Type.GetConstructor(candidate.Parameters) is null).Select(candidate => candidate.Type.Name)];
 
     [Fact] void should_still_have_every_constructor() => _missing.ShouldBeEmpty();
+
+    [Fact]
+    void should_keep_the_three_output_interaction_deconstruct_signature()
+    {
+        var method = typeof(InteractionBinding).GetMethod("Deconstruct",
+        [
+            typeof(InteractionTrigger).MakeByRefType(),
+            typeof(IReadOnlyList<InteractionAction>).MakeByRefType(),
+            typeof(BindingExpression).MakeByRefType()
+        ]);
+        method.ShouldNotBeNull();
+        method.ReturnType.ShouldEqual(typeof(void));
+        method.GetParameters().All(parameter => parameter.IsOut).ShouldBeTrue();
+    }
+
+    [Fact]
+    void should_deconstruct_the_first_three_interaction_members_using_the_earlier_syntax()
+    {
+        var expectedTrigger = new BuiltInInteractionTrigger(InteractionTriggerKind.Click);
+        IReadOnlyList<InteractionAction> expectedActions = [];
+        var expectedCondition = new BindingExpression("allowed");
+        var (trigger, actions, condition) = new InteractionBinding(expectedTrigger, expectedActions, expectedCondition, Alternatives: [], Otherwise: []);
+
+        trigger.ShouldEqual(expectedTrigger);
+        actions.ShouldEqual(expectedActions);
+        condition.ShouldEqual(expectedCondition);
+    }
 
     [Fact]
     void should_build_the_same_profile_through_the_earlier_constructor()

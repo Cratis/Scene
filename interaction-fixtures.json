@@ -1,5 +1,10 @@
 {
   "description": "Shared behavior corpus for the interaction engine - resolveBehaviors.ts and runActions.ts (@cratis/scene.engine). Every case here is asserted independently of the unit specs, so the two rules most likely to drift - which behaviors a trigger runs and in what order, and where a sequence stops - are pinned by data rather than by prose. Same pattern as screen-template-fixtures.json and layout-evaluation-fixtures.json. NOTE: unlike those corpora, this one currently has a single consumer. There is no C# interaction engine yet; the sequencing rules live only in TypeScript, because the engine runs where the interaction happens. When a second implementation appears it asserts these same cases, which is the reason the corpus is a file rather than a fixture module.",
+  "guardedBindingCases": [
+    {"name":"a matching branch runs once", "subject":{"id":1}, "binding":{"trigger":{"kind":"Click"},"actions":[],"alternatives":[{"condition":{"kind":"comparison","left":{"subject":"item.id"},"operator":"Equal","right":1},"actions":[{"kind":"ExecuteCommand","command":"Selected"}]}],"otherwise":[{"kind":"ExecuteCommand","command":"Fallback"}]},"expectedCalls":["executeCommand:Selected:{}"]},
+    {"name":"an unmatched branch runs otherwise", "subject":{"id":2}, "binding":{"trigger":{"kind":"Click"},"actions":[],"alternatives":[{"condition":{"kind":"comparison","left":{"subject":"item.id"},"operator":"Equal","right":1},"actions":[{"kind":"ExecuteCommand","command":"Selected"}]}],"otherwise":[{"kind":"ExecuteCommand","command":"Fallback"}]},"expectedCalls":["executeCommand:Fallback:{}"]},
+    {"name":"a missing gesture subject never executes otherwise", "subject":null, "binding":{"trigger":{"kind":"Click"},"actions":[],"alternatives":[],"otherwise":[{"kind":"ExecuteCommand","command":"Fallback"}]},"expectedCalls":[]}
+  ],
   "resolutionCases": [
     {
       "name": "every matching attachment runs, not only the most specific",

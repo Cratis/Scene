@@ -16,7 +16,7 @@ describe('when describing the core package', () => {
 
     it('should give every layout-free component an author configures properties to edit', () => {
         coreDescriptors.filter(descriptor => descriptor.properties.length > 0).map(descriptor => descriptor.component)
-            .should.have.members(['core:button', 'core:action', 'core:toolbarItem', 'core:sliceDialog', 'core:column', 'core:outlet', 'core:navigationBar']);
+            .should.have.members(['core:button', 'core:action', 'core:guarded-action', 'core:toolbarItem', 'core:sliceDialog', 'core:column', 'core:outlet', 'core:navigationBar']);
     });
 
     it('should describe every component of the package, the structural ones with nothing to edit', () => {
@@ -35,6 +35,11 @@ describe('when describing the core package', () => {
         const action = coreDescriptors.find(descriptor => descriptor.component === 'core:action')!;
         action.properties.map(property => property.path).should.deep.equal(['label', 'command', 'arguments']);
         action.properties[2].valueType.should.equal(PropertyValueType.Collection);
+    });
+
+    it('should describe the guarded action without changing the ordinary action descriptor', () => {
+        const action = coreDescriptors.find(descriptor => descriptor.component === 'core:guarded-action')!;
+        action.properties.map(property => property.path).should.deep.equal(['label', 'item', 'alternatives', 'otherwise', 'navigateToScreen', 'navigateByParameter']);
     });
 
     it('should describe a toolbar button as a title, a state change slice, an emphasis and an icon', () => {
