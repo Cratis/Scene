@@ -6,7 +6,8 @@ import { ComponentName } from '../ComponentName';
 import { SlotName } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
 import { button, card, externalComponent, panel, text } from './elements';
-import { widget } from './widgets';
+import { pageHeader } from './widgets';
+import { actionButton } from '../foundation/templates/dialogTemplates';
 import { defaultBlueprintTemplateProvenance, neutralGalleryTemplateProvenance } from '../templateProvenance';
 
 /**
@@ -94,24 +95,24 @@ export const landingTemplate: ScreenTemplate = {
         [TemplateSlotName.Header]: [
             panel('landing-nav', [
                 externalComponent('landing-logo', ComponentName.Logo, { label: 'Contoso', initials: 'C' }),
-                button('landing-signin', 'Sign in', { severity: 'secondary', targetScreen: 'Login' }),
-                button('landing-start', 'Start free', { severity: 'primary', targetScreen: 'Register' }),
+                actionButton('landing-signin', { label: 'Sign in', emphasis: 'secondary', targetScreen: 'Login' }),
+                actionButton('landing-start', { label: 'Start free', emphasis: 'primary', targetScreen: 'Register' }),
             ]),
         ],
         [TemplateSlotName.Body]: [
-            card('landing-hero', [
-                text('landing-headline', 'Ship the shell on day one'),
-                text('landing-subhead', 'Eight menu modes, twenty screen templates and two themes, in one blueprint an application picks once.'),
-                button('landing-cta', 'Start free', { severity: 'primary', targetScreen: 'Register' }),
-            ]),
-            widget('landing-feature-modes', 'Every mode people expect', [text('landing-modes-text', 'Static, overlay, slim, slim+, compact, horizontal, reveal and drawer.')]),
-            widget('landing-feature-themes', 'Themeable to the token', [text('landing-themes-text', 'Ten semantic tokens define the whole shell. Swap them and everything follows.')]),
-            widget('landing-feature-templates', 'The pages you were going to build anyway', [
-                text('landing-templates-text', 'Dashboard, list, detail, form, invoice, settings, help - and every screen around signing in.'),
-            ]),
+            pageHeader('landing-hero', 'Ship the shell on day one',
+                'Eight menu modes, twenty screen templates and two themes, in one blueprint an application picks once.', [
+                    actionButton('landing-cta', { label: 'Start free', emphasis: 'primary', targetScreen: 'Register' }),
+                ]),
+            pageHeader('landing-feature-modes', 'Every mode people expect', 'Static, overlay, slim, slim+, compact, horizontal, reveal and drawer.'),
+            pageHeader('landing-feature-themes', 'Themeable to the token', 'Ten semantic tokens define the whole shell. Swap them and everything follows.'),
+            pageHeader('landing-feature-templates', 'The pages you were going to build anyway',
+                'Dashboard, list, detail, form, invoice, settings, help - and every screen around signing in.'),
         ],
         [TemplateSlotName.Actions]: [
-            panel('landing-footer', [text('landing-copyright', '© Contoso'), button('landing-contact', 'Talk to us', { severity: 'secondary' })]),
+            externalComponent('landing-footer', ComponentName.Footer, { text: '© Contoso' }, {
+                content: [actionButton('landing-contact', { label: 'Talk to us', emphasis: 'secondary' })],
+            }),
         ],
     },
     displayName: 'Landing',

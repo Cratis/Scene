@@ -22,6 +22,7 @@ export function ActionButtonControl({ element, interactions }: RegisteredCompone
     const requested = readOptionalString(element, 'emphasis');
     const emphasis = (emphases as readonly string[]).includes(requested ?? '') ? (requested as typeof emphases[number]) : 'primary';
     const target = readOptionalString(element, 'targetScreen');
+    const icon = readOptionalString(element, 'icon');
 
     return (
         <span className='foundation foundation-action' data-scene-id={element.id}>
@@ -30,6 +31,7 @@ export function ActionButtonControl({ element, interactions }: RegisteredCompone
                     if (interactions?.onClick) interactions.onClick(event);
                     else if (target && typeof window !== 'undefined') window.location.hash = `#/${target}`;
                 }}>
+                {icon && <i className={icon} aria-hidden='true' />}
                 {readOptionalString(element, 'label') ?? ''}
             </ActionButton>
         </span>

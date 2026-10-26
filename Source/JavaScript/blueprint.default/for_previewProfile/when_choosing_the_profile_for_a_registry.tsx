@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { ComponentRegistry, corePackage } from '@cratis/scene.react';
 import { defaultBlueprintComponents } from '../defaultBlueprintComponents';
 import { defaultBlueprintName } from '../packageName';
@@ -40,6 +40,15 @@ describe('when choosing the profile for a registry', () => {
         previewProfileFor(partlyLoaded).should.equal(galleryPreviewProfile);
         const { container } = render(<GalleryScreenPreview screenName='Landing' registry={partlyLoaded} state={TemplatePreviewState.Populated} />);
         (container.querySelector('[data-scene-unresolved-component]') === null).should.equal(true);
+    });
+
+    it('should keep Landing headings singular and its actions independent of the complete widget registry', () => {
+        render(<GalleryScreenPreview screenName='Landing' registry={full} />);
+        for (const title of ['Every mode people expect', 'Themeable to the token', 'The pages you were going to build anyway']) {
+            expect(screen.getAllByText(title)).toHaveLength(1);
+        }
+        expect(screen.getByRole('button', { name: 'Sign in' }).getAttribute('data-emphasis')).toBe('secondary');
+        expect(screen.getAllByRole('button', { name: 'Start free' }).every(button => button.getAttribute('data-emphasis') === 'primary')).toBe(true);
     });
 
     it('should name the blueprint as a package of the full profile', () => galleryProfile.packages.should.include(defaultBlueprintName));

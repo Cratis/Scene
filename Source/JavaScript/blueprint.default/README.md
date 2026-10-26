@@ -154,8 +154,15 @@ which the Cratis Breadcrumbs destination callback does not expose. Shell icons a
 installed icon font. Layout modes, breakpoints, persistence, navigation policies and theme switching are
 unchanged.
 
-The shell and foundation need no `PrimeReactProvider`, widget preset or icon font. Storybook applies none
+The shell and foundation need no `PrimeReactProvider` or widget preset. The optional `actionButton.icon`
+property renders decorative PrimeIcons classes; hosts using it supply the unchanged PrimeIcons font.
+The button's label remains its accessible name. Storybook applies no widget provider, preset or font
 globally. Stories that preview optional widgets own their provider, preset and font imports instead.
+
+Landing, ModuleWorkspace, FeatureSection and SliceSection use blueprint-owned headers and controls rather
+than library-selected cards, text and buttons. Their primary and secondary actions keep their emphasis;
+Landing's sign-in and start actions retain their target-screen navigation. FeatureSection keeps its
+PrimeIcons. Headings are rendered once, including with the complete widget registry.
 
 Older business templates still borrow widgets from `scene.primereact`. Their `templateProvenance` and the
 gallery dependency vocabulary declare that requirement locally; a host opts into the package in its UI

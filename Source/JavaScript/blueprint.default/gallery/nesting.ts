@@ -2,10 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ScreenTemplate } from '@cratis/scene.model';
-import { ComponentName } from '../ComponentName';
 import { SlotName, column, slotLeaf } from '../layouts';
 import { TemplateSlotName } from './TemplateSlotName';
-import { button, externalComponent } from './elements';
+import { actionButton } from '../foundation/templates/dialogTemplates';
 import { pageHeader } from './widgets';
 import { neutralGalleryTemplateProvenance } from '../templateProvenance';
 
@@ -52,8 +51,8 @@ export const featureSectionTemplate: ScreenTemplate = {
     slots: [{ name: TemplateSlotName.Toolbar }, { name: TemplateSlotName.Body }],
     content: {
         [TemplateSlotName.Toolbar]: [
-            button('feature-new', 'New', { severity: 'primary', icon: 'pi pi-plus' }),
-            button('feature-export', 'Export', { severity: 'secondary', icon: 'pi pi-download' }),
+            actionButton('feature-new', { label: 'New', emphasis: 'primary', icon: 'pi pi-plus' }),
+            actionButton('feature-export', { label: 'Export', emphasis: 'secondary', icon: 'pi pi-download' }),
         ],
     },
     displayName: 'Feature section',
@@ -75,7 +74,7 @@ export const sliceSectionTemplate: ScreenTemplate = {
         root: column([slotLeaf(TemplateSlotName.Body, { grow: 1 }), slotLeaf(TemplateSlotName.Actions)]),
     },
     content: {
-        [TemplateSlotName.Body]: [externalComponent('slice-body', ComponentName.PageHeader, { title: 'Adjustment', subtitle: 'One behavior, one surface' })],
+        [TemplateSlotName.Body]: [pageHeader('slice-body', 'Adjustment', 'One behavior, one surface')],
     },
     displayName: 'Slice section',
     description: 'Slice level: fits a feature section body slot and hosts one behavior.',

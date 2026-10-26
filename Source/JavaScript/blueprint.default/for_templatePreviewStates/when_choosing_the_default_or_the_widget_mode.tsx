@@ -37,7 +37,7 @@ describe('when choosing the default or the widget mode', () => {
 
         it('should not activate PrimeReact', () => host.bundles.some(bundle => bundle.manifest.name === 'PrimeReact').should.equal(false));
         it('should offer every foundation template as compatible', () => host.templates.filter(entry => foundation.some(template => template.name === entry.name) && !entry.compatible).map(entry => entry.name).should.deep.equal([]));
-        it('should offer exactly the five neutral templates without PrimeReact among the former gallery templates', () => {
+        it('should offer the neutral gallery screens and confirmation dialog without PrimeReact', () => {
             const neutral = ['Landing', 'ModuleWorkspace', 'FeatureSection', 'SliceSection'];
             neutral.every(name => foundation.some(template => template.name === name)).should.equal(true);
             borrowing.map(template => template.name).should.not.include.members(neutral);

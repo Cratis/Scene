@@ -23,7 +23,7 @@ import {booleanProperty, severityProperty, stringProperty} from '../properties';
  * button disabled so the action cannot be fired twice, and `aria-busy` so the state is announced rather
  * than only drawn. The icon is marked decorative throughout because the label already names the action.
  */
-export function PrimeButton({ element, slots }: RegisteredComponentProps) {
+export function PrimeButton({ element, slots, interactions }: RegisteredComponentProps) {
     const icon = stringProperty(element, 'icon');
     const severity = severityProperty(element, 'severity');
     const loading = booleanProperty(element, 'loading', false);
@@ -35,6 +35,7 @@ export function PrimeButton({ element, slots }: RegisteredComponentProps) {
     return (
         <Button
             data-scene-id={element.id}
+            {...interactions}
             severity={severity}
             variant={variant}
             rounded={booleanProperty(element, 'rounded', false)}
