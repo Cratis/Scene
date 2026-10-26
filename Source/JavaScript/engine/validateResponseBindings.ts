@@ -81,7 +81,8 @@ export function validateResponseBindings(entry: ResponseValidationEntry, contrac
 }
 
 function objectValueMatches(value: unknown, type: Extract<ResponseValueType, { kind: 'object' }>): boolean {
-    if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+    if (typeof value !== 'object') return false;
+    if (value === null || Array.isArray(value)) return false;
     return Object.entries(type.properties).every(([name, property]) => Object.hasOwn(value, name) && responseValueMatches((value as Record<string, unknown>)[name], property));
 }
 

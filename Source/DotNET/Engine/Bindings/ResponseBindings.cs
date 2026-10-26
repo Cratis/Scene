@@ -72,11 +72,14 @@ public static partial class ResponseBindings
 
     static ResponseValueType? MemberType(ResponseValueType type, string segment)
     {
-        if (type.Kind != "object" || type.Properties is null) return null;
+        if (type.Kind != "object") return null;
+        if (type.Properties is null) return null;
         if (!MemberName().IsMatch(segment)) return null;
-        if (segment == "constructor" || segment == "prototype" || segment == "__proto__") return null;
+        if (ProhibitedMember(segment)) return null;
         return type.Properties.TryGetValue(segment, out var property) ? property : null;
     }
+
+    static bool ProhibitedMember(string segment) => segment == "constructor" || segment == "prototype" || segment == "__proto__";
 
     static void Visit(IReadOnlyList<InteractionAction> actions, ResponseContract? response, IResponseValidationContracts contracts, List<BindingDiagnostic> diagnostics)
     {

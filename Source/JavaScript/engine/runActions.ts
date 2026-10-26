@@ -171,10 +171,16 @@ async function runSequence(
     }
 }
 
-async function runCommand(action: ExecuteCommandAction, args: Record<string, unknown>, dispatcher: ActionDispatcher, context: InteractionContext, run: InteractionRun) {
-    const outcome = await dispatcher.executeCommand(action.command, args);
-    const continuation = commandResponseContext(context, action.command, outcome.response, outcome.isSuccess);
-    await runSequence(outcome.isSuccess ? (action.onSuccess ?? []) : (action.onFailure ?? []), dispatcher, continuation, run);
+async function runConfirmation(action: ConfirmAction, dispatcher: ActionDispatcher, context: InteractionContext, run: InteractionRun) {
+    run.ran.push(describe(action));
+    const confirmed = await dispatcher.confirm(messageOf(action.message, context, run.findings));
+    if (!confirmed) {
+        await runSequence(action.onFailure ?? [], dispatcher, context, run);
+        if (run.stop === InteractionStop.Completed) run.stop = InteractionStop.Declined;
+        return true;
+    }
+    await runSequence(action.onSuccess ?? [], dispatcher, context, run);
+    return false;
 }
 
 async function runOne(
@@ -188,7 +194,10 @@ async function runOne(
     switch (action.kind) {
         case InteractionActionKind.ExecuteCommand: {
             run.ran.push(describe(action));
-            await runCommand(action as ExecuteCommandAction, args, dispatcher, context, run);
+            const command = (action as ExecuteCommandAction).command;
+            const outcome = await dispatcher.executeCommand(command, args);
+            const continuation = commandResponseContext(context, command, outcome.response, outcome.isSuccess);
+            await runSequence(outcome.isSuccess ? (action.onSuccess ?? []) : (action.onFailure ?? []), dispatcher, continuation, run);
             return false;
         }
 
@@ -234,18 +243,8 @@ async function runOne(
             dispatcher.notify((action as NotifyAction).level, messageOf((action as NotifyAction).message, context, run.findings));
             return false;
 
-        case InteractionActionKind.Confirm: {
-            run.ran.push(describe(action));
-            const confirmed = await dispatcher.confirm(messageOf((action as ConfirmAction).message, context, run.findings));
-            if (!confirmed) {
-                await runSequence((action.onFailure ?? []), dispatcher, context, run);
-                if (run.stop === InteractionStop.Completed) run.stop = InteractionStop.Declined;
-                return true;
-            }
-
-            await runSequence((action.onSuccess ?? []), dispatcher, context, run);
-            return false;
-        }
+        case InteractionActionKind.Confirm:
+            return runConfirmation(action as ConfirmAction, dispatcher, context, run);
 
         case InteractionActionKind.RaiseTrigger: {
             run.ran.push(describe(action));

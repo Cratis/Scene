@@ -15,12 +15,23 @@ function readMember(value: unknown, segment: string): unknown {
     return (value as Record<string, unknown>)[segment];
 }
 
-function resolveResponse(contract: ResponseContract | undefined, value: unknown, binding: BindingExpression): unknown {
+function responseType(contract: ResponseContract | undefined, binding: BindingExpression) {
     if (contract?.kind !== 'value') throw new ResponseBindingUnavailable('The command response is unavailable.');
-    if (value === undefined || value === null) throw new ResponseBindingUnavailable('The command response is unavailable.');
     const type = projectResponseType(contract.type, binding.path);
     if (!type) throw new ResponseBindingUnavailable('The command response is unavailable.');
-    const selected = binding.path ? binding.path.split('.').reduce<unknown>(readMember, value) : value;
+    return type;
+}
+
+function presentResponse(value: unknown): unknown {
+    if (value === undefined) throw new ResponseBindingUnavailable('The command response is unavailable.');
+    if (value === null) throw new ResponseBindingUnavailable('The command response is unavailable.');
+    return value;
+}
+
+function resolveResponse(contract: ResponseContract | undefined, value: unknown, binding: BindingExpression): unknown {
+    const type = responseType(contract, binding);
+    const present = presentResponse(value);
+    const selected = binding.path ? binding.path.split('.').reduce<unknown>(readMember, present) : present;
     if (!responseValueMatches(selected, type)) throw new ResponseBindingUnavailable('The command response value is incompatible.');
     return selected;
 }
