@@ -7,6 +7,8 @@
       href: architecture/layering.md
     - name: Binding resolution
       href: architecture/binding-resolution.md
+    - name: Guarded actions and interactions
+      href: architecture/guarded-actions.md
     - name: Glossary
       href: glossary.md
     - name: Packages
