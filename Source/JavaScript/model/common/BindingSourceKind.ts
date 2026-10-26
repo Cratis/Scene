@@ -16,4 +16,6 @@ export enum BindingSourceKind {
 
     /** A literal value carried by the binding. */
     Literal = 'literal',
+
+    CommandResponse = 'commandResponse',
 }

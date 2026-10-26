@@ -19,4 +19,7 @@ public enum BindingSourceKind
 
     /// <summary>A literal value carried by the binding.</summary>
     Literal = 3,
+
+    /// <summary>The successful command's response, scoped to its continuation.</summary>
+    CommandResponse = 4,
 }

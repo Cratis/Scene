@@ -26,4 +26,9 @@ public record Form(
     /// Gets the behaviors attached to the form. Additive with whatever is attached further out or further in.
     /// </summary>
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+
+    /// <summary>
+    /// Gets the actions to run after the native command succeeds, with its response in scope.
+    /// </summary>
+    public IReadOnlyList<InteractionAction> OnSubmit { get; init; } = [];
 }
