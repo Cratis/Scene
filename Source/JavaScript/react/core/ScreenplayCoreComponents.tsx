@@ -4,6 +4,7 @@
 import { resolveArgumentSource } from '@cratis/scene.engine';
 import type { ExternalComponent } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
+import { CoreGuardedAction } from './CoreGuardedAction';
 
 function textProperty(properties: Record<string, unknown>, name: string, fallback = ''): string {
     return typeof properties[name] === 'string' ? properties[name] : fallback;
@@ -37,7 +38,12 @@ interface ArgumentMapping {
  * An action that names no label is labelled with its command read as a sentence (`Change basket quantity`), and is
  * drawn as a button of the default blueprint's toolbar look (`scene-toolbar-button`) rather than as bare text.
  */
-export function CoreAction({ element }: RegisteredComponentProps) {
+export function CoreAction(props: RegisteredComponentProps) {
+    if ('alternatives' in props.element.properties) return <CoreGuardedAction {...props} />;
+    return <CoreCommandAction {...props} />;
+}
+
+function CoreCommandAction({ element }: RegisteredComponentProps) {
     const command = textProperty(element.properties, 'command');
     const label = textProperty(element.properties, 'label', commandLabel(command));
     const scope = useRenderBindingScope();

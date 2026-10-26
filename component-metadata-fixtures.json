@@ -2,6 +2,12 @@
   "description": "Shared component metadata corpus (spec CMP1, PICK2, PICK3, 3.4). It states the rules once as data: which component metadata is a problem, which badge a component gets, which components a picker filter finds and why, and which components 'Frequently used' lists. The TypeScript engine (engine/for_componentMetadata) asserts every case. There is no C# engine twin: component descriptors exist only in the TypeScript model, as the editing diagnostics do.",
   "validation": [
     {
+      "name": "the guarded action has the standard actions category",
+      "descriptors": [{ "component": "core:guarded-action", "category": "Actions", "properties": [] }],
+      "registered": ["core:guarded-action"],
+      "expected": []
+    },
+    {
       "name": "a described component with a known category",
       "descriptors": [{ "component": "Acme:button", "category": "Actions", "properties": [] }],
       "registered": ["Acme:button"],

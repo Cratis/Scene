@@ -24,6 +24,7 @@ export const corePackageManifest: ScenePackage = {
         'card',
         'data',
         'action',
+        'guarded-action',
         'section',
         'navigate',
         'title',

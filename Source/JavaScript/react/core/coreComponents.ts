@@ -5,6 +5,7 @@ import { ComponentRegistry } from '../renderer';
 import { componentRegistryKey } from '../packages';
 import { CoreText } from './CoreText';
 import { CoreButton } from './CoreButton';
+import { CoreGuardedAction } from './CoreGuardedAction';
 import { CoreCard } from './CoreCard';
 import { CoreNavigationBar } from './CoreNavigationBar';
 import { CoreToolbar, CoreToolbarItem } from './CoreToolbar';
@@ -34,6 +35,7 @@ export const coreComponents: ComponentRegistry = {
     [componentRegistryKey('core', 'card')]: CoreCard,
     [componentRegistryKey('core', 'data')]: CoreData,
     [componentRegistryKey('core', 'action')]: CoreAction,
+    [componentRegistryKey('core', 'guarded-action')]: CoreGuardedAction,
     [componentRegistryKey('core', 'section')]: CoreSection,
     [componentRegistryKey('core', 'navigate')]: CoreNavigate,
     [componentRegistryKey('core', 'title')]: CoreTitle,

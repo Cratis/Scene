@@ -47,6 +47,24 @@ const describedCore: ComponentDescriptor[] = [
         ],
     },
     {
+        component: key('guarded-action'),
+        displayName: 'Guarded command action',
+        description: 'Runs the first matching command for the selected item. Hidden unless a branch or executable fallback is selected; unsupported guards are refused.',
+        properties: [
+            { path: 'label', label: 'Label', group: 'Content', valueType: PropertyValueType.String },
+            { path: 'item', label: 'Selected item', group: 'Data', valueType: PropertyValueType.Object, open: true },
+            { path: 'alternatives', label: 'Alternatives', group: 'Behavior', valueType: PropertyValueType.Collection,
+                item: { label: 'Alternative', positional: true, properties: [
+                    { path: 'command', label: 'Command', group: 'Behavior', valueType: PropertyValueType.String },
+                    { path: 'condition', label: 'Condition', group: 'Behavior', valueType: PropertyValueType.Object, open: true },
+                    { path: 'arguments', label: 'Arguments', group: 'Behavior', valueType: PropertyValueType.Object, open: true },
+                ] } },
+            { path: 'otherwise', label: 'Fallback', group: 'Behavior', valueType: PropertyValueType.Object, open: true },
+            { path: 'navigateToScreen', label: 'Success screen', group: 'Navigation', valueType: PropertyValueType.String },
+            { path: 'navigateByParameter', label: 'Navigation parameter', group: 'Navigation', valueType: PropertyValueType.String },
+        ],
+    },
+    {
         component: key('toolbarItem'),
         displayName: 'Toolbar button',
         description: 'One toolbar button. An Action button invokes a state change slice and opens it as a task dialog over the page; a button with no slice is allowed while designing and is flagged.',

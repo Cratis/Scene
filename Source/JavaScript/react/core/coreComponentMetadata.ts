@@ -11,6 +11,7 @@ export const coreComponentMetadata: Record<string, ComponentMetadata> = {
     card: m('Card', ComponentCategory.Layout, 'square', ['panel', 'box', 'container']),
     data: m('Data', ComponentCategory.DataDisplay, 'database', ['read model', 'query', 'source']),
     action: m('Command action', ComponentCategory.Actions, 'zap', ['command', 'invoke', 'submit']),
+    'guarded-action': m('Guarded command action', ComponentCategory.Actions, 'git-branch', ['command', 'guard', 'condition', 'selected item']),
     section: m('Section', ComponentCategory.Layout, 'layout-panel-top', ['group', 'area', 'block']),
     navigate: m('Navigate', ComponentCategory.Navigation, 'corner-down-right', ['link', 'go to', 'route']),
     title: m('Title', ComponentCategory.DataDisplay, 'heading', ['heading', 'header', 'caption']),
