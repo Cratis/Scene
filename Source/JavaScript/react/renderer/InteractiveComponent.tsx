@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ComponentType, ReactNode, createElement, useEffect, useMemo } from 'react';
-import { BindingExpression, ExternalComponent } from '@cratis/scene.model';
+import { BindingExpression, ExternalComponent, FormPropertyNames } from '@cratis/scene.model';
 import { useInteractions } from '../interactions';
 import { useBindingOutputs } from './BindingOutputContext';
 import { RegisteredComponentProps } from './ComponentRegistry';
@@ -34,7 +34,7 @@ export function InteractiveComponent({ component, element, slots }: InteractiveC
 }
 
 function resolveProperties(properties: Record<string, unknown>, resolveBinding: (binding: BindingExpression) => unknown): Record<string, unknown> {
-    return Object.fromEntries(Object.entries(properties).map(([name, value]) => [name, resolveValue(value, resolveBinding)]));
+    return Object.fromEntries(Object.entries(properties).map(([name, value]) => [name, name === FormPropertyNames.onSubmit ? value : resolveValue(value, resolveBinding)]));
 }
 
 function resolveValue(value: unknown, resolveBinding: (binding: BindingExpression) => unknown): unknown {

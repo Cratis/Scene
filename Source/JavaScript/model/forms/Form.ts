@@ -25,4 +25,6 @@ export interface Form {
     onSubmit?: InteractionAction[];
 }
 
-export const FormPropertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'generationMode', 'layout', 'fields', 'behaviors', 'onSubmit'];
+const onSubmit = 'onSubmit' satisfies keyof Form;
+const propertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'generationMode', 'layout', 'fields', 'behaviors', onSubmit];
+export const FormPropertyNames = Object.assign(propertyNames, { onSubmit });
