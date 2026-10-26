@@ -1,16 +1,16 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { BindingExpression, BindingMode, BindingSourceKind, ExecuteCommandAction, InteractionAction, InteractionActionKind, PropertyValueType } from '@cratis/scene.model';
+import { BindingExpression, BindingMode, BindingSourceKind, ExecuteCommandAction, InteractionAction, InteractionActionKind, PropertyValueType, SetStateAction } from '@cratis/scene.model';
 import { BindingDiagnostic } from './BindingDiagnostic';
 import { ResponseContract, ResponseOperand, ResponseValidationContracts, ResponseValidationEntry, ResponseValueType } from './ResponseValidationContracts';
 
 export function responseOperands(action: InteractionAction): { binding: BindingExpression; operand: ResponseOperand }[] {
     const operands: { binding: BindingExpression; operand: ResponseOperand }[] = (action.arguments ?? []).map(argument => ({ binding: argument.value, operand: { kind: 'argument', name: argument.name } }));
-    if ('value' in action) operands.push({ binding: action.value as BindingExpression, operand: { kind: 'stateValue' } });
+    if (action.kind === InteractionActionKind.SetState) operands.push({ binding: (action as SetStateAction).value, operand: { kind: 'stateValue' } });
     if ('message' in action) {
-        const message = action.message as { binding?: BindingExpression };
-        if (message.binding) operands.push({ binding: message.binding, operand: { kind: 'message' } });
+        const message = action.message as { binding?: BindingExpression } | undefined;
+        if (message?.binding) operands.push({ binding: message.binding, operand: { kind: 'message' } });
     }
     return operands.filter(operand => operand.binding.kind === BindingSourceKind.CommandResponse);
 }
