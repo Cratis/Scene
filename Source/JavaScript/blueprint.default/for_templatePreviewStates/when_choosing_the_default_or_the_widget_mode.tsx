@@ -43,7 +43,7 @@ describe('when choosing the default or the widget mode', () => {
             borrowing.map(template => template.name).should.not.include.members(neutral);
             const confirm = host.templates.find(entry => entry.name === 'ConfirmDialog' && entry.package === defaultBlueprintName);
             (confirm?.compatible === true).should.equal(true);
-            (galleryDialogTemplates.find(template => template.name === 'ConfirmDialog')!.metadata?.compatibility?.packages ?? []).should.be.empty;
+            (galleryDialogTemplates.find(template => template.name === 'ConfirmDialog')!.metadata?.compatibility?.packages ?? []).length.should.equal(0);
         });
         it('should offer every widget-borrowing template as unavailable with an actionable message', () => {
             const entries = host.templates.filter(entry => borrowing.some(template => template.name === entry.name));
