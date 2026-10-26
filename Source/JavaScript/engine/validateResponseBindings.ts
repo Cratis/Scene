@@ -10,6 +10,7 @@ export { projectResponseType, responseTypeAssignable, responseValueMatches } fro
 const expectedCategories: Partial<Record<PropertyValueType, ResponseValueType['kind'][]>> = {
     [PropertyValueType.Json]: ['string', 'number', 'boolean', 'object', 'array'],
     [PropertyValueType.Collection]: ['array'],
+    [PropertyValueType.Object]: ['object'],
     [PropertyValueType.String]: ['string', 'object'],
     [PropertyValueType.Enum]: ['string', 'object'],
     [PropertyValueType.Icon]: ['string', 'object'],

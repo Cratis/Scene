@@ -13,6 +13,7 @@ public static partial class ResponseBindings
     {
         ["json"] = ["string", "number", "boolean", "object", "array"],
         ["collection"] = ["array"],
+        ["object"] = ["object"],
         ["string"] = ["string", "object"],
         ["enum"] = ["string", "object"],
         ["icon"] = ["string", "object"],
