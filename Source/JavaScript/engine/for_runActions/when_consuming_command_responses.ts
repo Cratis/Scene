@@ -55,6 +55,7 @@ describe('when consuming command responses', () => {
             const action: SetStateAction = { ...state, value: { ...binding, path: entry.path, nullBehavior: BindingNullBehavior.Clear } };
             const result = await runActions([action], dispatcher, commandResponseContext(supplied, 'create', entry.value));
             result.stop.should.equal(entry.valid ? InteractionStop.Completed : InteractionStop.Reported);
+            result.findings.map(finding => finding.kind).should.deep.equal(entry.valid ? [] : ['invalidResponseBinding']);
             values.should.deep.equal(entry.valid ? [entry.expected] : []);
         });
     }

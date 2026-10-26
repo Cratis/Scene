@@ -3,13 +3,12 @@
 
 import { BindingExpression, BindingSourceKind } from '@cratis/scene.model';
 import type { InteractionContext } from './runActions';
-import { ResponseContract } from './ResponseValidationContracts';
+import { ResponseContract, ResponseValueType } from './ResponseValidationContracts';
 import { projectResponseType, responseValueMatches } from './validateResponseBindings';
 
 export class ResponseBindingUnavailable extends Error {}
 
 function readMember(value: unknown, segment: string): unknown {
-    if (value === null) return null;
     if (typeof value !== 'object' || Array.isArray(value)) throw new ResponseBindingUnavailable('The command response member is missing.');
     if (!Object.hasOwn(value, segment)) throw new ResponseBindingUnavailable('The command response member is missing.');
     return (value as Record<string, unknown>)[segment];
@@ -19,7 +18,18 @@ function responseType(contract: ResponseContract | undefined, binding: BindingEx
     if (contract?.kind !== 'value') throw new ResponseBindingUnavailable('The command response is unavailable.');
     const type = projectResponseType(contract.type, binding.path);
     if (!type) throw new ResponseBindingUnavailable('The command response is unavailable.');
-    return type;
+    return { root: contract.type, projected: type };
+}
+
+function readResponsePath(value: unknown, type: ResponseValueType, segments: string[]): unknown {
+    if (value === null) {
+        if (!type.nullable) throw new ResponseBindingUnavailable('The command response value is incompatible.');
+        return null;
+    }
+    if (!segments.length) return value;
+    const [segment, ...remaining] = segments;
+    if (type.kind !== 'object' || !Object.hasOwn(type.properties, segment)) throw new ResponseBindingUnavailable('The command response member is missing.');
+    return readResponsePath(readMember(value, segment), type.properties[segment], remaining);
 }
 
 function presentResponse(value: unknown): unknown {
@@ -29,10 +39,10 @@ function presentResponse(value: unknown): unknown {
 }
 
 function resolveResponse(contract: ResponseContract | undefined, value: unknown, binding: BindingExpression): unknown {
-    const type = responseType(contract, binding);
+    const { root, projected } = responseType(contract, binding);
     const present = presentResponse(value);
-    const selected = binding.path ? binding.path.split('.').reduce<unknown>(readMember, present) : present;
-    if (!responseValueMatches(selected, type)) throw new ResponseBindingUnavailable('The command response value is incompatible.');
+    const selected = readResponsePath(present, root, binding.path ? binding.path.split('.') : []);
+    if (!responseValueMatches(selected, projected)) throw new ResponseBindingUnavailable('The command response value is incompatible.');
     return selected;
 }
 
