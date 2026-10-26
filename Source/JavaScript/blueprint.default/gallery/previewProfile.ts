@@ -46,15 +46,17 @@ export const galleryPreviewProfile: UiProfile = {
 /**
  * The profile a preview resolves against for the registry it renders with.
  *
- * {@link galleryProfile} when every package it declares has at least one implemented component in the registry, so
- * PrimeReact's `text`, `button` and `card` win over core's; otherwise {@link galleryPreviewProfile}, which keeps
- * partial bundles resolving to what exists. A package counts only when the registry holds one of its components,
- * because a package that is listed but implements nothing would only turn names into placeholders.
+ * {@link galleryProfile} when every package it declares is implemented in the registry: this blueprint, core and
+ * Cratis Components by at least one component, and PrimeReact by *every* component name the gallery borrows from it
+ * (the catalog's PrimeReact subset), so PrimeReact's `text` and `card` win over core's. Otherwise
+ * {@link galleryPreviewProfile}, which keeps partial bundles resolving to what exists. A package that is only partly
+ * registered must not win a name it cannot render, or the preview would show placeholders.
  */
 export const previewProfileFor = (registry: ComponentRegistry): UiProfile => {
     const keys = Object.keys(registry);
     const loaded = (name: string) => keys.some(key => key.startsWith(componentRegistryKey(name, '')));
-    return galleryProfile.packages.every(loaded) ? galleryProfile : galleryPreviewProfile;
+    const primeReactComplete = primeReactComponentNames.every(name => componentRegistryKey('PrimeReact', name) in registry);
+    return galleryProfile.packages.every(loaded) && primeReactComplete ? galleryProfile : galleryPreviewProfile;
 };
 
 /**

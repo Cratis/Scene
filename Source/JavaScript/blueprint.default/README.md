@@ -139,8 +139,9 @@ shell versions win the bare names while PrimeReact's stay reachable as `PrimeRea
 `GalleryScreenPreview` boots one gallery screen through the real path - real `Screen`, real
 `resolveComponentName`, real `SceneElementView`, real registry. Nothing in it is a preview-only code path.
 
-It resolves against `galleryPreviewProfile` rather than `galleryProfile`. Both describe the gallery's optional
-widget vocabulary; only a host that explicitly lists `PrimeReact` loads those widgets. A profile naming
+It resolves against `galleryProfile` when its registry implements every package that profile declares (PrimeReact by
+every component the gallery borrows from it), and against `galleryPreviewProfile` otherwise, so a partial bundle
+renders what exists instead of placeholders. Only a host that explicitly lists `PrimeReact` loads those widgets. A profile naming
 only `Cratis.Blueprint.Default` resolves the shell and Cratis Components, renders the foundation templates,
 and leaves templates requiring the optional package incompatible in the template catalog.
 
