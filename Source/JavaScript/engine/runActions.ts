@@ -21,6 +21,9 @@ import {
 import { ActionDispatcher } from './ActionDispatcher';
 import { BindingResolver } from './BindingResolver';
 import { selectGuardedInteraction } from './guards';
+import { ResponseContract, ResponseValidationContracts } from './ResponseValidationContracts';
+import { validateResponseAction } from './validateResponseBindings';
+import { commandResponseContext, ResponseBindingUnavailable } from './commandResponseContext';
 
 /**
  * Why an interaction stopped before running everything it was given.
@@ -46,7 +49,7 @@ export enum InteractionStop {
  * application, and 'this application produced no findings' has to be checkable rather than a matter of opinion.
  */
 export interface InteractionFinding {
-    kind: 'unknownAction' | 'unresolvedMessage' | 'unresolvedCondition' | 'unevaluableCondition';
+    kind: 'unknownAction' | 'unresolvedMessage' | 'unresolvedCondition' | 'unevaluableCondition' | 'invalidResponseBinding';
     detail: string;
 }
 
@@ -65,6 +68,8 @@ export interface InteractionRun {
  */
 export interface InteractionContext {
     resolve: BindingResolver;
+    responseContracts?: ResponseValidationContracts;
+    responseContract?: ResponseContract;
     subject?: () => unknown;
     /** Looks up a localization key. Returns the key itself when the host has no catalogue for it. */
     localize?: (key: string) => string;
@@ -148,8 +153,34 @@ async function runSequence(
     run: InteractionRun
 ): Promise<void> {
     for (const action of actions) {
-        if (await runOne(action, dispatcher, context, run)) return;
+        if (run.stop !== InteractionStop.Completed) return;
+        const diagnostics = validateResponseAction(action, context.responseContract, context.responseContracts);
+        if (diagnostics.length) {
+            run.findings.push(...diagnostics.map(diagnostic => ({ kind: 'invalidResponseBinding' as const, detail: diagnostic.message })));
+            run.stop = InteractionStop.Reported;
+            return;
+        }
+        try {
+            if (await runOne(action, dispatcher, context, run)) return;
+        } catch (error) {
+            if (!(error instanceof ResponseBindingUnavailable)) throw error;
+            run.findings.push({ kind: 'invalidResponseBinding', detail: error.message });
+            run.stop = InteractionStop.Reported;
+            return;
+        }
     }
+}
+
+async function runConfirmation(action: ConfirmAction, dispatcher: ActionDispatcher, context: InteractionContext, run: InteractionRun) {
+    run.ran.push(describe(action));
+    const confirmed = await dispatcher.confirm(messageOf(action.message, context, run.findings));
+    if (!confirmed) {
+        await runSequence(action.onFailure ?? [], dispatcher, context, run);
+        if (run.stop === InteractionStop.Completed) run.stop = InteractionStop.Declined;
+        return true;
+    }
+    await runSequence(action.onSuccess ?? [], dispatcher, context, run);
+    return false;
 }
 
 async function runOne(
@@ -163,8 +194,10 @@ async function runOne(
     switch (action.kind) {
         case InteractionActionKind.ExecuteCommand: {
             run.ran.push(describe(action));
-            const outcome = await dispatcher.executeCommand((action as ExecuteCommandAction).command, args);
-            await runSequence(outcome.isSuccess ? (action.onSuccess ?? []) : (action.onFailure ?? []), dispatcher, context, run);
+            const command = (action as ExecuteCommandAction).command;
+            const outcome = await dispatcher.executeCommand(command, args);
+            const continuation = commandResponseContext(context, command, outcome.response, outcome.isSuccess);
+            await runSequence(outcome.isSuccess ? (action.onSuccess ?? []) : (action.onFailure ?? []), dispatcher, continuation, run);
             return false;
         }
 
@@ -210,18 +243,8 @@ async function runOne(
             dispatcher.notify((action as NotifyAction).level, messageOf((action as NotifyAction).message, context, run.findings));
             return false;
 
-        case InteractionActionKind.Confirm: {
-            run.ran.push(describe(action));
-            const confirmed = await dispatcher.confirm(messageOf((action as ConfirmAction).message, context, run.findings));
-            if (!confirmed) {
-                await runSequence((action.onFailure ?? []), dispatcher, context, run);
-                run.stop = InteractionStop.Declined;
-                return true;
-            }
-
-            await runSequence((action.onSuccess ?? []), dispatcher, context, run);
-            return false;
-        }
+        case InteractionActionKind.Confirm:
+            return runConfirmation(action as ConfirmAction, dispatcher, context, run);
 
         case InteractionActionKind.RaiseTrigger: {
             run.ran.push(describe(action));

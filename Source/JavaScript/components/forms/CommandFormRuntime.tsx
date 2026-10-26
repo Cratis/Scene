@@ -17,6 +17,7 @@ interface CommandFormRuntimeProps {
     inputs?: CommandInput[];
     exclude?: string[];
     submitLabel: string;
+    onSuccess?: (response: unknown) => void;
     columns?: number;
     layout?: CommandFormLayout;
 
@@ -29,6 +30,7 @@ const NativeAutoCommandForm = AutoCommandForm as unknown as ComponentType<{
     command: BoundConstructor;
     exclude?: string[];
     footer?: ReactNode;
+    onSuccess?: (response: unknown) => void;
 }>;
 
 type Descriptor = { name: string; type: unknown; isOptional: boolean };
@@ -66,7 +68,7 @@ function capability(command: BoundConstructor, inputs?: CommandInput[], exclude?
 }
 
 /** Private lazy entry point: importing the Scene registry must not import Arc. */
-export default function CommandFormRuntime({ command, inputs, exclude, submitLabel, columns = 1, layout, compact = false }: CommandFormRuntimeProps) {
+export default function CommandFormRuntime({ command, inputs, exclude, submitLabel, onSuccess, columns = 1, layout, compact = false }: CommandFormRuntimeProps) {
     const error = capability(command, inputs, exclude);
     if (error) return <div role='alert'>{error}</div>;
     // The registry's never-argument constructor is erased; Arc creates this checked proxy with no args.
@@ -76,12 +78,12 @@ export default function CommandFormRuntime({ command, inputs, exclude, submitLab
         if (diagnostics.length) return <div role='alert'>{diagnostics[0].message}</div>;
         const formLayout = compact ? stackCommandFormLayout(authoredLayout) : authoredLayout;
         const columnsCss = formLayout.columns.map(column => formWidthToCss(column.width) ?? 'minmax(0, 1fr)').join(' ') || `repeat(${Math.max(1, columns)}, minmax(0, 1fr))`;
-        return <CommandForm command={command as unknown as new () => object} showTitles={false}>
+        return <CommandForm command={command as unknown as new () => object} showTitles={false} onSuccess={onSuccess}>
             <div data-scene-form-columns={formLayout.columns.length} style={{ display: 'grid', gridTemplateColumns: columnsCss, columnGap: formWidthToCss(formLayout.columnGap) ?? '1rem', rowGap: formWidthToCss(formLayout.rowGap) ?? '1rem' }}>
                 {inputs.map(input => <ExplicitCommandField key={input.property} input={input} placement={formLayout.placements.find(placement => placement.field === input.property) ?? input.placement} />)}
             </div>
             <CommandFormSubmit label={submitLabel} />
         </CommandForm>;
     }
-    return <NativeAutoCommandForm command={command} exclude={exclude} footer={<CommandFormSubmit label={submitLabel} />} />;
+    return <NativeAutoCommandForm command={command} exclude={exclude} onSuccess={onSuccess} footer={<CommandFormSubmit label={submitLabel} />} />;
 }

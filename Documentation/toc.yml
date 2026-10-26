@@ -9,6 +9,8 @@
       href: architecture/binding-resolution.md
     - name: Guarded actions and interactions
       href: architecture/guarded-actions.md
+    - name: Command responses and form continuations
+      href: architecture/command-responses.md
     - name: Glossary
       href: glossary.md
     - name: Packages

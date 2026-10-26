@@ -4,7 +4,9 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import { ArcContext } from '@cratis/arc.react';
-import { SceneElementView } from '@cratis/scene.react';
+import { SceneElementView, InteractionScope } from '@cratis/scene.react';
+import { BindingSourceKind, InteractionActionKind } from '@cratis/scene.model';
+import { ActionDispatcher, InteractionContext } from '@cratis/scene.engine';
 import { clearBindings, registerCommand } from '../../bindings';
 import { cratisComponents } from '../../cratisComponents';
 import { externalComponent } from '../../given';
@@ -16,6 +18,24 @@ function view(properties: Record<string, unknown> = {}) {
             command: 'RecordNote', exclude: ['internalValue'], ...properties,
         })} registry={cratisComponents} resolveBinding={() => undefined} />
     </ArcContext.Provider>;
+}
+
+function nativeResponse(failure?: string): Response {
+    return { status: 200, json: async () => ({
+        correlationId: '00000000-0000-0000-0000-000000000001',
+        isSuccess: failure === undefined, isAuthorized: failure !== 'authorization', isValid: failure !== 'validation', hasExceptions: failure === 'exception',
+        validationResults: failure === 'validation' ? [{ severity: 2, members: ['subject'], message: 'Refused', state: {} }] : [],
+        exceptionMessages: failure === 'exception' ? ['Failed commit'] : [], exceptionStackTrace: '',
+        response: { id: 'created-id' },
+    }) } as Response;
+}
+
+function continuationScope() {
+    const setState = vi.fn();
+    const executeCommand = vi.fn();
+    const dispatcher: ActionDispatcher = { executeCommand, setState, navigate: vi.fn(), navigateBack: vi.fn(), openDialog: vi.fn(), closeDialog: vi.fn(), refreshQuery: vi.fn(), notify: vi.fn(), confirm: vi.fn(), raise: vi.fn() };
+    const context: InteractionContext = { resolve: () => undefined, responseContracts: { commandResponse: () => ({ kind: 'value', type: { kind: 'object', properties: { id: { kind: 'string' } } } }), targetType: () => ({ kind: 'string' }) } };
+    return { dispatcher, context, setState, executeCommand };
 }
 
 // No Components/form/context doubles. Components <=4.12 ignores footer: these tests MUST fail there,
@@ -32,6 +52,52 @@ describe('when submitting a Scene command form through native AutoCommandForm', 
     });
 
     afterEach(() => { cleanup(); clearBindings(); vi.unstubAllGlobals(); });
+
+    it('should deserialize the native composite response fixture', async () => {
+        fetch.mockResolvedValue(nativeResponse());
+        const command = new RecordNote();
+        command.subject = 'Response proof';
+        const result = await command.execute();
+        result.exceptionMessages.should.deep.equal([]);
+        result.isSuccess.should.equal(true);
+    });
+
+    for (const explicit of [false, true]) {
+        it(`should continue exactly once from native ${explicit ? 'explicit' : 'automatic'} success without redispatching`, async () => {
+            const { dispatcher, context, setState, executeCommand } = continuationScope();
+            fetch.mockResolvedValue(nativeResponse());
+            render(<InteractionScope dispatcher={dispatcher} context={context} attachments={[]}>
+                {view({ ...(explicit ? { inputs: [{ property: 'subject', type: 'string', label: 'Subject' }] } : {}), onSubmit: [{ kind: InteractionActionKind.SetState, target: 'created', value: { kind: BindingSourceKind.CommandResponse, path: 'id' } }] })}
+            </InteractionScope>);
+            const button = await screen.findByRole('button', { name: 'Submit' });
+            fireEvent.change(screen.getByRole('textbox', { name: 'Subject' }), { target: { value: 'Response proof' } });
+            await act(async () => { fireEvent.click(button); });
+            await waitFor(() => setState.mock.calls.should.deep.equal([['created', 'created-id']]));
+            fetch.mock.calls.should.have.lengthOf(1);
+            executeCommand.mock.calls.should.have.lengthOf(0);
+            fireEvent.change(screen.getByRole('textbox', { name: 'Subject' }), { target: { value: 'Second submission' } });
+            await act(async () => { fireEvent.click(button); });
+            await waitFor(() => setState.mock.calls.should.have.lengthOf(2));
+            fetch.mock.calls.should.have.lengthOf(2);
+        });
+
+        for (const failure of ['validation', 'authorization', 'exception']) {
+            it(`should not continue native ${explicit ? 'explicit' : 'automatic'} ${failure} failure even with a response payload`, async () => {
+                const { dispatcher, context, setState, executeCommand } = continuationScope();
+                fetch.mockResolvedValue(nativeResponse(failure));
+                render(<InteractionScope dispatcher={dispatcher} context={context} attachments={[]}>
+                    {view({ ...(explicit ? { inputs: [{ property: 'subject', type: 'string', label: 'Subject' }] } : {}), onSubmit: [{ kind: InteractionActionKind.SetState, target: 'created', value: { kind: BindingSourceKind.CommandResponse, path: 'id' } }] })}
+                </InteractionScope>);
+                const button = await screen.findByRole<HTMLButtonElement>('button', { name: 'Submit' });
+                fireEvent.change(screen.getByRole('textbox', { name: 'Subject' }), { target: { value: 'Will fail' } });
+                await act(async () => { fireEvent.click(button); });
+                await waitFor(() => fetch.mock.calls.should.have.lengthOf(1));
+                await waitFor(() => button.disabled.should.equal(false));
+                setState.mock.calls.should.have.lengthOf(0);
+                executeCommand.mock.calls.should.have.lengthOf(0);
+            });
+        }
+    }
 
     it('should submit the actual form with a labeled button and preserve native payload and context', async () => {
         render(view({ submitLabel: 'Record note' }));

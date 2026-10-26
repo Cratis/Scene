@@ -9,6 +9,7 @@ import { BindingScope } from './BindingScope';
  */
 export function resolveBindingExpression(binding: BindingExpression, scope: BindingScope): unknown {
     const kind = binding.kind ?? BindingSourceKind.DataContext;
+    if (kind === BindingSourceKind.CommandResponse) return undefined;
 
     // A literal without a value is absent, whether the author wrote `null` or nothing: the C# model cannot
     // tell the two apart, and both engines must resolve the same document to the same value.
@@ -39,6 +40,8 @@ function sourceValue(binding: BindingExpression, scope: BindingScope, kind: Bind
             return binding.componentId ? scope.componentOutputs?.[binding.componentId] : undefined;
         case BindingSourceKind.Literal:
             return binding.value;
+        case BindingSourceKind.CommandResponse:
+            return undefined;
     }
 }
 

@@ -185,7 +185,8 @@
       "generationMode",
       "layout",
       "fields",
-      "behaviors"
+      "behaviors",
+      "onSubmit"
     ],
     "ContributionPoint": [
       "name"
@@ -812,7 +813,8 @@
       "DataContext",
       "QueryResult",
       "ComponentProperty",
-      "Literal"
+      "Literal",
+      "CommandResponse"
     ],
     "BindingMode": [
       "OneWay",

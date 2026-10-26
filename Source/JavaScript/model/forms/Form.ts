@@ -5,7 +5,7 @@ import { CommandFormLayout } from './CommandFormLayout';
 import { FormGenerationMode } from './FormGenerationMode';
 import { PopulateSource } from './PopulateSource';
 import { FormField } from './FormField';
-import { Behavior } from '../interactions';
+import { Behavior, InteractionAction } from '../interactions';
 
 /**
  * The command-side counterpart to a table or summary: a named, typed form for one command.
@@ -22,6 +22,9 @@ export interface Form {
      * attached further out or further in.
      */
     behaviors?: Behavior[];
+    onSubmit?: InteractionAction[];
 }
 
-export const FormPropertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'generationMode', 'layout', 'fields', 'behaviors'];
+const onSubmit = 'onSubmit' satisfies keyof Form;
+const propertyNames: (keyof Form)[] = ['name', 'forCommand', 'populateSource', 'generationMode', 'layout', 'fields', 'behaviors', onSubmit];
+export const FormPropertyNames = Object.assign(propertyNames, { onSubmit });
