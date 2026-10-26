@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { BehaviorAttachment, InteractionContext, resolveBehaviors, resolveIntervalBehaviors, runBindings } from '@cratis/scene.engine';
 import { Behavior, InteractionTriggerKind } from '@cratis/scene.model';
 import { attachmentFor, useInteractionScope } from './InteractionScope';
@@ -53,6 +53,8 @@ function gestureContext(context: InteractionContext, dataContext: unknown): Inte
 export function useInteractions(level: string, behaviors?: Behavior[]): InteractionHandlers {
     const scope = useInteractionScope();
     const bindingScope = useRenderBindingScope();
+    const subject = useRef(bindingScope.dataContext);
+    subject.current = bindingScope.dataContext;
 
     const attachments = useMemo<BehaviorAttachment[]>(
         () => [...(scope?.attachments ?? []), ...attachmentFor(level, behaviors)],
@@ -61,7 +63,7 @@ export function useInteractions(level: string, behaviors?: Behavior[]): Interact
     const run = useCallback(async (kind: InteractionTriggerKind) => {
         if (!scope) return;
 
-        const result = await runBindings(resolveBehaviors(attachments, kind), scope.dispatcher, gestureContext(scope.context, bindingScope.dataContext));
+        const result = await runBindings(resolveBehaviors(attachments, kind), scope.dispatcher, gestureContext(scope.context, subject.current));
         if (result.findings.length > 0) scope.onFindings?.(result.findings);
     }, [scope, attachments]);
 

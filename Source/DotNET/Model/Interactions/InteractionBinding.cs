@@ -32,4 +32,17 @@ public record InteractionBinding(
         : this(trigger, actions, condition, null, null)
     {
     }
+
+    /// <summary>
+    /// Preserves the three-output deconstruction used by earlier packages.
+    /// </summary>
+    /// <param name="trigger">What starts it.</param>
+    /// <param name="actions">The actions to run.</param>
+    /// <param name="condition">The existing binding guard.</param>
+    public void Deconstruct(out InteractionTrigger trigger, out IReadOnlyList<InteractionAction> actions, out BindingExpression? condition)
+    {
+        trigger = Trigger;
+        actions = Actions;
+        condition = Condition;
+    }
 }

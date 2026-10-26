@@ -18,11 +18,27 @@ const behavior: Behavior = {
     }],
 };
 
+const behaviors = [behavior];
+
 function Button() {
-    return <button {...useInteractions('test', [behavior])}>Run</button>;
+    return <button {...useInteractions('test', behaviors)}>Run</button>;
 }
 
 describe('when selecting a guarded interaction', () => {
+    it('should replace the gesture subject while behaviors and interaction scope remain stable', async () => {
+        const dispatcher = new RecordingDispatcher();
+        const attachments: [] = [];
+        const content = (dataContext: unknown) => <InteractionScope dispatcher={dispatcher} attachments={attachments}>
+            <RenderBindingScopeProvider dataContext={dataContext}><Button /></RenderBindingScopeProvider>
+        </InteractionScope>;
+        const view = render(content({ id: 1 }));
+        fireEvent.click(screen.getByRole('button'));
+        await waitFor(() => expect(dispatcher.calls).toEqual(['executeCommand:Selected:{}']));
+
+        view.rerender(content({ id: 2 }));
+        fireEvent.click(screen.getByRole('button'));
+        await waitFor(() => expect(dispatcher.calls).toEqual(['executeCommand:Selected:{}', 'executeCommand:Fallback:{}']));
+    });
     it('should use the current render subject for the gesture', async () => {
         const dispatcher = new RecordingDispatcher();
         render(<InteractionScope dispatcher={dispatcher} attachments={[]}>

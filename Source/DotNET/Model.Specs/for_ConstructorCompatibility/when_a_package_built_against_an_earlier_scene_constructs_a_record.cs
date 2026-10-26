@@ -34,6 +34,33 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
     [Fact] void should_still_have_every_constructor() => _missing.ShouldBeEmpty();
 
     [Fact]
+    void should_keep_the_three_output_interaction_deconstruct_signature()
+    {
+        var method = typeof(InteractionBinding).GetMethod("Deconstruct",
+        [
+            typeof(InteractionTrigger).MakeByRefType(),
+            typeof(IReadOnlyList<InteractionAction>).MakeByRefType(),
+            typeof(BindingExpression).MakeByRefType()
+        ]);
+        method.ShouldNotBeNull();
+        method.ReturnType.ShouldEqual(typeof(void));
+        method.GetParameters().All(parameter => parameter.IsOut).ShouldBeTrue();
+    }
+
+    [Fact]
+    void should_deconstruct_the_first_three_interaction_members_using_the_earlier_syntax()
+    {
+        var expectedTrigger = new BuiltInInteractionTrigger(InteractionTriggerKind.Click);
+        IReadOnlyList<InteractionAction> expectedActions = [];
+        var expectedCondition = new BindingExpression("allowed");
+        var (trigger, actions, condition) = new InteractionBinding(expectedTrigger, expectedActions, expectedCondition, Alternatives: [], Otherwise: []);
+
+        trigger.ShouldEqual(expectedTrigger);
+        actions.ShouldEqual(expectedActions);
+        condition.ShouldEqual(expectedCondition);
+    }
+
+    [Fact]
     void should_build_the_same_profile_through_the_earlier_constructor()
     {
         var earlier = new UiProfile("Desktop", "web", ["core"], null, null, "Aurora", null, null, new ProfileAppearance(ColorScheme.Dark, "#4f46e5"), null);
