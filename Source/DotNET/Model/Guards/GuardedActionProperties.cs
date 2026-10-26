@@ -33,7 +33,14 @@ public record GuardedActionProperties(
     static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web)
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+        Converters =
+        {
+            // The guard enumerations keep their canonical PascalCase wire values, which the engines match exactly.
+            new JsonStringEnumConverter<GuardOperator>(),
+            new JsonStringEnumConverter<LogicalGuardOperator>(),
+            new JsonStringEnumConverter<GuardedActionFallbackOutcome>(),
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+        }
     };
 
     /// <summary>

@@ -39,6 +39,20 @@ public class when_round_tripping_stage_properties : Specification
         json.GetProperty("alternatives")[0].GetProperty("condition").GetProperty("right").ValueKind.ShouldEqual(JsonValueKind.Null);
     }
 
+    [Fact]
+    void should_write_canonical_guard_enumeration_values()
+    {
+        var properties = new GuardedActionProperties(
+            "Close",
+            [new("Close", new LogicalGuardCondition(new ComparisonGuardCondition(new("item.status"), GuardOperator.Equal, "Open"), LogicalGuardOperator.And, new ComparisonGuardCondition(new("item.amount"), GuardOperator.GreaterThan, 0)))],
+            Otherwise: new(GuardedActionFallbackOutcome.Execute, "Cancel"));
+        var json = JsonSerializer.SerializeToElement(properties.ToProperties(), _options);
+        var condition = json.GetProperty("alternatives")[0].GetProperty("condition");
+        condition.GetProperty("operator").GetString().ShouldEqual("And");
+        condition.GetProperty("left").GetProperty("operator").GetString().ShouldEqual("Equal");
+        json.GetProperty("otherwise").GetProperty("outcome").GetString().ShouldEqual("Execute");
+    }
+
     [Fact] void should_preserve_the_command() => _roundTrip.Alternatives[0].Command.ShouldEqual("Approve");
     [Fact] void should_accept_stage_properties_without_a_subject_binding() => _roundTrip.Item.ShouldBeNull();
     [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments!["id"].Subject.ShouldEqual("item.id");
