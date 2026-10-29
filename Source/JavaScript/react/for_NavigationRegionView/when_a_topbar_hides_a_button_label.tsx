@@ -33,6 +33,7 @@ describe('when a topbar hides a button label', () => {
     const hideLabels = () => document.querySelectorAll<HTMLElement>('[data-scene-nav-button] > span:not([aria-hidden])').forEach(span => { span.style.display = 'none'; });
 
     it('should give the button the title as its tooltip', () => button().getAttribute('title')!.should.equal('Register SKU'));
+    it('should give the button the title as its aria label', () => button().getAttribute('aria-label')!.should.equal('Register SKU'));
     it('should keep the button findable by the title when the label is hidden', () => {
         hideLabels();
         (screen.getByRole('button', { name: 'Register SKU' }) === button()).should.equal(true);
