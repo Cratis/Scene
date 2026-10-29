@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { useRef, useState } from 'react';
-import { ActionDispatcher, resolveBindingExpression, resolveSubjectReference, selectGuardedAction } from '@cratis/scene.engine';
+import { ActionDispatcher, CommandOutcome, resolveBindingExpression, resolveSubjectReference, selectGuardedAction } from '@cratis/scene.engine';
 import { BindingExpression, GuardedActionProperties, SubjectReference } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
 import { useInteractionScope } from '../interactions/InteractionScope';
@@ -59,8 +59,13 @@ async function execute(selected: CommandSelection): Promise<void> {
         return;
     }
     const outcome = await selected.dispatcher.executeCommand(selected.command, { item: selected.item, ...args });
-    if (!outcome.isSuccess) throw new Error('The command did not succeed.');
+    if (!outcome.isSuccess) throw new Error(commandFailureMessage(outcome));
     await navigateAfterSuccess(selected.properties, selected.item, selected.dispatcher);
+}
+
+function commandFailureMessage(outcome: CommandOutcome): string {
+    const messages = [...(outcome.exceptionMessages ?? []), ...(outcome.validationErrors ?? []).map(error => error.message)];
+    return messages.map(message => message.trim()).filter(message => message.length > 0).join('\n') || 'The command did not succeed.';
 }
 
 export function CoreGuardedAction({ element }: RegisteredComponentProps) {

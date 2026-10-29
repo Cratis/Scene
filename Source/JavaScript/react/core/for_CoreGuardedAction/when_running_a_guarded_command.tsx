@@ -48,10 +48,13 @@ describe('when running a guarded command', () => {
         await waitFor(() => expect(dispatcher.executeCommand).toHaveBeenCalledExactlyOnceWith('Approve', { item, orderId: 42 }));
     });
     it('should submit explicit arguments with the item and navigate only after success', async () => {
+        dispatcher.executeCommand.mockResolvedValue({ isSuccess: true, exceptionMessages: ['Ignored on success'], validationErrors: [{ member: 'id', message: 'Also ignored' }] });
         draw({ navigateToScreen: 'details', navigateByParameter: 'id' });
         fireEvent.click(screen.getByRole('button'));
         await waitFor(() => expect(dispatcher.navigate).toHaveBeenCalledWith('details', { id: 42 }));
         expect(dispatcher.executeCommand).toHaveBeenCalledExactlyOnceWith('Approve', { item, orderId: 42 });
+        expect(screen.queryByRole('alert')).toBeNull();
+        expect((screen.getByRole('button') as HTMLButtonElement).disabled).toBe(false);
     });
     it('should map the Stage core:action shape to guarded execution', async () => {
         draw({}, item, true);
@@ -135,5 +138,84 @@ describe('when running a guarded command', () => {
         fireEvent.click(screen.getByRole('button'));
         await screen.findByRole('alert');
         expect(dispatcher.executeCommand).not.toHaveBeenCalled();
+    });
+});
+
+const failures: { name: string; outcome: CommandOutcome; message: string }[] = [
+    {
+        name: 'exception messages',
+        outcome: { isSuccess: false, exceptionMessages: [' Unavailable ', ' Try again. '] },
+        message: 'Unavailable\nTry again.',
+    },
+    {
+        name: 'validation messages',
+        outcome: { isSuccess: false, validationErrors: [{ member: 'id', message: ' Missing order. ' }, { member: 'status', message: ' Invalid status. ' }] },
+        message: 'Missing order.\nInvalid status.',
+    },
+    {
+        name: 'mixed messages and blank entries',
+        outcome: {
+            isSuccess: false,
+            exceptionMessages: ['', ' First failure. ', ' \t ', ' Second failure. '],
+            validationErrors: [{ member: 'id', message: ' ' }, { member: 'id', message: ' Missing order. ' }, { member: 'status', message: '' }, { member: 'status', message: ' Invalid status. ' }],
+        },
+        message: 'First failure.\nSecond failure.\nMissing order.\nInvalid status.',
+    },
+    {
+        name: 'absent messages',
+        outcome: { isSuccess: false },
+        message: 'The command did not succeed.',
+    },
+    {
+        name: 'empty message arrays',
+        outcome: { isSuccess: false, exceptionMessages: [], validationErrors: [] },
+        message: 'The command did not succeed.',
+    },
+    {
+        name: 'only blank messages',
+        outcome: { isSuccess: false, exceptionMessages: ['', ' \t\n '], validationErrors: [{ member: 'id', message: '' }, { member: 'status', message: ' \n ' }] },
+        message: 'The command did not succeed.',
+    },
+    {
+        name: 'HTML-like message text',
+        outcome: { isSuccess: false, exceptionMessages: ['<strong>Unavailable</strong>'], validationErrors: [{ member: 'id', message: '<em>Missing order</em>' }] },
+        message: '<strong>Unavailable</strong>\n<em>Missing order</em>',
+    },
+];
+
+describe.each(failures)('when running a guarded command with $name', ({ outcome, message }) => {
+    let alert: HTMLElement;
+    let button: HTMLButtonElement;
+
+    beforeEach(async () => {
+        dispatcher.executeCommand.mockResolvedValue(outcome);
+        draw({ navigateToScreen: 'details', otherwise: { outcome: GuardedActionFallbackOutcome.Execute, command: 'Fallback' } });
+        button = screen.getByRole('button') as HTMLButtonElement;
+        fireEvent.click(button);
+        alert = await screen.findByRole('alert');
+    });
+
+    it('should show usable messages in order or the generic fallback', () => {
+        alert.textContent!.should.equal(message);
+    });
+
+    it('should render messages as text', () => {
+        alert.childElementCount.should.equal(0);
+    });
+
+    it('should not navigate', () => {
+        dispatcher.navigate.mock.calls.length.should.equal(0);
+    });
+
+    it('should not fall through to another command', () => {
+        dispatcher.executeCommand.mock.calls.length.should.equal(1);
+    });
+
+    it('should make the action available again', () => {
+        button.disabled.should.equal(false);
+    });
+
+    it('should clear the pending state', () => {
+        button.getAttribute('aria-busy')!.should.equal('false');
     });
 });
