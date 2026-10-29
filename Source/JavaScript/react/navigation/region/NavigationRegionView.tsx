@@ -267,10 +267,10 @@ export function NavigationRegionView({ region, module, application = false, mode
         data-scene-nav-mode={resolved.mode} onKeyDown={onKeyDown}>
         <ul className={names.list}>{renderItems(visible, [], 0)}</ul>
         {buttons.length > 0 && <div className={names.buttons} role='group' aria-label={`${label ?? (sidebar ? 'Sidebar' : 'Topbar')} actions`} data-scene-nav-buttons={region}>
-            {/* A compact topbar and a slim rail hide the label and show only the icon, so the button carries its title as the tooltip and accessible name. */}
+            {/* A compact topbar and a slim rail hide the label and show only the icon, so the button carries its title as the tooltip and as an explicit aria-label. */}
             {buttons.map(button => <button key={button.id} type='button' className={`${names.button} scene-toolbar-button scene-toolbar-button-${button.emphasis}`} data-scene-nav-button={button.id}
                 data-scene-emphasis={button.emphasis} data-scene-slice={button.slice} data-scene-authorize={button.authorize} data-origin={button.origin} data-read-only={button.readOnly}
-                aria-haspopup={button.slice ? 'dialog' : undefined} disabled={button.slice === undefined} title={button.title} onClick={event => press(button, event)}>
+                aria-haspopup={button.slice ? 'dialog' : undefined} disabled={button.slice === undefined} title={button.title} aria-label={button.title} onClick={event => press(button, event)}>
                 {buttonIcon(button)}
                 <span className={names.label}>{button.title}</span>
             </button>)}
