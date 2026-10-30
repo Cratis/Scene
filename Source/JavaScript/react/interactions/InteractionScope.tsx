@@ -41,7 +41,7 @@ const Scope = createContext<InteractionScopeValue | undefined>(undefined);
  * definitely there, so only the author is spared, not the code doing the work.
  */
 export interface InteractionScopeProps extends Omit<InteractionScopeValue, 'context'> {
-    /** How bindings and localization resolve. Omitted means nothing resolves. */
+    /** How bindings and localization resolve. Omitted means nothing resolves. Guard settings inherit from the enclosing scope. */
     context?: InteractionContext;
 
     /** What the scope encloses. */
@@ -50,6 +50,7 @@ export interface InteractionScopeProps extends Omit<InteractionScopeValue, 'cont
 
 /**
  * Provides the dispatcher, the resolution context and the enclosing attachments to everything beneath it.
+ * Strict guard settings inherit from the enclosing scope like onFindings unless explicitly supplied.
  *
  * Attachments nest: a scope inside another scope appends to it rather than replacing it, so an element's
  * enclosing chain is assembled by the tree rather than reconstructed at each leaf. That is what keeps the
@@ -61,7 +62,7 @@ export function InteractionScope({ children, dispatcher, context = resolvesNothi
 
     const value = useMemo<InteractionScopeValue>(() => ({
         dispatcher,
-        context,
+        context: context.guards === undefined && enclosing?.context.guards ? { ...context, guards: enclosing.context.guards } : context,
         attachments: [...(enclosing?.attachments ?? []), ...attachments],
         onFindings: onFindings ?? enclosing?.onFindings,
     }), [dispatcher, context, attachments, onFindings, enclosing]);

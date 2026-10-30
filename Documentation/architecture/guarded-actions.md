@@ -68,13 +68,27 @@ A comparison contains `kind: "comparison"`, a `left` subject reference, an `oper
 - Paths start with `item.` and may traverse nested object properties. Unsafe prototype paths and malformed paths are unsupported.
 - Equality is type-strict. Missing fields never match. A **present null** matches a null literal with `Equal`; `NotEqual` involving null is false.
 - Ordering requires numeric values; strings are not coerced to numbers.
-- `Contains` supports a string substring or scalar array membership; `StartsWith` requires strings. String matching is case-sensitive.
+- `Contains` supports a string substring or scalar array membership; `StartsWith` requires strings. String matching is case-sensitive. Opt-in strict operands narrow `Contains` to strings.
 - An optional `enumeration` lists member names in ordinal order. A subject ordinal or member name resolves to the member name. Enum names compare case-insensitively; unknown names and out-of-range ordinals do not match.
 - A logical node is `{"kind":"logical","operator":"And","left":condition,"right":condition}`, or uses `Or`. Both branches must be understood, even if one branch would determine the answer.
 
 Unknown operators, node kinds and legacy string guards fail closed with `SCENE-GUARD-001`. A guarded action renders a disabled button and diagnostic rather than using its fallback. There is no JavaScript expression execution.
 
-`GuardConditions` and `GuardedSelection` in `Cratis.Scene.Engine.Guards` mirror `canEvaluateGuard`, `evaluateGuard`, `selectGuardedAction` and `selectGuardedInteraction` in `@cratis/scene.engine`. Their shared examples are in `guarded-selection-fixtures.json`.
+`GuardConditions` and `GuardedSelection` in `Cratis.Scene.Engine.Guards` mirror the default mode of `canEvaluateGuard`, `evaluateGuard`, `selectGuardedAction` and `selectGuardedInteraction` in `@cratis/scene.engine`. Their shared examples are in `guarded-selection-fixtures.json`.
+
+### Strict operands (Screenplay hosts)
+
+Hosts can opt in on their outermost interaction scope:
+
+```tsx
+<InteractionScope dispatcher={dispatcher} context={{ resolve, guards: { strictOperands: true } }} attachments={[]}>
+    {children}
+</InteractionScope>
+```
+
+Nested scopes inherit `guards` unless they supply their own setting. Strict `Contains` requires a string literal. With that literal, a null or absent field evaluates to false, allowing a fallback or `otherwise`, as specified by Screenplay `Documentation/screenplay/screens.md:86–90`. Non-null field values must be strings: numbers, Booleans, objects and arrays are unevaluable, as are non-string literals, even inside a logical expression or a later alternative after a match. An unevaluable guard means a disabled guarded action with `SCENE-GUARD-001`, or an `unevaluableCondition` finding for an interaction; nothing runs, including `otherwise`.
+
+Direct engine callers can pass `GuardEvaluationOptions` as the final argument: `selectGuardedInteraction(alternatives, item, hasOtherwise, { strictOperands: true })` or `selectGuardedAction(alternatives, item, otherwise, { strictOperands: true })`. `canEvaluateGuard` and `evaluateGuard` accept the same options. Without options, or without an `InteractionScope` (including the window-event command path), generic default semantics apply. The C# mirror covers the default mode only.
 
 ## Guarded interaction binding
 
