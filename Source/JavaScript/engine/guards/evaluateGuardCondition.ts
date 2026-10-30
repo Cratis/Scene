@@ -114,11 +114,11 @@ function unmatchedOperands(left: unknown, right: unknown): boolean {
 
 function compare(condition: Record<string, unknown>, item: unknown, options?: GuardEvaluationOptions): boolean | undefined {
     const value = resolveSubjectReference(condition.left as SubjectReference, item);
-    const right = normalize(condition.right, condition.enumeration);
     if (value === undefined) return false;
-    if (value === null) return condition.operator === 'Equal' && value === right;
+    if (value === null) return condition.operator === 'Equal' && value === normalize(condition.right, condition.enumeration);
+    if (strictContains(condition.operator, options) && !stringOperands(value, condition.right)) return undefined;
+    const right = normalize(condition.right, condition.enumeration);
     const left = normalize(value, condition.enumeration);
-    if (strictContains(condition.operator, options) && !stringOperands(left, right)) return undefined;
     if (unmatchedOperands(left, right)) return false;
     return comparisons[condition.operator as string](left, right);
 }

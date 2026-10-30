@@ -60,4 +60,20 @@ describe('when enforcing string-only contains', () => {
             expect(selectGuardedInteraction(alternatives(entry.condition), entry.item, true, strict)).toEqual({ kind: 'unevaluable' });
         });
     }
+    describe('with an enumeration', () => {
+        const enumerated = { ...contains('op'), enumeration: ['Open', 'Closed'] };
+        it('should refuse a numeric ordinal field', () => {
+            expect(evaluateGuard(enumerated, { value: 0 }, strict)).toBeUndefined();
+            expect(selectGuardedInteraction(alternatives(enumerated), { value: 0 }, true, strict)).toEqual({ kind: 'unevaluable' });
+        });
+        it('should evaluate a string field outside the enumeration as false', () => {
+            expect(evaluateGuard(enumerated, { value: 'Pending' }, strict)).toBe(false);
+            expect(selectGuardedInteraction(alternatives(enumerated), { value: 'Pending' }, true, strict)).toEqual({ kind: 'otherwise' });
+        });
+        it('should evaluate a string field in the enumeration normally', () => {
+            const open = { ...contains('Open'), enumeration: ['Open', 'Closed'] };
+            expect(evaluateGuard(open, { value: 'open' }, strict)).toBe(true);
+            expect(evaluateGuard({ ...open, right: 'Closed' }, { value: 'open' }, strict)).toBe(false);
+        });
+    });
 });
