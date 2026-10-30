@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { BehaviorAttachment, InteractionContext, resolveBehaviors, resolveIntervalBehaviors, runBindings } from '@cratis/scene.engine';
+import { BehaviorAttachment, InteractionContext, ResolvedBinding, resolveBehaviors, resolveIntervalBehaviors, runBindings } from '@cratis/scene.engine';
 import { Behavior, InteractionTriggerKind } from '@cratis/scene.model';
-import { attachmentFor, useInteractionScope } from './InteractionScope';
+import { InteractionScopeValue, attachmentFor, useInteractionScope } from './InteractionScope';
 import { useRenderBindingScope } from '../renderer/RenderBindingScopeContext';
 
 /**
@@ -32,6 +32,11 @@ const domTriggers: [keyof InteractionHandlers, InteractionTriggerKind][] = [
 
 function gestureContext(context: InteractionContext, dataContext: unknown): InteractionContext {
     return { ...context, subject: () => context.subject?.() ?? dataContext };
+}
+
+async function runInterval(candidate: ResolvedBinding, scope: InteractionScopeValue): Promise<void> {
+    const result = await runBindings([candidate], scope.dispatcher, scope.context);
+    if (result.findings.length > 0) scope.onFindings?.(result.findings);
 }
 
 /**
@@ -86,9 +91,7 @@ export function useInteractions(level: string, behaviors?: Behavior[]): Interact
 
         const timers = intervals.map(candidate => {
             const seconds = (candidate.binding.trigger as { seconds?: number }).seconds ?? 0;
-            return setInterval(
-                () => void runBindings([candidate], scope.dispatcher, scope.context),
-                Math.max(seconds, 1) * 1000);
+            return setInterval(() => void runInterval(candidate, scope), Math.max(seconds, 1) * 1000);
         });
 
         return () => timers.forEach(clearInterval);

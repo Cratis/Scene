@@ -5,11 +5,11 @@ import { useRef, useState } from 'react';
 import { ActionDispatcher, CommandOutcome, resolveBindingExpression, resolveSubjectReference, selectGuardedAction } from '@cratis/scene.engine';
 import { BindingExpression, GuardedActionProperties, SubjectReference } from '@cratis/scene.model';
 import { RegisteredComponentProps, useRenderBindingScope } from '../renderer';
-import { useInteractionScope } from '../interactions/InteractionScope';
+import { InteractionScopeValue, useInteractionScope } from '../interactions/InteractionScope';
 
-function selection(properties: GuardedActionProperties, item: unknown) {
+function selection(properties: GuardedActionProperties, item: unknown, interaction?: InteractionScopeValue) {
     const alternatives = Array.isArray(properties.alternatives) ? properties.alternatives : [];
-    const selected = selectGuardedAction(alternatives, item, properties.otherwise);
+    const selected = selectGuardedAction(alternatives, item, properties.otherwise, interaction?.context.guards);
     const branch = selected.kind === 'alternative' ? alternatives[selected.index] : properties.otherwise;
     const unsupported = !Array.isArray(properties.alternatives) || selected.kind === 'unevaluable';
     const hidden = selected.kind === 'noSubject' || selected.kind === 'hidden';
@@ -74,10 +74,10 @@ export function CoreGuardedAction({ element }: RegisteredComponentProps) {
     const interaction = useInteractionScope();
     const rawItem = Object.hasOwn(properties, 'item') ? properties.item : scope.dataContext;
     const item = resolveItem(rawItem, binding => resolveBindingExpression(binding, scope));
-    const { branch, hidden, unsupported, key } = selection(properties, item);
+    const { branch, hidden, unsupported, key } = selection(properties, item, interaction);
     const command = unsupported ? undefined : branch?.command;
     const verify = () => {
-        const current = selection(properties, item);
+        const current = selection(properties, item, interaction);
         return current.key === key && current.branch?.command === command;
     };
     const state = useGuardedCommand({ command, arguments: branch?.arguments, item, properties, dispatcher: interaction?.dispatcher, element, verify });

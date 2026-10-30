@@ -20,7 +20,7 @@ import {
 
 import { ActionDispatcher } from './ActionDispatcher';
 import { BindingResolver } from './BindingResolver';
-import { selectGuardedInteraction } from './guards';
+import { GuardEvaluationOptions, selectGuardedInteraction } from './guards';
 import { ResponseContract, ResponseValidationContracts } from './ResponseValidationContracts';
 import { validateResponseAction } from './validateResponseBindings';
 import { commandResponseContext, ResponseBindingUnavailable } from './commandResponseContext';
@@ -68,6 +68,8 @@ export interface InteractionRun {
  */
 export interface InteractionContext {
     resolve: BindingResolver;
+    /** Opt-in guard evaluation rules. Screenplay hosts set { strictOperands: true }. */
+    guards?: GuardEvaluationOptions;
     responseContracts?: ResponseValidationContracts;
     responseContract?: ResponseContract;
     subject?: () => unknown;
@@ -301,7 +303,7 @@ function branchActions(binding: InteractionBinding, context: InteractionContext,
         run.findings.push({ kind: 'unevaluableCondition', detail: 'SCENE-GUARD-001: An interaction cannot combine actions and alternatives' });
         return undefined;
     }
-    const selected = selectGuardedInteraction(binding.alternatives, context.subject?.() ?? context.resolve({ path: 'item' }), binding.otherwise !== undefined);
+    const selected = selectGuardedInteraction(binding.alternatives, context.subject?.() ?? context.resolve({ path: 'item' }), binding.otherwise !== undefined, context.guards);
     if (selected.kind === 'alternative') return binding.alternatives[selected.index].actions;
     if (selected.kind === 'otherwise') return binding.otherwise;
     if (selected.kind === 'unevaluable') run.findings.push({ kind: 'unevaluableCondition', detail: 'SCENE-GUARD-001: The structured guard could not be resolved' });

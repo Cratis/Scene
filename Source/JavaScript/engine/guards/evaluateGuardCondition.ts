@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { SubjectReference } from '@cratis/scene.model';
+import { GuardEvaluationOptions } from './GuardEvaluationOptions';
 
 const forbidden = new Set(['__proto__', 'prototype', 'constructor']);
 const numericOperators = new Set(['GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual']);
@@ -65,25 +66,34 @@ function validEnumeration(value: unknown): boolean {
     return value.every(member => typeof member === 'string') && new Set(value).size === value.length;
 }
 
-function validLiteral(operator: string, right: unknown): boolean {
+function strictContains(operator: unknown, options?: GuardEvaluationOptions): boolean {
+    return operator === 'Contains' && options?.strictOperands === true;
+}
+
+function stringOperands(left: unknown, right: unknown): boolean {
+    return typeof left === 'string' && typeof right === 'string';
+}
+
+function validLiteral(operator: string, right: unknown, options?: GuardEvaluationOptions): boolean {
+    if (strictContains(operator, options)) return typeof right === 'string';
     if (!scalar(right)) return false;
     if (numericOperators.has(operator)) return typeof right === 'number';
     return operator !== 'StartsWith' || typeof right === 'string';
 }
 
-function validComparison(condition: Record<string, unknown>): boolean {
+function validComparison(condition: Record<string, unknown>, options?: GuardEvaluationOptions): boolean {
     if (!subjectPath(condition.left)) return false;
     if (typeof condition.operator !== 'string') return false;
     if (!Object.hasOwn(comparisons, condition.operator)) return false;
-    return validEnumeration(condition.enumeration) && validLiteral(condition.operator, condition.right);
+    return validEnumeration(condition.enumeration) && validLiteral(condition.operator, condition.right, options);
 }
 
-export function canEvaluateGuard(condition: unknown): boolean {
+export function canEvaluateGuard(condition: unknown, options?: GuardEvaluationOptions): boolean {
     if (!record(condition)) return false;
-    if (condition.kind === 'comparison') return validComparison(condition);
+    if (condition.kind === 'comparison') return validComparison(condition, options);
     if (condition.kind !== 'logical') return false;
     if (condition.operator !== 'And' && condition.operator !== 'Or') return false;
-    return canEvaluateGuard(condition.left) && canEvaluateGuard(condition.right);
+    return canEvaluateGuard(condition.left, options) && canEvaluateGuard(condition.right, options);
 }
 
 function ordinal(value: unknown, length: number): value is number {
@@ -98,18 +108,30 @@ function normalize(value: unknown, enumeration: unknown): unknown {
     return undefined;
 }
 
-function compare(condition: Record<string, unknown>, item: unknown): boolean {
-    const left = normalize(resolveSubjectReference(condition.left as SubjectReference, item), condition.enumeration);
+function unmatchedOperands(left: unknown, right: unknown): boolean {
+    return left === undefined || right === undefined || right === null;
+}
+
+function compare(condition: Record<string, unknown>, item: unknown, options?: GuardEvaluationOptions): boolean | undefined {
+    const value = resolveSubjectReference(condition.left as SubjectReference, item);
+    if (value === undefined) return false;
+    if (value === null) return condition.operator === 'Equal' && value === normalize(condition.right, condition.enumeration);
+    if (strictContains(condition.operator, options) && !stringOperands(value, condition.right)) return undefined;
     const right = normalize(condition.right, condition.enumeration);
-    if (left === undefined || right === undefined) return false;
-    if (left === null || right === null) return condition.operator === 'Equal' && left === right;
+    const left = normalize(value, condition.enumeration);
+    if (unmatchedOperands(left, right)) return false;
     return comparisons[condition.operator as string](left, right);
 }
 
-export function evaluateGuard(condition: unknown, item: unknown): boolean | undefined {
-    if (!canEvaluateGuard(condition) || !record(condition)) return undefined;
-    if (condition.kind === 'comparison') return compare(condition, item);
-    const left = evaluateGuard(condition.left, item) === true;
-    const right = evaluateGuard(condition.right, item) === true;
+function evaluateLogical(condition: Record<string, unknown>, item: unknown, options?: GuardEvaluationOptions): boolean | undefined {
+    const left = evaluateGuard(condition.left, item, options);
+    const right = evaluateGuard(condition.right, item, options);
+    if (left === undefined || right === undefined) return undefined;
     return condition.operator === 'And' ? left && right : left || right;
+}
+
+export function evaluateGuard(condition: unknown, item: unknown, options?: GuardEvaluationOptions): boolean | undefined {
+    if (!canEvaluateGuard(condition, options) || !record(condition)) return undefined;
+    if (condition.kind === 'comparison') return compare(condition, item, options);
+    return evaluateLogical(condition, item, options);
 }
