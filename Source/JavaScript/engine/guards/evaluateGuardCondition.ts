@@ -60,10 +60,16 @@ export function resolveSubjectReference(reference: SubjectReference, item: unkno
     return value;
 }
 
-function validEnumeration(value: unknown): boolean {
+function validEnumeration(value: unknown, enumerationNumbers: unknown): boolean {
+    if (enumerationNumbers !== undefined && !validEnumerationNumbers(enumerationNumbers, value)) return false;
     if (value === undefined) return true;
     if (!Array.isArray(value) || value.length === 0) return false;
     return value.every(member => typeof member === 'string') && new Set(value).size === value.length;
+}
+
+function validEnumerationNumbers(value: unknown, enumeration: unknown): boolean {
+    if (!Array.isArray(value) || !Array.isArray(enumeration)) return false;
+    return value.length === enumeration.length && value.every(Number.isInteger) && new Set(value).size === value.length;
 }
 
 function strictContains(operator: unknown, options?: GuardEvaluationOptions): boolean {
@@ -85,7 +91,7 @@ function validComparison(condition: Record<string, unknown>, options?: GuardEval
     if (!subjectPath(condition.left)) return false;
     if (typeof condition.operator !== 'string') return false;
     if (!Object.hasOwn(comparisons, condition.operator)) return false;
-    return validEnumeration(condition.enumeration) && validLiteral(condition.operator, condition.right, options);
+    return validEnumeration(condition.enumeration, condition.enumerationNumbers) && validLiteral(condition.operator, condition.right, options);
 }
 
 export function canEvaluateGuard(condition: unknown, options?: GuardEvaluationOptions): boolean {
@@ -101,9 +107,10 @@ function ordinal(value: unknown, length: number): value is number {
     return value >= 0 && value < length;
 }
 
-function normalize(value: unknown, enumeration: unknown): unknown {
+function normalize(value: unknown, enumeration: unknown, enumerationNumbers: unknown): unknown {
     if (!Array.isArray(enumeration) || value === null) return value;
-    if (ordinal(value, enumeration.length)) return enumeration[value];
+    const index = typeof value === 'number' && Array.isArray(enumerationNumbers) ? enumerationNumbers.indexOf(value) : value;
+    if (ordinal(index, enumeration.length)) return enumeration[index];
     if (typeof value === 'string') return enumeration.find(member => member.toLowerCase() === value.toLowerCase());
     return undefined;
 }
@@ -115,10 +122,10 @@ function unmatchedOperands(left: unknown, right: unknown): boolean {
 function compare(condition: Record<string, unknown>, item: unknown, options?: GuardEvaluationOptions): boolean | undefined {
     const value = resolveSubjectReference(condition.left as SubjectReference, item);
     if (value === undefined) return false;
-    if (value === null) return condition.operator === 'Equal' && value === normalize(condition.right, condition.enumeration);
+    if (value === null) return condition.operator === 'Equal' && value === normalize(condition.right, condition.enumeration, condition.enumerationNumbers);
     if (strictContains(condition.operator, options) && !stringOperands(value, condition.right)) return undefined;
-    const right = normalize(condition.right, condition.enumeration);
-    const left = normalize(value, condition.enumeration);
+    const right = normalize(condition.right, condition.enumeration, condition.enumerationNumbers);
+    const left = normalize(value, condition.enumeration, condition.enumerationNumbers);
     if (unmatchedOperands(left, right)) return false;
     return comparisons[condition.operator as string](left, right);
 }

@@ -10,6 +10,7 @@ export interface ComparisonGuardCondition {
     operator: GuardOperator;
     right: string | number | boolean | null;
     enumeration?: string[];
+    enumerationNumbers?: number[];
 }
 
-export const ComparisonGuardConditionPropertyNames: (keyof ComparisonGuardCondition)[] = ['left', 'operator', 'right', 'enumeration'];
+export const ComparisonGuardConditionPropertyNames: (keyof ComparisonGuardCondition)[] = ['left', 'operator', 'right', 'enumeration', 'enumerationNumbers'];

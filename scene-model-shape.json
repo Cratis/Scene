@@ -3,7 +3,7 @@
   "types": {
     "GuardCondition": [],
     "SubjectReference": ["subject"],
-    "ComparisonGuardCondition": ["left", "operator", "right", "enumeration"],
+    "ComparisonGuardCondition": ["left", "operator", "right", "enumeration", "enumerationNumbers"],
     "LogicalGuardCondition": ["left", "operator", "right"],
     "GuardedActionAlternative": ["command", "condition", "arguments"],
     "GuardedActionFallback": ["outcome", "command", "arguments"],

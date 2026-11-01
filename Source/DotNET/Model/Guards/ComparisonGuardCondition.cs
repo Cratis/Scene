@@ -11,9 +11,16 @@ namespace Cratis.Scene.Model.Guards;
 /// <param name="Left">The subject field.</param>
 /// <param name="Operator">The comparison.</param>
 /// <param name="Right">A string, number, boolean or null literal.</param>
-/// <param name="Enumeration">The member names, in ordinal order.</param>
+/// <param name="Enumeration">The member names, in declaration order.</param>
 public record ComparisonGuardCondition(
     SubjectReference Left,
     GuardOperator Operator,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.Never)] object? Right,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<string>? Enumeration = null) : GuardCondition;
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<string>? Enumeration = null) : GuardCondition
+{
+    /// <summary>
+    /// Gets the distinct whole-number value for each member; absent means positional numbering.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<double>? EnumerationNumbers { get; init; }
+}

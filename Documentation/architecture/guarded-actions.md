@@ -69,7 +69,8 @@ A comparison contains `kind: "comparison"`, a `left` subject reference, an `oper
 - Equality is type-strict. Missing fields never match. A **present null** matches a null literal with `Equal`; `NotEqual` involving null is false.
 - Ordering requires numeric values; strings are not coerced to numbers.
 - `Contains` supports a string substring or scalar array membership; `StartsWith` requires strings. String matching is case-sensitive. Opt-in strict operands narrow `Contains` to strings.
-- An optional `enumeration` lists member names in ordinal order. A subject ordinal or member name resolves to the member name. Enum names compare case-insensitively; unknown names and out-of-range ordinals do not match.
+- An optional `enumeration` lists member names in declaration order. An optional `enumerationNumbers` supplies the declared whole-number value for each entry, for example `"enumeration": ["open", "closed"], "enumerationNumbers": [1, 0]`. Both numeric subject values and numeric literals resolve through these numbers to the member name. Without `enumerationNumbers`, numbers resolve by position as before. String member names compare case-insensitively; unknown names and numbers do not match, including for `NotEqual`.
+- When present, `enumerationNumbers` must be an array of distinct whole numbers with the same length as `enumeration`; otherwise the condition is unsupported, just like an invalid `enumeration`.
 - A logical node is `{"kind":"logical","operator":"And","left":condition,"right":condition}`, or uses `Or`. Both branches must be understood, even if one branch would determine the answer.
 
 Unknown operators, node kinds and legacy string guards fail closed with `SCENE-GUARD-001`. A guarded action renders a disabled button and diagnostic rather than using its fallback. There is no JavaScript expression execution.
