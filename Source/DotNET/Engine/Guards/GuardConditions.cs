@@ -59,16 +59,26 @@ public static class GuardConditions
         if (!ValidPath(Text(Get(Get(condition, "left"), "subject")))) return false;
         if (!Enum.TryParse<GuardOperator>(operation, out var parsed)) return false;
         if (!Enum.IsDefined(parsed) || operation != parsed.ToString()) return false;
-        return ValidEnumeration(Get(condition, "enumeration")) && ValidLiteral(parsed, Get(condition, "right"));
+        return ValidEnumeration(Get(condition, "enumeration"), Get(condition, "enumerationNumbers")) && ValidLiteral(parsed, Get(condition, "right"));
     }
 
-    static bool ValidEnumeration(JsonElement value)
+    static bool ValidEnumeration(JsonElement value, JsonElement enumerationNumbers)
     {
+        if (enumerationNumbers.ValueKind != JsonValueKind.Undefined && !ValidEnumerationNumbers(enumerationNumbers, value)) return false;
         if (value.ValueKind == JsonValueKind.Undefined) return true;
         if (value.ValueKind != JsonValueKind.Array || value.GetArrayLength() == 0) return false;
         if (value.EnumerateArray().Any(member => member.ValueKind != JsonValueKind.String)) return false;
         return value.EnumerateArray().Select(member => member.GetString()).Distinct().Count() == value.GetArrayLength();
     }
+
+    static bool ValidEnumerationNumbers(JsonElement value, JsonElement enumeration)
+    {
+        if (value.ValueKind != JsonValueKind.Array || enumeration.ValueKind != JsonValueKind.Array) return false;
+        if (value.GetArrayLength() != enumeration.GetArrayLength() || !value.EnumerateArray().All(WholeNumber)) return false;
+        return value.EnumerateArray().Select(member => member.GetDouble()).Distinct().Count() == value.GetArrayLength();
+    }
+
+    static bool WholeNumber(JsonElement value) => value.ValueKind == JsonValueKind.Number && value.TryGetDouble(out var number) && double.IsFinite(number) && number == Math.Truncate(number);
 
     static bool ValidLiteral(GuardOperator operation, JsonElement right)
     {
@@ -90,8 +100,9 @@ public static class GuardConditions
     static bool Compare(JsonElement condition, JsonElement item, string operation)
     {
         var enumeration = Get(condition, "enumeration");
-        var left = Normalize(Resolve(Get(condition, "left"), item), enumeration);
-        var right = Normalize(Get(condition, "right"), enumeration);
+        var enumerationNumbers = Get(condition, "enumerationNumbers");
+        var left = Normalize(Resolve(Get(condition, "left"), item), enumeration, enumerationNumbers);
+        var right = Normalize(Get(condition, "right"), enumeration, enumerationNumbers);
         if (left.ValueKind == JsonValueKind.Undefined || right.ValueKind == JsonValueKind.Undefined) return false;
         if (left.ValueKind == JsonValueKind.Null || right.ValueKind == JsonValueKind.Null) return operation == "Equal" && left.ValueKind == JsonValueKind.Null && right.ValueKind == JsonValueKind.Null;
         return CompareValues(left, right, operation);
@@ -106,19 +117,20 @@ public static class GuardConditions
             _ => Numeric(left, right, operation)
         };
 
-    static JsonElement Normalize(JsonElement value, JsonElement enumeration)
+    static JsonElement Normalize(JsonElement value, JsonElement enumeration, JsonElement enumerationNumbers)
     {
         if (enumeration.ValueKind != JsonValueKind.Array || value.ValueKind == JsonValueKind.Null) return value;
-        if (Ordinal(value, enumeration.GetArrayLength(), out var ordinal)) return enumeration[ordinal];
+        if (Ordinal(value, enumerationNumbers, enumeration.GetArrayLength(), out var ordinal)) return enumeration[ordinal];
         if (value.ValueKind == JsonValueKind.String) return enumeration.EnumerateArray().FirstOrDefault(member => string.Equals(member.GetString(), value.GetString(), StringComparison.OrdinalIgnoreCase));
         return default;
     }
 
-    static bool Ordinal(JsonElement value, int length, out int ordinal)
+    static bool Ordinal(JsonElement value, JsonElement enumerationNumbers, int length, out int ordinal)
     {
         ordinal = 0;
         if (value.ValueKind != JsonValueKind.Number) return false;
         var number = value.GetDouble();
+        if (enumerationNumbers.ValueKind == JsonValueKind.Array) number = enumerationNumbers.EnumerateArray().Select(member => member.GetDouble()).ToList().IndexOf(number);
         if (number != Math.Truncate(number)) return false;
         if (number < 0 || number >= length) return false;
         ordinal = (int)number;

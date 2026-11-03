@@ -33,6 +33,16 @@ public class when_running_the_shared_corpus : Specification
     }
 
     [Fact]
+    void should_evaluate_a_typed_enum_comparison_with_declared_numbers()
+    {
+        var condition = new ComparisonGuardCondition(new("item.status"), GuardOperator.Equal, "open", ["open", "closed"])
+        {
+            EnumerationNumbers = [10, 20]
+        };
+        GuardConditions.Evaluate(condition, new { status = 10 }).ShouldEqual(true);
+    }
+
+    [Fact]
     void should_evaluate_every_shared_predicate()
     {
         foreach (var entry in _corpus.GetProperty("cases").EnumerateArray())

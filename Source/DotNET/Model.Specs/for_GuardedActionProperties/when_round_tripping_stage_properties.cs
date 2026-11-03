@@ -11,7 +11,7 @@ namespace Cratis.Scene.Model.for_GuardedActionProperties;
 public class when_round_tripping_stage_properties : Specification
 {
     const string StageProperties = """
-        {"label":"Approve","alternatives":[{"command":"Approve","condition":{"kind":"logical","operator":"And","left":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Pending","enumeration":["Pending","Approved"]},"right":{"kind":"comparison","left":{"subject":"item.amount"},"operator":"GreaterThan","right":0}},"arguments":{"id":{"subject":"item.id"}}}],"otherwise":{"outcome":"Hidden"},"navigateToScreen":"detail","navigateByParameter":"id"}
+        {"label":"Approve","alternatives":[{"command":"Approve","condition":{"kind":"logical","operator":"And","left":{"kind":"comparison","left":{"subject":"item.status"},"operator":"Equal","right":"Pending","enumeration":["Pending","Approved"],"enumerationNumbers":[10,20]},"right":{"kind":"comparison","left":{"subject":"item.amount"},"operator":"GreaterThan","right":0}},"arguments":{"id":{"subject":"item.id"}}}],"otherwise":{"outcome":"Hidden"},"navigateToScreen":"detail","navigateByParameter":"id"}
         """;
     readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
     GuardedActionProperties _properties = null!;
@@ -53,10 +53,24 @@ public class when_round_tripping_stage_properties : Specification
         json.GetProperty("otherwise").GetProperty("outcome").GetString().ShouldEqual("Execute");
     }
 
+    [Fact]
+    void should_preserve_the_four_member_constructor_and_deconstruction()
+    {
+        var (left, operation, right, enumeration) = new ComparisonGuardCondition(new("item.status"), GuardOperator.Equal, "Pending", ["Pending", "Approved"])
+        {
+            EnumerationNumbers = [10, 20]
+        };
+        left.Subject.ShouldEqual("item.status");
+        operation.ShouldEqual(GuardOperator.Equal);
+        right.ShouldEqual("Pending");
+        enumeration.ShouldEqual("Pending", "Approved");
+    }
+
     [Fact] void should_preserve_the_command() => _roundTrip.Alternatives[0].Command.ShouldEqual("Approve");
     [Fact] void should_accept_stage_properties_without_a_subject_binding() => _roundTrip.Item.ShouldBeNull();
     [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments!["id"].Subject.ShouldEqual("item.id");
     [Fact] void should_preserve_the_nested_guard() => _roundTrip.Alternatives[0].Condition.ShouldBeOfExactType<LogicalGuardCondition>();
+    [Fact] void should_preserve_declared_enumeration_numbers() => ((ComparisonGuardCondition)((LogicalGuardCondition)_roundTrip.Alternatives[0].Condition).Left).EnumerationNumbers.ShouldEqual(10d, 20d);
     [Fact] void should_preserve_interaction_branches() => _interaction.GetProperty("alternatives").GetArrayLength().ShouldEqual(1);
     [Fact] void should_preserve_an_empty_fallback() => _interaction.GetProperty("otherwise").GetArrayLength().ShouldEqual(0);
 }
