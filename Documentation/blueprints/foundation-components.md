@@ -126,12 +126,27 @@ existing boards are unchanged. Columns are the `columns` list (a literal list of
 
 ```screenplay
 component Cratis.Blueprint.Default.kanbanBoard pricingBoard
-  property columns = [{"id":"draft","label":"Draft"},{"id":"approved","label":"Approved"},{"id":"withdrawn","label":"Withdrawn"}]
+  property columns
+    item
+      id    = "draft"
+      label = "Draft"
+    item
+      id    = "approved"
+      label = "Approved"
+    item
+      id    = "withdrawn"
+      label = "Withdrawn"
   property cards from query AllPricedProducts
   property cardId = "productId"
   property cardTitle = "name"
   property cardColumn = "status"
-  property cardFields = [{"field":"sku","label":"SKU"},{"field":"price","label":"Price"}]
+  property cardFields
+    item
+      field = "sku"
+      label = "SKU"
+    item
+      field = "price"
+      label = "Price"
 ```
 
 `swimlane: assignee` lays the board out in a lane for each person, across the same columns: lanes appear in the order the people first appear in the cards,
