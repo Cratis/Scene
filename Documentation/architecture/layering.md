@@ -3,9 +3,9 @@ title: Layering and seams
 description: The six layers a modeled application passes through, the rule that keeps them apart, and the invariants CI enforces so they stay that way.
 ---
 
-A Screenplay document describes an application. Something has to turn that description into pixels a user can
-click. Scene is the middle of that journey, and the whole design rests on one rule about who is allowed to know
-what.
+A Screenplay document describes an application, but it does not say how a selected order becomes a command
+invocation in a browser. Scene separates those responsibilities: the model describes the UI, the engine
+resolves its data and decisions, and the renderer uses the host APIs to make them happen.
 
 ## The layers
 
@@ -47,6 +47,18 @@ Packages and blueprints         core → components → primereact/tailwind → 
 The existing `NavBar` is the pattern in miniature: it takes a `renderRoute` callback rather than building a path,
 because at that layer the path is not yet knowable. Every new surface follows it.
 
+The selected-order example in Guarded actions and interactions follows the same boundary. The renderer resolves
+an `item` binding from the `orders` component's `selectedItem` output. The engine checks the ordered conditions
+against that item and selects a command; it does not send a request. With an `InteractionScope`, the renderer
+calls the supplied dispatcher's `executeCommand` and, only after success, its `navigate`. Without that scope,
+the renderer emits a window event for the host to handle. In either case, the host executes the command and
+handles navigation; the model carries command and screen references rather than routes.
+
+A native form takes another execution path, described in Command responses and form continuations. Arc owns
+the command execution, validation, authorization and exception feedback. Scene receives the native success
+response and runs the form's `onSubmit` actions without executing the command again. This is an alternative
+to dispatching the command through an interaction, not an extra adapter every command needs.
+
 ### What "platform-neutral" buys
 
 It is tempting to read the seam rule as ceremony — the application is a web application, so why should the
@@ -85,10 +97,11 @@ error  I4: no URL is constructed outside a renderer package. The model and the e
        references and parameter maps; a renderer turns those into a path.
 ```
 
-The same code in `react/**` lints clean. That asymmetry *is* the seam.
+The same code in `react/**` lints clean because the renderer may use host APIs; the model and engine may not.
 
-When the engine genuinely needs an effect, the answer is an injected seam, not an exception: a transport for
-data, a dispatcher for actions, a store for state. The engine sequences; the renderer performs.
+When the engine needs data, action execution or state storage, it uses an injected transport, dispatcher or
+store rather than reaching into the host itself. The engine sequences the work; the renderer supplies the
+implementations that perform it.
 
 ## Where decisions are recorded
 

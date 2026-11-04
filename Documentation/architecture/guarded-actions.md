@@ -1,12 +1,14 @@
 # Guarded actions and interactions
 
-A guarded action chooses the first command whose structured condition matches the current item. Scene renders one button, not one per branch. Selection is a presentation decision, **not authorization**: the host must still validate and authorize the command.
+When the command for a selected item depends on its state, a guarded action chooses the first command whose structured condition matches. Scene renders one button, not one per branch. Use a guarded command action for that single-command choice, or a guarded interaction when a gesture needs to select a whole action list.
+
+Branch selection does not decide how a command reaches the host. A guarded command action inside an `InteractionScope` uses its dispatcher; without that scope, it emits a window event that the host must handle. Choose the execution path alongside the component shape. Selection is a presentation decision, **not authorization**: the host must still validate and authorize the command.
 
 ## Guarded command action
 
 Use `core:guarded-action`. Existing Stage documents using `core:action` with an `alternatives` property are mapped to the same component. An ordinary `core:action` with `command` is unchanged.
 
-The open `properties` bag has this shape:
+In this example, the button reads the selected order and offers `ApproveOrder` when its status matches. The open `properties` bag has this shape:
 
 ```json
 {
@@ -36,11 +38,13 @@ The open `properties` bag has this shape:
 }
 ```
 
-`item` is a normal Scene binding, resolved reactively by the renderer. When it is omitted, the current render data context is the subject. Scene never guesses a row from a query's first result. No selected item means no action, **even with an executable fallback**.
+The `item` binding supplies the order used both to choose `ApproveOrder` and to resolve its `orderId` argument. Here it reads the `orders` component's `selectedItem` output. Like other Scene bindings, it is resolved reactively by the renderer. When `item` is omitted, the current render data context is the subject. Scene never guesses a row from a query's first result. No selected item means no action, **even with an executable fallback**.
 
 Alternatives are checked in order; only the first match is selected. Omit `otherwise`, or use `{"outcome":"Hidden"}`, to hide the button when none matches. An executable fallback uses `{"outcome":"Execute","command":"ReviewOrder","arguments":{"orderId":{"subject":"item.id"}}}`.
 
-Arguments remain `{ "subject": "item.field" }` references, rather than binding expressions. Scene resolves them only at invocation. The dispatcher receives the selected `item` alongside the explicit arguments; an explicitly mapped argument named `item` takes precedence. Unresolved explicit arguments refuse execution. The button has `data-scene-command`, disables while its command is pending, and displays failures. A changed branch at click time causes a re-render without executing the stale choice.
+Arguments remain `{ "subject": "item.field" }` references, rather than binding expressions. Scene resolves them only at invocation. The dispatcher receives the selected `item` alongside the explicit arguments; an explicitly mapped argument named `item` takes precedence. Unresolved explicit arguments refuse execution.
+
+Selection can change between rendering the button and clicking it. A changed branch at click time causes a re-render without executing the stale choice. The button has `data-scene-command`, disables while its command is pending, and displays failures.
 
 With an `InteractionScope`, Scene calls `dispatcher.executeCommand(command, args)` and navigates **only after a successful outcome**, using `dispatcher.navigate(screen, { [navigateByParameter]: item[navigateByParameter] })`. Without a navigation parameter, the arguments are empty. Failure does not select a different branch or run the fallback.
 
@@ -57,9 +61,38 @@ Without an interaction scope, Scene dispatches `cratis.scene.command` on `window
 }
 ```
 
-That event is the host's execution seam. The host owns completion, failure reporting and navigation after success; Scene does not infer success from event delivery. The host must also prevent duplicate submissions while its asynchronous event handler runs.
+The host handles this event and executes the command. It owns completion, failure reporting and navigation after success; Scene does not infer success from event delivery. The host must also prevent duplicate submissions while its asynchronous event handler runs.
 
 C# callers can use `GuardedActionProperties.Read(externalComponent)` and `ToProperties()` from `Cratis.Scene.Model.Guards` instead of hand-reading a JSON-backed dictionary. The matching TypeScript interfaces are exported by `@cratis/scene.model`.
+
+## Guarded interaction binding
+
+Use a guarded interaction when a gesture selects a whole action list instead of a single command. The same ordered selection applies, but the selected branch supplies the actions to run:
+
+```json
+{
+  "trigger": { "kind": "Click" },
+  "actions": [],
+  "alternatives": [
+    {
+      "condition": {
+        "kind": "comparison",
+        "left": { "subject": "item.canApprove" },
+        "operator": "Equal",
+        "right": true
+      },
+      "actions": [{ "kind": "ExecuteCommand", "command": "ApproveOrder" }]
+    }
+  ],
+  "otherwise": [{ "kind": "OpenDialog", "dialogTemplate": "ReviewOrder" }]
+}
+```
+
+Here, a matching `item.canApprove` condition selects the list containing `ApproveOrder`; an evaluable no-match selects the list that opens `ReviewOrder`. Set `actions` to an empty list when supplying `alternatives`; combining a nonempty `actions` list with alternatives is refused. The gesture's subject comes from `InteractionContext.subject()` when supplied, then `resolve({path: 'item'})`. React supplies the render data context when no explicit subject callback exists.
+
+The engine reads the subject once, selects once, and runs the chosen list with the existing sequencing rules. A command failure never falls through to another branch. With no subject, nothing runs, including `otherwise`. With an evaluable no-match and no `otherwise`, nothing runs. An unknown predicate reports an `unevaluableCondition` finding, with `SCENE-GUARD-001`, and does not execute otherwise.
+
+The existing binding-expression `condition` remains unchanged, including host-owned `$guard` resolution. Existing `actions`-only bindings and the three-parameter C# `InteractionBinding` constructor remain available.
 
 ## Guard vocabulary
 
@@ -90,35 +123,6 @@ Hosts can opt in on their outermost interaction scope:
 Nested scopes inherit `guards` unless they supply their own setting. Strict `Contains` requires a string literal. With that literal, a null or absent field evaluates to false, allowing a fallback or `otherwise`, as specified by Screenplay `Documentation/screenplay/screens.md:86–90`. Non-null field values must be strings: numbers, Booleans, objects and arrays are unevaluable, as are non-string literals, even inside a logical expression or a later alternative after a match. An unevaluable guard means a disabled guarded action with `SCENE-GUARD-001`, or an `unevaluableCondition` finding for an interaction; nothing runs, including `otherwise`.
 
 Direct engine callers can pass `GuardEvaluationOptions` as the final argument: `selectGuardedInteraction(alternatives, item, hasOtherwise, { strictOperands: true })` or `selectGuardedAction(alternatives, item, otherwise, { strictOperands: true })`. `canEvaluateGuard` and `evaluateGuard` accept the same options. Without options, or without an `InteractionScope` (including the window-event command path), generic default semantics apply. The C# mirror covers the default mode only.
-
-## Guarded interaction binding
-
-An interaction can select a whole action list instead of a single command:
-
-```json
-{
-  "trigger": { "kind": "Click" },
-  "actions": [],
-  "alternatives": [
-    {
-      "condition": {
-        "kind": "comparison",
-        "left": { "subject": "item.canApprove" },
-        "operator": "Equal",
-        "right": true
-      },
-      "actions": [{ "kind": "ExecuteCommand", "command": "ApproveOrder" }]
-    }
-  ],
-  "otherwise": [{ "kind": "OpenDialog", "dialogTemplate": "ReviewOrder" }]
-}
-```
-
-Set `actions` to an empty list when supplying `alternatives`; combining a nonempty `actions` list with alternatives is refused. The gesture's subject comes from `InteractionContext.subject()` when supplied, then `resolve({path: 'item'})`. React supplies the render data context when no explicit subject callback exists.
-
-The engine reads the subject once, selects once, and runs the chosen list with the existing sequencing rules. A command failure never falls through to another branch. With no subject, nothing runs, including `otherwise`. With an evaluable no-match and no `otherwise`, nothing runs. An unknown predicate reports an `unevaluableCondition` finding, with `SCENE-GUARD-001`, and does not execute otherwise.
-
-The existing binding-expression `condition` remains unchanged, including host-owned `$guard` resolution. Existing `actions`-only bindings and the three-parameter C# `InteractionBinding` constructor remain available.
 
 ## Stage adoption
 
