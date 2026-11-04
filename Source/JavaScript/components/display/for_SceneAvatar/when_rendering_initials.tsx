@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import { SceneElementView } from '@cratis/scene.react';
 import { cratisComponents } from '../../cratisComponents';
 import { externalComponent } from '../../given';
@@ -27,8 +27,30 @@ describe('when rendering an avatar from initials', () => {
         </>);
         document.querySelectorAll('style[data-href="scene-avatar-square"]').length.should.equal(1);
     });
-    it('should use the label as the alternative text of a picture', () => {
-        renderAvatar({ label: 'Ada North', image: 'https://example.test/ada.png' });
-        screen.getByRole('img', { name: 'Ada North' }).getAttribute('src')!.should.equal('https://example.test/ada.png');
+    describe('with a picture', () => {
+        const probes: { onload: (() => void) | null; onerror: (() => void) | null; src: string }[] = [];
+        const originalImage = globalThis.Image;
+        beforeEach(() => {
+            probes.length = 0;
+            globalThis.Image = class { onload: (() => void) | null = null; onerror: (() => void) | null = null; src = ''; constructor() { probes.push(this); } } as unknown as typeof Image;
+        });
+        afterEach(() => { globalThis.Image = originalImage; });
+
+        it('should show the label while the picture loads', () => {
+            const avatar = renderAvatar({ label: 'AN', image: 'https://example.test/ada.png' });
+            avatar.textContent!.should.equal('AN');
+            (avatar.querySelector('img') === null).should.equal(true);
+        });
+        it('should show the label when the picture fails to load', async () => {
+            const avatar = renderAvatar({ label: 'AN', image: 'https://example.test/missing.png' });
+            await act(async () => probes[0].onerror?.());
+            avatar.textContent!.should.equal('AN');
+            (avatar.querySelector('img') === null).should.equal(true);
+        });
+        it('should use the label as the alternative text once the picture has loaded', async () => {
+            renderAvatar({ label: 'Ada North', image: 'https://example.test/ada.png' });
+            await act(async () => probes[0].onload?.());
+            screen.getByRole('img', { name: 'Ada North' }).getAttribute('src')!.should.equal('https://example.test/ada.png');
+        });
     });
 });
