@@ -181,6 +181,23 @@ export const InContext: Story = {
     },
 };
 
+/** The display components - tag, avatar, message and progress bar - as a status panel, with PrimeReact's severity and shape vocabulary. */
+export const Display: Story = {
+    args: {
+        element: component('status', 'Cratis.Components:page', { title: 'Order status', showTitle: true, panel: true }, {
+            content: [
+                component('shipped', 'Cratis.Components:tag', { value: 'Shipped', severity: 'success' }),
+                component('overdue', 'Cratis.Components:tag', { value: 'Overdue', severity: 'warning', rounded: true }),
+                component('owner', 'Cratis.Components:avatar', { label: 'AN', size: 'large', shape: 'circle' }),
+                component('approver', 'Cratis.Components:avatar', { label: 'BO', size: 'large', shape: 'square' }),
+                component('note', 'Cratis.Components:message', { severity: 'info', text: 'The shell needs its stylesheet imported once, at the host.' }),
+                component('failure', 'Cratis.Components:message', { severity: 'error', text: 'The payment was declined.' }),
+                component('capacity', 'Cratis.Components:progressBar', { value: 68, label: 'Warehouse capacity' }),
+            ],
+        }),
+    },
+};
+
 /**
  * A Scene theme driving `@cratis/components` through the token bridge.
  *

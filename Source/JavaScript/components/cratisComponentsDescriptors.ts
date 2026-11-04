@@ -103,6 +103,46 @@ const toolbarButtonProperties: PropertyDescriptor[] = [
     },
 ];
 
+const choicesOf = (names: string[]) => names.map(value => ({ value, label: value.charAt(0).toUpperCase() + value.slice(1) }));
+
+const tagProperties: PropertyDescriptor[] = [
+    { path: 'value', label: 'Value', group: 'Content', valueType: PropertyValueType.String, description: 'The text the tag shows.' },
+    {
+        path: 'severity', label: 'Severity', group: 'Presentation', valueType: PropertyValueType.Enum,
+        choices: choicesOf(['secondary', 'success', 'info', 'warn', 'danger', 'contrast']),
+    },
+    { path: 'rounded', label: 'Rounded', group: 'Presentation', valueType: PropertyValueType.Boolean, default: false },
+    { path: 'icon', label: 'Icon', group: 'Content', valueType: PropertyValueType.Icon, editorKind: 'icon' },
+];
+
+const avatarProperties: PropertyDescriptor[] = [
+    { path: 'label', label: 'Label', group: 'Content', valueType: PropertyValueType.String, description: 'The initials shown without an image, and the image\'s alternative text.' },
+    { path: 'image', label: 'Image', group: 'Content', valueType: PropertyValueType.String, description: 'The URL of a picture; the label shows while there is none.' },
+    { path: 'icon', label: 'Icon', group: 'Content', valueType: PropertyValueType.Icon, editorKind: 'icon' },
+    {
+        path: 'size', label: 'Size', group: 'Presentation', valueType: PropertyValueType.Enum, default: 'normal',
+        choices: choicesOf(['normal', 'large', 'xlarge']),
+    },
+    {
+        path: 'shape', label: 'Shape', group: 'Presentation', valueType: PropertyValueType.Enum, default: 'square',
+        choices: choicesOf(['square', 'circle']),
+    },
+];
+
+const messageProperties: PropertyDescriptor[] = [
+    { path: 'text', label: 'Text', group: 'Content', valueType: PropertyValueType.String, description: 'The message shown.' },
+    {
+        path: 'severity', label: 'Severity', group: 'Presentation', valueType: PropertyValueType.Enum, default: 'info',
+        choices: choicesOf(['info', 'success', 'warn', 'error', 'secondary', 'contrast']),
+    },
+];
+
+const progressBarProperties: PropertyDescriptor[] = [
+    { path: 'value', label: 'Value', group: 'Content', valueType: PropertyValueType.Number, description: 'Completion, 0 to 100. Without one the bar is indeterminate.' },
+    { path: 'label', label: 'Label', group: 'Content', valueType: PropertyValueType.String, default: 'Progress', description: 'The accessible name: what is progressing.' },
+    { path: 'showValue', label: 'Show value', group: 'Presentation', valueType: PropertyValueType.Boolean, default: true },
+];
+
 const describedCratisComponents: ComponentDescriptor[] = [
     { component: key('dataTable'), displayName: 'Data table', properties: dataTableProperties },
     { component: key('table'), displayName: 'Table', properties: dataTableProperties },
@@ -121,6 +161,10 @@ const describedCratisComponents: ComponentDescriptor[] = [
         }],
     },
     { component: key('toolbarButton'), displayName: 'Toolbar button', properties: toolbarButtonProperties },
+    { component: key('tag'), displayName: 'Tag', properties: tagProperties },
+    { component: key('avatar'), displayName: 'Avatar', properties: avatarProperties },
+    { component: key('message'), displayName: 'Message', properties: messageProperties },
+    { component: key('progressBar'), displayName: 'Progress bar', properties: progressBarProperties },
 ];
 
 /** The `Cratis.Components` descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
