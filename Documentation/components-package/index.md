@@ -6,14 +6,13 @@ description: The Scene package that exposes @cratis/components' Arc-bound data, 
 `Cratis.Components` is the Scene package that turns [`@cratis/components`](https://www.npmjs.com/package/@cratis/components)
 — Cratis' React component library — into names a screen can resolve.
 
-Without it, a `.play` document that says "show a table of invoices" resolves `table` to PrimeReact's
-`DataTable`: a grid that renders rows it is handed, and knows nothing about where they came from. You still
-have to write the query, the paging, the sorting and the filtering by hand, in code the screen cannot see.
+In a profile that uses PrimeReact, a `.play` document can resolve `table` to PrimeReact's `DataTable`.
+That grid receives rows from its caller; the host must supply the query, paging, sorting and filtering.
 
-With it, `table` resolves to `DataTableForQuery`, and the screen names a query instead. The paging is
-server-side, the sorting and filtering go back to the backend, and the whole thing is one element in the
-model. The same swap happens for the form, the dialog, and the whole list page — that is the relief this
-package delivers.
+When this package has priority, `table` resolves to `DataTableForQuery` instead. The screen names a query,
+and the composite handles server-side paging and sends sorting and filtering to the backend. Forms,
+dialogs and list pages follow the same pattern: the screen names the work, and the host supplies the
+query or command class.
 
 ## What is in the box
 
@@ -34,15 +33,15 @@ Every name, with the properties and slots it reads, is in the [component referen
 ## It is a component library, and only that
 
 The package declares `ComponentLibrary`, and its `layouts`, `screenTemplates`, `dialogTemplates` and `themes`
-lists are all empty. That is a statement, not an oversight:
+lists are all empty. Layout and theme selection belong to other packages:
 
 - **No layouts or templates.** Those are decisions about what an application looks like as a whole, and they
   belong to a [blueprint](../blueprints/index.md). This package provides the Arc-bound composites a template
-  is *built from* — so a blueprint can place a `dataPage` in a slot and configure it, rather than this
-  package shipping one opinionated data page nobody can rearrange.
+  is *built from*. A blueprint can place a `dataPage` in a slot and configure it without this package
+  choosing the application's layout.
 - **No themes.** `@cratis/components` has no palette of its own. It reads a `--cratis-*` variable layer that
-  resolves whatever theme is active underneath it. Shipping a theme here would be this library asserting a
-  look it was specifically built not to have. See [theming through design tokens](theming.md).
+  resolves the active theme's values, so an application can change its palette without replacing the
+  components. See [theming through design tokens](theming.md).
 
 ## What it needs underneath it
 
@@ -57,9 +56,10 @@ ui profile Desktop
     Cratis.Components
 ```
 
-`@cratis/components` is built on React Aria Components; it needs no other component library. Its styling is a
-compiled Tailwind utility sheet plus the `--cratis-*` token layer, so list it without Tailwind and everything
-renders unstyled. It declares that dependency:
+`@cratis/components` is built on React Aria Components, so the profile above needs no other component
+library. Its styling combines a compiled Tailwind utility sheet with the `--cratis-*` token layer.
+The tokens supply theme values, not the structural utility styles; the package declares Tailwind as a
+dependency so those styles are available:
 
 ```typescript
 dependencies: [
@@ -79,8 +79,10 @@ Most of what this library offers is **Arc-bound**. `DataPage`, both data tables,
 A Scene element carries a `properties` bag of plain values and named slots — there is no way to put a
 TypeScript class in one.
 
-The [binding registry](binding-registry.md) is how a name in a screen becomes that class. Read that page
-before you build anything on this package; everything else here assumes it.
+The [binding registry](binding-registry.md) is how a name in a screen becomes that class. Host integrators
+should start there, then use the component reference to find the binding properties each adapter reads.
+Package authors should start with Manifest authority to understand declaration ownership and host approval,
+then read naming and shadowing to see how their components are selected.
 
 ## Where to go next
 

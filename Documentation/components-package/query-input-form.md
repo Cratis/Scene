@@ -3,10 +3,14 @@ title: Query input form
 description: An opt-in web form for explicit string arguments to an optional-single Arc query.
 ---
 
-`Cratis.Components:queryInputForm` owns local string drafts and commits them only on form submission
-(the submit button or native Enter submission). It uses the same private `SingleResultRuntime` as
-`singleResult`, not another executor. No default screen, platform-neutral Form schema, expression
-language, command context or cross-component binding is introduced.
+Use `Cratis.Components:queryInputForm` when a user needs to enter string arguments, submit an optional-single
+Arc query, and read a scalar result. The form owns the drafts and commits them only on submission through
+the submit button or native Enter submission.
+
+It uses the same private `SingleResultRuntime` as `singleResult`, not another executor. The form owns
+editing and submission; the separate result adapter takes arguments supplied by its host. Neither adds a
+default screen, platform-neutral Form schema, expression language, command context or cross-component
+binding.
 
 ## Host and Scene payload
 
@@ -36,8 +40,9 @@ const properties = {
 Use the **exact case-sensitive query name and argument names** emitted by the proxy. There is no route
 in the form, no guessed project, no all-projects fallback and no parameter inference. It requires a
 zero-argument native optional-single proxy (`enumerable === false`). Enumerable proxies fail before
-`perform`. The host supplies Arc/Arc React 22.16.1 or compatible peers as for `singleResult`, plus the
-matching Fundamentals peer (7.19.2 or compatible, already required by Arc) for `Guid` constructor identity.
+`perform`. The host supplies Arc/Arc React ^22.19.1 peers as for `singleResult`, plus the
+matching Fundamentals peer for `Guid` constructor identity. The version 7.19.2 is retained reference
+context, not a verified compatibility floor; match the Fundamentals dependency of the selected Arc runtime.
 
 | Property | Contract |
 |---|---|
@@ -63,21 +68,25 @@ supported for `type: 'string'`; numeric, boolean, unknown/missing, duplicate or 
 fail visibly before `perform`/HTTP. This is a bounded form mapping check, not type inference or a change
 to `singleResult`'s host-supplied arguments. Strings are never converted into Guid objects. A generated
 `projectId: Guid` with `new ParameterDescriptor('projectId', Guid, false)` is supported unchanged.
-Arc 22.16.1 does **not** enforce descriptor argument types or GUID string format in native `perform`.
-If format enforcement is desired, Stage must supply an explicit input `pattern` (or the proxy/backend
-must validate it); a nonempty malformed GUID can otherwise reach HTTP unchanged.
+The historical Arc 22.16.1 verification found that native `perform` did **not** enforce descriptor argument
+types or GUID string format; that observation is not a present compatibility certification.
+For format enforcement, Stage must supply an explicit input `pattern` (or the proxy/backend must validate
+it); the form does not convert a nonempty malformed GUID, so it can otherwise reach HTTP unchanged.
 
 ## Submission and lifetime
+
+Draft editing and validation happen before a query is committed:
 
 - Controls are accessible, controlled native web text inputs with associated labels, required state,
   inline validation alerts, `aria-invalid` and `aria-describedby`. Components' `InputTextField` is wrapped
   in `asCommandFormField` and requires command context; it is deliberately not repurposed with a fake command.
 - Editing never imports the execution runtime or calls a query. Submission validates required values and
   declared formats first. Invalid inputs stay visible and make no native `perform` or HTTP call.
+
+A valid submit commits a snapshot; the native proxy still owns execution:
+
 - Valid submission creates a **new frozen argument object** containing only the declared exact names and
   strings. Repeated submission of identical values explicitly retries, including a pending request.
-- Editing any draft immediately hides a settled result and unmounts/cancels a pending runtime. Editing
-  back to the previous string does not resurrect that result: another submission is required.
 - Native `QueryFor.perform` still owns proxy validation, required arguments, routing, HTTP and
   deserialization. A generated-validator rejection is visible as `Unable to load result`, with no HTTP;
   drafts remain editable. Scene does not expose server exception details or duplicate proxy/business
@@ -85,6 +94,11 @@ must validate it); a nonempty malformed GUID can otherwise reach HTTP unchanged.
 - Result, `Not found`, loading/failure, Arc context changes, abort and stale-response suppression are the
   existing `singleResult` behavior. Result strings are escaped text; only own string/finite-number/boolean
   fields are displayed. Successful missing models are not collections.
+
+Edits and host changes determine how long that committed result remains usable:
+
+- Editing any draft immediately hides a settled result and unmounts/cancels a pending runtime. Editing
+  back to the previous string does not resurrect that result: another submission is required.
 - Equivalent host rerenders retain drafts. A changed query name/input declaration/result field starts a
   fresh session. Disabling the Scene element, losing the binding or unmounting cancels and discards it.
   A replacement constructor for the same source identity reexecutes committed arguments through the
@@ -117,7 +131,7 @@ and cancels immediately if a collision appears.
 
 ## Verification boundary
 
-The regression suite renders the real `SceneElementView` with native Arc 22.16.1 `QueryFor.perform`,
+The historical regression suite renders the real `SceneElementView` with native Arc 22.16.1 `QueryFor.perform`,
 replacing only HTTP. It covers drafts, snapshots, validation, retry, exact/missing/ambiguous bindings,
 result/not-found, cancellation and stale completion, including the canonical generated ProjectById
 shape with Guid descriptors, decorated ProjectSummary, empty-object default and native inherited

@@ -3,7 +3,8 @@ title: What this package does not cover
 description: The parts of @cratis/components Cratis.Components deliberately does not expose, and the reasoning behind each omission.
 ---
 
-Every omission below is a decision. None of them is "not done yet".
+The omissions below keep specialized renderers, application behavior and validation with the layer that
+owns them. Each section explains what to use instead.
 
 ## `PivotViewer`
 
@@ -11,12 +12,11 @@ Every omission below is a decision. None of them is "not done yet".
 
 It is a canvas-rendered faceted browser built on [pixi.js](https://pixijs.com), a full WebGL rendering
 engine. Declaring the name would pull that engine into the module graph of every application that lists this
-package — including Studio's design-time preview, where a canvas of animated tiles has nothing to show
-because there is no data to facet. The cost is a heavy renderer in every bundle; the benefit at design time
-is zero.
+package, including Studio's design-time preview even when there is no data to facet. Keeping it outside
+the package lets an application choose that renderer only where it needs the faceted view.
 
-An application that wants a pivot viewer imports it directly and places it in a slot. That is the right shape
-for a component this specialized: it is a destination, not a building block.
+An application that wants a pivot viewer imports it directly and places it in a slot. The application then
+owns the specialized renderer and the data it needs.
 
 ## `card`
 
@@ -28,19 +28,20 @@ with a weaker implementation is a regression, so `card` falls through to `core` 
 `dataTable` and `dataPage` take their columns from the `content` slot, and this package declares no `column`
 name.
 
-A PrimeReact `Column` is a configuration element rather than a rendered one, and it belongs to the PrimeReact
-package. Declaring a second, identical `column` here would create a shadow with nothing behind it — priority
-resolution doing work for no reason.
+When the composition uses PrimeReact columns, its `Column` is a configuration element rather than a
+rendered one and comes from the PrimeReact package. This package does not declare another `column` merely
+to duplicate it. Choose the column configuration supported by the renderer in use. This package does
+not require PrimeReact for every table or guarantee that another renderer accepts the same configuration.
 
 ## Event handlers
 
 A screen configures a component through `properties` and fills it through `slots`. There is no seam yet for
 binding a click to an action, so adapters do not expose `onClick`, `onSelectionChange` or `onNavigate`.
 
-Where a component's callback drives its *own* visible state, the adapter holds that state so the component
-behaves like the component it is — the breadcrumb trail truncates when you click a crumb, the schema editor
-accepts edits, the time machine scrubs. That state is local to the preview. A host that needs the result
-reads it off its own model.
+Callbacks that change only the component's *own* visible state remain local to the adapter: clicking a
+breadcrumb truncates the trail, the schema editor accepts edits, and the time machine scrubs. That preview
+state is not an application action or a persisted model change. A host that needs the result reads it from
+its own model.
 
 Where a callback would reach outside the component — navigating, executing something — the adapter exposes
 nothing rather than a handler that quietly does nothing.
@@ -59,8 +60,8 @@ property bag can carry, and pretending otherwise would be the wrong seam — tha
 [screen template](../blueprints/screen-templates.md).
 
 Entries missing an `id`, a `label` or a parseable `timestamp` are dropped rather than defaulted. A version
-invented at the epoch would not be a slightly wrong entry; it would silently reorder every real one around
-it. A dropped entry is visibly one item short, and a fabricated one is a timeline that lies.
+given an invented epoch timestamp would appear in the wrong position among the real entries. Dropping
+an incomplete entry leaves the list visibly short without presenting a fabricated history.
 
 ## Where to go next
 
