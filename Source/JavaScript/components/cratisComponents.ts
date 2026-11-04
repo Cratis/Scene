@@ -23,6 +23,7 @@ import {
 import { SceneBusyIndicatorDialog, SceneCommandDialog, SceneConfirmationDialog, SceneDialog, SceneStepperCommandDialog } from './dialogs';
 import { SceneDropdown, SceneErrorBoundary, SceneIcon, SceneTooltip } from './common';
 import { SceneFilterPanel, SceneObjectContentEditor, SceneObjectNavigationalBar, SceneSchemaEditor, SceneTimeMachine } from './editors';
+import { SceneAvatar, SceneMessage, SceneProgressBar, SceneTag } from './display';
 import { SceneToolbar, SceneToolbarButton, SceneToolbarGroup, SceneToolbarSeparator } from './toolbar';
 
 /**
@@ -80,6 +81,11 @@ export const cratisComponents: ComponentRegistry = {
     [componentRegistryKey(cratisComponentsPackageName, 'tooltip')]: SceneTooltip,
     [componentRegistryKey(cratisComponentsPackageName, 'dropdown')]: SceneDropdown,
     [componentRegistryKey(cratisComponentsPackageName, 'errorBoundary')]: SceneErrorBoundary,
+
+    [componentRegistryKey(cratisComponentsPackageName, 'tag')]: SceneTag,
+    [componentRegistryKey(cratisComponentsPackageName, 'avatar')]: SceneAvatar,
+    [componentRegistryKey(cratisComponentsPackageName, 'message')]: SceneMessage,
+    [componentRegistryKey(cratisComponentsPackageName, 'progressBar')]: SceneProgressBar,
 
     [componentRegistryKey(cratisComponentsPackageName, 'objectContentEditor')]: SceneObjectContentEditor,
     [componentRegistryKey(cratisComponentsPackageName, 'objectNavigationalBar')]: SceneObjectNavigationalBar,

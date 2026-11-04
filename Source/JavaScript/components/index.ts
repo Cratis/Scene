@@ -8,6 +8,7 @@ export * from './data';
 export * from './forms';
 export * from './dialogs';
 export * from './common';
+export * from './display';
 export * from './editors';
 export * from './toolbar';
 export * from './cratisComponents';
