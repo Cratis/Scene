@@ -3,12 +3,21 @@ title: Ship your own blueprint
 description: Build and publish a blueprint package - the manifest, the bundle, and the specs that stop the two from drifting apart.
 ---
 
-You want your own application shape: your navigation, your page shapes, your palette. That is a blueprint,
-and it is a package like any other.
+A blueprint author packages an application's visual structure for other applications to use. That can mean defining a shell and
+its shared page shapes, or building a domain's screens on a foundation that already supplies them. Decide which you need before
+creating layouts or components: a domain blueprint does not need to rebuild its foundation.
 
 This guide assumes you have built a React package before and know what a `ui profile` is. If you want to
 understand *why* blueprints are a separate package kind first, read
 [understanding blueprints](./understanding-blueprints.md).
+
+For a foundation blueprint, follow the numbered steps below, choosing the shell with [the root template](root-template.md) and the
+page arrangements with [the template set](template-set.md). If you want domain-specific screens without a new shell, go to
+[A domain blueprint](#a-domain-blueprint); that route reuses a foundation rather than repeating its implementation.
+
+This is package authoring in Scene's model-first layer. The model declares what tooling can inspect, while the bundle
+supplies what a renderer loads. The checks here concern those package contents and their gallery; they do not establish that Stage
+emits an application from them or that a Studio host integrates them.
 
 ## What you are producing
 
@@ -141,7 +150,8 @@ export const myBlueprint: ScenePackageBundle = {
 
 ## 6. Prove the two halves agree
 
-This is the step that is tempting to skip and expensive to skip.
+Validate the bundle against its manifest before another application loads it. The check below reports declarations that have no
+matching implementation or definition, and component registrations that the manifest does not declare.
 
 ```ts
 import { validatePackageBundle } from '@cratis/scene.react';
@@ -155,10 +165,10 @@ describe('when validating the bundle', () => {
 });
 ```
 
-A manifest promising a component the bundle never registered renders as a dashed red box somewhere deep
-inside a screen, a long way from the declaration that caused it. A component registered but not declared is
-invisible to `resolveComponentName`, so no screen can ever name it. Both are silent, which is why every
-blueprint runs this.
+When the check reports a mismatch, repair the manifest or the bundle at that boundary. For a missing implementation, check the
+registered component name; for a missing layout or template, check that its definition is included in the bundle. Resolve the package
+mismatch before tracing a screen's name through `resolveComponentName`. An empty problem list confirms these declaration checks,
+not that every gallery arrangement has rendered correctly.
 
 Three more checks are worth having, and each one caught something real while the default blueprint was
 being built:
@@ -174,9 +184,10 @@ being built:
 
 Ship real `Screen` instances alongside your templates, and boot them through the real engine.
 
-This costs almost nothing and buys something specific: when a component name in a template is wrong, the
-gallery is where it goes red - during *your* specs, rather than in somebody's application three weeks
-later.
+Use the gallery to inspect the screens that consume your templates, not just the declarations that name them. Check the chosen
+layout, the template's slots and the content that fills them. If a component is unresolved, compare the name used by the template
+with the package declarations and the registry used by the preview before changing the arrangement. This is a separate check from
+validating the bundle.
 
 ## Style it against the tokens
 
@@ -194,6 +205,11 @@ components and themes, and adds what is particular to the domain: templates, a *
 [The CRM blueprint](crm-blueprint.md) is the worked example of everything below.
 
 ### Scaffold it
+
+The scaffolder belongs to the Scene workspace, so use this route from a Scene source checkout with its Node and Yarn tooling, not
+from an application's package directory. Choose an unused domain name first: the CRM workspace already exists in this repository,
+and the generator refuses to overwrite an existing directory. The block below shows that worked example's names and paths; adapt
+them consistently for your own domain rather than trying to create another CRM package.
 
 ```bash
 yarn new-blueprint crm "CRM" "Leads, accounts and deals for a sales team."

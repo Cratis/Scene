@@ -4,7 +4,11 @@ description: Every screen template and dialog template the default blueprint shi
 ---
 
 The default blueprint ships thirty-six screen templates (the eight [foundation templates](./foundation-templates.md), the four [auth and state screens](./foundation-templates.md#auth-and-state-screens) and twenty-four earlier ones) and seven dialog templates (the three earlier ones and the four [foundation dialogs](./foundation-templates.md#dialogs)). Each screen template
-has a matching `Screen` in the gallery, so every row below is something you can boot and look at.
+has a matching `Screen` in the gallery, so you can inspect an arrangement before filling its slots in your application.
+
+Use this catalog after choosing the application's shell. The foundation set is the starting point for a new blueprint; the earlier
+names remain available for screens that already use them. Choose a page shape by the content it needs to arrange, then check its
+layout and slot names in the tables below. Those slots are the boundary between the template's arrangement and the content you author.
 
 ## The foundation set
 
