@@ -11,6 +11,11 @@ that does not exist yet. Scene is where that description becomes a structure a r
 where the decisions that make it concrete (which component library, which visual theme, which application
 shell) are made explicitly rather than assumed.
 
+## Render your first screen
+
+**[Use the default blueprint](blueprints/getting-started.md)** to render a gallery screen in an application
+shell, switch its layout mode, and change its theme. Start there before exploring the model and engine below.
+
 ## The three halves
 
 Scene is deliberately split so that nothing platform-specific can leak into the model:
@@ -39,7 +44,7 @@ Four words carry most of the weight, and they are easy to confuse. They are not 
 ## Packages
 
 A `ui profile` lists packages by name and resolves component names against them in priority order. A
-[package](packages/index.md) is the declaration behind such a name: what it contributes, and what else has to
+[package](package-hosting.md) is the declaration behind such a name: what it contributes, and what else has to
 be active for it to work.
 
 - A **component library** declares component names — PrimeReact, Cratis Components, and the built-in `core`
