@@ -11,11 +11,10 @@ You need a React application, `@cratis/scene.react`, and the blueprint itself.
 
 ## Install and load the stylesheet
 
-The blueprint's shell is hand-written CSS - it predates any application-shell primitive to lean on -
-so the stylesheet has to be loaded once, at your entry point, along with PrimeReact's own.
+Load the blueprint's shell CSS and the PrimeIcons icon font stylesheet once at your entry point. The
+`primeicons` package must be installed for the icon import; it is not a PrimeReact component stylesheet.
 
 ```ts
-import 'primeicons/primeicons.css';
 import 'primeicons/primeicons.css';
 import '@cratis/scene.blueprint.default/styles';
 ```

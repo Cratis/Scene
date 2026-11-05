@@ -84,4 +84,4 @@ validatePackageBundle(cratisComponentsPackage).should.deep.equal([]);
 ## Where to go next
 
 - [Component reference](components.md) — the full name list.
-- [Packages](../packages/index.md) — how a profile's package list is resolved and ordered.
+- [Frontend package hosting](../package-hosting.md) — how a host approves packages and resolves a profile's packages and dependencies.

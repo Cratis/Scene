@@ -30,7 +30,7 @@ Scene owns the *object model and runtime* half of the Screenplay stack. In the m
 application's user interface is described — independently of any rendering platform.
 
 `Scene.Model` is the platform-agnostic
-C# object model that [Stage](https://github.com/Cratis/Stage) translates Screenplay's parsed language constructs into, and that [Studio](https://github.com/Cratis/Studio)'s
+C# object model that [Stage](https://github.com/Cratis/Stage) translates Screenplay's parsed language constructs into, and that Studio's
 design-time tooling reads and writes. `Scene.Engine` walks that graph, resolves bindings (data, action, form,
 navigation contribution) and drives whichever renderer is plugged in — it does not know React exists.
 `Scene.React` is one renderer implementing the abstract vocabulary against real React/DOM; sibling positions
@@ -59,7 +59,7 @@ This project is part of [Cratis](https://www.cratis.io) — tools for building e
 - **[Arc](https://github.com/Cratis/Arc)** — opinionated CQRS framework for ASP.NET Core with commands, queries, validation, authorization, and TypeScript proxy generation. Works without event sourcing. [Docs](https://www.cratis.io/arc/)
 - **[Components](https://github.com/Cratis/Components)** — React components aligned with Arc patterns. [Docs](https://www.cratis.io/components/)
 - **[CLI](https://github.com/Cratis/cli) + Workbench** — inspect and diagnose Chronicle from the terminal or the browser. [Docs](https://www.cratis.io/cli/)
-- **Model-first layer** — [Studio](https://github.com/Cratis/Studio), [Screenplay](https://github.com/Cratis/Screenplay), [Stage](https://github.com/Cratis/Stage), Scene (this repository), [Prologue](https://github.com/Cratis/Prologue)
+- **Model-first layer** — Studio, [Screenplay](https://github.com/Cratis/Screenplay), [Stage](https://github.com/Cratis/Stage), Scene (this repository), [Prologue](https://github.com/Cratis/Prologue)
 - **Supporting** — [Fundamentals](https://github.com/Cratis/Fundamentals), [Specifications](https://github.com/Cratis/Specifications), [Synopsis](https://github.com/Cratis/Synopsis), [Lens](https://github.com/Cratis/Lens), [Narrator](https://github.com/Cratis/Narrator), and free [AI tooling](https://github.com/Cratis/AI); [Ensemble](https://github.com/Cratis/Ensemble) coming soon
 - **[Samples](https://github.com/Cratis/Samples)** — runnable event sourcing and CQRS samples for the whole stack
 
