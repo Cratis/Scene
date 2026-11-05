@@ -19,9 +19,9 @@ it back — and nothing in that round trip can carry a TypeScript class.
 <DataTableForQuery query={AllInvoices} emptyMessage='No invoices' />
 ```
 
-That gap is real and it is not closable from inside Scene. An adapter cannot conjure a query class out of a
-string, and it should not try — guessing at a module path or reaching into a global would move the failure
-somewhere worse. The name is the only thing that survives, so the name is what the lookup has to be keyed on.
+The host must bridge that gap: it owns the generated class, while Scene carries only its name. Looking up
+that name in an explicit registry lets the adapter request the class without guessing module paths or
+reaching into application globals.
 
 ## The seam
 
@@ -47,8 +47,8 @@ flowchart LR
     D --> E
 ```
 
-Only the host owns the generated Arc proxies, so only the host can supply the class. It registers every proxy
-a screen can name, once, at startup:
+At startup, the host registers the generated Arc proxies its screens can name. The object keys must match
+the names in those screens; the values are the actual classes:
 
 ```typescript
 import { registerQueries, registerCommands } from '@cratis/scene.components';
@@ -59,9 +59,10 @@ registerQueries({ AllInvoices, InvoiceById });
 registerCommands({ RegisterInvoice });
 ```
 
-Object shorthand is the point of the bulk form: Stage generates a module that exports every proxy it
-produced, and handing that module's exports straight in stays correct as proxies are added and removed
-without anyone editing a list.
+This example is an explicit list: object shorthand uses each imported name as the registry key. The bulk
+helpers register the entries supplied to them; they do not discover modules or filter their exports.
+A host may generate that object, but keeping it aligned with added or removed proxies is the host's
+responsibility.
 
 ## The API
 
@@ -77,9 +78,8 @@ without anyone editing a list.
 | `registeredCommandNames()` | Every registered command name, sorted. |
 | `clearBindings()` | Forget everything. |
 
-Queries and commands are separate namespaces. They are opposite halves of CQRS, and a screen means exactly
-one of them at each site — letting a command satisfy a query binding would turn a modeling mistake into a
-runtime one.
+Queries and commands have separate namespaces because each binding site requests a specific kind of work.
+Registering a command does not satisfy a screen's query binding, even when the names match.
 
 Registering the same name twice replaces the earlier registration, so a host can re-register on hot reload
 without unwinding the previous run. `clearBindings()` exists because the registry is module-level state:
@@ -88,9 +88,12 @@ must not inherit what the previous one registered.
 
 ## Opt-in exact lookup identities
 
-`queryInputForm` can use `registerQueryIdentity(name, sourceIdentity, proxy)` to distinguish source-name
-collisions from hot-reload replacement. `resolveExactQuery(name)` returns a constructor, `'ambiguous'`, or
-`undefined`; `unregisterQueryIdentity(name, sourceIdentity)` removes a source. `resolveQuery` keeps
+Use exact identities when source-name collisions must remain visible rather than replace each other.
+`queryInputForm` can use `registerQueryIdentity(name, sourceIdentity, proxy)` to distinguish those collisions
+from hot-reload replacement. `resolveExactQuery(name)` returns a constructor, `'ambiguous'`, or
+`undefined`; `unregisterQueryIdentity(name, sourceIdentity)` removes a source.
+
+This is an opt-in policy, not a change to ordinary registration. `resolveQuery` keeps
 legacy last-registration-wins precedence; only when no legacy registration exists does it resolve a
 unique identity. Multiple identity-only candidates return `undefined`, producing the existing adapters'
 visible unresolved placeholder without selection. Existing adapters look up on host render, not by
@@ -129,8 +132,9 @@ A screen that names no query at all reads differently, because it is a different
 Missing query binding on Cratis.Components:dataTable
 ```
 
-The first needs the host to register that name; the second needs the screen edited. The message is enough to
-tell them apart without opening a debugger.
+For the first message, compare the requested name with the registry's reported query names, then check
+registration and spelling in the host. For the second, supply the missing name in the screen. These are
+binding problems, distinct from a package that does not declare the component.
 
 This matters most in Studio. Design-time preview normally has *nothing* registered — there is no backend to
 query — and the screen still has to be usable so its layout can be worked on. One unbound table costs one
@@ -141,7 +145,8 @@ should recognize both instantly as "something here is not wired up".
 ## The Arc runtime is loaded only when it is needed
 
 `@cratis/arc` and `@cratis/arc.react` are peer dependencies of `@cratis/components` that the host supplies.
-A design surface is not a host, so every adapter that reaches them does so through a dynamic `import()`:
+Design-time preview can show the layout before an Arc runtime is available, so every adapter that reaches
+them does so through a dynamic `import()`:
 
 ```tsx
 const DataTableForQuery = lazy(async () => ({ default: (await import('@cratis/components/DataTables')).DataTableForQuery }));

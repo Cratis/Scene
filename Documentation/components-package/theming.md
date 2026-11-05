@@ -9,13 +9,14 @@ about CSS, because a non-DOM renderer has to be able to make an entirely differe
 `@cratis/components` reads a `--cratis-*` CSS variable layer. It says nothing about Scene, because it was
 written years before Scene existed and is used by applications that will never touch it.
 
-Neither side can learn about the other without one of them losing what makes it useful. So a stylesheet in
-this package joins them, and both stay ignorant.
+This package connects the vocabularies with a stylesheet: Scene supplies semantic values, and the bridge
+makes them available through the variables the component library already reads.
 
 ## Three layers, resolved in order
 
-`@cratis/components` is built on React Aria and never references PrimeReact's variables directly; the PrimeReact fallbacks below only serve a profile that opts into the optional PrimeReact package. Its own `tokens.css` puts one
-indirection in front of them, so a single build spans PrimeReact major versions:
+`@cratis/components` is built on React Aria. Its own `tokens.css` provides an indirection before any
+PrimeReact variables; the fallbacks below serve compositions that opt into the optional PrimeReact
+package. This lets the variable chain accommodate different PrimeReact major versions:
 
 ```css
 --cratis-surface-card: var(--p-content-background, var(--surface-card));
@@ -29,19 +30,20 @@ This package's bridge inserts Scene in front of that chain:
 /*                         ^ Scene theme           ^ PrimeReact v11         ^ v10 legacy */
 ```
 
-Three consequences, each a decision rather than a side effect:
+That order determines which values a component sees:
 
 - **The Scene value is only a *first* preference.** Every mapping keeps the library's original fallback chain
-  behind it, so a theme that defines eight of the thirteen tokens leaves the other five exactly as the active
-  PrimeReact theme had them, rather than blanking them.
+  behind it. When a PrimeReact theme is active, a Scene theme defining eight of the thirteen tokens leaves
+  the other five to that theme's fallbacks rather than blanking them. The bridge does not load the fallback
+  theme itself.
 - **The rules are scoped to the themed element, never `:root`.** `applyThemeTokens` writes onto the
   `SceneThemeProvider`'s element, so `--scene-*` does not exist at the document root. A `:root` rule would
   resolve every mapping to nothing and wipe out the PrimeReact fallbacks the bridge is supposed to preserve.
   The selector is `[data-scene-theme-root], [data-scene-theme]` — the provider sets the first, and a host
   calling `applyThemeTokens` directly sets the second.
 - **Only tokens Scene has a name for are mapped.** `--cratis-primary-500`, `--cratis-green-500` and the rest
-  of the primitive palette are left untouched and keep resolving against the PrimeReact theme. Inventing
-  Scene names for them would assert a vocabulary the themes on the other side do not have.
+  of the primitive palette are left untouched. In a PrimeReact composition they keep resolving against its
+  theme; the bridge does not invent additional Scene token names or supply a missing palette.
 
 ## Using it
 
@@ -49,8 +51,9 @@ Three consequences, each a decision rather than a side effect:
 import '@cratis/scene.components/styles';
 ```
 
-Then wrap the tree in a `SceneThemeProvider` with a theme, and every `@cratis/components` component
-underneath follows it:
+After importing the bridge, wrap the tree in a `SceneThemeProvider` so `@cratis/components` components
+underneath can read its values. This excerpt assumes the host has supplied the theme, screen, registry
+and optional binding resolver, along with its selected renderer setup:
 
 ```tsx
 <SceneThemeProvider theme={midnight}>
@@ -88,16 +91,16 @@ CSS custom property: it splits on `.`, kebab-cases each part, and prefixes `--sc
 
 ## A theme still has to be loaded
 
-The bridge tints the surfaces the Cratis wrappers own. It does not, on its own, skin PrimeReact's widgets:
-in PrimeReact 11 every widget's *structural* CSS — padding, borders, the dialog frame, focus rings — comes
-inside the theme file, and there is no separate primitives stylesheet. An application that loads no
-PrimeReact theme has no structural CSS, and its components render as raw HTML primitives whatever the tokens
-say.
+When the composition uses PrimeReact widgets, the bridge alone does not skin them. In PrimeReact 11,
+a widget's *structural* CSS — padding, borders, the dialog frame, focus rings — comes from its theme,
+not a separate primitives stylesheet. Without that styling, PrimeReact widgets render as raw HTML
+primitives regardless of the Scene token values. This styling requirement applies to PrimeReact widgets,
+not every Scene profile.
 
-So load a PrimeReact theme underneath, and use Scene tokens to move it to your palette. The
-[PrimeReact package](../primereact-package/index.md) ships 24 themes built on PrimeTek's `@primeuix/themes` presets as Scene themes,
-with its tokens read verbatim out of the theme's own `:root` block — so the token layer always agrees with
-what the stylesheet renders. Its [theme reference](../primereact-package/theme-reference.md) lists the
+For that composition, load a PrimeReact theme as well as the Scene tokens. The
+[PrimeReact package](../primereact-package/index.md) ships 24 themes built on PrimeTek's `@primeuix/themes` presets as Scene themes.
+The token layer and widget styling must agree; scoped Scene variables do not replace a theme's `:root`
+values or its generated styles. Its [theme reference](../primereact-package/theme-reference.md) lists the
 values each theme carries for the thirteen tokens above.
 
 ## Where to go next

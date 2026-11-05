@@ -41,15 +41,17 @@ and re-renders when the read model changes.
 | `commandForm` | `AutoCommandForm` (legacy) or native Arc `CommandForm` (explicit) | **`command`** (binding), `inputs`, `exclude` (auto only), `submitLabel` | — |
 | `queryInputForm` | Native web inputs + existing optional-single runtime | **`query`** (exact binding), `inputs`, `resultField`, `label`, `submitLabel` | — |
 
-[`queryInputForm`](query-input-form.md) is opt-in and submits explicit string drafts, never querying while
-editing. Unlike forgiving display properties, malformed input declarations fail visibly and execute
-nothing. It does not use command fields or a new core form schema.
+Choose a command form to submit a command, with either generated fields or explicitly declared inputs.
+Choose [`queryInputForm`](query-input-form.md) to submit string arguments to an optional-single query;
+it never queries while editing. Unlike forgiving display properties, malformed input declarations fail
+visibly and execute nothing. The query form does not use command fields or a new core form schema.
 
-Without `inputs`, `AutoCommandForm` generates fields from native proxy descriptors (String, Number, Boolean,
-Date only). A required Guid or other unsupported required descriptor, including one removed with `exclude`,
-shows a diagnostic rather than a partial form. The `content` slot is **not** consumed by this adapter;
-`exclude` does not connect independently placed fields to the form. Prefer an authored screen for complete
-layout control. Opt into exactly named fields with `inputs`, for example:
+For automatic command fields, omit `inputs`: `AutoCommandForm` generates fields from native proxy
+descriptors (String, Number, Boolean, Date only). A required Guid or other unsupported required descriptor,
+including one removed with `exclude`, shows a diagnostic rather than a partial form. The `content` slot
+is **not** consumed by this adapter; `exclude` does not connect independently placed fields to the form.
+An authored screen offers layout control, but placing fields independently does not establish their
+command context. To declare exactly named command inputs instead, use `inputs`, for example:
 
 ```json
 [{"property":"projectId","type":"guid","label":"Project ID"},{"property":"name","type":"string","label":"Name"}]
@@ -71,11 +73,14 @@ feedback. No Scene action handler or command executor is needed.
 
 **Dependency requirement:** Components >=4.13.0 supplies the auto-form footer; Arc and Arc React
 >=22.19.1 supply the custom-field-error execution gate for explicit Guid inputs. These are the declared
-peer floors for this package. Arc peers remain optional: unbound previews stay lazy and do not import Arc.
+peer floors for this package, supplied by the host. Lazy loading is a separate concern: unbound previews
+do not import the Arc runtime, but that does not make the declared peers optional.
 
 ### Field types
 
-Every field takes the same three properties, plus its own:
+These separately exposed field adapters need an enclosing Arc command context. They do not create that
+context or connect themselves to an automatic form. Every field takes the same three properties, plus
+its own:
 
 | Property | Meaning |
 |---|---|
@@ -142,7 +147,8 @@ the dialog open on a rejected command without reimplementing the protocol.
 | `errorBoundary` | `ErrorBoundary` | — | `content` |
 
 `icon` normalizes the shorthand forms people write — `pi-check` on its own, or a bare name — into the class
-PrimeIcons expects. `dropdown` is the standalone control; use `dropdownField` inside a `commandForm`.
+PrimeIcons expects. `dropdown` is the standalone control; `dropdownField` requires command context.
+It cannot be connected by placing it in a `commandForm` content slot, because that adapter consumes none.
 
 ## Editors
 

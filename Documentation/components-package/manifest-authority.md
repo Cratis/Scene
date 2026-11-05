@@ -1,6 +1,6 @@
 # Manifest authority
 
-Scene catalogs and Components renderer manifests are **two concepts with an executable mapping**, not two competing registries. Scene owns the platform-neutral catalog. Components owns the web renderer ABI. Scene does not generate its component catalog from Components primitive slots.
+Package authors and host integrators work with **two concepts connected by an executable mapping**: Scene's platform-neutral catalog and Components' web renderer manifest. Scene owns which component names a package declares; Components owns the web renderer ABI. Scene does not generate its component catalog from Components primitive slots.
 
 ## Ownership
 
@@ -14,7 +14,7 @@ Scene catalogs and Components renderer manifests are **two concepts with an exec
 
 A package owner versions its catalog and bundle together. A change to Components' ABI does not change Scene.Model: the web package owner updates its mapping and verifies the new adapter before upgrading. Non-web Scene packages need no Components mapping.
 
-Components slots such as `common.button` are presentation contracts, **not** the Scene component vocabulary. DataTable, CommandForm and other library-independent composites do not become additional primitive slots. A component may consume several slots, and several Scene components may consume the same slot. Manifest consistency must not pretend there is a one-to-one relationship.
+Components slots such as `common.button` are presentation contracts, **not** the Scene component vocabulary. DataTable, CommandForm and other library-independent composites do not become additional primitive slots. A component may consume several slots, and several Scene components may consume the same slot. The consistency checks therefore validate the mapping, not a one-to-one correspondence between names and slots.
 
 ## Register a custom web package
 
@@ -24,7 +24,7 @@ Components slots such as `common.button` are presentation contracts, **not** the
 4. Register the bundle and renderer module explicitly with each host. Resolve package identity and dependencies from the catalog **before** loading executable code. A module name in a document is not permission to import arbitrary code.
 5. Check the registered renderer export with `validateComponentsUiLibraryMapping` before supplying it to `CratisComponentsProvider`. Reject diagnostics rather than substituting an unrelated adapter.
 
-For example, after importing an allowlisted package and its actual Components adapter:
+The host first approves and imports the package and its actual Components adapter. This excerpt assumes those imports and the supplied bundle and presentation-library values; it shows the checks, not standalone host setup:
 
 ```typescript
 const problems = [
@@ -38,7 +38,7 @@ The mapping checker accepts Components' structural renderer manifest directly; i
 
 ## Precedence and diagnostics
 
-Scene package selection determines component-name resolution; it does not authorize loading frontend modules. Scene profiles list higher-priority packages first. Components composes libraries with the last library winning. A host composing corresponding renderer libraries must therefore reverse the Scene priority order rather than silently choosing another precedence rule.
+Scene package selection determines component-name resolution; it does not authorize loading frontend modules. For an unqualified name, the resolver searches the profile's packages from last to first, so the last declaring package wins. The host must preserve that selected implementation when supplying renderer libraries. Do not infer a separate library-composition order from the package list or silently substitute another implementation.
 
 Unknown package names are dependency-resolution errors. Missing declared React implementations and malformed descriptors are bundle-validation errors. Unknown module exports are host-registration errors. Wrong ABI/profile or missing slots/capabilities are mapping errors. Runtime libraries must not quietly fall back across these boundaries.
 

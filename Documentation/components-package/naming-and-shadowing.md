@@ -24,26 +24,26 @@ Three packages in a typical profile declare `table`, and two declare `dialog`:
 
 | Name | `core` | `PrimeReact` | `Cratis.Components` |
 |---|---|---|---|
-| `table` | — | `DataTable` | `DataTableForQuery` |
+| `table` | `CoreTable` | `DataTable` | `DataTableForQuery` |
 | `dialog` | — | `Dialog` | Arc-aware `Dialog` |
 | `card` | a bordered section | a `Card` | — |
 
 With the profile listing `core`, `PrimeReact`, `Cratis.Components` in that order, `resolveComponentName`
-walks from highest priority to lowest and lands here:
+searches from last to first. The last package declaring the name wins:
 
 ```typescript
 resolveComponentName('table', profile, catalog);
-// { name: 'table', package: 'Cratis.Components', shadows: ['PrimeReact'] }
+// { name: 'table', package: 'Cratis.Components', shadows: ['PrimeReact', 'core'] }
 ```
 
-The shadowed package is **recorded, not discarded** — that list is what answers "why did this resolve to
-`Cratis.Components` and not PrimeReact?" without anyone having to reason it out.
+Both earlier table declarations are **recorded, not discarded**. The shadow list explains why the name
+resolved to `Cratis.Components` rather than PrimeReact or core.
 
-Both overrides are override priority working exactly as designed, and both are worth having:
+The overrides select different behavior, not just different styling:
 
-- **`table`** — PrimeReact's `DataTable` is handed rows. `DataTableForQuery` performs the query, pages
-  against the server, and wires filtering and sorting back into it. For a Cratis application that is
-  strictly better, so the bare name should land on it.
+- **`table`** — PrimeReact's `DataTable` receives rows from its caller. `DataTableForQuery` performs the
+  query, pages against the server, and wires filtering and sorting back into it. Ranking this package
+  higher lets a screen request that query-bound behavior through the existing name.
 - **`dialog`** — PrimeReact's `Dialog` is a modal frame. This one resolves its result through Arc's dialog
   context, so a caller awaits a `DialogResult` instead of threading `visible` state and callbacks by hand.
 
@@ -52,17 +52,18 @@ Both overrides are override priority working exactly as designed, and both are w
 `@cratis/components` ships no card component. The closest thing is `Page`'s `panel` chrome, which is a page
 concern rather than a card, and the `.panel` class it applies is one the consuming application defines.
 
-Declaring `card` here would shadow `core` and PrimeReact with something worse — an override that makes the
-name resolve to a weaker implementation is a regression wearing the costume of a feature. So `card` falls
-through:
+Declaring `card` here would shadow `core` and PrimeReact without supplying a comparable card component.
+Leaving it undeclared preserves those implementations. In the profile above, `card` falls through to
+PrimeReact, which has priority over core:
 
 ```typescript
 resolveComponentName('card', profile, catalog);
-// { name: 'card', package: 'core', shadows: [] }
+// { name: 'card', package: 'PrimeReact', shadows: ['core'] }
 ```
 
-Only override a name when you are confident the replacement is better for every screen that already writes
-it. That is the test, and it is the reason two names are overridden here and a third is not.
+An override changes the implementation for screens that already use the name. Check that the replacement
+supports their intended behavior before declaring it; omitting an override leaves the existing choice
+available.
 
 ## `dataTable` and `table` are the same component
 
