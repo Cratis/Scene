@@ -3,8 +3,12 @@ title: The root template
 description: How a UI profile names the application's shell - the root template - its options, its appearance and the defaults it carries.
 ---
 
-An application's **root template** is its shell: the chrome every screen is placed inside. A UI profile names it with
+An application's **root template** selects its shell: the chrome around its screens. A UI profile names it with
 `root`, instead of the bare layout name `layout` offered before.
+
+Choose this shell separately from the template that arranges an individual screen. If you are writing a new profile, start with
+[authoring a profile](#authoring-a-profile); the migration section is for profiles that already name a layout. Blueprint authors use
+[the template set](template-set.md) to choose the page shapes that sit inside the shell.
 
 ```csharp
 public record UiProfile(
@@ -31,7 +35,7 @@ semver range such as `^4.5`. Absent `version` accepts any version.
 {
   "name": "Desktop",
   "targetPlatform": "web",
-  "packages": ["core", "Cratis.Components"],
+  "packages": ["core", "Cratis.Components", "Cratis.Blueprint.Default", "crm"],
   "root": {
     "template": { "source": "Blueprint", "id": "AppShell", "blueprint": "Cratis.Blueprint.Default", "version": "^4.5" },
     "options": { "navigationMode": "slim", "showFooter": true }
@@ -113,6 +117,10 @@ built in), the supplying `package` and its installed version, the pin evaluation
 declaration order, the `primaryOutlet`, the profile's `options` and the `diagnostics`.
 
 ## Diagnostics
+
+A fallback shell can still be drawn when the requested shell cannot be used. Check the diagnostics alongside the resolved shell
+before treating its appearance as confirmation that the profile is correct. Start with the referenced template and its package,
+then check the version pin and the outlet declarations indicated by the diagnostic; do not compensate by changing each screen.
 
 The codes are camelCase and engine-owned; every message carries real names (templates, blueprints, screens, outlets, packages),
 never ids.
