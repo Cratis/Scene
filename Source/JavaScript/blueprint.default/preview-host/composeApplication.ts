@@ -59,11 +59,11 @@ export interface CompositionOptions {
     identity?: ResolvedProfileIdentity;
 
     /**
-     * Outlets the shell declares that navigation renders screens into - a navigation item authored with `slot side`. Each one the shell
-     * has, other than its primary outlet, holds a closable `core:outlet` so the screen placed there is drawn beside the primary screen.
-     * {@link ApplicationHost} fills it from the destinations; a host that composes on its own names the outlets it wants.
+     * Slots the shell declares that navigation renders screens into - a navigation item authored with `slot side`. Each one the shell
+     * has, other than its primary slot, holds a closable `core:slot` so the screen placed there is drawn beside the primary screen.
+     * {@link ApplicationHost} fills it from the destinations; a host that composes on its own names the slots it wants.
      */
-    hostedOutlets?: string[];
+    hostedSlots?: string[];
 
     /**
      * Composes a screen with only the template it names, not inside the templates that template fits. A modeled screen fills only
@@ -131,9 +131,9 @@ export function effectiveShellOf(application: ApplicationDocument, screen: Scree
     return resolveEffectiveShell(resolved, { library: libraryOf(application, options) });
 }
 
-/** The shell as the layout the templates are placed into: its name and outlets. */
+/** The shell as the layout the templates are placed into: its name and slots. */
 export function shellLayout(shell: EffectiveShell): Layout {
-    return { name: shell.name, slots: shell.outlets.map(name => ({ name })) };
+    return { name: shell.name, slots: shell.slots.map(name => ({ name })) };
 }
 
 /**
@@ -209,9 +209,9 @@ function ownRootTemplateOf(application: ApplicationDocument, options: Compositio
 /** The slot of the layout a template chain's outermost template fits: its declared slot, or `content`. */
 function layoutSlotOf(shell: EffectiveShell, outermost: ScreenTemplate): string {
     const fits = outermost.fitsSlot;
-    if (fits === undefined) return shell.primaryOutlet;
+    if (fits === undefined) return shell.primarySlot;
     const slot = fits.includes('.') ? fits.slice(fits.lastIndexOf('.') + 1) : fits;
-    return shell.outlets.includes(slot) ? slot : shell.primaryOutlet;
+    return shell.slots.includes(slot) ? slot : shell.primarySlot;
 }
 
 /** The templates a screen's own template sits inside, outermost first, ending with the screen's own template. */
@@ -238,7 +238,7 @@ export function templateChainOf(application: ApplicationDocument, screen: Screen
 
 /**
  * What a screen puts in the shell's content slot: the screen - inside the template chain it names, when it names one - and the
- * forms it hosts. The same content fills the shell on the primary region and a nested outlet.
+ * forms it hosts. The same content fills the shell on the primary region and a nested slot.
  *
  * The innermost template takes the screen's own slot content; each template outside it holds the one inside in the slot it
  * declared (`fitsSlot`), so the chain's arrangements all apply.
@@ -248,7 +248,7 @@ export function screenContent(application: ApplicationDocument, screen: Screen, 
     const forms = screen.forms.map(candidate => form(screen.name, candidate));
     const chain = templateChainOf(application, screen, options);
     if (chain.length === 0) {
-        return { content: [...Object.values(screen.slotContent).flat(), ...forms], templates: [], slot: effectiveShellOf(application, screen, options).primaryOutlet };
+        return { content: [...Object.values(screen.slotContent).flat(), ...forms], templates: [], slot: effectiveShellOf(application, screen, options).primarySlot };
     }
 
     let inner: SceneElement | undefined;
@@ -296,9 +296,9 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
     const chrome = options.chrome
         ? options.chrome(screen, shell)
         : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo, options.identity);
-    const screenSlots: Record<string, SceneElement[]> = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primaryOutlet ? options.trailing ?? [] : [])] };
-    for (const name of hostedShellOutlets(effective, options)) {
-        screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`outlet-${name}`, 'core:outlet', { name, closable: true })];
+    const screenSlots: Record<string, SceneElement[]> = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primarySlot ? options.trailing ?? [] : [])] };
+    for (const name of hostedShellSlots(effective, options)) {
+        screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`slot-${name}`, 'core:slot', { name, closable: true })];
     }
 
     // An own root template that fills a slot itself - the storefront's topbar with its basket - says what is drawn there: the host's default chrome only seeds the slots the application's template leaves empty. A blueprint's root template content is placeholder seed, which the host's chrome replaces.
@@ -310,18 +310,18 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
     return { element: finish(composed, profile, previewCatalog(options), options), configuration: configurationOf(application, screen, options), templates };
 }
 
-/** The outlets the host asked to hold screens that this shell has, other than the one every screen is placed in. */
-export function hostedShellOutlets(shell: EffectiveShell, options: CompositionOptions): string[] {
-    return (options.hostedOutlets ?? []).filter(name => name !== shell.primaryOutlet && shell.outlets.includes(name));
+/** The slots the host asked to hold screens that this shell has, other than the one every screen is placed in. */
+export function hostedShellSlots(shell: EffectiveShell, options: CompositionOptions): string[] {
+    return (options.hostedSlots ?? []).filter(name => name !== shell.primarySlot && shell.slots.includes(name));
 }
 
 /**
- * A screen as it appears inside an outlet of another screen: its content alone, without the shell the primary region wraps
+ * A screen as it appears inside a slot of another screen: its content alone, without the shell the primary region wraps
  * every screen in, with the same name resolution.
  */
-export function composeOutletScreen(application: ApplicationDocument, screen: Screen, options: CompositionOptions = {}): SceneElement {
+export function composeSlotScreen(application: ApplicationDocument, screen: Screen, options: CompositionOptions = {}): SceneElement {
     const { content } = screenContent(application, screen, options);
-    const element = content.length === 1 ? content[0] : { id: `outlet-${screen.name}`, children: content } as unknown as SceneElement;
+    const element = content.length === 1 ? content[0] : { id: `slot-${screen.name}`, children: content } as unknown as SceneElement;
     return finish(element, profileOf(application, options), previewCatalog(options), options);
 }
 

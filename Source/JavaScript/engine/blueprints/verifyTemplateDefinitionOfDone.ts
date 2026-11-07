@@ -73,6 +73,8 @@ export function verifyTemplateDefinitionOfDone(template: ScreenTemplate | Dialog
 
 function slotProblems(template: ScreenTemplate | DialogTemplate, owner: string): string[] {
     const declared = template.slots.map(slot => slot.name);
+    // A routed slot is placed by the `core:slot` element its content declares, not by the arrangement.
+    const composed = template.slots.filter(slot => slot.routed !== true).map(slot => slot.name);
     const arranged = new Set<string>();
     const visit = (node: FlowNode | undefined) => {
         if (!node) return;
@@ -88,7 +90,7 @@ function slotProblems(template: ScreenTemplate | DialogTemplate, owner: string):
     const problems: string[] = [];
     // A template with no arrangement stacks its slots in declaration order, which places every one of them.
     if (template.arrangement !== undefined) {
-        for (const name of declared.filter(slot => !arranged.has(slot))) problems.push(`${owner} declares slot '${name}' but its arrangement never places it`);
+        for (const name of composed.filter(slot => !arranged.has(slot))) problems.push(`${owner} declares slot '${name}' but its arrangement never places it`);
         for (const name of [...arranged].filter(slot => !declared.includes(slot))) problems.push(`${owner} arranges slot '${name}', which it does not declare`);
     }
 

@@ -952,14 +952,14 @@
                 "name": "RootFrame",
                 "slots": [
                   {
-                    "name": "main"
+                    "name": "main",
+                    "primary": true
                   }
                 ],
                 "displayName": "Root frame",
                 "description": "A frame as the root",
                 "metadata": {
                   "role": "Root",
-                  "primaryOutlet": "main",
                   "defaultMenuMode": "reveal",
                   "thumbnail": "thumbnails/RootFrame.svg"
                 }

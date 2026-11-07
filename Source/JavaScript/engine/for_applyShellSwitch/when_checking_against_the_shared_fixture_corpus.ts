@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { SceneDocument, Screen, ScreenTemplate, TemplateReference, UiProfile } from '@cratis/scene.model';
-import { OutletRemaps, ShellSwitchApplication, ShellSwitchChange, TemplateLibrary, applyShellSwitch, placeableScreenTemplates, planShellSwitch, resolveEffectiveShell } from '../index';
+import { SlotRemaps, ShellSwitchApplication, ShellSwitchChange, TemplateLibrary, applyShellSwitch, placeableScreenTemplates, planShellSwitch, resolveEffectiveShell } from '../index';
 
 interface ApplyCase {
     name: string;
@@ -12,7 +12,7 @@ interface ApplyCase {
     profile: UiProfile;
     currentRoot: TemplateReference;
     candidateRoot: TemplateReference;
-    remaps: OutletRemaps;
+    remaps: SlotRemaps;
     document: { screens: Screen[]; screenTemplates: ScreenTemplate[] };
     expected: Projection;
 }
@@ -52,7 +52,7 @@ const projectionOf = (result: ShellSwitchApplication): Projection => ({
     screens: result.document.screens.map(screen => ({
         name: screen.name,
         ...(screen.screenTemplate === undefined ? {} : { screenTemplate: screen.screenTemplate }),
-        slotContent: Object.fromEntries(Object.entries(screen.slotContent).map(([outlet, content]) => [outlet, content.map(element => element.id)])),
+        slotContent: Object.fromEntries(Object.entries(screen.slotContent).map(([slot, content]) => [slot, content.map(element => element.id)])),
     })),
     screenTemplates: result.document.screenTemplates.map(template => ({ name: template.name, ...(template.fitsSlot === undefined ? {} : { fitsSlot: template.fitsSlot }) })),
     changes: result.changes,

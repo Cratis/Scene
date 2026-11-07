@@ -58,7 +58,7 @@ describe('when navigating with the browser history', () => {
         window.history.replaceState(null, '', '/app/billing/invoices/INV-9?tab=payments');
         render(host());
         location().should.deep.include({ screen: 'InvoiceDetails', parameters: { invoiceId: 'INV-9', tab: 'payments' }, unresolved: null });
-        document.querySelector('[data-scene-outlet]')!.getAttribute('data-scene-outlet')!.should.equal('content');
+        document.querySelector('[data-scene-slot]')!.getAttribute('data-scene-slot')!.should.equal('content');
     });
 
     it('should restore the same entry on refresh', () => {

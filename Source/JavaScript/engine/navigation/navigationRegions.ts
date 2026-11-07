@@ -6,7 +6,7 @@ import { ApplicationNavigation, ModuleNavigation, NavigationModel, NavigationReg
 /** The regions in the order every result lists them. */
 export const navigationRegionOrder: NavigationRegionKind[] = [NavigationRegionKind.Topbar, NavigationRegionKind.Sidebar];
 
-/** The slot an item renders into when it names none: the primary outlet. */
+/** The slot an item renders into when it names none: the primary slot. */
 export const primarySlot = 'content';
 
 /**

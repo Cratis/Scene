@@ -120,11 +120,11 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         element.TryGetProperty("fitsSlot", out var fits) ? fits.GetString() : null,
         [.. element.GetProperty("slots").EnumerateArray().Select(slot => new Slot(slot.GetProperty("name").GetString()!))]);
 
-    static Dictionary<string, OutletRemap> RemapsOf(JsonElement element) =>
+    static Dictionary<string, SlotRemap> RemapsOf(JsonElement element) =>
         element.EnumerateObject().ToDictionary(
             property => property.Name,
-            property => new OutletRemap(
-                Enum.Parse<ShellOutletAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
+            property => new SlotRemap(
+                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
                 property.Value.TryGetProperty("target", out var target) ? target.GetString() : null),
             StringComparer.Ordinal);
 
@@ -134,7 +134,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         result.Applied,
         result.Screens.Select(screen => (screen.Name, screen.ScreenTemplate, string.Join(';', screen.SlotContent.Select(slot => $"{slot.Key}=[{string.Join(',', slot.Value.Select(element => element.Id))}]")))),
         result.ScreenTemplates.Select(template => (template.Name, template.FitsSlot)),
-        result.Changes.Select(change => (ToCamelCase(change.Kind.ToString()), change.Screen, change.Template, change.Outlet, ToCamelCase(change.Action.ToString()), change.Target, change.Count, change.Description))));
+        result.Changes.Select(change => (ToCamelCase(change.Kind.ToString()), change.Screen, change.Template, change.Slot, ToCamelCase(change.Action.ToString()), change.Target, change.Count, change.Description))));
 
     static string DescribeExpected(JsonElement expected) => string.Join('\n', Lines(
         expected.GetProperty("applied").GetBoolean(),
@@ -147,7 +147,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             change.GetProperty("kind").GetString()!,
             change.TryGetProperty("screen", out var screen) ? screen.GetString() : null,
             change.TryGetProperty("template", out var template) ? template.GetString() : null,
-            change.GetProperty("outlet").GetString()!,
+            change.GetProperty("slot").GetString()!,
             change.GetProperty("action").GetString()!,
             change.TryGetProperty("target", out var target) ? target.GetString() : null,
             change.GetProperty("count").GetInt32(),
@@ -157,7 +157,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         bool applied,
         IEnumerable<(string Name, string? Template, string Content)> screens,
         IEnumerable<(string Name, string? FitsSlot)> templates,
-        IEnumerable<(string Kind, string? Screen, string? Template, string Outlet, string Action, string? Target, int Count, string Description)> changes)
+        IEnumerable<(string Kind, string? Screen, string? Template, string Slot, string Action, string? Target, int Count, string Description)> changes)
     {
         yield return $"applied {applied}";
         foreach (var screen in screens)
@@ -172,7 +172,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 
         foreach (var change in changes)
         {
-            yield return $"change {change.Kind}|{change.Screen}|{change.Template}|{change.Outlet}|{change.Action}|{change.Target}|{change.Count}|{change.Description}";
+            yield return $"change {change.Kind}|{change.Screen}|{change.Template}|{change.Slot}|{change.Action}|{change.Target}|{change.Count}|{change.Description}";
         }
     }
 
@@ -186,5 +186,5 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         return ShellSwitchApplier.Apply(fixture.Screens, fixture.Templates, plan, templates);
     }
 
-    sealed record ApplyCase(string Name, UiProfile Profile, TemplateReference CurrentRoot, TemplateReference CandidateRoot, Dictionary<string, OutletRemap> Remaps, List<Screen> Screens, List<ScreenTemplate> Templates, JsonElement Expected);
+    sealed record ApplyCase(string Name, UiProfile Profile, TemplateReference CurrentRoot, TemplateReference CandidateRoot, Dictionary<string, SlotRemap> Remaps, List<Screen> Screens, List<ScreenTemplate> Templates, JsonElement Expected);
 }

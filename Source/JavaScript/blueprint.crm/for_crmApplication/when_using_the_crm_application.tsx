@@ -9,8 +9,8 @@ import { interactive, nordic, provideBrowserApis } from './given';
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const topbar = () => screen.getByRole('navigation', { name: 'Modules' });
 const labels = (nav: HTMLElement) => Array.from(nav.querySelectorAll('a')).map(item => item.textContent?.trim());
-const onPage = () => document.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen');
-const headings = () => Array.from(document.querySelectorAll('[data-scene-outlet="primary"] h1')).map(heading => heading.textContent);
+const onPage = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
+const headings = () => Array.from(document.querySelectorAll('[data-scene-slot="primary"] h1')).map(heading => heading.textContent);
 
 // Spec Part B 3.1 as an application: the navigation, the screens a user moves between, what the buttons and rows do, and what each pack's data looks like.
 describe('when using the CRM application', () => {
@@ -37,7 +37,7 @@ describe('when using the CRM application', () => {
         it('should mark the dashboard as the place the user is', () => within(sidebar()).getByText('Dashboard').closest('[aria-current]')!.getAttribute('aria-current')!.should.equal('page'));
 
         it('should show the three key figures, the two charts and the tasks of the user', () => {
-            const page = document.querySelector('[data-scene-outlet="primary"]')!;
+            const page = document.querySelector('[data-scene-slot="primary"]')!;
             Array.from(page.querySelectorAll('.foundation-stat-label')).map(label => label.textContent).should.deep.equal(['Open pipeline value', 'Won this month', 'Conversion rate']);
             page.textContent!.should.contain('Leads by source').and.contain('Deals by stage');
             within(page as HTMLElement).getByRole('region', { name: 'My tasks' });
@@ -62,11 +62,11 @@ describe('when using the CRM application', () => {
 
         it('should show the lead list with the columns of the specification', () => {
             onPage()!.should.equal('crm.leads');
-            Array.from(document.querySelectorAll('[data-scene-outlet="primary"] th')).map(header => header.textContent!.trim()).should.include.members(['Name', 'Company', 'Owner', 'Status', 'Last contact']);
+            Array.from(document.querySelectorAll('[data-scene-slot="primary"] th')).map(header => header.textContent!.trim()).should.include.members(['Name', 'Company', 'Owner', 'Status', 'Last contact']);
         });
 
         it('should offer the row actions edit, assign, convert and delete', () => {
-            const page = document.querySelector('[data-scene-outlet="primary"]')!;
+            const page = document.querySelector('[data-scene-slot="primary"]')!;
             const actions = page.querySelector('.foundation-table tbody tr select.foundation-row-actions')!;
             Array.from(actions.querySelectorAll('option')).map(option => option.textContent).should.deep.equal(['Actions', 'Edit', 'Assign', 'Convert', 'Delete']);
         });
@@ -84,18 +84,18 @@ describe('when using the CRM application', () => {
     describe('and the user goes to the contacts and chooses one', () => {
         beforeEach(() => {
             render(interactive('crm.contacts'));
-            fireEvent.click(document.querySelector('[data-scene-outlet="primary"] .foundation-table tbody tr input[type="radio"], [data-scene-outlet="primary"] .foundation-table tbody tr input[type="checkbox"]')!);
+            fireEvent.click(document.querySelector('[data-scene-slot="primary"] .foundation-table tbody tr input[type="radio"], [data-scene-slot="primary"] .foundation-table tbody tr input[type="checkbox"]')!);
         });
 
         it('should open the contact page with its summary, related deals and activity', () => {
             onPage()!.should.equal('crm.contacts.record');
-            const page = document.querySelector('[data-scene-outlet="primary"]')!;
+            const page = document.querySelector('[data-scene-slot="primary"]')!;
             headings().should.deep.equal(['Freya Collins']);
             page.textContent!.should.contain('Deals of this contact').and.contain('Next steps').and.contain('commented').and.contain('Lifetime value');
         });
 
         it('should go to the edit form from Edit', () => {
-            const edit = Array.from(document.querySelectorAll('[data-scene-outlet="primary"] button')).find(button => button.textContent === 'Edit')!;
+            const edit = Array.from(document.querySelectorAll('[data-scene-slot="primary"] button')).find(button => button.textContent === 'Edit')!;
             fireEvent.click(edit);
             onPage()!.should.equal('crm.contacts.edit');
             headings().should.deep.equal(['Freya Collins']);
@@ -128,9 +128,9 @@ describe('when using the CRM application', () => {
     describe('and the user goes to the deals list', () => {
         it('should group the deals by stage with the value of each stage as its subtotal', () => {
             render(interactive('crm.deals.list'));
-            const groups = Array.from(document.querySelectorAll('[data-scene-outlet="primary"] .foundation-list-group')).map(group => group.querySelector('button')!.textContent);
+            const groups = Array.from(document.querySelectorAll('[data-scene-slot="primary"] .foundation-list-group')).map(group => group.querySelector('button')!.textContent);
             groups.should.deep.equal(['New', 'Qualified', 'Proposal', 'Negotiation', 'Won']);
-            document.querySelector('[data-scene-outlet="primary"] .foundation-list-group .foundation-count')!.textContent!.replace(/\u00a0/g, ' ').should.match(/£[0-9,]+/);
+            document.querySelector('[data-scene-slot="primary"] .foundation-list-group .foundation-count')!.textContent!.replace(/\u00a0/g, ' ').should.match(/£[0-9,]+/);
         });
     });
 });

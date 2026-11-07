@@ -5,7 +5,7 @@ namespace Cratis.Scene.Engine.Navigation;
 
 /// <summary>
 /// Finds cycles in a "renders inside" graph, where an edge from a screen to another means the first is placed
-/// in an outlet the second one's template owns. Visits screens in the given order and edges in insertion order,
+/// in a slot the second one's template owns. Visits screens in the given order and edges in insertion order,
 /// matching the TypeScript engine exactly.
 /// </summary>
 static class HostingCycles

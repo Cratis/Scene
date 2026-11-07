@@ -12,7 +12,7 @@ import { component, foundationTemplateProvenance, fromQuery, thumbnailOf } from 
 export const masterDetailScreenTemplate: ScreenTemplate = {
     name: 'MasterDetailScreen',
     fitsSlot: 'WorkspaceScreen.moduleContent',
-    slots: [{ name: 'list' }, { name: 'details' }],
+    slots: [{ name: 'list' }, { name: 'details' }, { name: 'master-detail.detail', description: 'The selected record.', routed: true, accepts: ['Detail'] }],
     arrangement: {
         root: grid([slotLeaf('list'), slotLeaf('details', { span: 2 })], 3, 16),
         overrides: [{ width: WidthSizeClass.Compact, root: column([slotLeaf('list'), slotLeaf('details')], 16) }],
@@ -23,6 +23,5 @@ export const masterDetailScreenTemplate: ScreenTemplate = {
     },
     displayName: 'Master/detail with address selection',
     description: 'A list beside the selected record that stacks into a navigation stack on a phone.',
-    outlets: [{ name: 'master-detail.detail', description: 'The selected record.', accepts: ['Detail'] }],
     metadata: { ...foundationTemplateProvenance, type: 'Workspace', category: 'Foundation / Workspace', thumbnail: thumbnailOf('MasterDetailScreen') },
 };

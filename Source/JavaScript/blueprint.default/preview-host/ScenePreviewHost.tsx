@@ -457,7 +457,7 @@ function ReportNavigation({ onNavigate }: { onNavigate?(destination: Destination
         const before = previous.current;
         previous.current = { primaryScreen, currentDialog };
         if (before.primaryScreen === primaryScreen && before.currentDialog === currentDialog) return;
-        onNavigate?.(currentDialog === undefined ? { kind: DestinationKind.Outlet, screen: primaryScreen } : { kind: DestinationKind.Dialog, dialog: currentDialog });
+        onNavigate?.(currentDialog === undefined ? { kind: DestinationKind.Slot, screen: primaryScreen } : { kind: DestinationKind.Dialog, dialog: currentDialog });
     }, [currentDialog, onNavigate, primaryScreen]);
 
     return null;

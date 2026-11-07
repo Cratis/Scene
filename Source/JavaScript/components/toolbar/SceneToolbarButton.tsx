@@ -19,7 +19,7 @@ const tooltipPositions = ['top', 'right', 'bottom', 'left'] as const;
  * visible label is never left nameless.
  */
 /**
- * A toolbar button. Its authored `destination` - a screen in an outlet, or a dialog - is executed by the
+ * A toolbar button. Its authored `destination` - a screen in a slot, or a dialog - is executed by the
  * enclosing navigation host; outside one it is announced with the host-neutral `cratis.scene.navigate` event.
  * Interactions attached by the document run first.
  */

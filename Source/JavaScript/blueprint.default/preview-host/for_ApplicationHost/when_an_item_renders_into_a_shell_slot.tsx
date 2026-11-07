@@ -9,7 +9,7 @@ import { ApplicationHost } from '../ApplicationHost';
 import { ApplicationDocument } from '../ApplicationDocument';
 import { element, navigation, ordersApplication, registry, structure, withPrime } from '../for_ScenePreviewHost/given';
 
-// The layout of the application declares a `side` slot of its own; no screen declares an outlet of that name (Cratis/Stage#456).
+// The layout of the application declares a `side` slot of its own; no screen declares a slot of that name (Cratis/Stage#456).
 const slots = ['topbar', 'sidebar', 'menu', 'breadcrumb', 'content', 'footer', 'side'].map(name => ({ name }));
 
 function application(): ApplicationDocument {
@@ -36,8 +36,8 @@ const host = (initialScreen = 'support.tickets', document = application()) =>
     withPrime(<ApplicationHost application={document} navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation: withSideItem }} registry={registry} composition={{ logo: navigation.application.logo }} initialScreen={initialScreen} />);
 
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
-const primary = () => document.querySelector('[data-scene-outlet="primary"]')!;
-const side = () => document.querySelector('[data-scene-outlet="side"]');
+const primary = () => document.querySelector('[data-scene-slot="primary"]')!;
+const side = () => document.querySelector('[data-scene-slot="side"]');
 const active = () => Array.from(sidebar().querySelectorAll('[aria-current="page"]')).map(item => item.textContent?.trim());
 const nothing = () => undefined;
 
@@ -52,8 +52,8 @@ describe('when a navigation item renders into a slot the shell declares', () => 
     describe('and nothing was opened in it', () => {
         beforeEach(() => { render(host()); });
 
-        it('should draw the side slot as an empty outlet', () => [side() !== null, side()?.hasAttribute('data-scene-outlet-screen'), side()?.textContent].should.deep.equal([true, false, '']));
-        it('should show the page in the primary outlet', () => primary().getAttribute('data-scene-screen')!.should.equal('support.tickets'));
+        it('should draw the side slot as an empty slot', () => [side() !== null, side()?.hasAttribute('data-scene-slot-screen'), side()?.textContent].should.deep.equal([true, false, '']));
+        it('should show the page in the primary slot', () => primary().getAttribute('data-scene-screen')!.should.equal('support.tickets'));
         it('should mark only the page the user is on', () => active().should.deep.equal(['Tickets']));
         it('should draw no close button', () => (screen.queryByRole('button', { name: 'Close' }) === null).should.equal(true));
     });
@@ -64,10 +64,10 @@ describe('when a navigation item renders into a slot the shell declares', () => 
             fireEvent.click(within(sidebar()).getByText('Knowledge base'));
         });
 
-        it('should keep the page in the primary outlet', () => primary().getAttribute('data-scene-screen')!.should.equal('support.tickets'));
+        it('should keep the page in the primary slot', () => primary().getAttribute('data-scene-screen')!.should.equal('support.tickets'));
         it('should still show the page', () => primary().textContent!.should.contain('Tickets'));
         it('should render the target in the side pane', () => side()!.textContent!.should.contain('Knowledge base'));
-        it('should draw the side pane inside the shell, beside the page', () => (document.querySelector('.layout-wrapper > .layout-side [data-scene-outlet="side"]') !== null).should.equal(true));
+        it('should draw the side pane inside the shell, beside the page', () => (document.querySelector('.layout-wrapper > .layout-side [data-scene-slot="side"]') !== null).should.equal(true));
         it('should mark both items active', () => active().should.deep.equal(['Tickets', 'Knowledge base']));
         it('should offer to close the pane', () => (within(side() as HTMLElement).queryByRole('button', { name: 'Close' }) !== null).should.equal(true));
     });
@@ -101,7 +101,7 @@ describe('when a navigation item renders into a slot the shell declares', () => 
             fireEvent.click(within(sidebar()).getByText('Knowledge base'));
         });
 
-        it('should open the target in the primary outlet as before', () => primary().getAttribute('data-scene-screen')!.should.equal('support.kb'));
+        it('should open the target in the primary slot as before', () => primary().getAttribute('data-scene-screen')!.should.equal('support.kb'));
         it('should draw no side pane', () => (side() === null).should.equal(true));
     });
 });

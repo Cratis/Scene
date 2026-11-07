@@ -110,7 +110,7 @@ export async function openInventoryPage(): Promise<InventoryPage> {
             const overflow = document.documentElement.scrollWidth > window.innerWidth ? [`overflow: the page is ${document.documentElement.scrollWidth}px wide in a ${window.innerWidth}px viewport`] : [];
             const box = dialog ? document.querySelector<HTMLElement>('[role="dialog"]')?.getBoundingClientRect() : undefined;
             const outside = !dialog ? [] : !box ? ['the dialog was not drawn'] : box.left < -1 || box.top < -1 || box.right > window.innerWidth + 1 ? [`the dialog box is outside the ${window.innerWidth}px window`] : [];
-            const shown = document.querySelector('[data-scene-outlet="primary"]')?.getAttribute('data-scene-screen');
+            const shown = document.querySelector('[data-scene-slot="primary"]')?.getAttribute('data-scene-screen');
             const wrong = shown === expected ? [] : [`the page shows '${shown}', not the requested '${expected}'`];
             return [...wrong, ...overflow, ...outside, ...result.violations.map(violation => `${violation.id}: ${violation.nodes.map(node => node.target.join(' ')).join(', ')}`)];
         }, [call, argumentsList, settle, checkDialog] as const);

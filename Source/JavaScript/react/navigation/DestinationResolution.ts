@@ -6,7 +6,7 @@ import { DestinationKind } from '@cratis/scene.model';
 export interface DestinationResolution {
     kind: DestinationKind;
     url?: string;
-    outlet?: string;
+    slot?: string;
     dialog?: string;
 
     /** The resolved route parameters, by name, before they are written into the URL. */

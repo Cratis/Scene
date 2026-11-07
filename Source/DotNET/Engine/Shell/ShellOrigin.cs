@@ -24,7 +24,7 @@ public enum ShellOrigin
     BlueprintDefault = 2,
 
     /// <summary>
-    /// Nothing was chosen or found: the built-in bare shell with one content outlet and no chrome.
+    /// Nothing was chosen or found: the built-in bare shell with one content slot and no chrome.
     /// </summary>
     Bare = 3
 }

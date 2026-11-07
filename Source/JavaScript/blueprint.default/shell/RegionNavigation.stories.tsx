@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from 'storybook/test';
 import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement, Visibility } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
+import { CoreSlot, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../configuration';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
@@ -54,13 +54,13 @@ const screens: Record<string, SceneElement> = {
     'sales.orders': element('sales.orders', 'story:page'),
     'sales.orders.returns': element('sales.orders.returns', 'story:page'),
     'sales.customers': element('sales.customers', 'story:page'),
-    'support.tickets': element('support.tickets', 'story:page', {}, [element('side', 'core:outlet', { name: 'side' })]),
+    'support.tickets': element('support.tickets', 'story:page', {}, [element('side', 'core:slot', { name: 'side' })]),
     'support.kb': element('support.kb', 'story:page'),
 };
 
 function Application({ initialScreen }: { initialScreen: string }) {
     return <LayoutConfigProvider>
-        <SceneNavigationHost screens={screens} initialScreen={initialScreen} registry={{ 'story:page': Page, 'core:outlet': CoreOutlet }}
+        <SceneNavigationHost screens={screens} initialScreen={initialScreen} registry={{ 'story:page': Page, 'core:slot': CoreSlot }}
             navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation }}
             frame={content => <div className='layout-wrapper layout-static'>
                 <div className='layout-topbar'><Topbar element={element('topbar', 'topbar')} slots={{}} /></div>
@@ -87,7 +87,7 @@ type Story = StoryObj<typeof meta>;
 /** A module whose sidebar replaces the application's and nests Returns under Orders. */
 export const HierarchicalSidebar: Story = { args: { initialScreen: 'sales.orders' } };
 
-/** Activating the Knowledge base item renders it into the side outlet while Tickets stays in the main one; both are active. */
+/** Activating the Knowledge base item renders it into the side slot while Tickets stays in the main one; both are active. */
 export const TwoSlots: Story = {
     args: { initialScreen: 'support.tickets' },
     play: async ({ canvasElement }) => {

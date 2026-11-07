@@ -53,12 +53,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -205,12 +205,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -269,12 +269,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -439,12 +439,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -475,7 +475,7 @@
       }
     },
     {
-      "name": "an own root screen template names its primary outlet",
+      "name": "an own root screen template names its primary slot",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -551,7 +551,7 @@
       }
     },
     {
-      "name": "a blueprint root screen template with its own primary outlet",
+      "name": "a blueprint root screen template with its own primary slot",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -842,7 +842,7 @@
       }
     },
     {
-      "name": "a shell without the content outlet is used and reported",
+      "name": "a shell without the content slot is used and reported",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -876,7 +876,7 @@
       }
     },
     {
-      "name": "a screen whose content has no outlet in the shell is reported",
+      "name": "a screen whose content has no slot in the shell is reported",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -911,7 +911,7 @@
       ]
     },
     {
-      "name": "a screen nested in a blueprint template reaches the shell outlet",
+      "name": "a screen nested in a blueprint template reaches the shell slot",
       "library": "default",
       "profile": {
         "name": "Desktop",

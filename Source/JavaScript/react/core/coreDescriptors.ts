@@ -128,9 +128,9 @@ const describedCore: ComponentDescriptor[] = [
         ],
     },
     {
-        component: key('outlet'),
-        displayName: 'Outlet',
-        description: 'A named region another screen opens into. Placing a screen here keeps this screen on the page, and the placed screen may declare outlets of its own.',
+        component: key('slot'),
+        displayName: 'Slot',
+        description: 'A named region another screen opens into. Placing a screen here keeps this screen on the page, and the placed screen may declare slots of its own.',
         properties: [{ path: 'name', label: 'Name', group: 'Navigation', valueType: PropertyValueType.String, constraints: { required: true } }],
     },
     {

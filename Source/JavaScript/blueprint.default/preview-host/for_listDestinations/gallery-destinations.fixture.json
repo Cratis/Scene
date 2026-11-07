@@ -6,7 +6,7 @@
                 "id": "page:WorkspaceScreen",
                 "label": "Module workspace",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "WorkspaceScreen"
                 }
             },
@@ -14,7 +14,7 @@
                 "id": "page:DashboardScreen",
                 "label": "Dashboard",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "DashboardScreen"
                 }
             },
@@ -22,7 +22,7 @@
                 "id": "page:ListScreen",
                 "label": "List",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ListScreen"
                 }
             },
@@ -30,7 +30,7 @@
                 "id": "page:BoardScreen",
                 "label": "Board",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "BoardScreen"
                 }
             },
@@ -38,7 +38,7 @@
                 "id": "page:MasterDetailScreen",
                 "label": "Master/detail with address selection",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "MasterDetailScreen"
                 }
             },
@@ -46,7 +46,7 @@
                 "id": "page:RecordPage",
                 "label": "Record page",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "RecordPage"
                 }
             },
@@ -54,7 +54,7 @@
                 "id": "page:FormScreen",
                 "label": "Form",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "FormScreen"
                 }
             },
@@ -62,7 +62,7 @@
                 "id": "page:WizardScreen",
                 "label": "Wizard",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "WizardScreen"
                 }
             },
@@ -70,7 +70,7 @@
                 "id": "page:CalendarScreen",
                 "label": "Calendar",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "CalendarScreen"
                 }
             },
@@ -78,7 +78,7 @@
                 "id": "page:TimelineScreen",
                 "label": "Timeline",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "TimelineScreen"
                 }
             },
@@ -86,7 +86,7 @@
                 "id": "page:InboxScreen",
                 "label": "Inbox",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "InboxScreen"
                 }
             },
@@ -94,7 +94,7 @@
                 "id": "page:SettingsScreen",
                 "label": "Settings",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "SettingsScreen"
                 }
             },
@@ -102,7 +102,7 @@
                 "id": "page:ProfileScreen",
                 "label": "Profile",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ProfileScreen"
                 }
             },
@@ -110,7 +110,7 @@
                 "id": "page:ReportViewer",
                 "label": "Report viewer",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ReportViewer"
                 }
             },
@@ -118,7 +118,7 @@
                 "id": "page:ImportWizard",
                 "label": "Import wizard",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ImportWizard"
                 }
             },
@@ -126,7 +126,7 @@
                 "id": "page:LoginScreen",
                 "label": "Sign in",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "LoginScreen"
                 }
             },
@@ -134,7 +134,7 @@
                 "id": "page:Dashboard",
                 "label": "Dashboard",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Dashboard"
                 }
             },
@@ -142,7 +142,7 @@
                 "id": "page:CrudList",
                 "label": "List",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "CrudList"
                 }
             },
@@ -150,7 +150,7 @@
                 "id": "page:MasterDetail",
                 "label": "Master/detail",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "MasterDetail"
                 }
             },
@@ -158,7 +158,7 @@
                 "id": "page:DetailView",
                 "label": "Detail",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "DetailView"
                 }
             },
@@ -166,7 +166,7 @@
                 "id": "page:FormPage",
                 "label": "Form",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "FormPage"
                 }
             },
@@ -174,7 +174,7 @@
                 "id": "page:Documentation",
                 "label": "Documentation",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Documentation"
                 }
             },
@@ -182,7 +182,7 @@
                 "id": "page:ProfileSettings",
                 "label": "Profile settings",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ProfileSettings"
                 }
             },
@@ -190,7 +190,7 @@
                 "id": "page:UserManagement",
                 "label": "User management",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "UserManagement"
                 }
             },
@@ -198,7 +198,7 @@
                 "id": "page:Invoice",
                 "label": "Invoice",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Invoice"
                 }
             },
@@ -206,7 +206,7 @@
                 "id": "page:Help",
                 "label": "Help",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Help"
                 }
             },
@@ -214,7 +214,7 @@
                 "id": "page:Login",
                 "label": "Sign in",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Login"
                 }
             },
@@ -222,7 +222,7 @@
                 "id": "page:Register",
                 "label": "Register",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Register"
                 }
             },
@@ -230,7 +230,7 @@
                 "id": "page:ForgotPassword",
                 "label": "Forgotten password",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ForgotPassword"
                 }
             },
@@ -238,7 +238,7 @@
                 "id": "page:NewPassword",
                 "label": "New password",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "NewPassword"
                 }
             },
@@ -246,7 +246,7 @@
                 "id": "page:Verification",
                 "label": "Verification",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Verification"
                 }
             },
@@ -254,7 +254,7 @@
                 "id": "page:LockScreen",
                 "label": "Lock screen",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "LockScreen"
                 }
             },
@@ -262,7 +262,7 @@
                 "id": "page:Landing",
                 "label": "Landing",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Landing"
                 }
             },
@@ -270,7 +270,7 @@
                 "id": "page:ModuleWorkspace",
                 "label": "Module workspace",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ModuleWorkspace"
                 }
             },
@@ -278,7 +278,7 @@
                 "id": "page:FeatureSection",
                 "label": "Feature section",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "FeatureSection"
                 }
             },
@@ -286,7 +286,7 @@
                 "id": "page:SliceSection",
                 "label": "Slice section",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "SliceSection"
                 }
             }
@@ -299,7 +299,7 @@
                 "id": "state:NotFoundScreen",
                 "label": "Not found",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "NotFoundScreen"
                 }
             },
@@ -307,7 +307,7 @@
                 "id": "state:ForbiddenScreen",
                 "label": "Forbidden",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ForbiddenScreen"
                 }
             },
@@ -315,7 +315,7 @@
                 "id": "state:ErrorScreen",
                 "label": "Error",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "ErrorScreen"
                 }
             },
@@ -323,7 +323,7 @@
                 "id": "state:Empty",
                 "label": "Empty state",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Empty"
                 }
             },
@@ -331,7 +331,7 @@
                 "id": "state:Error",
                 "label": "Error",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "Error"
                 }
             },
@@ -339,7 +339,7 @@
                 "id": "state:AccessDenied",
                 "label": "Access denied",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "AccessDenied"
                 }
             },
@@ -347,7 +347,7 @@
                 "id": "state:NotFound",
                 "label": "Not found",
                 "destination": {
-                    "kind": "outlet",
+                    "kind": "slot",
                     "screen": "NotFound"
                 }
             }

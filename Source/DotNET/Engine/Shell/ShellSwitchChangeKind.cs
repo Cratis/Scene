@@ -9,12 +9,12 @@ namespace Cratis.Scene.Engine.Shell;
 public enum ShellSwitchChangeKind
 {
     /// <summary>
-    /// The content a screen placed in an outlet moved to another outlet of the new shell, or was dropped.
+    /// The content a screen placed in a slot moved to another slot of the new shell, or was dropped.
     /// </summary>
     Content = 0,
 
     /// <summary>
-    /// A screen template that fits an outlet now fits the outlet of the new shell (or none, when its outlet was dropped).
+    /// A screen template that fits a slot now fits the slot of the new shell (or none, when its slot was dropped).
     /// </summary>
     Placement = 1
 }

@@ -8,8 +8,8 @@ namespace Cratis.Scene.Model.Common;
 /// </summary>
 public enum DestinationKind
 {
-    /// <summary>Replace content in a named outlet.</summary>
-    Outlet = 0,
+    /// <summary>Replace content in a named slot.</summary>
+    Slot = 0,
 
     /// <summary>Open a dialog surface.</summary>
     Dialog = 1,

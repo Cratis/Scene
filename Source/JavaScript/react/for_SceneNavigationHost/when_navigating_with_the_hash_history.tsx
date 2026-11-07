@@ -24,7 +24,7 @@ function Close({ element }: RegisteredComponentProps) {
 
 function Where() {
     const navigation = useSceneNavigation();
-    return <output aria-label='where'>{JSON.stringify({ screen: navigation.currentScreen, parameters: navigation.currentParameters, outlet: navigation.currentOutlet ?? null, returned: navigation.dialogResult ?? null })}</output>;
+    return <output aria-label='where'>{JSON.stringify({ screen: navigation.currentScreen, parameters: navigation.currentParameters, slot: navigation.currentSlot ?? null, returned: navigation.dialogResult ?? null })}</output>;
 }
 
 function Page({ slots }: RegisteredComponentProps) {
@@ -37,7 +37,7 @@ const page = (id: string, ...children: SceneElement[]) => ({ id, componentName: 
 
 const details: DestinationReference = {
     screen: 'WorkItemDetails',
-    outlet: 'detail',
+    slot: 'detail',
     routeParameterBindings: { workItemId: { kind: BindingSourceKind.DataContext, path: 'selected.workItemId' } },
 };
 const rename: DestinationReference = { kind: DestinationKind.Dialog, dialog: 'RenameWorkItem' };
@@ -67,7 +67,7 @@ describe('when navigating with the hash history', () => {
     it('should open the deep link with its typed parameter', () => {
         window.history.replaceState(null, '', '/runtime/index.html#/WorkItemDetails?workItemId=B');
         render(host());
-        where().should.deep.equal({ screen: 'WorkItemDetails', parameters: { workItemId: 'B' }, outlet: 'detail', returned: null });
+        where().should.deep.equal({ screen: 'WorkItemDetails', parameters: { workItemId: 'B' }, slot: 'detail', returned: null });
     });
 
     it('should write the destination and its parameter into the fragment, keeping the page path', () => {
@@ -75,7 +75,7 @@ describe('when navigating with the hash history', () => {
         fireEvent.click(screen.getByText('Open B'));
         window.location.pathname.should.equal('/runtime/index.html');
         window.location.hash.should.equal('#/WorkItemDetails?workItemId=B');
-        where().should.deep.include({ screen: 'WorkItemDetails', parameters: { workItemId: 'B' }, outlet: 'detail' });
+        where().should.deep.include({ screen: 'WorkItemDetails', parameters: { workItemId: 'B' }, slot: 'detail' });
     });
 
     it('should open the toolbar dialog over the details and return its result', async () => {

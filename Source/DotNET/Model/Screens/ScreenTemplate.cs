@@ -60,11 +60,6 @@ public record ScreenTemplate(
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
 
     /// <summary>
-    /// Gets named routed replacement surfaces this template owns. Static slots remain composition surfaces.
-    /// </summary>
-    public IReadOnlyList<Outlet>? Outlets { get; init; }
-
-    /// <summary>
     /// Gets optional semantic type, browse category and scope restrictions.
     /// </summary>
     public TemplateMetadata? Metadata { get; init; }

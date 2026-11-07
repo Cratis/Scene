@@ -4,9 +4,9 @@
 namespace Cratis.Scene.Engine.Shell;
 
 /// <summary>
-/// Where a screen template sits in the shell: the outermost template of its chain and the outlet that template fits.
+/// Where a screen template sits in the shell: the outermost template of its chain and the slot that template fits.
 /// </summary>
-/// <param name="Template">The name of the outermost template of the chain - the one whose <c language="csharp">FitsSlot</c> names the outlet.</param>
-/// <param name="Outlet">The outlet of the shell it fits (a name the shell may not have).</param>
-/// <param name="Qualifier">The qualifier of its <c language="csharp">FitsSlot</c> (<c language="csharp">Shell.outlet</c>), when it has one.</param>
-public record TemplatePlacement(string Template, string Outlet, string? Qualifier = null);
+/// <param name="Template">The name of the outermost template of the chain - the one whose <c language="csharp">FitsSlot</c> names the slot.</param>
+/// <param name="Slot">The slot of the shell it fits (a name the shell may not have).</param>
+/// <param name="Qualifier">The qualifier of its <c language="csharp">FitsSlot</c> (<c language="csharp">Shell.slot</c>), when it has one.</param>
+public record TemplatePlacement(string Template, string Slot, string? Qualifier = null);

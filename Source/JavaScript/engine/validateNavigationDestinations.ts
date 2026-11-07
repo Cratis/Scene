@@ -10,7 +10,7 @@ import { NavigationDiagnostic, diagnoseNavigation } from './navigation';
 export type NavigationDestinationDiagnostic = NavigationDiagnostic;
 
 /**
- * Validates destinations against the outlet/route declarations owned by layouts and templates, and - when
+ * Validates destinations against the slot/route declarations owned by layouts and templates, and - when
  * the screens and dialog templates are given - against the targets that actually exist.
  *
  * A shorthand for {@link diagnoseNavigation} over destinations without entry identities.

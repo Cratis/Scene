@@ -4,7 +4,7 @@
 import { ReactNode } from 'react';
 import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
+import { CoreSlot, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../configuration';
 import { Sidebar, Topbar } from '../shell';
 
@@ -53,14 +53,14 @@ function Page({ element: page, slots }: RegisteredComponentProps) {
     return <section data-screen={page.id}>{page.id}{slots.content}</section>;
 }
 
-const registry = { 'test:page': Page, 'core:outlet': CoreOutlet };
+const registry = { 'test:page': Page, 'core:slot': CoreSlot };
 
 function screens(): Record<string, SceneElement> {
     const result: Record<string, SceneElement> = {};
     for (const module of structure.modules) {
         for (const feature of module.features) {
             const id = `${module.id}.${feature.id}`;
-            result[id] = element(id, 'test:page', {}, id === 'support.tickets' ? [element('side', 'core:outlet', { name: 'side' })] : []);
+            result[id] = element(id, 'test:page', {}, id === 'support.tickets' ? [element('side', 'core:slot', { name: 'side' })] : []);
             for (const child of feature.features ?? []) result[`${id}.${child.id}`] = element(`${id}.${child.id}`, 'test:page');
         }
     }

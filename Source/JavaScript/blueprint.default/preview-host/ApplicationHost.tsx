@@ -6,13 +6,13 @@ import { DialogTemplate, SceneElement, type EffectiveConfiguration } from '@crat
 import { BindingResolver, BindingScope } from '@cratis/scene.engine';
 import {
     ComponentRegistry, NavigationActivationPolicy, NavigationActivationProvider, SceneElementView, SceneHistory, SceneNavigationContextValue, SceneNavigationModel, SceneNavigationModelProvider,
-    SceneNavigationProvider, SceneOutletContext, SliceDialogView, collectOutletOwners, createMemorySceneHistory, shellOutletOwner, navigationDestinations,
+    SceneNavigationProvider, SceneSlotContext, SliceDialogView, collectSlotOwners, createMemorySceneHistory, shellSlotOwner, navigationDestinations,
     sceneRoutesFrom, sliceDialogParameters, useSceneHistoryNavigation,
 } from '@cratis/scene.react';
 import { LayoutConfigProvider, LayoutConfigState, useLayoutConfig } from '../configuration';
 import { ApplicationDocument } from './ApplicationDocument';
 import { previewComponents } from './PreviewTemplate';
-import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen, effectiveShellOf } from './composeApplication';
+import { CompositionOptions, collectDestinations, composeApplicationScreen, composeDialog, composeSlotScreen, effectiveShellOf } from './composeApplication';
 
 export interface ApplicationHostProps {
     /** The document the application is composed from. */
@@ -96,7 +96,7 @@ export interface ApplicationHostProps {
 
 /**
  * The application as both Stage and the preview host run it: the shell composed for the screen on the page
- * (`composeApplicationScreen`), nested outlets holding the screens placed in them, the navigation model in scope for the shell's
+ * (`composeApplicationScreen`), nested slots holding the screens placed in them, the navigation model in scope for the shell's
  * topbar and sidebar regions, every destination the document and the navigation lead to routed, and the dialog a toolbar slice
  * button or a dialog destination opened shown over it - one place for all of it (spec PRV9), so a behaviour that differs between
  * the two hosts is a bug in the host, not a second implementation.
@@ -107,33 +107,33 @@ export function ApplicationHost({ application, composition = {}, navigationModel
     const hostHistory = history ?? memoryHistory;
     const screens = application.screens;
 
-    const outletScreens = useMemo(
-        () => Object.fromEntries(screens.map(candidate => [candidate.name, composeOutletScreen(application, candidate, composition)])),
+    const slotScreens = useMemo(
+        () => Object.fromEntries(screens.map(candidate => [candidate.name, composeSlotScreen(application, candidate, composition)])),
         [application, composition, screens]);
     const destinations = useMemo(
         () => [...collectDestinations(application), ...navigationDestinations(navigationModel.structure, navigationModel.navigation, navigationModel.screenFor)],
         [application, navigationModel]);
-    const screenOwners = useMemo(() => collectOutletOwners(outletScreens), [outletScreens]);
+    const screenOwners = useMemo(() => collectSlotOwners(slotScreens), [slotScreens]);
 
-    // An outlet a destination renders into that no screen declares but the shell does - `slot side` - is the shell's: it holds the screen beside
-    // the primary one, so the shell is given a closable outlet in that slot and the owner of the outlet is the shell.
-    const shellOutlets = useMemo(() => {
-        const wanted = new Set(destinations.flatMap(destination => destination.outlet && !(destination.outlet in screenOwners) ? [destination.outlet] : []));
+    // A slot a destination renders into that no screen declares but the shell does - `slot side` - is the shell's: it holds the screen beside
+    // the primary one, so the shell is given a closable slot in that slot and the owner of the slot is the shell.
+    const shellSlots = useMemo(() => {
+        const wanted = new Set(destinations.flatMap(destination => destination.slot && !(destination.slot in screenOwners) ? [destination.slot] : []));
         if (wanted.size === 0) return [];
         return [...new Set(screens.flatMap(candidate => {
             const shell = effectiveShellOf(application, candidate, composition);
-            return shell.outlets.filter(name => name !== shell.primaryOutlet && wanted.has(name));
+            return shell.slots.filter(name => name !== shell.primarySlot && wanted.has(name));
         }))];
     }, [application, composition, destinations, screenOwners, screens]);
-    const owners = useMemo(() => ({ ...screenOwners, ...Object.fromEntries(shellOutlets.map(name => [name, shellOutletOwner])) }), [screenOwners, shellOutlets]);
-    const hostedComposition = useMemo<CompositionOptions>(() => shellOutlets.length === 0 ? composition : { ...composition, hostedOutlets: [...(composition.hostedOutlets ?? []), ...shellOutlets] }, [composition, shellOutlets]);
+    const owners = useMemo(() => ({ ...screenOwners, ...Object.fromEntries(shellSlots.map(name => [name, shellSlotOwner])) }), [screenOwners, shellSlots]);
+    const hostedComposition = useMemo<CompositionOptions>(() => shellSlots.length === 0 ? composition : { ...composition, hostedSlots: [...(composition.hostedSlots ?? []), ...shellSlots] }, [composition, shellSlots]);
     const routes = useMemo(() => sceneRoutesFrom(screens.map(candidate => candidate.name), destinations), [destinations, screens]);
     const bindingScope = useMemo<BindingScope>(() => ({ queryResults }), [queryResults]);
     const navigation = useSceneHistoryNavigation(hostHistory, routes, initialScreen, bindingScope, owners, destinations);
 
     const screen = screens.find(candidate => candidate.name === navigation.primaryScreen) ?? screens.find(candidate => candidate.name === initialScreen) ?? screens[0];
     const composed = useMemo(() => screen ? composeApplicationScreen(application, screen, hostedComposition) : undefined, [application, hostedComposition, screen]);
-    const outletContext = useMemo(() => ({ screens: outletScreens, registry }), [outletScreens, registry]);
+    const slotContext = useMemo(() => ({ screens: slotScreens, registry }), [slotScreens, registry]);
 
     const dialogTemplate = navigation.currentDialog ? application.dialogTemplates?.find(candidate => candidate.name === navigation.currentDialog) : undefined;
     const sliceDialog = !dialogTemplate && navigation.currentDialog && sliceDialogParameters(navigation.currentDialogParameters) !== undefined;
@@ -143,7 +143,7 @@ export function ApplicationHost({ application, composition = {}, navigationModel
 
     const body = (
         <>
-            <div data-scene-outlet='primary' data-scene-url={navigation.currentUrl} data-scene-screen={navigation.primaryScreen}>
+            <div data-scene-slot='primary' data-scene-url={navigation.currentUrl} data-scene-screen={navigation.primaryScreen}>
                 {composed && <Drawn>{renderScreen
                     ? () => renderScreen(composed.element, composed.configuration, navigation)
                     : () => <SceneElementView element={composed.element} registry={registry} resolveBinding={resolveBinding} queryResults={queryResults} configuration={composed.configuration} />}</Drawn>}
@@ -165,7 +165,7 @@ export function ApplicationHost({ application, composition = {}, navigationModel
 
     return (
         <SceneNavigationProvider value={navigation}>
-            <SceneOutletContext.Provider value={outletContext}>
+            <SceneSlotContext.Provider value={slotContext}>
                 <SceneNavigationModelProvider model={navigationModel}>
                     {/* The shell reads its layout configuration from a provider; nothing is saved unless the host gives it somewhere to. */}
                     <LayoutConfigProvider storage={layoutConfigStorage} initialConfig={layoutConfig} viewportWidth={viewportWidth}>
@@ -176,7 +176,7 @@ export function ApplicationHost({ application, composition = {}, navigationModel
                         </NavigationActivationProvider>
                     </LayoutConfigProvider>
                 </SceneNavigationModelProvider>
-            </SceneOutletContext.Provider>
+            </SceneSlotContext.Provider>
         </SceneNavigationProvider>
     );
 }

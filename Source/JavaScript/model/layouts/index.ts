@@ -14,6 +14,7 @@ export * from './FlowColumn';
 export * from './FlowGrid';
 export * from './FlowLeaf';
 export * from './FlowSlotLeaf';
+export * from './SlotRole';
 export * from './FreeformArrangement';
 export * from './FreeformVariant';
 export * from './ElementPlacement';

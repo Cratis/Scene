@@ -3,10 +3,10 @@
 
 /**
  * One route a navigation host can be deep linked to: a template such as `sales/orders/{orderId}` and the
- * screen, and optionally the outlet, it opens.
+ * screen, and optionally the slot, it opens.
  */
 export interface SceneRoute {
     route: string;
     screen: string;
-    outlet?: string;
+    slot?: string;
 }

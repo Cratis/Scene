@@ -16,7 +16,7 @@ const toolbar = element('toolbar', 'core:toolbar', { name: 'main' }, {
     items: [
         element('edit', 'core:toolbarItem', { name: 'edit', kind: 'Action', target: 'EditInvoice', label: 'Edit', icon: 'edit', parameters: { invoiceId: { path: 'invoice.id' } }, presentation: { placement: 'primary' } }),
         element('details', 'core:toolbarItem', { name: 'details', kind: 'Navigate', target: 'InvoiceDetails', label: 'Details', presentation: { mode: 'icon' }, icon: 'info', parameters: { invoiceId: { path: 'invoice.id' } } }),
-        element('open', 'core:toolbarItem', { name: 'open', kind: 'Navigate', target: 'InvoiceDetails', label: 'Open', destination: { screen: 'InvoiceDetails', outlet: 'detail', kind: 'outlet', routeParameterBindings: { id: { path: 'invoice.id' } } } }),
+        element('open', 'core:toolbarItem', { name: 'open', kind: 'Navigate', target: 'InvoiceDetails', label: 'Open', destination: { screen: 'InvoiceDetails', slot: 'detail', kind: 'slot', routeParameterBindings: { id: { path: 'invoice.id' } } } }),
         element('help', 'core:toolbarItem', { name: 'help', kind: 'Dialog', target: 'HelpDialog', label: 'Help' }),
     ],
 });
@@ -62,7 +62,7 @@ describe('when activating toolbar items', () => {
 
         it('should resolve the bindings of an authored destination against the scope it renders in', () => {
             fireEvent.click(screen.getByText('Open'));
-            [navigations[0].destination.routeParameterBindings!.id.value, (navigations[0].destination as { outlet?: string }).outlet].should.deep.equal(['i-7', 'detail']);
+            [navigations[0].destination.routeParameterBindings!.id.value, (navigations[0].destination as { slot?: string }).slot].should.deep.equal(['i-7', 'detail']);
         });
 
         it('should announce a dialog', () => {

@@ -7,11 +7,11 @@ import { DestinationResolution } from './DestinationResolution';
 import { identityRoute } from './identityRoute';
 
 /**
- * Resolves a destination into a renderer-neutral navigation action, deep link and target outlet/dialog.
+ * Resolves a destination into a renderer-neutral navigation action, deep link and target slot/dialog.
  */
 export function resolveDestination(destination: DestinationReference, scope: BindingScope = {}): DestinationResolution {
     const diagnostics: string[] = [];
-    const kind = destination.kind ?? (destination.dialog ? DestinationKind.Dialog : DestinationKind.Outlet);
+    const kind = destination.kind ?? (destination.dialog ? DestinationKind.Dialog : DestinationKind.Slot);
     const parameters = Object.entries(destination.routeParameterBindings ?? {})
         .map(([name, binding]) => [name, String(resolveBindingExpression(binding, scope) ?? '')] as const);
     const base = destination.route ?? identityRoute(destination);
@@ -21,7 +21,7 @@ export function resolveDestination(destination: DestinationReference, scope: Bin
     return {
         kind,
         url,
-        outlet: destination.outlet,
+        slot: destination.slot,
         dialog: destination.dialog,
         parameters: Object.fromEntries(parameters),
         action: kind === DestinationKind.Dialog ? 'openDialog' : kind === DestinationKind.External ? 'openExternal' : 'navigate',

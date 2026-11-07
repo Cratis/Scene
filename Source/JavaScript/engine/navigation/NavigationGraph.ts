@@ -15,10 +15,10 @@ export interface NavigationGraph {
     /** The screens destinations may open. */
     screens?: Screen[];
 
-    /** The layouts that may own outlets. */
+    /** The layouts that may own slots. */
     layouts?: Layout[];
 
-    /** The screen templates that may own outlets, and that give screens their semantic type. */
+    /** The screen templates that may own slots, and that give screens their semantic type. */
     screenTemplates?: ScreenTemplate[];
 
     /** The dialog templates dialog destinations may open. */

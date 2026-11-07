@@ -3,7 +3,7 @@
 
 /**
  * Finds cycles in a "renders inside" graph, where an edge from a screen to another means the first is
- * placed in an outlet the second one's template owns. Screens are visited in the given order and edges in
+ * placed in a slot the second one's template owns. Screens are visited in the given order and edges in
  * insertion order, so the same graph always yields the same cycles in the same order. Each set of screens
  * is reported once, starting from the screen the walk reached it through.
  */

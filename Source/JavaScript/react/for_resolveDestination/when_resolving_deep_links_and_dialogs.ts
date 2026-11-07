@@ -10,12 +10,12 @@ describe('when resolving deep links and dialogs', () => {
             module: 'billing',
             feature: 'invoices',
             slice: 'details',
-            outlet: 'content',
+            slot: 'content',
             routeParameterBindings: { invoiceId: { kind: BindingSourceKind.ComponentProperty, componentId: 'table', path: 'selected.id' } },
         }, { componentOutputs: { table: { selected: { id: 'invoice-2' } } } });
 
         result.action.should.equal('navigate');
-        result.outlet!.should.equal('content');
+        result.slot!.should.equal('content');
         result.url!.should.equal('billing/invoices/details?invoiceId=invoice-2');
     });
 

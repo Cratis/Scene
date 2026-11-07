@@ -51,10 +51,10 @@ describe('when composing with a root template', () => {
         });
     });
 
-    describe('and the root is a screen template with the root role and its own primary outlet', () => {
+    describe('and the root is a screen template with the root role and its own primary slot', () => {
         const frame: ScreenTemplate = {
-            name: 'Frame', slots: [{ name: 'rail' }, { name: 'main' }], content: { rail: [element('frame-rail', 'test:page')] },
-            metadata: { role: TemplateRole.Root, primaryOutlet: 'main' },
+            name: 'Frame', slots: [{ name: 'rail' }, { name: 'main', primary: true }], content: { rail: [element('frame-rail', 'test:page')] },
+            metadata: { role: TemplateRole.Root },
         };
         const application = withRoot({ template: { source: TemplateReferenceSource.Own, id: 'Frame' } }, [], [frame]);
         const composed = composeApplicationScreen(application, application.screens[1]);
@@ -62,13 +62,13 @@ describe('when composing with a root template', () => {
         it('should be a screen template shell', () => effectiveShellOf(application, application.screens[1]).kind.should.equal(ShellKind.ScreenTemplate));
         it('should be drawn by the template component', () => asComponent(composed.element).componentName.should.equal(previewTemplateComponent));
         it('should keep the template content in its rail', () => (asComponent(composed.element).slots.rail ?? []).map(value => (value as ExternalComponent).id).should.include('frame-rail'));
-        it('should place the screen in the primary outlet', () => (asComponent(composed.element).slots.main ?? []).map(value => (value as ExternalComponent).id).should.include('orders'));
+        it('should place the screen in the primary slot', () => (asComponent(composed.element).slots.main ?? []).map(value => (value as ExternalComponent).id).should.include('orders'));
     });
 
     describe('and the root screen template fills its own topbar', () => {
         const shop: ScreenTemplate = {
-            name: 'ShopFrame', slots: [{ name: 'topbar' }, { name: 'breadcrumb' }, { name: 'content' }], content: { topbar: [element('shop-topbar', 'test:topbar')] },
-            metadata: { role: TemplateRole.Root, primaryOutlet: 'content' },
+            name: 'ShopFrame', slots: [{ name: 'topbar' }, { name: 'breadcrumb' }, { name: 'content', primary: true }], content: { topbar: [element('shop-topbar', 'test:topbar')] },
+            metadata: { role: TemplateRole.Root },
         };
         const application = withRoot({ template: { source: TemplateReferenceSource.Own, id: 'ShopFrame' } }, [], [shop]);
         const composed = composeApplicationScreen(application, application.screens[1]);

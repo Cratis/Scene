@@ -13,7 +13,7 @@ import { preview } from '../for_ScenePreviewHost/when_previewing_a_module';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 
 // React and PrimeReact number the elements they render; the numbers are not part of what is rendered.
-const primary = () => document.querySelector('[data-scene-outlet="primary"]')!.innerHTML.replace(/_r_[0-9a-z]+_/g, '_r_');
+const primary = () => document.querySelector('[data-scene-slot="primary"]')!.innerHTML.replace(/_r_[0-9a-z]+_/g, '_r_');
 
 describe('when hosting the application as Stage does', () => {
     afterEach(cleanup);
@@ -60,7 +60,7 @@ describe('when a host puts its own scope around the application', () => {
 
     it('should draw the screen inside it', () => {
         render(withPrime(<ApplicationHost application={ordersApplication()} navigationModel={model} registry={registry} initialScreen='sales.orders' scope={(_navigation, children) => <Marker>{children}</Marker>} />));
-        (document.querySelector('[data-host-scope] [data-scene-outlet="primary"] [data-page="orders"]') !== null).should.equal(true);
+        (document.querySelector('[data-host-scope] [data-scene-slot="primary"] [data-page="orders"]') !== null).should.equal(true);
     });
 
     it('should run what the host draws as part of the application, under the scope', () => {

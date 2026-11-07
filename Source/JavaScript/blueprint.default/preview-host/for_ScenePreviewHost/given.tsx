@@ -91,7 +91,7 @@ export function ordersApplication(): ApplicationDocument {
                 element('order-list', 'test:grid', { query: 'OrderList' }),
             ]),
             screen('sales.customers', [element('customers', 'test:page', { title: 'Customers' })]),
-            screen('support.tickets', [element('tickets', 'test:page', { title: 'Tickets' }, { content: [element('side', 'core:outlet', { name: 'side' })] })]),
+            screen('support.tickets', [element('tickets', 'test:page', { title: 'Tickets' }, { content: [element('side', 'core:slot', { name: 'side' })] })]),
             screen('support.kb', [element('kb', 'test:page', { title: 'Knowledge base' })]),
         ],
         uiProfiles: [{ ...previewProfile(undefined), name: 'Acme', sampleData: { activePack: 'nordic-smb', mappings: [], bindings: [] } }],

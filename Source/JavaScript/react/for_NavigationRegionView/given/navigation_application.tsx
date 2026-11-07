@@ -10,7 +10,7 @@ import { RegisteredComponentProps } from '../../renderer';
 import { SceneNavigationHost } from '../../navigation/SceneNavigationHost';
 import { SceneNavigationModel } from '../../navigation/region/SceneNavigationModel';
 import { NavigationRegionView, NavigationRegionViewProps } from '../../navigation/region/NavigationRegionView';
-import { CoreOutlet } from '../../navigation/CoreOutlet';
+import { CoreSlot } from '../../navigation/CoreSlot';
 
 export interface NavigationFixtureView {
     module?: string;
@@ -42,23 +42,23 @@ function ScreenText({ element }: RegisteredComponentProps) {
     return <span data-screen={element.id}>{String(element.properties.text ?? element.id)}</span>;
 }
 
-/** A screen that declares outlets: its `core:outlet` elements are its content, as on a page with a side panel. */
-function ScreenWithOutlets({ element, slots }: RegisteredComponentProps) {
+/** A screen that declares slots: its `core:slot` elements are its content, as on a page with a side panel. */
+function ScreenWithSlots({ element, slots }: RegisteredComponentProps) {
     return <section data-screen={element.id}>{String(element.id)}{slots.content}</section>;
 }
 
-export const registry = { 'test:text': ScreenText, 'test:page': ScreenWithOutlets, 'core:outlet': CoreOutlet };
+export const registry = { 'test:text': ScreenText, 'test:page': ScreenWithSlots, 'core:slot': CoreSlot };
 
 const element = (id: string, componentName: string, properties: Record<string, unknown> = {}, content: SceneElement[] = []) =>
     ({ id, componentName, properties, slots: content.length > 0 ? { content } : {} }) as unknown as SceneElement;
 
-/** One screen per feature of the structure, named by the feature's qualified id; `outlets` names the outlets each screen declares. */
-export function screensOf(structure: ApplicationStructure, outlets: Record<string, string[]> = {}): Record<string, SceneElement> {
+/** One screen per feature of the structure, named by the feature's qualified id; `slots` names the slots each screen declares. */
+export function screensOf(structure: ApplicationStructure, slots: Record<string, string[]> = {}): Record<string, SceneElement> {
     const screens: Record<string, SceneElement> = {};
     const visit = (prefix: string, features: ApplicationStructure['modules'][number]['features']) => {
         for (const feature of features) {
             const id = `${prefix}.${feature.id}`;
-            screens[id] = outlets[id] ? element(id, 'test:page', {}, outlets[id].map(name => element(`${id}.${name}`, 'core:outlet', { name }))) : element(id, 'test:text');
+            screens[id] = slots[id] ? element(id, 'test:page', {}, slots[id].map(name => element(`${id}.${name}`, 'core:slot', { name }))) : element(id, 'test:text');
             visit(id, feature.features ?? []);
         }
     };
@@ -71,7 +71,7 @@ export interface NavigationApplicationProps {
     navigation: NavigationModel;
     initialScreen: string;
     regions?: Partial<NavigationRegionViewProps>[];
-    outlets?: Record<string, string[]>;
+    slots?: Record<string, string[]>;
     isVisible?(item: EffectiveNavItem): boolean;
     screenFor?(item: EffectiveNavItem): string | undefined;
     moduleOf?(screen: string | undefined): string | undefined;
@@ -79,10 +79,10 @@ export interface NavigationApplicationProps {
     frame?(content: ReactNode): ReactNode;
 }
 
-/** An application host: every feature a screen, the regions of `regions` as its chrome, the content in the primary outlet. */
-export function NavigationApplication({ structure, navigation, initialScreen, regions = [{ region: NavigationRegionKind.Topbar }, { region: NavigationRegionKind.Sidebar }], outlets, isVisible, screenFor, moduleOf, screens }: NavigationApplicationProps) {
+/** An application host: every feature a screen, the regions of `regions` as its chrome, the content in the primary slot. */
+export function NavigationApplication({ structure, navigation, initialScreen, regions = [{ region: NavigationRegionKind.Topbar }, { region: NavigationRegionKind.Sidebar }], slots, isVisible, screenFor, moduleOf, screens }: NavigationApplicationProps) {
     const model: SceneNavigationModel = { structure: new ApplicationStructureIndex(structure), navigation, ...(isVisible ? { isVisible } : {}), ...(screenFor ? { screenFor } : {}), ...(moduleOf ? { moduleOf } : {}) };
-    return <SceneNavigationHost navigationModel={model} screens={screens ?? screensOf(structure, outlets)} initialScreen={initialScreen} registry={registry}
+    return <SceneNavigationHost navigationModel={model} screens={screens ?? screensOf(structure, slots)} initialScreen={initialScreen} registry={registry}
         frame={content => <div data-frame>
             {regions.map((props, position) => <NavigationRegionView key={position} {...props as NavigationRegionViewProps} />)}
             <main>{content}</main>

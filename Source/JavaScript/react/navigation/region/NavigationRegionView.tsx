@@ -83,7 +83,7 @@ function containsActive(item: EffectiveNavItem, isActive: (item: EffectiveNavIte
  * - **Active state** follows what the navigation host shows: an item is active (`aria-current`, `data-active`) when the
  *   screen it opens is the one in its slot, so items rendering into different slots are active at once.
  * - **Activation** goes through the enclosing navigation host (`navigate`), which renders the target in the item's slot -
- *   the `outlet` of the destination; outside a host it announces `cratis.scene.navigate`.
+ *   the `slot` of the destination; outside a host it announces `cratis.scene.navigate`.
  * - **Buttons**: the application-level toolbar buttons the region declares follow the same inherit/extend/override rules. A
  *   button with a slice opens that slice's task dialog over the current page through the navigation host - the way a screen's
  *   toolbar button does, after the host's activation policy had its say - and, outside a host, announces the slice with `cratis.scene.command`. A button without a slice is
@@ -107,11 +107,11 @@ export function NavigationRegionView({ region, module, application = false, mode
     const screenFor = model.screenFor ?? defaultScreenFor;
 
     const sidebar = region === NavigationRegionKind.Sidebar;
-    const placement = useMemo(() => ({ primaryScreen: navigation?.primaryScreen, outlets: navigation?.outlets ?? {} }), [navigation?.outlets, navigation?.primaryScreen]);
+    const placement = useMemo(() => ({ primaryScreen: navigation?.primaryScreen, slots: navigation?.slots ?? {} }), [navigation?.slots, navigation?.primaryScreen]);
     const scope = application ? undefined : module ?? (model.moduleOf ? model.moduleOf(placement.primaryScreen) : currentModuleOf(index, placement.primaryScreen));
     const resolved: EffectiveNavigationRegion = useMemo(() => effectiveNavigation(index, model.navigation, scope, region), [index, model.navigation, scope, region]);
 
-    const isActive = (item: EffectiveNavItem) => placement.primaryScreen !== undefined && navigationItemActive(item, { primaryScreen: placement.primaryScreen, outlets: placement.outlets }, screenFor, !sidebar);
+    const isActive = (item: EffectiveNavItem) => placement.primaryScreen !== undefined && navigationItemActive(item, { primaryScreen: placement.primaryScreen, slots: placement.slots }, screenFor, !sidebar);
     const isVisible = model.isVisible ?? (() => true);
     const visible = useMemo(() => {
         const keep = (items: EffectiveNavItem[]): EffectiveNavItem[] => items.filter(isVisible).map(item => item.children ? { ...item, children: keep(item.children) } : item);
@@ -134,7 +134,7 @@ export function NavigationRegionView({ region, module, application = false, mode
         globalThis.dispatchEvent(new CustomEvent('cratis.scene.command', { detail: { command: button.slice, button, arguments: {} } }));
     };
 
-    const activeKey = JSON.stringify([placement.primaryScreen, placement.outlets, scope]);
+    const activeKey = JSON.stringify([placement.primaryScreen, placement.slots, scope]);
     const [toggled, setToggled] = useState<{ key: string; state: Record<string, boolean> }>({ key: activeKey, state: {} });
     const overrides = toggled.key === activeKey ? toggled.state : {};
     const [focused, setFocused] = useState<string>();

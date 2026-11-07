@@ -35,14 +35,14 @@ export const openInvoice: DestinationReference = {
     module: 'billing',
     feature: 'invoices',
     route: 'billing/invoices/{invoiceId}',
-    outlet: 'content',
+    slot: 'content',
     routeParameterBindings: {
         invoiceId: { kind: BindingSourceKind.DataContext, path: 'invoice.id' },
         tab: { kind: BindingSourceKind.Literal, path: '', value: 'lines' },
     },
 };
 
-export const destinations: DestinationReference[] = [openInvoice, { screen: 'Invoices', route: 'billing/invoices', outlet: 'content' }];
+export const destinations: DestinationReference[] = [openInvoice, { screen: 'Invoices', route: 'billing/invoices', slot: 'content' }];
 
 export const screens: Record<string, SceneElement> = {
     Invoices: page('invoices',

@@ -12,7 +12,7 @@ import { preview } from './when_previewing_a_module';
 const topbar = () => screen.getByRole('navigation', { name: 'Modules' });
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const trail = () => screen.getByRole('navigation', { name: 'Breadcrumb' });
-const page = () => document.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen');
+const page = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
 const current = (nav: HTMLElement) => Array.from(nav.querySelectorAll('[aria-current="page"]')).map(item => item.textContent?.trim());
 const galleryMenu = () => document.querySelector<HTMLElement>('.layout-sidebar')!;
 const nothing = () => undefined;

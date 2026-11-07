@@ -4,7 +4,6 @@
 import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
 import { Behavior } from '../interactions';
-import { Outlet } from './Outlet';
 import { TemplateMetadata } from './TemplateMetadata';
 
 /**
@@ -66,9 +65,6 @@ export interface ScreenTemplate {
      */
     behaviors?: Behavior[];
 
-    /** Named routed replacement surfaces this template owns. Static slots remain composition surfaces. */
-    outlets?: Outlet[];
-
     /** Optional semantic type, browse category and scope restrictions. */
     metadata?: TemplateMetadata;
 }
@@ -82,6 +78,5 @@ export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
     'displayName',
     'description',
     'behaviors',
-    'outlets',
     'metadata',
 ];

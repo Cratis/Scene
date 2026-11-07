@@ -8,7 +8,7 @@ import { ticketingNavigation, supportModule } from '../index';
 import { preview, provideBrowserApis } from './given';
 
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
-const onPage = () => document.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen');
+const onPage = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
 const sidebarItems = ticketingNavigation.modules[0].regions.find(region => region.region === NavigationRegionKind.Sidebar)!.items;
 const topLevel = sidebarItems.filter(item => item.target?.feature !== undefined);
 

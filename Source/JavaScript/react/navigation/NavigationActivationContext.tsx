@@ -6,7 +6,7 @@ import { DestinationKind, DestinationReference } from '@cratis/scene.model';
 import { NavigationActivation, NavigationActivationRequest } from './NavigationActivation';
 import { NavigationMode } from './NavigationMode';
 import { SceneNavigationContextInternal } from './SceneNavigationContext';
-import { SceneOutletContext } from './SceneOutletContext';
+import { SceneSlotContext } from './SceneSlotContext';
 
 /** What a host decides about the controls that navigate. */
 export interface NavigationActivationPolicy {
@@ -67,9 +67,9 @@ export interface NavigationActivator {
  */
 export function useNavigationActivation(): NavigationActivator {
     const navigation = useContext(SceneNavigationContextInternal);
-    const outlets = useContext(SceneOutletContext);
+    const slots = useContext(SceneSlotContext);
     const policy = useContext(PolicyContext);
-    const screens = outlets?.screens;
+    const screens = slots?.screens;
 
     const resolves = useCallback((destination: DestinationReference | undefined): boolean => {
         if (destination === undefined) return false;

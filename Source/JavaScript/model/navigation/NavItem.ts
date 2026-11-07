@@ -22,7 +22,7 @@ export interface NavItem {
      */
     target?: DestinationReference;
 
-    /** The rendering slot - an outlet id - the target renders into; `content`, the primary outlet, when absent. */
+    /** The rendering slot - a slot id - the target renders into; `content`, the primary slot, when absent. */
     slot?: string;
 
     /** The sub-items; only a sidebar item has them. */

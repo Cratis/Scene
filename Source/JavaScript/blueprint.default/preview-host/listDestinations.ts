@@ -72,7 +72,7 @@ export function listDestinations(application: ApplicationDocument): DestinationG
             label: template?.displayName ?? screen.name,
             group: state ? DestinationGroup.States : DestinationGroup.Pages,
             category: template?.metadata?.category ?? screen.screenTemplate,
-            destination: { kind: DestinationKind.Outlet, screen: screen.name },
+            destination: { kind: DestinationKind.Slot, screen: screen.name },
             layout: screen.layout,
             ...(template?.description === undefined ? {} : { description: template.description }),
         };

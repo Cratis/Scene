@@ -35,7 +35,7 @@ export const corePackageManifest: ScenePackage = {
         'code',
         'file',
         'navigationBar',
-        'outlet',
+        'slot',
         'toolbar',
         'toolbarItem',
         'sliceDialog',

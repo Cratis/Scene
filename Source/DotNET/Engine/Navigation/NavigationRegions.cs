@@ -11,7 +11,7 @@ namespace Cratis.Scene.Engine.Navigation;
 static class NavigationRegions
 {
     /// <summary>
-    /// The slot an item renders into when it names none: the primary outlet.
+    /// The slot an item renders into when it names none: the primary slot.
     /// </summary>
     public const string PrimarySlot = "content";
 

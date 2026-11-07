@@ -97,8 +97,8 @@ describe('when diagnosing a preview of an application with its own root template
     const document = ordersApplication();
     document.screenTemplates = [
         {
-            name: 'Frame', slots: [{ name: 'topbar' }, { name: 'content' }, { name: 'footer' }],
-            metadata: { role: TemplateRole.Root, primaryOutlet: 'content' },
+            name: 'Frame', slots: [{ name: 'topbar' }, { name: 'content', primary: true }, { name: 'footer' }],
+            metadata: { role: TemplateRole.Root },
         },
         { name: 'Side', fitsSlot: 'content', slots: [{ name: 'main' }, { name: 'summary' }] },
     ];

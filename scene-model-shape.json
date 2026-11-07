@@ -92,12 +92,18 @@
       "slots",
       "arrangement",
       "behaviors",
-      "outlets",
       "metadata"
     ],
     "Slot": [
       "name",
-      "arrangement"
+      "arrangement",
+      "description",
+      "role",
+      "routed",
+      "routedBy",
+      "primary",
+      "optional",
+      "accepts"
     ],
     "Arrangement": [],
     "FlowArrangement": [
@@ -328,7 +334,6 @@
       "displayName",
       "description",
       "behaviors",
-      "outlets",
       "metadata"
     ],
     "DialogTemplate": [
@@ -352,7 +357,6 @@
       "sliceKinds",
       "thumbnail",
       "role",
-      "primaryOutlet",
       "defaultMenuMode",
       "displayName",
       "description"
@@ -502,16 +506,11 @@
       "module",
       "feature",
       "slice",
-      "outlet",
+      "slot",
       "route",
       "kind",
       "dialog",
       "routeParameterBindings"
-    ],
-    "Outlet": [
-      "name",
-      "description",
-      "accepts"
     ],
     "PackageDesignTimeMetadata": [
       "previews",
@@ -825,8 +824,13 @@
       "Clear",
       "Preserve"
     ],
+    "SlotRole": [
+      "Page",
+      "Pane",
+      "Panel"
+    ],
     "DestinationKind": [
-      "Outlet",
+      "Slot",
       "Dialog",
       "External"
     ],

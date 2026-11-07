@@ -8,7 +8,7 @@ import { Notifications, interactive, provideBrowserApis } from './given';
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const topbar = () => screen.getByRole('navigation', { name: 'Modules' });
 const labels = (nav: HTMLElement) => Array.from(nav.querySelectorAll('a')).map(item => item.textContent?.trim());
-const page = () => document.querySelector('[data-scene-outlet="primary"]')!;
+const page = () => document.querySelector('[data-scene-slot="primary"]')!;
 const onPage = () => page().getAttribute('data-scene-screen');
 const headings = () => Array.from(page().querySelectorAll('h1')).map(heading => heading.textContent);
 const headers = () => Array.from(page().querySelectorAll('th')).map(header => header.textContent!.trim());

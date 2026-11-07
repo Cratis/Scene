@@ -3,7 +3,7 @@
 
 import { ExternalComponent, SceneElement, ScreenTemplate, TemplateReferenceSource, TemplateRole } from '@cratis/scene.model';
 import { listScreenTemplate } from '../../foundation/templates/listScreenTemplate';
-import { composeApplicationScreen, composeOutletScreen, screenContent } from '../composeApplication';
+import { composeApplicationScreen, composeSlotScreen, screenContent } from '../composeApplication';
 import { element, ordersApplication } from '../for_ScenePreviewHost/given';
 
 const asComponent = (value: SceneElement) => value as ExternalComponent;
@@ -51,9 +51,9 @@ describe('when replacing seeded slot content', () => {
         it('should keep all seeded content', () => [ids(slots.header), ids(slots.body), ids(slots.forms)].should.deep.equal([['seed-header'], ['seed-body'], ['seed-form']]));
     });
 
-    describe('and the screen is placed in a nested outlet', () => {
+    describe('and the screen is placed in a nested slot', () => {
         const { application, screen } = seededScreen();
-        const slots = asComponent(composeOutletScreen(application, screen)).slots;
+        const slots = asComponent(composeSlotScreen(application, screen)).slots;
 
         it('should replace the seed just as in the primary screen', () => ids(slots.header).should.deep.equal(['authored-header']));
         it('should keep unauthored content', () => ids(slots.body).should.deep.equal(['seed-body']));
@@ -105,25 +105,25 @@ describe('when replacing seeded slot content', () => {
         it('should keep the unauthored toolbar and filters', () => [ids(slots.toolbar), ids(slots.filters)].should.deep.equal([ids(listScreenTemplate.content!.toolbar), ids(listScreenTemplate.content!.filters)]));
     });
 
-    describe('and the root template has seeded outlets and chrome', () => {
+    describe('and the root template has seeded slots and chrome', () => {
         const application = ordersApplication();
         application.screenTemplates = [{
-            name: 'Frame', slots: [{ name: 'main' }, { name: 'topbar' }, { name: 'rail' }, { name: 'side' }],
+            name: 'Frame', slots: [{ name: 'main', primary: true }, { name: 'topbar' }, { name: 'rail' }, { name: 'side' }],
             content: {
                 main: [element('seed-main', 'test:page')], topbar: [element('seed-topbar', 'test:page')],
                 rail: [element('seed-rail', 'test:page')], side: [element('seed-side', 'test:page')],
             },
-            metadata: { role: TemplateRole.Root, primaryOutlet: 'main' },
+            metadata: { role: TemplateRole.Root },
         }];
         application.uiProfiles = [{ ...application.uiProfiles![0], root: { template: { source: TemplateReferenceSource.Own, id: 'Frame' } } }];
         const slots = asComponent(composeApplicationScreen(application, application.screens[1], {
             chrome: () => ({ main: [element('host-main', 'test:page')], topbar: [element('host-topbar', 'test:page')] }),
-            trailing: [element('status', 'test:page')], hostedOutlets: ['side'],
+            trailing: [element('status', 'test:page')], hostedSlots: ['side'],
         }).element).slots;
 
         it('should replace the primary seed and keep host chrome and trailing content once', () => ids(slots.main).should.deep.equal(['host-main', 'orders', 'order-list', 'status']));
         it('should keep what the application\'s own root template says in a chrome slot over the host chrome', () => ids(slots.topbar).should.deep.equal(['seed-topbar']));
         it('should keep an unfilled roots content', () => ids(slots.rail).should.deep.equal(['seed-rail']));
-        it('should replace a hosted outlets seed', () => ids(slots.side).should.deep.equal(['outlet-side']));
+        it('should replace a hosted slots seed', () => ids(slots.side).should.deep.equal(['slot-side']));
     });
 });

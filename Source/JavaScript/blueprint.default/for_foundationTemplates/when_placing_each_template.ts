@@ -42,7 +42,7 @@ describe('when placing each foundation template', () => {
     });
 
     it('should declare every slot named in Part B 2.2-2.9, in the order the spec lists them', () => {
-        const slotsOf = (name: string) => foundationScreenTemplates.find(template => template.name === name)!.slots.map(slot => slot.name);
+        const slotsOf = (name: string) => foundationScreenTemplates.find(template => template.name === name)!.slots.filter(slot => slot.routed !== true).map(slot => slot.name);
         slotsOf('WorkspaceScreen').should.deep.equal(['moduleNav', 'moduleContent']);
         slotsOf('DashboardScreen').should.deep.equal(['header', 'kpis', 'charts', 'tables', 'aside']);
         slotsOf('ListScreen').should.deep.equal(['header', 'toolbar', 'filters', 'list', 'bulkBar', 'footer']);

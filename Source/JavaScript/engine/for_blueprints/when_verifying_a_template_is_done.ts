@@ -43,6 +43,9 @@ describe('when verifying a template is done', () => {
     it('should report a declared slot the arrangement never places', () =>
         verify({ ...done, slots: [...done.slots, { name: 'footer' }] }).should.deep.equal(["Template 'ListScreen' declares slot 'footer' but its arrangement never places it"]));
 
+    it('should not ask the arrangement to place a routed slot', () =>
+        verify({ ...done, slots: [...done.slots, { name: 'detail', routed: true }] }).should.deep.equal([]));
+
     it('should report a template that fits a slot nothing declares', () =>
         verify({ ...done, fitsSlot: 'nowhere' }).should.deep.equal(["Template 'ListScreen' is unplaced: no layout or template declares slot 'nowhere'"]));
 

@@ -8,7 +8,7 @@ namespace Cratis.Scene.Engine.Screens;
 
 /// <summary>
 /// Shared applicability rules for template selection and validation at any application depth.
-/// Invalid input is diagnosed rather than rewritten; absent templates allow outlet-only composition.
+/// Invalid input is diagnosed rather than rewritten; absent templates allow slot-only composition.
 /// </summary>
 public static class TemplateApplicability
 {

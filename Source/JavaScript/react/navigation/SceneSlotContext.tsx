@@ -5,15 +5,15 @@ import { createContext, useContext } from 'react';
 import { SceneElement } from '@cratis/scene.model';
 import { ComponentRegistry } from '../renderer';
 
-/** What a nested outlet needs to render the screen placed in it. */
-export interface SceneOutletContextValue {
+/** What a nested slot needs to render the screen placed in it. */
+export interface SceneSlotContextValue {
     screens: Record<string, SceneElement>;
     registry: ComponentRegistry;
 }
 
-export const SceneOutletContext = createContext<SceneOutletContextValue | undefined>(undefined);
+export const SceneSlotContext = createContext<SceneSlotContextValue | undefined>(undefined);
 
 /** The screens and registry of the enclosing navigation host, or undefined outside one. */
-export function useSceneOutlets(): SceneOutletContextValue | undefined {
-    return useContext(SceneOutletContext);
+export function useSceneSlots(): SceneSlotContextValue | undefined {
+    return useContext(SceneSlotContext);
 }

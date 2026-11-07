@@ -14,10 +14,10 @@ export interface SceneNavigationContextValue {
     /** The screen in the primary region. */
     primaryScreen: string;
 
-    /** Which screen each nested outlet shows, by outlet name. */
-    outlets: Record<string, string>;
+    /** Which screen each nested slot shows, by slot name. */
+    slots: Record<string, string>;
     currentUrl?: string;
-    currentOutlet?: string;
+    currentSlot?: string;
     currentDialog?: string;
 
     /** The parameters the open dialog was opened with - a slice dialog carries its slice, command and title. */
@@ -38,10 +38,10 @@ export interface SceneNavigationContextValue {
     closeDialog(result?: unknown): void;
 
     /**
-     * Closes the screen shown in an outlet the shell declares (a side pane), keeping the primary screen: one history entry, so back
-     * reopens it. An outlet that shows nothing is left as it is.
+     * Closes the screen shown in a slot the shell declares (a side pane), keeping the primary screen: one history entry, so back
+     * reopens it. A slot that shows nothing is left as it is.
      */
-    closeOutlet(name: string): void;
+    closeSlot(name: string): void;
 
     /** Goes back one history entry. */
     back(): void;

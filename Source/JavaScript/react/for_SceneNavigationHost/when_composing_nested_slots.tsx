@@ -10,8 +10,8 @@ import { createHashSceneHistory } from '../navigation/createHashSceneHistory';
 import { useSceneNavigation } from '../navigation/SceneNavigationContext';
 
 /**
- * Three levels of recursive composition: the Orders workspace declares a `detail` outlet, the order shown
- * there declares a `line` outlet, and a line opens into it. Each level stays on the page while the next
+ * Three levels of recursive composition: the Orders workspace declares a `detail` slot, the order shown
+ * there declares a `line` slot, and a line opens into it. Each level stays on the page while the next
  * opens inside it.
  */
 function Navigate({ element }: RegisteredComponentProps) {
@@ -31,17 +31,17 @@ const registry = { ...coreComponents, 'test:navigate': Navigate, 'test:heading':
 const element = (id: string, componentName: string, properties: Record<string, unknown> = {}) => ({ id, componentName, properties, slots: {} }) as unknown as ExternalComponent;
 const page = (id: string, ...children: SceneElement[]) => ({ id, componentName: 'test:page', properties: {}, slots: { content: children } }) as unknown as ExternalComponent;
 
-const order: DestinationReference = { screen: 'OrderDetails', outlet: 'detail', route: 'orders/{orderId}', routeParameterBindings: { orderId: { kind: BindingSourceKind.Literal, path: '', value: 'ORD-7' } } };
-const line: DestinationReference = { screen: 'OrderLine', outlet: 'line', route: 'orders/{orderId}/lines/{lineId}', routeParameterBindings: {
+const order: DestinationReference = { screen: 'OrderDetails', slot: 'detail', route: 'orders/{orderId}', routeParameterBindings: { orderId: { kind: BindingSourceKind.Literal, path: '', value: 'ORD-7' } } };
+const line: DestinationReference = { screen: 'OrderLine', slot: 'line', route: 'orders/{orderId}/lines/{lineId}', routeParameterBindings: {
     orderId: { kind: BindingSourceKind.Literal, path: '', value: 'ORD-7' }, lineId: { kind: BindingSourceKind.Literal, path: '', value: 'L-2' },
 } };
 const customers: DestinationReference = { screen: 'Customers' };
 
 const screens = {
     Orders: page('orders', element('orders.heading', 'test:heading', { text: 'Orders' }), element('orders.open', 'test:navigate', { label: 'Open ORD-7', destination: order }),
-        element('orders.customers', 'test:navigate', { label: 'Customers', destination: customers }), element('orders.detail', 'core:outlet', { name: 'detail' })),
+        element('orders.customers', 'test:navigate', { label: 'Customers', destination: customers }), element('orders.detail', 'core:slot', { name: 'detail' })),
     OrderDetails: page('details', element('details.heading', 'test:heading', { text: 'Order ORD-7' }), element('details.open', 'test:navigate', { label: 'Open line L-2', destination: line }),
-        element('details.line', 'core:outlet', { name: 'line' })),
+        element('details.line', 'core:slot', { name: 'line' })),
     OrderLine: page('line', element('line.heading', 'test:heading', { text: 'Line L-2' })),
     Customers: page('customers', element('customers.heading', 'test:heading', { text: 'Customers' })),
 };
@@ -49,7 +49,7 @@ const screens = {
 const headings = () => screen.queryAllByRole('heading').map(heading => heading.textContent);
 const host = () => <SceneNavigationHost screens={screens} initialScreen='Orders' registry={registry} destinations={[order, line, customers]} history={createHashSceneHistory(window)} />;
 
-describe('when composing nested outlets', () => {
+describe('when composing nested slots', () => {
     beforeEach(() => window.history.replaceState(null, '', '/app/index.html'));
     afterEach(cleanup);
 
@@ -65,7 +65,7 @@ describe('when composing nested outlets', () => {
         fireEvent.click(screen.getByText('Open line L-2'));
         headings().should.deep.equal(['Orders', 'Order ORD-7', 'Line L-2']);
         window.location.hash.should.equal('#/orders/ORD-7/lines/L-2');
-        document.querySelector('[data-scene-outlet="detail"] [data-scene-outlet="line"] h2')!.textContent!.should.equal('Line L-2');
+        document.querySelector('[data-scene-slot="detail"] [data-scene-slot="line"] h2')!.textContent!.should.equal('Line L-2');
     });
 
     it('should compose every level from a deep link', () => {

@@ -226,13 +226,13 @@
     margin-inline-end: 20rem;
 }
 
-.scene-outlet-bar {
+.scene-slot-bar {
     display: flex;
     justify-content: flex-end;
     padding-block-end: 0.5rem;
 }
 
-.scene-outlet-close {
+.scene-slot-close {
     padding: 0.25rem 0.75rem;
     color: inherit;
     background: transparent;

@@ -24,7 +24,7 @@ function recordProperty(properties: Record<string, unknown>, name: string): Reco
 
 function isDestination(value: unknown): value is DestinationReference {
     if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
-    return ['screen', 'module', 'route', 'dialog', 'outlet'].some(key => typeof (value as Record<string, unknown>)[key] === 'string');
+    return ['screen', 'module', 'route', 'dialog', 'slot'].some(key => typeof (value as Record<string, unknown>)[key] === 'string');
 }
 
 function isBinding(value: unknown): value is BindingExpression {
@@ -103,7 +103,7 @@ export function CoreToolbar({ element, slots }: RegisteredComponentProps) {
  * - An `Action` item announces the command it targets with the host-neutral `cratis.scene.command` event, carrying its
  *   parameters resolved against the binding scope.
  * - A `Navigate` or `Dialog` item executes its destination through the enclosing navigation host - a screen in an
- *   outlet, a dialog - and, outside one, announces it with the host-neutral `cratis.scene.navigate` event.
+ *   slot, a dialog - and, outside one, announces it with the host-neutral `cratis.scene.navigate` event.
  *
  * Presentation: `mode` is `icon`, `text` or `both` (the default); an icon-only item keeps its label as its accessible name.
  * Every presentation hint - `placement`, `density` or whatever a package reads - is also carried on the node as a

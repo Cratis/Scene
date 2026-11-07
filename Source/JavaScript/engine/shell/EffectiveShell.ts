@@ -16,7 +16,7 @@ export enum ShellOrigin {
     /** The default layout of the first installed blueprint. */
     BlueprintDefault = 'blueprintDefault',
 
-    /** Nothing was chosen or found: the built-in bare shell with one content outlet and no chrome. */
+    /** Nothing was chosen or found: the built-in bare shell with one content slot and no chrome. */
     Bare = 'bare',
 }
 
@@ -70,11 +70,11 @@ export interface EffectiveShell {
     /** How the shell's pin relates to the installed version. Present for a shell from a blueprint. */
     pin?: BlueprintPinEvaluation;
 
-    /** The names of the shell's outlets (slots), in declaration order. */
-    outlets: string[];
+    /** The names of the shell's slots (slots), in declaration order. */
+    slots: string[];
 
-    /** The outlet every screen's content is placed in. `content` unless the shell names another. */
-    primaryOutlet: string;
+    /** The slot every screen's content is placed in. `content` unless the shell names another. */
+    primarySlot: string;
 
     /** The shell's own configuration, as the profile wrote it. Empty when the profile leaves everything at the shell's defaults. */
     options: Record<string, unknown>;

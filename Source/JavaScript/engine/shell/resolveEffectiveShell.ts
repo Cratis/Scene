@@ -14,6 +14,7 @@ import {
 } from '@cratis/scene.model';
 import { BlueprintPinEvaluation, defaultBlueprintPin, evaluateBlueprintPin } from '../blueprints/evaluateBlueprintPin';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
+import { primarySlotOf } from '../slots/resolveSlotRole';
 import { validateLayoutApplicability, validateScreenTemplateApplicability } from '../templateApplicability';
 import { incompatiblePackages } from '../themeCompatibility';
 import { TemplateCatalogKind } from '../templates/TemplateCatalogKind';
@@ -25,12 +26,12 @@ import { ShellDiagnostic } from './ShellDiagnostic';
 import { ShellDiagnosticCode } from './ShellDiagnosticCode';
 import { ShellResolutionContext } from './ShellResolutionContext';
 
-const defaultPrimaryOutlet = 'content';
+const defaultPrimarySlot = 'content';
 
 /** The name of the built-in shell that is used when a profile chooses none and no blueprint offers one. */
 export const bareShellName = 'Bare';
 
-const bareShell: Layout = { name: bareShellName, slots: [{ name: defaultPrimaryOutlet }] };
+const bareShell: Layout = { name: bareShellName, slots: [{ name: defaultPrimarySlot }] };
 
 interface Found {
     template: Layout | ScreenTemplate;
@@ -44,17 +45,17 @@ interface Found {
  * Screenplay validator) calls, so there is no second implementation of "what is the shell?".
  *
  * The order is the profile's root template, then its legacy layout name, then the default layout of the first installed
- * blueprint, then the built-in bare shell (one `content` outlet, no chrome). A candidate that cannot be used at all (it does not
+ * blueprint, then the built-in bare shell (one `content` slot, no chrome). A candidate that cannot be used at all (it does not
  * exist, its blueprint is not available, it is not something an application can use as a shell) is reported and the next one is
  * tried, so there is always a shell to render. A candidate that exists but is wrong in a way the host can still show (its pin is
- * drifted, it lacks the content outlet, the blueprint is available but not added to the packages) is used and reported.
+ * drifted, it lacks the content slot, the blueprint is available but not added to the packages) is used and reported.
  *
  * Besides the root's own problems, the profile around it is checked: the theme against the profile's packages, the packages
- * against the available ones, and - when the screens are given - that every screen's content has an outlet to go to.
+ * against the available ones, and - when the screens are given - that every screen's content has a slot to go to.
  *
  * @param profile The UI profile.
  * @param context The templates, screens, themes and packages to resolve against.
- * @returns The effective shell with its outlets, options and every diagnostic.
+ * @returns The effective shell with its slots, options and every diagnostic.
  */
 export function resolveEffectiveShell(profile: UiProfile, context: ShellResolutionContext): EffectiveShell {
     const diagnostics: ShellDiagnostic[] = [];
@@ -73,7 +74,7 @@ export function resolveEffectiveShell(profile: UiProfile, context: ShellResoluti
     shell ??= bare();
 
     shell.diagnostics.push(...diagnostics);
-    checkContentOutlet(shell);
+    checkContentSlot(shell);
     const templates = placeableScreenTemplates(profile, context);
     checkCycles(shell, templates);
 
@@ -193,8 +194,8 @@ function bare(): EffectiveShell {
         kind: ShellKind.Layout,
         source: ShellSource.BuiltIn,
         name: bareShell.name,
-        outlets: bareShell.slots.map(slot => slot.name),
-        primaryOutlet: defaultPrimaryOutlet,
+        slots: bareShell.slots.map(slot => slot.name),
+        primarySlot: defaultPrimarySlot,
         options: {},
         diagnostics: [],
     };
@@ -202,7 +203,7 @@ function bare(): EffectiveShell {
 
 function build(found: Found, origin: ShellOrigin, reference: TemplateReference, options?: Record<string, unknown>): EffectiveShell {
     const template = found.template;
-    const primaryOutlet = (found.kind === ShellKind.Layout ? (template as Layout).metadata?.primaryOutlet : (template as ScreenTemplate).metadata?.primaryOutlet) ?? defaultPrimaryOutlet;
+    const primarySlot = primarySlotOf(template.slots) ?? defaultPrimarySlot;
     let pin: BlueprintPinEvaluation | undefined;
     if (found.isBlueprint && found.source !== undefined) {
         pin = evaluateBlueprintPin(reference.version, found.source.manifest.version);
@@ -217,8 +218,8 @@ function build(found: Found, origin: ShellOrigin, reference: TemplateReference, 
         name: template.name,
         ...(found.isBlueprint && found.source !== undefined ? { package: found.source.manifest.name, packageVersion: found.source.manifest.version } : {}),
         ...(pin === undefined ? {} : { pin }),
-        outlets: template.slots.map(slot => slot.name),
-        primaryOutlet,
+        slots: template.slots.map(slot => slot.name),
+        primarySlot,
         options: { ...(options ?? {}) },
         diagnostics: [],
     };
@@ -254,12 +255,12 @@ function kindName(kind: TemplateCatalogKind | undefined): string {
     }
 }
 
-function checkContentOutlet(shell: EffectiveShell): void {
-    if (!shell.outlets.includes(shell.primaryOutlet)) {
+function checkContentSlot(shell: EffectiveShell): void {
+    if (!shell.slots.includes(shell.primarySlot)) {
         shell.diagnostics.push({
             code: ShellDiagnosticCode.RootTemplateMissingContentSlot,
             subject: shell.name,
-            message: `Shell '${shell.name}' has no '${shell.primaryOutlet}' outlet, so no screen can be placed in it`,
+            message: `Shell '${shell.name}' has no '${shell.primarySlot}' slot, so no screen can be placed in it`,
         });
     }
 }
@@ -323,32 +324,32 @@ function checkProfile(shell: EffectiveShell, profile: UiProfile, context: ShellR
 
 function checkScreens(shell: EffectiveShell, context: ShellResolutionContext, templates: readonly ScreenTemplate[]): void {
     for (const screen of context.screens ?? []) {
-        for (const outlet of outletsUsedBy(screen, shell.name, templates)) {
-            if (!shell.outlets.includes(outlet)) {
+        for (const slot of slotsUsedBy(screen, shell.name, templates)) {
+            if (!shell.slots.includes(slot)) {
                 shell.diagnostics.push({
                     code: ShellDiagnosticCode.ProfileSlotUnplaced,
                     subject: screen.name,
-                    message: `Screen '${screen.name}' places content in outlet '${outlet}', which shell '${shell.name}' does not have`,
+                    message: `Screen '${screen.name}' places content in slot '${slot}', which shell '${shell.name}' does not have`,
                 });
             }
         }
     }
 }
 
-/** Where a screen template sits in the shell: the outermost template of its chain and the outlet that template fits. */
+/** Where a screen template sits in the shell: the outermost template of its chain and the slot that template fits. */
 export interface TemplatePlacement {
-    /** The name of the outermost template of the chain - the one whose `fitsSlot` names the outlet. */
+    /** The name of the outermost template of the chain - the one whose `fitsSlot` names the slot. */
     template: string;
 
-    /** The outlet of the shell it fits (a name the shell may not have). */
-    outlet: string;
+    /** The slot of the shell it fits (a name the shell may not have). */
+    slot: string;
 
-    /** The qualifier of its `fitsSlot` (`Shell.outlet`), when it has one. */
+    /** The qualifier of its `fitsSlot` (`Shell.slot`), when it has one. */
     qualifier?: string;
 }
 
 /**
- * Where a screen template lands in the shell: follows `fitsSlot` from template to containing template until the slot is an outlet of the
+ * Where a screen template lands in the shell: follows `fitsSlot` from template to containing template until the slot is a slot of the
  * shell - qualified with the shell's name, or one no template of the chain declares. A template without `fitsSlot` is placed explicitly
  * and has no placement.
  *
@@ -366,10 +367,10 @@ export function templatePlacement(templateName: string, shellName: string, templ
         const separator = current.fitsSlot.lastIndexOf('.');
         const qualifier = separator < 0 ? undefined : current.fitsSlot.slice(0, separator);
         const slot = separator < 0 ? current.fitsSlot : current.fitsSlot.slice(separator + 1);
-        if (qualifier === shellName) return { template: current.name, outlet: slot, qualifier };
+        if (qualifier === shellName) return { template: current.name, slot: slot, qualifier };
         const self: ScreenTemplate = current;
         const container = templates.find(template => template !== self && (qualifier === undefined || template.name === qualifier) && template.slots.some(candidate => candidate.name === slot));
-        if (container === undefined) return { template: current.name, outlet: slot, qualifier };
+        if (container === undefined) return { template: current.name, slot: slot, qualifier };
         current = container;
     }
 
@@ -377,18 +378,18 @@ export function templatePlacement(templateName: string, shellName: string, templ
 }
 
 /**
- * The outlets of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
+ * The slots of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
  *
  * @param screen The screen.
  * @param shellName The name of the shell the screen is placed in.
  * @param templates The screen templates a screen can be built from ({@link placeableScreenTemplates}).
- * @returns The outlet names, which may include names the shell does not have.
+ * @returns The slot names, which may include names the shell does not have.
  */
-export function outletsUsedBy(screen: Screen, shellName: string, templates: readonly ScreenTemplate[]): string[] {
+export function slotsUsedBy(screen: Screen, shellName: string, templates: readonly ScreenTemplate[]): string[] {
     if (screen.screenTemplate === undefined) {
         return Object.entries(screen.slotContent ?? {}).filter(([, content]) => content.length > 0).map(([slot]) => slot);
     }
 
     const placement = templatePlacement(screen.screenTemplate, shellName, templates);
-    return placement === undefined ? [] : [placement.outlet];
+    return placement === undefined ? [] : [placement.slot];
 }

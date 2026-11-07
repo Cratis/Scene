@@ -5,7 +5,7 @@
  * The navigational surface a destination opens.
  */
 export enum DestinationKind {
-    Outlet = 'outlet',
+    Slot = 'slot',
     Dialog = 'dialog',
     External = 'external',
 }

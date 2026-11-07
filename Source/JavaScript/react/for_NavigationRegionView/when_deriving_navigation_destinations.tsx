@@ -21,16 +21,16 @@ describe('when deriving the destination of a navigation item', () => {
     afterEach(cleanup);
 
     it('should carry the module and feature identity and the screen of a feature target', () =>
-        navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'tickets'))!.should.deep.equal({ kind: DestinationKind.Outlet, module: 'support', feature: 'tickets', screen: 'support.tickets' }));
+        navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'tickets'))!.should.deep.equal({ kind: DestinationKind.Slot, module: 'support', feature: 'tickets', screen: 'support.tickets' }));
 
     it('should resolve a module target to the first feature of the module', () =>
-        navigationItemDestination(item(undefined, NavigationRegionKind.Topbar, 'sales'))!.should.deep.equal({ kind: DestinationKind.Outlet, module: 'sales', feature: 'orders', screen: 'sales.orders' }));
+        navigationItemDestination(item(undefined, NavigationRegionKind.Topbar, 'sales'))!.should.deep.equal({ kind: DestinationKind.Slot, module: 'sales', feature: 'orders', screen: 'sales.orders' }));
 
-    it('should render into the slot the item names as the outlet', () =>
-        navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'kb'))!.outlet!.should.equal('side'));
+    it('should render into the slot the item names as the slot', () =>
+        navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'kb'))!.slot!.should.equal('side'));
 
-    it('should not name an outlet for the primary content slot', () =>
-        ('outlet' in navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'tickets'))!).should.be.false);
+    it('should not name a slot for the primary content slot', () =>
+        ('slot' in navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'tickets'))!).should.be.false);
 
     it('should let the host name the screens', () =>
         navigationItemDestination(item('support', NavigationRegionKind.Sidebar, 'tickets'), () => 'TicketsScreen')!.screen!.should.equal('TicketsScreen'));
@@ -45,7 +45,7 @@ describe('when deriving the destination of a navigation item', () => {
     });
 
     it('should not change what is active outside the slot an item renders into', () =>
-        navigationItemActive(item('support', NavigationRegionKind.Sidebar, 'kb'), { primaryScreen: 'support.kb', outlets: {} }).should.be.false);
+        navigationItemActive(item('support', NavigationRegionKind.Sidebar, 'kb'), { primaryScreen: 'support.kb', slots: {} }).should.be.false);
 
     it('should open a deep link of a navigation item inside its slot', () => {
         const history = createMemorySceneHistory();

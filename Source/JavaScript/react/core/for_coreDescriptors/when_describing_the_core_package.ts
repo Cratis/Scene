@@ -16,7 +16,7 @@ describe('when describing the core package', () => {
 
     it('should give every layout-free component an author configures properties to edit', () => {
         coreDescriptors.filter(descriptor => descriptor.properties.length > 0).map(descriptor => descriptor.component)
-            .should.have.members(['core:button', 'core:action', 'core:guarded-action', 'core:toolbarItem', 'core:sliceDialog', 'core:column', 'core:outlet', 'core:navigationBar']);
+            .should.have.members(['core:button', 'core:action', 'core:guarded-action', 'core:toolbarItem', 'core:sliceDialog', 'core:column', 'core:slot', 'core:navigationBar']);
     });
 
     it('should describe every component of the package, the structural ones with nothing to edit', () => {

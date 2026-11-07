@@ -3,16 +3,16 @@
 
 import { validateNavigationDestinations } from '../validateNavigationDestinations';
 
-describe('when validating outlets and routes', () => {
-    it('should report missing outlets and duplicate routes', () => {
+describe('when validating slots and routes', () => {
+    it('should report missing slots and duplicate routes', () => {
         const diagnostics = validateNavigationDestinations(
             [
-                { screen: 'Invoices', outlet: 'missing', route: 'invoices' },
+                { screen: 'Invoices', slot: 'missing', route: 'invoices' },
                 { screen: 'InvoiceDetails', route: 'invoices' },
             ],
-            { layouts: [{ name: 'AppShell', slots: [], outlets: [{ name: 'content' }] }] },
+            { layouts: [{ name: 'AppShell', slots: [{ name: 'content', routed: true }] }] },
         );
 
-        diagnostics.map(diagnostic => diagnostic.code).should.have.members(['missingOutlet', 'duplicateRoute']);
+        diagnostics.map(diagnostic => diagnostic.code).should.have.members(['missingSlot', 'duplicateRoute']);
     });
 });

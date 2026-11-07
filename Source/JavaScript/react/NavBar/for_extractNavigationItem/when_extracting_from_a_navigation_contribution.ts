@@ -49,7 +49,7 @@ describe('when extracting from a navigation contribution', () => {
                 icon: 'receipt',
                 presentation: 'primary',
                 targetScreen: 'InvoiceList',
-                destination: { screen: 'InvoiceList', outlet: 'main', kind: 'outlet' },
+                destination: { screen: 'InvoiceList', slot: 'main', kind: 'slot' },
                 hierarchy: ['Billing', 'Invoices', 42],
             }));
         });
@@ -57,7 +57,7 @@ describe('when extracting from a navigation contribution', () => {
         it('should extract the stable id', () => result!.id!.should.equal('nav:invoices'));
         it('should extract the icon', () => result!.icon!.should.equal('receipt'));
         it('should extract the presentation', () => result!.presentation!.should.equal('primary'));
-        it('should extract the destination', () => result!.destination!.outlet!.should.equal('main'));
+        it('should extract the destination', () => result!.destination!.slot!.should.equal('main'));
         it('should extract the hierarchy it was declared in, outermost first', () => result!.hierarchy!.should.deep.equal(['Billing', 'Invoices']));
     });
 

@@ -15,8 +15,8 @@ namespace Cratis.Scene.Engine.Shell;
 /// <param name="Kind">Whether the shell is a layout or a root screen template.</param>
 /// <param name="Source">Whose template the shell is.</param>
 /// <param name="Name">The shell's name.</param>
-/// <param name="Outlets">The names of the shell's outlets (slots), in declaration order.</param>
-/// <param name="PrimaryOutlet">The outlet every screen's content is placed in. <c language="csharp">content</c> unless the shell names another.</param>
+/// <param name="Slots">The names of the shell's slots (slots), in declaration order.</param>
+/// <param name="PrimarySlot">The slot every screen's content is placed in. <c language="csharp">content</c> unless the shell names another.</param>
 /// <param name="Options">The shell's own configuration, as the profile wrote it. Empty when the profile leaves everything at the shell's defaults.</param>
 /// <param name="Diagnostics">Everything found wrong, in a stable order: the root and fallbacks first, then the profile's theme and packages, then the screens.</param>
 /// <param name="Package">The package that supplies the shell. <see langword="null"/> for the built-in bare shell and for a template of the application itself.</param>
@@ -30,8 +30,8 @@ public record EffectiveShell(
     ShellKind Kind,
     ShellSource Source,
     string Name,
-    IReadOnlyList<string> Outlets,
-    string PrimaryOutlet,
+    IReadOnlyList<string> Slots,
+    string PrimarySlot,
     IReadOnlyDictionary<string, JsonNode?> Options,
     IReadOnlyList<ShellDiagnostic> Diagnostics,
     string? Package = null,

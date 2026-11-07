@@ -9,7 +9,7 @@ export interface ShellResolutionContext {
     /** The application's own templates and the blueprints that are available. */
     library: TemplateLibrary;
 
-    /** The application's screens. When given, content placed in an outlet the shell lacks is reported. */
+    /** The application's screens. When given, content placed in a slot the shell lacks is reported. */
     screens?: readonly Screen[];
 
     /** The themes known to the host. When given, the profile's theme is checked against its packages. */

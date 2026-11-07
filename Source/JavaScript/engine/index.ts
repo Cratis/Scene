@@ -46,6 +46,7 @@ export * from './guards';
 export * from './resolveBehaviors';
 export * from './resolveStrings';
 export * from './navigation';
+export * from './slots';
 export * from './validateNavigationDestinations';
 export * from './editing';
 export * from './sampleData';

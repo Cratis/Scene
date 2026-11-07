@@ -140,7 +140,7 @@
       "expectedProblems": ["Template 'list' of type 'List' must not be a Layout"]
     },
     {
-      "name": "templates are optional with outlet composition",
+      "name": "templates are optional with slot composition",
       "kind": "ScreenTemplate",
       "scope": "Feature",
       "expectedProblems": []

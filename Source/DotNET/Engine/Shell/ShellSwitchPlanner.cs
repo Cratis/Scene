@@ -6,20 +6,20 @@ using Cratis.Scene.Model.Screens;
 namespace Cratis.Scene.Engine.Shell;
 
 /// <summary>
-/// Plans switching the application's shell: where the content of every outlet of the current shell goes in the new one, what would be
+/// Plans switching the application's shell: where the content of every slot of the current shell goes in the new one, what would be
 /// lost, and what stops the switch. The pre-flight of "Use this shell"; the host shows the plan, offers the choices of any unresolved
-/// outlet, and on commit applies it as one undoable edit. The TypeScript twin is <c language="csharp">planShellSwitch</c> in
+/// slot, and on commit applies it as one undoable edit. The TypeScript twin is <c language="csharp">planShellSwitch</c> in
 /// <c language="csharp">@cratis/scene.engine</c>; both are asserted against the shared <c language="csharp">shell-switch-fixtures.json</c> corpus.
 /// </summary>
 /// <remarks>
-/// The default mapping is by name, with the current shell's primary outlet following to the new shell's primary outlet (an outlet named
-/// <c language="csharp">content</c> does too when the new shell has no outlet of that name). An outlet the new shell lacks that screens place content in must be
-/// decided - move into the primary outlet, map to another outlet or drop - through the remaps, keyed by the outlet's name; until then it is
-/// <see cref="ShellOutletAction.Unresolved"/> and a blocker. A choice for an outlet that needs none is ignored. An outlet no screen uses needs no decision.
+/// The default mapping is by name, with the current shell's primary slot following to the new shell's primary slot (a slot named
+/// <c language="csharp">content</c> does too when the new shell has no slot of that name). A slot the new shell lacks that screens place content in must be
+/// decided - move into the primary slot, map to another slot or drop - through the remaps, keyed by the slot's name; until then it is
+/// <see cref="ShellSlotAction.Unresolved"/> and a blocker. A choice for a slot that needs none is ignored. A slot no screen uses needs no decision.
 /// </remarks>
 public static class ShellSwitchPlanner
 {
-    const string ContentOutlet = "content";
+    const string ContentSlot = "content";
     const int NamedScreens = 3;
 
     static readonly HashSet<ShellDiagnosticCode> _blocking =
@@ -38,25 +38,25 @@ public static class ShellSwitchPlanner
     /// <param name="candidate">The shell being switched to, resolved the same way with the candidate as the profile's root.</param>
     /// <param name="screens">The application's screens.</param>
     /// <param name="templates">The screen templates a screen can be built from (<see cref="ShellPlacement.PlaceableScreenTemplates"/>).</param>
-    /// <param name="remaps">The user's choices for the outlets that need one, keyed by the outlet of the current shell.</param>
+    /// <param name="remaps">The user's choices for the slots that need one, keyed by the slot of the current shell.</param>
     /// <returns>The plan; <see cref="ShellSwitchPlan.CanSwitch"/> says whether it can be committed.</returns>
     public static ShellSwitchPlan Plan(
         EffectiveShell current,
         EffectiveShell candidate,
         IReadOnlyList<Screen> screens,
         IReadOnlyList<ScreenTemplate>? templates = null,
-        IReadOnlyDictionary<string, OutletRemap>? remaps = null)
+        IReadOnlyDictionary<string, SlotRemap>? remaps = null)
     {
         templates ??= [];
         var users = new Dictionary<string, List<string>>(StringComparer.Ordinal);
         var used = new List<string>();
         foreach (var screen in screens)
         {
-            foreach (var outlet in ShellPlacement.OutletsUsedBy(screen, current.Name, templates))
+            foreach (var slot in ShellPlacement.SlotsUsedBy(screen, current.Name, templates))
             {
-                if (!users.TryGetValue(outlet, out var names))
+                if (!users.TryGetValue(slot, out var names))
                 {
-                    users[outlet] = names = [];
+                    users[slot] = names = [];
                 }
 
                 if (!names.Contains(screen.Name))
@@ -64,22 +64,22 @@ public static class ShellSwitchPlanner
                     names.Add(screen.Name);
                 }
 
-                if (!used.Contains(outlet))
+                if (!used.Contains(slot))
                 {
-                    used.Add(outlet);
+                    used.Add(slot);
                 }
             }
         }
 
         var blockers = new List<ShellDiagnostic>();
-        var outlets = current.Outlets.Concat(used.Where(outlet => !current.Outlets.Contains(outlet)));
-        var moves = outlets
-            .Select(outlet => MoveOf(
-                outlet,
+        var slots = current.Slots.Concat(used.Where(slot => !current.Slots.Contains(slot)));
+        var moves = slots
+            .Select(slot => MoveOf(
+                slot,
                 current,
                 candidate,
-                users.TryGetValue(outlet, out var found) ? found : [],
-                remaps is not null && remaps.TryGetValue(outlet, out var remap) ? remap : null,
+                users.TryGetValue(slot, out var found) ? found : [],
+                remaps is not null && remaps.TryGetValue(slot, out var remap) ? remap : null,
                 blockers))
             .ToList();
 
@@ -112,8 +112,8 @@ public static class ShellSwitchPlanner
         return new ShellSwitchPlan(
             current.Name,
             candidate.Name,
-            current.PrimaryOutlet,
-            candidate.PrimaryOutlet,
+            current.PrimarySlot,
+            candidate.PrimarySlot,
             current.Name == candidate.Name && current.Package == candidate.Package,
             moves,
             addPackages,
@@ -121,87 +121,87 @@ public static class ShellSwitchPlanner
             warnings);
     }
 
-    static ShellOutletMove MoveOf(string outlet, EffectiveShell current, EffectiveShell candidate, List<string> screens, OutletRemap? remap, List<ShellDiagnostic> blockers)
+    static ShellSlotMove MoveOf(string slot, EffectiveShell current, EffectiveShell candidate, List<string> screens, SlotRemap? remap, List<ShellDiagnostic> blockers)
     {
-        if (current.Outlets.Contains(outlet) && outlet == current.PrimaryOutlet)
+        if (current.Slots.Contains(slot) && slot == current.PrimarySlot)
         {
-            return candidate.PrimaryOutlet == outlet
-                ? new(outlet, ShellOutletAction.Keep, screens, KeepText(outlet, screens), outlet)
-                : new(outlet, ShellOutletAction.Primary, screens, PrimaryText(outlet, candidate, screens), candidate.PrimaryOutlet);
+            return candidate.PrimarySlot == slot
+                ? new(slot, ShellSlotAction.Keep, screens, KeepText(slot, screens), slot)
+                : new(slot, ShellSlotAction.Primary, screens, PrimaryText(slot, candidate, screens), candidate.PrimarySlot);
         }
 
-        if (candidate.Outlets.Contains(outlet))
+        if (candidate.Slots.Contains(slot))
         {
-            return new(outlet, ShellOutletAction.Keep, screens, KeepText(outlet, screens), outlet);
+            return new(slot, ShellSlotAction.Keep, screens, KeepText(slot, screens), slot);
         }
 
-        if (outlet == ContentOutlet && current.Outlets.Contains(outlet))
+        if (slot == ContentSlot && current.Slots.Contains(slot))
         {
-            return new(outlet, ShellOutletAction.Primary, screens, PrimaryText(outlet, candidate, screens), candidate.PrimaryOutlet);
+            return new(slot, ShellSlotAction.Primary, screens, PrimaryText(slot, candidate, screens), candidate.PrimarySlot);
         }
 
         if (screens.Count == 0)
         {
-            return new(outlet, ShellOutletAction.Unused, screens, $"Outlet '{outlet}' of shell '{current.Name}' has no counterpart in shell '{candidate.Name}'; no screen uses it");
+            return new(slot, ShellSlotAction.Unused, screens, $"Slot '{slot}' of shell '{current.Name}' has no counterpart in shell '{candidate.Name}'; no screen uses it");
         }
 
-        return Remapped(outlet, candidate, screens, remap, blockers);
+        return Remapped(slot, candidate, screens, remap, blockers);
     }
 
-    static ShellOutletMove Remapped(string outlet, EffectiveShell candidate, List<string> screens, OutletRemap? remap, List<ShellDiagnostic> blockers)
+    static ShellSlotMove Remapped(string slot, EffectiveShell candidate, List<string> screens, SlotRemap? remap, List<ShellDiagnostic> blockers)
     {
         var (count, names) = ScreensText(screens);
         var place = screens.Count == 1 ? "places" : "place";
-        List<OutletRemap> choices =
+        List<SlotRemap> choices =
         [
-            new(ShellOutletAction.MoveToPrimary, candidate.PrimaryOutlet),
-            .. candidate.Outlets.Where(name => name != candidate.PrimaryOutlet).Select(name => new OutletRemap(ShellOutletAction.MapTo, name)),
-            new(ShellOutletAction.Drop)
+            new(ShellSlotAction.MoveToPrimary, candidate.PrimarySlot),
+            .. candidate.Slots.Where(name => name != candidate.PrimarySlot).Select(name => new SlotRemap(ShellSlotAction.MapTo, name)),
+            new(ShellSlotAction.Drop)
         ];
 
-        if (remap?.Action == ShellOutletAction.MoveToPrimary)
+        if (remap?.Action == ShellSlotAction.MoveToPrimary)
         {
-            return new(outlet, ShellOutletAction.MoveToPrimary, screens, $"The content that {names} {place} in outlet '{outlet}' moves into '{candidate.PrimaryOutlet}', the primary outlet of shell '{candidate.Name}'", candidate.PrimaryOutlet);
+            return new(slot, ShellSlotAction.MoveToPrimary, screens, $"The content that {names} {place} in slot '{slot}' moves into '{candidate.PrimarySlot}', the primary slot of shell '{candidate.Name}'", candidate.PrimarySlot);
         }
 
-        if (remap?.Action == ShellOutletAction.Drop)
+        if (remap?.Action == ShellSlotAction.Drop)
         {
-            return new(outlet, ShellOutletAction.Drop, screens, $"The content that {names} {place} in outlet '{outlet}' is dropped");
+            return new(slot, ShellSlotAction.Drop, screens, $"The content that {names} {place} in slot '{slot}' is dropped");
         }
 
-        var message = $"{count} ({names}) {place} content in outlet '{outlet}', which shell '{candidate.Name}' does not have: move it into '{candidate.PrimaryOutlet}', map it to another outlet or drop it";
-        if (remap?.Action == ShellOutletAction.MapTo)
+        var message = $"{count} ({names}) {place} content in slot '{slot}', which shell '{candidate.Name}' does not have: move it into '{candidate.PrimarySlot}', map it to another slot or drop it";
+        if (remap?.Action == ShellSlotAction.MapTo)
         {
-            if (remap.Target is not null && candidate.Outlets.Contains(remap.Target))
+            if (remap.Target is not null && candidate.Slots.Contains(remap.Target))
             {
-                return new(outlet, ShellOutletAction.MapTo, screens, $"The content that {names} {place} in outlet '{outlet}' moves into '{remap.Target}' of shell '{candidate.Name}'", remap.Target);
+                return new(slot, ShellSlotAction.MapTo, screens, $"The content that {names} {place} in slot '{slot}' moves into '{remap.Target}' of shell '{candidate.Name}'", remap.Target);
             }
 
-            message = $"The content in outlet '{outlet}' cannot be mapped to '{remap.Target ?? string.Empty}': shell '{candidate.Name}' has no such outlet";
+            message = $"The content in slot '{slot}' cannot be mapped to '{remap.Target ?? string.Empty}': shell '{candidate.Name}' has no such slot";
         }
 
-        blockers.Add(new ShellDiagnostic(ShellDiagnosticCode.ProfileSlotUnplaced, message, outlet));
-        return new(outlet, ShellOutletAction.Unresolved, screens, message, null, choices);
+        blockers.Add(new ShellDiagnostic(ShellDiagnosticCode.ProfileSlotUnplaced, message, slot));
+        return new(slot, ShellSlotAction.Unresolved, screens, message, null, choices);
     }
 
-    static string KeepText(string outlet, List<string> screens)
+    static string KeepText(string slot, List<string> screens)
     {
         if (screens.Count == 0)
         {
-            return $"Outlet '{outlet}' is kept; no screen uses it";
+            return $"Slot '{slot}' is kept; no screen uses it";
         }
 
-        return $"{ScreensText(screens).Names} stay{(screens.Count == 1 ? "s" : string.Empty)} in outlet '{outlet}'";
+        return $"{ScreensText(screens).Names} stay{(screens.Count == 1 ? "s" : string.Empty)} in slot '{slot}'";
     }
 
-    static string PrimaryText(string outlet, EffectiveShell candidate, List<string> screens)
+    static string PrimaryText(string slot, EffectiveShell candidate, List<string> screens)
     {
         if (screens.Count == 0)
         {
-            return $"Outlet '{outlet}' becomes '{candidate.PrimaryOutlet}', the primary outlet of shell '{candidate.Name}'; no screen uses it";
+            return $"Slot '{slot}' becomes '{candidate.PrimarySlot}', the primary slot of shell '{candidate.Name}'; no screen uses it";
         }
 
-        return $"{ScreensText(screens).Names} move{(screens.Count == 1 ? "s" : string.Empty)} from outlet '{outlet}' to '{candidate.PrimaryOutlet}', the primary outlet of shell '{candidate.Name}'";
+        return $"{ScreensText(screens).Names} move{(screens.Count == 1 ? "s" : string.Empty)} from slot '{slot}' to '{candidate.PrimarySlot}', the primary slot of shell '{candidate.Name}'";
     }
 
     static (string Count, string Names) ScreensText(List<string> screens)
