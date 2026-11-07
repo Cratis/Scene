@@ -1,11 +1,47 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
+import { ComponentDescriptor, Opens, OutletSubject, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { componentRegistryKey, describeComponents } from '../packages';
 import { coreComponentMetadata } from './coreComponentMetadata';
 
 const key = (name: string) => componentRegistryKey('core', name);
+
+/**
+ * Where an action's slice opens, its subject and when it is enabled: the one model the `action` component shares with the
+ * buttons and menu entries of an outlet of actions (`OutletAction`).
+ */
+const actionPlacementProperties: ComponentDescriptor['properties'] = [
+    {
+        path: 'opens', label: 'Opens', group: 'Behavior', valueType: PropertyValueType.Enum, default: Opens.Automatic,
+        editorKind: PropertyEditorKind.Enum,
+        choices: [
+            { value: Opens.Automatic, label: 'Automatic' },
+            { value: Opens.None, label: 'Run directly' },
+            { value: Opens.Dialog, label: 'Ask in a dialog' },
+            { value: Opens.Drawer, label: 'Ask in a drawer' },
+            { value: Opens.Slot, label: 'In a slot' },
+        ],
+        description: 'Where the slice\'s screen opens. Automatic takes the first place the slice fits that the page has free; run directly needs a source for every input.',
+    },
+    {
+        path: 'opensIn', label: 'Slot', group: 'Behavior', valueType: PropertyValueType.String,
+        description: 'The slot of the page the screen opens in, when it opens in a slot.',
+    },
+    {
+        path: 'subject', label: 'Acts on', group: 'Behavior', valueType: PropertyValueType.Enum,
+        editorKind: PropertyEditorKind.Enum,
+        choices: [
+            { value: OutletSubject.Item, label: 'The selected item' },
+            { value: OutletSubject.Screen, label: 'The screen' },
+        ],
+        description: 'An action for an item waits for one to be selected.',
+    },
+    {
+        path: 'enabledWhen', label: 'Enabled when', group: 'Behavior', valueType: PropertyValueType.String,
+        description: 'A condition, in guarded-action condition grammar, under which the action is enabled, such as item.status == "onSale".',
+    },
+];
 
 /**
  * What can be edited on the `core` package's components.
@@ -44,6 +80,7 @@ const describedCore: ComponentDescriptor[] = [
                     ],
                 },
             },
+            ...actionPlacementProperties,
         ],
     },
     {

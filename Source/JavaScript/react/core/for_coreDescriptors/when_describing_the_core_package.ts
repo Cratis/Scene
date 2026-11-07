@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
+import { Opens, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { corePackage, coreDescriptors } from '../../index';
 import { toolbarItemMode } from '../CoreToolbar';
 
@@ -31,10 +31,16 @@ describe('when describing the core package', () => {
         ]);
     });
 
-    it('should describe an action\'s command and its argument mapping', () => {
+    it('should describe an action\'s command, its argument mapping, where it opens, its subject and when it is enabled', () => {
         const action = coreDescriptors.find(descriptor => descriptor.component === 'core:action')!;
-        action.properties.map(property => property.path).should.deep.equal(['label', 'command', 'arguments']);
+        action.properties.map(property => property.path).should.deep.equal(['label', 'command', 'arguments', 'opens', 'opensIn', 'subject', 'enabledWhen']);
         action.properties[2].valueType.should.equal(PropertyValueType.Collection);
+    });
+
+    it('should offer the Opens choices an outlet\'s actions have, opening automatically by default', () => {
+        const opens = coreDescriptors.find(descriptor => descriptor.component === 'core:action')!.properties.find(property => property.path === 'opens')!;
+        opens.default!.should.equal(Opens.Automatic);
+        opens.choices!.map(choice => choice.value).should.deep.equal(Object.values(Opens));
     });
 
     it('should describe the guarded action without changing the ordinary action descriptor', () => {
