@@ -1,6 +1,6 @@
 ---
 title: Navigation regions
-description: How an application defines its topbar and sidebar, how a module inherits, extends or overrides them, how an item targets a module or feature and a rendering slot, and the engine functions every host calls to get the effective items.
+description: How an application stores its topbar and sidebar as outlets of navigation, how a module inherits, extends or overrides them, how an item targets a module or feature and a rendering slot, and the engine functions every host calls to get the effective items.
 ---
 
 An application shell has two navigation **regions**, `topbar` and `sidebar`. The application defines their items;
@@ -8,8 +8,9 @@ each module may leave them as they are, add to them, or replace them. The engine
 shows - `effectiveNavigation` - so React renderers, Stage, Studio design mode and Studio preview all draw the same
 items and nothing re-implements the rules.
 
-A region is an [outlet](outlets.md) of navigation, and its buttons an outlet of actions: `effectiveNavigation`
-resolves the inheritance through `effectiveOutlet`, the same rule every outlet follows.
+A region is stored as an [outlet](outlets.md) of navigation named after it, and its buttons as an outlet of actions
+named `<region>Buttons`. A navigation contribution point, such as `Navigation`, is an outlet of navigation too.
+`effectiveNavigation` resolves them through `effectiveOutlet`, the same rule and the same provenance every outlet has.
 
 ## The model
 
@@ -18,33 +19,36 @@ resolves the inheritance through `effectiveOutlet`, the same rule every outlet f
 | Type | Properties |
 | --- | --- |
 | `NavigationModel` | `application`, `modules` |
-| `ApplicationNavigation` | `regions`, `logo?` |
-| `ModuleNavigation` | `module`, `regions` |
-| `NavigationRegion` | `region` (`topbar` \| `sidebar`), `mode?`, `items`, `buttons?` |
-| `NavigationButton` | `id`, `title`, `slice?`, `emphasis?`, `icon?`, `authorize?` |
-| `NavItem` | `id`, `title`, `icon?`, `target?`, `slot?`, `children?` |
+| `ApplicationNavigation` | `outlets` (`Outlet[]`), `logo?` |
+| `ModuleNavigation` | `module`, `refinements?` (`OutletRefinement[]`), `contributions?` (`OutletContribution[]`) |
+| `OutletNavigationItem` | `kind: navigation`, `id`, `title`, `icon?`, `target?`, `slot?`, `children?`, `before?`, `after?` |
+| `OutletButton` | `kind: button`, `id`, `title`, `slice?`, `emphasis?`, `icon?`, `authorize?`, `before?`, `after?` |
 | `ApplicationLogo` | `image`, `title` |
 
 ```json
 {
   "application": {
-    "regions": [
-      { "region": "topbar", "items": [
-        { "id": "sales", "title": "Sales", "target": { "module": "sales" } },
-        { "id": "support", "title": "Support", "target": { "module": "support" } } ] }
+    "outlets": [
+      { "name": "topbar", "kind": "navigation", "defaults": [
+        { "kind": "navigation", "id": "sales", "title": "Sales", "target": { "module": "sales" } },
+        { "kind": "navigation", "id": "support", "title": "Support", "target": { "module": "support" } } ] }
     ],
     "logo": { "image": "acme.svg", "title": "Acme" }
   },
   "modules": [
-    { "module": "support", "regions": [
-      { "region": "topbar", "mode": "extend", "items": [
-        { "id": "help", "title": "Help center", "target": { "module": "support" } } ] } ] }
+    { "module": "support", "refinements": [
+      { "outlet": "topbar", "mode": "extends", "items": [
+        { "kind": "navigation", "id": "help", "title": "Help center", "target": { "module": "support" } } ] } ] }
   ]
 }
 ```
 
-The application level has no `mode`: it is the base. A module declares a region only when it changes it; a region it
-does not declare, or declares without a `mode`, is `inherit`.
+The shell always offers the `topbar` and `sidebar` outlets of navigation and their `topbarButtons` and
+`sidebarButtons` outlets of actions; the application declares only the ones it gives default items to, and any other
+outlet of navigation it offers. The application level has no mode: it is the base. A module refines an outlet only
+when it changes it, with `inherits`, `extends` or `overrides`, `hide` and `before`/`after`, exactly as any outlet
+refinement; an outlet it does not refine is inherited. Items a module contributes to an outlet
+(`contributions`) follow the outlet's own items.
 
 An item's **target** is a module, or a module and a feature (`feature` is a dotted path inside the module, so
 `orders.returns` is a sub-feature). A module target goes to the module's **first feature**
@@ -54,31 +58,37 @@ authored on a topbar item are ignored. A sidebar item that only groups sub-items
 
 ### Toolbar buttons
 
-A region can also declare **application-level toolbar buttons** (`buttons`) - the Screenplay `button <id> title "..." slice <Slice>` of a
-`navigation topbar` region (Screenplay decision 0098). A button opens the task dialog of its state change `slice` over the current page, as a
-screen's toolbar button does. `emphasis` is `primary`, `secondary` (the default) or `quiet`; `authorize` names the policy the user needs to see it.
-Buttons follow the **same modes as the items**: an application button is shown in every module that inherits or extends the region, a module that
-overrides shows only its own, and a module's own buttons follow the application's when it extends.
+A region's **application-level toolbar buttons** are the outlet of actions `<region>Buttons` (`topbarButtons`,
+`sidebarButtons`) - the Screenplay `button <id> title "..." slice <Slice>` of the topbar (Screenplay decision 0098). A
+button opens the task dialog of its state change `slice` over the current page, as a screen's toolbar button does.
+`emphasis` is `primary`, `secondary` (the default) or `quiet`; `authorize` names the policy the user needs to see it.
+A module refines the buttons outlet on its own: an application button is shown in every module that inherits or
+extends `topbarButtons`, a module that overrides it shows only its own.
 
 ## Effective items
 
 ```ts
 const region = effectiveNavigation(structure, navigation, 'sales', NavigationRegionKind.Sidebar);
+const contributed = effectiveNavigation(structure, navigation, 'sales', 'Navigation');
 ```
 
 ```csharp
 var region = EffectiveNavigation.Resolve(index, navigation, "sales", NavigationRegionKind.Sidebar);
 ```
 
-`module` is the module to resolve for; leave it out for the application itself. The result's `buttons` (`EffectiveNavButton`: the
-button, its `origin`, `readOnly` and `reason`, `emphasis` resolved to its default) follow the same rules as `items`.
+`module` is the module to resolve for; leave it out for the application itself. The last argument is the name of
+the outlet of navigation - a region, or a contribution point such as `Navigation`. The result's `buttons`
+(`EffectiveNavButton`: the button, its `origin`, `readOnly` and `reason`, `emphasis` resolved to its default) are the
+resolved `<outlet>Buttons` outlet of actions.
 
 | Mode | Effective items |
 | --- | --- |
 | *(application)* | the application items, editable |
-| `inherit` | the application items, **read-only**; the module's own items are cleared |
-| `extend` | the application items (read-only) followed by the module's items |
-| `override` | the module's items only |
+| `inherits` | the application items, **read-only** |
+| `extends` | the application items (read-only) less the ones the module hides, followed by the module's items |
+| `overrides` | the module's items only |
+
+Contributed items follow in every mode.
 
 Each item says where it came from, so a designer can draw the locked, violet inherited items and the region tag:
 
@@ -96,24 +106,34 @@ The region itself carries `mode` (the effective mode) and `sources`, the compact
 | `sources.kind` | `sources.label` | When |
 | --- | --- | --- |
 | `definedHere` | `defined here` | the application level |
-| `inherited` | `inherited` | `inherit` |
-| `extended` | `Application + Sales` | `extend` |
-| `overridden` | `Sales only` | `override` |
+| `inherited` | `inherited` | `inherits` |
+| `extended` | `Application + Sales` | `extends` |
+| `overridden` | `Sales only` | `overrides` |
 
 ## Editing
 
 The helpers plan the edits a gesture needs, so every host that offers the gesture makes the same change. They return
 `{ edits, rejected? }`; `applyNavigationEdits` applies edits all-or-nothing to a copy and never changes the model it was given.
 
+Every helper takes the navigation model, the module (`undefined` for the application) and the outlet, such as
+`sidebar` or `topbarButtons`. C# has the same helpers on `NavigationEdits` (`SwitchOutletMode`, `AddItem`,
+`RenameItem`, `MoveItem`, `DuplicateItem`, `RemoveItem`, `SetApplicationLogo`, `Apply`).
+
 | Gesture | Helper | Edits |
 | --- | --- | --- |
-| Switch a region to `inherit` | `switchRegionMode` | clears the module items, sets the mode (NAV3) |
-| Switch `inherit` → `override` | `switchRegionMode(..., { copy: true })` | copies the application items into the module, then sets the mode (NAV5); without `copy` the module starts empty |
-| "+" on an inheriting region | `addNavItem` | switches the region to `extend`, then adds the item (NAV6) |
-| Add a sub-item | `addNavItem(..., parent)` | adds under the parent; sidebar only |
+| Switch an outlet back to `inherits` | `switchOutletMode` | drops the module's refinement of the outlet - its items and what it hides (NAV3) |
+| Switch `inherits` → `overrides` | `switchOutletMode(..., { copy: true })` | copies the application items into the module, then sets the mode (NAV5); without `copy` the module starts empty |
+| "+" on an inherited outlet | `addNavigationItem` | switches the module to `extends`, then adds the item (NAV6) |
+| Add a sub-item | `addNavigationItem(..., parent, index?)` | adds under the parent, at a position; not on the flat topbar |
+| Rename | `renameNavigationItem` | replaces the item with its new title; an inherited item is renamed where it is defined |
+| Move | `moveNavigationItem(..., { parent?, index? })` | moves to another position, under another item or to the top level; never under itself |
+| Duplicate | `duplicateNavigationItem(..., newId?)` | adds a copy right after the item, with fresh ids (`<id>-copy`) for it and its sub-items |
+| Delete | `removeNavigationItem` | removes one of the level's own items with its sub-items; an inherited item is hidden instead, switching to `extends` first |
 | Set the logo | `setApplicationLogo` | refused for a module (NAV8); the logo is application-level only |
 
-A switch to the mode a region already has plans no edits. The application has no mode, so switching it is refused.
+An item must be of a kind the outlet takes: navigation items in an outlet of navigation, buttons in a buttons outlet.
+Adding a button to `topbarButtons` declares that standard outlet at the application when it has none yet. A switch
+to the mode a module already has plans no edits. The application has no mode, so switching it is refused.
 
 ## Override is an extension of exposure
 
@@ -123,16 +143,17 @@ system:
 
 | Mode | Exposure model |
 | --- | --- |
-| `inherit` | no instance contribution; the owner's items are fixed (read-only) |
-| `extend` | an instance contribution with `items`, appended after the owner's items - the existing behaviour |
-| `override` | an instance contribution with `items` and `replaceOwnerItems`, using the new `replace` collection operation, which hides the owner's items |
+| `inherits` | no instance contribution; the owner's items are fixed (read-only) |
+| `extends` | an instance contribution with `items`, appended after the owner's items - the existing behaviour |
+| `overrides` | an instance contribution with `items` and `replaceOwnerItems`, using the new `replace` collection operation, which hides the owner's items |
 
 `replace` is the one genuinely new rule: see *Replacing the owner's items* in that page.
 
 ## Diagnostics
 
-`diagnoseNavigationRegions(structure, navigation, { slots })` (`NavigationRegionDiagnostics.Diagnose`) reports, with the
-`entry` `<module|application>:<region>:<itemId>` (`<module|application>:<region>:button:<buttonId>` for a button):
+`diagnoseNavigationOutlets(structure, navigation, { slots })` (`NavigationOutletDiagnostics.Diagnose`) checks the
+application's outlets, then each module's refinements and contributions, and reports with the `entry`
+`<module|application>:<outlet>:<itemId>` (so `application:topbarButtons:new-order` for a button):
 
 | Code | Meaning |
 | --- | --- |
@@ -140,7 +161,11 @@ system:
 | `navTargetOutOfScope` | a module's own item targets a different module (application items may target any module) |
 | `navModuleWithoutFeatures` | a module target whose module has no feature to go to |
 | `navSlotUnknown` | the item's slot is not one of the layout's slots (`content` only unless `slots` says otherwise) |
-| `navDuplicateId` | an id is used twice in one level's region, or an extending module reuses an application item's (or button's) id |
+| `navDuplicateId` | an id is used twice in one level's outlet, or an extending module reuses an application item's (or button's) id |
+
+Problems with the outlets themselves - a refinement of an outlet the application does not offer, an item of the wrong
+kind, a hidden item that is not there - are the outlet diagnostics `diagnoseOutlets` reports over
+`navigationOutletLevels(navigation, module)`.
 
 `diagnoseNavigation` runs the same check when its graph carries `structure` and `navigation`. See
 [Navigation diagnostics](navigation-diagnostics.md).
@@ -189,10 +214,23 @@ so nothing about inheritance or hierarchy is re-implemented in a renderer (spec 
 The specs render both shared corpora through the real navigation host (`react/for_NavigationRegionView`), audit the result with axe-core
 (`blueprint.default/for_templateAccessibility`), and `shell/RegionNavigation.stories.tsx` shows it in Storybook.
 
-## Existing `Navigation` contributions
+## Stored documents from before outlets
 
-The `Navigation` contribution point and the `core:navigation` component are unchanged: legacy and generated
-navigation keep rendering as before. A host that wants such items in a region supplies them as application items.
+A navigation model that lists `regions`, and a screen whose `contributions` carry navigation items for a contribution
+point, are the shapes Scene 5 replaced. The document upgrader (`upgradeSlotShape`, `SlotShapeUpgrader` in C#)
+rewrites them:
+
+| Stored | Becomes |
+| --- | --- |
+| an application region with `items` | an outlet of navigation named after the region, its items the defaults |
+| an application region's `buttons` | the `<region>Buttons` outlet of actions |
+| a module region that `extend`s or `override`s | a refinement of that outlet with `extends` or `overrides` and its items |
+| a module region that `inherit`s, or has no mode | nothing: an outlet a module does not refine is inherited |
+| a module region's `buttons` | a refinement of `<region>Buttons` with the region's mode; an overriding region overrides the buttons too |
+| navigation items a screen contributes to a contribution point | a contribution to the outlet of navigation of that name in `outletContributions`, ordered by `order`, a `group` becoming an item with the group's items as sub-items |
+
+Validation on save refuses both old shapes (`legacyNavigationShape`, `legacyNavigationContribution`). The cases are in
+`slot-shape-fixtures.json`.
 
 ## Shared fixtures
 

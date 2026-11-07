@@ -82,11 +82,16 @@ The result, `EffectiveOutlet`, has:
 
 ## What outlets replace
 
-- [Navigation regions](navigation-regions.md) are outlets of navigation, and a region's buttons an outlet of actions
-  (`topbarButtons`, `sidebarButtons`). `effectiveNavigation` resolves them through `effectiveOutlet`;
+- [Navigation regions](navigation-regions.md) are stored as outlets of navigation on the application's navigation
+  (`navigation.application.outlets`), and a region's buttons as an outlet of actions (`topbarButtons`,
+  `sidebarButtons`). A module refines them (`modules[].refinements`) and contributes to them
+  (`modules[].contributions`). `effectiveNavigation` resolves them through `effectiveOutlet`;
   `navigationOutletLevels` (`NavigationOutlets.Levels`) is the chain a navigation model is.
-- The items of a navigation contribution point become a contribution to the outlet of navigation of that name
-  (`navigationItemsAsOutletContribution`, `NavigationOutlets.AsContribution`).
+- A navigation contribution point is an outlet of navigation, such as `Navigation`. A screen contributes navigation
+  items to it in its `outletContributions`, which resolve like any other contribution.
+- The document upgrader rewrites a stored navigation model that lists `regions` into outlets and refinements, and a
+  screen's navigation items contributed to a contribution point into `outletContributions`. Validation on save
+  rejects both old shapes (`legacyNavigationShape`, `legacyNavigationContribution`).
 - A feature or module toolbar, whose buttons every screen's toolbar got, is a refinement that extends the `toolbar`
   outlet (`toolbarAsOutletRefinement`, `ToolbarOutlet.AsRefinement`). The document upgrader (`upgradeSlotShape`,
   `SlotShapeUpgrader`) rewrites a stored `toolbar: { buttons }` into the owner's `refinements`, and validation on save

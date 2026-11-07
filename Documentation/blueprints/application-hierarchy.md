@@ -18,12 +18,12 @@ It is the structural identity a destination's `module` and `feature` resolve aga
 screen under its place in the hierarchy even when no navigation entry lists it. A screen outside any module has an
 empty or absent `path`.
 
-## Navigation items carry their hierarchy
+## Navigation items are contributed to outlets
 
-A `Navigation` contribution's `NavigationItem` records the same thing in `hierarchy` - the modules and features it
-was declared in. A contribution may sit on a module, on a feature at any depth, or inside a screen. `extractNavigationItem`
-reads the full authored item: `id`, `label`, `icon`, `presentation`, `targetScreen`, `destination`, `order`, `group`
-and `hierarchy`.
+A navigation contribution point is an outlet of navigation, such as `Navigation`. A module contributes navigation
+items to it in `modules[].contributions` of the navigation model, and a screen in its `outletContributions`. Where an
+item came from is the provenance outlet resolution gives it (`effectiveOutlet`): the level and the name of the module,
+feature or screen that contributed it. See [Outlets](outlets.md).
 
 ## Toolbars
 

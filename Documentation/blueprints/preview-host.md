@@ -52,7 +52,7 @@ Ids are the qualified ids of the application structure (`sales`, `sales.orders`,
 The preview has no design affordances and edits nothing. A toolbar button without a slice shows no warning badge here; it is reported as a problem instead. `diagnosePreview` judges the model with the engine's own validators - nothing is judged that the engine does not already judge - and returns `PreviewProblem` entries with a `code`, a `severity`, a `message` and the `nodeId` to link to:
 
 - **errors** stop the preview, and the host shows them (`PreviewProblemsView`) instead of a blank screen: `targetNotFound`, `moduleWithoutFeatures`, `sliceNotPreviewable`, `screenMissing`, `layoutMissing`, `templateMissing`, `templateUnplaced`;
-- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationRegions`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`, `sliceScreenMissing`.
+- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationOutlets`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`, `sliceScreenMissing`.
 
 `onProblems` receives every problem, blocking or not, whenever they change; `onSelectProblem` is called when the author follows one to its node.
 
