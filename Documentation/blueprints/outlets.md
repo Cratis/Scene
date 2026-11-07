@@ -97,5 +97,8 @@ The result, `EffectiveOutlet`, has:
   outlet (`toolbarAsOutletRefinement`, `ToolbarOutlet.AsRefinement`). The document upgrader (`upgradeSlotShape`,
   `SlotShapeUpgrader`) rewrites a stored `toolbar: { buttons }` into the owner's `refinements`, and validation on save
   rejects the old shape (`legacyToolbarShape`) and an outlet of an unknown kind (`unknownOutletKind`).
+- A screen's `core:toolbar` element, whose `items` slot held `core:toolbarItem` elements, is the `core:outletItems`
+  element that draws an outlet of actions. The upgrader rewrites it, and validation on save rejects both old elements
+  (`legacyToolbarElement`). [Rendering outlets](rendering-outlets.md) says how each kind is drawn.
 
 Both engines assert the shared `outlet-resolution-fixtures.json` corpus.

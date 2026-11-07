@@ -28,6 +28,8 @@
   href: outlets.md
 - name: Placement, Opens and enablement
   href: placement.md
+- name: Rendering outlets and routed slots
+  href: rendering-outlets.md
 - name: Preview host
   href: preview-host.md
 
