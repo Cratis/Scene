@@ -26,7 +26,7 @@ The bounded vocabulary deliberately separates navigation from business content. 
 - An omitted scopes list preserves legacy behavior. An explicitly empty list means no applicable scope.
 - Explicit scopes never override structural role. A ScreenTemplate marked `ApplicationShell` is invalid even if it declares Slice scope; a Layout declaring Slice scope is also invalid.
 - The built-in `Dialog` type requires a DialogTemplate. Workspace/List/Detail/Form are not Layout types. Custom types inherit the definition's structural rules.
-- No template selection is valid: an outlet may compose child content without a template. Nothing is scaffolded or substituted in this case.
+- No template selection is valid: a slot may compose child content without a template. Nothing is scaffolded or substituted in this case.
 
 A reusable feature workspace could declare:
 

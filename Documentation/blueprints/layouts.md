@@ -31,6 +31,46 @@ A slot's own `Arrangement` is a different thing from the layout's, and the disti
 A layout is not uniformly one arrangement mode. Flow for most slots and freeform for one is a valid
 combination, and the engine evaluates each independently.
 
+### What a slot is
+
+A slot also says what kind of region it is. Screen templates declare their slots the same way.
+
+| Member | Meaning |
+| --- | --- |
+| `Role` | `page`, `pane` or `panel`. Leave it out and the slot is a `page` when it is primary and a `pane` otherwise. Read it through `resolveSlotRole` (C#: `SlotRoles.Resolve`), which applies that default. |
+| `Routed` | Navigation replaces the slot's content, so the slot is a destination. A slot that is not routed is filled by composition only. |
+| `RoutedBy` | The route parameters a routed slot is addressed by, Screenplay's `routed by <param>`. Route parameters on a slot that is not routed are an error. |
+| `Primary` | The slot every screen's content goes into when nothing names another. A layout or template has at most one. The shell's primary slot is `content` when no slot is marked. Read it through `primarySlotOf` (C#: `SlotRoles.PrimaryOf`). |
+| `Optional` | The slot may stay empty, and takes no space when it does. |
+| `Accepts` | The template types (`TemplateMetadata.type`) a screen must have to be placed in the slot, for example `Detail`. Leave it out to accept any screen. |
+| `Description` | A description for designers. |
+
+In Screenplay, `content page routed primary` is a primary routed page, and `detail pane routed by sku optional`
+is an optional detail pane addressed by `sku`.
+
+A routed slot is placed by the `core:slot` element its content declares, not by the arrangement, so the
+arrangement does not have to position it. Destinations name a routed slot by its `name`, and routed slot
+names are unique across the application (`duplicateSlot`).
+
+### Documents written before Scene 5
+
+Before Scene 5 a layout or template listed its routed regions separately as `outlets`, a shell named its
+primary region in `metadata.primaryOutlet`, a destination named an `outlet` with `kind: outlet`, and a screen
+declared a nested region with `core:outlet`. Scene 5 removes all of these without a deprecation period.
+
+- `upgradeSlotShape(document)` (C#: `SlotShapeUpgrader.Upgrade`) reads a stored document in the old shape
+  and returns it in the slot shape. It accepts a whole document, a template library, or a single layout,
+  template or destination. Each outlet becomes a slot with `routed: true`, merged into a slot of the same name
+  if there is one. `primaryOutlet` becomes `primary: true` on the slot it names. A destination's `outlet` and
+  kind become `slot`, and `core:outlet` becomes `core:slot`. Running it on a document that is already in the
+  slot shape changes nothing. Anything it cannot map stays where it was and is listed in `diagnostics`.
+- `validateSlotShape(document)` (C#: `SlotShapeValidator.Validate`) lists anything left of the old shape
+  (`legacyOutletShape`) and any broken slot rule. Saving a document through
+  `SceneDocumentChangeValidation.Validate` refuses it with `invalidSlotShape` until the document is upgraded.
+  The message names the upgrade and `screenplay migrate --from 5 --to 6`.
+
+The shared `slot-shape-fixtures.json` corpus holds both engines to the same results.
+
 ## Arrangement
 
 Two modes, both evaluated by `Cratis.Scene.Engine.Layouts` and its TypeScript twin.
@@ -83,4 +123,4 @@ slots it fills, and an application has many of them, where it has one layout.
 
 A UI profile names its shell with a [root template](root-template.md): an own or blueprint template reference with a version pin
 and the shell's options. The profile's `layout` name stays readable as the legacy form. Which shell an application ends up with is answered
-by `resolveEffectiveShell` alone; the shell's outlets (`content` unless `metadata.primaryOutlet` says otherwise) are what screens place content in.
+by `resolveEffectiveShell` alone; the shell's slots are what screens place content in, and the primary one (`content` unless a slot is marked `primary`) receives every screen's content.

@@ -15,7 +15,7 @@ Representative React application templates repeatedly converge on the same busin
 | CRUD command forms | MUI CRUD dashboard, Berry/uifort forms, ThemeForest validation/form wizard examples | `CommandForm` templates and `Cratis.Components:commandForm` | Use one native Arc form boundary for auto and manual fields. |
 | Dialog/confirmation | Admin kits include destructive confirmation and editor dialogs | Dialog templates and `DestinationReference.kind = dialog` | Keep dialogs as destinations, not ad-hoc host calls. |
 | Settings pages | Admin kits include account/app settings as forms in nested layouts | Workspace/editor templates | Treat as configurable workspace/editor variants. |
-| Nested workspaces | Sidebar + module + feature regions are common in admin templates | hierarchical screen templates, named outlets | Model route identity separately from labels/URLs. |
+| Nested workspaces | Sidebar + module + feature regions are common in admin templates | hierarchical screen templates, named slots | Model route identity separately from labels/URLs. |
 
 No source or asset was copied from commercial templates. The research was used only to choose patterns and coverage priorities.
 

@@ -45,8 +45,8 @@ does not declare, or declares without a `mode`, is `inherit`.
 
 An item's **target** is a module, or a module and a feature (`feature` is a dotted path inside the module, so
 `orders.returns` is a sub-feature). A module target goes to the module's **first feature**
-(`ApplicationStructureIndex.firstFeature`). The **slot** is the outlet the target renders into; `content` - the
-primary outlet - when absent. `children` are sub-items and belong to the sidebar: a topbar is flat, and sub-items
+(`ApplicationStructureIndex.firstFeature`). The **slot** is the slot the target renders into; `content` - the
+primary slot - when absent. `children` are sub-items and belong to the sidebar: a topbar is flat, and sub-items
 authored on a topbar item are ignored. A sidebar item that only groups sub-items needs no target of its own.
 
 ### Toolbar buttons
@@ -161,10 +161,10 @@ so nothing about inheritance or hierarchy is re-implemented in a renderer (spec 
 - **Hierarchy.** A topbar is flat. A sidebar nests: a parent has an expand/collapse button (`aria-expanded`), and the parents of the active
   item are expanded (`expand='all'` shows everything for a design layer).
 - **Active state.** An item is active (`aria-current='page'`, `data-active`) when the screen it opens is shown in the slot it renders into:
-  the primary region for `content`, the nested outlet of that name otherwise (`core:outlet`). Items that render into different slots are
+  the primary region for `content`, the nested slot of that name otherwise (`core:slot`). Items that render into different slots are
   active at once, and closing a slot's screen clears its item. A topbar item that targets a module is also active on any screen of that module.
 - **Render-into-slot.** Activating an item calls `navigate` with `navigationItemDestination(item)`: the module/feature identity, the screen
-  (by default the qualified feature id, `sales.orders`; `screenFor` overrides it, and `moduleOf` says which module a screen not named by a qualified id belongs to, so the right sidebar is shown) and the slot as `outlet`. A module target opens its first
+  (by default the qualified feature id, `sales.orders`; `screenFor` overrides it, and `moduleOf` says which module a screen not named by a qualified id belongs to, so the right sidebar is shown) and the slot as `slot`. A module target opens its first
   feature. `navigationDestinations(...)` lists every destination so deep links resolve; the host derives them from `navigationModel`.
   Outside a host the item announces `cratis.scene.navigate`.
 - **Activation.** A click goes through `useNavigationActivation` (`@cratis/scene.react`): the host's `NavigationActivationProvider` policy decides

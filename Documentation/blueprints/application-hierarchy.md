@@ -39,7 +39,7 @@ a toolbar on the screen rather than a placeholder.
 | `destination` | Where the item opens; when absent a `Navigate` item opens the screen `target` and a `Dialog` item the dialog `target` |
 | `presentation` | Hints by name. `mode` is `icon`, `text` or `both` (the default); every hint is also exposed as `data-scene-presentation-<name>` |
 
-A destination executes through the enclosing navigation host - a screen in an outlet, or a dialog - and is announced with
+A destination executes through the enclosing navigation host - a screen in a slot, or a dialog - and is announced with
 the host-neutral `cratis.scene.navigate` event (carrying `targetScreen`, `dialog` and `destination`) outside one. An
 icon-only item keeps its label as its accessible name.
 

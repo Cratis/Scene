@@ -19,7 +19,7 @@ sidebar left (the default), top navigation only (the `Horizontal` layout mode) a
 | `DashboardScreen` | Dashboard | `content` | `header`, `kpis`, `charts`, `tables`, `aside` | Key figures, charts and tables; every region has its own five states |
 | `ListScreen` | List | `content` | `header`, `toolbar`, `filters`, `list`, `bulkBar`, `footer` | Search, filters, a table, grouped list or cards, and a bulk bar for the selection |
 | `BoardScreen` | Board | `content` | `header`, `toolbar`, `board` | Columns mapped to a stage; cards move by dragging or by each card's Move-to menu |
-| `MasterDetailScreen` | Workspace | `WorkspaceScreen.moduleContent` | `list`, `details` | A list beside the selected record; offers the `master-detail.detail` outlet for `Detail` screens |
+| `MasterDetailScreen` | Workspace | `WorkspaceScreen.moduleContent` | `list`, `details` | A list beside the selected record; offers the `master-detail.detail` slot for `Detail` screens |
 | `RecordPage` | Detail | `content` | `header`, `summary`, `tabs`, `main`, `related`, `activity`, `aside` | One record: key facts, tabs, related records and history |
 | `FormScreen` | Form | `content` | `header`, `body`, `actions` | Sections of validated fields; create, edit, read-only and settings by mode; unsaved-changes guard |
 | `WizardScreen` | Wizard | `content` | `header`, `progress`, `step`, `actions` | Linear steps with progress, Back/Next, save draft and a review step |
