@@ -58,7 +58,7 @@ Choosing an enabled action does what placement decided:
 
 | Decision | What happens |
 | --- | --- |
-| Run directly (`none`) | The slice invoker (`SliceInvokerProvider`) invokes the slice with the inputs the item and the route feed. |
+| Run directly (`none`) | The slice invoker (`SliceInvokerProvider`) invokes the slice with the inputs the item and the route feed. When the slice is not among the outlets' `slices`, nothing says which inputs it takes, so nothing of the item is sent. |
 | `dialog`, `drawer` | The slice's screen opens over the page through the navigation host. A drawer carries `data-scene-presentation="drawer"`. Neither changes the URL. |
 | `slot` | The screen opens in the slot through the router, with the slot's route values - from the page, or from the item it acts on - and the slice's segment. |
 

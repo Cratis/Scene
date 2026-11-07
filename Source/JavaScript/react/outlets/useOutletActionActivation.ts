@@ -59,11 +59,12 @@ function indexOf(model: SceneNavigationModel | undefined): ApplicationStructureI
 
 /**
  * The values an action that runs directly sends: each input of its command, from the item it acts on or the page's route,
- * as the slice's hooks say. An input whose source is a constant or another component is the host's to fill.
+ * as the slice's hooks say. An input whose source is a constant or another component is the host's to fill. Without a
+ * known slice nothing says which inputs the command takes, so nothing of the item is sent - never the whole row.
  */
 export function directPayload(slice: ActionSlice | undefined, item: unknown, routeValues: Record<string, string>): Record<string, unknown> {
+    if (!slice) return {};
     const fields = item !== null && typeof item === 'object' ? item as Record<string, unknown> : {};
-    if (!slice) return { ...fields };
     const payload: Record<string, unknown> = {};
     for (const input of slice.inputs) {
         if (input.source === InputSourceKind.Route && input.name in routeValues) payload[input.name] = routeValues[input.name];
