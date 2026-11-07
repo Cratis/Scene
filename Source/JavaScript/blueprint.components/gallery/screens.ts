@@ -5,7 +5,7 @@ import { Screen, ScreenTemplate } from '@cratis/scene.model';
 import { LayoutName, appShellLayout, nestScreenTemplates, templateContentInLayout } from '@cratis/scene.blueprint.default';
 import { componentsScreenTemplates, nestingChainTemplates } from '../templates';
 import { componentsApplicationChrome } from './applicationChrome';
-import { componentsNavigationContributions } from './navigation';
+import { componentsNavigationContribution } from './navigation';
 
 /**
  * The gallery: one {@link Screen} per template, ready to boot through the real engine.
@@ -40,7 +40,8 @@ function screenFor(template: ScreenTemplate): Screen {
         screenTemplate: template.name,
         slotContent: mergeSlotContent(componentsApplicationChrome(template.name), templateContentInLayout(placeable, appShellLayout)),
         forms: [],
-        contributions: componentsNavigationContributions,
+        contributions: [],
+        outletContributions: [componentsNavigationContribution],
     };
 }
 

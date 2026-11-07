@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Layout } from '@cratis/scene.model';
-import { defaultBlueprint, shellComponentForLayout } from '@cratis/scene.blueprint.default';
+import { defaultBlueprint, navigationOutlet, shellComponentForLayout } from '@cratis/scene.blueprint.default';
 import { componentsBlueprint } from '../componentsBlueprint';
 import { componentsGalleryScreens } from '../gallery';
 
@@ -49,7 +49,7 @@ describe('when checking the layouts and slots they fill', () => {
             });
 
             it('should contribute its navigation, so the menu is the same on every screen', () => {
-                screen.contributions.should.not.be.empty;
+                screen.outletContributions!.map(contribution => contribution.outlet).should.deep.equal([navigationOutlet]);
             });
         });
     }
