@@ -5,5 +5,6 @@ export * from './SceneRouter';
 export * from './SceneRouterContext';
 export * from './sceneRouteState';
 export * from './routedSlotPath';
+export * from './SceneSlotRouteContext';
 export * from './useMemorySceneRouter';
 export * from './useSceneQueryParameters';

@@ -7,6 +7,7 @@ import { RegisteredComponentProps } from '../renderer/ComponentRegistry';
 import { SceneElementView } from '../SceneElementView';
 import { useOptionalSceneRouter } from '../routing/SceneRouterContext';
 import { routedSlotPath } from '../routing/routedSlotPath';
+import { SceneSlotRouteContext } from '../routing/SceneSlotRouteContext';
 import { SceneNavigationContextInternal } from './SceneNavigationContext';
 import { useSceneSlots } from './SceneSlotContext';
 
@@ -65,6 +66,8 @@ export function CoreSlot({ element }: RegisteredComponentProps) {
 
     const closable = shape.closable || (shape.optional && (shape.role === SlotRole.Pane || shape.role === SlotRole.Panel));
     const close = () => (route ? router?.closeSlot(shape.name) : navigation?.closeSlot(shape.name));
+    const view = (shown: NonNullable<typeof screen>, registry: NonNullable<typeof slots>['registry']) =>
+        <SceneElementView element={shown} registry={registry} dataContext={navigation?.bindingScope.dataContext} queryResults={navigation?.bindingScope.queryResults} />;
     const attributes = {
         'data-scene-slot': shape.name,
         'data-scene-slot-screen': placed,
@@ -77,8 +80,9 @@ export function CoreSlot({ element }: RegisteredComponentProps) {
         {closable && placed && <div className='scene-slot-bar'>
             <button type='button' className='scene-slot-close' aria-label='Close' onClick={close}>Close</button>
         </div>}
-        {screen && slots && <SceneElementView element={screen} registry={slots.registry}
-            dataContext={navigation?.bindingScope.dataContext} queryResults={navigation?.bindingScope.queryResults} />}
+        {screen && slots && (route
+            ? <SceneSlotRouteContext.Provider value={route.parameters}>{view(screen, slots.registry)}</SceneSlotRouteContext.Provider>
+            : view(screen, slots.registry))}
     </>;
 
     return shape.role === SlotRole.Panel

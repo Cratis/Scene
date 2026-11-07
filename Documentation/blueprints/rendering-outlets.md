@@ -71,7 +71,9 @@ whose confirmation is set asks first.
 `core:slot` takes the `role`, `routed`, `routedBy` and `optional` of the slot it draws.
 
 - A **routed** slot shows what the router says it shows, and carries its route - parameter values and segment - as
-  `data-scene-slot-route`, such as `NK-101/set-product-price`.
+  `data-scene-slot-route`, such as `NK-101/set-product-price`. The screen it shows receives the values it was opened
+  with: `useSceneSlotRouteValues()` returns them, and `usePageRouteValues()` - what the screen's actions take their
+  `route.` inputs from - lets them win over the page's, so two panes routed by `sku` each see their own product.
 - A **panel** is drawn as a landmark (`aside`) docked beside the content. It is never routed.
 - An **optional** slot is hidden until something fills it; an optional pane or panel can be closed.
 
