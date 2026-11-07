@@ -6129,6 +6129,222 @@
           ]
         }
       ]
+    },
+    {
+      "name": "a domain blueprint that ships its own shells lists their slots, primary slot and role",
+      "sources": [
+        {
+          "manifest": {
+            "name": "@cratis/scene.blueprint.portal",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [
+              {
+                "name": "Cratis.Blueprint.Default",
+                "versionRange": "^4.0.0"
+              }
+            ],
+            "components": [],
+            "layouts": [
+              "PortalShell"
+            ],
+            "screenTemplates": [
+              "PortalRoot",
+              "PortalHome"
+            ],
+            "dialogTemplates": [
+              "PortalDialog"
+            ],
+            "themes": [],
+            "blueprint": {
+              "domain": "portal",
+              "description": "A customer portal with its own shells.",
+              "thumbnail": "thumbnails/portal.svg",
+              "screenSet": [
+                {
+                  "name": "Home",
+                  "title": "Home",
+                  "template": "PortalHome"
+                }
+              ]
+            },
+            "displayName": "Portal",
+            "license": "MIT"
+          },
+          "layouts": [
+            {
+              "name": "PortalShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "page",
+                  "primary": true
+                },
+                {
+                  "name": "drawer",
+                  "routed": true,
+                  "optional": true
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Portal / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "PortalRoot",
+              "fitsSlot": "page",
+              "slots": [
+                {
+                  "name": "header"
+                },
+                {
+                  "name": "content",
+                  "routed": true
+                }
+              ],
+              "displayName": "Portal root",
+              "description": "The root template the portal profile pins.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Portal / Shell",
+                "type": "Shell",
+                "role": "Root"
+              }
+            },
+            {
+              "name": "PortalHome",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "Portal home",
+              "description": "The page a customer lands on.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Portal / Home",
+                "type": "Dashboard"
+              }
+            }
+          ],
+          "dialogTemplates": [
+            {
+              "name": "PortalDialog",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "Portal dialog",
+              "description": "A dialog of the portal.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Portal / Dialog",
+                "type": "Form"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedEntries": [
+        {
+          "package": "@cratis/scene.blueprint.portal",
+          "version": "1.0.0",
+          "domain": "portal",
+          "displayName": "Portal",
+          "description": "A customer portal with its own shells.",
+          "thumbnail": "thumbnails/portal.svg",
+          "license": "MIT",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "screens": [
+            {
+              "name": "Home",
+              "title": "Home",
+              "template": "PortalHome"
+            }
+          ],
+          "templates": [
+            {
+              "name": "PortalShell",
+              "kind": "Layout",
+              "type": "Shell",
+              "category": "Portal / Shell",
+              "slots": [
+                "topbar",
+                "page",
+                "drawer"
+              ],
+              "primarySlot": "page"
+            },
+            {
+              "name": "PortalRoot",
+              "kind": "ScreenTemplate",
+              "displayName": "Portal root",
+              "description": "The root template the portal profile pins.",
+              "type": "Shell",
+              "category": "Portal / Shell",
+              "slots": [
+                "header",
+                "content"
+              ],
+              "role": "Root"
+            },
+            {
+              "name": "PortalHome",
+              "kind": "ScreenTemplate",
+              "displayName": "Portal home",
+              "description": "The page a customer lands on.",
+              "type": "Dashboard",
+              "category": "Portal / Home"
+            },
+            {
+              "name": "PortalDialog",
+              "kind": "DialogTemplate",
+              "displayName": "Portal dialog",
+              "description": "A dialog of the portal.",
+              "type": "Form",
+              "category": "Portal / Dialog"
+            }
+          ],
+          "sampleData": []
+        }
+      ]
     }
   ],
   "pin": [
