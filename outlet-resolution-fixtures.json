@@ -1,0 +1,617 @@
+{
+  "description": "Shared outlet corpus asserted by both the C# engine (Engine.Specs/for_EffectiveOutlets) and the TypeScript engine (engine/for_effectiveOutlet). An outlet is a list of items a layout or template offers. A case is a chain of levels from the top down (layout, template, module, feature, slice, screen) plus contributors outside the chain; each entry of resolve resolves one outlet for the last level of the chain (effectiveOutlet / EffectiveOutlets.Resolve). Items are id|kind|owner|level|source|editable or locked, a group's kind lists its children as group(a,b); removed items are id|removal|by <level>|from <owner>; diagnostics are code|severity|outlet|owner|item|message with - for what is absent. expectedDiagnostics is what diagnoseOutlets / OutletDiagnostics.Diagnose reports for the whole chain. itemKinds lists what each outlet kind takes. dialogTemplates are the outlets a dialog template offers. navigationContributions turn the items of a navigation contribution point into a contribution to the outlet of navigation. toolbars turn a feature or module toolbar into a refinement that extends the toolbar outlet.",
+  "itemKinds": {
+    "actions": ["button", "menuEntry", "separator", "group"],
+    "filters": ["filter"],
+    "tabs": ["tab"],
+    "stats": ["stat"],
+    "navigation": ["navigation"]
+  },
+  "cases": [
+    {
+      "name": "a template resolved for itself shows its defaults, editable and declared there",
+      "chain": [
+        {
+          "kind": "template",
+          "name": "ListPage",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": [
+                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "export", "title": "Export" }
+              ]
+            }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "ListPage",
+            "mode": null,
+            "summary": "ListPage",
+            "items": ["refresh|button|ListPage|template|default|editable", "export|button|ListPage|template|default|editable"],
+            "removed": [],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "the catalog: a feature overrides, extends and a feature outside the chain contributes",
+      "chain": [
+        {
+          "kind": "layout",
+          "name": "AppShell",
+          "outlets": [
+            { "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "products", "title": "Products", "target": { "module": "catalog", "feature": "products" } }] }
+          ]
+        },
+        {
+          "kind": "template",
+          "name": "Catalog",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": [
+                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "export", "title": "Export" }
+              ]
+            },
+            { "name": "rowActions", "kind": "actions", "subject": "item", "defaults": [] },
+            { "name": "filters", "kind": "filters", "defaults": [{ "kind": "filter", "id": "search", "title": "Search", "control": "search" }] },
+            { "name": "stats", "kind": "stats", "defaults": [] },
+            { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
+          ]
+        },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "mode": "overrides",
+              "items": [
+                { "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "emphasis": "primary" },
+                { "kind": "button", "id": "price", "title": "Set price", "slice": "catalog.products.SetProductPrice", "subject": "item" }
+              ]
+            },
+            {
+              "outlet": "rowActions",
+              "mode": "extends",
+              "items": [
+                { "kind": "button", "id": "withdraw", "title": "Withdraw", "slice": "catalog.products.WithdrawProduct", "subject": "item", "opens": "none", "confirm": "Withdraw this product?", "enabledWhen": "item.status == \"onSale\"" }
+              ]
+            },
+            { "outlet": "filters", "mode": "extends", "items": [{ "kind": "filter", "id": "status", "title": "Status", "sets": { "query": "AllProducts", "parameter": "status" } }] },
+            { "outlet": "stats", "mode": "extends", "items": [{ "kind": "stat", "id": "drafts", "title": "Drafts", "valueFrom": { "query": "ProductStats", "field": "drafts" } }] }
+          ]
+        },
+        { "kind": "screen", "name": "ProductCatalog" }
+      ],
+      "contributors": [
+        { "kind": "feature", "name": "Pricing", "contributions": [{ "outlet": "detailTabs", "items": [{ "kind": "tab", "id": "pricing", "title": "Pricing", "shows": "catalog.pricing.ProductPricing" }] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog + Products",
+            "items": ["add|button|Products|feature|own|locked", "price|button|Products|feature|own|locked"],
+            "removed": ["refresh|overridden|by Products|from Catalog", "export|overridden|by Products|from Catalog"],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "rowActions",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog + Products",
+            "items": ["withdraw|button|Products|feature|own|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "filters",
+          "expected": {
+            "kind": "filters",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog + Products",
+            "items": ["search|filter|Catalog|template|default|locked", "status|filter|Products|feature|own|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "stats",
+          "expected": {
+            "kind": "stats",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog + Products",
+            "items": ["drafts|stat|Products|feature|own|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "detailTabs",
+          "expected": {
+            "kind": "tabs",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog + Pricing",
+            "items": ["pricing|tab|Pricing|feature|contribution|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "sidebar",
+          "expected": {
+            "kind": "navigation",
+            "declaredBy": "AppShell",
+            "mode": "inherits",
+            "summary": "AppShell",
+            "items": ["products|navigation|AppShell|layout|default|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "editing as the feature that overrides: its own items are editable and the mode is its own",
+      "chain": [
+        {
+          "kind": "template",
+          "name": "Catalog",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": [
+                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "export", "title": "Export" }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            { "outlet": "toolbar", "mode": "overrides", "items": [{ "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "emphasis": "primary" }] }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "overrides",
+            "summary": "Catalog + Products",
+            "items": ["add|button|Products|feature|own|editable"],
+            "removed": ["refresh|overridden|by Products|from Catalog", "export|overridden|by Products|from Catalog"],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "extending with hide and before: the lighter alternative to overriding",
+      "chain": [
+        {
+          "kind": "template",
+          "name": "Catalog",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": [
+                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "export", "title": "Export" }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "mode": "extends",
+              "hide": ["export"],
+              "items": [
+                { "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "before": "refresh" },
+                { "kind": "button", "id": "price", "title": "Set price", "slice": "catalog.products.SetProductPrice" }
+              ]
+            }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "extends",
+            "summary": "Catalog + Products",
+            "items": ["add|button|Products|feature|own|editable", "refresh|button|Catalog|template|default|locked", "price|button|Products|feature|own|editable"],
+            "removed": ["export|hidden|by Products|from Catalog"],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "own items go after the inherited ones level by level, and a refinement with items but no mode extends",
+      "chain": [
+        { "kind": "layout", "name": "AppShell", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "help", "title": "Help" }] }] },
+        { "kind": "module", "name": "Sales", "refinements": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "report", "title": "Report" }] }] },
+        { "kind": "feature", "name": "Orders", "refinements": [{ "outlet": "toolbar", "items": [{ "kind": "separator", "id": "gap" }, { "kind": "button", "id": "place", "title": "Place order", "after": "help" }] }] },
+        { "kind": "screen", "name": "OrderList", "refinements": [{ "outlet": "toolbar", "hide": ["report"] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "AppShell",
+            "mode": "extends",
+            "summary": "AppShell + Sales + Orders + OrderList",
+            "items": ["help|button|AppShell|layout|default|locked", "place|button|Orders|feature|own|locked", "gap|separator|Orders|feature|own|locked"],
+            "removed": ["report|hidden|by OrderList|from Sales"],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "a group keeps its actions and a contribution at the viewed level is editable",
+      "chain": [
+        { "kind": "template", "name": "ListPage", "outlets": [{ "name": "rowActions", "kind": "actions", "subject": "item", "defaults": [] }] },
+        {
+          "kind": "screen",
+          "name": "ProductCatalog",
+          "contributions": [
+            {
+              "outlet": "rowActions",
+              "items": [
+                {
+                  "kind": "group",
+                  "id": "more",
+                  "title": "More",
+                  "items": [
+                    { "kind": "menuEntry", "id": "archive", "title": "Archive", "slice": "catalog.products.ArchiveProduct" },
+                    { "kind": "separator", "id": "line" },
+                    { "kind": "menuEntry", "id": "open", "title": "Open", "navigateTo": { "screen": "catalog.products.ProductDetails" } }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "rowActions",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "ListPage",
+            "mode": "inherits",
+            "summary": "ListPage + ProductCatalog",
+            "items": ["more|group(archive,line,open)|ProductCatalog|screen|contribution|editable"],
+            "removed": [],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": []
+    },
+    {
+      "name": "hide and before naming an item the outlet does not have",
+      "chain": [
+        { "kind": "template", "name": "Catalog", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] }] },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            { "outlet": "toolbar", "mode": "extends", "hide": ["export"], "items": [{ "kind": "button", "id": "add", "title": "Add product", "before": "new" }, { "kind": "button", "id": "price", "title": "Set price", "after": "missing" }] }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "extends",
+            "summary": "Catalog + Products",
+            "items": ["refresh|button|Catalog|template|default|locked", "add|button|Products|feature|own|editable", "price|button|Products|feature|own|editable"],
+            "removed": [],
+            "diagnostics": [
+              "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' it inherits does not have",
+              "placementTargetMissing|warning|toolbar|Products|add|Products places 'add' before 'new', which the outlet 'toolbar' does not have, so it goes last",
+              "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' it inherits does not have",
+        "placementTargetMissing|warning|toolbar|Products|add|Products places 'add' before 'new', which the outlet 'toolbar' does not have, so it goes last",
+        "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last"
+      ]
+    },
+    {
+      "name": "items of the wrong kind and repeated ids are left out",
+      "chain": [
+        {
+          "kind": "template",
+          "name": "Catalog",
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh" }, { "kind": "tab", "id": "overview", "title": "Overview", "shows": "catalog.Overview" }] },
+            { "name": "sidebar", "kind": "navigation", "defaults": [] }
+          ]
+        },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "items": [
+                { "kind": "button", "id": "refresh", "title": "Refresh again" },
+                { "kind": "group", "id": "more", "title": "More", "items": [{ "kind": "menuEntry", "id": "archive", "title": "Archive" }, { "kind": "stat", "id": "count", "title": "Count" }, { "kind": "group", "id": "nested", "title": "Nested", "items": [] }] }
+              ]
+            },
+            { "outlet": "sidebar", "items": [{ "kind": "filter", "id": "status", "title": "Status" }] }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "extends",
+            "summary": "Catalog + Products",
+            "items": ["refresh|button|Catalog|template|default|locked", "more|group(archive)|Products|feature|own|editable"],
+            "removed": [],
+            "diagnostics": [
+              "itemKindMismatch|error|toolbar|Catalog|overview|Catalog puts the tab 'overview' in the actions outlet 'toolbar', which takes buttons, menu entries, separators and groups",
+              "duplicateItemId|error|toolbar|Products|refresh|Products adds 'refresh' to the outlet 'toolbar', which already has an item with that id",
+              "itemKindMismatch|error|toolbar|Products|count|Products puts the stat 'count' in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators",
+              "itemKindMismatch|error|toolbar|Products|nested|Products puts the group 'nested' in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators"
+            ]
+          }
+        },
+        {
+          "outlet": "sidebar",
+          "expected": {
+            "kind": "navigation",
+            "declaredBy": "Catalog",
+            "mode": "extends",
+            "summary": "Catalog + Products",
+            "items": [],
+            "removed": [],
+            "diagnostics": [
+              "itemKindMismatch|error|sidebar|Products|status|Products puts the filter 'status' in the navigation outlet 'sidebar', which takes navigation items"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "itemKindMismatch|error|toolbar|Catalog|overview|Catalog puts the tab 'overview' in the actions outlet 'toolbar', which takes buttons, menu entries, separators and groups",
+        "duplicateItemId|error|toolbar|Products|refresh|Products adds 'refresh' to the outlet 'toolbar', which already has an item with that id",
+        "itemKindMismatch|error|toolbar|Products|count|Products puts the stat 'count' in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators",
+        "itemKindMismatch|error|toolbar|Products|nested|Products puts the group 'nested' in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators",
+        "itemKindMismatch|error|sidebar|Products|status|Products puts the filter 'status' in the navigation outlet 'sidebar', which takes navigation items"
+      ]
+    },
+    {
+      "name": "inheriting with items ignores them",
+      "chain": [
+        { "kind": "template", "name": "Catalog", "outlets": [{ "name": "filters", "kind": "filters", "defaults": [{ "kind": "filter", "id": "search", "title": "Search" }] }] },
+        { "kind": "feature", "name": "Products", "refinements": [{ "outlet": "filters", "mode": "inherits", "hide": ["search"], "items": [{ "kind": "filter", "id": "status", "title": "Status" }] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "filters",
+          "expected": {
+            "kind": "filters",
+            "declaredBy": "Catalog",
+            "mode": "inherits",
+            "summary": "Catalog",
+            "items": ["search|filter|Catalog|template|default|locked"],
+            "removed": [],
+            "diagnostics": [
+              "itemsIgnoredWhenInheriting|warning|filters|Products|-|Products inherits the outlet 'filters' unchanged, so its items and hides are ignored; extend or override it to use them"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "itemsIgnoredWhenInheriting|warning|filters|Products|-|Products inherits the outlet 'filters' unchanged, so its items and hides are ignored; extend or override it to use them"
+      ]
+    },
+    {
+      "name": "declarations that cannot stand: a repeated outlet, tabs without a slot, a subject on filters",
+      "chain": [
+        {
+          "kind": "layout",
+          "name": "AppShell",
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [] },
+            { "name": "detailTabs", "kind": "tabs", "defaults": [] },
+            { "name": "filters", "kind": "filters", "subject": "item", "defaults": [] }
+          ]
+        },
+        { "kind": "template", "name": "ListPage", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh" }] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "AppShell",
+            "mode": "inherits",
+            "summary": "AppShell",
+            "items": [],
+            "removed": [],
+            "diagnostics": [
+              "duplicateOutlet|error|toolbar|ListPage|-|ListPage declares the outlet 'toolbar', which AppShell already declares"
+            ]
+          }
+        },
+        {
+          "outlet": "detailTabs",
+          "expected": {
+            "kind": "tabs",
+            "declaredBy": "AppShell",
+            "mode": "inherits",
+            "summary": "AppShell",
+            "items": [],
+            "removed": [],
+            "diagnostics": [
+              "tabsNeedSlot|error|detailTabs|AppShell|-|The tabs outlet 'detailTabs' of AppShell names no slot to show its screens in"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "duplicateOutlet|error|toolbar|ListPage|-|ListPage declares the outlet 'toolbar', which AppShell already declares",
+        "tabsNeedSlot|error|detailTabs|AppShell|-|The tabs outlet 'detailTabs' of AppShell names no slot to show its screens in",
+        "subjectOnlyForActions|warning|filters|AppShell|-|The filters outlet 'filters' of AppShell names a subject; only an outlet of actions has one"
+      ]
+    },
+    {
+      "name": "references to outlets nobody declares",
+      "chain": [
+        { "kind": "template", "name": "ListPage", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [] }] },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "outlets": [{ "name": "stats", "kind": "stats", "defaults": [] }],
+          "refinements": [{ "outlet": "toolbars", "mode": "extends", "items": [] }, { "outlet": "stats", "mode": "extends", "items": [] }],
+          "contributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "add", "title": "Add" }] }]
+        }
+      ],
+      "contributors": [
+        { "kind": "feature", "name": "Pricing", "contributions": [{ "outlet": "detailTabs", "items": [{ "kind": "tab", "id": "pricing", "title": "Pricing", "shows": "catalog.pricing.ProductPricing" }] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "detailTabs",
+          "expected": {
+            "kind": null,
+            "declaredBy": null,
+            "mode": null,
+            "summary": "",
+            "items": [],
+            "removed": [],
+            "diagnostics": [
+              "unknownOutlet|error|detailTabs|-|-|No level declares the outlet 'detailTabs'"
+            ]
+          }
+        },
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "ListPage",
+            "mode": "inherits",
+            "summary": "ListPage + Products",
+            "items": ["add|button|Products|feature|contribution|editable"],
+            "removed": [],
+            "diagnostics": []
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "refinementOfUnknownOutlet|error|toolbars|Products|-|Products refines the outlet 'toolbars', which no level above it declares",
+        "refinementOfUnknownOutlet|error|stats|Products|-|Products refines the outlet 'stats', which no level above it declares",
+        "contributionToUnknownOutlet|error|detailTabs|Pricing|-|Pricing contributes to the outlet 'detailTabs', which no level declares"
+      ]
+    }
+  ],
+  "dialogTemplates": [
+    {
+      "name": "a dialog template that declares no outlets offers Cancel and Submit",
+      "template": { "name": "ConfirmDialog", "slots": [{ "name": "body" }] },
+      "expected": ["actions|actions|cancel:close:-,submit:submit:primary"]
+    },
+    {
+      "name": "a drawer template's own outlets follow the actions outlet",
+      "template": { "name": "EditDrawer", "slots": [{ "name": "body" }], "outlets": [{ "name": "tabs", "kind": "tabs", "slot": "body", "defaults": [] }] },
+      "expected": ["actions|actions|cancel:close:-,submit:submit:primary", "tabs|tabs|"]
+    },
+    {
+      "name": "a template that declares its own actions outlet replaces the standard one",
+      "template": { "name": "WizardDialog", "slots": [{ "name": "body" }], "outlets": [{ "name": "actions", "kind": "actions", "defaults": [{ "kind": "button", "id": "next", "title": "Next", "runs": "submit", "emphasis": "primary" }] }] },
+      "expected": ["actions|actions|next:submit:primary"]
+    }
+  ],
+  "navigationContributions": [
+    {
+      "name": "the items of a navigation contribution point become navigation items, ordered",
+      "outlet": "Navigation",
+      "items": [
+        { "label": "Orders", "targetScreen": "sales.orders.OrderList", "routeParameterBindings": {}, "order": 2 },
+        { "id": "quotes", "label": "Quotes", "icon": "lucide:file", "targetScreen": "sales.quotes.QuoteList", "routeParameterBindings": {} },
+        { "id": "customers", "label": "Customers", "targetScreen": "sales.customers.CustomerList", "routeParameterBindings": {}, "destination": { "module": "sales", "feature": "customers" }, "order": 1 }
+      ],
+      "expected": {
+        "outlet": "Navigation",
+        "items": [
+          { "kind": "navigation", "id": "customers", "title": "Customers", "target": { "module": "sales", "feature": "customers" } },
+          { "kind": "navigation", "id": "sales.orders.OrderList", "title": "Orders", "target": { "screen": "sales.orders.OrderList" } },
+          { "kind": "navigation", "id": "quotes", "title": "Quotes", "icon": "lucide:file", "target": { "screen": "sales.quotes.QuoteList" } }
+        ]
+      }
+    }
+  ],
+  "toolbars": [
+    {
+      "name": "a feature toolbar extends the toolbar outlet, a command target becomes the button's command",
+      "toolbar": {
+        "buttons": [
+          { "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "emphasis": "primary", "icon": "lucide:plus" },
+          { "id": "price", "title": "Set price", "target": "SetProductPrice" }
+        ]
+      },
+      "expected": {
+        "outlet": "toolbar",
+        "mode": "extends",
+        "items": [
+          { "kind": "button", "id": "add", "title": "Add product", "icon": "lucide:plus", "slice": "catalog.products.DraftProduct", "emphasis": "primary" },
+          { "kind": "button", "id": "price", "title": "Set price", "command": "SetProductPrice" }
+        ]
+      }
+    }
+  ]
+}

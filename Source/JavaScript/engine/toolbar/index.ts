@@ -10,3 +10,4 @@ export * from './ResolvedToolbarButton';
 export * from './sliceDialogFor';
 export * from './toolbarButtons';
 export * from './validateToolbarButtons';
+export * from './toolbarOutlet';
