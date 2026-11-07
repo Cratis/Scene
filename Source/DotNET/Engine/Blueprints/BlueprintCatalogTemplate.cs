@@ -16,4 +16,5 @@ namespace Cratis.Scene.Engine.Blueprints;
 /// <param name="Slots">For a shell (a layout, or a screen template with the root role): the names of its slots, in declaration order.</param>
 /// <param name="PrimarySlot">For a shell: the slot every screen's content is placed in. <see langword="null"/> when it is <c language="csharp">content</c>.</param>
 /// <param name="Role">The structural role the template takes, for a screen template with one (<c language="csharp">Root</c> marks a shell).</param>
-public record BlueprintCatalogTemplate(string Name, string Kind, string? DisplayName = null, string? Description = null, string? Type = null, string? Category = null, string? Thumbnail = null, IReadOnlyList<string>? Slots = null, string? PrimarySlot = null, string? Role = null);
+/// <param name="Outlets">The outlets the template offers, in declaration order; <see langword="null"/> when it offers none.</param>
+public record BlueprintCatalogTemplate(string Name, string Kind, string? DisplayName = null, string? Description = null, string? Type = null, string? Category = null, string? Thumbnail = null, IReadOnlyList<string>? Slots = null, string? PrimarySlot = null, string? Role = null, IReadOnlyList<BlueprintCatalogOutlet>? Outlets = null);

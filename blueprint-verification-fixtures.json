@@ -6249,7 +6249,38 @@
                 "license": "MIT",
                 "category": "Portal / Home",
                 "type": "Dashboard"
-              }
+              },
+              "outlets": [
+                {
+                  "name": "toolbar",
+                  "kind": "actions",
+                  "defaults": [
+                    {
+                      "kind": "button",
+                      "id": "refresh",
+                      "title": "Refresh",
+                      "runs": "refresh"
+                    },
+                    {
+                      "kind": "button",
+                      "id": "export",
+                      "title": "Export"
+                    }
+                  ]
+                },
+                {
+                  "name": "filters",
+                  "kind": "filters",
+                  "defaults": [
+                    {
+                      "kind": "filter",
+                      "id": "search",
+                      "title": "Search",
+                      "control": "search"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "dialogTemplates": [
@@ -6331,7 +6362,19 @@
               "displayName": "Portal home",
               "description": "The page a customer lands on.",
               "type": "Dashboard",
-              "category": "Portal / Home"
+              "category": "Portal / Home",
+              "outlets": [
+                {
+                  "name": "toolbar",
+                  "kind": "actions",
+                  "defaults": 2
+                },
+                {
+                  "name": "filters",
+                  "kind": "filters",
+                  "defaults": 1
+                }
+              ]
             },
             {
               "name": "PortalDialog",
