@@ -43,13 +43,13 @@ public static class SlotShapeValidator
         return diagnostics;
     }
 
-    static void Visit(JsonNode? value, string path, List<SlotShapeDiagnostic> diagnostics)
+    static void Visit(JsonNode? value, string path, List<SlotShapeDiagnostic> diagnostics, bool inValues = false)
     {
         if (value is JsonArray array)
         {
             for (var index = 0; index < array.Count; index++)
             {
-                Visit(array[index], $"{path}[{index}]", diagnostics);
+                Visit(array[index], $"{path}[{index}]", diagnostics, inValues);
             }
 
             return;
@@ -60,15 +60,22 @@ public static class SlotShapeValidator
             return;
         }
 
-        CheckLegacy(owner, path, diagnostics);
-        CheckSlots(owner, path, diagnostics);
-        CheckOutlets(owner, path, diagnostics);
-        CheckNavigation(owner, path, diagnostics);
-        CheckPlacement(owner, path, diagnostics);
+        CheckLegacy(owner, path, diagnostics, inValues);
+        if (!inValues)
+        {
+            CheckSlots(owner, path, diagnostics);
+            CheckOutlets(owner, path, diagnostics);
+            CheckNavigation(owner, path, diagnostics);
+        }
+
+        if (!inValues || LegacyOutletShape.Text(owner["componentName"]) is not null)
+        {
+            CheckPlacement(owner, path, diagnostics);
+        }
 
         foreach (var (key, child) in owner)
         {
-            Visit(child, $"{path}.{key}", diagnostics);
+            Visit(child, $"{path}.{key}", diagnostics, inValues || LegacyOutletShape.HoldsUserValues(owner, key));
         }
     }
 
@@ -105,20 +112,20 @@ public static class SlotShapeValidator
     static SlotShapeDiagnostic Legacy(string path, string what) =>
         new(SlotShapeDiagnosticCode.LegacyOutletShape, path, $"{what}. {LegacyOutletShape.MigrationHint}");
 
-    static void CheckLegacy(JsonObject value, string path, List<SlotShapeDiagnostic> diagnostics)
+    static void CheckLegacy(JsonObject value, string path, List<SlotShapeDiagnostic> diagnostics, bool inValues)
     {
         var name = LegacyOutletShape.Text(value["name"]) is { } text ? $"'{text}'" : "The object";
-        if (LegacyOutletShape.IsOutletList(value["outlets"]))
+        if (!inValues && LegacyOutletShape.IsOutletList(value["outlets"]))
         {
             diagnostics.Add(Legacy($"{path}.outlets", $"{name} declares outlets"));
         }
 
-        if (value["metadata"] is JsonObject metadata && LegacyOutletShape.Text(metadata["primaryOutlet"]) is not null)
+        if (!inValues && value["metadata"] is JsonObject metadata && LegacyOutletShape.Text(metadata["primaryOutlet"]) is not null)
         {
             diagnostics.Add(Legacy($"{path}.metadata.primaryOutlet", $"{name} names its primary outlet in its metadata"));
         }
 
-        if (LegacyOutletShape.IsDestinationKind(value["kind"]))
+        if (LegacyOutletShape.IsDestinationOfLegacyKind(value))
         {
             diagnostics.Add(Legacy($"{path}.kind", $"A destination opens the kind '{LegacyOutletShape.Text(value["kind"])}'"));
         }

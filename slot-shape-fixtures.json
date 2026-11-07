@@ -56,6 +56,72 @@
       }
     },
     {
+      "name": "a slot the user made unrouted stays unrouted",
+      "input": {
+        "name": "MasterDetail",
+        "slots": [{ "name": "detail", "routed": false }],
+        "outlets": [{ "name": "detail", "accepts": ["Detail"] }]
+      },
+      "expected": {
+        "document": { "name": "MasterDetail", "slots": [{ "name": "detail", "routed": false, "accepts": ["Detail"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a null on an outlet is never copied, and a null the slot has stays",
+      "input": {
+        "name": "Shell",
+        "slots": [{ "name": "list", "description": null }],
+        "outlets": [{ "name": "list", "description": null, "accepts": null }, { "name": "content", "description": null, "accepts": null }]
+      },
+      "expected": {
+        "document": { "name": "Shell", "slots": [{ "name": "list", "description": null, "routed": true }, { "name": "content", "routed": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a kind of outlet on something that is not a destination stays",
+      "input": { "name": "Harbour", "kind": "outlet", "title": "Harbour outlet store" },
+      "expected": {
+        "document": { "name": "Harbour", "kind": "outlet", "title": "Harbour outlet store" },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "values a user typed in an element's properties stay, apart from destinations",
+      "input": {
+        "id": "stores",
+        "componentName": "core:card",
+        "properties": {
+          "outlets": [{ "name": "Harbour" }, { "name": "Station", "description": "By the station" }],
+          "toolbar": { "buttons": [{ "id": "call", "title": "Call" }] },
+          "metadata": { "primaryOutlet": "Harbour" },
+          "shape": { "kind": "Outlet" },
+          "destination": { "screen": "StoreDetails", "outlet": "detail", "kind": "outlet" }
+        },
+        "slots": {}
+      },
+      "expected": {
+        "document": {
+          "id": "stores",
+          "componentName": "core:card",
+          "properties": {
+            "outlets": [{ "name": "Harbour" }, { "name": "Station", "description": "By the station" }],
+            "toolbar": { "buttons": [{ "id": "call", "title": "Call" }] },
+            "metadata": { "primaryOutlet": "Harbour" },
+            "shape": { "kind": "Outlet" },
+            "destination": { "screen": "StoreDetails", "slot": "detail", "kind": "slot" }
+          },
+          "slots": {}
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
       "name": "a template with outlets and no slots",
       "input": { "name": "Workspace", "outlets": [{ "name": "workspace.detail" }] },
       "expected": {
@@ -872,6 +938,16 @@
     }
   ],
   "validations": [
+    {
+      "name": "values a user typed in an element's properties and a kind of outlet on something that is not a destination",
+      "document": {
+        "screens": [{ "name": "Stores", "slotContent": { "main": [
+          { "id": "stores", "componentName": "core:card", "properties": { "outlets": [{ "name": "Harbour" }], "metadata": { "primaryOutlet": "Harbour" }, "shape": { "kind": "Outlet" } }, "slots": {} }
+        ] } }],
+        "sampleRecord": { "name": "Harbour", "kind": "outlet" }
+      },
+      "expected": []
+    },
     {
       "name": "an action component that still stores a presentation",
       "document": {

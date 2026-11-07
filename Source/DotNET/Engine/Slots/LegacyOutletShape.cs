@@ -41,6 +41,7 @@ static class LegacyOutletShape
 
     static readonly HashSet<string> _outletKeys = new(StringComparer.Ordinal) { "name", "description", "accepts" };
     static readonly string[] _destinationKeys = ["screen", "module", "feature", "slice", "route", "kind", "dialog", "routeParameterBindings"];
+    static readonly string[] _destinationTargetKeys = ["screen", "module", "feature", "slice", "route", "dialog", "routeParameterBindings", "outlet", "slot"];
 
     /// <summary>
     /// Whether a value is a list of outlets in the legacy shape: a non-empty list of <c language="csharp">{ name, description?, accepts? }</c>.
@@ -70,6 +71,25 @@ static class LegacyOutletShape
     /// <returns>Whether it is the legacy kind.</returns>
     public static bool IsDestinationKind(JsonNode? value) =>
         string.Equals(Text(value), "outlet", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Whether an object is a destination that opens the legacy <c language="csharp">outlet</c> kind: the kind next to one
+    /// of the keys that make it a destination. Any other object with that kind is the user's and stays.
+    /// </summary>
+    /// <param name="value">The object.</param>
+    /// <returns>Whether it is a destination of the legacy kind.</returns>
+    public static bool IsDestinationOfLegacyKind(JsonObject value) =>
+        IsDestinationKind(value["kind"]) && _destinationTargetKeys.Any(value.ContainsKey);
+
+    /// <summary>
+    /// Whether a key of an object holds the values a user typed: an element's <c language="csharp">properties</c>. Inside
+    /// them only destinations and elements are upgraded and checked, so a value that looks like an old shape stays.
+    /// </summary>
+    /// <param name="owner">The object that has the key.</param>
+    /// <param name="key">The key.</param>
+    /// <returns>Whether the key holds user values.</returns>
+    public static bool HoldsUserValues(JsonObject owner, string key) =>
+        key == "properties" && Text(owner["componentName"]) is not null;
 
     /// <summary>
     /// The text of a JSON string value, or <see langword="null"/> for anything else.

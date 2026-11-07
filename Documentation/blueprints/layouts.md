@@ -64,6 +64,11 @@ declared a nested region with `core:outlet`. Scene 5 removes all of these withou
   if there is one. `primaryOutlet` becomes `primary: true` on the slot it names. A destination's `outlet` and
   kind become `slot`, and `core:outlet` becomes `core:slot`. Running it on a document that is already in the
   slot shape changes nothing. Anything it cannot map stays where it was and is listed in `diagnostics`.
+  It never overwrites or destroys a value the user set. A slot that already has a `description`, `routed`
+  (even `false`) or `accepts` keeps it, and a `null` on the outlet is never copied. `kind: outlet` is renamed
+  only on a destination. Inside an element's `properties`, the values a user typed, only destinations are
+  upgraded, so a property value that happens to look like an old outlet list or toolbar stays as it is. The
+  validator skips those values the same way.
 - `validateSlotShape(document)` (C#: `SlotShapeValidator.Validate`) lists anything left of the old shape
   (`legacyOutletShape`) and any broken slot rule. Saving a document through
   `SceneDocumentChangeValidation.Validate` refuses it with `invalidSlotShape` until the document is upgraded.

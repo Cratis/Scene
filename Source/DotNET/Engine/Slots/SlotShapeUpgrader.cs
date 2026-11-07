@@ -33,6 +33,10 @@ namespace Cratis.Scene.Engine.Slots;
 /// <c language="csharp">core:toolbarItem</c> elements, becomes the <c language="csharp">core:outletItems</c> element that draws an outlet
 /// of actions (<see cref="LegacyToolbarElement.Upgrade"/>).</description></item>
 /// <item><description>The upgrade is idempotent, and what cannot be mapped is reported (never thrown) and stays as it was.</description></item>
+/// <item><description>It never overwrites or destroys a user's value: a slot that already has a description,
+/// <c language="json">routed</c> or <c language="json">accepts</c> keeps it (a <c language="json">null</c> is never copied over it),
+/// <c language="json">kind: outlet</c> is renamed only on a destination, and inside an element's <c language="json">properties</c> -
+/// the values a user typed - only destinations are upgraded.</description></item>
 /// </list>
 /// </remarks>
 public static class SlotShapeUpgrader
@@ -59,14 +63,14 @@ public static class SlotShapeUpgrader
         return new(copy, changed, diagnostics);
     }
 
-    static bool Visit(JsonNode? value, string path, List<SlotShapeDiagnostic> diagnostics)
+    static bool Visit(JsonNode? value, string path, List<SlotShapeDiagnostic> diagnostics, bool inValues = false)
     {
         if (value is JsonArray array)
         {
             var changed = false;
             for (var index = 0; index < array.Count; index++)
             {
-                changed = Visit(array[index], $"{path}[{index}]", diagnostics) || changed;
+                changed = Visit(array[index], $"{path}[{index}]", diagnostics, inValues) || changed;
             }
 
             return changed;
@@ -77,28 +81,37 @@ public static class SlotShapeUpgrader
             return false;
         }
 
-        var ownChanged = MergeOutlets(owner);
-        ownChanged = MovePrimaryOutlet(owner, path, diagnostics) || ownChanged;
-        ownChanged = RenameDestination(owner, path, diagnostics) || ownChanged;
-        ownChanged = UpgradeToolbar(owner) || ownChanged;
-        if (LegacyNavigationShape.IsNavigationModel(owner))
+        var element = LegacyOutletShape.Text(owner["componentName"]) is not null;
+        var ownChanged = false;
+        if (!inValues)
         {
-            LegacyNavigationShape.UpgradeNavigationModel(owner);
-            ownChanged = true;
+            ownChanged = MergeOutlets(owner);
+            ownChanged = MovePrimaryOutlet(owner, path, diagnostics) || ownChanged;
+            ownChanged = UpgradeToolbar(owner) || ownChanged;
+            if (LegacyNavigationShape.IsNavigationModel(owner))
+            {
+                LegacyNavigationShape.UpgradeNavigationModel(owner);
+                ownChanged = true;
+            }
+
+            ownChanged = LegacyNavigationShape.UpgradeNavigationContributions(owner) || ownChanged;
         }
 
-        ownChanged = LegacyNavigationShape.UpgradeNavigationContributions(owner) || ownChanged;
-        ownChanged = LegacyActionPresentation.Upgrade(owner, path, diagnostics) || ownChanged;
-        ownChanged = LegacyToolbarElement.Upgrade(owner, path, diagnostics) || ownChanged;
-        if (LegacyOutletShape.Text(owner["componentName"]) == LegacyOutletShape.OutletComponentName)
+        ownChanged = RenameDestination(owner, path, diagnostics) || ownChanged;
+        if (element)
         {
-            owner["componentName"] = LegacyOutletShape.SlotComponentName;
-            ownChanged = true;
+            ownChanged = LegacyActionPresentation.Upgrade(owner, path, diagnostics) || ownChanged;
+            ownChanged = LegacyToolbarElement.Upgrade(owner, path, diagnostics) || ownChanged;
+            if (LegacyOutletShape.Text(owner["componentName"]) == LegacyOutletShape.OutletComponentName)
+            {
+                owner["componentName"] = LegacyOutletShape.SlotComponentName;
+                ownChanged = true;
+            }
         }
 
         foreach (var (key, child) in owner.ToList())
         {
-            ownChanged = Visit(child, $"{path}.{key}", diagnostics) || ownChanged;
+            ownChanged = Visit(child, $"{path}.{key}", diagnostics, inValues || LegacyOutletShape.HoldsUserValues(owner, key)) || ownChanged;
         }
 
         return ownChanged;
@@ -144,7 +157,7 @@ public static class SlotShapeUpgrader
             {
                 var slot = new JsonObject { ["name"] = name };
                 CopyIfAbsent(outlet, slot, "description");
-                slot["routed"] = true;
+                RoutedIfAbsent(slot);
                 CopyIfAbsent(outlet, slot, "accepts");
                 slots.Add(Ordered(slot));
                 continue;
@@ -152,7 +165,7 @@ public static class SlotShapeUpgrader
 
             var merged = slots[index];
             CopyIfAbsent(outlet, merged, "description");
-            merged["routed"] = true;
+            RoutedIfAbsent(merged);
             CopyIfAbsent(outlet, merged, "accepts");
             slots[index] = Ordered(merged);
         }
@@ -205,7 +218,7 @@ public static class SlotShapeUpgrader
     static bool RenameDestination(JsonObject destination, string path, List<SlotShapeDiagnostic> diagnostics)
     {
         var changed = false;
-        if (LegacyOutletShape.IsDestinationKind(destination["kind"]))
+        if (LegacyOutletShape.IsDestinationOfLegacyKind(destination))
         {
             var kind = LegacyOutletShape.Text(destination["kind"])!;
             destination["kind"] = kind == "OUTLET" ? "SLOT" : kind.StartsWith('O') ? "Slot" : "slot";
@@ -246,6 +259,14 @@ public static class SlotShapeUpgrader
         if (to[key] is null && from[key] is { } value)
         {
             to[key] = value.DeepClone();
+        }
+    }
+
+    static void RoutedIfAbsent(JsonObject slot)
+    {
+        if (slot["routed"] is null)
+        {
+            slot["routed"] = true;
         }
     }
 

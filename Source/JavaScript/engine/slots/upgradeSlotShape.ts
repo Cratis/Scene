@@ -28,6 +28,29 @@ function ordered(slot: JsonObject): JsonObject {
 const legacyOutletKeys = new Set(['name', 'description', 'accepts']);
 const destinationKeys = ['screen', 'module', 'feature', 'slice', 'route', 'kind', 'dialog', 'routeParameterBindings'];
 
+const destinationTargetKeys = ['screen', 'module', 'feature', 'slice', 'route', 'dialog', 'routeParameterBindings', 'outlet', 'slot'];
+
+/**
+ * Tells whether an object is a destination that opens the legacy `outlet` kind: the kind next to one of the keys that make
+ * it a destination. Any other object with that kind is the user's and stays.
+ * @param value The object.
+ * @returns Whether it is a destination of the legacy kind.
+ */
+export function isDestinationOfLegacyKind(value: JsonObject): boolean {
+    return isLegacyDestinationKind(value.kind) && destinationTargetKeys.some(key => key in value);
+}
+
+/**
+ * Tells whether a key of an object holds the values a user typed: an element's `properties`. Inside them only destinations
+ * and elements are upgraded and checked, so a value that looks like an old shape stays.
+ * @param owner The object that has the key.
+ * @param key The key.
+ * @returns Whether the key holds user values.
+ */
+export function holdsUserValues(owner: JsonObject, key: string): boolean {
+    return key === 'properties' && typeof owner.componentName === 'string';
+}
+
 /**
  * Whether a value is a list of outlets in the shape Scene 5 replaced with slots: a non-empty list of `{ name, description?,
  * accepts? }`. Anything else - such as an outlet of items, which has a kind - is not.
@@ -96,6 +119,10 @@ function renamedKind(kind: string): string {
  * - A screen's `core:toolbar` element, whose `items` slot held `core:toolbarItem` elements, becomes the `core:outletItems`
  *   element that draws an outlet of actions ({@link upgradeToolbarElement}).
  * - The function is idempotent: a document already in the slot shape comes back unchanged.
+ * - It never overwrites or destroys a user's value: a slot that already has a description, `routed` or `accepts`
+ *   keeps it (a `null` is never copied over it), `kind: outlet` is renamed only on a destination, and inside an
+ *   element's `properties` - the values a user typed - only destinations are upgraded, so a value that happens to
+ *   look like an old outlet list or toolbar stays as it is.
  * - What cannot be mapped is reported in `diagnostics` (never thrown) and stays as it was, so validation on save
  *   still refuses it.
  * @param document The stored document, parsed from JSON.
@@ -108,35 +135,41 @@ export function upgradeSlotShape(document: unknown): SlotShapeUpgrade {
     return { document: copy, changed, diagnostics };
 }
 
-function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
+function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[], inValues = false): boolean {
     if (Array.isArray(value)) {
         let changed = false;
         value.forEach((item, index) => {
-            changed = upgrade(item, `${path}[${index}]`, diagnostics) || changed;
+            changed = upgrade(item, `${path}[${index}]`, diagnostics, inValues) || changed;
         });
         return changed;
     }
 
     if (!isObject(value)) return false;
 
-    let changed = mergeOutlets(value);
-    changed = movePrimaryOutlet(value, path, diagnostics) || changed;
-    changed = renameDestination(value, path, diagnostics) || changed;
-    changed = upgradeToolbar(value) || changed;
-    if (isLegacyNavigationModel(value)) {
-        upgradeNavigationModel(value);
-        changed = true;
+    const element = typeof value.componentName === 'string';
+    let changed = false;
+    if (!inValues) {
+        changed = mergeOutlets(value) || changed;
+        changed = movePrimaryOutlet(value, path, diagnostics) || changed;
+        changed = upgradeToolbar(value) || changed;
+        if (isLegacyNavigationModel(value)) {
+            upgradeNavigationModel(value);
+            changed = true;
+        }
+        changed = upgradeNavigationContributions(value) || changed;
     }
-    changed = upgradeNavigationContributions(value) || changed;
-    changed = upgradeActionPresentation(value, path, diagnostics) || changed;
-    changed = upgradeToolbarElement(value, path, diagnostics) || changed;
-    if (value.componentName === legacyOutletComponentName) {
-        value.componentName = slotComponentName;
-        changed = true;
+    changed = renameDestination(value, path, diagnostics) || changed;
+    if (element) {
+        changed = upgradeActionPresentation(value, path, diagnostics) || changed;
+        changed = upgradeToolbarElement(value, path, diagnostics) || changed;
+        if (value.componentName === legacyOutletComponentName) {
+            value.componentName = slotComponentName;
+            changed = true;
+        }
     }
 
     for (const [key, child] of Object.entries(value)) {
-        changed = upgrade(child, `${path}.${key}`, diagnostics) || changed;
+        changed = upgrade(child, `${path}.${key}`, diagnostics, inValues || holdsUserValues(value, key)) || changed;
     }
 
     return changed;
@@ -169,24 +202,26 @@ function mergeOutlets(owner: JsonObject): boolean {
     const slots: JsonObject[] = Array.isArray(owner.slots) ? (owner.slots as unknown[]).filter(isObject) : [];
     for (const outlet of owner.outlets) {
         const index = slots.findIndex(slot => slot.name === outlet.name);
-        if (index < 0) {
-            slots.push(ordered({ name: outlet.name, description: outlet.description, routed: true, accepts: outlet.accepts }));
-            continue;
-        }
-
-        const existing = slots[index];
-        slots[index] = ordered({
-            ...existing,
-            description: existing.description ?? outlet.description,
-            routed: true,
-            accepts: existing.accepts ?? outlet.accepts,
-        });
+        const slot: JsonObject = index < 0 ? { name: outlet.name } : { ...slots[index] };
+        copyIfAbsent(outlet, slot, 'description');
+        if (slot.routed === undefined || slot.routed === null) slot.routed = true;
+        copyIfAbsent(outlet, slot, 'accepts');
+        if (index < 0) slots.push(ordered(slot));
+        else slots[index] = ordered(slot);
     }
 
     const nonObjects = Array.isArray(owner.slots) ? (owner.slots as unknown[]).filter(slot => !isObject(slot)) : [];
     owner.slots = [...slots, ...nonObjects];
     delete owner.outlets;
     return true;
+}
+
+/**
+ * Copies a value the upgraded object does not have; a value it has, even an explicit `null`, is the user's and stays.
+ * A `null` is never copied, as C#'s `CopyIfAbsent` does.
+ */
+function copyIfAbsent(from: JsonObject, to: JsonObject, key: string): void {
+    if ((to[key] === undefined || to[key] === null) && from[key] !== undefined && from[key] !== null) to[key] = from[key];
 }
 
 function movePrimaryOutlet(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
@@ -226,7 +261,7 @@ function movePrimaryOutlet(owner: JsonObject, path: string, diagnostics: SlotSha
 
 function renameDestination(destination: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
     let changed = false;
-    if (isLegacyDestinationKind(destination.kind)) {
+    if (isDestinationOfLegacyKind(destination)) {
         destination.kind = renamedKind(destination.kind as string);
         changed = true;
     }

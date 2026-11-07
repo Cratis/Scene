@@ -7,7 +7,7 @@ import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
 import { isLegacyToolbarElement, toolbarElementMigrationHint } from './upgradeToolbarElement';
-import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, isLegacyToolbar, legacyOutletComponentName } from './upgradeSlotShape';
+import { holdsUserValues, isDestinationOfLegacyKind, isLegacyDestination, isLegacyOutletList, isLegacyToolbar, legacyOutletComponentName } from './upgradeSlotShape';
 
 type JsonObject = { [key: string]: unknown };
 
@@ -33,22 +33,24 @@ export function validateSlotShape(document: unknown): SlotShapeDiagnostic[] {
     return diagnostics;
 }
 
-function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[], inValues = false): void {
     if (Array.isArray(value)) {
-        value.forEach((item, index) => visit(item, `${path}[${index}]`, diagnostics));
+        value.forEach((item, index) => visit(item, `${path}[${index}]`, diagnostics, inValues));
         return;
     }
 
     if (!isObject(value)) return;
 
-    checkLegacy(value, path, diagnostics);
-    checkSlots(value, path, diagnostics);
-    checkOutlets(value, path, diagnostics);
-    checkNavigation(value, path, diagnostics);
-    checkPlacement(value, path, diagnostics);
+    checkLegacy(value, path, diagnostics, inValues);
+    if (!inValues) {
+        checkSlots(value, path, diagnostics);
+        checkOutlets(value, path, diagnostics);
+        checkNavigation(value, path, diagnostics);
+    }
+    if (!inValues || typeof value.componentName === 'string') checkPlacement(value, path, diagnostics);
 
     for (const [key, child] of Object.entries(value)) {
-        visit(child, `${path}.${key}`, diagnostics);
+        visit(child, `${path}.${key}`, diagnostics, inValues || holdsUserValues(value, key));
     }
 }
 
@@ -56,17 +58,17 @@ function legacy(path: string, what: string): SlotShapeDiagnostic {
     return { code: SlotShapeDiagnosticCode.LegacyOutletShape, path, message: `${what}. ${slotShapeMigrationHint}` };
 }
 
-function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[], inValues: boolean): void {
     const name = typeof value.name === 'string' ? `'${value.name}'` : 'The object';
-    if (isLegacyOutletList(value.outlets)) {
+    if (!inValues && isLegacyOutletList(value.outlets)) {
         diagnostics.push(legacy(`${path}.outlets`, `${name} declares outlets`));
     }
 
-    if (isObject(value.metadata) && typeof value.metadata.primaryOutlet === 'string') {
+    if (!inValues && isObject(value.metadata) && typeof value.metadata.primaryOutlet === 'string') {
         diagnostics.push(legacy(`${path}.metadata.primaryOutlet`, `${name} names its primary outlet in its metadata`));
     }
 
-    if (isLegacyDestinationKind(value.kind)) {
+    if (isDestinationOfLegacyKind(value)) {
         diagnostics.push(legacy(`${path}.kind`, `A destination opens the kind '${String(value.kind)}'`));
     }
 
