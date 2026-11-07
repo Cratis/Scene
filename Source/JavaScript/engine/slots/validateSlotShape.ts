@@ -1,10 +1,10 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { SlotRole } from '@cratis/scene.model';
+import { OutletKind, SlotRole } from '@cratis/scene.model';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
-import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, legacyOutletComponentName } from './upgradeSlotShape';
+import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, isLegacyToolbar, legacyOutletComponentName } from './upgradeSlotShape';
 
 type JsonObject = { [key: string]: unknown };
 
@@ -40,6 +40,7 @@ function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[])
 
     checkLegacy(value, path, diagnostics);
     checkSlots(value, path, diagnostics);
+    checkOutlets(value, path, diagnostics);
 
     for (const [key, child] of Object.entries(value)) {
         visit(child, `${path}.${key}`, diagnostics);
@@ -71,6 +72,33 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
     if (isLegacyDestination(value)) {
         diagnostics.push(legacy(`${path}.outlet`, `A destination names the outlet '${String(value.outlet)}'`));
     }
+}
+
+const outletKinds = new Set<string>(Object.values(OutletKind));
+
+/** What the validator tells a document that still has a feature or module toolbar. */
+export const toolbarShapeMigrationHint = 'Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
+
+function checkOutlets(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    const ownerName = typeof owner.name === 'string' ? owner.name : '(unnamed)';
+    if (isLegacyToolbar(owner.toolbar)) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.LegacyToolbarShape,
+            path: `${path}.toolbar`,
+            message: `'${ownerName}' has a toolbar whose buttons every screen gets. ${toolbarShapeMigrationHint}`,
+        });
+    }
+    if (!Array.isArray(owner.outlets) || isLegacyOutletList(owner.outlets)) return;
+    owner.outlets.forEach((outlet: unknown, index: number) => {
+        if (!isObject(outlet) || typeof outlet.name !== 'string') return;
+        if (typeof outlet.kind === 'string' && outletKinds.has(outlet.kind.toLowerCase())) return;
+        const kind = outlet.kind === undefined ? 'no kind' : `the kind '${String(outlet.kind)}'`;
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.UnknownOutletKind,
+            path: `${path}.outlets[${index}].kind`,
+            message: `The outlet '${outlet.name}' of '${ownerName}' has ${kind}; an outlet lists actions, filters, tabs, stats or navigation`,
+        });
+    });
 }
 
 function checkSlots(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {

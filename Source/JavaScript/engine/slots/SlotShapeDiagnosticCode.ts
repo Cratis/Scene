@@ -23,4 +23,10 @@ export enum SlotShapeDiagnosticCode {
 
     /** An object has both the legacy `outlet` and the new `slot` key, with different values. */
     ConflictingSlotKey = 'conflictingSlotKey',
+
+    /** The document still has a feature or module toolbar Scene 5 replaced with the toolbar outlet; upgrade it before saving. */
+    LegacyToolbarShape = 'legacyToolbarShape',
+
+    /** An outlet's kind is not actions, filters, tabs, stats or navigation. */
+    UnknownOutletKind = 'unknownOutletKind',
 }

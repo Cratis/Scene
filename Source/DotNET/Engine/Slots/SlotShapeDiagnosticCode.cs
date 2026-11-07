@@ -38,4 +38,14 @@ public enum SlotShapeDiagnosticCode
     /// An object has both the legacy outlet and the new slot key, with different values.
     /// </summary>
     ConflictingSlotKey = 5,
+
+    /// <summary>
+    /// The document still has a feature or module toolbar Scene 5 replaced with the toolbar outlet; upgrade it before saving.
+    /// </summary>
+    LegacyToolbarShape = 6,
+
+    /// <summary>
+    /// An outlet's kind is not actions, filters, tabs, stats or navigation.
+    /// </summary>
+    UnknownOutletKind = 7,
 }

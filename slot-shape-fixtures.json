@@ -200,6 +200,85 @@
           { "code": "conflictingSlotKey", "path": "$.screens[0].target.outlet", "message": "The destination names the outlet 'a' and the slot 'b'; keep one" }
         ]
       }
+    },
+    {
+      "name": "a feature toolbar becomes a refinement that extends the toolbar outlet",
+      "input": {
+        "name": "Products",
+        "toolbar": {
+          "buttons": [
+            { "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "emphasis": "primary", "icon": "lucide:plus" },
+            { "id": "price", "title": "Set price", "target": "SetProductPrice" }
+          ]
+        }
+      },
+      "expected": {
+        "document": {
+          "name": "Products",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "mode": "extends",
+              "items": [
+                { "kind": "button", "id": "add", "title": "Add product", "icon": "lucide:plus", "slice": "catalog.products.DraftProduct", "emphasis": "primary" },
+                { "kind": "button", "id": "price", "title": "Set price", "command": "SetProductPrice" }
+              ]
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a module toolbar joins the refinements the module already has",
+      "input": {
+        "modules": [{
+          "name": "Catalog",
+          "refinements": [{ "outlet": "filters", "mode": "extends", "items": [{ "kind": "filter", "id": "status", "title": "Status" }] }],
+          "toolbar": { "buttons": [{ "id": "export", "title": "Export", "emphasis": "quiet" }] }
+        }]
+      },
+      "expected": {
+        "document": {
+          "modules": [{
+            "name": "Catalog",
+            "refinements": [
+              { "outlet": "filters", "mode": "extends", "items": [{ "kind": "filter", "id": "status", "title": "Status" }] },
+              { "outlet": "toolbar", "mode": "extends", "items": [{ "kind": "button", "id": "export", "title": "Export", "emphasis": "quiet" }] }
+            ]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a template that declares outlets of items is already in the outlet shape",
+      "input": {
+        "screenTemplates": [{
+          "name": "ListPage",
+          "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] },
+            { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screenTemplates": [{
+            "name": "ListPage",
+            "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
+            "outlets": [
+              { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] },
+              { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
+            ]
+          }]
+        },
+        "changed": false,
+        "diagnostics": []
+      }
     }
   ],
   "validations": [
@@ -207,7 +286,7 @@
       "name": "a document in the slot shape",
       "document": {
         "layouts": [{ "name": "AppShell", "slots": [{ "name": "topbar" }, { "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "drawer", "role": "Panel", "optional": true }] }],
-        "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routed": true, "routedBy": ["sku"] }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] }],
+        "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routed": true, "routedBy": ["sku"] }], "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [] }, { "name": "detailTabs", "kind": "Tabs", "slot": "detail", "defaults": [] }] }],
         "screens": [{ "name": "Products", "target": { "screen": "ProductDetails", "slot": "detail", "kind": "slot" } }]
       },
       "expected": []
@@ -260,6 +339,21 @@
       "document": { "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "primary": true }, { "name": "main", "primary": true }] }] },
       "expected": [
         { "code": "multiplePrimarySlots", "path": "$.layouts[0].slots", "message": "'AppShell' marks 'content', 'main' as primary; only one slot can be" }
+      ]
+    },
+    {
+      "name": "a feature toolbar",
+      "document": { "features": [{ "name": "Products", "toolbar": { "buttons": [{ "id": "add", "title": "Add product" }] } }] },
+      "expected": [
+        { "code": "legacyToolbarShape", "path": "$.features[0].toolbar", "message": "'Products' has a toolbar whose buttons every screen gets. Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "an outlet of a kind that is not one of the five",
+      "document": { "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "buttons", "defaults": [] }, { "name": "stats", "defaults": [] }] }] },
+      "expected": [
+        { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[0].kind", "message": "The outlet 'toolbar' of 'ListPage' has the kind 'buttons'; an outlet lists actions, filters, tabs, stats or navigation" },
+        { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[1].kind", "message": "The outlet 'stats' of 'ListPage' has no kind; an outlet lists actions, filters, tabs, stats or navigation" }
       ]
     }
   ]

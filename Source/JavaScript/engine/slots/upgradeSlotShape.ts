@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Toolbar } from '@cratis/scene.model';
+import { toolbarAsOutletRefinement } from '../toolbar/toolbarOutlet';
 import { SlotShapeDiagnostic, SlotShapeUpgrade } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 
@@ -77,6 +79,9 @@ function renamedKind(kind: string): string {
  * - `metadata.primaryOutlet` becomes `primary: true` on the slot it names, and leaves the metadata.
  * - A destination's `outlet` becomes `slot`, and a destination kind of `outlet` becomes `slot`.
  * - A nested outlet a screen declares (`core:outlet`) becomes a nested slot (`core:slot`).
+ * - A feature or module `toolbar` (`{ buttons }`), whose buttons every screen's toolbar got, becomes what it is now: a
+ *   refinement that extends the `toolbar` outlet of actions, appended to the owner's `refinements`. A button's `target`
+ *   (a command name) becomes the outlet button's `command`.
  * - The function is idempotent: a document already in the slot shape comes back unchanged.
  * - What cannot be mapped is reported in `diagnostics` (never thrown) and stays as it was, so validation on save
  *   still refuses it.
@@ -104,6 +109,7 @@ function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[
     let changed = mergeOutlets(value);
     changed = movePrimaryOutlet(value, path, diagnostics) || changed;
     changed = renameDestination(value, path, diagnostics) || changed;
+    changed = upgradeToolbar(value) || changed;
     if (value.componentName === legacyOutletComponentName) {
         value.componentName = slotComponentName;
         changed = true;
@@ -114,6 +120,27 @@ function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[
     }
 
     return changed;
+}
+
+/**
+ * Tells whether a value is the toolbar of a feature or module in the shape Scene 5 replaced with the `toolbar` outlet:
+ * an object with nothing but a list of buttons, each with an id and a title.
+ * @param value The value of an owner's `toolbar` key.
+ * @returns Whether it is a legacy toolbar.
+ */
+export function isLegacyToolbar(value: unknown): value is Toolbar {
+    return isObject(value)
+        && Object.keys(value).length === 1
+        && Array.isArray(value.buttons)
+        && value.buttons.every(button => isObject(button) && typeof button.id === 'string' && typeof button.title === 'string');
+}
+
+function upgradeToolbar(owner: JsonObject): boolean {
+    if (!isLegacyToolbar(owner.toolbar)) return false;
+    const refinement = toolbarAsOutletRefinement(owner.toolbar);
+    delete owner.toolbar;
+    owner.refinements = [...(Array.isArray(owner.refinements) ? owner.refinements : []), refinement];
+    return true;
 }
 
 function mergeOutlets(owner: JsonObject): boolean {

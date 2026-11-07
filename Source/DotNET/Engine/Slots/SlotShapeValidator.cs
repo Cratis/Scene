@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text.Json.Nodes;
+using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Engine.Slots;
 
@@ -58,6 +59,7 @@ public static class SlotShapeValidator
 
         CheckLegacy(owner, path, diagnostics);
         CheckSlots(owner, path, diagnostics);
+        CheckOutlets(owner, path, diagnostics);
 
         foreach (var (key, child) in owner)
         {
@@ -94,6 +96,42 @@ public static class SlotShapeValidator
         if (LegacyOutletShape.IsDestination(value))
         {
             diagnostics.Add(Legacy($"{path}.outlet", $"A destination names the outlet '{LegacyOutletShape.Text(value["outlet"])}'"));
+        }
+    }
+
+    static void CheckOutlets(JsonObject owner, string path, List<SlotShapeDiagnostic> diagnostics)
+    {
+        var ownerName = LegacyOutletShape.Text(owner["name"]) ?? "(unnamed)";
+        if (LegacyOutletShape.IsToolbar(owner["toolbar"]))
+        {
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.LegacyToolbarShape,
+                $"{path}.toolbar",
+                $"'{ownerName}' has a toolbar whose buttons every screen gets. {LegacyOutletShape.ToolbarMigrationHint}"));
+        }
+
+        if (owner["outlets"] is not JsonArray outlets || LegacyOutletShape.IsOutletList(outlets))
+        {
+            return;
+        }
+
+        for (var index = 0; index < outlets.Count; index++)
+        {
+            if (outlets[index] is not JsonObject outlet || LegacyOutletShape.Text(outlet["name"]) is not { } outletName)
+            {
+                continue;
+            }
+
+            if (LegacyOutletShape.Text(outlet["kind"]) is { } kind && Enum.TryParse<OutletKind>(kind, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed) && !int.TryParse(kind, out _))
+            {
+                continue;
+            }
+
+            var described = outlet.ContainsKey("kind") ? $"the kind '{LegacyOutletShape.Describe(outlet["kind"])}'" : "no kind";
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.UnknownOutletKind,
+                $"{path}.outlets[{index}].kind",
+                $"The outlet '{outletName}' of '{ownerName}' has {described}; an outlet lists actions, filters, tabs, stats or navigation"));
         }
     }
 

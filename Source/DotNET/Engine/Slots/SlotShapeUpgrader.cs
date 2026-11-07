@@ -18,6 +18,9 @@ namespace Cratis.Scene.Engine.Slots;
 /// <item><description><c language="csharp">metadata.primaryOutlet</c> becomes <c language="csharp">primary: true</c> on the slot it names, and leaves the metadata.</description></item>
 /// <item><description>A destination's <c language="csharp">outlet</c> becomes <c language="csharp">slot</c>, and a destination kind of <c language="csharp">outlet</c> becomes <c language="csharp">slot</c>.</description></item>
 /// <item><description>A nested outlet a screen declares (<c language="csharp">core:outlet</c>) becomes a nested slot (<c language="csharp">core:slot</c>).</description></item>
+/// <item><description>A feature or module <c language="json">toolbar</c> (<c language="json">{ buttons }</c>), whose buttons every screen's toolbar
+/// got, becomes a refinement that extends the <c language="json">toolbar</c> outlet of actions, appended to the owner's
+/// <c language="json">refinements</c>. A button's <c language="json">target</c> (a command name) becomes the outlet button's <c language="json">command</c>.</description></item>
 /// <item><description>The upgrade is idempotent, and what cannot be mapped is reported (never thrown) and stays as it was.</description></item>
 /// </list>
 /// </remarks>
@@ -66,6 +69,7 @@ public static class SlotShapeUpgrader
         var ownChanged = MergeOutlets(owner);
         ownChanged = MovePrimaryOutlet(owner, path, diagnostics) || ownChanged;
         ownChanged = RenameDestination(owner, path, diagnostics) || ownChanged;
+        ownChanged = UpgradeToolbar(owner) || ownChanged;
         if (LegacyOutletShape.Text(owner["componentName"]) == LegacyOutletShape.OutletComponentName)
         {
             owner["componentName"] = LegacyOutletShape.SlotComponentName;
@@ -78,6 +82,27 @@ public static class SlotShapeUpgrader
         }
 
         return ownChanged;
+    }
+
+    static bool UpgradeToolbar(JsonObject owner)
+    {
+        if (!LegacyOutletShape.IsToolbar(owner["toolbar"]))
+        {
+            return false;
+        }
+
+        var refinement = LegacyOutletShape.ToolbarAsRefinement(owner["toolbar"]!.AsObject());
+        owner.Remove("toolbar");
+        if (owner["refinements"] is JsonArray refinements)
+        {
+            refinements.Add(refinement);
+        }
+        else
+        {
+            owner["refinements"] = new JsonArray(refinement);
+        }
+
+        return true;
     }
 
     static bool MergeOutlets(JsonObject owner)

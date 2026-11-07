@@ -27,6 +27,13 @@ static class LegacyOutletShape
     /// </summary>
     public const string MigrationHint = "Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source";
 
+    /// <summary>
+    /// What the validator tells a document that still has a feature or module toolbar.
+    /// </summary>
+    public const string ToolbarMigrationHint = "Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source";
+
+    static readonly (string From, string To)[] _toolbarButtonKeys = [("id", "id"), ("title", "title"), ("icon", "icon"), ("slice", "slice"), ("target", "command"), ("emphasis", "emphasis")];
+
     static readonly HashSet<string> _outletKeys = new(StringComparer.Ordinal) { "name", "description", "accepts" };
     static readonly string[] _destinationKeys = ["screen", "module", "feature", "slice", "route", "kind", "dialog", "routeParameterBindings"];
 
@@ -66,6 +73,37 @@ static class LegacyOutletShape
     /// <returns>Its text.</returns>
     public static string? Text(JsonNode? value) =>
         value is JsonValue json && json.GetValueKind() == JsonValueKind.String ? json.GetValue<string>() : null;
+
+    /// <summary>
+    /// Tells whether a value is the toolbar of a feature or module in the shape Scene 5 replaced with the toolbar outlet: an
+    /// object with nothing but a list of buttons, each with an id and a title.
+    /// </summary>
+    /// <param name="value">The value of an owner's <c language="json">toolbar</c> key.</param>
+    /// <returns>Whether it is a legacy toolbar.</returns>
+    public static bool IsToolbar(JsonNode? value) =>
+        value is JsonObject { Count: 1 } toolbar
+        && toolbar["buttons"] is JsonArray buttons
+        && buttons.All(button => button is JsonObject candidate && Text(candidate["id"]) is not null && Text(candidate["title"]) is not null);
+
+    /// <summary>
+    /// Turns a legacy toolbar into the refinement that extends the toolbar outlet with its buttons, as stored JSON.
+    /// </summary>
+    /// <param name="toolbar">The legacy toolbar.</param>
+    /// <returns>The refinement.</returns>
+    public static JsonObject ToolbarAsRefinement(JsonObject toolbar)
+    {
+        var items = new JsonArray();
+        foreach (var button in toolbar["buttons"]!.AsArray().OfType<JsonObject>())
+        {
+            var item = new JsonObject { ["kind"] = "button" };
+            foreach (var (from, to) in _toolbarButtonKeys)
+            {
+                if (button[from] is { } value) item[to] = value.DeepClone();
+            }
+            items.Add(item);
+        }
+        return new JsonObject { ["outlet"] = Toolbar.ToolbarOutlet.Name, ["mode"] = "extends", ["items"] = items };
+    }
 
     /// <summary>
     /// The text of a JSON value as it reads in a message: a string as is, anything else as JSON.
