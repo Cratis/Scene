@@ -72,6 +72,8 @@ declared a nested region with `core:outlet`. Scene 5 removes all of these withou
 - `validateSlotShape(document)` (C#: `SlotShapeValidator.Validate`) lists anything left of the old shape
   (`legacyOutletShape`) and any broken slot rule. Saving a document through
   `SceneDocumentChangeValidation.Validate` refuses it with `invalidSlotShape` until the document is upgraded.
+  The stored document it is compared with, and the stored documents it inherits from, are upgraded first, so
+  saving an upgraded document over one stored in the old shape is judged on what actually changed.
   The message names the upgrade and `screenplay migrate --from 5 --to 6`.
 
 The shared `slot-shape-fixtures.json` corpus holds both engines to the same results.
