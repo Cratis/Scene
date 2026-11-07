@@ -1,0 +1,266 @@
+{
+  "description": "The slot shape of stored Scene documents: a slot's role, the primary slot, upgrading a document from the outlet shape Scene 5 replaced (upgradeSlotShape / SlotShapeUpgrader) and validating the slot shape on save (validateSlotShape / SlotShapeValidator). Asserted by the TypeScript and C# engines.",
+  "hint": "Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source",
+  "roles": [
+    { "name": "a declared role wins", "slot": { "name": "drawer", "role": "panel" }, "expected": "panel" },
+    { "name": "a declared role in another letter case", "slot": { "name": "content", "role": "Page" }, "expected": "page" },
+    { "name": "a primary slot without a role is a page", "slot": { "name": "content", "primary": true }, "expected": "page" },
+    { "name": "any other slot without a role is a pane", "slot": { "name": "detail", "routed": true }, "expected": "pane" },
+    { "name": "a declared role wins over primary", "slot": { "name": "content", "primary": true, "role": "pane" }, "expected": "pane" }
+  ],
+  "primary": [
+    { "name": "the slot marked primary", "slots": [{ "name": "rail" }, { "name": "main", "primary": true }], "expected": "main" },
+    { "name": "the first of several marked primary", "slots": [{ "name": "a", "primary": true }, { "name": "b", "primary": true }], "expected": "a" },
+    { "name": "no slot marked primary", "slots": [{ "name": "content" }], "expected": null }
+  ],
+  "upgrades": [
+    {
+      "name": "a layout's outlets become routed slots",
+      "input": {
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [{ "name": "topbar" }, { "name": "content" }],
+            "outlets": [{ "name": "content", "description": "Main" }, { "name": "side", "accepts": ["Detail"] }]
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                { "name": "topbar" },
+                { "name": "content", "description": "Main", "routed": true },
+                { "name": "side", "routed": true, "accepts": ["Detail"] }
+              ]
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an existing slot keeps its own values",
+      "input": {
+        "name": "MasterDetail",
+        "slots": [{ "name": "detail", "description": "Own" }],
+        "outlets": [{ "name": "detail", "description": "Outlet", "accepts": ["Detail"] }]
+      },
+      "expected": {
+        "document": { "name": "MasterDetail", "slots": [{ "name": "detail", "description": "Own", "routed": true, "accepts": ["Detail"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a template with outlets and no slots",
+      "input": { "name": "Workspace", "outlets": [{ "name": "workspace.detail" }] },
+      "expected": {
+        "document": { "name": "Workspace", "slots": [{ "name": "workspace.detail", "routed": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "the primary outlet becomes the primary slot",
+      "input": { "name": "Frame", "slots": [{ "name": "rail" }, { "name": "main" }], "metadata": { "role": "Root", "primaryOutlet": "main" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "rail" }, { "name": "main", "primary": true }], "metadata": { "role": "Root" } },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "metadata holding only the primary outlet is dropped",
+      "input": { "name": "Frame", "slots": [{ "name": "content" }], "metadata": { "primaryOutlet": "content" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "content", "primary": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination's outlet and kind become slot",
+      "input": { "screen": "InvoiceDetails", "outlet": "detail", "kind": "outlet" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination kind written by a C# host keeps its letter case",
+      "input": { "screen": "InvoiceDetails", "kind": "Outlet" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "kind": "Slot" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination naming the same outlet and slot keeps one",
+      "input": { "screen": "InvoiceDetails", "outlet": "detail", "slot": "detail" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "slot": "detail" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a nested outlet a screen declares becomes a nested slot",
+      "input": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:outlet", "properties": { "name": "line" } }] }] },
+      "expected": {
+        "document": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:slot", "properties": { "name": "line" } }] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a whole document",
+      "input": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "content" }], "outlets": [{ "name": "content" }], "metadata": { "primaryOutlet": "content" } }],
+        "screenTemplates": [{ "name": "MasterDetail", "slots": [{ "name": "list" }], "outlets": [{ "name": "master-detail.detail", "accepts": ["Detail"] }] }],
+        "screens": [{ "name": "Invoices", "navigation": [{ "id": "open", "target": { "screen": "InvoiceDetails", "outlet": "master-detail.detail", "kind": "outlet" } }] }]
+      },
+      "expected": {
+        "document": {
+          "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "routed": true, "primary": true }] }],
+          "screenTemplates": [{ "name": "MasterDetail", "slots": [{ "name": "list" }, { "name": "master-detail.detail", "routed": true, "accepts": ["Detail"] }] }],
+          "screens": [{ "name": "Invoices", "navigation": [{ "id": "open", "target": { "screen": "InvoiceDetails", "slot": "master-detail.detail", "kind": "slot" } }] }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a document already in the slot shape comes back unchanged",
+      "input": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "detail", "role": "pane", "routed": true, "routedBy": ["sku"], "optional": true }] }],
+        "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" } }]
+      },
+      "expected": {
+        "document": {
+          "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "detail", "role": "pane", "routed": true, "routedBy": ["sku"], "optional": true }] }],
+          "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" } }]
+        },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "outlets of items are not the outlet shape",
+      "input": { "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] },
+      "expected": {
+        "document": { "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an outlet key on something that is not a destination stays",
+      "input": { "name": "addProduct", "outlet": "toolbar" },
+      "expected": {
+        "document": { "name": "addProduct", "outlet": "toolbar" },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a primary outlet that is not a slot stays and is reported",
+      "input": { "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "content" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "content" } },
+        "changed": false,
+        "diagnostics": [
+          { "code": "primarySlotNotDeclared", "path": "$.metadata.primaryOutlet", "message": "The primary outlet 'content' of 'Frame' is not one of its slots, so no slot can be made primary" }
+        ]
+      }
+    },
+    {
+      "name": "a primary outlet that conflicts with a primary slot stays and is reported",
+      "input": { "name": "Frame", "slots": [{ "name": "a", "primary": true }, { "name": "b" }], "metadata": { "primaryOutlet": "b" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "a", "primary": true }, { "name": "b" }], "metadata": { "primaryOutlet": "b" } },
+        "changed": false,
+        "diagnostics": [
+          { "code": "multiplePrimarySlots", "path": "$.metadata.primaryOutlet", "message": "The primary outlet 'b' of 'Frame' conflicts with its primary slot 'a'" }
+        ]
+      }
+    },
+    {
+      "name": "a destination naming a different outlet and slot stays and is reported",
+      "input": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "a", "slot": "b" } }] },
+      "expected": {
+        "document": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "a", "slot": "b" } }] },
+        "changed": false,
+        "diagnostics": [
+          { "code": "conflictingSlotKey", "path": "$.screens[0].target.outlet", "message": "The destination names the outlet 'a' and the slot 'b'; keep one" }
+        ]
+      }
+    }
+  ],
+  "validations": [
+    {
+      "name": "a document in the slot shape",
+      "document": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "topbar" }, { "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "drawer", "role": "Panel", "optional": true }] }],
+        "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routed": true, "routedBy": ["sku"] }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] }],
+        "screens": [{ "name": "Products", "target": { "screen": "ProductDetails", "slot": "detail", "kind": "slot" } }]
+      },
+      "expected": []
+    },
+    {
+      "name": "outlets of a layout",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [], "outlets": [{ "name": "content" }] }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.layouts[0].outlets", "message": "'AppShell' declares outlets. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a primary outlet in the metadata",
+      "document": { "screenTemplates": [{ "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "main" } }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screenTemplates[0].metadata.primaryOutlet", "message": "'Frame' names its primary outlet in its metadata. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a destination that names an outlet",
+      "document": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "detail", "kind": "outlet" } }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screens[0].target.kind", "message": "A destination opens the kind 'outlet'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" },
+        { "code": "legacyOutletShape", "path": "$.screens[0].target.outlet", "message": "A destination names the outlet 'detail'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a nested outlet a screen declares",
+      "document": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:outlet", "properties": { "name": "line" } }] }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screens[0].elements[0].componentName", "message": "A screen declares a nested outlet with 'core:outlet'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a slot role that is not a page, a pane or a panel",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [{ "name": "side", "role": "sidebar" }] }] },
+      "expected": [
+        { "code": "unknownSlotRole", "path": "$.layouts[0].slots[0].role", "message": "The slot 'side' of 'AppShell' has the role 'sidebar'; a slot is a page, a pane or a panel" }
+      ]
+    },
+    {
+      "name": "route parameters on a slot that is not routed",
+      "document": { "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routedBy": ["sku"] }] }] },
+      "expected": [
+        { "code": "routeParametersWithoutRouting", "path": "$.screenTemplates[0].slots[1].routedBy", "message": "The slot 'detail' of 'ListPage' is routed by sku but is not routed" }
+      ]
+    },
+    {
+      "name": "more than one primary slot",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "primary": true }, { "name": "main", "primary": true }] }] },
+      "expected": [
+        { "code": "multiplePrimarySlots", "path": "$.layouts[0].slots", "message": "'AppShell' marks 'content', 'main' as primary; only one slot can be" }
+      ]
+    }
+  ]
+}

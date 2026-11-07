@@ -1,0 +1,111 @@
+// Copyright (c) Cratis. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+import { SlotRole } from '@cratis/scene.model';
+import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
+import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
+import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, legacyOutletComponentName } from './upgradeSlotShape';
+
+type JsonObject = { [key: string]: unknown };
+
+function isObject(value: unknown): value is JsonObject {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+const roles = new Set<string>(Object.values(SlotRole));
+
+/** The sentence every legacy-shape diagnostic ends with: how to get out of it. */
+export const slotShapeMigrationHint = 'Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
+
+/**
+ * Checks that a stored Scene document - a whole document, a template library, or a single layout or screen template - is in
+ * the slot shape: nothing left of the outlet shape, every slot role known, route parameters only on routed slots, and at
+ * most one primary slot per layout or screen template. The C# engine runs the same check on save (`SlotShapeValidator`).
+ * @param document The stored document, parsed from JSON.
+ * @returns What is wrong, in document order; empty when the document is in the slot shape.
+ */
+export function validateSlotShape(document: unknown): SlotShapeDiagnostic[] {
+    const diagnostics: SlotShapeDiagnostic[] = [];
+    visit(document, '$', diagnostics);
+    return diagnostics;
+}
+
+function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (Array.isArray(value)) {
+        value.forEach((item, index) => visit(item, `${path}[${index}]`, diagnostics));
+        return;
+    }
+
+    if (!isObject(value)) return;
+
+    checkLegacy(value, path, diagnostics);
+    checkSlots(value, path, diagnostics);
+
+    for (const [key, child] of Object.entries(value)) {
+        visit(child, `${path}.${key}`, diagnostics);
+    }
+}
+
+function legacy(path: string, what: string): SlotShapeDiagnostic {
+    return { code: SlotShapeDiagnosticCode.LegacyOutletShape, path, message: `${what}. ${slotShapeMigrationHint}` };
+}
+
+function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    const name = typeof value.name === 'string' ? `'${value.name}'` : 'The object';
+    if (isLegacyOutletList(value.outlets)) {
+        diagnostics.push(legacy(`${path}.outlets`, `${name} declares outlets`));
+    }
+
+    if (isObject(value.metadata) && typeof value.metadata.primaryOutlet === 'string') {
+        diagnostics.push(legacy(`${path}.metadata.primaryOutlet`, `${name} names its primary outlet in its metadata`));
+    }
+
+    if (isLegacyDestinationKind(value.kind)) {
+        diagnostics.push(legacy(`${path}.kind`, `A destination opens the kind '${String(value.kind)}'`));
+    }
+
+    if (value.componentName === legacyOutletComponentName) {
+        diagnostics.push(legacy(`${path}.componentName`, `A screen declares a nested outlet with '${legacyOutletComponentName}'`));
+    }
+
+    if (isLegacyDestination(value)) {
+        diagnostics.push(legacy(`${path}.outlet`, `A destination names the outlet '${String(value.outlet)}'`));
+    }
+}
+
+function checkSlots(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (!Array.isArray(owner.slots)) return;
+
+    const ownerName = typeof owner.name === 'string' ? owner.name : '(unnamed)';
+    const primaries: string[] = [];
+    owner.slots.forEach((slot: unknown, index: number) => {
+        if (!isObject(slot) || typeof slot.name !== 'string') return;
+        const slotPath = `${path}.slots[${index}]`;
+
+        if (slot.role !== undefined && (typeof slot.role !== 'string' || !roles.has(slot.role.toLowerCase()))) {
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.UnknownSlotRole,
+                path: `${slotPath}.role`,
+                message: `The slot '${slot.name}' of '${ownerName}' has the role '${String(slot.role)}'; a slot is a page, a pane or a panel`,
+            });
+        }
+
+        if (Array.isArray(slot.routedBy) && slot.routedBy.length > 0 && slot.routed !== true) {
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.RouteParametersWithoutRouting,
+                path: `${slotPath}.routedBy`,
+                message: `The slot '${slot.name}' of '${ownerName}' is routed by ${slot.routedBy.map(String).join(', ')} but is not routed`,
+            });
+        }
+
+        if (slot.primary === true) primaries.push(slot.name);
+    });
+
+    if (primaries.length > 1) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.MultiplePrimarySlots,
+            path: `${path}.slots`,
+            message: `'${ownerName}' marks ${primaries.map(name => `'${name}'`).join(', ')} as primary; only one slot can be`,
+        });
+    }
+}

@@ -57,5 +57,10 @@ public enum SceneDocumentViolationCode
     /// <summary>
     /// An exposure or a contribution is not shaped as one.
     /// </summary>
-    InvalidEdit = 9
+    InvalidEdit = 9,
+
+    /// <summary>
+    /// The document is not in the slot shape: it still uses the outlet shape Scene 5 replaced, or its slots break a slot rule.
+    /// </summary>
+    InvalidSlotShape = 10
 }

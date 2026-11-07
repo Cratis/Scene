@@ -1,0 +1,208 @@
+// Copyright (c) Cratis. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+import { SlotShapeDiagnostic, SlotShapeUpgrade } from './SlotShapeDiagnostic';
+import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
+
+type JsonObject = { [key: string]: unknown };
+
+function isObject(value: unknown): value is JsonObject {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/** The order of a slot's keys, so an upgraded slot reads like one written in the new shape. */
+const slotKeyOrder = ['name', 'arrangement', 'description', 'role', 'routed', 'routedBy', 'primary', 'optional', 'accepts'];
+
+function ordered(slot: JsonObject): JsonObject {
+    const result: JsonObject = {};
+    for (const key of slotKeyOrder) if (slot[key] !== undefined) result[key] = slot[key];
+    for (const key of Object.keys(slot)) if (!(key in result) && slot[key] !== undefined) result[key] = slot[key];
+    return result;
+}
+
+const legacyOutletKeys = new Set(['name', 'description', 'accepts']);
+const destinationKeys = ['screen', 'module', 'feature', 'slice', 'route', 'kind', 'dialog', 'routeParameterBindings'];
+
+/**
+ * Whether a value is a list of outlets in the shape Scene 5 replaced with slots: a non-empty list of `{ name, description?,
+ * accepts? }`. Anything else - such as an outlet of items, which has a kind - is not.
+ * @param value The value of an `outlets` key.
+ * @returns Whether it is a legacy outlet list.
+ */
+export function isLegacyOutletList(value: unknown): value is JsonObject[] {
+    return Array.isArray(value)
+        && value.length > 0
+        && value.every(item => isObject(item) && typeof item.name === 'string' && Object.keys(item).every(key => legacyOutletKeys.has(key)));
+}
+
+/**
+ * Whether an object is a destination that names an outlet the legacy way: an `outlet` text next to one of the other keys
+ * of a destination.
+ * @param value The object.
+ * @returns Whether it is a legacy destination.
+ */
+export function isLegacyDestination(value: JsonObject): boolean {
+    return typeof value.outlet === 'string' && destinationKeys.some(key => key in value);
+}
+
+/**
+ * Whether a destination kind is the legacy `outlet`, in any letter case.
+ * @param value The value of a `kind` key.
+ * @returns Whether it is the legacy kind.
+ */
+export function isLegacyDestinationKind(value: unknown): boolean {
+    return typeof value === 'string' && value.toLowerCase() === 'outlet';
+}
+
+/** The component a screen declared a nested outlet with, before Scene 5. */
+export const legacyOutletComponentName = 'core:outlet';
+
+/** The component a screen declares a nested routed slot with. */
+export const slotComponentName = 'core:slot';
+
+/** Renames `outlet` to `slot` keeping its letter case: `Outlet` becomes `Slot`, `OUTLET` becomes `SLOT`. */
+function renamedKind(kind: string): string {
+    if (kind === 'OUTLET') return 'SLOT';
+    return kind.startsWith('O') ? 'Slot' : 'slot';
+}
+
+/**
+ * Upgrades a stored Scene document - a whole document, a template library, or a single layout, screen template or
+ * destination - from the outlet shape to the slot shape, in one pure step every host uses (Studio, Stage, the CLI and
+ * the C# engine's `SlotShapeUpgrader`).
+ *
+ * - Every `outlets` entry of a layout or screen template becomes a slot with `routed: true`. When a slot of the same
+ *   name already exists, it is marked routed and keeps its own values; the outlet's description and accepted types
+ *   fill in only what it lacks.
+ * - `metadata.primaryOutlet` becomes `primary: true` on the slot it names, and leaves the metadata.
+ * - A destination's `outlet` becomes `slot`, and a destination kind of `outlet` becomes `slot`.
+ * - A nested outlet a screen declares (`core:outlet`) becomes a nested slot (`core:slot`).
+ * - The function is idempotent: a document already in the slot shape comes back unchanged.
+ * - What cannot be mapped is reported in `diagnostics` (never thrown) and stays as it was, so validation on save
+ *   still refuses it.
+ * @param document The stored document, parsed from JSON.
+ * @returns The upgraded document, whether it changed, and what could not be mapped.
+ */
+export function upgradeSlotShape(document: unknown): SlotShapeUpgrade {
+    const diagnostics: SlotShapeDiagnostic[] = [];
+    const copy = structuredClone(document);
+    const changed = upgrade(copy, '$', diagnostics);
+    return { document: copy, changed, diagnostics };
+}
+
+function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
+    if (Array.isArray(value)) {
+        let changed = false;
+        value.forEach((item, index) => {
+            changed = upgrade(item, `${path}[${index}]`, diagnostics) || changed;
+        });
+        return changed;
+    }
+
+    if (!isObject(value)) return false;
+
+    let changed = mergeOutlets(value);
+    changed = movePrimaryOutlet(value, path, diagnostics) || changed;
+    changed = renameDestination(value, path, diagnostics) || changed;
+    if (value.componentName === legacyOutletComponentName) {
+        value.componentName = slotComponentName;
+        changed = true;
+    }
+
+    for (const [key, child] of Object.entries(value)) {
+        changed = upgrade(child, `${path}.${key}`, diagnostics) || changed;
+    }
+
+    return changed;
+}
+
+function mergeOutlets(owner: JsonObject): boolean {
+    if (!isLegacyOutletList(owner.outlets)) return false;
+
+    const slots: JsonObject[] = Array.isArray(owner.slots) ? (owner.slots as unknown[]).filter(isObject) : [];
+    for (const outlet of owner.outlets) {
+        const index = slots.findIndex(slot => slot.name === outlet.name);
+        if (index < 0) {
+            slots.push(ordered({ name: outlet.name, description: outlet.description, routed: true, accepts: outlet.accepts }));
+            continue;
+        }
+
+        const existing = slots[index];
+        slots[index] = ordered({
+            ...existing,
+            description: existing.description ?? outlet.description,
+            routed: true,
+            accepts: existing.accepts ?? outlet.accepts,
+        });
+    }
+
+    const nonObjects = Array.isArray(owner.slots) ? (owner.slots as unknown[]).filter(slot => !isObject(slot)) : [];
+    owner.slots = [...slots, ...nonObjects];
+    delete owner.outlets;
+    return true;
+}
+
+function movePrimaryOutlet(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
+    const metadata = owner.metadata;
+    if (!isObject(metadata) || typeof metadata.primaryOutlet !== 'string') return false;
+
+    const name = metadata.primaryOutlet;
+    const slots = Array.isArray(owner.slots) ? (owner.slots as unknown[]).filter(isObject) : [];
+    const target = slots.find(slot => slot.name === name);
+    if (target === undefined) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.PrimarySlotNotDeclared,
+            path: `${path}.metadata.primaryOutlet`,
+            message: `The primary outlet '${name}' of '${String(owner.name)}' is not one of its slots, so no slot can be made primary`,
+        });
+        return false;
+    }
+
+    const other = slots.find(slot => slot.primary === true && slot !== target);
+    if (other !== undefined) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.MultiplePrimarySlots,
+            path: `${path}.metadata.primaryOutlet`,
+            message: `The primary outlet '${name}' of '${String(owner.name)}' conflicts with its primary slot '${String(other.name)}'`,
+        });
+        return false;
+    }
+
+    target.primary = true;
+    const replaced = ordered(target);
+    for (const key of Object.keys(target)) delete target[key];
+    Object.assign(target, replaced);
+    delete metadata.primaryOutlet;
+    if (Object.keys(metadata).length === 0) delete owner.metadata;
+    return true;
+}
+
+function renameDestination(destination: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): boolean {
+    let changed = false;
+    if (isLegacyDestinationKind(destination.kind)) {
+        destination.kind = renamedKind(destination.kind as string);
+        changed = true;
+    }
+
+    if (!isLegacyDestination(destination)) return changed;
+
+    if (destination.slot !== undefined && destination.slot !== destination.outlet) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.ConflictingSlotKey,
+            path: `${path}.outlet`,
+            message: `The destination names the outlet '${String(destination.outlet)}' and the slot '${String(destination.slot)}'; keep one`,
+        });
+        return changed;
+    }
+
+    const entries: [string, unknown][] = Object.entries(destination).map(([key, value]) => [key === 'outlet' ? 'slot' : key, value]);
+    const seen = new Set<string>();
+    for (const key of Object.keys(destination)) delete destination[key];
+    for (const [key, value] of entries) {
+        if (seen.has(key)) continue;
+        seen.add(key);
+        destination[key] = value;
+    }
+
+    return true;
+}

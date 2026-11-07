@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Engine.Slots;
 using Cratis.Scene.Model.Editing;
 
 namespace Cratis.Scene.Engine.Editing;
@@ -48,6 +49,12 @@ public static class SceneDocumentChangeValidation
         if (!ParsedSceneDocument.TryParse(submitted, out var document, out var problem))
         {
             return Refused(SceneDocumentViolationCode.DocumentUnreadable, $"The document cannot be read: {problem}.");
+        }
+
+        var slotShape = SlotShapeValidator.Validate(submitted);
+        if (slotShape.Count > 0)
+        {
+            return new([.. slotShape.Select(diagnostic => new SceneDocumentViolation(SceneDocumentViolationCode.InvalidSlotShape, $"{diagnostic.Message}.", diagnostic.Path))]);
         }
 
         var before = ParsedSceneDocument.TryParse(previous, out var stored, out _) ? stored : null;
