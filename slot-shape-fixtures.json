@@ -858,7 +858,7 @@
       }
     },
     {
-      "name": "a toolbar element whose item has presentation hints is reported and kept",
+      "name": "a toolbar element whose item has presentation hints is upgraded with the hints dropped and reported",
       "input": {
         "screens": [
           {
@@ -901,37 +901,25 @@
                 "main": [
                   {
                     "id": "bar",
-                    "componentName": "core:toolbar",
-                    "properties": {},
-                    "slots": {
-                      "items": [
-                        {
-                          "id": "info",
-                          "componentName": "core:toolbarItem",
-                          "properties": {
-                            "kind": "Navigate",
-                            "target": "Info",
-                            "presentation": {
-                              "mode": "icon",
-                              "placement": "end"
-                            }
-                          },
-                          "slots": {}
-                        }
-                      ]
-                    }
+                    "componentName": "core:outletItems",
+                    "properties": {
+                      "name": "toolbar",
+                      "kind": "actions",
+                      "items": [{ "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" } }]
+                    },
+                    "slots": {}
                   }
                 ]
               }
             }
           ]
         },
-        "changed": false,
+        "changed": true,
         "diagnostics": [
           {
-            "code": "legacyToolbarElement",
-            "path": "$.screens[0].slotContent.main[0].slots.items",
-            "message": "The toolbar 'bar' has the item 'info' with the presentation hints mode, placement, which an outlet button has no place for, so it is kept as it is"
+            "code": "droppedPresentationHints",
+            "path": "$.screens[0].slotContent.main[0].slots.items[0].properties.presentation",
+            "message": "The toolbar 'bar' has the item 'info' with the presentation hints mode, placement, which an outlet button has no place for, so they are dropped"
           }
         ]
       }

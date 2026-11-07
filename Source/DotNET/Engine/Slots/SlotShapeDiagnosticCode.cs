@@ -102,4 +102,10 @@ public enum SlotShapeDiagnosticCode
     /// An outlet item lacks what its kind needs: an id, a title, the screen a tab shows or the items of a group.
     /// </summary>
     IncompleteOutletItem = 17,
+
+    /// <summary>
+    /// An old toolbar item had presentation hints, such as showing only its icon, which an outlet button has no place for;
+    /// the upgrade drops them and upgrades the item.
+    /// </summary>
+    DroppedPresentationHints = 18,
 }

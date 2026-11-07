@@ -111,10 +111,11 @@ The `core:toolbar` component and its `core:toolbarItem` items are gone: a screen
 by `core:outletItems`. The document upgrader (`upgradeSlotShape`, `SlotShapeUpgrader` in C#) rewrites a stored toolbar
 element. Its `name` names the outlet, `toolbar` when it names none. Each item becomes a button: its slice, its navigation
 target or dialog as `navigateTo`, or its hand-typed command as `command`, with its title, icon, emphasis and
-confirmation. A toolbar that holds something a button cannot carry is reported and kept as it was:
+confirmation. Presentation hints other than showing both icon and text, such as showing only the icon, are cosmetic: an
+outlet button has no place for them, so they are dropped, reported (`droppedPresentationHints`) and the item is upgraded.
+A toolbar that holds something a button cannot carry is reported and kept as it was:
 
 - an element that is not a toolbar item;
-- presentation hints other than showing both icon and text;
 - parameters passed to a command.
 
 Saving refuses a document that still has either element (`legacyToolbarElement`). For a Screenplay source, run

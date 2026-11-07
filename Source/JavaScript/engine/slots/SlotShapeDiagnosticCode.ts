@@ -62,4 +62,10 @@ export enum SlotShapeDiagnosticCode {
 
     /** An outlet item lacks what its kind needs: an id, a title, the screen a tab shows or the items of a group. */
     IncompleteOutletItem = 'incompleteOutletItem',
+
+    /**
+     * An old toolbar item had presentation hints, such as showing only its icon, which an outlet button has no place for;
+     * the upgrade drops them and upgrades the item.
+     */
+    DroppedPresentationHints = 'droppedPresentationHints',
 }

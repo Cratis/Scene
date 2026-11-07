@@ -52,7 +52,9 @@ static class LegacyToolbarElement
     /// <summary>
     /// Turns a <c language="csharp">core:toolbar</c> element into the <c language="csharp">core:outletItems</c> element that draws an
     /// outlet of actions: the toolbar's <c language="csharp">name</c> names the outlet (<c language="csharp">toolbar</c> when it names
-    /// none), and each item becomes a button. A toolbar holding something that cannot become a button is reported and kept.
+    /// none), and each item becomes a button. Presentation hints other than showing icon and text are only cosmetic: they are
+    /// dropped and reported (<see cref="SlotShapeDiagnosticCode.DroppedPresentationHints"/>), and the item is upgraded. A toolbar
+    /// holding something that cannot become a button - another element, parameters passed to a command - is reported and kept.
     /// </summary>
     /// <param name="owner">The object, which is changed in place.</param>
     /// <param name="path">The JSON path of the object.</param>
@@ -68,9 +70,10 @@ static class LegacyToolbarElement
         var properties = owner["properties"] as JsonObject ?? [];
         var elements = (owner["slots"] as JsonObject)?["items"] as JsonArray ?? [];
         var buttons = new JsonArray();
-        foreach (var element in elements)
+        var dropped = new List<SlotShapeDiagnostic>();
+        for (var index = 0; index < elements.Count; index++)
         {
-            var (button, reason) = AsButton(element);
+            var (button, reason, hints) = AsButton(elements[index]);
             if (button is null)
             {
                 diagnostics.Add(new(
@@ -81,7 +84,16 @@ static class LegacyToolbarElement
             }
 
             buttons.Add(button);
+            if (hints.Count > 0)
+            {
+                dropped.Add(new(
+                    SlotShapeDiagnosticCode.DroppedPresentationHints,
+                    $"{path}.slots.items[{index}].properties.presentation",
+                    $"The toolbar '{LegacyOutletShape.Describe(owner["id"])}' has the item '{LegacyOutletShape.Describe(button["id"])}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for, so they are dropped"));
+            }
         }
+
+        diagnostics.AddRange(dropped);
 
         owner["componentName"] = OutletItemsComponentName;
         owner["properties"] = new JsonObject
@@ -114,14 +126,14 @@ static class LegacyToolbarElement
         return bindings;
     }
 
-    static (JsonObject? Button, string Reason) AsButton(JsonNode? element)
+    static (JsonObject? Button, string Reason, IReadOnlyList<string> Dropped) AsButton(JsonNode? element)
     {
         if (element is not JsonObject item
             || LegacyOutletShape.Text(item["componentName"]) != ToolbarItemComponentName
             || item["properties"] is not JsonObject properties)
         {
             var name = element is JsonObject other ? LegacyOutletShape.Describe(other["componentName"]) : LegacyOutletShape.Describe(element);
-            return (null, $"holds '{name}', which is not a {ToolbarItemComponentName}");
+            return (null, $"holds '{name}', which is not a {ToolbarItemComponentName}", []);
         }
 
         var id = LegacyOutletShape.Describe(item["id"]);
@@ -129,11 +141,6 @@ static class LegacyToolbarElement
             .Where(hint => !(hint.Key == "mode" && LegacyOutletShape.Text(hint.Value) == "both"))
             .Select(hint => hint.Key)
             .ToList();
-        if (hints.Count > 0)
-        {
-            return (null, $"has the item '{id}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for");
-        }
-
         var kind = NonEmpty(properties["kind"])?.ToLowerInvariant();
         var target = NonEmpty(properties["target"]);
         var slice = NonEmpty(properties["slice"]);
@@ -186,7 +193,7 @@ static class LegacyToolbarElement
 
         if (hasParameters && button["navigateTo"] is null)
         {
-            return (null, $"has the item '{id}' that passes parameters to its command, which an outlet button takes from the slice's inputs instead");
+            return (null, $"has the item '{id}' that passes parameters to its command, which an outlet button takes from the slice's inputs instead", []);
         }
 
         if (NonEmpty(properties["emphasis"])?.ToLowerInvariant() is { } emphasis && _emphases.Contains(emphasis))
@@ -199,6 +206,6 @@ static class LegacyToolbarElement
             button["confirm"] = confirm;
         }
 
-        return (button, string.Empty);
+        return (button, string.Empty, hints);
     }
 }

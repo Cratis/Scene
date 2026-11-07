@@ -51,7 +51,7 @@ function routeParameterBindings(parameters: JsonObject): JsonObject {
  * @param element The `core:toolbarItem` element.
  * @returns The button, or the reason it cannot be carried over.
  */
-function asButton(element: unknown): { button: JsonObject } | { reason: string } {
+function asButton(element: unknown): { button: JsonObject; dropped: string[] } | { reason: string } {
     if (!isObject(element) || element.componentName !== legacyToolbarItemComponentName || !isObject(element.properties)) {
         return { reason: `holds '${isObject(element) ? String(element.componentName) : String(element)}', which is not a ${legacyToolbarItemComponentName}` };
     }
@@ -59,8 +59,7 @@ function asButton(element: unknown): { button: JsonObject } | { reason: string }
     const properties = element.properties;
     const id = String(element.id);
     const presentation = isObject(properties.presentation) ? properties.presentation : {};
-    const hints = Object.entries(presentation).filter(([key, value]) => !(key === 'mode' && value === 'both'));
-    if (hints.length > 0) return { reason: `has the item '${id}' with the presentation hints ${hints.map(([key]) => key).join(', ')}, which an outlet button has no place for` };
+    const dropped = Object.entries(presentation).filter(([key, value]) => !(key === 'mode' && value === 'both')).map(([key]) => key);
 
     const kind = text(properties, 'kind')?.toLowerCase();
     const target = text(properties, 'target');
@@ -91,7 +90,7 @@ function asButton(element: unknown): { button: JsonObject } | { reason: string }
     if (emphasis !== undefined && emphases.has(emphasis)) button.emphasis = emphasis;
     const confirm = text(properties, 'confirm');
     if (confirm !== undefined) button.confirm = confirm;
-    return { button };
+    return { button, dropped };
 }
 
 /**
@@ -107,8 +106,9 @@ export function isLegacyToolbarElement(value: JsonObject): boolean {
  * Turns a `core:toolbar` element - whose `items` slot held `core:toolbarItem` elements - into the `core:outletItems`
  * element that draws an outlet of actions: the toolbar's `name` names the outlet (`toolbar` when it names none), and each
  * item a button - its slice, its navigation target or dialog as `navigateTo`, or its hand-typed command as `command`, with
- * its title, icon, emphasis and confirmation. A toolbar holding something that cannot become a button - another element,
- * presentation hints other than showing icon and text, parameters passed to a command - is reported and left as it was.
+ * its title, icon, emphasis and confirmation. Presentation hints other than showing icon and text are only cosmetic: they
+ * are dropped and reported (`droppedPresentationHints`), and the item is upgraded. A toolbar holding something that cannot
+ * become a button - another element, parameters passed to a command - is reported and left as it was.
  * @param owner The object, which is changed in place.
  * @param path The JSON path of the object.
  * @param diagnostics Where what cannot be mapped is reported.
@@ -121,7 +121,8 @@ export function upgradeToolbarElement(owner: JsonObject, path: string, diagnosti
     const slots = isObject(owner.slots) ? owner.slots : {};
     const elements = Array.isArray(slots.items) ? slots.items : [];
     const buttons: JsonObject[] = [];
-    for (const element of elements) {
+    const dropped: SlotShapeDiagnostic[] = [];
+    for (const [index, element] of elements.entries()) {
         const result = asButton(element);
         if ('reason' in result) {
             diagnostics.push({
@@ -132,7 +133,15 @@ export function upgradeToolbarElement(owner: JsonObject, path: string, diagnosti
             return false;
         }
         buttons.push(result.button);
+        if (result.dropped.length > 0) {
+            dropped.push({
+                code: SlotShapeDiagnosticCode.DroppedPresentationHints,
+                path: `${path}.slots.items[${index}].properties.presentation`,
+                message: `The toolbar '${String(owner.id)}' has the item '${String(result.button.id)}' with the presentation hints ${result.dropped.join(', ')}, which an outlet button has no place for, so they are dropped`,
+            });
+        }
     }
+    diagnostics.push(...dropped);
 
     owner.componentName = outletItemsComponentName;
     owner.properties = { name: text(properties, 'name') ?? defaultToolbarOutlet, kind: 'actions', items: buttons };
