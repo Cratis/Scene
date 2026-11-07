@@ -217,8 +217,8 @@ function mergeOutlets(owner: JsonObject): boolean {
 }
 
 /**
- * Copies a value the upgraded object does not have; a value it has, even an explicit `null`, is the user's and stays.
- * A `null` is never copied, as C#'s `CopyIfAbsent` does.
+ * Copies a value the upgraded object does not have - missing or `null`, both mean absent - and never copies a `null`, as
+ * C#'s `CopyIfAbsent` does. A value the object has is the user's and stays.
  */
 function copyIfAbsent(from: JsonObject, to: JsonObject, key: string): void {
     if ((to[key] === undefined || to[key] === null) && from[key] !== undefined && from[key] !== null) to[key] = from[key];

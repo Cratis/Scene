@@ -82,6 +82,19 @@
       }
     },
     {
+      "name": "a null on a slot is absent, so the outlet's value fills it",
+      "input": {
+        "name": "Shell",
+        "slots": [{ "name": "list", "description": null, "accepts": null }],
+        "outlets": [{ "name": "list", "description": "The list", "accepts": ["List"] }]
+      },
+      "expected": {
+        "document": { "name": "Shell", "slots": [{ "name": "list", "description": "The list", "routed": true, "accepts": ["List"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
       "name": "a kind of outlet on something that is not a destination stays",
       "input": { "name": "Harbour", "kind": "outlet", "title": "Harbour outlet store" },
       "expected": {
