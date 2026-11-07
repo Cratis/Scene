@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PackageKind, TemplateRole } from '@cratis/scene.model';
+import { Outlet, PackageKind, Slot, TemplateRole } from '@cratis/scene.model';
+import { primarySlotOf } from '../slots/resolveSlotRole';
 import { TemplateSource } from '../templates/TemplateSource';
 import { BlueprintCatalogEntry, BlueprintCatalogFile } from './BlueprintCatalogEntry';
 
@@ -44,7 +45,8 @@ export function describeBlueprintCatalog(sources: readonly TemplateSource[]): Bl
                     ...(screen.order === undefined ? {} : { order: screen.order }),
                 })),
                 templates: templates.map(({ kind, template }) => {
-                    const described = template as { displayName?: string; description?: string; slots?: { name: string }[]; metadata?: { type?: string; category?: string; thumbnail?: string; role?: string; primaryOutlet?: string } };
+                    const described = template as { displayName?: string; description?: string; slots?: Slot[]; outlets?: Outlet[]; metadata?: { type?: string; category?: string; thumbnail?: string; role?: string } };
+                    const primarySlot = primarySlotOf(described.slots);
                     const isShell = kind === 'Layout' || described.metadata?.role === TemplateRole.Root;
                     return {
                         name: template.name,
@@ -54,9 +56,12 @@ export function describeBlueprintCatalog(sources: readonly TemplateSource[]): Bl
                         ...(described.metadata?.type === undefined ? {} : { type: described.metadata.type }),
                         ...(described.metadata?.category === undefined ? {} : { category: described.metadata.category }),
                         ...(described.metadata?.thumbnail === undefined ? {} : { thumbnail: described.metadata.thumbnail }),
-                        ...(isShell ? { outlets: (described.slots ?? []).map(slot => slot.name) } : {}),
-                        ...(isShell && described.metadata?.primaryOutlet !== undefined ? { primaryOutlet: described.metadata.primaryOutlet } : {}),
+                        ...(isShell ? { slots: (described.slots ?? []).map(slot => slot.name) } : {}),
+                        ...(isShell && primarySlot !== undefined ? { primarySlot } : {}),
                         ...(described.metadata?.role === undefined ? {} : { role: described.metadata.role }),
+                        ...((described.outlets ?? []).length === 0 ? {} : {
+                            outlets: described.outlets!.map(outlet => ({ name: outlet.name, kind: outlet.kind, defaults: outlet.defaults.length })),
+                        }),
                     };
                 }),
                 sampleData: (manifest.sampleData ?? []).map(reference => ({ id: reference.id, title: reference.title, locale: reference.locale, path: reference.path, default: reference.id === defaultId })),

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TemplateReferenceSource, TemplateRole } from '@cratis/scene.model';
+import { OutletItemKind, TemplateReferenceSource, TemplateRole } from '@cratis/scene.model';
 import { diagnosePreview } from '../diagnosePreview';
 import { navigation, ordersApplication, structure } from '../for_ScenePreviewHost/given';
 
@@ -59,7 +59,7 @@ describe('when diagnosing a preview', () => {
 
     describe('and the navigation leads to a feature that does not exist', () => {
         const withGhost = structuredClone(navigation);
-        withGhost.modules[0].regions[0].items.push({ id: 'ghost', title: 'Ghost', target: { module: 'sales', feature: 'ghosts' } });
+        withGhost.modules[0].refinements![0].items!.push({ kind: OutletItemKind.Navigation, id: 'ghost', title: 'Ghost', target: { module: 'sales', feature: 'ghosts' } });
         const { problems } = diagnosePreview({ document: ordersApplication(), structure, navigation: withGhost, target: { module: 'sales' } });
 
         it('should be reported as a warning on the item, which does not block', () => codes(problems.filter(problem => problem.code === 'navigationInvalid')).should.deep.equal([['navigationInvalid', 'warning', 'sales:sidebar:ghost']]));
@@ -68,7 +68,7 @@ describe('when diagnosing a preview', () => {
     describe('and a toolbar button names a slice that is not there', () => {
         const document = ordersApplication();
         document.screens = document.screens.map(screen => screen.name === 'sales.customers'
-            ? { ...screen, slotContent: { content: [{ id: 'bad', componentName: 'core:toolbarItem', properties: { kind: 'Action', label: 'Bad', slice: 'sales.orders.Ghost' }, slots: {} } as never] } }
+            ? { ...screen, slotContent: { content: [{ id: 'toolbar', componentName: 'core:outletItems', properties: { name: 'toolbar', kind: 'actions', items: [{ kind: 'button', id: 'bad', title: 'Bad', slice: 'sales.orders.Ghost' }] }, slots: {} } as never] } }
             : screen);
         const { problems } = diagnosePreview({ document, structure, navigation, target: { module: 'sales' } });
 
@@ -97,8 +97,8 @@ describe('when diagnosing a preview of an application with its own root template
     const document = ordersApplication();
     document.screenTemplates = [
         {
-            name: 'Frame', slots: [{ name: 'topbar' }, { name: 'content' }, { name: 'footer' }],
-            metadata: { role: TemplateRole.Root, primaryOutlet: 'content' },
+            name: 'Frame', slots: [{ name: 'topbar' }, { name: 'content', primary: true }, { name: 'footer' }],
+            metadata: { role: TemplateRole.Root },
         },
         { name: 'Side', fitsSlot: 'content', slots: [{ name: 'main' }, { name: 'summary' }] },
     ];

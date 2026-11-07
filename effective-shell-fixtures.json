@@ -53,12 +53,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -205,12 +205,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -269,12 +269,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -439,12 +439,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -482,11 +482,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {
           "navigationMode": "slim",
           "showFooter": true
@@ -495,7 +495,7 @@
       }
     },
     {
-      "name": "an own root screen template names its primary outlet",
+      "name": "an own root screen template names its primary slot",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -519,11 +519,11 @@
           "source": "Own",
           "id": "OwnFrame"
         },
-        "outlets": [
+        "slots": [
           "nav",
           "main"
         ],
-        "primaryOutlet": "main",
+        "primarySlot": "main",
         "options": {},
         "diagnostics": []
       }
@@ -562,11 +562,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.4",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -603,11 +603,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.4.2",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -646,17 +646,17 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.0",
-        "outlets": [
+        "slots": [
           "content",
           "footer"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
     },
     {
-      "name": "a blueprint root screen template with its own primary outlet",
+      "name": "a blueprint root screen template with its own primary slot",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -687,11 +687,11 @@
         "packageVersion": "0.3.0",
         "pinStatus": "Current",
         "pin": "^0.3.0",
-        "outlets": [
+        "slots": [
           "rail",
           "main"
         ],
-        "primaryOutlet": "main",
+        "primarySlot": "main",
         "options": {},
         "diagnostics": []
       }
@@ -730,11 +730,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "NotSatisfied",
         "pin": "^2.0",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -778,11 +778,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.4",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -821,11 +821,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -869,10 +869,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -904,10 +904,10 @@
         "kind": "layout",
         "source": "builtIn",
         "name": "Bare",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -946,11 +946,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -982,10 +982,10 @@
         "kind": "layout",
         "source": "builtIn",
         "name": "Bare",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1022,11 +1022,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1058,10 +1058,10 @@
         "kind": "layout",
         "source": "builtIn",
         "name": "Bare",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1099,11 +1099,11 @@
           "source": "Own",
           "id": "OwnFrame"
         },
-        "outlets": [
+        "slots": [
           "nav",
           "main"
         ],
-        "primaryOutlet": "main",
+        "primarySlot": "main",
         "options": {},
         "diagnostics": []
       }
@@ -1128,11 +1128,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -1164,11 +1164,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.4.2",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -1200,10 +1200,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1230,10 +1230,10 @@
         "kind": "layout",
         "source": "builtIn",
         "name": "Bare",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1271,10 +1271,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -1305,11 +1305,11 @@
         "packageVersion": "0.3.0",
         "pinStatus": "Current",
         "pin": "^0.3.0",
-        "outlets": [
+        "slots": [
           "rail",
           "main"
         ],
-        "primaryOutlet": "main",
+        "primarySlot": "main",
         "options": {},
         "diagnostics": []
       }
@@ -1329,16 +1329,16 @@
         "kind": "layout",
         "source": "builtIn",
         "name": "Bare",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
     },
     {
-      "name": "a shell without the content outlet is used and reported",
+      "name": "a shell without the content slot is used and reported",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -1362,17 +1362,17 @@
           "source": "Own",
           "id": "HeaderOnlyShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "header"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
             "code": "rootTemplateMissingContentSlot",
             "subject": "HeaderOnlyShell",
-            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+            "message": "Shell 'HeaderOnlyShell' has no 'content' slot, so no screen can be placed in it"
           }
         ]
       }
@@ -1402,11 +1402,11 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1418,7 +1418,7 @@
       }
     },
     {
-      "name": "a screen whose content has no outlet in the shell is reported",
+      "name": "a screen whose content has no slot in the shell is reported",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -1460,23 +1460,23 @@
           "source": "Own",
           "id": "OwnShell"
         },
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
             "code": "profileSlotUnplaced",
             "subject": "Lost",
-            "message": "Screen 'Lost' places content in outlet 'toolbar', which shell 'OwnShell' does not have"
+            "message": "Screen 'Lost' places content in slot 'toolbar', which shell 'OwnShell' does not have"
           }
         ]
       }
     },
     {
-      "name": "a screen nested in a blueprint template reaches the shell outlet",
+      "name": "a screen nested in a blueprint template reaches the shell slot",
       "library": "default",
       "profile": {
         "name": "Desktop",
@@ -1519,11 +1519,11 @@
         "packageVersion": "1.4.2",
         "pinStatus": "Current",
         "pin": "^1.4",
-        "outlets": [
+        "slots": [
           "sidebar",
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -1564,10 +1564,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {
@@ -1615,10 +1615,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": []
       }
@@ -1655,10 +1655,10 @@
         "packageVersion": "2.0.0",
         "pinStatus": "Current",
         "pin": "^2.0.0",
-        "outlets": [
+        "slots": [
           "content"
         ],
-        "primaryOutlet": "content",
+        "primarySlot": "content",
         "options": {},
         "diagnostics": [
           {

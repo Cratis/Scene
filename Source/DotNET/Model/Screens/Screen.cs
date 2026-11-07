@@ -5,6 +5,7 @@ using Cratis.Scene.Model.ContributionPoints;
 using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Forms;
 using Cratis.Scene.Model.Interactions;
+using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Model.Screens;
 
@@ -43,6 +44,12 @@ public record Screen(
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
 
     /// <summary>
+    /// Gets the items the screen contributes to outlets (<c language="csharp">contribute to &lt;outlet&gt;</c>), such as navigation items for the
+    /// <c language="csharp">Navigation</c> outlet of navigation. <see langword="null"/> when it contributes none.
+    /// </summary>
+    public IReadOnlyList<OutletContribution>? OutletContributions { get; init; }
+
+    /// <summary>
     /// Gets the modules and features, outermost first, the screen was declared in - its place in the application
     /// hierarchy. It is what a destination's <c language="csharp">module</c>/<c language="csharp">feature</c> identity resolves against, and what a
     /// host groups an unlisted screen under, so the hierarchy no longer has to be reconstructed from the
@@ -58,4 +65,11 @@ public record Screen(
     /// blueprint's, a hand-authored one - which belongs to the application and so to every preview.
     /// </summary>
     public string? Owner { get; init; }
+
+    /// <summary>
+    /// Gets the places the screen fits, in order of preference: Screenplay's <c language="screenplay">fits dialog, drawer, pane</c>.
+    /// An action that opens the screen automatically takes the first one the page has free. <see langword="null"/> or empty, the
+    /// screen fits a dialog, where a command's form opened before screens listed what they fit.
+    /// </summary>
+    public IReadOnlyList<ScreenFit>? Fits { get; init; }
 }

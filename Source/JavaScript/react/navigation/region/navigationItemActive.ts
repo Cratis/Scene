@@ -6,13 +6,13 @@ import { defaultScreenFor } from './navigationItemDestination';
 import { SceneNavigationContextValue } from '../SceneNavigationContext';
 
 /** Where the navigation host is: the part of {@link SceneNavigationContextValue} that says what is on the page. */
-export type NavigationPlacement = Pick<SceneNavigationContextValue, 'primaryScreen' | 'outlets'>;
+export type NavigationPlacement = Pick<SceneNavigationContextValue, 'primaryScreen' | 'slots'>;
 
 /**
  * Whether a navigation item is the one the page shows.
  *
  * An item is active when the screen it opens is the one in the slot it renders into: the primary region for the
- * `content` slot, the nested outlet of that name otherwise. So several items can be active at once - each is shown in
+ * `content` slot, the nested slot of that name otherwise. So several items can be active at once - each is shown in
  * its own slot - and closing a slot's screen un-highlights its item. With `matchModule` - a topbar - an item that targets
  * a module without a feature is also active while any screen of that module is in its slot.
  *
@@ -30,7 +30,7 @@ export function navigationItemActive(
     const screen = screenFor(item);
     if (screen === undefined) return false;
 
-    const shown = item.slot === primarySlot ? placement.primaryScreen : placement.outlets[item.slot];
+    const shown = item.slot === primarySlot ? placement.primaryScreen : placement.slots[item.slot];
     if (shown === undefined) return false;
     if (shown === screen) return true;
 

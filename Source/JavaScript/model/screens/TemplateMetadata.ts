@@ -55,9 +55,6 @@ export interface TemplateMetadata {
     /** A structural role beyond the template's kind. `Root` marks a screen template that can be an application's shell. */
     role?: TemplateRole;
 
-    /** For a shell: the name of the slot every screen's content is placed in. Absent means `content`. */
-    primaryOutlet?: string;
-
     /** For a shell: the navigation mode the application starts in when the shell is chosen. The author can change it afterwards. */
     defaultMenuMode?: string;
 
@@ -69,5 +66,5 @@ export interface TemplateMetadata {
 }
 
 export const TemplateMetadataPropertyNames: (keyof TemplateMetadata)[] = [
-    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'primaryOutlet', 'defaultMenuMode', 'displayName', 'description',
+    'type', 'category', 'scopes', 'compatibility', 'attribution', 'license', 'licenseUrl', 'sliceKinds', 'thumbnail', 'role', 'defaultMenuMode', 'displayName', 'description',
 ];

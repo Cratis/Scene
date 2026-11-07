@@ -5,6 +5,8 @@ import { SceneElement } from '../elements';
 import { Form } from '../forms';
 import { Contribution } from '../contributionPoints';
 import { Behavior } from '../interactions';
+import type { OutletContribution } from '../outlets/OutletContribution';
+import type { ScreenFit } from './ScreenFit';
 
 /**
  * A named screen: the structure it fills, the content that fills it, the forms it hosts, and whatever it
@@ -41,6 +43,12 @@ export interface Screen {
     contributions: Contribution[];
 
     /**
+     * The items this screen contributes to outlets (`contribute to <outlet>`), such as navigation items for the
+     * `Navigation` outlet of navigation. Absent when it contributes none.
+     */
+    outletContributions?: OutletContribution[];
+
+    /**
      * The resolved name of the {@link ScreenTemplate} this screen fills, or undefined when it fills the
      * `layout`'s own slots directly. The template's `fitsSlot` is what decides where it lands, so a screen
      * never has to state its own position.
@@ -68,6 +76,13 @@ export interface Screen {
      * the application's own, a blueprint's, a hand-authored one - which belongs to the application and so to every preview.
      */
     owner?: string;
+
+    /**
+     * The places the screen fits, in order of preference: Screenplay's `fits dialog, drawer, pane`. An action that opens
+     * the screen automatically takes the first one the page has free (`resolvePlacement`). Absent or empty, the screen
+     * fits a dialog, where a command's form opened before screens listed what they fit.
+     */
+    fits?: ScreenFit[];
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors', 'path', 'owner'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'outletContributions', 'screenTemplate', 'behaviors', 'path', 'owner', 'fits'];

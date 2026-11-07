@@ -5,16 +5,15 @@ using Cratis.Scene.Model.Common;
 using Cratis.Scene.Model.Interactions;
 using Cratis.Scene.Model.Profiles;
 using Cratis.Scene.Model.SampleData;
-using Cratis.Scene.Model.Screens;
 using Cratis.Scene.Model.SizeClasses;
-using Cratis.Scene.Model.Structure;
 
 namespace Cratis.Scene.Model.for_ConstructorCompatibility;
 
 /// <summary>
 /// A package built against an earlier Scene calls the constructor it was compiled with by its exact signature. Adding a member to a positional record
 /// removes that constructor, and the call then fails at run time (<c language="csharp">MissingMethodException</c>), not when the package is built. Every record that gained a member
-/// keeps the constructor it had before, and this specification names them.
+/// keeps the constructor it had before, and this specification names them. A major release that removes a member drops the constructor
+/// that carried it (Scene 5 dropped <c language="csharp">TemplateMetadata</c>'s primary outlet for a primary slot).
 /// </summary>
 public class when_a_package_built_against_an_earlier_scene_constructs_a_record : Specification
 {
@@ -24,7 +23,6 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
         (typeof(ProfileAppearance), [typeof(ColorScheme?), typeof(string)]),
         (typeof(InteractionBinding), [typeof(InteractionTrigger), typeof(IReadOnlyList<InteractionAction>), typeof(BindingExpression)]),
         (typeof(SampleDataPackReference), [typeof(string), typeof(string), typeof(string), typeof(string)]),
-        (typeof(TemplateMetadata), [typeof(string), typeof(string), typeof(IReadOnlyList<TemplateScope>), typeof(TemplateCompatibility), typeof(TemplateAttribution), typeof(string), typeof(string), typeof(IReadOnlyList<SliceKind>), typeof(string), typeof(TemplateRole?), typeof(string)])
     ];
 
     List<string> _missing = null!;

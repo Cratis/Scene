@@ -19,7 +19,7 @@ export const structure = {
     ] }] }],
 } as unknown as ApplicationStructure;
 
-export const navigation: NavigationModel = { application: { regions: [] }, modules: [] };
+export const navigation: NavigationModel = { application: { outlets: [] }, modules: [] };
 
 export const fields: Record<string, SliceCommandField[]> = {
     PlaceOrder: [
@@ -34,13 +34,15 @@ export const fields: Record<string, SliceCommandField[]> = {
 const element = (id: string, componentName: string, properties: Record<string, unknown> = {}, slots: Record<string, SceneElement[]> = {}) =>
     ({ id, componentName, properties, slots }) as unknown as ExternalComponent;
 
-/** A screen with a toolbar of slice buttons, the way the specification's orders page has one. */
-export const ordersScreen = element('orders', 'core:toolbar', { name: 'orders' }, {
+/** A screen with a toolbar of slice buttons - an outlet of actions - the way the specification's orders page has one. */
+export const ordersScreen = element('orders', 'core:outletItems', {
+    name: 'orders',
+    kind: 'actions',
     items: [
-        element('new', 'core:toolbarItem', { name: 'new', kind: 'Action', label: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' }),
-        element('ship', 'core:toolbarItem', { name: 'ship', kind: 'Action', label: 'Ship', slice: 'sales.orders.Ship', emphasis: 'quiet' }),
-        element('cancel', 'core:toolbarItem', { name: 'cancel', kind: 'Action', label: 'Cancel order', emphasis: 'secondary' }),
-        element('view', 'core:toolbarItem', { name: 'view', kind: 'Action', label: 'View', slice: 'sales.orders.OrderList' }),
+        { kind: 'button', id: 'new', title: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' },
+        { kind: 'button', id: 'ship', title: 'Ship', slice: 'sales.orders.Ship', emphasis: 'quiet' },
+        { kind: 'button', id: 'cancel', title: 'Cancel order', emphasis: 'secondary' },
+        { kind: 'button', id: 'view', title: 'View', slice: 'sales.orders.OrderList' },
     ],
 });
 

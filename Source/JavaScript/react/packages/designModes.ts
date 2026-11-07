@@ -57,10 +57,13 @@ export function navigationDesignMode(options: NavigationDesignModeOptions = {}):
 /**
  * The design mode of a toolbar: add a button, and on a selected button rename it, choose the slice it starts, set its emphasis,
  * move it earlier or later, duplicate it, delete it (spec DM3). The buttons are the toolbar's own items, which the host resolves.
+ * @param itemsPath The `Collection` property the buttons are, for a component whose buttons are a property - the `items` of an
+ * outlet of actions - rather than its own slot.
  */
-export function toolbarDesignMode(): ComponentDesignModeDescriptor {
+export function toolbarDesignMode(itemsPath?: string): ComponentDesignModeDescriptor {
     return {
-        addActions: [{ id: 'addButton', label: 'Add button', icon: componentIcon('plus') }],
+        ...(itemsPath === undefined ? {} : { itemsPath }),
+        addActions: [{ id: 'addButton', label: 'Add button', icon: componentIcon('plus'), ...(itemsPath === undefined ? {} : { collectionPath: itemsPath }) }],
         itemToolbar: [
             mutating({ id: 'rename', icon: 'pencil', title: 'Rename' }),
             mutating({ id: 'slice', icon: 'git-branch', title: 'Choose slice' }),

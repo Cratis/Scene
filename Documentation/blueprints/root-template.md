@@ -91,8 +91,8 @@ profile in one canonical form, byte for byte identical, proven by the shared cor
 A shell is either a **layout** or an **application-scope screen template with the root role**. A screen template takes the role with
 `metadata.role: Root` (C# `TemplateRole.Root`); it is offered only at the `Application` scope, must not fit any slot (nothing contains
 the shell), and `ApplicableTemplates` at the `Application` scope lists layouts and root screen templates side by side. A dialog
-template can never take the role. `metadata.primaryOutlet` names the slot every screen's content is placed in; it is `content` when
-absent.
+template can never take the role. The slot marked `primary` is the one every screen's content is placed in; it is `content` when
+no slot is marked.
 
 ## The effective shell
 
@@ -105,24 +105,24 @@ The order is:
 1. `profile.root` - the pinned template reference;
 2. the legacy `profile.layout` name, looked up in the application and then in the installed blueprints;
 3. the default layout (or root screen template) of the first installed blueprint;
-4. the built-in **Bare** shell: one `content` outlet and no chrome.
+4. the built-in **Bare** shell: one `content` slot and no chrome.
 
 A candidate that cannot be used at all - it does not exist, its blueprint is not available, it is a dialog template or a screen
 template without the root role - is reported and the next one is tried, so there is always a shell to render. A candidate that exists
-but is wrong in a way the host can still show (a pin the installed version does not satisfy, no `content` outlet, a blueprint that is
+but is wrong in a way the host can still show (a pin the installed version does not satisfy, no `content` slot, a blueprint that is
 available but not among the profile's packages) is used and reported.
 
 The result carries the pinned `reference`, the `template` (a layout or a screen template), its `kind`, `source` (own, blueprint,
-built in), the supplying `package` and its installed version, the pin evaluation (`Current`, `NotSatisfied`, ...), the `outlets` in
-declaration order, the `primaryOutlet`, the profile's `options` and the `diagnostics`.
+built in), the supplying `package` and its installed version, the pin evaluation (`Current`, `NotSatisfied`, ...), the `slots` in
+declaration order, the `primarySlot`, the profile's `options` and the `diagnostics`.
 
 ## Diagnostics
 
 A fallback shell can still be drawn when the requested shell cannot be used. Check the diagnostics alongside the resolved shell
 before treating its appearance as confirmation that the profile is correct. Start with the referenced template and its package,
-then check the version pin and the outlet declarations indicated by the diagnostic; do not compensate by changing each screen.
+then check the version pin and the slot declarations indicated by the diagnostic; do not compensate by changing each screen.
 
-The codes are camelCase and engine-owned; every message carries real names (templates, blueprints, screens, outlets, packages),
+The codes are camelCase and engine-owned; every message carries real names (templates, blueprints, screens, slots, packages),
 never ids.
 
 | Code | When |
@@ -130,17 +130,17 @@ never ids.
 | `rootTemplateUnknown` | The root template (or the legacy layout name) does not exist. |
 | `rootTemplateVersionNotSatisfied` | The pin does not match the installed blueprint version (the shell is still used). |
 | `rootTemplateNotApplicable` | The template cannot be a shell: a dialog template, a screen template without the root role, or a root template that fits a slot. |
-| `rootTemplateMissingContentSlot` | The shell has no outlet for the screens' content. |
+| `rootTemplateMissingContentSlot` | The shell has no slot for the screens' content. |
 | `rootTemplateCycle` | Templates that nest inside the shell contain each other and can never be placed. |
 | `rootTemplateBlueprintNotInstalled` | The root template's blueprint is unavailable, or available but not among the profile's packages. |
 | `profileThemeIncompatible` | The profile's theme does not support every package of the profile. |
 | `profilePackageMissing` | The profile lists a package that is not available. |
-| `profileSlotUnplaced` | A screen puts content in an outlet the shell does not have. |
+| `profileSlotUnplaced` | A screen puts content in a slot the shell does not have. |
 
 ## Blueprint catalog
 
 `blueprintCatalog.json` describes the shells a blueprint ships: a catalog template entry for a layout or a root screen template
-carries `outlets` (in declaration order), `primaryOutlet` when it is not `content`, and `role`.
+carries `slots` (in declaration order), `primarySlot` when one of them is marked `primary`, and `role`.
 
 Switching the shell is planned by [`planShellSwitch`](#switching-the-shell) and applied by [`applyShellSwitch`](#applying-the-switch); what stops a profile is found by [`findProfileBlockers`](#what-stops-a-profile-from-being-applied); the nodes a designer edits are described by [`describeUiProfile`](#describing-the-profile-for-a-designer).
 
@@ -206,21 +206,21 @@ Write `root`, not `layout`, and let the engine - not your host - decide whether 
 shell in place and the candidate with `resolveEffectiveShell` (the candidate as the profile's root), hands both over with the screens and the templates a screen can be built from
 (`placeableScreenTemplates` / `ShellPlacement.PlaceableScreenTemplates`), shows the plan, and on commit applies it as one undoable edit. The plan is pure data and identical in both engines.
 
-The default mapping is **by name**, with the current shell's primary outlet following to the new shell's primary outlet (an outlet named `content` does too when the new shell has no
-outlet of that name). Every outlet of the current shell - and any outlet a screen uses that the shell does not have - gets one entry in `moves`:
+The default mapping is **by name**, with the current shell's primary slot following to the new shell's primary slot (a slot named `content` does too when the new shell has no
+slot of that name). Every slot of the current shell - and any slot a screen uses that the shell does not have - gets one entry in `moves`:
 
 | `action` | Meaning |
 | --- | --- |
-| `keep` | the new shell has an outlet of that name; the content stays |
-| `primary` | the content follows to the new shell's primary outlet, which is named differently |
-| `unused` | the new shell has no such outlet and no screen uses it; nothing to decide |
-| `unresolved` | the new shell has no such outlet and screens use it: a blocker until the user chooses (`choices` lists them) |
-| `moveToPrimary` / `mapTo` / `drop` | the user's choice, passed back in `remaps` keyed by the outlet's name |
+| `keep` | the new shell has a slot of that name; the content stays |
+| `primary` | the content follows to the new shell's primary slot, which is named differently |
+| `unused` | the new shell has no such slot and no screen uses it; nothing to decide |
+| `unresolved` | the new shell has no such slot and screens use it: a blocker until the user chooses (`choices` lists them) |
+| `moveToPrimary` / `mapTo` / `drop` | the user's choice, passed back in `remaps` keyed by the slot's name |
 
-An unresolved outlet's message names the screens and outlets - *3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'AppShell' does not have* - never
-ids or placeholders. A choice for an outlet that needs none is ignored; a `mapTo` to an outlet the new shell lacks is refused. `addPackages` lists the blueprint the candidate needs that the
+An unresolved slot's message names the screens and slots - *3 screens ('Customers', 'Tickets' and 'Invoices') place content in slot 'subject', which shell 'AppShell' does not have* - never
+ids or placeholders. A choice for a slot that needs none is ignored; a `mapTo` to a slot the new shell lacks is refused. `addPackages` lists the blueprint the candidate needs that the
 profile does not yet have; `blockers` carries the candidate's own problems (`rootTemplateUnknown`, `rootTemplateVersionNotSatisfied`, `rootTemplateNotApplicable`,
-`rootTemplateMissingContentSlot`, `rootTemplateCycle`) and every unresolved outlet (`profileSlotUnplaced`); `warnings` the rest (an incompatible theme). `canSwitch` is true when there are no blockers.
+`rootTemplateMissingContentSlot`, `rootTemplateCycle`) and every unresolved slot (`profileSlotUnplaced`); `warnings` the rest (an incompatible theme). `canSwitch` is true when there are no blockers.
 
 ### Applying the switch
 
@@ -233,21 +233,21 @@ const plan = planShellSwitch(current, candidate, screens, templates, remaps);
 const { document: switched, applied, changes } = applyShellSwitch(document, plan, templates);
 ```
 
-| Plan says | Screens built directly on the shell (`slotContent`) | Screen templates that fit the outlet (`fitsSlot`) |
+| Plan says | Screens built directly on the shell (`slotContent`) | Screen templates that fit the slot (`fitsSlot`) |
 | --- | --- | --- |
 | `keep` | untouched | untouched - except a name qualified with the old shell's (`ToolShell.subject`), which is requalified with the new shell's (`DeskShell.subject`) |
-| `primary`, `moveToPrimary`, `mapTo` | the outlet's content is appended to the target outlet | `fitsSlot` becomes the target outlet, keeping a qualifier (`OwnShell.content`); the screens built from the template move with it |
-| `drop` | the outlet's content is removed | `fitsSlot` is removed: the template is placed explicitly, not by declaration |
+| `primary`, `moveToPrimary`, `mapTo` | the slot's content is appended to the target slot | `fitsSlot` becomes the target slot, keeping a qualifier (`OwnShell.content`); the screens built from the template move with it |
+| `drop` | the slot's content is removed | `fitsSlot` is removed: the template is placed explicitly, not by declaration |
 | `unused`, `unresolved` | untouched | untouched |
 
-- Content moved into an outlet is appended after what the outlet already holds, in the order of the outlets it came from. In a screen's `slotContent` the kept outlets come first, then the outlets the move created; an outlet the content left disappears, and an empty outlet no screen uses (`unused`) is left alone.
-- A screen built from a screen template has no content of its own in a shell outlet - its template's chain is placed - so only the **outermost** template of the chain is edited; the inner templates fit slots of the outer one and stay.
+- Content moved into a slot is appended after what the slot already holds, in the order of the slots it came from. In a screen's `slotContent` the kept slots come first, then the slots the move created; a slot the content left disappears, and an empty slot no screen uses (`unused`) is left alone.
+- A screen built from a screen template has no content of its own in a shell slot - its template's chain is placed - so only the **outermost** template of the chain is edited; the inner templates fit slots of the outer one and stay.
 - Only the document's own screens and templates are edited. A template that lives in an installed blueprint is not the application's to edit, and a screen's `layout` is not touched.
-- A plan with blockers (an undecided outlet, an unusable shell) is not applied: `applied` is `false` and the document comes back as it was. A plan that changes nothing (the same shell, or nothing to move) comes back as `applied` with no `changes`, and the very document that was given.
-- `changes` is the review list, screens first in document order and then templates: `kind` (`content` or `placement`), the `screen` or `template`, the `outlet`, the plan's `action`, the `target` (absent when dropped), the element `count` (1 for a placement) and a `description` with real names, never ids.
+- A plan with blockers (an undecided slot, an unusable shell) is not applied: `applied` is `false` and the document comes back as it was. A plan that changes nothing (the same shell, or nothing to move) comes back as `applied` with no `changes`, and the very document that was given.
+- `changes` is the review list, screens first in document order and then templates: `kind` (`content` or `placement`), the `screen` or `template`, the `slot`, the plan's `action`, the `target` (absent when dropped), the element `count` (1 for a placement) and a `description` with real names, never ids.
 
-Both engines are asserted against `shell-switch-apply-fixtures.json` (the libraries and roots of `shell-switch-fixtures.json`): keep, the same shell, an outlet nobody uses, primary following to a differently named primary outlet, moving into an occupied primary outlet, mapping, several outlets into one,
-dropping, a template that fits the lost outlet (moved, mapped and dropped), qualified templates, a nested template chain and a blocked plan.
+Both engines are asserted against `shell-switch-apply-fixtures.json` (the libraries and roots of `shell-switch-fixtures.json`): keep, the same shell, a slot nobody uses, primary following to a differently named primary slot, moving into an occupied primary slot, mapping, several slots into one,
+dropping, a template that fits the lost slot (moved, mapped and dropped), qualified templates, a nested template chain and a blocked plan.
 
 ## What stops a profile from being applied
 

@@ -11,7 +11,7 @@ const stateKey = 'sceneNavigation';
 
 /**
  * A history backed by the browser's `history` API under a base path such as `/app/`. Entries carry their
- * navigation state, so back and forward restore the screen, outlet, parameters and dialog without
+ * navigation state, so back and forward restore the screen, slot, parameters and dialog without
  * re-resolving; an entry without state - a typed or bookmarked URL - is reported by URL alone.
  */
 export function createBrowserSceneHistory(browser: SceneBrowserWindow = window, basePath = '/'): SceneHistory {

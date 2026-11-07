@@ -27,7 +27,7 @@ function component(id: string, componentName: string, properties: Record<string,
 }
 
 describe('when composing hierarchical destinations', () => {
-    it('should execute screen deep links outlets and dialogs through the rendered hierarchy', () => {
+    it('should execute screen deep links slots and dialogs through the rendered hierarchy', () => {
         const home = component('home', 'test:navigate', {
             label: 'Open details',
             destination: {
@@ -36,7 +36,7 @@ describe('when composing hierarchical destinations', () => {
                 feature: 'orders',
                 slice: 'details',
                 route: 'sales/orders/{orderId}',
-                outlet: 'content',
+                slot: 'content',
                 routeParameterBindings: { orderId: { kind: BindingSourceKind.DataContext, path: 'order.id' } },
             },
         });
@@ -54,7 +54,7 @@ describe('when composing hierarchical destinations', () => {
             bindingScope={{ dataContext: { order: { id: 'order-2' } } }} />);
 
         fireEvent.click(screen.getByText('Open details'));
-        rendered.container.querySelector('[data-scene-outlet="content"]')!.getAttribute('data-scene-url')!.should.equal('sales/orders/order-2');
+        rendered.container.querySelector('[data-scene-slot="content"]')!.getAttribute('data-scene-url')!.should.equal('sales/orders/order-2');
         Boolean(screen.getByText('Open confirm')).should.equal(true);
         fireEvent.click(screen.getByText('Open confirm'));
         Boolean(screen.getByRole('dialog')).should.equal(true);

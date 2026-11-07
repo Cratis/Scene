@@ -21,6 +21,6 @@ describe('when arranging data templates at a compact width', () => {
             containsGrid(evaluateFlowArrangement(arrangement, { width: WidthSizeClass.Compact, height: HeightSizeClass.Regular })).should.equal(false));
     }
 
-    it('should let a row open a detail screen in the master/detail outlet only', () =>
-        masterDetailTemplate.outlets!.should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', accepts: ['Detail'] }]));
+    it('should let a row open a detail screen in the master/detail slot only', () =>
+        masterDetailTemplate.slots.filter(slot => slot.routed === true).should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', routed: true, accepts: ['Detail'] }]));
 });

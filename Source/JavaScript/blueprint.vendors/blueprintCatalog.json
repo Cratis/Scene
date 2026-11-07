@@ -54,7 +54,34 @@
           "description": "Every vendor with its category, country, spend, rating and status, filtered by category, status, country and account manager.",
           "type": "List",
           "category": "Business / Vendors",
-          "thumbnail": "thumbnails/VendorsList.svg"
+          "thumbnail": "thumbnails/VendorsList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "VendorPage",
@@ -63,7 +90,19 @@
           "description": "One vendor: status, spend, rating and open orders, its details, contacts, purchase orders and certificates, and its activity.",
           "type": "Detail",
           "category": "Business / Vendors",
-          "thumbnail": "thumbnails/VendorPage.svg"
+          "thumbnail": "thumbnails/VendorPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "VendorsOnboardingBoard",
@@ -81,7 +120,19 @@
           "description": "Active vendors, spend this year, on-time delivery, spend by category, delivery over the quarters and the vendors to watch.",
           "type": "Dashboard",
           "category": "Business / Vendors",
-          "thumbnail": "thumbnails/VendorsPerformance.svg"
+          "thumbnail": "thumbnails/VendorsPerformance.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "VendorsQuickCreateVendor",

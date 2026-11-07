@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { CSSProperties, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, ReactNode, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, SceneElement, Screen, SliceKind, Theme } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, OutletItemKind, OutletKind, SceneElement, Screen, SliceKind, Theme } from '@cratis/scene.model';
 import {
     ApplicationStructureIndex, EffectiveNavItem, ProfileRegion, defaultNavigationMode, navigationModes, normalizeNavigationMode, resolveAppearance, resolveProfileIdentity, resolveToolbarButton,
 } from '@cratis/scene.engine';
@@ -126,7 +126,7 @@ export interface ScenePreviewHostProps {
 const shellScheme = (scheme: ProfileColorScheme): ColorScheme => scheme === ProfileColorScheme.Dark ? ColorScheme.Dark : ColorScheme.Light;
 
 const previewPageScreen = '#preview-page';
-const noNavigation: NavigationModel = { application: { regions: [] }, modules: [] };
+const noNavigation: NavigationModel = { application: { outlets: [] }, modules: [] };
 
 /** The page a slice preview happens over when its feature has no screen of its own, or a State View's fragment is shown. */
 function minimalPage(layout: string, content: Screen['slotContent'][string]): Screen {
@@ -423,9 +423,10 @@ function initialScreenOf(application: ApplicationDocument, index: ApplicationStr
     const has = (name: string | undefined): name is string => name !== undefined && application.screens.some(candidate => candidate.name === name);
     if (has(initial?.screen)) return initial?.screen;
 
-    for (const region of navigation.application.regions) {
-        for (const item of region.items) {
-            const target = item.target;
+    for (const outlet of navigation.application.outlets) {
+        if (outlet.kind !== OutletKind.Navigation) continue;
+        for (const item of outlet.defaults) {
+            const target = item.kind === OutletItemKind.Navigation ? item.target : undefined;
             if (!target?.module) continue;
             const feature = target.feature === undefined ? index.firstFeatureId(target.module) : `${target.module}.${target.feature}`;
             if (has(feature)) return feature;
@@ -457,7 +458,7 @@ function ReportNavigation({ onNavigate }: { onNavigate?(destination: Destination
         const before = previous.current;
         previous.current = { primaryScreen, currentDialog };
         if (before.primaryScreen === primaryScreen && before.currentDialog === currentDialog) return;
-        onNavigate?.(currentDialog === undefined ? { kind: DestinationKind.Outlet, screen: primaryScreen } : { kind: DestinationKind.Dialog, dialog: currentDialog });
+        onNavigate?.(currentDialog === undefined ? { kind: DestinationKind.Slot, screen: primaryScreen } : { kind: DestinationKind.Dialog, dialog: currentDialog });
     }, [currentDialog, onNavigate, primaryScreen]);
 
     return null;

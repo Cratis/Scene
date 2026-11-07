@@ -37,10 +37,10 @@ describe('when the shell shows navigation regions', () => {
             container.querySelector('main [data-screen]')!.getAttribute('data-screen')!.should.equal('support.tickets');
         });
 
-        it('should render an item with a slot into the nested outlet and keep both highlighted', () => {
+        it('should render an item with a slot into the nested slot and keep both highlighted', () => {
             fireEvent.click(screen.getByRole('link', { name: 'Support' }));
             fireEvent.click(screen.getByRole('link', { name: 'Knowledge base' }));
-            [container.querySelector('[data-scene-outlet="side"] [data-screen]')!.getAttribute('data-screen'),
+            [container.querySelector('[data-scene-slot="side"] [data-screen]')!.getAttribute('data-screen'),
                 Array.from(container.querySelectorAll('.layout-region-sidebar [data-active="true"]')).map(item => item.getAttribute('data-scene-nav-item'))]
                 .should.deep.equal(['support.kb', ['tickets', 'kb']]);
         });

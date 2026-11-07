@@ -9,11 +9,9 @@ import { useShellLink } from './useShellLink';
 /**
  * One entry in a navigation list, optionally with a submenu.
  *
- * Its properties are deliberately the {@link NavigationItem} contract - `label`, `targetScreen`,
- * `routeParameterBindings`, `order`, `group` - so the very same element can be handed to the
- * `Navigation` contribution point and read back by `extractNavigationItem`. A screen therefore declares
- * its navigation once and gets both the sidebar entry and the aggregated navigation for free, instead of
- * maintaining a menu and a contribution that drift apart.
+ * Its properties are `label`, `targetScreen`, `routeParameterBindings`, `order`, `group` and `icon`. Navigation that
+ * belongs to the application rather than one screen is an outlet of navigation (`effectiveNavigation`), which the
+ * shell's regions render; a menu item is the element a screen places itself.
  *
  * Inside a navigation host (the preview host, Stage) the entry navigates through the host's navigation context: a click renders
  * the target screen in the primary region, the entry is current while that screen is on the page, and the address of the page

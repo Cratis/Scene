@@ -7,7 +7,7 @@ using Cratis.Scene.Model.Screens;
 namespace Cratis.Scene.Engine.Shell;
 
 /// <summary>
-/// Where screens put their content in a shell: the templates a screen can be built from and the outlets it uses.
+/// Where screens put their content in a shell: the templates a screen can be built from and the slots it uses.
 /// </summary>
 public static class ShellPlacement
 {
@@ -37,7 +37,7 @@ public static class ShellPlacement
 
     /// <summary>
     /// Where a screen template lands in the shell: follows <see cref="ScreenTemplate.FitsSlot"/> from template to containing template until the slot is an
-    /// outlet of the shell - qualified with the shell's name, or one no template of the chain declares. A template without a <c language="csharp">FitsSlot</c> is placed
+    /// slot of the shell - qualified with the shell's name, or one no template of the chain declares. A template without a <c language="csharp">FitsSlot</c> is placed
     /// explicitly and has no placement.
     /// </summary>
     /// <param name="templateName">The screen template the chain starts at.</param>
@@ -78,13 +78,13 @@ public static class ShellPlacement
     }
 
     /// <summary>
-    /// The outlets of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
+    /// The slots of a shell a screen puts content in: its own slots with content, or the slot its outermost template fits.
     /// </summary>
     /// <param name="screen">The screen.</param>
     /// <param name="shellName">The name of the shell the screen is placed in.</param>
     /// <param name="templates">The screen templates a screen can be built from (<see cref="PlaceableScreenTemplates"/>).</param>
-    /// <returns>The outlet names, which may include names the shell does not have.</returns>
-    public static IReadOnlyList<string> OutletsUsedBy(Screen screen, string shellName, IReadOnlyList<ScreenTemplate> templates)
+    /// <returns>The slot names, which may include names the shell does not have.</returns>
+    public static IReadOnlyList<string> SlotsUsedBy(Screen screen, string shellName, IReadOnlyList<ScreenTemplate> templates)
     {
         if (screen.ScreenTemplate is null)
         {
@@ -92,6 +92,6 @@ public static class ShellPlacement
         }
 
         var placement = PlacementOf(screen.ScreenTemplate, shellName, templates);
-        return placement is null ? [] : [placement.Outlet];
+        return placement is null ? [] : [placement.Slot];
     }
 }

@@ -163,7 +163,7 @@ export const detailViewTemplate: ScreenTemplate = {
 
 /**
  * Master/detail: the list and the selected record side by side, so working through records does not mean
- * leaving the list. The detail region is an outlet that accepts detail screens, which is what lets a row's
+ * leaving the list. The detail region is a slot that accepts detail screens, which is what lets a row's
  * destination open a full detail screen in place.
  *
  * At a compact width the two stack, list first, because side-by-side on a phone is two unreadable halves.
@@ -171,8 +171,12 @@ export const detailViewTemplate: ScreenTemplate = {
 export const masterDetailTemplate: ScreenTemplate = {
     name: 'MasterDetail',
     fitsSlot: SlotName.Content,
-    slots: [{ name: TemplateSlotName.Header }, { name: TemplateSlotName.Primary }, { name: TemplateSlotName.SidePanel }],
-    outlets: [{ name: 'master-detail.detail', description: 'The selected record.', accepts: ['Detail'] }],
+    slots: [
+        { name: TemplateSlotName.Header },
+        { name: TemplateSlotName.Primary },
+        { name: TemplateSlotName.SidePanel },
+        { name: 'master-detail.detail', description: 'The selected record.', routed: true, accepts: ['Detail'] },
+    ],
     arrangement: {
         root: column([slotLeaf(TemplateSlotName.Header), grid([slotLeaf(TemplateSlotName.Primary), slotLeaf(TemplateSlotName.SidePanel)], 2, 16)], 16),
         overrides: [

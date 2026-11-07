@@ -47,7 +47,7 @@ export const ClickAnEntry: Story = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await userEvent.click(canvas.getAllByText('Products')[0]);
-        await expect(canvasElement.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen')).toBe('CrudList');
+        await expect(canvasElement.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen')).toBe('CrudList');
         await expect(canvasElement.querySelector('.layout-menu-link[aria-current="page"]')!.textContent).toContain('Products');
     },
 };
@@ -58,7 +58,7 @@ export const SelectInsteadOfNavigate: Story = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await userEvent.click(canvas.getAllByText('Products')[0]);
-        await expect(canvasElement.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen')).toBe('Dashboard');
+        await expect(canvasElement.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen')).toBe('Dashboard');
     },
 };
 

@@ -3,14 +3,15 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationLogo, ApplicationStructure, NavigationModel, OutletItem, OutletMode } from '@cratis/scene.model';
 import {
     ApplicationStructureIndex, EffectiveNavButton, EffectiveNavItem, NavigationDiagnostic, NavigationEdit, NavigationEditPlan,
-    addNavItem, effectiveNavigation, setApplicationLogo, switchRegionMode,
+    addNavigationItem, duplicateNavigationItem, effectiveNavigation, moveNavigationItem, removeNavigationItem, renameNavigationItem,
+    setApplicationLogo, switchOutletMode,
 } from '../../index';
 
 export interface ExpectedView {
-    mode?: NavigationRegionMode;
+    mode?: OutletMode;
     sources: string;
     items: string[];
     buttons?: string[];
@@ -18,7 +19,7 @@ export interface ExpectedView {
 
 export interface View {
     module?: string;
-    region: NavigationRegionKind;
+    outlet: string;
     expected: ExpectedView;
 }
 
@@ -31,10 +32,25 @@ export interface FixtureCase {
     expectedDiagnostics: NavigationDiagnostic[];
 }
 
+export interface EditCall {
+    op: string;
+    module?: string;
+    outlet: string;
+    mode?: OutletMode;
+    copy?: boolean;
+    item?: OutletItem;
+    id?: string;
+    title?: string;
+    newId?: string;
+    parent?: string;
+    index?: number;
+    logo?: ApplicationLogo;
+}
+
 export interface EditCase {
     name: string;
     navigation: NavigationModel;
-    call: { op: string; module?: string; region?: NavigationRegionKind; mode?: NavigationRegionMode; copy?: boolean; item?: never; parent?: string; logo?: never };
+    call: EditCall;
     expected: { edits?: NavigationEdit[]; model?: NavigationModel; rejected?: string };
 }
 
@@ -62,9 +78,9 @@ function buttonLines(buttons: EffectiveNavButton[]): string {
 }
 
 export function describeView(index: ApplicationStructureIndex, navigation: NavigationModel, view: View): string {
-    const region = effectiveNavigation(index, navigation, view.module, view.region);
-    const mode = region.mode ? `mode=${region.mode}\n` : '';
-    return `${mode}${region.sources.kind}|${region.sources.label}\n${lines(region.items, 0).join('\n')}${buttonLines(region.buttons)}`;
+    const resolved = effectiveNavigation(index, navigation, view.module, view.outlet);
+    const mode = resolved.mode ? `mode=${resolved.mode}\n` : '';
+    return `${mode}${resolved.sources.kind}|${resolved.sources.label}\n${lines(resolved.items, 0).join('\n')}${buttonLines(resolved.buttons)}`;
 }
 
 export function describeExpected(view: View): string {
@@ -73,11 +89,15 @@ export function describeExpected(view: View): string {
 }
 
 export function plan(fixture: EditCase): NavigationEditPlan {
-    const call = fixture.call as unknown as { op: string; module?: string; region: NavigationRegionKind; mode: NavigationRegionMode; copy?: boolean; item: never; parent?: string; logo: never };
+    const call = fixture.call;
     switch (call.op) {
-        case 'switchRegionMode': return switchRegionMode(fixture.navigation, call.module, call.region, call.mode, { copy: call.copy });
-        case 'addNavItem': return addNavItem(fixture.navigation, call.module, call.region, call.item, call.parent);
-        case 'setApplicationLogo': return setApplicationLogo(fixture.navigation, call.module, call.logo);
+        case 'switchOutletMode': return switchOutletMode(fixture.navigation, call.module, call.outlet, call.mode!, { copy: call.copy });
+        case 'addNavigationItem': return addNavigationItem(fixture.navigation, call.module, call.outlet, call.item!, call.parent, call.index);
+        case 'renameNavigationItem': return renameNavigationItem(fixture.navigation, call.module, call.outlet, call.id!, call.title!);
+        case 'moveNavigationItem': return moveNavigationItem(fixture.navigation, call.module, call.outlet, call.id!, { parent: call.parent, index: call.index });
+        case 'duplicateNavigationItem': return duplicateNavigationItem(fixture.navigation, call.module, call.outlet, call.id!, call.newId);
+        case 'removeNavigationItem': return removeNavigationItem(fixture.navigation, call.module, call.outlet, call.id!);
+        case 'setApplicationLogo': return setApplicationLogo(fixture.navigation, call.module, call.logo!);
         default: throw new Error(`Unknown edit helper '${call.op}'.`);
     }
 }

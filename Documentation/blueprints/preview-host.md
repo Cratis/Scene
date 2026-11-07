@@ -52,7 +52,7 @@ Ids are the qualified ids of the application structure (`sales`, `sales.orders`,
 The preview has no design affordances and edits nothing. A toolbar button without a slice shows no warning badge here; it is reported as a problem instead. `diagnosePreview` judges the model with the engine's own validators - nothing is judged that the engine does not already judge - and returns `PreviewProblem` entries with a `code`, a `severity`, a `message` and the `nodeId` to link to:
 
 - **errors** stop the preview, and the host shows them (`PreviewProblemsView`) instead of a blank screen: `targetNotFound`, `moduleWithoutFeatures`, `sliceNotPreviewable`, `screenMissing`, `layoutMissing`, `templateMissing`, `templateUnplaced`;
-- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationRegions`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`, `sliceScreenMissing`.
+- **warnings** are reported and the preview renders: `structureInvalid`, `navigationInvalid` (`diagnoseNavigationOutlets`), `toolbarInvalid` (`validateToolbarButtons`), `sampleDataInvalid` (`validateSampleDataSelection`), `sliceFragmentMissing`, `sliceScreenMissing`.
 
 `onProblems` receives every problem, blocking or not, whenever they change; `onSelectProblem` is called when the author follows one to its node.
 
@@ -100,13 +100,13 @@ The dark strip (`Previewing`, the breadcrumb, the sample data selector, `Exit pr
 
 ## One composition for the preview and for Stage
 
-`composeApplicationScreen(application, screen, options)` is the single function that composes a screen: the shell for the screen's layout, the chrome in its slots, the screen inside its **template chain** (each template holds the one inside it in the slot it fits, so every arrangement applies), names resolved against the profile, and the effective configuration of the templates' instance contributions. `composeOutletScreen` composes a screen as it appears in a nested outlet, `composeDialog` a dialog template.
+`composeApplicationScreen(application, screen, options)` is the single function that composes a screen: the shell for the screen's layout, the chrome in its slots, the screen inside its **template chain** (each template holds the one inside it in the slot it fits, so every arrangement applies), names resolved against the profile, and the effective configuration of the templates' instance contributions. `composeSlotScreen` composes a screen as it appears in a nested slot, `composeDialog` a dialog template.
 
-Authored slot content replaces that slot's seeded template content rather than appending to it. An absent slot keeps its seed; an explicitly empty slot clears it. This also applies when an inner template fills a parent slot, or the host fills a root template's outlet or chrome slot. Nested outlet screens use the same rule. Hosted forms still append after the resulting forms-slot content.
+Authored slot content replaces that slot's seeded template content rather than appending to it. An absent slot keeps its seed; an explicitly empty slot clears it. This also applies when an inner template fills a parent slot, or the host fills a root template's slot or chrome slot. Nested slot screens use the same rule. Hosted forms still append after the resulting forms-slot content.
 
-**A slot the shell declares can hold a screen.** A navigation item authored with `slot <name>` renders its target into that outlet. When the outlet is declared by a screen (`core:outlet`) the target is nested in it; when no screen declares it but the shell (the layout or root template) does - `side` in `layout AppShell ... side` - the host owns it: `ApplicationHost` puts a closable `core:outlet` in that slot (`CompositionOptions.hostedOutlets`), the default `AppShell` draws any slot beyond its own regions as a side pane (`.layout-side`), and `placeInOutlet` keeps the primary screen and places the target beside it. Both items are active (`aria-current`), the pane has a `Close` button (`closeOutlet(name)` on the navigation context, one history entry, so back reopens it), the pane survives navigation of the primary region, and a reload restores both from the history state. A shell without that slot opens the target in the primary outlet as before.
+**A slot the shell declares can hold a screen.** A navigation item authored with `slot <name>` renders its target into that slot. When the slot is declared by a screen (`core:slot`) the target is nested in it; when no screen declares it but the shell (the layout or root template) does - `side` in `layout AppShell ... side` - the host owns it: `ApplicationHost` puts a closable `core:slot` in that slot (`CompositionOptions.hostedSlots`), the default `AppShell` draws any slot beyond its own regions as a side pane (`.layout-side`), and `placeInSlot` keeps the primary screen and places the target beside it. Both items are active (`aria-current`), the pane has a `Close` button (`closeSlot(name)` on the navigation context, one history entry, so back reopens it), the pane survives navigation of the primary region, and a reload restores both from the history state. A shell without that slot opens the target in the primary slot as before.
 
-`ApplicationHost` is what runs it: the shell for the screen on the page, nested outlets, the navigation model in scope for the topbar and sidebar regions, every destination routed, and the dialog a toolbar button or a dialog destination opened. A host decides only what is its own through `CompositionOptions` - the chrome, the form component, trailing content, a last pass over the tree (Stage binds its data sources there) and the packages names resolve against - and through `renderScreen`, with which Stage wraps a screen in its data and command scope.
+`ApplicationHost` is what runs it: the shell for the screen on the page, nested slots, the navigation model in scope for the topbar and sidebar regions, every destination routed, and the dialog a toolbar button or a dialog destination opened. A host decides only what is its own through `CompositionOptions` - the chrome, the form component, trailing content, a last pass over the tree (Stage binds its data sources there) and the packages names resolve against - and through `renderScreen`, with which Stage wraps a screen in its data and command scope.
 
 The specs run the corpus application through both paths and compare what they render.
 
@@ -119,11 +119,11 @@ engine's `resolveEffectiveShell` - through `effectiveShellOf(application, screen
   in a different shell by naming another layout. The one exception is the chrome-less `FullPage` layout, which a screen may still name
   to opt out of the chrome (a sign-in page).
 - A root that is a layout draws that layout's component; a root that is a screen template with the root role is drawn by the
-  template component with its own arrangement and content, and the screen goes in its primary outlet.
+  template component with its own arrangement and content, and the screen goes in its primary slot.
 - Without a root the screen's own layout is the shell, exactly as before; a layout name no package provides stays an unresolved
   component in the tree on purpose, rather than being silently replaced.
-- The templates a chain is placed into, and the outlet the screen lands in, are the resolved shell's outlets and primary outlet.
+- The templates a chain is placed into, and the slot the screen lands in, are the resolved shell's slots and primary slot.
 
 `CompositionOptions.templateLibrary` lets a host hand over the installed blueprints; absent, the document's own templates and the
-default blueprint's are used. The shell's problems (`rootTemplateUnknown`, drifted pins, a missing content outlet, ...) are on
+default blueprint's are used. The shell's problems (`rootTemplateUnknown`, drifted pins, a missing content slot, ...) are on
 `effectiveShellOf(...).diagnostics`.

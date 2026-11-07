@@ -12,7 +12,7 @@ import { preview } from './when_previewing_a_module';
 const topbar = () => screen.getByRole('navigation', { name: 'Modules' });
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const trail = () => screen.getByRole('navigation', { name: 'Breadcrumb' });
-const page = () => document.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen');
+const page = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
 const current = (nav: HTMLElement) => Array.from(nav.querySelectorAll('[aria-current="page"]')).map(item => item.textContent?.trim());
 const galleryMenu = () => document.querySelector<HTMLElement>('.layout-sidebar')!;
 const nothing = () => undefined;
@@ -235,7 +235,7 @@ describe('when navigating the shell of a preview', () => {
     describe('and an item of the region has no target', () => {
         it('should draw it with the warning marker and not navigate', () => {
             const model = JSON.parse(JSON.stringify(preview().props.children.props.navigation));
-            model.modules[0].regions[0].items.push({ id: 'soon', title: 'Soon' });
+            model.modules[0].refinements[0].items.push({ kind: 'navigation', id: 'soon', title: 'Soon' });
             render(preview({ navigation: model }));
             const item = within(sidebar()).getByText('Soon').closest('li')!;
             fireEvent.click(within(sidebar()).getByText('Soon'));

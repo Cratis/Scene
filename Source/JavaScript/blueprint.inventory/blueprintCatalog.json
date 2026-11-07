@@ -83,7 +83,19 @@
           "description": "Low stock count, stock value, top movers, recent movements and the items to reorder.",
           "type": "Dashboard",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryDashboard.svg"
+          "thumbnail": "thumbnails/InventoryDashboard.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InventoryItemList",
@@ -92,7 +104,34 @@
           "description": "Items with sku, category, location, quantity and status, low stock highlighted, filtered by category, location and status.",
           "type": "List",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryItemList.svg"
+          "thumbnail": "thumbnails/InventoryItemList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InventoryItemGallery",
@@ -101,7 +140,34 @@
           "description": "Items as cards with a picture, sku, quantity and status, low stock highlighted.",
           "type": "List",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryItemGallery.svg"
+          "thumbnail": "thumbnails/InventoryItemGallery.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InventoryItemPage",
@@ -110,7 +176,19 @@
           "description": "One item: key facts, its fields and supplier, its stock by location and its movement history.",
           "type": "Detail",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryItemPage.svg"
+          "thumbnail": "thumbnails/InventoryItemPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "InventoryLocations",
@@ -119,7 +197,19 @@
           "description": "The tree of locations beside what is stored in the chosen location.",
           "type": "Workspace",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryLocations.svg"
+          "thumbnail": "thumbnails/InventoryLocations.svg",
+          "outlets": [
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "detailTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "InventoryMovementList",
@@ -128,7 +218,34 @@
           "description": "Check ins, check outs, transfers and adjustments with the item, quantity, location and who did it.",
           "type": "List",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventoryMovementList.svg"
+          "thumbnail": "thumbnails/InventoryMovementList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InventoryCheckInOut",
@@ -146,7 +263,34 @@
           "description": "Suppliers with their contact, the items they supply and their status.",
           "type": "List",
           "category": "Business / Inventory",
-          "thumbnail": "thumbnails/InventorySupplierList.svg"
+          "thumbnail": "thumbnails/InventorySupplierList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InventoryAdjustStock",

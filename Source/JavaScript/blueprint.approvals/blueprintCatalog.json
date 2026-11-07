@@ -75,7 +75,34 @@
           "description": "The requests waiting for my decision as cards, with Approve, Reject and Request changes inline.",
           "type": "List",
           "category": "Business / Approvals",
-          "thumbnail": "thumbnails/ApprovalInbox.svg"
+          "thumbnail": "thumbnails/ApprovalInbox.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "MyRequests",
@@ -84,7 +111,34 @@
           "description": "The requests I made, with draft, submitted, approved and rejected as chips.",
           "type": "List",
           "category": "Business / Approvals",
-          "thumbnail": "thumbnails/MyRequests.svg"
+          "thumbnail": "thumbnails/MyRequests.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "NewRequestWizard",
@@ -102,7 +156,19 @@
           "description": "One request: summary, approval chain, fields, attachments and comments, and the decision buttons.",
           "type": "Detail",
           "category": "Business / Approvals",
-          "thumbnail": "thumbnails/RequestPage.svg"
+          "thumbnail": "thumbnails/RequestPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "AllRequests",
@@ -111,7 +177,34 @@
           "description": "Every request of the organisation with its type, requester, current approver and status.",
           "type": "List",
           "category": "Business / Approvals",
-          "thumbnail": "thumbnails/AllRequests.svg"
+          "thumbnail": "thumbnails/AllRequests.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "RequestTypes",
@@ -120,7 +213,34 @@
           "description": "The request types an organisation offers, with the steps that approve each and whether it is active.",
           "type": "List",
           "category": "Business / Approvals",
-          "thumbnail": "thumbnails/RequestTypes.svg"
+          "thumbnail": "thumbnails/RequestTypes.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "RequestTypeEditForm",

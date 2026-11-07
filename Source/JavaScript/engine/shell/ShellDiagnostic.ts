@@ -8,7 +8,7 @@ export interface ShellDiagnostic {
     /** The engine-owned code. */
     code: ShellDiagnosticCode;
 
-    /** The human message. It carries real names (templates, screens, outlets, packages), never ids. */
+    /** The human message. It carries real names (templates, screens, slots, packages), never ids. */
     message: string;
 
     /** The thing the problem is about (a template, screen, theme or package name), when there is one. */

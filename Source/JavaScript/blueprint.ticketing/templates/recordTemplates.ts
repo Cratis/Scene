@@ -15,6 +15,7 @@ export const ticketPageTemplate: ScreenTemplate = {
     name: 'TicketPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('ticket-header', 'pageHeader', { title: fromQuery(TicketingQuery.Ticket, '0.subject'), subtitle: fromQuery(TicketingQuery.Ticket, '0.reference') }, {

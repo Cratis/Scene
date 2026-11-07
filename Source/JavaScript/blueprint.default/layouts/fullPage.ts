@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FlowArrangement, Layout, WidthSizeClass } from '@cratis/scene.model';
+import { FlowArrangement, Layout, SlotRole, WidthSizeClass } from '@cratis/scene.model';
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
@@ -44,7 +44,7 @@ export const fullPageArrangement: FlowArrangement = {
  */
 export const fullPageLayout: Layout = {
     name: LayoutName.FullPage,
-    slots: [{ name: SlotName.Aside }, { name: SlotName.Content }, { name: SlotName.ConfigPanel }],
+    slots: [{ name: SlotName.Aside }, { name: SlotName.Content, role: SlotRole.Page, routed: true, primary: true }, { name: SlotName.ConfigPanel, role: SlotRole.Panel, optional: true }],
     arrangement: fullPageArrangement,
     metadata: { ...defaultBlueprintShellProvenance, category: 'Foundation / Shell' },
 };

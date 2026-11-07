@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { administrationScreenDefinitions } from './administrationScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,18 +36,18 @@ export const administrationStructure: ApplicationStructure = (() => {
 export const administrationNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Administration' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'admin', title: 'Administration', target: { module: administrationModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'admin', title: 'Administration', target: { module: administrationModule } }] }],
     },
     modules: [{
         module: administrationModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'users', title: 'Users', target: { module: administrationModule, feature: 'users' } },
-                { id: 'roles', title: 'Roles', target: { module: administrationModule, feature: 'roles' } },
-                { id: 'settings', title: 'Settings', target: { module: administrationModule, feature: 'settings' } },
-                { id: 'audit', title: 'Audit log', target: { module: administrationModule, feature: 'audit' } },
+                { kind: OutletItemKind.Navigation, id: 'users', title: 'Users', target: { module: administrationModule, feature: 'users' } },
+                { kind: OutletItemKind.Navigation, id: 'roles', title: 'Roles', target: { module: administrationModule, feature: 'roles' } },
+                { kind: OutletItemKind.Navigation, id: 'settings', title: 'Settings', target: { module: administrationModule, feature: 'settings' } },
+                { kind: OutletItemKind.Navigation, id: 'audit', title: 'Audit log', target: { module: administrationModule, feature: 'audit' } },
             ],
         }],
     }],

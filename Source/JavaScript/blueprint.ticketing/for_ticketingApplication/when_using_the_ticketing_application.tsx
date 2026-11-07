@@ -8,10 +8,10 @@ import { german, interactive, provideBrowserApis } from './given';
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const topbar = () => screen.getByRole('navigation', { name: 'Modules' });
 const labels = (nav: HTMLElement) => Array.from(nav.querySelectorAll('a')).map(item => item.textContent?.trim());
-const outlet = () => document.querySelector('[data-scene-outlet="primary"]')!;
-const onPage = () => outlet().getAttribute('data-scene-screen');
-const headings = () => Array.from(outlet().querySelectorAll('h1')).map(heading => heading.textContent);
-const buttonNamed = (name: string) => Array.from(outlet().querySelectorAll('button')).find(button => button.textContent === name)!;
+const slot = () => document.querySelector('[data-scene-slot="primary"]')!;
+const onPage = () => slot().getAttribute('data-scene-screen');
+const headings = () => Array.from(slot().querySelectorAll('h1')).map(heading => heading.textContent);
+const buttonNamed = (name: string) => Array.from(slot().querySelectorAll('button')).find(button => button.textContent === name)!;
 
 // Spec Part B 3.2 as an application: the navigation, the screens a user moves between, what the buttons and rows do, and what each pack's data looks like.
 describe('when using the help desk application', () => {
@@ -38,19 +38,19 @@ describe('when using the help desk application', () => {
         it('should mark the dashboard as the place the user is', () => within(sidebar()).getByText('Dashboard').closest('[aria-current]')!.getAttribute('aria-current')!.should.equal('page'));
 
         it('should show open, overdue and the average first response, then tickets by priority and by assignee', () => {
-            Array.from(outlet().querySelectorAll('.foundation-stat-label')).map(label => label.textContent).should.deep.equal(['Open tickets', 'Overdue', 'Average first response (hours)']);
-            outlet().textContent!.should.contain('Open tickets by priority').and.contain('Open tickets by assignee').and.contain('Overdue tickets');
-            within(outlet() as HTMLElement).getByRole('region', { name: 'My next steps' });
+            Array.from(slot().querySelectorAll('.foundation-stat-label')).map(label => label.textContent).should.deep.equal(['Open tickets', 'Overdue', 'Average first response (hours)']);
+            slot().textContent!.should.contain('Open tickets by priority').and.contain('Open tickets by assignee').and.contain('Overdue tickets');
+            within(slot() as HTMLElement).getByRole('region', { name: 'My next steps' });
         });
 
         it('should format the average response in the locale of the pack', () =>
-            Array.from(outlet().querySelectorAll('.foundation-stat-value')).map(value => value.textContent!.replace(/\u00a0/g, ' '))[2].should.equal('2.4'));
+            Array.from(slot().querySelectorAll('.foundation-stat-value')).map(value => value.textContent!.replace(/\u00a0/g, ' '))[2].should.equal('2.4'));
     });
 
     describe('and the pack is the German one', () => {
         it('should format the same figure in the German number style', () => {
             render(interactive('support.dashboard', german));
-            Array.from(outlet().querySelectorAll('.foundation-stat-value')).map(value => value.textContent!.replace(/\u00a0/g, ' '))[2].should.equal('2,4');
+            Array.from(slot().querySelectorAll('.foundation-stat-value')).map(value => value.textContent!.replace(/\u00a0/g, ' '))[2].should.equal('2,4');
         });
     });
 
@@ -59,17 +59,17 @@ describe('when using the help desk application', () => {
 
         it('should show the columns of the specification', () => {
             onPage()!.should.equal('support.queue');
-            Array.from(outlet().querySelectorAll('th')).map(header => header.textContent!.trim()).should.include.members(['ID', 'Subject', 'Requester', 'Priority', 'Status', 'Assignee', 'Age']);
+            Array.from(slot().querySelectorAll('th')).map(header => header.textContent!.trim()).should.include.members(['ID', 'Subject', 'Requester', 'Priority', 'Status', 'Assignee', 'Age']);
         });
 
         it('should draw priority and status as chips that say the word', () => {
-            const row = outlet().querySelector('.foundation-table tbody tr')!;
+            const row = slot().querySelector('.foundation-table tbody tr')!;
             Array.from(row.querySelectorAll('.foundation-chip')).map(chip => chip.textContent).should.include.members(['Urgent', 'New']);
         });
 
         it('should offer the saved views Unassigned, Mine and Overdue', () => {
-            fireEvent.click(within(outlet() as HTMLElement).getByRole('button', { name: /Saved views/ }));
-            ['Unassigned', 'Mine', 'Overdue'].forEach(view => within(outlet() as HTMLElement).getAllByText(view).length.should.be.greaterThan(0));
+            fireEvent.click(within(slot() as HTMLElement).getByRole('button', { name: /Saved views/ }));
+            ['Unassigned', 'Mine', 'Overdue'].forEach(view => within(slot() as HTMLElement).getAllByText(view).length.should.be.greaterThan(0));
         });
 
         it('should open the quick-create dialog from New ticket and close it again from Cancel', () => {
@@ -81,10 +81,10 @@ describe('when using the help desk application', () => {
         });
 
         it('should open the ticket when a row is chosen, with its conversation, properties and quick actions', () => {
-            fireEvent.click(outlet().querySelector('.foundation-table tbody tr input')!);
+            fireEvent.click(slot().querySelector('.foundation-table tbody tr input')!);
             onPage()!.should.equal('support.queue.ticket');
             headings().should.deep.equal(['Invoice PDF shows the wrong VAT number']);
-            outlet().textContent!.should.contain('Conversation').and.contain('Properties').and.contain('Thanks Isla');
+            slot().textContent!.should.contain('Conversation').and.contain('Properties').and.contain('Thanks Isla');
             ['Assign', 'Change status', 'Escalate', 'Merge'].forEach(action => (buttonNamed(action) !== undefined).should.equal(true));
         });
     });
@@ -92,7 +92,7 @@ describe('when using the help desk application', () => {
     describe('and the user is on a ticket', () => {
         beforeEach(() => {
             render(interactive('support.queue'));
-            fireEvent.click(outlet().querySelector('.foundation-table tbody tr input')!);
+            fireEvent.click(slot().querySelector('.foundation-table tbody tr input')!);
         });
 
         for (const [action, dialog] of [['Assign', 'AssignTicket'], ['Change status', 'ChangeTicketStatus'], ['Escalate', 'EscalateTicket'], ['Merge', 'MergeTickets']]) {
@@ -130,9 +130,9 @@ describe('when using the help desk application', () => {
         beforeEach(() => { render(interactive('support.knowledge')); });
 
         it('should show the categories and articles as a tree beside the article', () => {
-            const tree = within(outlet() as HTMLElement).getByRole('tree');
+            const tree = within(slot() as HTMLElement).getByRole('tree');
             ['Accounts', 'Billing', 'Devices'].forEach(category => within(tree).getByText(category));
-            outlet().textContent!.should.contain('Reset a password').and.contain('Forgot password');
+            slot().textContent!.should.contain('Reset a password').and.contain('Forgot password');
         });
 
         it('should offer a way to the public form from Still need help', () => {
@@ -151,8 +151,8 @@ describe('when using the help desk application', () => {
         });
 
         it('should say what happens next and ask for only what a customer can say', () => {
-            outlet().textContent!.should.contain('What happens next').and.contain('Your name').and.contain('What is wrong?');
-            outlet().textContent!.should.not.contain('Assignee');
+            slot().textContent!.should.contain('What happens next').and.contain('Your name').and.contain('What is wrong?');
+            slot().textContent!.should.not.contain('Assignee');
         });
     });
 });

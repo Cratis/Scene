@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
+import { FilterControl, OutletBuiltInAction, OutletItemKind, OutletKind, OutletSubject, ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
 import { column, grid, row, slotLeaf } from '../../layouts/flowBuilders';
 import { component, foundationTemplateProvenance, fromQuery, thumbnailOf } from './templateParts';
 
@@ -31,6 +31,18 @@ export const listScreenTemplate: ScreenTemplate = {
         bulkBar: [component('list-bulk', 'bulkBar', { selection: fromQuery('DealSelection'), actions: ['Assign', 'Archive'] })],
         footer: [],
     },
+    outlets: [
+        {
+            name: 'toolbar', kind: OutletKind.Actions, defaults: [
+                { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', builtIn: OutletBuiltInAction.Refresh },
+                { kind: OutletItemKind.Button, id: 'export', title: 'Export', icon: 'download' },
+            ],
+        },
+        { name: 'filters', kind: OutletKind.Filters, defaults: [{ kind: OutletItemKind.Filter, id: 'search', title: 'Search', control: FilterControl.Search }] },
+        { name: 'stats', kind: OutletKind.Stats, defaults: [] },
+        { name: 'rowActions', kind: OutletKind.Actions, subject: OutletSubject.Item, defaults: [] },
+        { name: 'emptyActions', kind: OutletKind.Actions, subject: OutletSubject.Screen, defaults: [] },
+    ],
     displayName: 'List',
     description: 'A searchable, filterable collection that is a table, grouped or cards, with a bulk bar for selected rows.',
     metadata: { ...foundationTemplateProvenance, type: 'List', category: 'Foundation / List', thumbnail: thumbnailOf('ListScreen') },

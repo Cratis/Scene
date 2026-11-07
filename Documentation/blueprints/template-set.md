@@ -22,7 +22,7 @@ Eleven shapes, each fitting the `AppShell` layout's `content` slot.
 | --- | --- | --- |
 | `Dashboard` | Four stat cards over two columns of widgets | `stats`, `primary`, `secondary` |
 | `CrudList` | A searchable table with a header and a primary action | `toolbar`, `body` |
-| `MasterDetail` | A list beside the selected record, with a `master-detail.detail` outlet that accepts `Detail` screens | `header`, `primary`, `sidePanel` |
+| `MasterDetail` | A list beside the selected record, with a `master-detail.detail` slot that accepts `Detail` screens | `header`, `primary`, `sidePanel` |
 | `DetailView` | One record: header with actions, its sections, a summary panel | `header`, `body`, `sidePanel` |
 | `FormPage` | A grouped form with the field types applications actually use | `header`, `body`, `actions` |
 | `Empty` | The designed empty state for a list with nothing in it | `body` |

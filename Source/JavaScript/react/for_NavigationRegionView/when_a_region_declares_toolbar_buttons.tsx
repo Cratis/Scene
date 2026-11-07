@@ -3,7 +3,7 @@
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach } from 'vitest';
-import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, ToolbarEmphasis } from '@cratis/scene.model';
+import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode, ToolbarEmphasis } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { coreComponents } from '../core';
 import { NavigationRegionView } from '../navigation/region/NavigationRegionView';
@@ -21,17 +21,23 @@ const structure = {
 
 const navigation: NavigationModel = {
     application: {
-        regions: [{
-            region: NavigationRegionKind.Topbar,
-            items: [{ id: 'catalog', title: 'Catalog', target: { module: 'catalog' } }],
-            buttons: [
-                { id: 'new-product', title: 'New product', slice: 'catalog.products.DraftProduct', emphasis: ToolbarEmphasis.Primary },
-                { id: 'audit', title: 'Audit', slice: 'catalog.products.DraftProduct', authorize: 'Catalog.Auditor' },
-                { id: 'soon', title: 'Coming soon' },
-            ],
-        }],
+        outlets: [
+            { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'catalog', title: 'Catalog', target: { module: 'catalog' } }] },
+            {
+                name: 'topbarButtons',
+                kind: OutletKind.Actions,
+                defaults: [
+                    { kind: OutletItemKind.Button, id: 'new-product', title: 'New product', slice: 'catalog.products.DraftProduct', emphasis: ToolbarEmphasis.Primary },
+                    { kind: OutletItemKind.Button, id: 'audit', title: 'Audit', slice: 'catalog.products.DraftProduct', authorize: 'Catalog.Auditor' },
+                    { kind: OutletItemKind.Button, id: 'soon', title: 'Coming soon' },
+                ],
+            },
+        ],
     },
-    modules: [{ module: 'warehouse', regions: [{ region: NavigationRegionKind.Topbar, mode: 'extend', items: [], buttons: [{ id: 'count', title: 'Count stock', slice: 'catalog.products.DraftProduct' }] }] } as never],
+    modules: [{
+        module: 'warehouse',
+        refinements: [{ outlet: 'topbarButtons', mode: OutletMode.Extends, items: [{ kind: OutletItemKind.Button, id: 'count', title: 'Count stock', slice: 'catalog.products.DraftProduct' }] }],
+    }],
 };
 
 const text = (id: string) => ({ id, componentName: 'core:text', properties: { text: id }, slots: {} }) as unknown as ExternalComponent;

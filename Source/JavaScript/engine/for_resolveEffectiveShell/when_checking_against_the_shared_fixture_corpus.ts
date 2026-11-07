@@ -16,8 +16,8 @@ interface ExpectedShell {
     packageVersion?: string;
     pinStatus?: string;
     pin?: string;
-    outlets: string[];
-    primaryOutlet: string;
+    slots: string[];
+    primarySlot: string;
     options: Record<string, unknown>;
     diagnostics: { code: string; subject: string | null; message: string }[];
 }
@@ -48,8 +48,8 @@ function describeShell(shell: EffectiveShell): ExpectedShell {
         described.pinStatus = shell.pin.status;
         described.pin = shell.pin.pin;
     }
-    described.outlets = shell.outlets;
-    described.primaryOutlet = shell.primaryOutlet;
+    described.slots = shell.slots;
+    described.primarySlot = shell.primarySlot;
     described.options = shell.options;
     described.diagnostics = shell.diagnostics.map(diagnostic => ({ code: diagnostic.code, subject: diagnostic.subject ?? null, message: diagnostic.message }));
     return described;

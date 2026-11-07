@@ -18,7 +18,7 @@ const sideBySide = ['WorkspaceScreen', 'DashboardScreen', 'MasterDetailScreen', 
 // is one column on a phone.
 describe('when arranging each foundation template for each width', () => {
     for (const template of foundationScreenTemplates) {
-        const declared = template.slots.map(slot => slot.name);
+        const declared = template.slots.filter(slot => slot.routed !== true).map(slot => slot.name);
 
         for (const width of [WidthSizeClass.Regular, WidthSizeClass.Compact]) {
             it(`should place every slot of ${template.name} exactly once at a ${width} width`, () => {
@@ -36,7 +36,7 @@ describe('when arranging each foundation template for each width', () => {
     it('should read the master/detail as a navigation stack on a phone: the list, then the record', () => {
         const masterDetail = foundationScreenTemplates.find(template => template.name === 'MasterDetailScreen')!;
         slotsIn(evaluate(masterDetail, WidthSizeClass.Compact)).should.deep.equal(['list', 'details']);
-        masterDetail.outlets!.should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', accepts: ['Detail'] }]);
+        masterDetail.slots.filter(slot => slot.routed === true).should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', role: 'pane', routed: true, routedBy: ['id'], optional: true, accepts: ['Detail'] }]);
     });
 
     it('should put the workspace sections before its content on a phone, where the rail reads as tabs', () => {

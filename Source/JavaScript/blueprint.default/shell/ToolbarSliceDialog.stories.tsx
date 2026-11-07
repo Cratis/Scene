@@ -14,17 +14,18 @@ const structure = {
 const element = (id: string, componentName: string, properties: Record<string, unknown> = {}, slots: Record<string, SceneElement[]> = {}) =>
     ({ id, componentName, properties, slots }) as unknown as ExternalComponent;
 
-const toolbar = element('toolbar', 'core:toolbar', { name: 'orders' }, { items: [
-    element('new', 'core:toolbarItem', { name: 'new', kind: 'Action', label: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' }),
-    element('cancel', 'core:toolbarItem', { name: 'cancel', kind: 'Action', label: 'Cancel order', slice: 'sales.orders.PlaceOrder', emphasis: 'secondary' }),
-    element('more', 'core:toolbarItem', { name: 'more', kind: 'Action', label: 'More', emphasis: 'quiet' }),
+/** The toolbar is an outlet of actions; each button that names a State Change slice is a hook. */
+const toolbar = element('toolbar', 'core:outletItems', { name: 'toolbar', kind: 'actions', items: [
+    { kind: 'button', id: 'new', title: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' },
+    { kind: 'button', id: 'cancel', title: 'Cancel order', slice: 'sales.orders.PlaceOrder', emphasis: 'secondary', opens: 'drawer' },
+    { kind: 'button', id: 'more', title: 'More', emphasis: 'quiet' },
 ] });
 
 function OrdersToolbar({ warnEmptySlices }: { warnEmptySlices: boolean }) {
     return <SliceInvokerProvider invoker={createDryRunInvoker({ onInvoked: invocation => console.info('Dry run', invocation) })} warnEmptySlices={warnEmptySlices}>
         <SliceCommandFieldsProvider fieldsFor={() => [{ name: 'customer', type: 'string', required: true }, { name: 'product', type: 'string' }, { name: 'quantity', type: 'number' }]}>
             <SceneNavigationHost screens={{ Orders: toolbar }} initialScreen='Orders' registry={coreComponents}
-                navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation: { application: { regions: [] }, modules: [] } }} />
+                navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation: { application: { outlets: [] }, modules: [] } }} />
         </SliceCommandFieldsProvider>
     </SliceInvokerProvider>;
 }

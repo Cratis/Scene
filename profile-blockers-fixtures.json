@@ -101,12 +101,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -288,12 +288,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -600,7 +600,7 @@
       ]
     },
     {
-      "name": "shell without a content outlet",
+      "name": "shell without a content slot",
       "description": "a root with nowhere to put screens",
       "profile": {
         "name": "Desktop",
@@ -622,7 +622,7 @@
         {
           "code": "shellUnusable",
           "subject": "HeaderOnlyShell",
-          "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it",
+          "message": "Shell 'HeaderOnlyShell' has no 'content' slot, so no screen can be placed in it",
           "shellCode": "rootTemplateMissingContentSlot",
           "severity": "blocker",
           "section": "shell",

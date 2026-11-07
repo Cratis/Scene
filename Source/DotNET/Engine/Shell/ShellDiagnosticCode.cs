@@ -50,7 +50,7 @@ public enum ShellDiagnosticCode
     ProfilePackageMissing = 7,
 
     /// <summary>
-    /// A screen puts content in an outlet the shell does not have.
+    /// A screen puts content in a slot the shell does not have.
     /// </summary>
     ProfileSlotUnplaced = 8
 }

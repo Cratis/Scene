@@ -11,7 +11,7 @@ export function defaultScreenFor(item: EffectiveNavItem): string | undefined {
 
 /**
  * Where activating a navigation item goes: its stable module/feature identity, the screen it opens, and the slot it
- * renders into as the outlet - the primary `content` slot is the host's primary outlet.
+ * renders into as the slot - the primary `content` slot is the host's primary slot.
  *
  * @param item The effective item.
  * @param screenFor Names the screen an item opens; {@link defaultScreenFor} when absent.
@@ -22,8 +22,8 @@ export function navigationItemDestination(item: EffectiveNavItem, screenFor: (it
     if (screen === undefined || item.target === undefined) return undefined;
 
     const resolved = item.target.resolvedFeature;
-    const destination: DestinationReference = { kind: DestinationKind.Outlet, module: item.target.module, screen };
+    const destination: DestinationReference = { kind: DestinationKind.Slot, module: item.target.module, screen };
     if (resolved !== undefined && resolved.startsWith(`${item.target.module}.`)) destination.feature = resolved.substring(item.target.module.length + 1);
-    if (item.slot !== primarySlot) destination.outlet = item.slot;
+    if (item.slot !== primarySlot) destination.slot = item.slot;
     return destination;
 }

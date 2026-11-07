@@ -61,7 +61,19 @@
           "description": "Outstanding, overdue and collected this month, receivables by age, invoiced against collected and the invoices to chase.",
           "type": "Dashboard",
           "category": "Business / Invoicing",
-          "thumbnail": "thumbnails/InvoicingOverview.svg"
+          "thumbnail": "thumbnails/InvoicingOverview.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InvoicesList",
@@ -70,7 +82,34 @@
           "description": "Every invoice with its customer, issue and due dates, amount and status, filtered by customer, status and date.",
           "type": "List",
           "category": "Business / Invoicing",
-          "thumbnail": "thumbnails/InvoicesList.svg"
+          "thumbnail": "thumbnails/InvoicesList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InvoicePage",
@@ -79,7 +118,19 @@
           "description": "One invoice: status, total, paid and balance due, its details, lines and payments, and its activity.",
           "type": "Detail",
           "category": "Business / Invoicing",
-          "thumbnail": "thumbnails/InvoicePage.svg"
+          "thumbnail": "thumbnails/InvoicePage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "PaymentsList",
@@ -88,7 +139,34 @@
           "description": "The payments received with the invoice each settled, when and how, filtered by method and date.",
           "type": "List",
           "category": "Business / Invoicing",
-          "thumbnail": "thumbnails/PaymentsList.svg"
+          "thumbnail": "thumbnails/PaymentsList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "InvoicingDueDates",

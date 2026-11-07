@@ -63,6 +63,7 @@ function listTemplateOf(options: ListOptions): ScreenTemplate {
         name: options.name,
         fitsSlot: 'content',
         slots: listScreenTemplate.slots,
+        outlets: listScreenTemplate.outlets,
         arrangement: listScreenTemplate.arrangement,
         content: {
             header: [component(`${id}-header`, 'pageHeader', { title: options.title, subtitle: options.subtitle }, {

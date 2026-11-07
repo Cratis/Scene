@@ -9,7 +9,7 @@ import { DestinationKind } from './DestinationKind';
  * Where activating something takes the user.
  *
  * Stable module/feature/slice identity is carried separately from labels and authored URLs. A renderer maps
- * the destination to a URL, route state, native deep link, dialog or named outlet without guessing from text.
+ * the destination to a URL, route state, native deep link, dialog or named slot without guessing from text.
  */
 export interface DestinationReference {
     /** The legacy or explicit screen name to go to. */
@@ -24,13 +24,13 @@ export interface DestinationReference {
     /** Stable slice identity inside the feature. */
     slice?: string;
 
-    /** The named outlet to replace; absent means the host's primary outlet. */
-    outlet?: string;
+    /** The named slot to replace; absent means the host's primary slot. */
+    slot?: string;
 
     /** The authored URL/path override, when the default route should not be derived from identity. */
     route?: string;
 
-    /** Whether this opens in an outlet, a dialog, or an external target. */
+    /** Whether this opens in a slot, a dialog, or an external target. */
     kind?: DestinationKind;
 
     /** A dialog template or dialog identity when `kind` is `dialog`. */
@@ -41,5 +41,5 @@ export interface DestinationReference {
 }
 
 export const DestinationReferencePropertyNames: (keyof DestinationReference)[] = [
-    'screen', 'module', 'feature', 'slice', 'outlet', 'route', 'kind', 'dialog', 'routeParameterBindings',
+    'screen', 'module', 'feature', 'slice', 'slot', 'route', 'kind', 'dialog', 'routeParameterBindings',
 ];

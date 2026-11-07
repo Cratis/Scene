@@ -2,39 +2,39 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ShellDiagnostic } from './ShellDiagnostic';
-import { ShellOutletAction } from './ShellOutletAction';
+import { ShellSlotAction } from './ShellSlotAction';
 
-/** What the user chose to do with the content of an outlet the new shell does not have. */
-export interface OutletRemap {
+/** What the user chose to do with the content of a slot the new shell does not have. */
+export interface SlotRemap {
     /** `moveToPrimary`, `mapTo` or `drop`. */
-    action: ShellOutletAction.MoveToPrimary | ShellOutletAction.MapTo | ShellOutletAction.Drop;
+    action: ShellSlotAction.MoveToPrimary | ShellSlotAction.MapTo | ShellSlotAction.Drop;
 
-    /** For `mapTo`: the outlet of the new shell to move the content into. */
+    /** For `mapTo`: the slot of the new shell to move the content into. */
     target?: string;
 }
 
-/** The user's choices, by the name of the outlet of the current shell they are for. */
-export type OutletRemaps = Record<string, OutletRemap>;
+/** The user's choices, by the name of the slot of the current shell they are for. */
+export type SlotRemaps = Record<string, SlotRemap>;
 
-/** One outlet of the current shell and where its content goes. */
-export interface ShellOutletMove {
-    /** The outlet of the current shell. */
-    outlet: string;
+/** One slot of the current shell and where its content goes. */
+export interface ShellSlotMove {
+    /** The slot of the current shell. */
+    slot: string;
 
     /** What happens to its content. */
-    action: ShellOutletAction;
+    action: ShellSlotAction;
 
-    /** The outlet of the new shell the content lands in. Absent when it is dropped or not decided. */
+    /** The slot of the new shell the content lands in. Absent when it is dropped or not decided. */
     target?: string;
 
-    /** The screens that place content in the outlet, in document order. */
+    /** The screens that place content in the slot, in document order. */
     screens: string[];
 
-    /** A sentence with the real names of the screens, outlets and shells, ready to show. */
+    /** A sentence with the real names of the screens, slots and shells, ready to show. */
     description: string;
 
-    /** For an `unresolved` outlet: the choices on offer, *move into the primary outlet* first, then each other outlet, then *drop*. */
-    choices?: OutletRemap[];
+    /** For an `unresolved` slot: the choices on offer, *move into the primary slot* first, then each other slot, then *drop*. */
+    choices?: SlotRemap[];
 }
 
 /** What switching the application's shell does. Pure data: the host applies it as one undoable edit. */
@@ -45,17 +45,17 @@ export interface ShellSwitchPlan {
     /** The name of the shell being switched to. */
     to: string;
 
-    /** The current shell's primary outlet. */
+    /** The current shell's primary slot. */
     fromPrimary: string;
 
-    /** The new shell's primary outlet. */
+    /** The new shell's primary slot. */
     toPrimary: string;
 
-    /** Whether nothing changes: the same shell, so every outlet stays. */
+    /** Whether nothing changes: the same shell, so every slot stays. */
     isNoOp: boolean;
 
-    /** Every outlet of the current shell (and any outlet screens use that it lacks), in declared order. */
-    moves: ShellOutletMove[];
+    /** Every slot of the current shell (and any slot screens use that it lacks), in declared order. */
+    moves: ShellSlotMove[];
 
     /** Packages the switch adds to the profile: the new shell's blueprint when it is not yet among the profile's packages. */
     addPackages: string[];

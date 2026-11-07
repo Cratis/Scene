@@ -18,47 +18,36 @@ It is the structural identity a destination's `module` and `feature` resolve aga
 screen under its place in the hierarchy even when no navigation entry lists it. A screen outside any module has an
 empty or absent `path`.
 
-## Navigation items carry their hierarchy
+## Navigation items are contributed to outlets
 
-A `Navigation` contribution's `NavigationItem` records the same thing in `hierarchy` - the modules and features it
-was declared in. A contribution may sit on a module, on a feature at any depth, or inside a screen. `extractNavigationItem`
-reads the full authored item: `id`, `label`, `icon`, `presentation`, `targetScreen`, `destination`, `order`, `group`
-and `hierarchy`.
+A navigation contribution point is an outlet of navigation, such as `Navigation`. A module contributes navigation
+items to it in `modules[].contributions` of the navigation model, and a screen in its `outletContributions`. Where an
+item came from is the provenance outlet resolution gives it (`effectiveOutlet`): the level and the name of the module,
+feature or screen that contributed it. See [Outlets](outlets.md).
 
 ## Toolbars
 
-The `core` package renders `core:toolbar` and its `core:toolbarItem` elements, so a toolbar a document authors is
-a toolbar on the screen rather than a placeholder.
-
-| Property | Meaning |
-| --- | --- |
-| `name`, `label`, `icon` | The item's identity, text and icon |
-| `kind` | `Action` announces the command in `target` with `cratis.scene.command`; `Navigate` and `Dialog` execute a destination |
-| `target` | The command, screen or dialog template |
-| `parameters` | Bindings resolved when the item is activated - command arguments or route parameters |
-| `destination` | Where the item opens; when absent a `Navigate` item opens the screen `target` and a `Dialog` item the dialog `target` |
-| `presentation` | Hints by name. `mode` is `icon`, `text` or `both` (the default); every hint is also exposed as `data-scene-presentation-<name>` |
-
-A destination executes through the enclosing navigation host - a screen in an outlet, or a dialog - and is announced with
-the host-neutral `cratis.scene.navigate` event (carrying `targetScreen`, `dialog` and `destination`) outside one. An
-icon-only item keeps its label as its accessible name.
+A screen's toolbar is an outlet of actions, drawn by the `core:outletItems` component (`name: toolbar`). Each button is
+an item of the outlet: a slice it runs (a hook), a navigation target (`navigateTo`), a built-in (`builtIn`) or a hand-typed
+`command`. See [Rendering outlets](rendering-outlets.md) for how the buttons are drawn and what choosing one does, and
+why the former `core:toolbar` and `core:toolbarItem` elements are upgraded.
 
 ## Toolbar buttons that invoke state change slices
 
-A toolbar button of the screen editor is a `core:toolbarItem` with `kind: Action` plus a `slice` and an `emphasis`:
+A toolbar button of the screen editor is a button of the toolbar outlet with a `slice` and an `emphasis`:
 
 | Property | Meaning |
 | --- | --- |
-| `label` | The title shown on the button (`Button` for a new one) |
+| `title` | The title shown on the button |
 | `slice` | The qualified id of the **state change** slice the button invokes, for example `sales.orders.PlaceOrder`. Edited with the `slice` editor (`editorOptions.kinds: ['StateChange']`): the whole slice tree is listed, state changes are selectable, state views and automations are greyed |
 | `emphasis` | `primary`, `secondary` (the default) or `quiet`, edited as chips |
 | `icon` | Qualified icon reference |
-| `target` | The hand-typed command of a legacy button; kept for compatibility |
+| `command` | The hand-typed command of a legacy button; kept for compatibility |
 | `confirm` | Optional question the user answers before the button runs: an accessible alert dialog with Cancel and the button's title as the accept action. Empty runs at once. Screenplay's `confirm "..."` line on a toolbar item or button, also on the toolbar a feature or module contributes |
 
 `ToolbarButton` (`id`, `title`, `slice?`, `emphasis?`, `icon?`, `target?`) and `Toolbar` (`buttons`) are the model shapes in
-`@cratis/scene.model` and `Cratis.Scene.Model.Toolbar`; `toolbarButtonFromItem` / `ToolbarButtons.FromItem` read a button from
-the properties of a `core:toolbarItem` (a `Navigate` or `Dialog` item is not a slice button). The slice comes from the
+`@cratis/scene.model` and `Cratis.Scene.Model.Toolbar`; `outletActionAsToolbarButton` turns an action of an outlet into the
+button these rules validate (an action that navigates or runs a built-in is not a slice button). The slice comes from the
 [application structure](application-structure.md).
 
 **Validation** - `validateToolbarButtons(structure, toolbar)` (`ToolbarButtonValidation.Validate`):
@@ -77,7 +66,7 @@ Stage, Studio preview and the renderers agree.
 **Compatibility** - a legacy button (`kind: Action` and a `target` command, no `slice`) still validates and renders. On read
 the engine converts it: when exactly one state change slice accepts the command (a slice's `command`, or its id when it names
 none; a qualified slice id also matches) the button names that slice. A command no single slice accepts - unknown, ambiguous, or a
-state view - stays a legacy button and raises no diagnostic. `core:toolbarItem` keeps rendering from `kind` and `target` as before.
+state view - stays a legacy button and raises no diagnostic, and choosing it announces the command.
 
 Both engines are asserted against `toolbar-slice-fixtures.json` (state change ok, state view and automation rejected, missing
 slice, empty slice warning, dialog template resolution, conversion from a `target` command, and reading buttons from items):
@@ -85,9 +74,8 @@ slice, empty slice warning, dialog template resolution, conversion from a `targe
 
 ### Running a slice button: the task dialog and the `sliceInvoker`
 
-`core:toolbarItem` renders every button with its `emphasis` - `data-scene-emphasis` and the class `scene-toolbar-button-<emphasis>`
-(`primary` solid accent, `secondary` outlined, `quiet` frameless; `blueprint.default` styles them) - and an icon according to
-`presentation.mode`. When a navigation model is in scope (`SceneNavigationHost` `navigationModel`), a button that resolves to a state
+An outlet of actions renders every button with its `emphasis` - `data-scene-emphasis` and the class `scene-toolbar-button-<emphasis>`
+(`primary` solid accent, `secondary` outlined, `quiet` frameless; `blueprint.default` styles them) - and its icon. When a navigation model is in scope (`SceneNavigationHost` `navigationModel`), a button that resolves to a state
 change slice **opens its dialog** instead of announcing the command:
 
 - The button navigates to the dialog destination `sliceDialogDestination(resolved)` - the template `sliceDialogFor` picked, with the

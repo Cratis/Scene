@@ -14,7 +14,7 @@ export function validateLayoutApplicability(layout: Layout | undefined, scope: T
 
 /**
  * Validates selection at any depth of the application hierarchy, including qualified fitsSlot names.
- * Undefined represents outlet-only composition and is valid. Invalid author input is never rewritten.
+ * Undefined represents slot-only composition and is valid. Invalid author input is never rewritten.
  */
 export function validateScreenTemplateApplicability(
     template: ScreenTemplate | undefined,

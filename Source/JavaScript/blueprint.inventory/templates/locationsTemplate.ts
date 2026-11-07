@@ -16,6 +16,7 @@ export const inventoryLocationsTemplate: ScreenTemplate = {
     name: 'InventoryLocations',
     fitsSlot: 'content',
     slots: masterDetailScreenTemplate.slots,
+    outlets: masterDetailScreenTemplate.outlets,
     arrangement: masterDetailScreenTemplate.arrangement,
     content: {
         list: [component('inventory-locations-tree', 'orgTree', {

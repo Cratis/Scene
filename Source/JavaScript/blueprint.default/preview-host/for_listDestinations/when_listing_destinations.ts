@@ -36,7 +36,7 @@ describe('when listing destinations', () => {
 
         it('should list each as a page named by the screen', () => listing.should.deep.equal([{
             group: DestinationGroup.Pages,
-            destinations: ordersApplication().screens.map(screen => ({ id: `page:${screen.name}`, label: screen.name, group: DestinationGroup.Pages, category: undefined, destination: { kind: DestinationKind.Outlet, screen: screen.name }, layout: 'AppShell' })),
+            destinations: ordersApplication().screens.map(screen => ({ id: `page:${screen.name}`, label: screen.name, group: DestinationGroup.Pages, category: undefined, destination: { kind: DestinationKind.Slot, screen: screen.name }, layout: 'AppShell' })),
         }]));
     });
 

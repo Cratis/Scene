@@ -9,16 +9,16 @@ export enum NavigationDiagnosticCode {
     /** Two destinations that go to different targets share one URL. */
     DuplicateRoute = 'duplicateRoute',
 
-    /** Two surfaces declare an outlet with the same name, so a destination cannot tell them apart. */
-    DuplicateOutlet = 'duplicateOutlet',
+    /** Two surfaces declare a slot with the same name, so a destination cannot tell them apart. */
+    DuplicateSlot = 'duplicateSlot',
 
-    /** A destination names an outlet that no layout or screen template declares. */
-    MissingOutlet = 'missingOutlet',
+    /** A destination names a slot that no layout or screen template declares. */
+    MissingSlot = 'missingSlot',
 
-    /** A destination names an outlet that cannot host what it opens. */
-    IncompatibleOutlet = 'incompatibleOutlet',
+    /** A destination names a slot that cannot host what it opens. */
+    IncompatibleSlot = 'incompatibleSlot',
 
-    /** Screens are placed in outlets owned by each other, so composition never terminates. */
+    /** Screens are placed in slots owned by each other, so composition never terminates. */
     NavigationCycle = 'navigationCycle',
 
     /** A destination opens a screen or dialog that does not exist, or names nothing to open. */

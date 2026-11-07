@@ -56,10 +56,10 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     void should_have_cases_in_the_corpus() => _cases.Count.ShouldBeGreaterThan(20);
 
     [Fact]
-    void should_cover_every_outlet_action()
+    void should_cover_every_slot_action()
     {
         var covered = _results.SelectMany(item => item.Plan.Moves).Select(move => move.Action).Distinct().Order();
-        covered.ShouldContainOnly(Enum.GetValues<ShellOutletAction>().Order());
+        covered.ShouldContainOnly(Enum.GetValues<ShellSlotAction>().Order());
     }
 
     [Fact]
@@ -102,11 +102,11 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         [],
         element.TryGetProperty("screenTemplate", out var template) ? template.GetString() : null);
 
-    static Dictionary<string, OutletRemap> RemapsOf(JsonElement element) =>
+    static Dictionary<string, SlotRemap> RemapsOf(JsonElement element) =>
         element.EnumerateObject().ToDictionary(
             property => property.Name,
-            property => new OutletRemap(
-                Enum.Parse<ShellOutletAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
+            property => new SlotRemap(
+                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
                 property.Value.TryGetProperty("target", out var target) ? target.GetString() : null),
             StringComparer.Ordinal);
 
@@ -117,7 +117,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         plan.ToPrimary,
         plan.IsNoOp,
         plan.CanSwitch,
-        plan.Moves.Select(move => (move.Outlet, ToCamelCase(move.Action.ToString()), move.Target, string.Join(',', move.Screens), move.Description, string.Join(',', (move.Choices ?? []).Select(choice => $"{ToCamelCase(choice.Action.ToString())}:{choice.Target}")))),
+        plan.Moves.Select(move => (move.Slot, ToCamelCase(move.Action.ToString()), move.Target, string.Join(',', move.Screens), move.Description, string.Join(',', (move.Choices ?? []).Select(choice => $"{ToCamelCase(choice.Action.ToString())}:{choice.Target}")))),
         plan.AddPackages,
         plan.Blockers.Select(item => (ToCamelCase(item.Code.ToString()), item.Subject, item.Message)),
         plan.Warnings.Select(item => (ToCamelCase(item.Code.ToString()), item.Subject, item.Message))));
@@ -130,7 +130,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         plan.GetProperty("isNoOp").GetBoolean(),
         plan.GetProperty("canSwitch").GetBoolean(),
         plan.GetProperty("moves").EnumerateArray().Select(move => (
-            move.GetProperty("outlet").GetString()!,
+            move.GetProperty("slot").GetString()!,
             move.GetProperty("action").GetString()!,
             move.TryGetProperty("target", out var target) ? target.GetString() : null,
             string.Join(',', move.GetProperty("screens").EnumerateArray().Select(item => item.GetString())),
@@ -149,7 +149,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         string toPrimary,
         bool isNoOp,
         bool canSwitch,
-        IEnumerable<(string Outlet, string Action, string? Target, string Screens, string Description, string Choices)> moves,
+        IEnumerable<(string Slot, string Action, string? Target, string Screens, string Description, string Choices)> moves,
         IEnumerable<string> addPackages,
         IEnumerable<(string Code, string? Subject, string Message)> blockers,
         IEnumerable<(string Code, string? Subject, string Message)> warnings)
@@ -157,7 +157,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         yield return $"switch {from} -> {to} primary {fromPrimary} -> {toPrimary} noop {isNoOp} can {canSwitch}";
         foreach (var move in moves)
         {
-            yield return $"move {move.Outlet}|{move.Action}|{move.Target}|{move.Screens}|{move.Description}|{move.Choices}";
+            yield return $"move {move.Slot}|{move.Action}|{move.Target}|{move.Screens}|{move.Description}|{move.Choices}";
         }
 
         yield return $"add {string.Join(',', addPackages)}";
@@ -174,5 +174,5 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 
     static string ToCamelCase(string value) => char.ToLowerInvariant(value[0]) + value[1..];
 
-    sealed record SwitchCase(string Name, UiProfile Profile, TemplateReference CurrentRoot, TemplateReference CandidateRoot, List<Screen> Screens, Dictionary<string, OutletRemap> Remaps, string Expected);
+    sealed record SwitchCase(string Name, UiProfile Profile, TemplateReference CurrentRoot, TemplateReference CandidateRoot, List<Screen> Screens, Dictionary<string, SlotRemap> Remaps, string Expected);
 }

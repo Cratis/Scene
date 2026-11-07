@@ -4,7 +4,7 @@
 namespace Cratis.Scene.Model.Navigation;
 
 /// <summary>
-/// All the navigation an application declares: its own regions and the regions each module changes.
+/// All the navigation an application declares: the outlets of its shell layout and how each module refines them.
 /// </summary>
 /// <param name="Application">The application-level navigation.</param>
 /// <param name="Modules">The per-module navigation; a module that is not listed inherits everything.</param>

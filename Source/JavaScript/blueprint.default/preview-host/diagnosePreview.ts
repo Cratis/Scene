@@ -1,10 +1,10 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, OutletItem, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
 import {
-    ApplicationStructureIndex, collectComponents, diagnoseNavigationRegions, resolveScreenTemplates,
-    toolbarButtonFromItem, validateSampleDataSelection, validateToolbarButtons,
+    ApplicationStructureIndex, collectComponents, diagnoseNavigationOutlets, resolveScreenTemplates,
+    outletActionAsToolbarButton, outletActionsOf, validateSampleDataSelection, validateToolbarButtons,
 } from '@cratis/scene.engine';
 import { ApplicationDocument } from './ApplicationDocument';
 import { CompositionOptions, effectiveShellOf, findLayout, shellLayout, templatePoolFor, templatesOf } from './composeApplication';
@@ -51,7 +51,7 @@ const make = (code: PreviewProblemCode, severity: PreviewProblemSeverity, messag
  *
  * - the target must be in the structure, and a module must have a feature;
  * - the page - the screen named by the target's feature - must exist, with a layout and a template that can be found and placed;
- * - navigation (`diagnoseNavigationRegions`), toolbar buttons (`validateToolbarButtons`, whatever their severity), the structure's own
+ * - navigation (`diagnoseNavigationOutlets`), toolbar buttons (`validateToolbarButtons`, whatever their severity), the structure's own
  *   ids and the sample data selection are reported as warnings: the preview still renders, an item or button just will not behave
  *   as authored.
  *
@@ -102,14 +102,15 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
     }
 
     if (input.navigation) {
-        for (const diagnostic of diagnoseNavigationRegions(index, input.navigation)) {
+        for (const diagnostic of diagnoseNavigationOutlets(index, input.navigation)) {
             problems.push(make(PreviewProblemCode.NavigationInvalid, PreviewProblemSeverity.Warning, diagnostic.message, diagnostic.entry));
         }
     }
 
     const buttons = screens.flatMap(candidate => collectComponents(candidate)
-        .filter(component => component.componentName.endsWith('toolbarItem'))
-        .map(component => toolbarButtonFromItem(component.id, component.properties as Record<string, unknown>))
+        .filter(component => component.componentName.endsWith(':outletItems') && Array.isArray(component.properties.items))
+        .flatMap(component => outletActionsOf(component.properties.items as OutletItem[]))
+        .map(outletActionAsToolbarButton)
         .filter((button): button is ToolbarButton => button !== undefined));
     const toolbar: Toolbar = { buttons };
     for (const diagnostic of validateToolbarButtons(index, toolbar)) {

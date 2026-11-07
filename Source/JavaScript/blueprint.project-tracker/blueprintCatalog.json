@@ -69,7 +69,34 @@
           "description": "Projects as cards with owner, a progress bar, due date and status, filtered by owner, status and due date.",
           "type": "List",
           "category": "Business / Project tracker",
-          "thumbnail": "thumbnails/ProjectList.svg"
+          "thumbnail": "thumbnails/ProjectList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "ProjectPage",
@@ -78,7 +105,19 @@
           "description": "One project: key facts, its task list, its members and its activity.",
           "type": "Detail",
           "category": "Business / Project tracker",
-          "thumbnail": "thumbnails/ProjectPage.svg"
+          "thumbnail": "thumbnails/ProjectPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "ProjectMyTasks",
@@ -87,7 +126,34 @@
           "description": "The user's tasks grouped by due date, with project, priority and status.",
           "type": "List",
           "category": "Business / Project tracker",
-          "thumbnail": "thumbnails/ProjectMyTasks.svg"
+          "thumbnail": "thumbnails/ProjectMyTasks.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "ProjectTaskBoard",

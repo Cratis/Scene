@@ -16,6 +16,7 @@ export const inventoryItemPageTemplate: ScreenTemplate = {
     name: 'InventoryItemPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('InventoryItemPage-header', 'pageHeader', { title: fromQuery(queries.record, '0.name'), subtitle: 'Item' }, {

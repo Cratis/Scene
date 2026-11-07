@@ -5,7 +5,7 @@ import { ApplicationNavigation } from './ApplicationNavigation';
 import { ModuleNavigation } from './ModuleNavigation';
 
 /**
- * All the navigation an application declares: its own regions and the regions each module changes.
+ * All the navigation an application declares: the outlets of its shell layout and how each module refines them.
  */
 export interface NavigationModel {
     /** The application-level navigation. */

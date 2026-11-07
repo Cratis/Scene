@@ -1,6 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
+using Cratis.Scene.Engine.Slots;
 using Cratis.Scene.Model.Editing;
 
 namespace Cratis.Scene.Engine.Editing;
@@ -50,10 +52,16 @@ public static class SceneDocumentChangeValidation
             return Refused(SceneDocumentViolationCode.DocumentUnreadable, $"The document cannot be read: {problem}.");
         }
 
-        var before = ParsedSceneDocument.TryParse(previous, out var stored, out _) ? stored : null;
+        var slotShape = SlotShapeValidator.Validate(submitted);
+        if (slotShape.Count > 0)
+        {
+            return new([.. slotShape.Select(diagnostic => new SceneDocumentViolation(SceneDocumentViolationCode.InvalidSlotShape, $"{diagnostic.Message}.", diagnostic.Path))]);
+        }
+
+        var before = ParsedSceneDocument.TryParse(InSlotShape(previous), out var stored, out _) ? stored : null;
         var stores = (references ?? new Dictionary<string, string>())
             .OrderBy(reference => reference.Key, StringComparer.Ordinal)
-            .Select(reference => (reference.Key, Document: ParsedSceneDocument.TryParse(reference.Value, out var parsed, out _) ? parsed : null))
+            .Select(reference => (reference.Key, Document: ParsedSceneDocument.TryParse(InSlotShape(reference.Value), out var parsed, out _) ? parsed : null))
             .Where(reference => reference.Document is not null)
             .Select(reference => (reference.Key, reference.Document!))
             .ToList();
@@ -77,6 +85,30 @@ public static class SceneDocumentChangeValidation
         ExposureChecker.Check(context, chain, grants);
         ContributionChecker.Check(context, chain, grants);
         return new SceneDocumentChangeResult(context.Violations);
+    }
+
+    /// <summary>
+    /// Upgrades a stored document to the slot shape, so a submitted document - which must be in that shape - is compared
+    /// with what was stored as it reads now, not with the shape it was stored in.
+    /// </summary>
+    /// <param name="json">The stored document, or <see langword="null"/>.</param>
+    /// <returns>The document in the slot shape; as it was when it is not JSON or needs no upgrade.</returns>
+    static string? InSlotShape(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return json;
+        }
+
+        try
+        {
+            var upgrade = SlotShapeUpgrader.Upgrade(json);
+            return upgrade.Changed && upgrade.Document is not null ? upgrade.Document.ToJsonString() : json;
+        }
+        catch (JsonException)
+        {
+            return json;
+        }
     }
 
     static void RequireAuthoritativeScreenAncestry(ChangeContext context)

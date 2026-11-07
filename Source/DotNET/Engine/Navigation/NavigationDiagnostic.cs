@@ -4,9 +4,9 @@
 namespace Cratis.Scene.Engine.Navigation;
 
 /// <summary>
-/// One problem with how destinations, outlets and routes fit together.
+/// One problem with how destinations, slots and routes fit together.
 /// </summary>
 /// <param name="Code">What kind of problem this is.</param>
-/// <param name="Message">A sentence naming the destinations, outlets or screens involved.</param>
+/// <param name="Message">A sentence naming the destinations, slots or screens involved.</param>
 /// <param name="Entry">The entry the problem was found on - its id, or <c language="csharp">#&lt;position&gt;</c> - or <see langword="null"/> for model-wide problems.</param>
 public record NavigationDiagnostic(NavigationDiagnosticCode Code, string Message, string? Entry = null);

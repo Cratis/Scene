@@ -15,6 +15,7 @@ export const supportDashboardTemplate: ScreenTemplate = {
     name: 'SupportDashboard',
     fitsSlot: 'content',
     slots: dashboardScreenTemplate.slots,
+    outlets: dashboardScreenTemplate.outlets,
     arrangement: dashboardScreenTemplate.arrangement,
     content: {
         header: [component('support-dashboard-header', 'pageHeader', { title: 'Support dashboard', subtitle: 'How the queue is doing right now' })],

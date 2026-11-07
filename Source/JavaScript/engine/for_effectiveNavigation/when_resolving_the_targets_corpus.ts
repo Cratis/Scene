@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructureIndex, diagnoseNavigationRegions } from '../index';
+import { ApplicationStructureIndex, diagnoseNavigationOutlets } from '../index';
 import { describeExpected, describeView, loadCorpus } from './given/navigation_fixtures';
 
 const corpus = loadCorpus('navigation-targets-fixtures.json');
@@ -21,12 +21,12 @@ for (const fixture of corpus.cases) {
         });
 
         for (const view of fixture.views) {
-            it(`should resolve the ${view.module ?? 'application'} ${view.region} as the C# engine does`, () =>
+            it(`should resolve the ${view.module ?? 'application'} ${view.outlet} as the C# engine does`, () =>
                 describeView(index, fixture.navigation, view).should.equal(describeExpected(view)));
         }
 
         it('should report the same diagnostics as the C# engine', () =>
-            diagnoseNavigationRegions(index, fixture.navigation, { slots: fixture.slots }).should.deep.equal(fixture.expectedDiagnostics));
+            diagnoseNavigationOutlets(index, fixture.navigation, { slots: fixture.slots }).should.deep.equal(fixture.expectedDiagnostics));
         it('should not rewrite the authored navigation', () => {
             fixture.views.forEach(view => describeView(index, fixture.navigation, view));
             JSON.stringify(fixture.navigation).should.equal(original);

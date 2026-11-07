@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
+import { OutletItemKind, OutletKind, OutletSubject, ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
 import { column, grid, row, slotLeaf } from '../../layouts/flowBuilders';
 import { component, foundationTemplateProvenance, fromQuery, thumbnailOf } from './templateParts';
 
@@ -30,6 +30,10 @@ export const recordPageTemplate: ScreenTemplate = {
         activity: [component('record-activity', 'activityFeed', { label: 'History', entries: fromQuery('Activity') })],
         aside: [component('record-checklist', 'checklistSection', { sections: fromQuery('Checklist') })],
     },
+    outlets: [
+        { name: 'toolbar', kind: OutletKind.Actions, subject: OutletSubject.Screen, defaults: [] },
+        { name: 'recordTabs', kind: OutletKind.Tabs, slot: 'main', defaults: [{ kind: OutletItemKind.Tab, id: 'overview', title: 'Overview', shows: 'Overview' }] },
+    ],
     displayName: 'Record page',
     description: 'One record: its key facts, tabbed sections, related records and history.',
     metadata: { ...foundationTemplateProvenance, type: 'Detail', category: 'Foundation / Detail', thumbnail: thumbnailOf('RecordPage') },

@@ -5,7 +5,7 @@ import { SliceInvoker } from './SliceInvoker';
 
 /**
  * The invoker used when a host provides none: it announces the command with the host-neutral `cratis.scene.command` event,
- * as a `core:toolbarItem` action always has, and reports success. A host that listens for the event runs the command.
+ * as an action of an outlet that names a command does, and reports success. A host that listens for the event runs the command.
  */
 export function createAnnouncingInvoker(): SliceInvoker {
     return {

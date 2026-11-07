@@ -3,7 +3,7 @@
   "cases": [
     {
       "name": "keep",
-      "description": "every outlet the new shell has stays where it is",
+      "description": "every slot the new shell has stays where it is",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -152,8 +152,8 @@
       }
     },
     {
-      "name": "outlet nobody uses",
-      "description": "an empty outlet the new shell lacks is left alone",
+      "name": "slot nobody uses",
+      "description": "an empty slot the new shell lacks is left alone",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -212,7 +212,7 @@
     },
     {
       "name": "primary follows",
-      "description": "the primary outlet's content follows to the new shell's primary outlet, after what is already there",
+      "description": "the primary slot's content follows to the new shell's primary slot, after what is already there",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -313,27 +313,27 @@
           {
             "kind": "content",
             "screen": "Orders",
-            "outlet": "content",
+            "slot": "content",
             "action": "primary",
             "target": "main",
             "count": 2,
-            "description": "The 2 elements of 'Orders' in outlet 'content' move into 'main'"
+            "description": "The 2 elements of 'Orders' in slot 'content' move into 'main'"
           },
           {
             "kind": "content",
             "screen": "Customers",
-            "outlet": "content",
+            "slot": "content",
             "action": "primary",
             "target": "main",
             "count": 1,
-            "description": "The 1 element of 'Customers' in outlet 'content' moves into 'main'"
+            "description": "The 1 element of 'Customers' in slot 'content' moves into 'main'"
           }
         ]
       }
     },
     {
-      "name": "move into the primary outlet",
-      "description": "a lost outlet moves into the occupied primary outlet, appended in order; a screen with only the lost outlet gets the primary outlet",
+      "name": "move into the primary slot",
+      "description": "a lost slot moves into the occupied primary slot, appended in order; a screen with only the lost slot gets the primary slot",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -449,27 +449,27 @@
           {
             "kind": "content",
             "screen": "Customers",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "count": 2,
-            "description": "The 2 elements of 'Customers' in outlet 'subject' move into 'content'"
+            "description": "The 2 elements of 'Customers' in slot 'subject' move into 'content'"
           },
           {
             "kind": "content",
             "screen": "Tickets",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "count": 1,
-            "description": "The 1 element of 'Tickets' in outlet 'subject' moves into 'content'"
+            "description": "The 1 element of 'Tickets' in slot 'subject' moves into 'content'"
           }
         ]
       }
     },
     {
-      "name": "map to other outlets",
-      "description": "several lost outlets map into the outlets of the new shell, kept outlets first, then what arrived in outlet order",
+      "name": "map to other slots",
+      "description": "several lost slots map into the slots of the new shell, kept slots first, then what arrived in slot order",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -556,27 +556,27 @@
           {
             "kind": "content",
             "screen": "Mixed",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "mapTo",
             "target": "sidebar",
             "count": 1,
-            "description": "The 1 element of 'Mixed' in outlet 'subject' moves into 'sidebar'"
+            "description": "The 1 element of 'Mixed' in slot 'subject' moves into 'sidebar'"
           },
           {
             "kind": "content",
             "screen": "Mixed",
-            "outlet": "aside",
+            "slot": "aside",
             "action": "moveToPrimary",
             "target": "content",
             "count": 1,
-            "description": "The 1 element of 'Mixed' in outlet 'aside' moves into 'content'"
+            "description": "The 1 element of 'Mixed' in slot 'aside' moves into 'content'"
           }
         ]
       }
     },
     {
-      "name": "two lost outlets into one new outlet",
-      "description": "content from two outlets that land in the same new outlet is appended in the order the outlets are declared on the screen",
+      "name": "two lost slots into one new slot",
+      "description": "content from two slots that land in the same new slot is appended in the order the slots are declared on the screen",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -651,20 +651,20 @@
           {
             "kind": "content",
             "screen": "Both",
-            "outlet": "aside",
+            "slot": "aside",
             "action": "moveToPrimary",
             "target": "content",
             "count": 2,
-            "description": "The 2 elements of 'Both' in outlet 'aside' move into 'content'"
+            "description": "The 2 elements of 'Both' in slot 'aside' move into 'content'"
           },
           {
             "kind": "content",
             "screen": "Both",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "count": 1,
-            "description": "The 1 element of 'Both' in outlet 'subject' moves into 'content'"
+            "description": "The 1 element of 'Both' in slot 'subject' moves into 'content'"
           }
         ]
       }
@@ -759,24 +759,24 @@
           {
             "kind": "content",
             "screen": "Customers",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "drop",
             "count": 2,
-            "description": "The 2 elements of 'Customers' in outlet 'subject' are dropped"
+            "description": "The 2 elements of 'Customers' in slot 'subject' are dropped"
           },
           {
             "kind": "content",
             "screen": "Tickets",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "drop",
             "count": 1,
-            "description": "The 1 element of 'Tickets' in outlet 'subject' is dropped"
+            "description": "The 1 element of 'Tickets' in slot 'subject' is dropped"
           }
         ]
       }
     },
     {
-      "name": "template fits the lost outlet",
+      "name": "template fits the lost slot",
       "description": "the template's own placement moves with it; the screen built from it is untouched",
       "profile": {
         "name": "Desktop",
@@ -881,18 +881,18 @@
           {
             "kind": "placement",
             "template": "Subject Panel",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "count": 1,
-            "description": "'Subject Panel' moves from outlet 'subject' to 'content'"
+            "description": "'Subject Panel' moves from slot 'subject' to 'content'"
           }
         ]
       }
     },
     {
-      "name": "template mapped to another outlet",
-      "description": "a template that fits a lost outlet follows a mapTo",
+      "name": "template mapped to another slot",
+      "description": "a template that fits a lost slot follows a mapTo",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -955,18 +955,18 @@
           {
             "kind": "placement",
             "template": "Subject Panel",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "mapTo",
             "target": "sidebar",
             "count": 1,
-            "description": "'Subject Panel' moves from outlet 'subject' to 'sidebar'"
+            "description": "'Subject Panel' moves from slot 'subject' to 'sidebar'"
           }
         ]
       }
     },
     {
       "name": "template dropped",
-      "description": "dropping the outlet a template fits leaves it placed explicitly, without a fitsSlot",
+      "description": "dropping the slot a template fits leaves it placed explicitly, without a fitsSlot",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1027,10 +1027,10 @@
           {
             "kind": "placement",
             "template": "Subject Panel",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "drop",
             "count": 1,
-            "description": "'Subject Panel' no longer fits outlet 'subject': it is placed explicitly"
+            "description": "'Subject Panel' no longer fits slot 'subject': it is placed explicitly"
           }
         ]
       }
@@ -1099,18 +1099,18 @@
           {
             "kind": "placement",
             "template": "Aside Note",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "count": 1,
-            "description": "'Aside Note' moves from outlet 'subject' to 'content'"
+            "description": "'Aside Note' moves from slot 'subject' to 'content'"
           }
         ]
       }
     },
     {
       "name": "qualified template kept",
-      "description": "a qualified placement is requalified with the new shell's name when the outlet is kept",
+      "description": "a qualified placement is requalified with the new shell's name when the slot is kept",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1168,11 +1168,11 @@
           {
             "kind": "placement",
             "template": "Aside Note",
-            "outlet": "subject",
+            "slot": "subject",
             "action": "keep",
             "target": "subject",
             "count": 1,
-            "description": "'Aside Note' stays in outlet 'subject' of shell 'DeskShell'"
+            "description": "'Aside Note' stays in slot 'subject' of shell 'DeskShell'"
           }
         ]
       }
@@ -1250,18 +1250,18 @@
           {
             "kind": "placement",
             "template": "CRM Workspace",
-            "outlet": "content",
+            "slot": "content",
             "action": "primary",
             "target": "main",
             "count": 1,
-            "description": "'CRM Workspace' moves from outlet 'content' to 'main'"
+            "description": "'CRM Workspace' moves from slot 'content' to 'main'"
           }
         ]
       }
     },
     {
       "name": "blocked plan is not applied",
-      "description": "a plan with an undecided outlet changes nothing",
+      "description": "a plan with an undecided slot changes nothing",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",

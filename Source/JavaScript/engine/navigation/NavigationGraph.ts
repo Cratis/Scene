@@ -15,19 +15,19 @@ export interface NavigationGraph {
     /** The screens destinations may open. */
     screens?: Screen[];
 
-    /** The layouts that may own outlets. */
+    /** The layouts that may own slots. */
     layouts?: Layout[];
 
-    /** The screen templates that may own outlets, and that give screens their semantic type. */
+    /** The screen templates that may own slots, and that give screens their semantic type. */
     screenTemplates?: ScreenTemplate[];
 
     /** The dialog templates dialog destinations may open. */
     dialogTemplates?: DialogTemplate[];
 
-    /** The modules, features and slices of the application; with `navigation`, the navigation regions are checked against them. */
+    /** The modules, features and slices of the application; with `navigation`, the navigation outlets are checked against them. */
     structure?: ApplicationStructure;
 
-    /** The application and module navigation regions to check against `structure`. */
+    /** The application's navigation outlets and how each module refines them, to check against `structure`. */
     navigation?: NavigationModel;
 
     /** The rendering slots navigation items may render into; `content` only when absent. */

@@ -11,7 +11,7 @@ const source = {
     },
     layouts: [{ name: 'Shell', slots: [{ name: 'sidebar' }, { name: 'content' }] }],
     screenTemplates: [
-        { name: 'Frame', slots: [{ name: 'rail' }, { name: 'main' }], metadata: { role: TemplateRole.Root, primaryOutlet: 'main' } },
+        { name: 'Frame', slots: [{ name: 'rail' }, { name: 'main', primary: true }], metadata: { role: TemplateRole.Root } },
         { name: 'Page', fitsSlot: 'content', slots: [{ name: 'body' }] },
     ],
     files: [],
@@ -23,10 +23,10 @@ describe('when describing the shells of a blueprint', () => {
 
     beforeEach(() => (entry = describeBlueprintCatalog([source])[0]));
 
-    it('should list the outlets of a layout', () => template('Shell').outlets!.should.deep.equal(['sidebar', 'content']));
-    it('should list the outlets of a root screen template', () => template('Frame').outlets!.should.deep.equal(['rail', 'main']));
-    it('should carry the primary outlet of a root screen template', () => template('Frame').primaryOutlet!.should.equal('main'));
+    it('should list the slots of a layout', () => template('Shell').slots!.should.deep.equal(['sidebar', 'content']));
+    it('should list the slots of a root screen template', () => template('Frame').slots!.should.deep.equal(['rail', 'main']));
+    it('should carry the primary slot of a root screen template', () => template('Frame').primarySlot!.should.equal('main'));
     it('should carry the root role', () => template('Frame').role!.should.equal('Root'));
-    it('should not list outlets for an ordinary screen template', () => (template('Page').outlets === undefined).should.be.true);
+    it('should not list slots for an ordinary screen template', () => (template('Page').slots === undefined).should.be.true);
     it('should not carry a role for a layout', () => (template('Shell').role === undefined).should.be.true);
 });

@@ -56,12 +56,12 @@
               "name": "rail"
             },
             {
-              "name": "main"
+              "name": "main",
+              "primary": true
             }
           ],
           "metadata": {
-            "role": "Root",
-            "primaryOutlet": "main"
+            "role": "Root"
           }
         }
       ]
@@ -165,12 +165,12 @@
                 "name": "rail"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
-              "role": "Root",
-              "primaryOutlet": "main"
+              "role": "Root"
             }
           },
           {

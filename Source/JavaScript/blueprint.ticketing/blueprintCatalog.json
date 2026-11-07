@@ -90,7 +90,19 @@
           "description": "Open and overdue tickets, average first response, tickets by priority and by assignee, and the overdue tickets.",
           "type": "Dashboard",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/SupportDashboard.svg"
+          "thumbnail": "thumbnails/SupportDashboard.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "TicketQueue",
@@ -99,7 +111,34 @@
           "description": "Every ticket with its priority and status as chips, filtered by status, priority, assignee and age, with the saved views Unassigned, Mine and Overdue.",
           "type": "List",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/TicketQueue.svg"
+          "thumbnail": "thumbnails/TicketQueue.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "TicketBoard",
@@ -117,7 +156,19 @@
           "description": "One ticket: the conversation, its properties in the aside, and the quick actions assign, change status, escalate and merge.",
           "type": "Detail",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/TicketPage.svg"
+          "thumbnail": "thumbnails/TicketPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "TicketCreateForm",
@@ -144,7 +195,34 @@
           "description": "The tickets assigned to the signed-in agent, with their priority and status as chips and how long each has waited.",
           "type": "List",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/MyTickets.svg"
+          "thumbnail": "thumbnails/MyTickets.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CustomerList",
@@ -153,7 +231,34 @@
           "description": "The people and organisations that write in, with their plan, how many tickets they have open and when they last wrote.",
           "type": "List",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/CustomerList.svg"
+          "thumbnail": "thumbnails/CustomerList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "KnowledgeBase",
@@ -162,7 +267,19 @@
           "description": "Categories and articles as a tree with search on the left, the chosen article on the right; a navigation stack on a phone.",
           "type": "Workspace",
           "category": "Business / Ticketing",
-          "thumbnail": "thumbnails/KnowledgeBase.svg"
+          "thumbnail": "thumbnails/KnowledgeBase.svg",
+          "outlets": [
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "detailTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "TicketQuickCreate",

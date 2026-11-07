@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ReactNode } from 'react';
-import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement } from '@cratis/scene.model';
+import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode, SceneElement } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
+import { CoreSlot, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../configuration';
 import { Sidebar, Topbar } from '../shell';
 
@@ -23,24 +23,24 @@ const structure = {
 } as unknown as ApplicationStructure;
 
 const navigation: NavigationModel = {
-    application: { regions: [
-        { region: NavigationRegionKind.Topbar, items: [
-            { id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
-            { id: 'sales', title: 'Sales', target: { module: 'sales' } },
-            { id: 'support', title: 'Support', target: { module: 'support' } },
+    application: { outlets: [
+        { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [
+            { kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
+            { kind: OutletItemKind.Navigation, id: 'sales', title: 'Sales', target: { module: 'sales' } },
+            { kind: OutletItemKind.Navigation, id: 'support', title: 'Support', target: { module: 'support' } },
         ] },
-        { region: NavigationRegionKind.Sidebar, items: [{ id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
+        { name: NavigationRegionKind.Sidebar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
     ] },
     modules: [
-        { module: 'sales', regions: [{ region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-            { id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' }, children: [{ id: 'returns', title: 'Returns', target: { module: 'sales', feature: 'orders.returns' } }] },
-            { id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
+        { module: 'sales', refinements: [{ outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+            { kind: OutletItemKind.Navigation, id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' }, children: [{ kind: OutletItemKind.Navigation, id: 'returns', title: 'Returns', target: { module: 'sales', feature: 'orders.returns' } }] },
+            { kind: OutletItemKind.Navigation, id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
         ] }] },
-        { module: 'support', regions: [
-            { region: NavigationRegionKind.Topbar, mode: NavigationRegionMode.Extend, items: [{ id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' }, slot: 'side' }] },
-            { region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-                { id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
-                { id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' }, slot: 'side' },
+        { module: 'support', refinements: [
+            { outlet: NavigationRegionKind.Topbar, mode: OutletMode.Extends, items: [{ kind: OutletItemKind.Navigation, id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' }, slot: 'side' }] },
+            { outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+                { kind: OutletItemKind.Navigation, id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
+                { kind: OutletItemKind.Navigation, id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' }, slot: 'side' },
             ] },
         ] },
     ],
@@ -53,14 +53,14 @@ function Page({ element: page, slots }: RegisteredComponentProps) {
     return <section data-screen={page.id}>{page.id}{slots.content}</section>;
 }
 
-const registry = { 'test:page': Page, 'core:outlet': CoreOutlet };
+const registry = { 'test:page': Page, 'core:slot': CoreSlot };
 
 function screens(): Record<string, SceneElement> {
     const result: Record<string, SceneElement> = {};
     for (const module of structure.modules) {
         for (const feature of module.features) {
             const id = `${module.id}.${feature.id}`;
-            result[id] = element(id, 'test:page', {}, id === 'support.tickets' ? [element('side', 'core:outlet', { name: 'side' })] : []);
+            result[id] = element(id, 'test:page', {}, id === 'support.tickets' ? [element('side', 'core:slot', { name: 'side' })] : []);
             for (const child of feature.features ?? []) result[`${id}.${child.id}`] = element(`${id}.${child.id}`, 'test:page');
         }
     }

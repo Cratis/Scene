@@ -33,6 +33,7 @@ function recordTemplateOf(options: RecordOptions): ScreenTemplate {
         name: options.name,
         fitsSlot: 'content',
         slots: recordPageTemplate.slots,
+        outlets: recordPageTemplate.outlets,
         arrangement: recordPageTemplate.arrangement,
         content: {
             header: [component(`${id}-header`, 'pageHeader', { title: fromQuery(queries.record, '0.name'), subtitle: options.subtitle }, {

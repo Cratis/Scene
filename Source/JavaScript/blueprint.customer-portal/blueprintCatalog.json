@@ -68,7 +68,19 @@
           "description": "Open orders, what is owed, open support requests, spend by month, your latest orders and what happened lately.",
           "type": "Dashboard",
           "category": "Business / Customer portal",
-          "thumbnail": "thumbnails/PortalHome.svg"
+          "thumbnail": "thumbnails/PortalHome.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "PortalOrdersList",
@@ -77,7 +89,34 @@
           "description": "The customer's own orders with placed and delivery dates, total and status, filtered by status and date.",
           "type": "List",
           "category": "Business / Customer portal",
-          "thumbnail": "thumbnails/PortalOrdersList.svg"
+          "thumbnail": "thumbnails/PortalOrdersList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "PortalOrderPage",
@@ -86,7 +125,19 @@
           "description": "One of your orders: status, total, items and days to delivery, its details, lines and tracking, and what happened to it.",
           "type": "Detail",
           "category": "Business / Customer portal",
-          "thumbnail": "thumbnails/PortalOrderPage.svg"
+          "thumbnail": "thumbnails/PortalOrderPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "PortalInvoicesList",
@@ -95,7 +146,34 @@
           "description": "The customer's invoices with issue and due dates, amount and whether each is paid, filtered by status and date.",
           "type": "List",
           "category": "Business / Customer portal",
-          "thumbnail": "thumbnails/PortalInvoicesList.svg"
+          "thumbnail": "thumbnails/PortalInvoicesList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "PortalSupport",

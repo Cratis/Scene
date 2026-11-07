@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { approvalsScreenDefinitions } from './approvalsScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,18 +36,18 @@ export const approvalsStructure: ApplicationStructure = (() => {
 export const approvalsNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Approvals' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'approvals', title: 'Approvals', target: { module: approvalsModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'approvals', title: 'Approvals', target: { module: approvalsModule } }] }],
     },
     modules: [{
         module: approvalsModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'inbox', title: 'Inbox', target: { module: approvalsModule, feature: 'inbox' } },
-                { id: 'requests', title: 'My requests', target: { module: approvalsModule, feature: 'requests' } },
-                { id: 'all', title: 'All requests', target: { module: approvalsModule, feature: 'all' } },
-                { id: 'templates', title: 'Templates', target: { module: approvalsModule, feature: 'templates' } },
+                { kind: OutletItemKind.Navigation, id: 'inbox', title: 'Inbox', target: { module: approvalsModule, feature: 'inbox' } },
+                { kind: OutletItemKind.Navigation, id: 'requests', title: 'My requests', target: { module: approvalsModule, feature: 'requests' } },
+                { kind: OutletItemKind.Navigation, id: 'all', title: 'All requests', target: { module: approvalsModule, feature: 'all' } },
+                { kind: OutletItemKind.Navigation, id: 'templates', title: 'Templates', target: { module: approvalsModule, feature: 'templates' } },
             ],
         }],
     }],

@@ -70,7 +70,34 @@
           "description": "Every booking with its resource, who booked it, date and time and status, filtered by resource, status, person and date.",
           "type": "List",
           "category": "Business / Bookings",
-          "thumbnail": "thumbnails/BookingsList.svg"
+          "thumbnail": "thumbnails/BookingsList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "BookingPage",
@@ -79,7 +106,19 @@
           "description": "One booking: status, date, hours and people, its details, attendees and extras, and its activity.",
           "type": "Detail",
           "category": "Business / Bookings",
-          "thumbnail": "thumbnails/BookingPage.svg"
+          "thumbnail": "thumbnails/BookingPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "ResourcesList",
@@ -88,7 +127,34 @@
           "description": "The rooms, equipment and vehicles that can be booked, with their capacity, location and whether each is free.",
           "type": "List",
           "category": "Business / Bookings",
-          "thumbnail": "thumbnails/ResourcesList.svg"
+          "thumbnail": "thumbnails/ResourcesList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "NewBookingWizard",

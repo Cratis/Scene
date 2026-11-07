@@ -1,0 +1,809 @@
+{
+  "description": "Placement, Opens and enablement of actions: where an action's slice opens and why (resolvePlacement / PlacementResolver.Resolve), whether it can be used and why (resolveEnablement / EnablementResolver.Resolve), and inspecting the actions of an outlet or an action component (inspectOutletActions, inspectActionElement / ActionInspector). The page of most cases is Products: content (a page the list fills), detail (a pane routed by sku) and activity (a free panel). Asserted by the TypeScript and C# engines.",
+  "placement": [
+    {
+      "name": "automatic takes the slice's first fit, a drawer, which every page has",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "screen": "SetProductPrice", "fits": ["drawer", "pane", "dialog"],
+        "inputs": [{ "name": "sku", "source": "component" }, { "name": "price" }],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] },
+          { "name": "activity", "role": "panel" }
+        ],
+        "routeValues": { "sku": "NK-101" }
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "drawer", "fit": "drawer", "routed": false,
+        "reason": "Drawer: the slice's first fit, and the page has room",
+        "runDirectly": { "available": false, "missing": ["price"], "reason": "price has no source, so it needs the form" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+          { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "sku", "value": "NK-101" }], "segment": "set-product-price" } },
+          { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+        ]
+      }
+    },
+    {
+      "name": "run directly is refused when an input has no source",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "opens": "none", "screen": "SetProductPrice", "fits": ["drawer", "pane", "dialog"],
+        "inputs": [{ "name": "sku", "source": "component" }, { "name": "price" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "none", "routed": false, "problem": "inputsWithoutSource",
+        "reason": "price has no source, so it needs the form",
+        "runDirectly": { "available": false, "missing": ["price"], "reason": "price has no source, so it needs the form" },
+        "slots": []
+      }
+    },
+    {
+      "name": "run directly names every input without a source",
+      "request": {
+        "slice": "Catalog.Products.DraftProduct", "opens": "none", "screen": "DraftProduct", "fits": ["dialog"],
+        "inputs": [{ "name": "sku" }, { "name": "name" }, { "name": "category", "source": "constant" }, { "name": "price" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "none", "routed": false, "problem": "inputsWithoutSource",
+        "reason": "sku, name and price have no source, so they need the form",
+        "runDirectly": { "available": false, "missing": ["sku", "name", "price"], "reason": "sku, name and price have no source, so they need the form" },
+        "slots": []
+      }
+    },
+    {
+      "name": "run directly with two inputs without a source",
+      "request": {
+        "slice": "Catalog.Products.RenameProduct", "opens": "none", "screen": "RenameProduct", "fits": ["dialog"],
+        "inputs": [{ "name": "sku", "source": "route" }, { "name": "name" }, { "name": "price" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "none", "routed": false, "problem": "inputsWithoutSource",
+        "reason": "name and price have no source, so they need the form",
+        "runDirectly": { "available": false, "missing": ["name", "price"], "reason": "name and price have no source, so they need the form" },
+        "slots": []
+      }
+    },
+    {
+      "name": "run directly when every input has a source, even with a screen",
+      "request": {
+        "slice": "Catalog.Products.PublishProduct", "opens": "none", "screen": "PublishProduct", "fits": ["dialog"],
+        "inputs": [{ "name": "sku", "source": "dataContext" }, { "name": "channel", "source": "constant" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "none", "resolved": "none", "routed": false,
+        "reason": "Runs directly: every input has a source",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": []
+      }
+    },
+    {
+      "name": "a routed slot named on the trigger produces a URL",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "opens": "slot", "opensIn": "detail", "screen": "SetProductPrice", "fits": ["drawer", "pane", "dialog"],
+        "inputs": [{ "name": "sku", "source": "component" }, { "name": "price" }],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] },
+          { "name": "activity", "role": "panel" }
+        ],
+        "routeValues": { "sku": "NK-101" }
+      },
+      "expected": {
+        "requested": "slot", "resolved": "slot", "fit": "pane", "slot": "detail", "routed": true,
+        "route": { "slot": "detail", "parameters": [{ "name": "sku", "value": "NK-101" }], "segment": "set-product-price" },
+        "reason": "In 'detail': chosen on the trigger; it is routed, so opening it changes the URL",
+        "runDirectly": { "available": false, "missing": ["price"], "reason": "price has no source, so it needs the form" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+          { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "sku", "value": "NK-101" }], "segment": "set-product-price" } },
+          { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+        ]
+      }
+    },
+    {
+      "name": "a slot whose role the slice does not fit is refused",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "opens": "slot", "opensIn": "activity", "screen": "SetProductPrice", "fits": ["drawer", "pane", "dialog"],
+        "inputs": [],
+        "slots": [{ "name": "activity", "role": "panel" }]
+      },
+      "expected": {
+        "requested": "slot", "routed": false, "problem": "roleNotFitted",
+        "reason": "The slice doesn't list panel in what it fits, so it cannot open in 'activity'",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+        ]
+      }
+    },
+    {
+      "name": "a slot the trigger does not name is refused",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "opens": "slot", "screen": "SetProductPrice", "fits": ["pane"],
+        "inputs": [],
+        "slots": []
+      },
+      "expected": {
+        "requested": "slot", "routed": false, "problem": "slotNotNamed",
+        "reason": "It opens in a slot, but names none",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": []
+      }
+    },
+    {
+      "name": "a slot the page does not declare is refused",
+      "request": {
+        "slice": "Catalog.Products.SetProductPrice", "opens": "slot", "opensIn": "sidebar", "screen": "SetProductPrice", "fits": ["pane"],
+        "inputs": [],
+        "slots": [{ "name": "detail", "role": "pane" }]
+      },
+      "expected": {
+        "requested": "slot", "routed": false, "problem": "slotNotDeclared",
+        "reason": "The page has no slot named 'sidebar'",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "detail", "role": "pane", "routed": false, "offered": true, "reason": "pane: free" }
+        ]
+      }
+    },
+    {
+      "name": "a slot the page's content fills is refused",
+      "request": {
+        "slice": "Catalog.Products.EditProduct", "opens": "slot", "opensIn": "content", "screen": "EditProduct", "fits": ["page"],
+        "inputs": [],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] }
+        ]
+      },
+      "expected": {
+        "requested": "slot", "routed": false, "problem": "slotFilled",
+        "reason": "'content' is already filled by the page's content",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: it is already filled" },
+          { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice doesn't list pane in what it fits" }
+        ]
+      }
+    },
+    {
+      "name": "a slice with no screen runs directly",
+      "request": {
+        "slice": "Catalog.Products.WithdrawProduct",
+        "inputs": [{ "name": "sku", "source": "component" }],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] }
+        ]
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "none", "routed": false,
+        "reason": "Runs directly: the slice has no screen",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+          { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" }
+        ]
+      }
+    },
+    {
+      "name": "a slice with no screen and an input without a source cannot be placed",
+      "request": {
+        "slice": "Catalog.Products.WithdrawProduct",
+        "inputs": [{ "name": "sku", "source": "component" }, { "name": "reason" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "automatic", "routed": false, "problem": "inputsWithoutSource",
+        "reason": "The slice has no screen, so it can only run directly, but reason has no source",
+        "runDirectly": { "available": false, "missing": ["reason"], "reason": "reason has no source, so it needs the form" },
+        "slots": []
+      }
+    },
+    {
+      "name": "a slice with no screen cannot open in a dialog",
+      "request": {
+        "slice": "Catalog.Products.WithdrawProduct", "opens": "dialog",
+        "inputs": [{ "name": "sku", "source": "component" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "dialog", "routed": false, "problem": "noScreen",
+        "reason": "The slice has no screen, so it can only run directly",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": []
+      }
+    },
+    {
+      "name": "a slice with no screen cannot open in a slot",
+      "request": {
+        "slice": "Catalog.Products.WithdrawProduct", "opens": "slot", "opensIn": "detail",
+        "inputs": [],
+        "slots": [{ "name": "detail", "role": "pane" }]
+      },
+      "expected": {
+        "requested": "slot", "routed": false, "problem": "noScreen",
+        "reason": "The slice has no screen, so it can only run directly",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "detail", "role": "pane", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+        ]
+      }
+    },
+    {
+      "name": "a drawer the slice does not fit is refused",
+      "request": {
+        "slice": "Catalog.Products.DraftProduct", "opens": "drawer", "screen": "DraftProduct", "fits": ["dialog"],
+        "inputs": [],
+        "slots": []
+      },
+      "expected": {
+        "requested": "drawer", "routed": false, "problem": "notFitted",
+        "reason": "The slice doesn't list drawer in what it fits",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": []
+      }
+    },
+    {
+      "name": "a dialog chosen on the trigger",
+      "request": {
+        "slice": "Catalog.Products.DraftProduct", "opens": "dialog", "screen": "DraftProduct", "fits": ["dialog"],
+        "inputs": [{ "name": "sku" }],
+        "slots": []
+      },
+      "expected": {
+        "requested": "dialog", "resolved": "dialog", "fit": "dialog", "routed": false,
+        "reason": "Dialog: chosen on the trigger",
+        "runDirectly": { "available": false, "missing": ["sku"], "reason": "sku has no source, so it needs the form" },
+        "slots": []
+      }
+    },
+    {
+      "name": "automatic skips a fit the page has no room for",
+      "request": {
+        "slice": "Catalog.Products.ShowProduct", "screen": "ShowProduct", "fits": ["panel", "pane", "dialog"],
+        "inputs": [{ "name": "sku", "source": "component" }],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] }
+        ]
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "slot", "fit": "pane", "slot": "detail", "routed": true,
+        "route": { "slot": "detail", "parameters": [{ "name": "sku" }], "segment": "show-product" },
+        "reason": "Pane: the slice's second fit, since the page has no free panel; it opens in 'detail'; it is routed, so opening it changes the URL",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+          { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "sku" }], "segment": "show-product" } }
+        ]
+      }
+    },
+    {
+      "name": "automatic falls back to a dialog after the slots it fits are full",
+      "request": {
+        "slice": "Catalog.Products.ShowProduct", "screen": "ShowProduct", "fits": ["panel", "page", "dialog"],
+        "inputs": [],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "activity", "role": "panel", "filled": true }
+        ]
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "dialog", "fit": "dialog", "routed": false,
+        "reason": "Dialog: the slice's third fit, since the page has no free panel or page",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: it is already filled" },
+          { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: it is already filled" }
+        ]
+      }
+    },
+    {
+      "name": "automatic finds nothing when every slot the slice fits is full",
+      "request": {
+        "slice": "Catalog.Products.ShowProduct", "screen": "ShowProduct", "fits": ["panel", "page"],
+        "inputs": [],
+        "slots": [{ "name": "content", "role": "page", "filled": true }]
+      },
+      "expected": {
+        "requested": "automatic", "routed": false, "problem": "nothingFits",
+        "reason": "Nothing: the page has no free panel or page for the slice",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: it is already filled" }
+        ]
+      }
+    },
+    {
+      "name": "automatic takes a free panel that is not routed",
+      "request": {
+        "slice": "Catalog.Products.ProductActivity", "screen": "ProductActivity", "fits": ["panel"],
+        "inputs": [],
+        "slots": [
+          { "name": "content", "role": "page", "filled": true },
+          { "name": "activity", "role": "panel" }
+        ]
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "slot", "fit": "panel", "slot": "activity", "routed": false,
+        "reason": "Panel: the slice's first fit, and the page has room in 'activity'",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+          { "name": "activity", "role": "panel", "routed": false, "offered": true, "reason": "panel: free" }
+        ]
+      }
+    },
+    {
+      "name": "a screen that lists no fits opens in a dialog",
+      "request": {
+        "slice": "Catalog.Products.DraftProduct", "screen": "DraftProduct",
+        "inputs": [],
+        "slots": [{ "name": "detail", "role": "pane" }]
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "dialog", "fit": "dialog", "routed": false,
+        "reason": "Dialog: the screen lists no fits, so it opens in a dialog",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "detail", "role": "pane", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list pane in what it fits" }
+        ]
+      }
+    },
+    {
+      "name": "values in another letter case and an acronym in the slice name",
+      "request": {
+        "slice": "Sales.Returns.ApproveRMARequest", "opens": "Automatic", "screen": "ApproveRMARequest", "fits": ["PANE", "Dialog"],
+        "inputs": [],
+        "slots": [{ "name": "detail", "role": "Pane", "routed": true, "routedBy": ["order", "line"] }],
+        "routeValues": { "order": "SO-7" }
+      },
+      "expected": {
+        "requested": "automatic", "resolved": "slot", "fit": "pane", "slot": "detail", "routed": true,
+        "route": { "slot": "detail", "parameters": [{ "name": "order", "value": "SO-7" }, { "name": "line" }], "segment": "approve-rma-request" },
+        "reason": "Pane: the slice's first fit, and the page has room in 'detail'; it is routed, so opening it changes the URL",
+        "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+        "slots": [
+          { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "order", "value": "SO-7" }, { "name": "line" }], "segment": "approve-rma-request" } }
+        ]
+      }
+    }
+  ],
+  "enablement": [
+    {
+      "name": "an action with nothing to check",
+      "request": {},
+      "expected": { "state": "enabled", "reason": "Enabled", "steps": [] }
+    },
+    {
+      "name": "an action for the screen",
+      "request": { "subject": "screen" },
+      "expected": { "state": "enabled", "reason": "Enabled", "steps": [] }
+    },
+    {
+      "name": "an action for an item waits for a selection",
+      "request": { "subject": "item", "selected": false },
+      "expected": {
+        "state": "disabled", "reason": "It is for item, so it waits for a selection",
+        "steps": [{ "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" }]
+      }
+    },
+    {
+      "name": "an action for an item with one selected",
+      "request": { "subject": "Item", "selected": true },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [{ "check": "subject", "outcome": "passed", "reason": "An item is selected" }]
+      }
+    },
+    {
+      "name": "a persona without the command's policy does not see the action",
+      "request": { "authorize": "ManageCatalog", "persona": { "name": "Viewer", "policies": ["ReadCatalog"] } },
+      "expected": {
+        "state": "hidden", "reason": "Viewer does not have 'ManageCatalog', which the command authorizes with",
+        "steps": [{ "check": "authorization", "outcome": "blocked", "reason": "Viewer does not have 'ManageCatalog', which the command authorizes with" }]
+      }
+    },
+    {
+      "name": "a persona with the command's policy",
+      "request": { "authorize": "ManageCatalog", "persona": { "name": "Catalog manager", "policies": ["ManageCatalog"] } },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [{ "check": "authorization", "outcome": "passed", "reason": "Catalog manager has 'ManageCatalog'" }]
+      }
+    },
+    {
+      "name": "authorization with no persona to check it against",
+      "request": { "authorize": "ManageCatalog" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [{ "check": "authorization", "outcome": "unchecked", "reason": "The command authorizes with 'ManageCatalog', and no persona is given to check it against" }]
+      }
+    },
+    {
+      "name": "a condition the host says does not hold",
+      "request": { "enabledWhen": "item.status == \"onSale\"", "conditionHolds": false },
+      "expected": {
+        "state": "disabled", "reason": "Enabled when item.status == \"onSale\", which does not hold",
+        "steps": [{ "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }]
+      }
+    },
+    {
+      "name": "a structured condition evaluated against the selected item",
+      "request": {
+        "subject": "item", "selected": true, "item": { "status": "onSale" },
+        "enabledWhen": "item.status == \"onSale\"",
+        "condition": { "kind": "comparison", "left": { "subject": "item.status" }, "operator": "Equal", "right": "onSale" }
+      },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "passed", "reason": "item.status == \"onSale\" holds" }
+        ]
+      }
+    },
+    {
+      "name": "a structured condition that does not hold for the selected item",
+      "request": {
+        "subject": "item", "selected": true, "item": { "status": "draft" },
+        "enabledWhen": "item.status == \"onSale\"",
+        "condition": { "kind": "comparison", "left": { "subject": "item.status" }, "operator": "Equal", "right": "onSale" }
+      },
+      "expected": {
+        "state": "disabled", "reason": "Enabled when item.status == \"onSale\", which does not hold",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }
+        ]
+      }
+    },
+    {
+      "name": "a condition with nothing to evaluate it against",
+      "request": { "enabledWhen": "item.status == \"onSale\"" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [{ "check": "condition", "outcome": "unchecked", "reason": "Enabled when item.status == \"onSale\", which cannot be checked here" }]
+      }
+    },
+    {
+      "name": "enabled when as written is evaluated against the selected item",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale", "stock": 4 }, "enabledWhen": "item.status == \"onSale\" and item.stock > 0" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "passed", "reason": "item.status == \"onSale\" and item.stock > 0 holds" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when that does not hold names the part that fails",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale", "stock": 0 }, "enabledWhen": "item.status == \"onSale\" && (item.stock > 0 || item.backorder == true)" },
+      "expected": {
+        "state": "disabled", "reason": "Enabled when item.stock > 0 or item.backorder == true, which does not hold",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.stock > 0 or item.backorder == true, which does not hold" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when on a comparison of words and an operator",
+      "request": { "subject": "item", "selected": true, "item": { "name": "Nordic Kettle" }, "enabledWhen": "item.name startsWith 'Nordic'" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "passed", "reason": "item.name startsWith 'Nordic' holds" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when that Scene cannot read is reported, never guessed",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale" }, "enabledWhen": "canPublish(item)" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "unchecked", "reason": "Enabled when canPublish(item), which Scene cannot read" }
+        ]
+      }
+    },
+    {
+      "name": "the subject decides before the condition",
+      "request": { "subject": "item", "selected": false, "enabledWhen": "item.status == \"onSale\"", "conditionHolds": false },
+      "expected": {
+        "state": "disabled", "reason": "It is for item, so it waits for a selection",
+        "steps": [
+          { "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" },
+          { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }
+        ]
+      }
+    },
+    {
+      "name": "a persona without the policy does not see the action, even while it waits for a selection",
+      "request": { "subject": "item", "selected": false, "authorize": "ManageCatalog", "persona": { "name": "Viewer", "policies": [] } },
+      "expected": {
+        "state": "hidden", "reason": "Viewer does not have 'ManageCatalog', which the command authorizes with",
+        "steps": [
+          { "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" },
+          { "check": "authorization", "outcome": "blocked", "reason": "Viewer does not have 'ManageCatalog', which the command authorizes with" }
+        ]
+      }
+    }
+  ],
+  "inspection": {
+    "context": {
+      "slices": [
+        { "id": "Catalog.Products.DraftProduct", "command": "DraftProduct", "screen": "DraftProduct", "fits": ["dialog"], "inputs": [{ "name": "sku" }, { "name": "name" }, { "name": "price" }], "authorize": "ManageCatalog" },
+        { "id": "Catalog.Products.SetProductPrice", "command": "SetProductPrice", "screen": "SetProductPrice", "fits": ["drawer", "pane", "dialog"], "inputs": [{ "name": "sku", "source": "component" }, { "name": "price" }], "authorize": "ManageCatalog" },
+        { "id": "Catalog.Products.WithdrawProduct", "command": "WithdrawProduct", "inputs": [{ "name": "sku", "source": "component" }] }
+      ],
+      "slots": [
+        { "name": "content", "role": "page", "filled": true },
+        { "name": "detail", "role": "pane", "filled": true, "routed": true, "routedBy": ["sku"] },
+        { "name": "activity", "role": "panel" }
+      ],
+      "routeValues": { "sku": "NK-101" },
+      "selected": false,
+      "persona": { "name": "Catalog manager", "policies": ["ManageCatalog"] },
+      "conditions": { "withdraw": false }
+    },
+    "outlets": [
+      {
+        "name": "the toolbar of Products: Catalog's default, Products' own, a built-in and a group",
+        "outlet": {
+          "name": "toolbar", "kind": "actions", "declaredBy": "Catalog", "mode": "extends",
+          "items": [
+            {
+              "item": { "kind": "button", "id": "add-product", "title": "Add product", "slice": "Catalog.Products.DraftProduct", "opens": "dialog" },
+              "provenance": { "owner": "Catalog", "level": "feature", "source": "default" }, "editable": false
+            },
+            {
+              "item": { "kind": "button", "id": "set-price", "title": "Set price", "slice": "Catalog.Products.SetProductPrice", "subject": "item" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "own" }, "editable": true
+            },
+            {
+              "item": { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
+              "provenance": { "owner": "Catalog", "level": "feature", "source": "default" }, "editable": false
+            },
+            {
+              "item": { "kind": "group", "id": "more", "title": "More", "items": [
+                { "kind": "menuEntry", "id": "withdraw", "title": "Withdraw", "command": "WithdrawProduct", "subject": "item", "enabledWhen": "item.status == \"onSale\"" },
+                { "kind": "separator", "id": "line" }
+              ] },
+              "provenance": { "owner": "Pricing", "level": "feature", "source": "contribution" }, "editable": false
+            }
+          ],
+          "removed": [], "sources": ["Catalog", "Products", "Pricing"], "summary": "Catalog + Products + Pricing", "diagnostics": []
+        },
+        "expected": [
+          {
+            "id": "add-product", "title": "Add product", "slice": "Catalog.Products.DraftProduct",
+            "provenance": { "owner": "Catalog", "level": "feature", "source": "default" }, "editable": false,
+            "placement": {
+              "requested": "dialog", "resolved": "dialog", "fit": "dialog", "routed": false,
+              "reason": "Dialog: chosen on the trigger",
+              "runDirectly": { "available": false, "missing": ["sku", "name", "price"], "reason": "sku, name and price have no source, so they need the form" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice doesn't list pane in what it fits" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+              ]
+            },
+            "enablement": {
+              "state": "enabled", "reason": "Enabled",
+              "steps": [{ "check": "authorization", "outcome": "passed", "reason": "Catalog manager has 'ManageCatalog'" }]
+            }
+          },
+          {
+            "id": "set-price", "title": "Set price", "slice": "Catalog.Products.SetProductPrice",
+            "provenance": { "owner": "Products", "level": "screen", "source": "own" }, "editable": true,
+            "placement": {
+              "requested": "automatic", "resolved": "drawer", "fit": "drawer", "routed": false,
+              "reason": "Drawer: the slice's first fit, and the page has room",
+              "runDirectly": { "available": false, "missing": ["price"], "reason": "price has no source, so it needs the form" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "sku", "value": "NK-101" }], "segment": "set-product-price" } },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+              ]
+            },
+            "enablement": {
+              "state": "disabled", "reason": "It is for item, so it waits for a selection",
+              "steps": [
+                { "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" },
+                { "check": "authorization", "outcome": "passed", "reason": "Catalog manager has 'ManageCatalog'" }
+              ]
+            }
+          },
+          {
+            "id": "refresh", "title": "Refresh",
+            "provenance": { "owner": "Catalog", "level": "feature", "source": "default" }, "editable": false,
+            "enablement": { "state": "enabled", "reason": "Enabled", "steps": [] }
+          },
+          {
+            "id": "withdraw", "title": "Withdraw", "group": "more", "slice": "Catalog.Products.WithdrawProduct",
+            "provenance": { "owner": "Pricing", "level": "feature", "source": "contribution" }, "editable": false,
+            "placement": {
+              "requested": "automatic", "resolved": "none", "routed": false,
+              "reason": "Runs directly: the slice has no screen",
+              "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+              ]
+            },
+            "enablement": {
+              "state": "disabled", "reason": "It is for item, so it waits for a selection",
+              "steps": [
+                { "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" },
+                { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "an outlet whose subject is an item, and an action for a slice the context does not know",
+        "outlet": {
+          "name": "rowActions", "kind": "actions", "subject": "item", "declaredBy": "Products",
+          "items": [
+            {
+              "item": { "kind": "button", "id": "archive", "title": "Archive", "slice": "Catalog.Products.ArchiveProduct" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true
+            }
+          ],
+          "removed": [], "sources": ["Products"], "summary": "Products", "diagnostics": []
+        },
+        "expected": [
+          {
+            "id": "archive", "title": "Archive",
+            "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true,
+            "enablement": {
+              "state": "disabled", "reason": "It is for item, so it waits for a selection",
+              "steps": [{ "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" }]
+            }
+          }
+        ]
+      },
+      {
+        "name": "row actions whose enabled when is evaluated from the model against the selected row",
+        "context": { "selected": true, "item": { "status": "draft", "stock": 3 }, "conditions": {} },
+        "outlet": {
+          "name": "rowActions", "kind": "actions", "subject": "item", "declaredBy": "Products",
+          "items": [
+            {
+              "item": { "kind": "button", "id": "publish", "title": "Publish", "command": "WithdrawProduct", "subject": "item", "enabledWhen": "item.status == \"onSale\" and item.stock > 0" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true
+            },
+            {
+              "item": { "kind": "button", "id": "restock", "title": "Restock", "command": "WithdrawProduct", "subject": "item", "enabledWhen": "item.stock < 5" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true
+            }
+          ],
+          "removed": [], "sources": ["Products"], "summary": "Products", "diagnostics": []
+        },
+        "expected": [
+          {
+            "id": "publish", "title": "Publish", "slice": "Catalog.Products.WithdrawProduct",
+            "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true,
+            "placement": {
+              "requested": "automatic", "resolved": "none", "routed": false, "reason": "Runs directly: the slice has no screen",
+              "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+              ]
+            },
+            "enablement": {
+              "state": "disabled", "reason": "Enabled when item.status == \"onSale\", which does not hold",
+              "steps": [
+                { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+                { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }
+              ]
+            }
+          },
+          {
+            "id": "restock", "title": "Restock", "slice": "Catalog.Products.WithdrawProduct",
+            "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true,
+            "placement": {
+              "requested": "automatic", "resolved": "none", "routed": false, "reason": "Runs directly: the slice has no screen",
+              "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+              ]
+            },
+            "enablement": {
+              "state": "enabled", "reason": "Enabled",
+              "steps": [
+                { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+                { "check": "condition", "outcome": "passed", "reason": "item.stock < 5 holds" }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "name": "an action component that runs directly but has an argument without a source",
+        "element": {
+          "id": "set-price-action", "name": "setPriceAction", "componentName": "core:action", "slots": {},
+          "properties": {
+            "label": "Set price", "command": "SetProductPrice", "opens": "none",
+            "arguments": [{ "name": "sku", "source": "component.products.selectedItem.sku" }, { "name": "price", "source": "" }]
+          }
+        },
+        "expected": {
+          "id": "set-price-action", "title": "Set price", "slice": "Catalog.Products.SetProductPrice",
+          "placement": {
+            "requested": "none", "routed": false, "problem": "inputsWithoutSource",
+            "reason": "price has no source, so it needs the form",
+            "runDirectly": { "available": false, "missing": ["price"], "reason": "price has no source, so it needs the form" },
+            "slots": [
+              { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+              { "name": "detail", "role": "pane", "routed": true, "offered": true, "reason": "pane, routed: opening here changes the URL", "route": { "slot": "detail", "parameters": [{ "name": "sku", "value": "NK-101" }], "segment": "set-product-price" } },
+              { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+            ]
+          },
+          "enablement": {
+            "state": "enabled", "reason": "Enabled",
+            "steps": [{ "check": "authorization", "outcome": "passed", "reason": "Catalog manager has 'ManageCatalog'" }]
+          }
+        }
+      },
+      {
+        "name": "an action component whose argument mapping feeds every input",
+        "element": {
+          "id": "publish", "name": "publish", "componentName": "core:action", "slots": {},
+          "properties": {
+            "command": "Catalog.Products.DraftProduct", "opens": "None", "subject": "item",
+            "arguments": [
+              { "name": "sku", "source": "route.sku" },
+              { "name": "name", "source": "component.name.value" },
+              { "name": "price", "source": "product.price" }
+            ]
+          }
+        },
+        "expected": {
+          "id": "publish", "title": "Catalog.Products.DraftProduct", "slice": "Catalog.Products.DraftProduct",
+          "placement": {
+            "requested": "none", "resolved": "none", "routed": false,
+            "reason": "Runs directly: every input has a source",
+            "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+            "slots": [
+              { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list page in what it fits" },
+              { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice doesn't list pane in what it fits" },
+              { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice doesn't list panel in what it fits" }
+            ]
+          },
+          "enablement": {
+            "state": "disabled", "reason": "It is for item, so it waits for a selection",
+            "steps": [
+              { "check": "subject", "outcome": "blocked", "reason": "It is for item, so it waits for a selection" },
+              { "check": "authorization", "outcome": "passed", "reason": "Catalog manager has 'ManageCatalog'" }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "argumentSources": [
+    { "source": "component.products.selectedItem.sku", "expected": "component" },
+    { "source": "route.sku", "expected": "route" },
+    { "source": "product.price", "expected": "dataContext" },
+    { "source": "", "expected": null },
+    { "source": "   ", "expected": null }
+  ]
+}

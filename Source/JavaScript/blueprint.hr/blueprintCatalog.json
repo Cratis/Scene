@@ -82,7 +82,34 @@
           "description": "Employees as cards with photo, name, title, department and contact, filtered by department, location and status.",
           "type": "List",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrEmployeeDirectory.svg"
+          "thumbnail": "thumbnails/HrEmployeeDirectory.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "HrEmployeePage",
@@ -91,7 +118,19 @@
           "description": "One employee: personal and job information, documents and time-off balance.",
           "type": "Detail",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrEmployeePage.svg"
+          "thumbnail": "thumbnails/HrEmployeePage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "HrOrgChart",
@@ -109,7 +148,34 @@
           "description": "Time-off requests with the employee, type, dates, days and status, filtered by type, status and period.",
           "type": "List",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrTimeOffList.svg"
+          "thumbnail": "thumbnails/HrTimeOffList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "HrTimeOffBalanceList",
@@ -118,7 +184,34 @@
           "description": "Each employee's entitlement, days taken and days left, with how much of it is used.",
           "type": "List",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrTimeOffBalanceList.svg"
+          "thumbnail": "thumbnails/HrTimeOffBalanceList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "HrTeamCalendar",
@@ -136,7 +229,34 @@
           "description": "New hires with their start date, owner and a progress bar of their checklist.",
           "type": "List",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrOnboardingList.svg"
+          "thumbnail": "thumbnails/HrOnboardingList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "HrOnboardingChecklist",
@@ -145,7 +265,19 @@
           "description": "One new hire's onboarding: checklist sections with an owner and a due date for each task, and the key facts of the hire.",
           "type": "Detail",
           "category": "Business / HR",
-          "thumbnail": "thumbnails/HrOnboardingChecklist.svg"
+          "thumbnail": "thumbnails/HrOnboardingChecklist.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "HrRequestTimeOff",

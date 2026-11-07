@@ -5,6 +5,7 @@ using System.Text.Json.Nodes;
 using Cratis.Scene.Engine.Blueprints;
 using Cratis.Scene.Engine.Profiles;
 using Cratis.Scene.Engine.Screens;
+using Cratis.Scene.Engine.Slots;
 using Cratis.Scene.Engine.Templates;
 using Cratis.Scene.Model.Layouts;
 using Cratis.Scene.Model.Packages;
@@ -22,14 +23,14 @@ namespace Cratis.Scene.Engine.Shell;
 /// <remarks>
 /// <para>
 /// The order is the profile's root template, then its legacy layout name, then the default layout of the first installed blueprint,
-/// then the built-in bare shell (one <c language="csharp">content</c> outlet, no chrome). A candidate that cannot be used at all (it
+/// then the built-in bare shell (one <c language="csharp">content</c> slot, no chrome). A candidate that cannot be used at all (it
 /// does not exist, its blueprint is not available, it is not something an application can use as a shell) is reported and the next
 /// one is tried, so there is always a shell to render. A candidate that exists but is wrong in a way the host can still show (its
-/// pin is drifted, it lacks the content outlet, the blueprint is available but not added to the packages) is used and reported.
+/// pin is drifted, it lacks the content slot, the blueprint is available but not added to the packages) is used and reported.
 /// </para>
 /// <para>
 /// Besides the root's own problems, the profile around it is checked: the theme against the profile's packages, the packages
-/// against the available ones, and - when the screens are given - that every screen's content has an outlet to go to.
+/// against the available ones, and - when the screens are given - that every screen's content has a slot to go to.
 /// </para>
 /// </remarks>
 public static class ShellResolver
@@ -39,16 +40,16 @@ public static class ShellResolver
     /// </summary>
     public const string BareShellName = "Bare";
 
-    const string DefaultPrimaryOutlet = "content";
+    const string DefaultPrimarySlot = "content";
 
-    static readonly Layout _bareShell = new(BareShellName, [new Slot(DefaultPrimaryOutlet)]);
+    static readonly Layout _bareShell = new(BareShellName, [new Slot(DefaultPrimarySlot)]);
 
     /// <summary>
     /// Resolves the effective shell of an application.
     /// </summary>
     /// <param name="profile">The UI profile.</param>
     /// <param name="context">The templates, screens, themes and packages to resolve against.</param>
-    /// <returns>The effective shell with its outlets, options and every diagnostic.</returns>
+    /// <returns>The effective shell with its slots, options and every diagnostic.</returns>
     public static EffectiveShell Resolve(UiProfile profile, ShellResolutionContext context)
     {
         var diagnostics = new List<ShellDiagnostic>();
@@ -70,7 +71,7 @@ public static class ShellResolver
 
         var all = new List<ShellDiagnostic>(diagnostics);
         var templates = ShellPlacement.PlaceableScreenTemplates(profile, context).ToList();
-        CheckContentOutlet(shell, all);
+        CheckContentSlot(shell, all);
         CheckCycles(shell, templates, all);
         CheckProfile(profile, context, all);
         CheckScreens(shell, context, templates, all);
@@ -209,7 +210,7 @@ public static class ShellResolver
         ShellSource.BuiltIn,
         _bareShell.Name,
         [.. _bareShell.Slots.Select(slot => slot.Name)],
-        DefaultPrimaryOutlet,
+        DefaultPrimarySlot,
         new Dictionary<string, JsonNode?>(),
         [],
         Layout: _bareShell);
@@ -218,7 +219,6 @@ public static class ShellResolver
     {
         var name = found.Kind == ShellKind.Layout ? found.Layout!.Name : found.ScreenTemplate!.Name;
         var slots = found.Kind == ShellKind.Layout ? found.Layout!.Slots : found.ScreenTemplate!.Slots;
-        var metadata = found.Kind == ShellKind.Layout ? found.Layout!.Metadata : found.ScreenTemplate!.Metadata;
         var pin = found.IsBlueprint && found.Source is not null ? BlueprintVersionPin.Evaluate(reference.Version, found.Source.Manifest.Version) : null;
 
         return new(
@@ -228,7 +228,7 @@ public static class ShellResolver
             found.IsBlueprint ? ShellSource.Blueprint : ShellSource.Own,
             name,
             [.. slots.Select(slot => slot.Name)],
-            metadata?.PrimaryOutlet ?? DefaultPrimaryOutlet,
+            SlotRoles.PrimaryOf(slots) ?? DefaultPrimarySlot,
             new Dictionary<string, JsonNode?>(options ?? new Dictionary<string, JsonNode?>()),
             [],
             found.IsBlueprint && found.Source is not null ? found.Source.Manifest.Name : null,
@@ -265,11 +265,11 @@ public static class ShellResolver
         _ => "template"
     };
 
-    static void CheckContentOutlet(EffectiveShell shell, List<ShellDiagnostic> diagnostics)
+    static void CheckContentSlot(EffectiveShell shell, List<ShellDiagnostic> diagnostics)
     {
-        if (!shell.Outlets.Contains(shell.PrimaryOutlet))
+        if (!shell.Slots.Contains(shell.PrimarySlot))
         {
-            diagnostics.Add(new(ShellDiagnosticCode.RootTemplateMissingContentSlot, $"Shell '{shell.Name}' has no '{shell.PrimaryOutlet}' outlet, so no screen can be placed in it", shell.Name));
+            diagnostics.Add(new(ShellDiagnosticCode.RootTemplateMissingContentSlot, $"Shell '{shell.Name}' has no '{shell.PrimarySlot}' slot, so no screen can be placed in it", shell.Name));
         }
     }
 
@@ -312,9 +312,9 @@ public static class ShellResolver
     {
         foreach (var screen in context.Screens ?? [])
         {
-            foreach (var outlet in ShellPlacement.OutletsUsedBy(screen, shell.Name, templates).Where(outlet => !shell.Outlets.Contains(outlet)))
+            foreach (var slot in ShellPlacement.SlotsUsedBy(screen, shell.Name, templates).Where(slot => !shell.Slots.Contains(slot)))
             {
-                diagnostics.Add(new(ShellDiagnosticCode.ProfileSlotUnplaced, $"Screen '{screen.Name}' places content in outlet '{outlet}', which shell '{shell.Name}' does not have", screen.Name));
+                diagnostics.Add(new(ShellDiagnosticCode.ProfileSlotUnplaced, $"Screen '{screen.Name}' places content in slot '{slot}', which shell '{shell.Name}' does not have", screen.Name));
             }
         }
     }

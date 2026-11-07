@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { ordersScreenDefinitions } from './ordersScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,17 +36,17 @@ export const ordersStructure: ApplicationStructure = (() => {
 export const ordersNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Orders' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'orders', title: 'Orders', target: { module: ordersModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'orders', title: 'Orders', target: { module: ordersModule } }] }],
     },
     modules: [{
         module: ordersModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'order-list', title: 'Orders', target: { module: ordersModule, feature: 'list' } },
-                { id: 'fulfilment', title: 'Fulfilment', target: { module: ordersModule, feature: 'fulfilment' } },
-                { id: 'deliveries', title: 'Deliveries', target: { module: ordersModule, feature: 'deliveries' } },
+                { kind: OutletItemKind.Navigation, id: 'order-list', title: 'Orders', target: { module: ordersModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'fulfilment', title: 'Fulfilment', target: { module: ordersModule, feature: 'fulfilment' } },
+                { kind: OutletItemKind.Navigation, id: 'deliveries', title: 'Deliveries', target: { module: ordersModule, feature: 'deliveries' } },
             ],
         }],
     }],

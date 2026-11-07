@@ -22,3 +22,4 @@ export * from './editing';
 export * from './structure';
 export * from './navigation';
 export * from './toolbar';
+export * from './outlets';

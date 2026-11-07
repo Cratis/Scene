@@ -1,8 +1,13 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json;
+using Cratis.Scene.Engine.Slots;
 using Cratis.Scene.Engine.Templates;
+using Cratis.Scene.Model.Layouts;
+using Cratis.Scene.Model.Outlets;
 using Cratis.Scene.Model.Packages;
+using Cratis.Scene.Model.Screens;
 
 namespace Cratis.Scene.Engine.Blueprints;
 
@@ -32,9 +37,20 @@ public static class BlueprintCatalog
         var references = manifest.SampleData ?? [];
         var defaultId = blueprint.DefaultSampleData ?? (references.Count == 1 ? references[0].Id : null);
 
-        var templates = (source.Layouts ?? []).Select(layout => new BlueprintCatalogTemplate(layout.Name, nameof(TemplateCatalogKind.Layout), null, null, layout.Metadata?.Type, layout.Metadata?.Category, layout.Metadata?.Thumbnail))
-            .Concat((source.ScreenTemplates ?? []).Select(template => new BlueprintCatalogTemplate(template.Name, nameof(TemplateCatalogKind.ScreenTemplate), template.DisplayName, template.Description, template.Metadata?.Type, template.Metadata?.Category, template.Metadata?.Thumbnail)))
-            .Concat((source.DialogTemplates ?? []).Select(template => new BlueprintCatalogTemplate(template.Name, nameof(TemplateCatalogKind.DialogTemplate), template.DisplayName, template.Description, template.Metadata?.Type, template.Metadata?.Category, template.Metadata?.Thumbnail)));
+        var templates = (source.Layouts ?? []).Select(layout => new BlueprintCatalogTemplate(layout.Name, nameof(TemplateCatalogKind.Layout), null, null, layout.Metadata?.Type, layout.Metadata?.Category, layout.Metadata?.Thumbnail, SlotNames(layout.Slots), SlotRoles.PrimaryOf(layout.Slots), RoleOf(layout.Metadata), OutletsOf(layout.Outlets)))
+            .Concat((source.ScreenTemplates ?? []).Select(template => new BlueprintCatalogTemplate(
+                template.Name,
+                nameof(TemplateCatalogKind.ScreenTemplate),
+                template.DisplayName,
+                template.Description,
+                template.Metadata?.Type,
+                template.Metadata?.Category,
+                template.Metadata?.Thumbnail,
+                template.Metadata?.Role == TemplateRole.Root ? SlotNames(template.Slots) : null,
+                template.Metadata?.Role == TemplateRole.Root ? SlotRoles.PrimaryOf(template.Slots) : null,
+                RoleOf(template.Metadata),
+                OutletsOf(template.Outlets))))
+            .Concat((source.DialogTemplates ?? []).Select(template => new BlueprintCatalogTemplate(template.Name, nameof(TemplateCatalogKind.DialogTemplate), template.DisplayName, template.Description, template.Metadata?.Type, template.Metadata?.Category, template.Metadata?.Thumbnail, Role: RoleOf(template.Metadata), Outlets: OutletsOf(template.Outlets))));
 
         return new(
             manifest.Name,
@@ -50,6 +66,30 @@ public static class BlueprintCatalog
             [.. templates],
             [.. references.Select(reference => new BlueprintCatalogSampleData(reference.Id, reference.Title, reference.Locale, reference.Path, reference.Id == defaultId))]);
     }
+
+    /// <summary>
+    /// The names of a shell's slots, in declaration order.
+    /// </summary>
+    /// <param name="slots">The slots the shell declares.</param>
+    /// <returns>The slot names.</returns>
+    static string[] SlotNames(IReadOnlyList<Slot>? slots) => [.. (slots ?? []).Select(slot => slot.Name)];
+
+    /// <summary>
+    /// The structural role a template declares, written the way the catalog lists it (<c language="csharp">Root</c>).
+    /// </summary>
+    /// <param name="metadata">The template metadata.</param>
+    /// <returns>The role, or null when the template declares none.</returns>
+    static string? RoleOf(TemplateMetadata? metadata) => metadata?.Role?.ToString();
+
+    /// <summary>
+    /// The outlets a template offers, as the catalog lists them: name, kind and how many defaults.
+    /// </summary>
+    /// <param name="outlets">The outlets the template declares.</param>
+    /// <returns>The outlets, or null when it declares none.</returns>
+    static BlueprintCatalogOutlet[]? OutletsOf(IReadOnlyList<Outlet>? outlets) =>
+        outlets is { Count: > 0 }
+            ? [.. outlets.Select(outlet => new BlueprintCatalogOutlet(outlet.Name, JsonNamingPolicy.CamelCase.ConvertName(outlet.Kind.ToString()), outlet.Defaults.Count))]
+            : null;
 
     /// <summary>
     /// Puts screens in navigation order: siblings by order (a screen without one keeps its written place after those with one), each screen

@@ -3,14 +3,15 @@
 
 using Cratis.Scene.Engine.Structure;
 using Cratis.Scene.Model.Common;
+using Cratis.Scene.Model.Layouts;
 using Cratis.Scene.Model.Screens;
 
 namespace Cratis.Scene.Engine.Navigation;
 
 /// <summary>
-/// Diagnoses how destinations, outlets, routes and targets fit together: duplicate routes, duplicate, missing
-/// or incompatible outlets, hosting cycles and unavailable targets - and, when the graph carries an application structure and
-/// navigation regions, the regions too. Nothing is rewritten and no URL is constructed.
+/// Diagnoses how destinations, slots, routes and targets fit together: duplicate routes, duplicate, missing
+/// or incompatible slots, hosting cycles and unavailable targets - and, when the graph carries an application structure and
+/// navigation, its navigation outlets too. Nothing is rewritten and no URL is constructed.
 /// </summary>
 /// <remarks>
 /// The TypeScript engine (<c language="csharp">diagnoseNavigation</c>) reports the same codes and messages in the same order for
@@ -31,7 +32,7 @@ public static class NavigationDiagnostics
     {
         routeKey ??= NavigationRoutes.AuthoredRouteKey;
         var diagnostics = new List<NavigationDiagnostic>();
-        var outlets = CollectOutlets(graph, diagnostics);
+        var slots = CollectSlots(graph, diagnostics);
         var screens = graph.Screens?.GroupBy(screen => screen.Name, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
         var routes = new Dictionary<string, (string Entry, string Target)>(StringComparer.Ordinal);
         var hostedIn = new Dictionary<string, List<string>>(StringComparer.Ordinal);
@@ -40,7 +41,7 @@ public static class NavigationDiagnostics
         {
             var destination = graph.Entries[index].Destination;
             var entry = graph.Entries[index].Id ?? $"#{index + 1}";
-            var kind = destination.Kind ?? (string.IsNullOrEmpty(destination.Dialog) ? DestinationKind.Outlet : DestinationKind.Dialog);
+            var kind = destination.Kind ?? (string.IsNullOrEmpty(destination.Dialog) ? DestinationKind.Slot : DestinationKind.Dialog);
             void Report(NavigationDiagnosticCode code, string message) => diagnostics.Add(new(code, message, entry));
 
             if (string.IsNullOrEmpty(destination.Screen) && string.IsNullOrEmpty(destination.Module) && string.IsNullOrEmpty(destination.Route) && string.IsNullOrEmpty(destination.Dialog))
@@ -50,7 +51,7 @@ public static class NavigationDiagnostics
             }
 
             DiagnoseTarget(graph, screens, destination, kind, entry, Report);
-            var owner = DiagnoseOutlet(graph, outlets, screens, destination, kind, entry, Report);
+            var owner = DiagnoseSlot(graph, slots, screens, destination, kind, entry, Report);
             if (owner is { OwnedByLayout: false } && !string.IsNullOrEmpty(destination.Screen) && screens?.ContainsKey(destination.Screen) == true)
             {
                 if (!hostedIn.TryGetValue(destination.Screen, out var hosts))
@@ -80,41 +81,45 @@ public static class NavigationDiagnostics
         {
             diagnostics.Add(new(
                 NavigationDiagnosticCode.NavigationCycle,
-                $"Navigation cycle {string.Join(" -> ", cycle.Append(cycle[0]))}: each screen is placed in an outlet owned by the next, so composition never terminates."));
+                $"Navigation cycle {string.Join(" -> ", cycle.Append(cycle[0]))}: each screen is placed in a slot owned by the next, so composition never terminates."));
         }
 
         if (graph.Structure is not null && graph.Navigation is not null)
         {
-            diagnostics.AddRange(NavigationRegionDiagnostics.Diagnose(new ApplicationStructureIndex(graph.Structure), graph.Navigation, graph.Slots));
+            diagnostics.AddRange(NavigationOutletDiagnostics.Diagnose(new ApplicationStructureIndex(graph.Structure), graph.Navigation, graph.Slots));
         }
 
         return diagnostics;
     }
 
-    static Dictionary<string, OutletOwner> CollectOutlets(NavigationGraph graph, List<NavigationDiagnostic> diagnostics)
+    static Dictionary<string, SlotOwner> CollectSlots(NavigationGraph graph, List<NavigationDiagnostic> diagnostics)
     {
-        var owners = new Dictionary<string, OutletOwner>(StringComparer.Ordinal);
-        var surfaces = (graph.Layouts ?? []).Select(layout => (layout.Name, OwnedByLayout: true, Outlets: layout.Outlets ?? []))
-            .Concat((graph.ScreenTemplates ?? []).Select(template => (template.Name, OwnedByLayout: false, Outlets: template.Outlets ?? [])));
+        var owners = new Dictionary<string, SlotOwner>(StringComparer.Ordinal);
+
+        // Only a routed slot is a destination; the others are filled by composition, not navigation.
+        var surfaces = (graph.Layouts ?? []).Select(layout => (layout.Name, OwnedByLayout: true, Slots: Routed(layout.Slots)))
+            .Concat((graph.ScreenTemplates ?? []).Select(template => (template.Name, OwnedByLayout: false, Slots: Routed(template.Slots))));
 
         foreach (var (name, ownedByLayout, declared) in surfaces)
         {
-            foreach (var outlet in declared)
+            foreach (var slot in declared)
             {
-                if (owners.TryGetValue(outlet.Name, out var existing))
+                if (owners.TryGetValue(slot.Name, out var existing))
                 {
                     diagnostics.Add(new(
-                        NavigationDiagnosticCode.DuplicateOutlet,
-                        $"Outlet '{outlet.Name}' is declared by both '{existing.Owner}' and '{name}'; destinations cannot tell them apart."));
+                        NavigationDiagnosticCode.DuplicateSlot,
+                        $"Slot '{slot.Name}' is declared by both '{existing.Owner}' and '{name}'; destinations cannot tell them apart."));
                     continue;
                 }
 
-                owners[outlet.Name] = new(outlet, name, ownedByLayout);
+                owners[slot.Name] = new(slot, name, ownedByLayout);
             }
         }
 
         return owners;
     }
+
+    static IEnumerable<Slot> Routed(IReadOnlyList<Slot>? slots) => (slots ?? []).Where(slot => slot.Routed == true);
 
     static void DiagnoseTarget(
         NavigationGraph graph,
@@ -138,33 +143,33 @@ public static class NavigationDiagnostics
             return;
         }
 
-        if (kind == DestinationKind.Outlet && !string.IsNullOrEmpty(destination.Screen) && screens?.ContainsKey(destination.Screen) == false)
+        if (kind == DestinationKind.Slot && !string.IsNullOrEmpty(destination.Screen) && screens?.ContainsKey(destination.Screen) == false)
         {
             report(NavigationDiagnosticCode.UnavailableTarget, $"Destination '{entry}' opens screen '{destination.Screen}', which does not exist.");
         }
     }
 
-    static OutletOwner? DiagnoseOutlet(
+    static SlotOwner? DiagnoseSlot(
         NavigationGraph graph,
-        Dictionary<string, OutletOwner> outlets,
+        Dictionary<string, SlotOwner> slots,
         Dictionary<string, Screen>? screens,
         DestinationReference destination,
         DestinationKind kind,
         string entry,
         Action<NavigationDiagnosticCode, string> report)
     {
-        if (string.IsNullOrEmpty(destination.Outlet)) return null;
+        if (string.IsNullOrEmpty(destination.Slot)) return null;
 
-        if (kind != DestinationKind.Outlet)
+        if (kind != DestinationKind.Slot)
         {
             var opens = kind == DestinationKind.Dialog ? "a dialog" : "an external target";
-            report(NavigationDiagnosticCode.IncompatibleOutlet, $"Destination '{entry}' opens {opens} but names outlet '{destination.Outlet}'; only outlet destinations render in outlets.");
+            report(NavigationDiagnosticCode.IncompatibleSlot, $"Destination '{entry}' opens {opens} but names slot '{destination.Slot}'; only slot destinations render in slots.");
             return null;
         }
 
-        if (!outlets.TryGetValue(destination.Outlet, out var owner))
+        if (!slots.TryGetValue(destination.Slot, out var owner))
         {
-            report(NavigationDiagnosticCode.MissingOutlet, $"Destination '{entry}' targets missing outlet '{destination.Outlet}'.");
+            report(NavigationDiagnosticCode.MissingSlot, $"Destination '{entry}' targets missing slot '{destination.Slot}'.");
             return null;
         }
 
@@ -173,18 +178,18 @@ public static class NavigationDiagnostics
         if (owner.OwnedByLayout && screen.Layout != owner.Owner)
         {
             report(
-                NavigationDiagnosticCode.IncompatibleOutlet,
-                $"Outlet '{owner.Outlet.Name}' belongs to layout '{owner.Owner}', but destination '{entry}' places '{screen.Name}', which renders in layout '{screen.Layout}'.");
+                NavigationDiagnosticCode.IncompatibleSlot,
+                $"Slot '{owner.Slot.Name}' belongs to layout '{owner.Owner}', but destination '{entry}' places '{screen.Name}', which renders in layout '{screen.Layout}'.");
         }
 
-        if (owner.Outlet.Accepts is not null)
+        if (owner.Slot.Accepts is not null)
         {
             var type = graph.ScreenTemplates?.FirstOrDefault(template => template.Name == screen.ScreenTemplate)?.Metadata?.Type;
-            if (string.IsNullOrEmpty(type) || !owner.Outlet.Accepts.Contains(type))
+            if (string.IsNullOrEmpty(type) || !owner.Slot.Accepts.Contains(type))
             {
                 report(
-                    NavigationDiagnosticCode.IncompatibleOutlet,
-                    $"Outlet '{owner.Outlet.Name}' accepts {string.Join(", ", owner.Outlet.Accepts)} screens, but destination '{entry}' places '{screen.Name}' of type '{(string.IsNullOrEmpty(type) ? "untyped" : type)}'.");
+                    NavigationDiagnosticCode.IncompatibleSlot,
+                    $"Slot '{owner.Slot.Name}' accepts {string.Join(", ", owner.Slot.Accepts)} screens, but destination '{entry}' places '{screen.Name}' of type '{(string.IsNullOrEmpty(type) ? "untyped" : type)}'.");
             }
         }
 
@@ -195,6 +200,6 @@ public static class NavigationDiagnostics
     {
         DestinationKind.Dialog => "dialog",
         DestinationKind.External => "external",
-        _ => "outlet"
+        _ => "slot"
     };
 }

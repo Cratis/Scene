@@ -6,7 +6,7 @@ import { ComponentName } from '../../ComponentName';
 import { galleryScreenTemplates } from '../../gallery/screens';
 import { defaultLayouts } from '../../layouts';
 import { ApplicationDocument } from '../ApplicationDocument';
-import { collectDestinations, composeApplicationScreen, composeDialog, composeOutletScreen, screenContent, templateChainOf } from '../composeApplication';
+import { collectDestinations, composeApplicationScreen, composeDialog, composeSlotScreen, screenContent, templateChainOf } from '../composeApplication';
 import { previewTemplateComponent } from '../PreviewTemplate';
 import { previewProfile } from '../previewProfile';
 import { element, ordersApplication } from '../for_ScenePreviewHost/given';
@@ -129,11 +129,11 @@ describe('when composing a screen', () => {
         });
     });
 
-    describe('and it is composed as an outlet screen', () => {
+    describe('and it is composed as a slot screen', () => {
         const application = ordersApplication();
 
-        it('should be its content alone', () => asComponent(composeOutletScreen(application, application.screens[3])).id.should.equal('tickets'));
-        it('should group several elements', () => ids((composeOutletScreen(application, application.screens[1]) as unknown as { children: SceneElement[] }).children).should.deep.equal(['orders', 'order-list']));
+        it('should be its content alone', () => asComponent(composeSlotScreen(application, application.screens[3])).id.should.equal('tickets'));
+        it('should group several elements', () => ids((composeSlotScreen(application, application.screens[1]) as unknown as { children: SceneElement[] }).children).should.deep.equal(['orders', 'order-list']));
     });
 
     describe('and it is composed as a dialog', () => {

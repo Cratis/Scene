@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FlowArrangement, HeightSizeClass, Layout, WidthSizeClass } from '@cratis/scene.model';
+import { FlowArrangement, HeightSizeClass, Layout, NavigationRegionKind, OutletKind, SlotRole, WidthSizeClass } from '@cratis/scene.model';
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
@@ -88,6 +88,10 @@ export const appShellArrangement: FlowArrangement = {
  * the right panel. Both sets are here, because a layout package covering only the free template's regions
  * forces a fork on anyone who wants the others.
  *
+ * The shell offers its navigation as outlets: the `topbar` and `sidebar` outlets of navigation with their
+ * `topbarButtons` and `sidebarButtons` outlets of actions, and the `Navigation` outlet screens contribute to. An
+ * application's navigation gives them their items (`NavigationModel`).
+ *
  * The slots carry no arrangement of their own: how a screen's content is arranged *inside* a slot is that
  * page template's business, and a layout that dictated it would stop being a shell.
  */
@@ -98,12 +102,19 @@ export const appShellLayout: Layout = {
         { name: SlotName.Sidebar },
         { name: SlotName.Menu },
         { name: SlotName.Breadcrumb },
-        { name: SlotName.Content },
+        { name: SlotName.Content, role: SlotRole.Page, routed: true, primary: true },
         { name: SlotName.Footer },
-        { name: SlotName.RightPanel },
-        { name: SlotName.ConfigPanel },
+        { name: SlotName.RightPanel, role: SlotRole.Panel, optional: true },
+        { name: SlotName.ConfigPanel, role: SlotRole.Panel, optional: true },
     ],
     arrangement: appShellArrangement,
+    outlets: [
+        { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [] },
+        { name: 'topbarButtons', kind: OutletKind.Actions, defaults: [] },
+        { name: NavigationRegionKind.Sidebar, kind: OutletKind.Navigation, defaults: [] },
+        { name: 'sidebarButtons', kind: OutletKind.Actions, defaults: [] },
+        { name: 'Navigation', kind: OutletKind.Navigation, defaults: [] },
+    ],
     metadata: {
         ...sakaiShellProvenance,
         category: 'Foundation / Shell',

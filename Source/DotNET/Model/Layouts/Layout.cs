@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Cratis.Scene.Model.Interactions;
+using Cratis.Scene.Model.Outlets;
 using Cratis.Scene.Model.Screens;
 
 namespace Cratis.Scene.Model.Layouts;
@@ -35,12 +36,12 @@ public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrang
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
 
     /// <summary>
-    /// Gets named routed replacement surfaces this layout owns. Static slots remain template composition surfaces.
-    /// </summary>
-    public IReadOnlyList<Outlet>? Outlets { get; init; }
-
-    /// <summary>
     /// Gets optional browse metadata. ApplicationShell retains this existing Layout role.
     /// </summary>
     public TemplateMetadata? Metadata { get; init; }
+
+    /// <summary>
+    /// Gets the outlets - item lists such as the shell's navigation - the layout offers, with their default items.
+    /// </summary>
+    public IReadOnlyList<Outlet>? Outlets { get; init; }
 }

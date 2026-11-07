@@ -1,0 +1,1149 @@
+{
+  "description": "The slot shape of stored Scene documents: a slot's role, the primary slot, upgrading a document from the outlet shape Scene 5 replaced (upgradeSlotShape / SlotShapeUpgrader) and validating the slot shape on save (validateSlotShape / SlotShapeValidator). Asserted by the TypeScript and C# engines.",
+  "hint": "Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source",
+  "roles": [
+    { "name": "a declared role wins", "slot": { "name": "drawer", "role": "panel" }, "expected": "panel" },
+    { "name": "a declared role in another letter case", "slot": { "name": "content", "role": "Page" }, "expected": "page" },
+    { "name": "a primary slot without a role is a page", "slot": { "name": "content", "primary": true }, "expected": "page" },
+    { "name": "any other slot without a role is a pane", "slot": { "name": "detail", "routed": true }, "expected": "pane" },
+    { "name": "a declared role wins over primary", "slot": { "name": "content", "primary": true, "role": "pane" }, "expected": "pane" }
+  ],
+  "primary": [
+    { "name": "the slot marked primary", "slots": [{ "name": "rail" }, { "name": "main", "primary": true }], "expected": "main" },
+    { "name": "the first of several marked primary", "slots": [{ "name": "a", "primary": true }, { "name": "b", "primary": true }], "expected": "a" },
+    { "name": "no slot marked primary", "slots": [{ "name": "content" }], "expected": null }
+  ],
+  "upgrades": [
+    {
+      "name": "a layout's outlets become routed slots",
+      "input": {
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [{ "name": "topbar" }, { "name": "content" }],
+            "outlets": [{ "name": "content", "description": "Main" }, { "name": "side", "accepts": ["Detail"] }]
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                { "name": "topbar" },
+                { "name": "content", "description": "Main", "routed": true },
+                { "name": "side", "routed": true, "accepts": ["Detail"] }
+              ]
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an existing slot keeps its own values",
+      "input": {
+        "name": "MasterDetail",
+        "slots": [{ "name": "detail", "description": "Own" }],
+        "outlets": [{ "name": "detail", "description": "Outlet", "accepts": ["Detail"] }]
+      },
+      "expected": {
+        "document": { "name": "MasterDetail", "slots": [{ "name": "detail", "description": "Own", "routed": true, "accepts": ["Detail"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a slot the user made unrouted stays unrouted",
+      "input": {
+        "name": "MasterDetail",
+        "slots": [{ "name": "detail", "routed": false }],
+        "outlets": [{ "name": "detail", "accepts": ["Detail"] }]
+      },
+      "expected": {
+        "document": { "name": "MasterDetail", "slots": [{ "name": "detail", "routed": false, "accepts": ["Detail"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a null on an outlet is never copied, and a null the slot has stays",
+      "input": {
+        "name": "Shell",
+        "slots": [{ "name": "list", "description": null }],
+        "outlets": [{ "name": "list", "description": null, "accepts": null }, { "name": "content", "description": null, "accepts": null }]
+      },
+      "expected": {
+        "document": { "name": "Shell", "slots": [{ "name": "list", "description": null, "routed": true }, { "name": "content", "routed": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a null on a slot is absent, so the outlet's value fills it",
+      "input": {
+        "name": "Shell",
+        "slots": [{ "name": "list", "description": null, "accepts": null }],
+        "outlets": [{ "name": "list", "description": "The list", "accepts": ["List"] }]
+      },
+      "expected": {
+        "document": { "name": "Shell", "slots": [{ "name": "list", "description": "The list", "routed": true, "accepts": ["List"] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a kind of outlet on something that is not a destination stays",
+      "input": { "name": "Harbour", "kind": "outlet", "title": "Harbour outlet store" },
+      "expected": {
+        "document": { "name": "Harbour", "kind": "outlet", "title": "Harbour outlet store" },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "values a user typed in an element's properties stay, apart from destinations",
+      "input": {
+        "id": "stores",
+        "componentName": "core:card",
+        "properties": {
+          "outlets": [{ "name": "Harbour" }, { "name": "Station", "description": "By the station" }],
+          "toolbar": { "buttons": [{ "id": "call", "title": "Call" }] },
+          "metadata": { "primaryOutlet": "Harbour" },
+          "shape": { "kind": "Outlet" },
+          "destination": { "screen": "StoreDetails", "outlet": "detail", "kind": "outlet" }
+        },
+        "slots": {}
+      },
+      "expected": {
+        "document": {
+          "id": "stores",
+          "componentName": "core:card",
+          "properties": {
+            "outlets": [{ "name": "Harbour" }, { "name": "Station", "description": "By the station" }],
+            "toolbar": { "buttons": [{ "id": "call", "title": "Call" }] },
+            "metadata": { "primaryOutlet": "Harbour" },
+            "shape": { "kind": "Outlet" },
+            "destination": { "screen": "StoreDetails", "slot": "detail", "kind": "slot" }
+          },
+          "slots": {}
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a template with outlets and no slots",
+      "input": { "name": "Workspace", "outlets": [{ "name": "workspace.detail" }] },
+      "expected": {
+        "document": { "name": "Workspace", "slots": [{ "name": "workspace.detail", "routed": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "the primary outlet becomes the primary slot",
+      "input": { "name": "Frame", "slots": [{ "name": "rail" }, { "name": "main" }], "metadata": { "role": "Root", "primaryOutlet": "main" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "rail" }, { "name": "main", "primary": true }], "metadata": { "role": "Root" } },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "metadata holding only the primary outlet is dropped",
+      "input": { "name": "Frame", "slots": [{ "name": "content" }], "metadata": { "primaryOutlet": "content" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "content", "primary": true }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination's outlet and kind become slot",
+      "input": { "screen": "InvoiceDetails", "outlet": "detail", "kind": "outlet" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination kind written by a C# host keeps its letter case",
+      "input": { "screen": "InvoiceDetails", "kind": "Outlet" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "kind": "Slot" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a destination naming the same outlet and slot keeps one",
+      "input": { "screen": "InvoiceDetails", "outlet": "detail", "slot": "detail" },
+      "expected": {
+        "document": { "screen": "InvoiceDetails", "slot": "detail" },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a nested outlet a screen declares becomes a nested slot",
+      "input": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:outlet", "properties": { "name": "line" } }] }] },
+      "expected": {
+        "document": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:slot", "properties": { "name": "line" } }] }] },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a whole document",
+      "input": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "content" }], "outlets": [{ "name": "content" }], "metadata": { "primaryOutlet": "content" } }],
+        "screenTemplates": [{ "name": "MasterDetail", "slots": [{ "name": "list" }], "outlets": [{ "name": "master-detail.detail", "accepts": ["Detail"] }] }],
+        "screens": [{ "name": "Invoices", "navigation": [{ "id": "open", "target": { "screen": "InvoiceDetails", "outlet": "master-detail.detail", "kind": "outlet" } }] }]
+      },
+      "expected": {
+        "document": {
+          "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "routed": true, "primary": true }] }],
+          "screenTemplates": [{ "name": "MasterDetail", "slots": [{ "name": "list" }, { "name": "master-detail.detail", "routed": true, "accepts": ["Detail"] }] }],
+          "screens": [{ "name": "Invoices", "navigation": [{ "id": "open", "target": { "screen": "InvoiceDetails", "slot": "master-detail.detail", "kind": "slot" } }] }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a document already in the slot shape comes back unchanged",
+      "input": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "detail", "role": "pane", "routed": true, "routedBy": ["sku"], "optional": true }] }],
+        "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" } }]
+      },
+      "expected": {
+        "document": {
+          "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "detail", "role": "pane", "routed": true, "routedBy": ["sku"], "optional": true }] }],
+          "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "slot": "detail", "kind": "slot" } }]
+        },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "outlets of items are not the outlet shape",
+      "input": { "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] },
+      "expected": {
+        "document": { "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "actions", "items": [] }] },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an outlet key on something that is not a destination stays",
+      "input": { "name": "addProduct", "outlet": "toolbar" },
+      "expected": {
+        "document": { "name": "addProduct", "outlet": "toolbar" },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a primary outlet that is not a slot stays and is reported",
+      "input": { "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "content" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "content" } },
+        "changed": false,
+        "diagnostics": [
+          { "code": "primarySlotNotDeclared", "path": "$.metadata.primaryOutlet", "message": "The primary outlet 'content' of 'Frame' is not one of its slots, so no slot can be made primary" }
+        ]
+      }
+    },
+    {
+      "name": "a primary outlet that conflicts with a primary slot stays and is reported",
+      "input": { "name": "Frame", "slots": [{ "name": "a", "primary": true }, { "name": "b" }], "metadata": { "primaryOutlet": "b" } },
+      "expected": {
+        "document": { "name": "Frame", "slots": [{ "name": "a", "primary": true }, { "name": "b" }], "metadata": { "primaryOutlet": "b" } },
+        "changed": false,
+        "diagnostics": [
+          { "code": "multiplePrimarySlots", "path": "$.metadata.primaryOutlet", "message": "The primary outlet 'b' of 'Frame' conflicts with its primary slot 'a'" }
+        ]
+      }
+    },
+    {
+      "name": "a destination naming a different outlet and slot stays and is reported",
+      "input": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "a", "slot": "b" } }] },
+      "expected": {
+        "document": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "a", "slot": "b" } }] },
+        "changed": false,
+        "diagnostics": [
+          { "code": "conflictingSlotKey", "path": "$.screens[0].target.outlet", "message": "The destination names the outlet 'a' and the slot 'b'; keep one" }
+        ]
+      }
+    },
+    {
+      "name": "a feature toolbar becomes a refinement that extends the toolbar outlet",
+      "input": {
+        "name": "Products",
+        "toolbar": {
+          "buttons": [
+            { "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "emphasis": "primary", "icon": "lucide:plus" },
+            { "id": "price", "title": "Set price", "target": "SetProductPrice" }
+          ]
+        }
+      },
+      "expected": {
+        "document": {
+          "name": "Products",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "mode": "extends",
+              "items": [
+                { "kind": "button", "id": "add", "title": "Add product", "icon": "lucide:plus", "slice": "catalog.products.DraftProduct", "emphasis": "primary" },
+                { "kind": "button", "id": "price", "title": "Set price", "command": "SetProductPrice" }
+              ]
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a module toolbar joins the refinements the module already has",
+      "input": {
+        "modules": [{
+          "name": "Catalog",
+          "refinements": [{ "outlet": "filters", "mode": "extends", "items": [{ "kind": "filter", "id": "status", "title": "Status" }] }],
+          "toolbar": { "buttons": [{ "id": "export", "title": "Export", "emphasis": "quiet" }] }
+        }]
+      },
+      "expected": {
+        "document": {
+          "modules": [{
+            "name": "Catalog",
+            "refinements": [
+              { "outlet": "filters", "mode": "extends", "items": [{ "kind": "filter", "id": "status", "title": "Status" }] },
+              { "outlet": "toolbar", "mode": "extends", "items": [{ "kind": "button", "id": "export", "title": "Export", "emphasis": "quiet" }] }
+            ]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a template that declares outlets of items is already in the outlet shape",
+      "input": {
+        "screenTemplates": [{
+          "name": "ListPage",
+          "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] },
+            { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screenTemplates": [{
+            "name": "ListPage",
+            "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
+            "outlets": [
+              { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] },
+              { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
+            ]
+          }]
+        },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "navigation regions become outlets of navigation, their buttons outlets of actions and module regions refinements",
+      "input": {
+        "navigation": {
+          "application": {
+            "logo": { "image": "acme.svg", "title": "Acme" },
+            "regions": [
+              {
+                "region": "topbar",
+                "items": [{ "id": "sales", "title": "Sales", "target": { "module": "sales" } }],
+                "buttons": [{ "id": "new-order", "title": "New order", "slice": "sales.orders.PlaceOrder", "emphasis": "primary" }]
+              },
+              {
+                "region": "sidebar",
+                "items": [{ "id": "dashboard", "title": "Dashboard", "icon": "lucide:home", "target": { "module": "dashboard" }, "slot": "side", "children": [{ "id": "kpis", "title": "KPIs", "target": { "module": "dashboard", "feature": "kpis" } }] }]
+              }
+            ]
+          },
+          "modules": [
+            {
+              "module": "sales",
+              "regions": [
+                { "region": "sidebar", "mode": "extend", "items": [{ "id": "orders", "title": "Orders", "target": { "module": "sales", "feature": "orders" } }], "buttons": [{ "id": "export", "title": "Export" }] },
+                { "region": "topbar", "mode": "override", "items": [] }
+              ]
+            },
+            { "module": "support", "regions": [{ "region": "topbar", "mode": "inherit", "items": [] }, { "region": "sidebar", "items": [] }] }
+          ]
+        }
+      },
+      "expected": {
+        "document": {
+          "navigation": {
+            "application": {
+              "outlets": [
+                { "name": "topbar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "sales", "title": "Sales", "target": { "module": "sales" } }] },
+                { "name": "topbarButtons", "kind": "actions", "defaults": [{ "kind": "button", "id": "new-order", "title": "New order", "slice": "sales.orders.PlaceOrder", "emphasis": "primary" }] },
+                {
+                  "name": "sidebar",
+                  "kind": "navigation",
+                  "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "icon": "lucide:home", "target": { "module": "dashboard" }, "slot": "side", "children": [{ "kind": "navigation", "id": "kpis", "title": "KPIs", "target": { "module": "dashboard", "feature": "kpis" } }] }]
+                }
+              ],
+              "logo": { "image": "acme.svg", "title": "Acme" }
+            },
+            "modules": [
+              {
+                "module": "sales",
+                "refinements": [
+                  { "outlet": "sidebar", "mode": "extends", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales", "feature": "orders" } }] },
+                  { "outlet": "sidebarButtons", "mode": "extends", "items": [{ "kind": "button", "id": "export", "title": "Export" }] },
+                  { "outlet": "topbar", "mode": "overrides", "items": [] },
+                  { "outlet": "topbarButtons", "mode": "overrides", "items": [] }
+                ]
+              },
+              { "module": "support" }
+            ]
+          }
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a navigation model in the outlet shape is left as it is",
+      "input": {
+        "navigation": {
+          "application": { "outlets": [{ "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "target": { "module": "dashboard" } }] }] },
+          "modules": [{ "module": "sales", "refinements": [{ "outlet": "sidebar", "hide": ["dashboard"] }], "contributions": [{ "outlet": "topbar", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales" } }] }] }]
+        }
+      },
+      "expected": {
+        "document": {
+          "navigation": {
+            "application": { "outlets": [{ "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "target": { "module": "dashboard" } }] }] },
+            "modules": [{ "module": "sales", "refinements": [{ "outlet": "sidebar", "hide": ["dashboard"] }], "contributions": [{ "outlet": "topbar", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales" } }] }] }]
+          }
+        },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "navigation items contributed to a contribution point become a contribution to the outlet of navigation, ordered",
+      "input": {
+        "screens": [{
+          "name": "Orders",
+          "contributions": [
+            { "contributionPointName": "Navigation", "content": { "id": "nav-orders", "componentName": "menuItem", "properties": { "label": "Orders", "targetScreen": "sales.orders.OrderList", "routeParameterBindings": {}, "order": 2 } } },
+            { "contributionPointName": "Navigation", "content": { "id": "nav-quotes", "componentName": "menuItem", "properties": { "id": "quotes", "label": "Quotes", "icon": "lucide:file", "targetScreen": "sales.quotes.QuoteList", "routeParameterBindings": {} } } },
+            { "contributionPointName": "Navigation", "content": { "id": "nav-customers", "componentName": "menuItem", "properties": { "id": "customers", "label": "Customers", "targetScreen": "sales.customers.CustomerList", "routeParameterBindings": {}, "destination": { "module": "sales", "feature": "customers" } } }, "order": 1 },
+            { "contributionPointName": "Stats", "content": { "id": "kpi", "componentName": "statCard", "properties": { "label": "Revenue" } } }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{
+            "name": "Orders",
+            "contributions": [
+              { "contributionPointName": "Stats", "content": { "id": "kpi", "componentName": "statCard", "properties": { "label": "Revenue" } } }
+            ],
+            "outletContributions": [{
+              "outlet": "Navigation",
+              "items": [
+                { "kind": "navigation", "id": "customers", "title": "Customers", "target": { "module": "sales", "feature": "customers" } },
+                { "kind": "navigation", "id": "sales.orders.OrderList", "title": "Orders", "target": { "screen": "sales.orders.OrderList" } },
+                { "kind": "navigation", "id": "quotes", "title": "Quotes", "icon": "lucide:file", "target": { "screen": "sales.quotes.QuoteList" } }
+              ]
+            }]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "grouped navigation contributions become sub-items of an item named after the group",
+      "input": {
+        "screens": [{
+          "name": "Gallery",
+          "contributions": [
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Dashboard", "targetScreen": "Dashboard", "routeParameterBindings": {}, "group": "Workspace", "order": 10 } } },
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Users", "targetScreen": "UserManagement", "routeParameterBindings": { "tab": { "literal": "all" } }, "group": "Administration", "order": 10 } } },
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Products", "targetScreen": "CrudList", "routeParameterBindings": {}, "group": "Workspace", "order": 20 } } }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{
+            "name": "Gallery",
+            "contributions": [],
+            "outletContributions": [{
+              "outlet": "Navigation",
+              "items": [
+                {
+                  "kind": "navigation",
+                  "id": "Workspace",
+                  "title": "Workspace",
+                  "children": [
+                    { "kind": "navigation", "id": "Dashboard", "title": "Dashboard", "target": { "screen": "Dashboard" } },
+                    { "kind": "navigation", "id": "CrudList", "title": "Products", "target": { "screen": "CrudList" } }
+                  ]
+                },
+                {
+                  "kind": "navigation",
+                  "id": "Administration",
+                  "title": "Administration",
+                  "children": [
+                    { "kind": "navigation", "id": "UserManagement", "title": "Users", "target": { "screen": "UserManagement", "routeParameterBindings": { "tab": { "literal": "all" } } } }
+                  ]
+                }
+              ]
+            }]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an action component's presentation becomes opens",
+      "input": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "add", "componentName": "core:action", "properties": { "label": "Add product", "command": "DraftProduct", "presentation": "modal" }, "slots": {} },
+          { "id": "withdraw", "componentName": "core:action", "properties": { "command": "WithdrawProduct", "presentation": "none", "arguments": [{ "name": "sku", "source": "component.products.selectedItem.sku" }] }, "slots": {} },
+          { "id": "price", "componentName": "thirdparty:action", "properties": { "command": "SetProductPrice", "presentation": "Drawer" }, "slots": {} },
+          { "id": "draft", "componentName": "core:action", "properties": { "command": "DraftProduct", "opens": "dialog", "presentation": "modal" }, "slots": {} },
+          { "id": "refresh", "componentName": "core:action", "properties": { "command": "RefreshCatalog" }, "slots": {} },
+          { "id": "note", "componentName": "core:text", "properties": { "presentation": "modal" }, "slots": {} }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Products", "slotContent": { "main": [
+            { "id": "add", "componentName": "core:action", "properties": { "label": "Add product", "command": "DraftProduct", "opens": "dialog" }, "slots": {} },
+            { "id": "withdraw", "componentName": "core:action", "properties": { "command": "WithdrawProduct", "opens": "none", "arguments": [{ "name": "sku", "source": "component.products.selectedItem.sku" }] }, "slots": {} },
+            { "id": "price", "componentName": "thirdparty:action", "properties": { "command": "SetProductPrice", "opens": "drawer" }, "slots": {} },
+            { "id": "draft", "componentName": "core:action", "properties": { "command": "DraftProduct", "opens": "dialog" }, "slots": {} },
+            { "id": "refresh", "componentName": "core:action", "properties": { "command": "RefreshCatalog" }, "slots": {} },
+            { "id": "note", "componentName": "core:text", "properties": { "presentation": "modal" }, "slots": {} }
+          ] } }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an action presentation that cannot become opens is reported and kept",
+      "input": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "odd", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+          { "id": "torn", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "drawer", "opens": "dialog" }, "slots": {} }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Products", "slotContent": { "main": [
+            { "id": "odd", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+            { "id": "torn", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "drawer", "opens": "dialog" }, "slots": {} }
+          ] } }]
+        },
+        "changed": false,
+        "diagnostics": [
+          { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[0].properties.presentation", "message": "The action 'odd' is presented as 'popover', which is not none, modal or drawer, so it has no opens to become" },
+          { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[1].properties.presentation", "message": "The action 'torn' is presented as 'drawer' but opens 'dialog'; keep one" }
+        ]
+      }
+    },
+    {
+      "name": "a screen's toolbar element becomes the element that draws an outlet of actions",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "orders-toolbar",
+                  "componentName": "core:toolbar",
+                  "properties": {
+                    "name": "orders"
+                  },
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "new",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "new",
+                          "kind": "Action",
+                          "label": "New order",
+                          "slice": "sales.orders.PlaceOrder",
+                          "emphasis": "Primary",
+                          "icon": "plus",
+                          "presentation": {
+                            "mode": "both"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "ship",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "ship",
+                          "kind": "Action",
+                          "label": "Ship",
+                          "target": "ShipOrder",
+                          "confirm": "Ship the order?"
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "details",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "details",
+                          "kind": "Navigate",
+                          "target": "OrderDetails",
+                          "label": "Details",
+                          "parameters": {
+                            "orderId": {
+                              "kind": "dataContext",
+                              "path": "order.id"
+                            },
+                            "tab": "lines"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "help",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "help",
+                          "kind": "Dialog",
+                          "target": "HelpDialog"
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "open",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "open",
+                          "kind": "Navigate",
+                          "label": "Open",
+                          "destination": {
+                            "screen": "OrderDetails",
+                            "slot": "detail"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "orders-toolbar",
+                    "componentName": "core:outletItems",
+                    "slots": {},
+                    "properties": {
+                      "name": "orders",
+                      "kind": "actions",
+                      "items": [
+                        {
+                          "kind": "button",
+                          "id": "new",
+                          "title": "New order",
+                          "icon": "plus",
+                          "slice": "sales.orders.PlaceOrder",
+                          "emphasis": "primary"
+                        },
+                        {
+                          "kind": "button",
+                          "id": "ship",
+                          "title": "Ship",
+                          "command": "ShipOrder",
+                          "confirm": "Ship the order?"
+                        },
+                        {
+                          "kind": "button",
+                          "id": "details",
+                          "title": "Details",
+                          "navigateTo": {
+                            "screen": "OrderDetails",
+                            "routeParameterBindings": {
+                              "orderId": {
+                                "kind": "dataContext",
+                                "path": "order.id"
+                              },
+                              "tab": {
+                                "kind": "literal",
+                                "path": "",
+                                "value": "lines"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "kind": "button",
+                          "id": "help",
+                          "title": "help",
+                          "navigateTo": {
+                            "kind": "dialog",
+                            "dialog": "HelpDialog"
+                          }
+                        },
+                        {
+                          "kind": "button",
+                          "id": "open",
+                          "title": "Open",
+                          "navigateTo": {
+                            "screen": "OrderDetails",
+                            "slot": "detail"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a toolbar element that names no outlet becomes the toolbar outlet",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": []
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:outletItems",
+                    "properties": {
+                      "name": "toolbar",
+                      "kind": "actions",
+                      "items": []
+                    },
+                    "slots": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a toolbar element whose item passes parameters to its command is reported and kept",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {
+                    "name": "main"
+                  },
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "edit",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "target": "EditInvoice",
+                          "parameters": {
+                            "invoiceId": "i-7"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:toolbar",
+                    "properties": {
+                      "name": "main"
+                    },
+                    "slots": {
+                      "items": [
+                        {
+                          "id": "edit",
+                          "componentName": "core:toolbarItem",
+                          "properties": {
+                            "kind": "Action",
+                            "target": "EditInvoice",
+                            "parameters": {
+                              "invoiceId": "i-7"
+                            }
+                          },
+                          "slots": {}
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyToolbarElement",
+            "path": "$.screens[0].slotContent.main[0].slots.items",
+            "message": "The toolbar 'bar' has the item 'edit' that passes parameters to its command, which an outlet button takes from the slice's inputs instead, so it is kept as it is"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a toolbar element whose item has presentation hints is upgraded with the hints dropped and reported",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "info",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Navigate",
+                          "target": "Info",
+                          "presentation": {
+                            "mode": "icon",
+                            "placement": "end"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:outletItems",
+                    "properties": {
+                      "name": "toolbar",
+                      "kind": "actions",
+                      "items": [{ "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" } }]
+                    },
+                    "slots": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": [
+          {
+            "code": "droppedPresentationHints",
+            "path": "$.screens[0].slotContent.main[0].slots.items[0].properties.presentation",
+            "message": "The toolbar 'bar' has the item 'info' with the presentation hints mode, placement, which an outlet button has no place for, so they are dropped"
+          }
+        ]
+      }
+    }
+  ],
+  "validations": [
+    {
+      "name": "outlet items of an unknown kind, of a kind their outlet or group does not take, or missing what their kind needs",
+      "document": {
+        "screenTemplates": [{
+          "name": "ListPage",
+          "slots": [{ "name": "main" }],
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [
+              { "kind": "tab", "id": "pricing", "title": "Pricing", "shows": "catalog.pricing.ProductPricing" },
+              { "kind": "widget", "id": "odd", "title": "Odd" },
+              { "kind": "button", "title": "No id" },
+              { "kind": "group", "id": "more", "title": "More", "items": [{ "kind": "stat", "id": "count", "title": "Count" }, { "kind": "menuEntry", "id": "print", "title": "Print" }] },
+              { "kind": "separator", "id": "gap" }
+            ] },
+            { "name": "detailTabs", "kind": "Tabs", "slot": "main", "defaults": [{ "kind": "Tab", "id": "notes", "title": "Notes" }] }
+          ]
+        }],
+        "screens": [{
+          "name": "Products",
+          "refinements": [{ "outlet": "toolbar", "mode": "extends", "items": [{ "id": "export", "title": "Export" }] }],
+          "outletContributions": [{ "outlet": "sidebar", "items": [{ "kind": "navigation", "id": "home" }] }]
+        }]
+      },
+      "expected": [
+        { "code": "outletItemKindMismatch", "path": "$.screenTemplates[0].outlets[0].defaults[0].kind", "message": "The tab 'pricing' cannot go in the actions outlet 'toolbar', which takes buttons, menu entries, separators and groups" },
+        { "code": "unknownOutletItemKind", "path": "$.screenTemplates[0].outlets[0].defaults[1].kind", "message": "The item 'odd' of the outlet 'toolbar' has the kind 'widget'; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item" },
+        { "code": "incompleteOutletItem", "path": "$.screenTemplates[0].outlets[0].defaults[2].id", "message": "The button '(no id)' of the outlet 'toolbar' has no id" },
+        { "code": "outletItemKindMismatch", "path": "$.screenTemplates[0].outlets[0].defaults[3].items[0].kind", "message": "The stat 'count' cannot go in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators" },
+        { "code": "incompleteOutletItem", "path": "$.screenTemplates[0].outlets[1].defaults[0].shows", "message": "The tab 'notes' of the outlet 'detailTabs' has no screen to show" },
+        { "code": "unknownOutletItemKind", "path": "$.screens[0].refinements[0].items[0].kind", "message": "The item 'export' of the outlet 'toolbar' has no kind; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item" },
+        { "code": "incompleteOutletItem", "path": "$.screens[0].outletContributions[0].items[0].title", "message": "The navigation item 'home' of the outlet 'sidebar' has no title" }
+      ]
+    },
+    {
+      "name": "values a user typed in an element's properties and a kind of outlet on something that is not a destination",
+      "document": {
+        "screens": [{ "name": "Stores", "slotContent": { "main": [
+          { "id": "stores", "componentName": "core:card", "properties": { "outlets": [{ "name": "Harbour" }], "metadata": { "primaryOutlet": "Harbour" }, "shape": { "kind": "Outlet" } }, "slots": {} }
+        ] } }],
+        "sampleRecord": { "name": "Harbour", "kind": "outlet" }
+      },
+      "expected": []
+    },
+    {
+      "name": "an action component that still stores a presentation",
+      "document": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "add", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "modal" }, "slots": {} }
+        ] } }]
+      },
+      "expected": [
+        { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[0].properties.presentation", "message": "The action 'add' stores a presentation. Scene 5 replaced an action's presentation with opens: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "fits, opens and a slot that are not known or not named",
+      "document": {
+        "screens": [{ "name": "Products", "fits": ["Drawer", "sidebar", "pane"], "slotContent": { "main": [
+          { "id": "price", "componentName": "core:action", "properties": { "command": "SetProductPrice", "opens": "slot" }, "slots": {} },
+          { "id": "detail", "componentName": "core:action", "properties": { "command": "ShowProduct", "opens": "Slot", "opensIn": "detail" }, "slots": {} }
+        ] } }],
+        "screenTemplates": [{ "name": "ListPage", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [
+          { "kind": "button", "id": "export", "title": "Export", "slice": "Catalog.Products.ExportProducts", "opens": "popover" },
+          { "kind": "menuEntry", "id": "archive", "title": "Archive", "slice": "Catalog.Products.ArchiveProduct", "opens": "slot", "opensIn": "" },
+          { "kind": "button", "id": "add", "title": "Add", "slice": "Catalog.Products.DraftProduct", "opens": "Dialog" }
+        ] }] }]
+      },
+      "expected": [
+        { "code": "unknownScreenFit", "path": "$.screens[0].fits[1]", "message": "The screen 'Products' fits 'sidebar'; a screen fits a dialog, a drawer, a pane, a panel or a page" },
+        { "code": "opensSlotWithoutName", "path": "$.screens[0].slotContent.main[0].properties.opensIn", "message": "The action 'price' opens in a slot but does not name one" },
+        { "code": "unknownOpens", "path": "$.screenTemplates[0].outlets[0].defaults[0].opens", "message": "The action 'export' opens 'popover'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot" },
+        { "code": "opensSlotWithoutName", "path": "$.screenTemplates[0].outlets[0].defaults[1].opensIn", "message": "The action 'archive' opens in a slot but does not name one" }
+      ]
+    },
+    {
+      "name": "a document in the slot shape",
+      "document": {
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "topbar" }, { "name": "content", "role": "page", "routed": true, "primary": true }, { "name": "drawer", "role": "Panel", "optional": true }] }],
+        "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routed": true, "routedBy": ["sku"] }], "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [] }, { "name": "detailTabs", "kind": "Tabs", "slot": "detail", "defaults": [] }] }],
+        "screens": [{ "name": "Products", "target": { "screen": "ProductDetails", "slot": "detail", "kind": "slot" } }]
+      },
+      "expected": []
+    },
+    {
+      "name": "outlets of a layout",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [], "outlets": [{ "name": "content" }] }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.layouts[0].outlets", "message": "'AppShell' declares outlets. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a primary outlet in the metadata",
+      "document": { "screenTemplates": [{ "name": "Frame", "slots": [{ "name": "main" }], "metadata": { "primaryOutlet": "main" } }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screenTemplates[0].metadata.primaryOutlet", "message": "'Frame' names its primary outlet in its metadata. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a destination that names an outlet",
+      "document": { "screens": [{ "name": "Invoices", "target": { "screen": "InvoiceDetails", "outlet": "detail", "kind": "outlet" } }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screens[0].target.kind", "message": "A destination opens the kind 'outlet'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" },
+        { "code": "legacyOutletShape", "path": "$.screens[0].target.outlet", "message": "A destination names the outlet 'detail'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a nested outlet a screen declares",
+      "document": { "screens": [{ "name": "Orders", "elements": [{ "id": "line", "componentName": "core:outlet", "properties": { "name": "line" } }] }] },
+      "expected": [
+        { "code": "legacyOutletShape", "path": "$.screens[0].elements[0].componentName", "message": "A screen declares a nested outlet with 'core:outlet'. Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a slot role that is not a page, a pane or a panel",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [{ "name": "side", "role": "sidebar" }] }] },
+      "expected": [
+        { "code": "unknownSlotRole", "path": "$.layouts[0].slots[0].role", "message": "The slot 'side' of 'AppShell' has the role 'sidebar'; a slot is a page, a pane or a panel" }
+      ]
+    },
+    {
+      "name": "route parameters on a slot that is not routed",
+      "document": { "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }, { "name": "detail", "routedBy": ["sku"] }] }] },
+      "expected": [
+        { "code": "routeParametersWithoutRouting", "path": "$.screenTemplates[0].slots[1].routedBy", "message": "The slot 'detail' of 'ListPage' is routed by sku but is not routed" }
+      ]
+    },
+    {
+      "name": "more than one primary slot",
+      "document": { "layouts": [{ "name": "AppShell", "slots": [{ "name": "content", "primary": true }, { "name": "main", "primary": true }] }] },
+      "expected": [
+        { "code": "multiplePrimarySlots", "path": "$.layouts[0].slots", "message": "'AppShell' marks 'content', 'main' as primary; only one slot can be" }
+      ]
+    },
+    {
+      "name": "a feature toolbar",
+      "document": { "features": [{ "name": "Products", "toolbar": { "buttons": [{ "id": "add", "title": "Add product" }] } }] },
+      "expected": [
+        { "code": "legacyToolbarShape", "path": "$.features[0].toolbar", "message": "'Products' has a toolbar whose buttons every screen gets. Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "an outlet of a kind that is not one of the five",
+      "document": { "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "buttons", "defaults": [] }, { "name": "stats", "defaults": [] }] }] },
+      "expected": [
+        { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[0].kind", "message": "The outlet 'toolbar' of 'ListPage' has the kind 'buttons'; an outlet lists actions, filters, tabs, stats or navigation" },
+        { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[1].kind", "message": "The outlet 'stats' of 'ListPage' has no kind; an outlet lists actions, filters, tabs, stats or navigation" }
+      ]
+    },
+    {
+      "name": "a navigation model that lists regions",
+      "document": { "navigation": { "application": { "regions": [{ "region": "topbar", "items": [{ "id": "sales", "title": "Sales" }] }] }, "modules": [] } },
+      "expected": [
+        { "code": "legacyNavigationShape", "path": "$.navigation.application.regions", "message": "The navigation lists regions. Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a screen that contributes navigation items to a contribution point",
+      "document": { "screens": [{ "name": "Orders", "contributions": [{ "contributionPointName": "Stats", "content": { "properties": { "label": "Revenue" } } }, { "contributionPointName": "Navigation", "content": { "properties": { "label": "Orders", "targetScreen": "OrderList", "routeParameterBindings": {} } } }] }] },
+      "expected": [
+        { "code": "legacyNavigationContribution", "path": "$.screens[0].contributions[1]", "message": "A navigation item is contributed to the contribution point 'Navigation'. Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a document that still has a toolbar element and its items",
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "new",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "slice": "sales.orders.PlaceOrder"
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "code": "legacyToolbarElement",
+          "path": "$.screens[0].slotContent.main[0].componentName",
+          "message": "The element 'bar' is a core:toolbar. Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source"
+        },
+        {
+          "code": "legacyToolbarElement",
+          "path": "$.screens[0].slotContent.main[0].slots.items[0].componentName",
+          "message": "The element 'new' is a core:toolbarItem. Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source"
+        }
+      ]
+    }
+  ]
+}

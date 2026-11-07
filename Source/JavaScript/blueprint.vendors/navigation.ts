@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { vendorsScreenDefinitions } from './vendorsScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,17 +36,17 @@ export const vendorsStructure: ApplicationStructure = (() => {
 export const vendorsNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Vendors' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'vendors', title: 'Vendors', target: { module: vendorsModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'vendors', title: 'Vendors', target: { module: vendorsModule } }] }],
     },
     modules: [{
         module: vendorsModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'list', title: 'Vendors', target: { module: vendorsModule, feature: 'list' } },
-                { id: 'onboarding', title: 'Onboarding', target: { module: vendorsModule, feature: 'onboarding' } },
-                { id: 'performance', title: 'Performance', target: { module: vendorsModule, feature: 'performance' } },
+                { kind: OutletItemKind.Navigation, id: 'list', title: 'Vendors', target: { module: vendorsModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'onboarding', title: 'Onboarding', target: { module: vendorsModule, feature: 'onboarding' } },
+                { kind: OutletItemKind.Navigation, id: 'performance', title: 'Performance', target: { module: vendorsModule, feature: 'performance' } },
             ],
         }],
     }],

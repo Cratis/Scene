@@ -8,7 +8,7 @@ import { bookingsComposition, bookingsScreenDefinitions } from '../index';
 import { ForcedState, tracker, forceState, preview, provideBrowserApis, violationsIn } from './given';
 
 
-const screenOnPage = () => document.querySelector('[data-scene-outlet="primary"]')!.getAttribute('data-scene-screen');
+const screenOnPage = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
 
 // Spec Part B 6: "standard states previewable via sample data" and "keyboard and screen-reader pass". Every ready-to-use screen is booted through the real
 // application host - the shell, the navigation, the template chain - once for each sample-data pack the blueprint ships.

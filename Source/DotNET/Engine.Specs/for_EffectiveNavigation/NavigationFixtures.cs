@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Cratis.Scene.Engine.Structure;
 using Cratis.Scene.Model.Navigation;
+using Cratis.Scene.Model.Outlets;
 using Cratis.Scene.Model.Structure;
 
 namespace Cratis.Scene.Engine.Navigation.for_EffectiveNavigation;
@@ -24,9 +25,9 @@ public static class NavigationFixtures
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
 
-    public record ExpectedView(string Sources, IReadOnlyList<string> Items, NavigationRegionMode? Mode = null, IReadOnlyList<string>? Buttons = null);
+    public record ExpectedView(string Sources, IReadOnlyList<string> Items, OutletMode? Mode = null, IReadOnlyList<string>? Buttons = null);
 
-    public record View(string? Module, NavigationRegionKind Region, ExpectedView Expected);
+    public record View(string? Module, string Outlet, ExpectedView Expected);
 
     public record ExpectedDiagnostic(string Code, string Message, string? Entry);
 
@@ -50,7 +51,7 @@ public static class NavigationFixtures
 
     public static string DescribeView(ApplicationStructureIndex index, NavigationModel navigation, View view)
     {
-        var region = EffectiveNavigation.Resolve(index, navigation, view.Module, view.Region);
+        var region = EffectiveNavigation.Resolve(index, navigation, view.Module, view.Outlet);
         var mode = region.Mode is { } value ? $"mode={Camel(value.ToString())}\n" : string.Empty;
         return $"{mode}{Camel(region.Sources.Kind.ToString())}|{region.Sources.Label}\n{string.Join('\n', Lines(region.Items, 0))}{ButtonLines(region.Buttons ?? [])}";
     }
@@ -70,23 +71,28 @@ public static class NavigationFixtures
     public static NavigationEditPlan Plan(NavigationModel navigation, JsonElement call)
     {
         var module = call.TryGetProperty("module", out var moduleElement) ? moduleElement.GetString() : null;
-        NavigationRegionKind Region() => call.GetProperty("region").Deserialize<NavigationRegionKind>(_read);
+        var outlet = call.TryGetProperty("outlet", out var outletElement) ? outletElement.GetString()! : string.Empty;
+        string? Text(string name) => call.TryGetProperty(name, out var element) ? element.GetString() : null;
+        int? Index() => call.TryGetProperty("index", out var element) ? element.GetInt32() : null;
         switch (call.GetProperty("op").GetString())
         {
-            case "switchRegionMode":
-                return NavigationEdits.SwitchRegionMode(
+            case "switchOutletMode":
+                return NavigationEdits.SwitchOutletMode(
                     navigation,
                     module,
-                    Region(),
-                    call.GetProperty("mode").Deserialize<NavigationRegionMode>(_read),
+                    outlet,
+                    call.GetProperty("mode").Deserialize<OutletMode>(_read),
                     call.TryGetProperty("copy", out var copy) && copy.GetBoolean());
-            case "addNavItem":
-                return NavigationEdits.AddNavItem(
-                    navigation,
-                    module,
-                    Region(),
-                    call.GetProperty("item").Deserialize<NavItem>(_read)!,
-                    call.TryGetProperty("parent", out var parent) ? parent.GetString() : null);
+            case "addNavigationItem":
+                return NavigationEdits.AddItem(navigation, module, outlet, call.GetProperty("item").Deserialize<OutletItem>(_read)!, Text("parent"), Index());
+            case "renameNavigationItem":
+                return NavigationEdits.RenameItem(navigation, module, outlet, Text("id")!, Text("title")!);
+            case "moveNavigationItem":
+                return NavigationEdits.MoveItem(navigation, module, outlet, Text("id")!, Text("parent"), Index());
+            case "duplicateNavigationItem":
+                return NavigationEdits.DuplicateItem(navigation, module, outlet, Text("id")!, Text("newId"));
+            case "removeNavigationItem":
+                return NavigationEdits.RemoveItem(navigation, module, outlet, Text("id")!);
             case "setApplicationLogo":
                 return NavigationEdits.SetApplicationLogo(module, call.GetProperty("logo").Deserialize<ApplicationLogo>(_read)!);
             default:

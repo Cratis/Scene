@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
+import { OutletBuiltInAction, OutletItemKind, OutletKind, ScreenTemplate, WidthSizeClass } from '@cratis/scene.model';
 import { column, grid, row, slotLeaf } from '../../layouts/flowBuilders';
 import { component, foundationTemplateProvenance, fromQuery, thumbnailOf } from './templateParts';
 
@@ -31,6 +31,10 @@ export const dashboardScreenTemplate: ScreenTemplate = {
         tables: [component('dashboard-deals', 'dataList', { label: 'Closing soon', rows: fromQuery('Deals'), columns: fromQuery('DealColumns'), titleField: 'name', pageSize: 5 })],
         aside: [component('dashboard-activity', 'activityFeed', { label: 'Recent activity', entries: fromQuery('Activity') })],
     },
+    outlets: [
+        { name: 'toolbar', kind: OutletKind.Actions, defaults: [{ kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', builtIn: OutletBuiltInAction.Refresh }] },
+        { name: 'stats', kind: OutletKind.Stats, defaults: [] },
+    ],
     displayName: 'Dashboard',
     description: 'Key figures, charts and tables, each region with its own loading, empty and error states.',
     metadata: { ...foundationTemplateProvenance, type: 'Dashboard', category: 'Foundation / Dashboard', thumbnail: thumbnailOf('DashboardScreen') },

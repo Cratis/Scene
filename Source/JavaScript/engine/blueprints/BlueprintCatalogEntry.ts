@@ -21,14 +21,29 @@ export interface BlueprintCatalogTemplate {
     category?: string;
     thumbnail?: string;
 
-    /** For a shell (a layout, or a screen template with the root role): the names of its outlets, in declaration order. */
-    outlets?: string[];
+    /** For a shell (a layout, or a screen template with the root role): the names of its slots, in declaration order. */
+    slots?: string[];
 
-    /** For a shell: the outlet every screen's content is placed in. Absent when it is `content`. */
-    primaryOutlet?: string;
+    /** For a shell: the slot every screen's content is placed in. Absent when it is `content`. */
+    primarySlot?: string;
 
     /** The structural role the template takes, for a screen template with one (`Root` marks a shell). */
     role?: string;
+
+    /** The outlets the template offers - its toolbar, filters, tabs, stats or navigation - in declaration order. */
+    outlets?: BlueprintCatalogOutlet[];
+}
+
+/** One outlet a template offers, as the gallery lists it: "toolbar · actions · 2 defaults". */
+export interface BlueprintCatalogOutlet {
+    /** The name of the outlet, such as `toolbar`. */
+    name: string;
+
+    /** Its kind: `actions`, `filters`, `tabs`, `stats` or `navigation`. */
+    kind: string;
+
+    /** How many default items it declares. */
+    defaults: number;
 }
 
 /** One sample-data pack a blueprint ships, as the gallery's preview-data selector lists it. */

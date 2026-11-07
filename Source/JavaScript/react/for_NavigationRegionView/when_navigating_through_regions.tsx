@@ -67,12 +67,12 @@ describe('when navigating through the topbar and sidebar of an application', () 
         let container: HTMLElement;
 
         beforeEach(() => {
-            ({ container } = render(<NavigationApplication structure={structure} navigation={navigation} initialScreen='support.tickets' outlets={{ 'support.tickets': ['side'] }} />));
+            ({ container } = render(<NavigationApplication structure={structure} navigation={navigation} initialScreen='support.tickets' slots={{ 'support.tickets': ['side'] }} />));
             fireEvent.click(link(container, 'Knowledge base'));
         });
 
         it('should keep the main screen and place the other in the side slot', () =>
-            [shown(container), container.querySelector('[data-scene-outlet="side"] [data-screen]')!.getAttribute('data-screen')].should.deep.equal(['support.tickets', 'support.kb']));
+            [shown(container), container.querySelector('[data-scene-slot="side"] [data-screen]')!.getAttribute('data-screen')].should.deep.equal(['support.tickets', 'support.kb']));
         it('should mark both sidebar items active at once', () => active(container, NavigationRegionKind.Sidebar).should.deep.equal(['tickets', 'kb']));
         it('should mark the topbar item that renders into the slot active too', () => active(container, NavigationRegionKind.Topbar).should.include('help'));
     });

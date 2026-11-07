@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Screen, TemplateReference, UiProfile } from '@cratis/scene.model';
-import { OutletRemaps, ShellOutletAction, ShellSwitchPlan, TemplateLibrary, planShellSwitch, placeableScreenTemplates, resolveEffectiveShell } from '../index';
+import { SlotRemaps, ShellSlotAction, ShellSwitchPlan, TemplateLibrary, planShellSwitch, placeableScreenTemplates, resolveEffectiveShell } from '../index';
 
 interface SwitchCase {
     name: string;
@@ -13,7 +13,7 @@ interface SwitchCase {
     currentRoot: TemplateReference;
     candidateRoot: TemplateReference;
     screens: Screen[];
-    remaps: OutletRemaps;
+    remaps: SlotRemaps;
     expected: ShellSwitchPlan;
 }
 
@@ -32,9 +32,9 @@ const planOf = (fixture: SwitchCase): ShellSwitchPlan => {
 describe('when planning a shell switch against the shared fixture corpus', () => {
     it('should have cases in the corpus', () => corpus.cases.length.should.be.greaterThan(20));
 
-    it('should cover every outlet action', () => {
+    it('should cover every slot action', () => {
         const covered = new Set(corpus.cases.flatMap(fixture => fixture.expected.moves.map(move => move.action)));
-        [...covered].sort().should.deep.equal(Object.values(ShellOutletAction).sort());
+        [...covered].sort().should.deep.equal(Object.values(ShellSlotAction).sort());
     });
 
     it('should never leave a placeholder or an id in a message', () => {
@@ -52,7 +52,7 @@ describe('when planning a shell switch against the shared fixture corpus', () =>
             it('should give the plan the corpus expects', () => JSON.parse(JSON.stringify(plan)).should.deep.equal(fixture.expected));
             it('should plan the same twice', () => JSON.stringify(planOf(fixture)).should.equal(JSON.stringify(plan)));
             it('should block exactly when there are blockers', () => plan.canSwitch.should.equal(plan.blockers.length === 0));
-            it('should account for every outlet of the current shell', () => plan.moves.length.should.be.at.least(1));
+            it('should account for every slot of the current shell', () => plan.moves.length.should.be.at.least(1));
         });
     }
 });

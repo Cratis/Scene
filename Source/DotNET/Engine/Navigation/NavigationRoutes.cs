@@ -29,7 +29,7 @@ public static class NavigationRoutes
     /// <param name="kind">The destination's effective kind name.</param>
     /// <returns>A comparable target key.</returns>
     internal static string TargetOf(DestinationReference destination, string kind) =>
-        string.Join('|', kind, destination.Screen ?? Identity(destination), destination.Dialog ?? string.Empty, destination.Outlet ?? string.Empty);
+        string.Join('|', kind, destination.Screen ?? Identity(destination), destination.Dialog ?? string.Empty, destination.Slot ?? string.Empty);
 
     static string Identity(DestinationReference destination) =>
         string.Join('.', new[] { destination.Module, destination.Feature, destination.Slice }.Where(part => !string.IsNullOrEmpty(part)));

@@ -92,12 +92,19 @@
       "slots",
       "arrangement",
       "behaviors",
-      "outlets",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "Slot": [
       "name",
-      "arrangement"
+      "arrangement",
+      "description",
+      "role",
+      "routed",
+      "routedBy",
+      "primary",
+      "optional",
+      "accepts"
     ],
     "Arrangement": [],
     "FlowArrangement": [
@@ -195,18 +202,6 @@
       "contributionPointName",
       "content",
       "order"
-    ],
-    "NavigationItem": [
-      "id",
-      "label",
-      "icon",
-      "presentation",
-      "targetScreen",
-      "routeParameterBindings",
-      "destination",
-      "order",
-      "group",
-      "hierarchy"
     ],
     "UiProfile": [
       "name",
@@ -308,10 +303,12 @@
       "slotContent",
       "forms",
       "contributions",
+      "outletContributions",
       "screenTemplate",
       "behaviors",
       "path",
-      "owner"
+      "owner",
+      "fits"
     ],
     "UiStarter": [
       "name",
@@ -328,8 +325,8 @@
       "displayName",
       "description",
       "behaviors",
-      "outlets",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "DialogTemplate": [
       "name",
@@ -339,7 +336,8 @@
       "displayName",
       "description",
       "behaviors",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "TemplateMetadata": [
       "type",
@@ -352,7 +350,6 @@
       "sliceKinds",
       "thumbnail",
       "role",
-      "primaryOutlet",
       "defaultMenuMode",
       "displayName",
       "description"
@@ -502,16 +499,11 @@
       "module",
       "feature",
       "slice",
-      "outlet",
+      "slot",
       "route",
       "kind",
       "dialog",
       "routeParameterBindings"
-    ],
-    "Outlet": [
-      "name",
-      "description",
-      "accepts"
     ],
     "PackageDesignTimeMetadata": [
       "previews",
@@ -635,39 +627,18 @@
       "command",
       "dialogTemplate"
     ],
-    "NavItem": [
-      "id",
-      "title",
-      "icon",
-      "target",
-      "slot",
-      "children"
-    ],
-    "NavigationRegion": [
-      "region",
-      "mode",
-      "items",
-      "buttons"
-    ],
-    "NavigationButton": [
-      "id",
-      "title",
-      "slice",
-      "emphasis",
-      "icon",
-      "authorize"
-    ],
     "ApplicationLogo": [
       "image",
       "title"
     ],
     "ApplicationNavigation": [
-      "regions",
+      "outlets",
       "logo"
     ],
     "ModuleNavigation": [
       "module",
-      "regions"
+      "refinements",
+      "contributions"
     ],
     "NavigationModel": [
       "application",
@@ -684,6 +655,23 @@
     "Toolbar": [
       "buttons"
     ],
+    "QueryParameterReference": ["query", "parameter"],
+    "QueryFieldReference": ["query", "field"],
+    "OutletItem": ["kind", "id", "before", "after"],
+    "OutletAction": ["title", "icon", "slice", "command", "navigateTo", "builtIn", "opens", "opensIn", "subject", "enabledWhen", "confirm", "authorize"],
+    "OutletButton": ["kind", "emphasis"],
+    "OutletMenuEntry": ["kind"],
+    "OutletSeparator": ["kind"],
+    "OutletGroup": ["kind", "title", "icon", "items"],
+    "OutletFilter": ["kind", "title", "control", "sets"],
+    "OutletTab": ["kind", "title", "shows"],
+    "OutletStat": ["kind", "title", "valueFrom", "trend"],
+    "OutletNavigationItem": ["kind", "title", "icon", "target", "slot", "children"],
+    "Outlet": ["name", "kind", "subject", "slot", "defaults"],
+    "OutletRefinement": ["outlet", "mode", "items", "hide"],
+    "OutletContribution": ["outlet", "items"],
+    "DialogActionsOutlet": [],
+    "SceneJson": [],
     "BlueprintScreen": [
       "name",
       "title",
@@ -825,8 +813,13 @@
       "Clear",
       "Preserve"
     ],
+    "SlotRole": [
+      "Page",
+      "Pane",
+      "Panel"
+    ],
     "DestinationKind": [
-      "Outlet",
+      "Slot",
       "Dialog",
       "External"
     ],
@@ -868,16 +861,19 @@
       "Topbar",
       "Sidebar"
     ],
-    "NavigationRegionMode": [
-      "Inherit",
-      "Extend",
-      "Override"
-    ],
     "ToolbarEmphasis": [
       "Primary",
       "Secondary",
       "Quiet"
     ],
+    "OutletKind": ["Actions", "Filters", "Tabs", "Stats", "Navigation"],
+    "OutletSubject": ["Item", "Screen"],
+    "OutletMode": ["Inherits", "Extends", "Overrides"],
+    "OutletItemKind": ["Button", "MenuEntry", "Separator", "Group", "Filter", "Tab", "Stat", "Navigation"],
+    "OutletBuiltInAction": ["Close", "Submit", "Refresh"],
+    "Opens": ["Automatic", "None", "Dialog", "Drawer", "Slot"],
+    "ScreenFit": ["Dialog", "Drawer", "Pane", "Panel", "Page"],
+    "FilterControl": ["Search", "Choice", "Range", "Date"],
     "ColorScheme": [
       "Light",
       "Dark",

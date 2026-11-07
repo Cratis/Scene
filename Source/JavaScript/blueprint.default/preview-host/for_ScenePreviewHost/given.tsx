@@ -3,7 +3,7 @@
 
 import { PrimeReactProvider } from '@primereact/core';
 import {
-    ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SampleDataPack, SceneElement, Screen,
+    ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode, SampleDataPack, SceneElement, Screen,
 } from '@cratis/scene.model';
 import { RegisteredComponentProps, coreComponents } from '@cratis/scene.react';
 import { defaultBlueprintComponents } from '../../defaultBlueprintComponents';
@@ -34,25 +34,25 @@ export const structure = {
 export const navigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Acme' },
-        regions: [
-            { region: NavigationRegionKind.Topbar, items: [
-                { id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
-                { id: 'sales', title: 'Sales', target: { module: 'sales' } },
-                { id: 'support', title: 'Support', target: { module: 'support' } },
+        outlets: [
+            { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [
+                { kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
+                { kind: OutletItemKind.Navigation, id: 'sales', title: 'Sales', target: { module: 'sales' } },
+                { kind: OutletItemKind.Navigation, id: 'support', title: 'Support', target: { module: 'support' } },
             ] },
-            { region: NavigationRegionKind.Sidebar, items: [{ id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
+            { name: NavigationRegionKind.Sidebar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
         ],
     },
     modules: [
-        { module: 'sales', regions: [{ region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-            { id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' } },
-            { id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
+        { module: 'sales', refinements: [{ outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+            { kind: OutletItemKind.Navigation, id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' } },
+            { kind: OutletItemKind.Navigation, id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
         ] }] },
-        { module: 'support', regions: [
-            { region: NavigationRegionKind.Topbar, mode: NavigationRegionMode.Extend, items: [{ id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' } }] },
-            { region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-                { id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
-                { id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' } },
+        { module: 'support', refinements: [
+            { outlet: NavigationRegionKind.Topbar, mode: OutletMode.Extends, items: [{ kind: OutletItemKind.Navigation, id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' } }] },
+            { outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+                { kind: OutletItemKind.Navigation, id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
+                { kind: OutletItemKind.Navigation, id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' } },
             ] },
         ] },
     ],
@@ -75,9 +75,9 @@ const screen = (name: string, content: SceneElement[], template?: string): Scree
     name, layout: 'AppShell', slotContent: { content }, forms: [], contributions: [], ...(template === undefined ? {} : { screenTemplate: template }),
 });
 
-const ordersToolbar = element('orders-toolbar', 'core:toolbar', { name: 'orders' }, { items: [
-    element('new', 'core:toolbarItem', { name: 'new', kind: 'Action', label: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' }),
-    element('cancel', 'core:toolbarItem', { name: 'cancel', kind: 'Action', label: 'Cancel order', emphasis: 'secondary' }),
+const ordersToolbar = element('orders-toolbar', 'core:outletItems', { name: 'orders', kind: 'actions', items: [
+    { kind: 'button', id: 'new', title: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' },
+    { kind: 'button', id: 'cancel', title: 'Cancel order', emphasis: 'secondary' },
 ] });
 
 export function ordersApplication(): ApplicationDocument {
@@ -91,7 +91,7 @@ export function ordersApplication(): ApplicationDocument {
                 element('order-list', 'test:grid', { query: 'OrderList' }),
             ]),
             screen('sales.customers', [element('customers', 'test:page', { title: 'Customers' })]),
-            screen('support.tickets', [element('tickets', 'test:page', { title: 'Tickets' }, { content: [element('side', 'core:outlet', { name: 'side' })] })]),
+            screen('support.tickets', [element('tickets', 'test:page', { title: 'Tickets' }, { content: [element('side', 'core:slot', { name: 'side' })] })]),
             screen('support.kb', [element('kb', 'test:page', { title: 'Knowledge base' })]),
         ],
         uiProfiles: [{ ...previewProfile(undefined), name: 'Acme', sampleData: { activePack: 'nordic-smb', mappings: [], bindings: [] } }],

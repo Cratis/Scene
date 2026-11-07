@@ -96,7 +96,7 @@ describe('when checking the Invoicing screen set agrees with itself', () => {
 
     it('should lead every navigation item to a screen of the set', () => {
         const screens = new Set(invoicingScreenDefinitions.map(definition => definition.name));
-        const targets = [...invoicingNavigation.application.regions, ...invoicingNavigation.modules.flatMap(module => module.regions)].flatMap(region => itemsOf(region.items));
+        const targets = [...invoicingNavigation.application.outlets.map(outlet => outlet.defaults), ...invoicingNavigation.modules.flatMap(module => (module.refinements ?? []).map(refinement => refinement.items ?? []))].flatMap(items => itemsOf(items as never));
         targets.length.should.be.greaterThan(0);
         targets.filter(target => !screens.has(`${target.module}.${target.feature ?? ''}`) && target.feature !== undefined).should.deep.equal([]);
     });

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { hrScreenDefinitions } from './hrScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,24 +36,24 @@ export const hrStructure: ApplicationStructure = (() => {
 export const hrNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'HR' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'hr', title: 'HR', target: { module: hrModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'hr', title: 'HR', target: { module: hrModule } }] }],
     },
     modules: [{
         module: hrModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'directory', title: 'Directory', target: { module: hrModule, feature: 'directory' } },
-                { id: 'org', title: 'Org chart', target: { module: hrModule, feature: 'org' } },
+                { kind: OutletItemKind.Navigation, id: 'directory', title: 'Directory', target: { module: hrModule, feature: 'directory' } },
+                { kind: OutletItemKind.Navigation, id: 'org', title: 'Org chart', target: { module: hrModule, feature: 'org' } },
                 {
-                    id: 'timeoff', title: 'Time off', target: { module: hrModule, feature: 'timeoff' }, children: [
-                        { id: 'requests', title: 'Requests', target: { module: hrModule, feature: 'timeoff' } },
-                        { id: 'calendar', title: 'Team calendar', target: { module: hrModule, feature: 'timeoff.calendar' } },
-                        { id: 'balances', title: 'Balances', target: { module: hrModule, feature: 'timeoff.balances' } },
+                    kind: OutletItemKind.Navigation, id: 'timeoff', title: 'Time off', target: { module: hrModule, feature: 'timeoff' }, children: [
+                        { kind: OutletItemKind.Navigation, id: 'requests', title: 'Requests', target: { module: hrModule, feature: 'timeoff' } },
+                        { kind: OutletItemKind.Navigation, id: 'calendar', title: 'Team calendar', target: { module: hrModule, feature: 'timeoff.calendar' } },
+                        { kind: OutletItemKind.Navigation, id: 'balances', title: 'Balances', target: { module: hrModule, feature: 'timeoff.balances' } },
                     ],
                 },
-                { id: 'onboarding', title: 'Onboarding', target: { module: hrModule, feature: 'onboarding' } },
+                { kind: OutletItemKind.Navigation, id: 'onboarding', title: 'Onboarding', target: { module: hrModule, feature: 'onboarding' } },
             ],
         }],
     }],

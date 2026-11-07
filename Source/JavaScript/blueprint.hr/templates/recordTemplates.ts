@@ -17,6 +17,7 @@ export const hrEmployeePageTemplate: ScreenTemplate = {
     name: 'HrEmployeePage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('HrEmployeePage-header', 'pageHeader', { title: fromQuery(employee.record, '0.name'), subtitle: fromQuery(employee.record, '0.title') }, {
@@ -54,6 +55,7 @@ export const hrOnboardingChecklistTemplate: ScreenTemplate = {
     name: 'HrOnboardingChecklist',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('HrOnboardingChecklist-header', 'pageHeader', { title: fromQuery(onboarding.record, '0.name'), subtitle: 'Onboarding checklist' })],

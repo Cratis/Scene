@@ -167,7 +167,19 @@
           "description": "Open pipeline value, won this month, conversion rate, leads by source, deals by stage and my tasks.",
           "type": "Dashboard",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmDashboard.svg"
+          "thumbnail": "thumbnails/CrmDashboard.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmLeadList",
@@ -176,7 +188,34 @@
           "description": "Leads with their company, owner, status and last contact, filtered by owner, status, source and creation date.",
           "type": "List",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmLeadList.svg"
+          "thumbnail": "thumbnails/CrmLeadList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmContactList",
@@ -185,7 +224,34 @@
           "description": "Contacts with their company, owner, status and last contact, filtered by owner, status, source and creation date.",
           "type": "List",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmContactList.svg"
+          "thumbnail": "thumbnails/CrmContactList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmCompanyList",
@@ -194,7 +260,34 @@
           "description": "Companies with their industry, owner, status and last contact, filtered by owner, status, source and creation date.",
           "type": "List",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmCompanyList.svg"
+          "thumbnail": "thumbnails/CrmCompanyList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmDealPipeline",
@@ -212,7 +305,34 @@
           "description": "Every deal as a table grouped by stage, with the value of each stage as its subtotal.",
           "type": "List",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmDealList.svg"
+          "thumbnail": "thumbnails/CrmDealList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmActivityList",
@@ -221,7 +341,34 @@
           "description": "Calls, meetings, emails and tasks with their owner, status and date.",
           "type": "List",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmActivityList.svg"
+          "thumbnail": "thumbnails/CrmActivityList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "CrmContactPage",
@@ -230,7 +377,19 @@
           "description": "One contact: key facts, their fields, their deals and the activity with them.",
           "type": "Detail",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmContactPage.svg"
+          "thumbnail": "thumbnails/CrmContactPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "CrmCompanyPage",
@@ -239,7 +398,19 @@
           "description": "One company: key facts, its fields, its contacts and deals and the activity with it.",
           "type": "Detail",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmCompanyPage.svg"
+          "thumbnail": "thumbnails/CrmCompanyPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "CrmDealPage",
@@ -248,7 +419,19 @@
           "description": "One deal: stage, value and close date, its fields, the contacts involved and the activity on it.",
           "type": "Detail",
           "category": "Business / CRM",
-          "thumbnail": "thumbnails/CrmDealPage.svg"
+          "thumbnail": "thumbnails/CrmDealPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "CrmLeadCreateForm",

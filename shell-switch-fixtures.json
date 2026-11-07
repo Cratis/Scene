@@ -101,12 +101,12 @@
                 "name": "nav"
               },
               {
-                "name": "main"
+                "name": "main",
+                "primary": true
               }
             ],
             "metadata": {
               "role": "Root",
-              "primaryOutlet": "main",
               "category": "Shell"
             }
           },
@@ -275,12 +275,12 @@
                   "name": "rail"
                 },
                 {
-                  "name": "main"
+                  "name": "main",
+                  "primary": true
                 }
               ],
               "metadata": {
-                "role": "Root",
-                "primaryOutlet": "main"
+                "role": "Root"
               }
             }
           ]
@@ -349,21 +349,21 @@
         "isNoOp": true,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders",
               "Customers"
             ],
-            "description": "'Orders' and 'Customers' stay in outlet 'content'"
+            "description": "'Orders' and 'Customers' stay in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -373,8 +373,8 @@
       }
     },
     {
-      "name": "same outlet names",
-      "description": "a shell with the same outlets keeps every screen where it is",
+      "name": "same slot names",
+      "description": "a shell with the same slots keeps every screen where it is",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -434,22 +434,22 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [
               "Menu"
             ],
-            "description": "'Menu' stays in outlet 'sidebar'"
+            "description": "'Menu' stays in slot 'sidebar'"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -459,8 +459,8 @@
       }
     },
     {
-      "name": "content follows the primary outlet",
-      "description": "content moves to the primary outlet of a shell that names it differently",
+      "name": "content follows the primary slot",
+      "description": "content moves to the primary slot of a shell that names it differently",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -532,13 +532,13 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'OwnFrame'; no screen uses it"
+            "description": "Slot 'sidebar' of shell 'OwnShell' has no counterpart in shell 'OwnFrame'; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "primary",
             "target": "main",
             "screens": [
@@ -546,7 +546,7 @@
               "Customers",
               "Tickets"
             ],
-            "description": "'Orders', 'Customers' and 'Tickets' move from outlet 'content' to 'main', the primary outlet of shell 'OwnFrame'"
+            "description": "'Orders', 'Customers' and 'Tickets' move from slot 'content' to 'main', the primary slot of shell 'OwnFrame'"
           }
         ],
         "addPackages": [],
@@ -557,7 +557,7 @@
     },
     {
       "name": "primary follows back",
-      "description": "the primary outlet of the current shell goes to the content outlet of the next",
+      "description": "the primary slot of the current shell goes to the content slot of the next",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -601,19 +601,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "nav",
+            "slot": "nav",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'nav' of shell 'OwnFrame' has no counterpart in shell 'OwnShell'; no screen uses it"
+            "description": "Slot 'nav' of shell 'OwnFrame' has no counterpart in shell 'OwnShell'; no screen uses it"
           },
           {
-            "outlet": "main",
+            "slot": "main",
             "action": "primary",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' moves from outlet 'main' to 'content', the primary outlet of shell 'OwnShell'"
+            "description": "'Orders' moves from slot 'main' to 'content', the primary slot of shell 'OwnShell'"
           }
         ],
         "addPackages": [],
@@ -624,7 +624,7 @@
     },
     {
       "name": "primary of a blueprint root template",
-      "description": "a blueprint root screen template with its own primary outlet",
+      "description": "a blueprint root screen template with its own primary slot",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -670,19 +670,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'AnalyticsRoot'; no screen uses it"
+            "description": "Slot 'sidebar' of shell 'OwnShell' has no counterpart in shell 'AnalyticsRoot'; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "primary",
             "target": "main",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' moves from outlet 'content' to 'main', the primary outlet of shell 'AnalyticsRoot'"
+            "description": "'Orders' moves from slot 'content' to 'main', the primary slot of shell 'AnalyticsRoot'"
           }
         ],
         "addPackages": [],
@@ -692,8 +692,8 @@
       }
     },
     {
-      "name": "unused outlet without counterpart",
-      "description": "an outlet nobody uses needs no decision",
+      "name": "unused slot without counterpart",
+      "description": "a slot nobody uses needs no decision",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -751,27 +751,27 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+            "description": "Slot 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders",
               "Customers"
             ],
-            "description": "'Orders' and 'Customers' stay in outlet 'content'"
+            "description": "'Orders' and 'Customers' stay in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -781,8 +781,8 @@
       }
     },
     {
-      "name": "used outlet without counterpart",
-      "description": "screens in an outlet the new shell lacks block the switch until decided",
+      "name": "used slot without counterpart",
+      "description": "screens in a slot the new shell lacks block the switch until decided",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -868,21 +868,21 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers",
               "Tickets",
               "Invoices"
             ],
-            "description": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -898,13 +898,13 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -912,7 +912,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "3 screens ('Customers', 'Tickets' and 'Invoices') place content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -920,7 +920,7 @@
       }
     },
     {
-      "name": "one screen in the lost outlet",
+      "name": "one screen in the lost slot",
       "description": "singular wording with one screen",
       "profile": {
         "name": "Desktop",
@@ -965,19 +965,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers"
             ],
-            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "1 screen ('Customers') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -993,11 +993,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1005,7 +1005,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "1 screen ('Customers') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -1114,14 +1114,14 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Orders",
@@ -1130,7 +1130,7 @@
               "Invoices",
               "Quotes"
             ],
-            "description": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -1146,11 +1146,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1158,7 +1158,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "5 screens ('Orders', 'Customers', 'Tickets' and 2 more) place content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -1166,8 +1166,8 @@
       }
     },
     {
-      "name": "move into the primary outlet",
-      "description": "the user moves the lost outlet into content",
+      "name": "move into the primary slot",
+      "description": "the user moves the lost slot into content",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1229,28 +1229,28 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "moveToPrimary",
             "target": "content",
             "screens": [
               "Customers",
               "Tickets"
             ],
-            "description": "The content that 'Customers' and 'Tickets' place in outlet 'subject' moves into 'content', the primary outlet of shell 'OwnShell'"
+            "description": "The content that 'Customers' and 'Tickets' place in slot 'subject' moves into 'content', the primary slot of shell 'OwnShell'"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1309,26 +1309,26 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "drop",
             "screens": [
               "Customers"
             ],
-            "description": "The content that 'Customers' places in outlet 'subject' is dropped"
+            "description": "The content that 'Customers' places in slot 'subject' is dropped"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1338,8 +1338,8 @@
       }
     },
     {
-      "name": "map to another outlet",
-      "description": "the user maps the lost outlet to another outlet of the new shell",
+      "name": "map to another slot",
+      "description": "the user maps the lost slot to another slot of the new shell",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1402,28 +1402,28 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "mapTo",
             "target": "sidebar",
             "screens": [
               "Customers",
               "Tickets"
             ],
-            "description": "The content that 'Customers' and 'Tickets' place in outlet 'subject' moves into 'sidebar' of shell 'OwnShell'"
+            "description": "The content that 'Customers' and 'Tickets' place in slot 'subject' moves into 'sidebar' of shell 'OwnShell'"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1433,8 +1433,8 @@
       }
     },
     {
-      "name": "map to an outlet that is not there",
-      "description": "a mapping to a missing outlet is refused",
+      "name": "map to a slot that is not there",
+      "description": "a mapping to a missing slot is refused",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1483,19 +1483,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers"
             ],
-            "description": "The content in outlet 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such outlet",
+            "description": "The content in slot 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such slot",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -1511,11 +1511,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1523,7 +1523,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "The content in outlet 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such outlet"
+            "message": "The content in slot 'subject' cannot be mapped to 'footer': shell 'OwnShell' has no such slot"
           }
         ],
         "warnings": [],
@@ -1580,19 +1580,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers"
             ],
-            "description": "The content in outlet 'subject' cannot be mapped to '': shell 'OwnShell' has no such outlet",
+            "description": "The content in slot 'subject' cannot be mapped to '': shell 'OwnShell' has no such slot",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -1608,11 +1608,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1620,7 +1620,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "The content in outlet 'subject' cannot be mapped to '': shell 'OwnShell' has no such outlet"
+            "message": "The content in slot 'subject' cannot be mapped to '': shell 'OwnShell' has no such slot"
           }
         ],
         "warnings": [],
@@ -1628,8 +1628,8 @@
       }
     },
     {
-      "name": "choice for an outlet that needs none",
-      "description": "a choice for an outlet that is matched by name is ignored",
+      "name": "choice for a slot that needs none",
+      "description": "a choice for a slot that is matched by name is ignored",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1677,27 +1677,27 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "keep",
             "target": "subject",
             "screens": [
               "Customers"
             ],
-            "description": "'Customers' stays in outlet 'subject'"
+            "description": "'Customers' stays in slot 'subject'"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1707,8 +1707,8 @@
       }
     },
     {
-      "name": "template fits the lost outlet",
-      "description": "a screen built from a template that fits the lost outlet is affected through the template",
+      "name": "template fits the lost slot",
+      "description": "a screen built from a template that fits the lost slot is affected through the template",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1760,19 +1760,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers"
             ],
-            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "1 screen ('Customers') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -1788,19 +1788,19 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           },
           {
-            "outlet": "aside",
+            "slot": "aside",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'aside' of shell 'DeskShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+            "description": "Slot 'aside' of shell 'DeskShell' has no counterpart in shell 'OwnShell'; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1808,7 +1808,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "1 screen ('Customers') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -1816,7 +1816,7 @@
       }
     },
     {
-      "name": "template fits a qualified outlet",
+      "name": "template fits a qualified slot",
       "description": "a template that fits 'ToolShell.subject'",
       "profile": {
         "name": "Desktop",
@@ -1855,19 +1855,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Notes"
             ],
-            "description": "1 screen ('Notes') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "1 screen ('Notes') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -1883,11 +1883,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -1895,7 +1895,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "1 screen ('Notes') places content in outlet 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "1 screen ('Notes') places content in slot 'subject', which shell 'OwnShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -1904,7 +1904,7 @@
     },
     {
       "name": "screen already outside the current shell",
-      "description": "a screen that uses an outlet the current shell lacks is mapped too",
+      "description": "a screen that uses a slot the current shell lacks is mapped too",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -1962,28 +1962,28 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           },
           {
-            "outlet": "footer",
+            "slot": "footer",
             "action": "unresolved",
             "screens": [
               "Stray"
             ],
-            "description": "1 screen ('Stray') places content in outlet 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "1 screen ('Stray') places content in slot 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -2008,7 +2008,7 @@
           {
             "code": "profileSlotUnplaced",
             "subject": "footer",
-            "message": "1 screen ('Stray') places content in outlet 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "1 screen ('Stray') places content in slot 'footer', which shell 'ToolShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],
@@ -2017,7 +2017,7 @@
     },
     {
       "name": "screen already outside, found by name",
-      "description": "switching can repair a stray screen when the new shell has that outlet",
+      "description": "switching can repair a stray screen when the new shell has that slot",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -2061,27 +2061,27 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "keep",
             "target": "subject",
             "screens": [
               "Stray"
             ],
-            "description": "'Stray' stays in outlet 'subject'"
+            "description": "'Stray' stays in slot 'subject'"
           }
         ],
         "addPackages": [],
@@ -2091,8 +2091,8 @@
       }
     },
     {
-      "name": "shell without a content outlet",
-      "description": "a shell with no outlet for the screens' content cannot be switched to",
+      "name": "shell without a content slot",
+      "description": "a shell with no slot for the screens' content cannot be switched to",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -2136,20 +2136,20 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -2157,7 +2157,7 @@
           {
             "code": "rootTemplateMissingContentSlot",
             "subject": "HeaderOnlyShell",
-            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+            "message": "Shell 'HeaderOnlyShell' has no 'content' slot, so no screen can be placed in it"
           }
         ],
         "warnings": [],
@@ -2210,20 +2210,20 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -2284,20 +2284,20 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -2360,20 +2360,20 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [],
@@ -2433,19 +2433,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'sidebar' of shell 'OwnShell' has no counterpart in shell 'HrShell'; no screen uses it"
+            "description": "Slot 'sidebar' of shell 'OwnShell' has no counterpart in shell 'HrShell'; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [
               "Orders"
             ],
-            "description": "'Orders' stays in outlet 'content'"
+            "description": "'Orders' stays in slot 'content'"
           }
         ],
         "addPackages": [
@@ -2487,24 +2487,24 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unused",
             "screens": [],
-            "description": "Outlet 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
+            "description": "Slot 'subject' of shell 'ToolShell' has no counterpart in shell 'OwnShell'; no screen uses it"
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -2515,7 +2515,7 @@
     },
     {
       "name": "shell blocker comes first",
-      "description": "the shell's own blockers come before the outlets to decide",
+      "description": "the shell's own blockers come before the slots to decide",
       "profile": {
         "name": "Desktop",
         "targetPlatform": "web",
@@ -2559,19 +2559,19 @@
         "isNoOp": false,
         "moves": [
           {
-            "outlet": "sidebar",
+            "slot": "sidebar",
             "action": "keep",
             "target": "sidebar",
             "screens": [],
-            "description": "Outlet 'sidebar' is kept; no screen uses it"
+            "description": "Slot 'sidebar' is kept; no screen uses it"
           },
           {
-            "outlet": "subject",
+            "slot": "subject",
             "action": "unresolved",
             "screens": [
               "Customers"
             ],
-            "description": "1 screen ('Customers') places content in outlet 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another outlet or drop it",
+            "description": "1 screen ('Customers') places content in slot 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another slot or drop it",
             "choices": [
               {
                 "action": "moveToPrimary",
@@ -2591,11 +2591,11 @@
             ]
           },
           {
-            "outlet": "content",
+            "slot": "content",
             "action": "keep",
             "target": "content",
             "screens": [],
-            "description": "Outlet 'content' is kept; no screen uses it"
+            "description": "Slot 'content' is kept; no screen uses it"
           }
         ],
         "addPackages": [],
@@ -2603,12 +2603,12 @@
           {
             "code": "rootTemplateMissingContentSlot",
             "subject": "HeaderOnlyShell",
-            "message": "Shell 'HeaderOnlyShell' has no 'content' outlet, so no screen can be placed in it"
+            "message": "Shell 'HeaderOnlyShell' has no 'content' slot, so no screen can be placed in it"
           },
           {
             "code": "profileSlotUnplaced",
             "subject": "subject",
-            "message": "1 screen ('Customers') places content in outlet 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another outlet or drop it"
+            "message": "1 screen ('Customers') places content in slot 'subject', which shell 'HeaderOnlyShell' does not have: move it into 'content', map it to another slot or drop it"
           }
         ],
         "warnings": [],

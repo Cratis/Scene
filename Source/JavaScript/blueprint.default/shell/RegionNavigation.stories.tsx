@@ -3,9 +3,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within } from 'storybook/test';
-import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, NavigationRegionMode, SceneElement, Visibility } from '@cratis/scene.model';
+import { ApplicationStructure, ExternalComponent, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode, SceneElement, Visibility } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { CoreOutlet, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
+import { CoreSlot, RegisteredComponentProps, SceneNavigationHost } from '@cratis/scene.react';
 import { LayoutConfigProvider } from '../configuration';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
@@ -19,24 +19,24 @@ const structure = {
 } as unknown as ApplicationStructure;
 
 const navigation: NavigationModel = {
-    application: { regions: [
-        { region: NavigationRegionKind.Topbar, items: [
-            { id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
-            { id: 'sales', title: 'Sales', target: { module: 'sales' } },
-            { id: 'support', title: 'Support', target: { module: 'support' } },
+    application: { outlets: [
+        { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [
+            { kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard' } },
+            { kind: OutletItemKind.Navigation, id: 'sales', title: 'Sales', target: { module: 'sales' } },
+            { kind: OutletItemKind.Navigation, id: 'support', title: 'Support', target: { module: 'support' } },
         ] },
-        { region: NavigationRegionKind.Sidebar, items: [{ id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
+        { name: NavigationRegionKind.Sidebar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: 'dashboard', feature: 'overview' } }] },
     ] },
     modules: [
-        { module: 'sales', regions: [{ region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-            { id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' }, children: [{ id: 'returns', title: 'Returns', target: { module: 'sales', feature: 'orders.returns' } }] },
-            { id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
+        { module: 'sales', refinements: [{ outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+            { kind: OutletItemKind.Navigation, id: 'orders', title: 'Orders', target: { module: 'sales', feature: 'orders' }, children: [{ kind: OutletItemKind.Navigation, id: 'returns', title: 'Returns', target: { module: 'sales', feature: 'orders.returns' } }] },
+            { kind: OutletItemKind.Navigation, id: 'customers', title: 'Customers', target: { module: 'sales', feature: 'customers' } },
         ] }] },
-        { module: 'support', regions: [
-            { region: NavigationRegionKind.Topbar, mode: NavigationRegionMode.Extend, items: [{ id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' }, slot: 'side' }] },
-            { region: NavigationRegionKind.Sidebar, mode: NavigationRegionMode.Override, items: [
-                { id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
-                { id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' }, slot: 'side' },
+        { module: 'support', refinements: [
+            { outlet: NavigationRegionKind.Topbar, mode: OutletMode.Extends, items: [{ kind: OutletItemKind.Navigation, id: 'help', title: 'Help center', target: { module: 'support', feature: 'kb' }, slot: 'side' }] },
+            { outlet: NavigationRegionKind.Sidebar, mode: OutletMode.Overrides, items: [
+                { kind: OutletItemKind.Navigation, id: 'tickets', title: 'Tickets', target: { module: 'support', feature: 'tickets' } },
+                { kind: OutletItemKind.Navigation, id: 'kb', title: 'Knowledge base', target: { module: 'support', feature: 'kb' }, slot: 'side' },
             ] },
         ] },
     ],
@@ -54,13 +54,13 @@ const screens: Record<string, SceneElement> = {
     'sales.orders': element('sales.orders', 'story:page'),
     'sales.orders.returns': element('sales.orders.returns', 'story:page'),
     'sales.customers': element('sales.customers', 'story:page'),
-    'support.tickets': element('support.tickets', 'story:page', {}, [element('side', 'core:outlet', { name: 'side' })]),
+    'support.tickets': element('support.tickets', 'story:page', {}, [element('side', 'core:slot', { name: 'side' })]),
     'support.kb': element('support.kb', 'story:page'),
 };
 
 function Application({ initialScreen }: { initialScreen: string }) {
     return <LayoutConfigProvider>
-        <SceneNavigationHost screens={screens} initialScreen={initialScreen} registry={{ 'story:page': Page, 'core:outlet': CoreOutlet }}
+        <SceneNavigationHost screens={screens} initialScreen={initialScreen} registry={{ 'story:page': Page, 'core:slot': CoreSlot }}
             navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation }}
             frame={content => <div className='layout-wrapper layout-static'>
                 <div className='layout-topbar'><Topbar element={element('topbar', 'topbar')} slots={{}} /></div>
@@ -87,7 +87,7 @@ type Story = StoryObj<typeof meta>;
 /** A module whose sidebar replaces the application's and nests Returns under Orders. */
 export const HierarchicalSidebar: Story = { args: { initialScreen: 'sales.orders' } };
 
-/** Activating the Knowledge base item renders it into the side outlet while Tickets stays in the main one; both are active. */
+/** Activating the Knowledge base item renders it into the side slot while Tickets stays in the main one; both are active. */
 export const TwoSlots: Story = {
     args: { initialScreen: 'support.tickets' },
     play: async ({ canvasElement }) => {

@@ -61,7 +61,34 @@
           "description": "Users with name, email, role, status and last active, filtered by role, status and last active; an invite action.",
           "type": "List",
           "category": "Business / Administration",
-          "thumbnail": "thumbnails/AdministrationUserList.svg"
+          "thumbnail": "thumbnails/AdministrationUserList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "AdministrationUserPage",
@@ -70,7 +97,19 @@
           "description": "One user: profile, role assignments and sessions.",
           "type": "Detail",
           "category": "Business / Administration",
-          "thumbnail": "thumbnails/AdministrationUserPage.svg"
+          "thumbnail": "thumbnails/AdministrationUserPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "AdministrationRoles",
@@ -79,7 +118,19 @@
           "description": "The roles on the left and the permission matrix of the chosen role on the right.",
           "type": "Workspace",
           "category": "Business / Administration",
-          "thumbnail": "thumbnails/AdministrationRoles.svg"
+          "thumbnail": "thumbnails/AdministrationRoles.svg",
+          "outlets": [
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "detailTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "AdministrationSettings",
@@ -97,7 +148,34 @@
           "description": "Time, actor, action and target of every change, filtered by actor, action and date range; exportable.",
           "type": "List",
           "category": "Business / Administration",
-          "thumbnail": "thumbnails/AdministrationAuditLog.svg"
+          "thumbnail": "thumbnails/AdministrationAuditLog.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "AdministrationInviteUser",

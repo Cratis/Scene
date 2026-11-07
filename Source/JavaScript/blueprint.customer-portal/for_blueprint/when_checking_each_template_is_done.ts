@@ -96,7 +96,7 @@ describe('when checking the Customer portal screen set agrees with itself', () =
 
     it('should lead every navigation item to a screen of the set', () => {
         const screens = new Set(customerPortalScreenDefinitions.map(definition => definition.name));
-        const targets = [...customerPortalNavigation.application.regions, ...customerPortalNavigation.modules.flatMap(module => module.regions)].flatMap(region => itemsOf(region.items));
+        const targets = [...customerPortalNavigation.application.outlets.map(outlet => outlet.defaults), ...customerPortalNavigation.modules.flatMap(module => (module.refinements ?? []).map(refinement => refinement.items ?? []))].flatMap(items => itemsOf(items as never));
         targets.length.should.be.greaterThan(0);
         targets.filter(target => !screens.has(`${target.module}.${target.feature ?? ''}`) && target.feature !== undefined).should.deep.equal([]);
     });

@@ -7,7 +7,7 @@ import { sceneRoutesFrom } from '../navigation/sceneRoutesFrom';
 
 describe('when matching deep links', () => {
     const routes = sceneRoutesFrom(['Orders', 'NewOrder'], [
-        { screen: 'OrderDetails', route: 'orders/{orderId}', outlet: 'detail' },
+        { screen: 'OrderDetails', route: 'orders/{orderId}', slot: 'detail' },
         { screen: 'NewOrder', route: 'orders/new' },
         { module: 'finance', feature: 'ledger', slice: 'Ledger' },
         { kind: DestinationKind.Dialog, dialog: 'Confirm', route: 'confirm' },
@@ -15,7 +15,7 @@ describe('when matching deep links', () => {
 
     it('should capture decoded path parameters and query parameters', () =>
         matchSceneRoute('orders/A%2FB%201?view=lines', routes)!.should.deep.equal({
-            route: { route: 'orders/{orderId}', screen: 'OrderDetails', outlet: 'detail' },
+            route: { route: 'orders/{orderId}', screen: 'OrderDetails', slot: 'detail' },
             parameters: { view: 'lines', orderId: 'A/B 1' },
         }));
 

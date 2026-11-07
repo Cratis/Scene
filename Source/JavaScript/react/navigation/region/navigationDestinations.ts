@@ -12,7 +12,7 @@ function flatten(items: EffectiveNavItem[]): EffectiveNavItem[] {
 /**
  * Every destination the navigation of the application and of each module can lead to, once each: what a
  * `SceneNavigationHost` is given as `destinations` so deep links to a navigation item resolve, and an item that renders
- * into a nested outlet is placed with the screen that declares the outlet.
+ * into a nested slot is placed with the screen that declares the slot.
  */
 export function navigationDestinations(
     structure: ApplicationStructure | ApplicationStructureIndex,

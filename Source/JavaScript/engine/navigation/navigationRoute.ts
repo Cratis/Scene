@@ -21,5 +21,5 @@ export const authoredRouteKey: NavigationRouteKey = destination => destination.r
  */
 export function navigationTarget(destination: DestinationReference, kind: string): string {
     const identity = destination.screen ?? [destination.module, destination.feature, destination.slice].filter(part => part).join('.');
-    return [kind, identity, destination.dialog ?? '', destination.outlet ?? ''].join('|');
+    return [kind, identity, destination.dialog ?? '', destination.slot ?? ''].join('|');
 }

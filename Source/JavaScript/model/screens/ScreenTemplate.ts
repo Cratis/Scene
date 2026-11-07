@@ -4,8 +4,8 @@
 import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
 import { Behavior } from '../interactions';
-import { Outlet } from './Outlet';
 import { TemplateMetadata } from './TemplateMetadata';
+import type { Outlet } from '../outlets/Outlet';
 
 /**
  * A reusable screen structure that fills a named slot on whatever contains it, and offers slots of its
@@ -66,11 +66,11 @@ export interface ScreenTemplate {
      */
     behaviors?: Behavior[];
 
-    /** Named routed replacement surfaces this template owns. Static slots remain composition surfaces. */
-    outlets?: Outlet[];
-
     /** Optional semantic type, browse category and scope restrictions. */
     metadata?: TemplateMetadata;
+
+    /** The outlets - item lists such as a toolbar, filters or row actions - the template offers, with their default items. */
+    outlets?: Outlet[];
 }
 
 export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
@@ -82,6 +82,6 @@ export const ScreenTemplatePropertyNames: (keyof ScreenTemplate)[] = [
     'displayName',
     'description',
     'behaviors',
-    'outlets',
     'metadata',
+    'outlets',
 ];

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { catalogScreenDefinitions } from './catalogScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,17 +36,17 @@ export const catalogStructure: ApplicationStructure = (() => {
 export const catalogNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Catalog' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'catalog', title: 'Catalog', target: { module: catalogModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'catalog', title: 'Catalog', target: { module: catalogModule } }] }],
     },
     modules: [{
         module: catalogModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'overview', title: 'Overview', target: { module: catalogModule, feature: 'overview' } },
-                { id: 'products', title: 'Products', target: { module: catalogModule, feature: 'products' } },
-                { id: 'categories', title: 'Categories', target: { module: catalogModule, feature: 'categories' } },
+                { kind: OutletItemKind.Navigation, id: 'overview', title: 'Overview', target: { module: catalogModule, feature: 'overview' } },
+                { kind: OutletItemKind.Navigation, id: 'products', title: 'Products', target: { module: catalogModule, feature: 'products' } },
+                { kind: OutletItemKind.Navigation, id: 'categories', title: 'Categories', target: { module: catalogModule, feature: 'categories' } },
             ],
         }],
     }],

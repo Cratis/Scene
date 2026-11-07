@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { bookingsScreenDefinitions } from './bookingsScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,18 +36,18 @@ export const bookingsStructure: ApplicationStructure = (() => {
 export const bookingsNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Bookings' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'bookings', title: 'Bookings', target: { module: bookingsModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'bookings', title: 'Bookings', target: { module: bookingsModule } }] }],
     },
     modules: [{
         module: bookingsModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'calendar', title: 'Calendar', target: { module: bookingsModule, feature: 'calendar' } },
-                { id: 'list', title: 'Bookings', target: { module: bookingsModule, feature: 'list' } },
-                { id: 'resources', title: 'Resources', target: { module: bookingsModule, feature: 'resources' } },
-                { id: 'new', title: 'New booking', target: { module: bookingsModule, feature: 'new' } },
+                { kind: OutletItemKind.Navigation, id: 'calendar', title: 'Calendar', target: { module: bookingsModule, feature: 'calendar' } },
+                { kind: OutletItemKind.Navigation, id: 'list', title: 'Bookings', target: { module: bookingsModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'resources', title: 'Resources', target: { module: bookingsModule, feature: 'resources' } },
+                { kind: OutletItemKind.Navigation, id: 'new', title: 'New booking', target: { module: bookingsModule, feature: 'new' } },
             ],
         }],
     }],

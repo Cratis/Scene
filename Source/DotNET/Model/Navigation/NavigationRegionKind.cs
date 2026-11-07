@@ -4,7 +4,7 @@
 namespace Cratis.Scene.Model.Navigation;
 
 /// <summary>
-/// The navigation regions an application shell has.
+/// The navigation regions an application shell has. Each is the name of the outlet of navigation the shell offers for it.
 /// </summary>
 public enum NavigationRegionKind
 {

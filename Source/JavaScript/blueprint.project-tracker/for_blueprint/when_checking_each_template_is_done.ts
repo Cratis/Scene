@@ -96,7 +96,7 @@ describe('when checking the Project and Task Tracker screen set agrees with itse
 
     it('should lead every navigation item to a screen of the set', () => {
         const screens = new Set(projectTrackerScreenDefinitions.map(definition => definition.name));
-        const targets = [...projectTrackerNavigation.application.regions, ...projectTrackerNavigation.modules.flatMap(module => module.regions)].flatMap(region => itemsOf(region.items));
+        const targets = [...projectTrackerNavigation.application.outlets.map(outlet => outlet.defaults), ...projectTrackerNavigation.modules.flatMap(module => (module.refinements ?? []).map(refinement => refinement.items ?? []))].flatMap(items => itemsOf(items as never));
         targets.length.should.be.greaterThan(0);
         targets.filter(target => !screens.has(`${target.module}.${target.feature ?? ''}`) && target.feature !== undefined).should.deep.equal([]);
     });

@@ -14,11 +14,11 @@ namespace Cratis.Scene.Engine.Navigation;
 /// </summary>
 /// <param name="Entries">The destinations to check, in authored order.</param>
 /// <param name="Screens">The screens destinations may open.</param>
-/// <param name="Layouts">The layouts that may own outlets.</param>
-/// <param name="ScreenTemplates">The screen templates that may own outlets, and that give screens their semantic type.</param>
+/// <param name="Layouts">The layouts that may own slots.</param>
+/// <param name="ScreenTemplates">The screen templates that may own slots, and that give screens their semantic type.</param>
 /// <param name="DialogTemplates">The dialog templates dialog destinations may open.</param>
-/// <param name="Structure">The modules, features and slices of the application; with <paramref name="Navigation"/>, the navigation regions are checked against them.</param>
-/// <param name="Navigation">The application and module navigation regions to check against <paramref name="Structure"/>.</param>
+/// <param name="Structure">The modules, features and slices of the application; with <paramref name="Navigation"/>, the navigation outlets are checked against them.</param>
+/// <param name="Navigation">The application's navigation outlets and how each module refines them, to check against <paramref name="Structure"/>.</param>
 /// <param name="Slots">The rendering slots navigation items may render into; <c language="csharp">content</c> only when <see langword="null"/>.</param>
 public record NavigationGraph(
     IReadOnlyList<NavigationEntry> Entries,
