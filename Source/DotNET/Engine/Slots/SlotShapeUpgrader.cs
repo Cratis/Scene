@@ -21,6 +21,11 @@ namespace Cratis.Scene.Engine.Slots;
 /// <item><description>A feature or module <c language="json">toolbar</c> (<c language="json">{ buttons }</c>), whose buttons every screen's toolbar
 /// got, becomes a refinement that extends the <c language="json">toolbar</c> outlet of actions, appended to the owner's
 /// <c language="json">refinements</c>. A button's <c language="json">target</c> (a command name) becomes the outlet button's <c language="json">command</c>.</description></item>
+/// <item><description>A navigation model that lists regions stores outlets instead: each application region becomes an outlet of navigation (its
+/// buttons the <c language="json">&lt;region&gt;Buttons</c> outlet of actions), and each module region that extends or overrides becomes a refinement of it
+/// (<see cref="LegacyNavigationShape.UpgradeNavigationModel"/>).</description></item>
+/// <item><description>Navigation items a screen contributes to a contribution point become contributions to the outlet of navigation of that name, in
+/// the screen's <c language="json">outletContributions</c> (<see cref="LegacyNavigationShape.UpgradeNavigationContributions"/>).</description></item>
 /// <item><description>The upgrade is idempotent, and what cannot be mapped is reported (never thrown) and stays as it was.</description></item>
 /// </list>
 /// </remarks>
@@ -70,6 +75,13 @@ public static class SlotShapeUpgrader
         ownChanged = MovePrimaryOutlet(owner, path, diagnostics) || ownChanged;
         ownChanged = RenameDestination(owner, path, diagnostics) || ownChanged;
         ownChanged = UpgradeToolbar(owner) || ownChanged;
+        if (LegacyNavigationShape.IsNavigationModel(owner))
+        {
+            LegacyNavigationShape.UpgradeNavigationModel(owner);
+            ownChanged = true;
+        }
+
+        ownChanged = LegacyNavigationShape.UpgradeNavigationContributions(owner) || ownChanged;
         if (LegacyOutletShape.Text(owner["componentName"]) == LegacyOutletShape.OutletComponentName)
         {
             owner["componentName"] = LegacyOutletShape.SlotComponentName;

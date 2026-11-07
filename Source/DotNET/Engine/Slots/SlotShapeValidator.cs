@@ -60,10 +60,41 @@ public static class SlotShapeValidator
         CheckLegacy(owner, path, diagnostics);
         CheckSlots(owner, path, diagnostics);
         CheckOutlets(owner, path, diagnostics);
+        CheckNavigation(owner, path, diagnostics);
 
         foreach (var (key, child) in owner)
         {
             Visit(child, $"{path}.{key}", diagnostics);
+        }
+    }
+
+    static void CheckNavigation(JsonObject owner, string path, List<SlotShapeDiagnostic> diagnostics)
+    {
+        if (LegacyNavigationShape.IsNavigationModel(owner))
+        {
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.LegacyNavigationShape,
+                $"{path}.application.regions",
+                $"The navigation lists regions. {LegacyOutletShape.NavigationMigrationHint}"));
+        }
+
+        if (owner["contributions"] is not JsonArray contributions)
+        {
+            return;
+        }
+
+        for (var index = 0; index < contributions.Count; index++)
+        {
+            if (!LegacyNavigationShape.IsNavigationContribution(contributions[index]))
+            {
+                continue;
+            }
+
+            var point = contributions[index]!["contributionPointName"]!.GetValue<string>();
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.LegacyNavigationContribution,
+                $"{path}.contributions[{index}]",
+                $"A navigation item is contributed to the contribution point '{point}'. {LegacyOutletShape.NavigationMigrationHint}"));
         }
     }
 

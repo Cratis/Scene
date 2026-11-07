@@ -29,4 +29,10 @@ export enum SlotShapeDiagnosticCode {
 
     /** An outlet's kind is not actions, filters, tabs, stats or navigation. */
     UnknownOutletKind = 'unknownOutletKind',
+
+    /** A navigation model lists navigation regions, which Scene 5 replaced with outlets of navigation. */
+    LegacyNavigationShape = 'legacyNavigationShape',
+
+    /** A screen contributes navigation items to a contribution point, which Scene 5 replaced with contributions to an outlet of navigation. */
+    LegacyNavigationContribution = 'legacyNavigationContribution',
 }

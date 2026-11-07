@@ -4,6 +4,7 @@
 import { OutletKind, SlotRole } from '@cratis/scene.model';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
+import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
 import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, isLegacyToolbar, legacyOutletComponentName } from './upgradeSlotShape';
 
 type JsonObject = { [key: string]: unknown };
@@ -41,6 +42,7 @@ function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[])
     checkLegacy(value, path, diagnostics);
     checkSlots(value, path, diagnostics);
     checkOutlets(value, path, diagnostics);
+    checkNavigation(value, path, diagnostics);
 
     for (const [key, child] of Object.entries(value)) {
         visit(child, `${path}.${key}`, diagnostics);
@@ -78,6 +80,28 @@ const outletKinds = new Set<string>(Object.values(OutletKind));
 
 /** What the validator tells a document that still has a feature or module toolbar. */
 export const toolbarShapeMigrationHint = 'Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
+
+/** What a stored navigation model or navigation contribution in the shape Scene 5 replaced is told to do. */
+export const navigationShapeMigrationHint = 'Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
+
+function checkNavigation(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (isLegacyNavigationModel(owner)) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.LegacyNavigationShape,
+            path: `${path}.application.regions`,
+            message: `The navigation lists regions. ${navigationShapeMigrationHint}`,
+        });
+    }
+    if (!Array.isArray(owner.contributions)) return;
+    owner.contributions.forEach((contribution: unknown, index: number) => {
+        if (!isLegacyNavigationContribution(contribution)) return;
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.LegacyNavigationContribution,
+            path: `${path}.contributions[${index}]`,
+            message: `A navigation item is contributed to the contribution point '${String(contribution.contributionPointName)}'. ${navigationShapeMigrationHint}`,
+        });
+    });
+}
 
 function checkOutlets(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     const ownerName = typeof owner.name === 'string' ? owner.name : '(unnamed)';

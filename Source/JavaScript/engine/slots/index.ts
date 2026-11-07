@@ -5,4 +5,5 @@ export * from './resolveSlotRole';
 export * from './SlotShapeDiagnostic';
 export * from './SlotShapeDiagnosticCode';
 export * from './upgradeSlotShape';
+export * from './upgradeNavigationShape';
 export * from './validateSlotShape';

@@ -48,4 +48,15 @@ public enum SlotShapeDiagnosticCode
     /// An outlet's kind is not actions, filters, tabs, stats or navigation.
     /// </summary>
     UnknownOutletKind = 7,
+
+    /// <summary>
+    /// A navigation model lists navigation regions, which Scene 5 replaced with outlets of navigation; upgrade it before saving.
+    /// </summary>
+    LegacyNavigationShape = 8,
+
+    /// <summary>
+    /// A screen contributes navigation items to a contribution point, which Scene 5 replaced with contributions to an outlet of navigation;
+    /// upgrade it before saving.
+    /// </summary>
+    LegacyNavigationContribution = 9,
 }

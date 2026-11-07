@@ -28,6 +28,11 @@ static class LegacyOutletShape
     public const string MigrationHint = "Scene 5 replaced outlets with slots: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source";
 
     /// <summary>
+    /// What the validator tells a document that still lists navigation regions or contributes navigation items to a contribution point.
+    /// </summary>
+    public const string NavigationMigrationHint = "Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source";
+
+    /// <summary>
     /// What the validator tells a document that still has a feature or module toolbar.
     /// </summary>
     public const string ToolbarMigrationHint = "Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source";

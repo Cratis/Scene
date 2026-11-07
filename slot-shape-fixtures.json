@@ -279,6 +279,167 @@
         "changed": false,
         "diagnostics": []
       }
+    },
+    {
+      "name": "navigation regions become outlets of navigation, their buttons outlets of actions and module regions refinements",
+      "input": {
+        "navigation": {
+          "application": {
+            "logo": { "image": "acme.svg", "title": "Acme" },
+            "regions": [
+              {
+                "region": "topbar",
+                "items": [{ "id": "sales", "title": "Sales", "target": { "module": "sales" } }],
+                "buttons": [{ "id": "new-order", "title": "New order", "slice": "sales.orders.PlaceOrder", "emphasis": "primary" }]
+              },
+              {
+                "region": "sidebar",
+                "items": [{ "id": "dashboard", "title": "Dashboard", "icon": "lucide:home", "target": { "module": "dashboard" }, "slot": "side", "children": [{ "id": "kpis", "title": "KPIs", "target": { "module": "dashboard", "feature": "kpis" } }] }]
+              }
+            ]
+          },
+          "modules": [
+            {
+              "module": "sales",
+              "regions": [
+                { "region": "sidebar", "mode": "extend", "items": [{ "id": "orders", "title": "Orders", "target": { "module": "sales", "feature": "orders" } }], "buttons": [{ "id": "export", "title": "Export" }] },
+                { "region": "topbar", "mode": "override", "items": [] }
+              ]
+            },
+            { "module": "support", "regions": [{ "region": "topbar", "mode": "inherit", "items": [] }, { "region": "sidebar", "items": [] }] }
+          ]
+        }
+      },
+      "expected": {
+        "document": {
+          "navigation": {
+            "application": {
+              "outlets": [
+                { "name": "topbar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "sales", "title": "Sales", "target": { "module": "sales" } }] },
+                { "name": "topbarButtons", "kind": "actions", "defaults": [{ "kind": "button", "id": "new-order", "title": "New order", "slice": "sales.orders.PlaceOrder", "emphasis": "primary" }] },
+                {
+                  "name": "sidebar",
+                  "kind": "navigation",
+                  "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "icon": "lucide:home", "target": { "module": "dashboard" }, "slot": "side", "children": [{ "kind": "navigation", "id": "kpis", "title": "KPIs", "target": { "module": "dashboard", "feature": "kpis" } }] }]
+                }
+              ],
+              "logo": { "image": "acme.svg", "title": "Acme" }
+            },
+            "modules": [
+              {
+                "module": "sales",
+                "refinements": [
+                  { "outlet": "sidebar", "mode": "extends", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales", "feature": "orders" } }] },
+                  { "outlet": "sidebarButtons", "mode": "extends", "items": [{ "kind": "button", "id": "export", "title": "Export" }] },
+                  { "outlet": "topbar", "mode": "overrides", "items": [] },
+                  { "outlet": "topbarButtons", "mode": "overrides", "items": [] }
+                ]
+              },
+              { "module": "support" }
+            ]
+          }
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a navigation model in the outlet shape is left as it is",
+      "input": {
+        "navigation": {
+          "application": { "outlets": [{ "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "target": { "module": "dashboard" } }] }] },
+          "modules": [{ "module": "sales", "refinements": [{ "outlet": "sidebar", "hide": ["dashboard"] }], "contributions": [{ "outlet": "topbar", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales" } }] }] }]
+        }
+      },
+      "expected": {
+        "document": {
+          "navigation": {
+            "application": { "outlets": [{ "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "dashboard", "title": "Dashboard", "target": { "module": "dashboard" } }] }] },
+            "modules": [{ "module": "sales", "refinements": [{ "outlet": "sidebar", "hide": ["dashboard"] }], "contributions": [{ "outlet": "topbar", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "sales" } }] }] }]
+          }
+        },
+        "changed": false,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "navigation items contributed to a contribution point become a contribution to the outlet of navigation, ordered",
+      "input": {
+        "screens": [{
+          "name": "Orders",
+          "contributions": [
+            { "contributionPointName": "Navigation", "content": { "id": "nav-orders", "componentName": "menuItem", "properties": { "label": "Orders", "targetScreen": "sales.orders.OrderList", "routeParameterBindings": {}, "order": 2 } } },
+            { "contributionPointName": "Navigation", "content": { "id": "nav-quotes", "componentName": "menuItem", "properties": { "id": "quotes", "label": "Quotes", "icon": "lucide:file", "targetScreen": "sales.quotes.QuoteList", "routeParameterBindings": {} } } },
+            { "contributionPointName": "Navigation", "content": { "id": "nav-customers", "componentName": "menuItem", "properties": { "id": "customers", "label": "Customers", "targetScreen": "sales.customers.CustomerList", "routeParameterBindings": {}, "destination": { "module": "sales", "feature": "customers" } } }, "order": 1 },
+            { "contributionPointName": "Stats", "content": { "id": "kpi", "componentName": "statCard", "properties": { "label": "Revenue" } } }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{
+            "name": "Orders",
+            "contributions": [
+              { "contributionPointName": "Stats", "content": { "id": "kpi", "componentName": "statCard", "properties": { "label": "Revenue" } } }
+            ],
+            "outletContributions": [{
+              "outlet": "Navigation",
+              "items": [
+                { "kind": "navigation", "id": "customers", "title": "Customers", "target": { "module": "sales", "feature": "customers" } },
+                { "kind": "navigation", "id": "sales.orders.OrderList", "title": "Orders", "target": { "screen": "sales.orders.OrderList" } },
+                { "kind": "navigation", "id": "quotes", "title": "Quotes", "icon": "lucide:file", "target": { "screen": "sales.quotes.QuoteList" } }
+              ]
+            }]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "grouped navigation contributions become sub-items of an item named after the group",
+      "input": {
+        "screens": [{
+          "name": "Gallery",
+          "contributions": [
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Dashboard", "targetScreen": "Dashboard", "routeParameterBindings": {}, "group": "Workspace", "order": 10 } } },
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Users", "targetScreen": "UserManagement", "routeParameterBindings": { "tab": { "literal": "all" } }, "group": "Administration", "order": 10 } } },
+            { "contributionPointName": "Navigation", "content": { "properties": { "label": "Products", "targetScreen": "CrudList", "routeParameterBindings": {}, "group": "Workspace", "order": 20 } } }
+          ]
+        }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{
+            "name": "Gallery",
+            "contributions": [],
+            "outletContributions": [{
+              "outlet": "Navigation",
+              "items": [
+                {
+                  "kind": "navigation",
+                  "id": "Workspace",
+                  "title": "Workspace",
+                  "children": [
+                    { "kind": "navigation", "id": "Dashboard", "title": "Dashboard", "target": { "screen": "Dashboard" } },
+                    { "kind": "navigation", "id": "CrudList", "title": "Products", "target": { "screen": "CrudList" } }
+                  ]
+                },
+                {
+                  "kind": "navigation",
+                  "id": "Administration",
+                  "title": "Administration",
+                  "children": [
+                    { "kind": "navigation", "id": "UserManagement", "title": "Users", "target": { "screen": "UserManagement", "routeParameterBindings": { "tab": { "literal": "all" } } } }
+                  ]
+                }
+              ]
+            }]
+          }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
     }
   ],
   "validations": [
@@ -354,6 +515,20 @@
       "expected": [
         { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[0].kind", "message": "The outlet 'toolbar' of 'ListPage' has the kind 'buttons'; an outlet lists actions, filters, tabs, stats or navigation" },
         { "code": "unknownOutletKind", "path": "$.screenTemplates[0].outlets[1].kind", "message": "The outlet 'stats' of 'ListPage' has no kind; an outlet lists actions, filters, tabs, stats or navigation" }
+      ]
+    },
+    {
+      "name": "a navigation model that lists regions",
+      "document": { "navigation": { "application": { "regions": [{ "region": "topbar", "items": [{ "id": "sales", "title": "Sales" }] }] }, "modules": [] } },
+      "expected": [
+        { "code": "legacyNavigationShape", "path": "$.navigation.application.regions", "message": "The navigation lists regions. Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a screen that contributes navigation items to a contribution point",
+      "document": { "screens": [{ "name": "Orders", "contributions": [{ "contributionPointName": "Stats", "content": { "properties": { "label": "Revenue" } } }, { "contributionPointName": "Navigation", "content": { "properties": { "label": "Orders", "targetScreen": "OrderList", "routeParameterBindings": {} } } }] }] },
+      "expected": [
+        { "code": "legacyNavigationContribution", "path": "$.screens[0].contributions[1]", "message": "A navigation item is contributed to the contribution point 'Navigation'. Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
       ]
     }
   ]
