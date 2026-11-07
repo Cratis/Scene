@@ -80,14 +80,50 @@ public static class EnablementResolver
         }
 
         var expression = request.EnabledWhen ?? "its condition";
-        var holds = request.ConditionHolds ?? Evaluate(request.Condition, request.Item);
-        return holds switch
+        var condition = request.Condition ?? (request.EnabledWhen is null ? null : GuardConditionText.Parse(request.EnabledWhen));
+        if (request.ConditionHolds is null && condition is null)
         {
-            null => new(EnablementCheck.Condition, EnablementOutcome.Unchecked, $"Enabled when {expression}, which cannot be checked here"),
-            true => new(EnablementCheck.Condition, EnablementOutcome.Passed, $"{expression} holds"),
-            false => new(EnablementCheck.Condition, EnablementOutcome.Blocked, $"Enabled when {expression}, which does not hold"),
-        };
+            return new(EnablementCheck.Condition, EnablementOutcome.Unchecked, $"Enabled when {expression}, which Scene cannot read");
+        }
+
+        var holds = request.ConditionHolds ?? Evaluate(condition, request.Item);
+        if (holds is null)
+        {
+            return new(EnablementCheck.Condition, EnablementOutcome.Unchecked, $"Enabled when {expression}, which cannot be checked here");
+        }
+
+        if (holds.Value)
+        {
+            return new(EnablementCheck.Condition, EnablementOutcome.Passed, $"{expression} holds");
+        }
+
+        var failing = request.ConditionHolds is null && condition is { } written && request.Item is { } item ? NarrowerFailingPart(written, item) : null;
+        var what = failing is { } part ? GuardConditionText.Describe(part) : expression;
+        return new(EnablementCheck.Condition, EnablementOutcome.Blocked, $"Enabled when {what}, which does not hold");
     }
+
+    /// <summary>
+    /// The part of a failing condition that makes it fail, when that is narrower than the whole: the first side of an
+    /// <c language="screenplay">and</c> that does not hold.
+    /// </summary>
+    /// <param name="condition">The condition.</param>
+    /// <param name="item">The item it is evaluated against.</param>
+    /// <returns>The failing part, or <see langword="null"/> when the whole condition is what fails.</returns>
+    static JsonElement? NarrowerFailingPart(JsonElement condition, JsonElement item)
+    {
+        if (!IsAnd(condition)) return null;
+        foreach (var side in new[] { condition.GetProperty("left"), condition.GetProperty("right") })
+        {
+            if (GuardConditions.Evaluate(side, item) == false) return NarrowerFailingPart(side, item) ?? side;
+        }
+
+        return null;
+    }
+
+    static bool IsAnd(JsonElement condition) =>
+        condition.ValueKind == JsonValueKind.Object
+        && condition.TryGetProperty("kind", out var kind) && kind.GetString() == "logical"
+        && condition.TryGetProperty("operator", out var @operator) && @operator.GetString() == "And";
 
     static bool? Evaluate(JsonElement? condition, JsonElement? item) =>
         condition is { } guard && item is { } subject && subject.ValueKind != JsonValueKind.Undefined

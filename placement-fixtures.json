@@ -472,6 +472,50 @@
       }
     },
     {
+      "name": "enabled when as written is evaluated against the selected item",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale", "stock": 4 }, "enabledWhen": "item.status == \"onSale\" and item.stock > 0" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "passed", "reason": "item.status == \"onSale\" and item.stock > 0 holds" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when that does not hold names the part that fails",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale", "stock": 0 }, "enabledWhen": "item.status == \"onSale\" && (item.stock > 0 || item.backorder == true)" },
+      "expected": {
+        "state": "disabled", "reason": "Enabled when item.stock > 0 or item.backorder == true, which does not hold",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.stock > 0 or item.backorder == true, which does not hold" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when on a comparison of words and an operator",
+      "request": { "subject": "item", "selected": true, "item": { "name": "Nordic Kettle" }, "enabledWhen": "item.name startsWith 'Nordic'" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "passed", "reason": "item.name startsWith 'Nordic' holds" }
+        ]
+      }
+    },
+    {
+      "name": "enabled when that Scene cannot read is reported, never guessed",
+      "request": { "subject": "item", "selected": true, "item": { "status": "onSale" }, "enabledWhen": "canPublish(item)" },
+      "expected": {
+        "state": "enabled", "reason": "Enabled",
+        "steps": [
+          { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+          { "check": "condition", "outcome": "unchecked", "reason": "Enabled when canPublish(item), which Scene cannot read" }
+        ]
+      }
+    },
+    {
       "name": "the subject decides before the condition",
       "request": { "subject": "item", "selected": false, "enabledWhen": "item.status == \"onSale\"", "conditionHolds": false },
       "expected": {

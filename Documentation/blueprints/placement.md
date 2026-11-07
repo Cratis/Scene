@@ -64,8 +64,13 @@ slots and the slots its content fills) and the page's route values. It returns:
 1. **The subject.** An action `for item` waits for a selection: *It is for item, so it waits for a selection*.
 2. **Authorization.** A persona without the policy the command authorizes with does not see the action. With no
    persona given, the check is `unchecked`.
-3. **`enabled when`.** The host's answer, or the structured guard condition evaluated against the selected item. With
-   neither, the check is `unchecked`.
+3. **`enabled when`.** The host's answer (`conditionHolds`) wins. Otherwise the condition is evaluated against the
+   selected item: the structured guard condition when one is given, or else the `enabledWhen` text as written.
+   `parseGuardCondition` (C#: `GuardConditionText.Parse`) reads that text. It takes comparisons of an `item.` path, an
+   operator (`==`, `!=`, `>`, `>=`, `<`, `<=`, `contains`, `startsWith`) and a literal, joined with `and`/`&&` and
+   `or`/`||`, in parentheses where needed. When it does not hold, the reason names the part of an `and` that fails,
+   such as *Enabled when item.stock > 0, which does not hold*. Text Scene cannot read is `unchecked` (*which Scene
+   cannot read*), and so is a condition with no item to evaluate it against. Scene never guesses.
 
 A blocked authorization makes the action `hidden`, whatever else holds, because the persona never sees it. Otherwise the
 first blocked check makes it `disabled`, with that check's reason; with none blocked it is `enabled`. An unchecked step

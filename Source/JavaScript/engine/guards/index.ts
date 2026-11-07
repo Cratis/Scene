@@ -4,3 +4,4 @@
 export * from './GuardEvaluationOptions';
 export * from './evaluateGuardCondition';
 export * from './selectGuardedAlternative';
+export * from './parseGuardCondition';

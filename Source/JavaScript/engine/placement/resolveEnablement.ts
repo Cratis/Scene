@@ -1,8 +1,9 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { OutletSubject } from '@cratis/scene.model';
+import { GuardCondition, LogicalGuardOperator, OutletSubject } from '@cratis/scene.model';
 import { evaluateGuard } from '../guards/evaluateGuardCondition';
+import { describeGuardCondition, parseGuardCondition } from '../guards/parseGuardCondition';
 import { Enablement, EnablementCheck, EnablementOutcome, EnablementRequest, EnablementState, EnablementStep } from './Enablement';
 
 function subjectStep(request: EnablementRequest): EnablementStep | undefined {
@@ -27,14 +28,30 @@ function authorizationStep(request: EnablementRequest): EnablementStep | undefin
 function conditionStep(request: EnablementRequest): EnablementStep | undefined {
     if (request.enabledWhen === undefined && request.condition === undefined && request.conditionHolds === undefined) return undefined;
     const expression = request.enabledWhen ?? 'its condition';
+    const condition = request.condition ?? (request.enabledWhen === undefined ? undefined : parseGuardCondition(request.enabledWhen));
+    if (request.conditionHolds === undefined && condition === undefined) {
+        return { check: EnablementCheck.Condition, outcome: EnablementOutcome.Unchecked, reason: `Enabled when ${expression}, which Scene cannot read` };
+    }
     const holds = request.conditionHolds
-        ?? (request.condition !== undefined && request.item !== undefined ? evaluateGuard(request.condition, request.item) : undefined);
+        ?? (condition !== undefined && request.item !== undefined ? evaluateGuard(condition, request.item) : undefined);
     if (holds === undefined) {
         return { check: EnablementCheck.Condition, outcome: EnablementOutcome.Unchecked, reason: `Enabled when ${expression}, which cannot be checked here` };
     }
-    return holds
-        ? { check: EnablementCheck.Condition, outcome: EnablementOutcome.Passed, reason: `${expression} holds` }
-        : { check: EnablementCheck.Condition, outcome: EnablementOutcome.Blocked, reason: `Enabled when ${expression}, which does not hold` };
+    if (holds) return { check: EnablementCheck.Condition, outcome: EnablementOutcome.Passed, reason: `${expression} holds` };
+    const failing = request.conditionHolds === undefined && condition !== undefined && request.item !== undefined
+        ? narrowerFailingPart(condition as GuardCondition, request.item)
+        : undefined;
+    const what = failing === undefined ? expression : describeGuardCondition(failing);
+    return { check: EnablementCheck.Condition, outcome: EnablementOutcome.Blocked, reason: `Enabled when ${what}, which does not hold` };
+}
+
+/** The part of a failing condition that makes it fail, when narrower than the whole: the first side of an `and` that does not hold. */
+function narrowerFailingPart(condition: GuardCondition, item: unknown): GuardCondition | undefined {
+    if (condition.kind !== 'logical' || condition.operator !== LogicalGuardOperator.And) return undefined;
+    for (const side of [condition.left, condition.right]) {
+        if (evaluateGuard(side, item) === false) return narrowerFailingPart(side, item) ?? side;
+    }
+    return undefined;
 }
 
 /**
