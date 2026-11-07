@@ -138,7 +138,7 @@ public class when_resolving_the_shared_corpus : Specification
 
     static string DescribeDialogOutlet(Outlet outlet) =>
         $"{outlet.Name}|{OutletItemKinds.NameOf(outlet.Kind)}|{string.Join(',', outlet.Defaults.Select(item => item is OutletButton button
-            ? $"{button.Id}:{(button.Runs is { } runs ? Camel(runs.ToString()) : "-")}:{(button.Emphasis is { } emphasis ? Camel(emphasis.ToString()) : "-")}"
+            ? $"{button.Id}:{(button.BuiltIn is { } builtIn ? Camel(builtIn.ToString()) : "-")}:{(button.Emphasis is { } emphasis ? Camel(emphasis.ToString()) : "-")}"
             : item.Id))}";
 
     (IReadOnlyList<OutletLevel> Chain, IReadOnlyList<OutletLevel> Contributors) Levels(JsonNode fixture) =>

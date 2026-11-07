@@ -6259,7 +6259,7 @@
                       "kind": "button",
                       "id": "refresh",
                       "title": "Refresh",
-                      "runs": "refresh"
+                      "builtIn": "refresh"
                     },
                     {
                       "kind": "button",

@@ -4,7 +4,7 @@
 namespace Cratis.Scene.Model.Outlets;
 
 /// <summary>
-/// A built-in an action runs instead of a slice or a navigation target: Screenplay's <c language="screenplay">runs close | submit | refresh</c>.
+/// A built-in an action runs instead of a slice or a navigation target, set in <see cref="OutletAction.BuiltIn"/>.
 /// </summary>
 public enum OutletBuiltInAction
 {

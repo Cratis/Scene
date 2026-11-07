@@ -17,7 +17,7 @@ Every outlet has a kind, and the kind decides which items it takes. Each item ha
 
 | Outlet kind | Items | An item binds to |
 | --- | --- | --- |
-| `actions` | `button`, `menuEntry`, `separator`, `group` (of buttons, menu entries and separators) | a State Change slice (a hook), a navigation target (`navigateTo`) or a built-in (`runs`: `close`, `submit`, `refresh`) |
+| `actions` | `button`, `menuEntry`, `separator`, `group` (of buttons, menu entries and separators) | a State Change slice (a hook), a navigation target (`navigateTo`) or a built-in (`builtIn`: `close`, `submit`, `refresh`) |
 | `filters` | `filter`: `title`, `control` (`search`, `choice`, `range`, `date`), `sets` (`query`, `parameter`) | a parameter of the query the screen shows |
 | `tabs` | `tab`: `title`, `shows` | a screen, shown in the slot the outlet owns (`slot`) |
 | `stats` | `stat`: `title`, `valueFrom` (`query`, `field`), `trend` | a field of a single-result query |
@@ -36,7 +36,7 @@ action's slice opens and whether the action is enabled are worked out by [placem
 | `OutletContribution` | `outlet`, `items` |
 
 Layouts, screen templates and dialog templates declare `outlets`. Every dialog and drawer template offers the
-`actions` outlet with Cancel (`runs close`) and Submit (`runs submit`, primary); `dialogTemplateOutlets`
+`actions` outlet with Cancel (`builtIn: close`) and Submit (`builtIn: submit`, primary); `dialogTemplateOutlets`
 (`DialogTemplateOutlets.Of`) returns it first unless the template declares its own `actions` outlet.
 
 A refinement without a `mode` extends when it has items or hides, and inherits otherwise.

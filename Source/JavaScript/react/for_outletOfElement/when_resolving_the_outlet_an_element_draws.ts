@@ -5,7 +5,7 @@ import { OutletLevelKind } from '@cratis/scene.engine';
 import { OutletItemKind, OutletKind } from '@cratis/scene.model';
 import { outletOfElement } from '../outlets/outletOfElement';
 
-const refresh = { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', runs: 'refresh' };
+const refresh = { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', builtIn: 'refresh' };
 const add = { kind: OutletItemKind.Button, id: 'add', title: 'Add', slice: 'Catalog.Products.AddProduct' };
 const chain = [
     { kind: OutletLevelKind.Template, name: 'Catalog', outlets: [{ name: 'toolbar', kind: OutletKind.Actions, defaults: [refresh] }] },

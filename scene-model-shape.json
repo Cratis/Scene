@@ -658,7 +658,7 @@
     "QueryParameterReference": ["query", "parameter"],
     "QueryFieldReference": ["query", "field"],
     "OutletItem": ["kind", "id", "before", "after"],
-    "OutletAction": ["title", "icon", "slice", "command", "navigateTo", "runs", "opens", "opensIn", "subject", "enabledWhen", "confirm", "authorize"],
+    "OutletAction": ["title", "icon", "slice", "command", "navigateTo", "builtIn", "opens", "opensIn", "subject", "enabledWhen", "confirm", "authorize"],
     "OutletButton": ["kind", "emphasis"],
     "OutletMenuEntry": ["kind"],
     "OutletSeparator": ["kind"],

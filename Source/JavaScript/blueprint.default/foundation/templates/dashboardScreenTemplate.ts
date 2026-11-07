@@ -32,7 +32,7 @@ export const dashboardScreenTemplate: ScreenTemplate = {
         aside: [component('dashboard-activity', 'activityFeed', { label: 'Recent activity', entries: fromQuery('Activity') })],
     },
     outlets: [
-        { name: 'toolbar', kind: OutletKind.Actions, defaults: [{ kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', runs: OutletBuiltInAction.Refresh }] },
+        { name: 'toolbar', kind: OutletKind.Actions, defaults: [{ kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', builtIn: OutletBuiltInAction.Refresh }] },
         { name: 'stats', kind: OutletKind.Stats, defaults: [] },
     ],
     displayName: 'Dashboard',

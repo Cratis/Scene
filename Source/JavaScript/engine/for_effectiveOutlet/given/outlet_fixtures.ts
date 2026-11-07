@@ -49,4 +49,4 @@ export const describeOutlet = (outlet: EffectiveOutlet): ExpectedOutlet => ({
 });
 
 export const describeDialogOutlet = (outlet: Outlet): string =>
-    `${outlet.name}|${outlet.kind}|${outlet.defaults.map(item => item.kind === OutletItemKind.Button ? `${item.id}:${item.runs ?? '-'}:${item.emphasis ?? '-'}` : item.id).join(',')}`;
+    `${outlet.name}|${outlet.kind}|${outlet.defaults.map(item => item.kind === OutletItemKind.Button ? `${item.id}:${item.builtIn ?? '-'}:${item.emphasis ?? '-'}` : item.id).join(',')}`;

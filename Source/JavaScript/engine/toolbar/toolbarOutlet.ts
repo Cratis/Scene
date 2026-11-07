@@ -40,7 +40,7 @@ export function outletActionsOf(items: readonly OutletItem[]): OutletAction[] {
  * @returns The button, or undefined when the action navigates or runs a built-in instead of a slice.
  */
 export function outletActionAsToolbarButton(action: OutletAction): ToolbarButton | undefined {
-    if (action.navigateTo !== undefined || action.runs !== undefined) return undefined;
+    if (action.navigateTo !== undefined || action.builtIn !== undefined) return undefined;
     const button: ToolbarButton = { id: action.id, title: action.title };
     if (action.slice !== undefined) button.slice = action.slice;
     if (action.command !== undefined) button.target = action.command;

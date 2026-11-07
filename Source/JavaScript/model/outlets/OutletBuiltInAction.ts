@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 /**
- * A built-in an action runs instead of a slice or a navigation target: Screenplay's `runs close | submit | refresh`.
+ * A built-in an action runs instead of a slice or a navigation target, set in `OutletAction.builtIn`.
  */
 export enum OutletBuiltInAction {
     /** Close the dialog or drawer the action sits in. */

@@ -26,8 +26,11 @@ public abstract record OutletAction : OutletItem
     /// <summary>Gets where the action navigates to, when it navigates instead of running a slice.</summary>
     public DestinationReference? NavigateTo { get; init; }
 
-    /// <summary>Gets the built-in the action runs instead of a slice or a navigation target.</summary>
-    public OutletBuiltInAction? Runs { get; init; }
+    /// <summary>
+    /// Gets the built-in the action runs instead of a slice or a navigation target. Named <c language="csharp">BuiltIn</c>, not <c language="csharp">Runs</c>:
+    /// in Screenplay <c language="screenplay">runs</c> means running a slice directly (<see cref="Opens.None"/>).
+    /// </summary>
+    public OutletBuiltInAction? BuiltIn { get; init; }
 
     /// <summary>Gets where the slice's screen opens; automatic when absent.</summary>
     public Opens? Opens { get; init; }

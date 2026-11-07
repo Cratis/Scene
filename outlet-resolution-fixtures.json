@@ -19,7 +19,7 @@
               "name": "toolbar",
               "kind": "actions",
               "defaults": [
-                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
                 { "kind": "button", "id": "export", "title": "Export" }
               ]
             }
@@ -60,7 +60,7 @@
               "name": "toolbar",
               "kind": "actions",
               "defaults": [
-                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
                 { "kind": "button", "id": "export", "title": "Export" }
               ]
             },
@@ -185,7 +185,7 @@
               "name": "toolbar",
               "kind": "actions",
               "defaults": [
-                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
                 { "kind": "button", "id": "export", "title": "Export" }
               ]
             }
@@ -226,7 +226,7 @@
               "name": "toolbar",
               "kind": "actions",
               "defaults": [
-                { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+                { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
                 { "kind": "button", "id": "export", "title": "Export" }
               ]
             }
@@ -333,7 +333,7 @@
     {
       "name": "hide and before naming an item the outlet does not have",
       "chain": [
-        { "kind": "template", "name": "Catalog", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] }] },
+        { "kind": "template", "name": "Catalog", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] }] },
         {
           "kind": "feature",
           "name": "Products",
@@ -644,7 +644,7 @@
     },
     {
       "name": "a template that declares its own actions outlet replaces the standard one",
-      "template": { "name": "WizardDialog", "slots": [{ "name": "body" }], "outlets": [{ "name": "actions", "kind": "actions", "defaults": [{ "kind": "button", "id": "next", "title": "Next", "runs": "submit", "emphasis": "primary" }] }] },
+      "template": { "name": "WizardDialog", "slots": [{ "name": "body" }], "outlets": [{ "name": "actions", "kind": "actions", "defaults": [{ "kind": "button", "id": "next", "title": "Next", "builtIn": "submit", "emphasis": "primary" }] }] },
       "expected": ["actions|actions|next:submit:primary"]
     }
   ],

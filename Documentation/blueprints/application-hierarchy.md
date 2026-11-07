@@ -28,7 +28,7 @@ feature or screen that contributed it. See [Outlets](outlets.md).
 ## Toolbars
 
 A screen's toolbar is an outlet of actions, drawn by the `core:outletItems` component (`name: toolbar`). Each button is
-an item of the outlet: a slice it runs (a hook), a navigation target (`navigateTo`), a built-in (`runs`) or a hand-typed
+an item of the outlet: a slice it runs (a hook), a navigation target (`navigateTo`), a built-in (`builtIn`) or a hand-typed
 `command`. See [Rendering outlets](rendering-outlets.md) for how the buttons are drawn and what choosing one does, and
 why the former `core:toolbar` and `core:toolbarItem` elements are upgraded.
 

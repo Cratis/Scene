@@ -34,7 +34,7 @@ export const listScreenTemplate: ScreenTemplate = {
     outlets: [
         {
             name: 'toolbar', kind: OutletKind.Actions, defaults: [
-                { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', runs: OutletBuiltInAction.Refresh },
+                { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', icon: 'refresh', builtIn: OutletBuiltInAction.Refresh },
                 { kind: OutletItemKind.Button, id: 'export', title: 'Export', icon: 'download' },
             ],
         },

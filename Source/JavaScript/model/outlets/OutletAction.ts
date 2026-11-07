@@ -30,8 +30,11 @@ export interface OutletAction extends OutletItemBase {
     /** Where the action navigates to, when it navigates instead of running a slice. */
     navigateTo?: DestinationReference;
 
-    /** The built-in the action runs instead of a slice or a navigation target. */
-    runs?: OutletBuiltInAction;
+    /**
+     * The built-in the action runs instead of a slice or a navigation target. Named `builtIn`, not `runs`: in Screenplay
+     * `runs` means running a slice directly ({@link Opens.None}).
+     */
+    builtIn?: OutletBuiltInAction;
 
     /** Where the slice's screen opens; automatic when absent. */
     opens?: Opens;
@@ -54,5 +57,5 @@ export interface OutletAction extends OutletItemBase {
 
 /** The own property names of {@link OutletAction}, checked against the shared shape manifest. */
 export const OutletActionPropertyNames: (keyof OutletAction)[] = [
-    'title', 'icon', 'slice', 'command', 'navigateTo', 'runs', 'opens', 'opensIn', 'subject', 'enabledWhen', 'confirm', 'authorize',
+    'title', 'icon', 'slice', 'command', 'navigateTo', 'builtIn', 'opens', 'opensIn', 'subject', 'enabledWhen', 'confirm', 'authorize',
 ];

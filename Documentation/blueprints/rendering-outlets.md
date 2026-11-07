@@ -62,7 +62,7 @@ Choosing an enabled action does what placement decided:
 | `dialog`, `drawer` | The slice's screen opens over the page through the navigation host. A drawer carries `data-scene-presentation="drawer"`. Neither changes the URL. |
 | `slot` | The screen opens in the slot through the router, with the slot's route values - from the page, or from the item it acts on - and the slice's segment. |
 
-A built-in (`runs`) is announced with the `cratis.scene.builtIn` event, and `close` also closes the dialog it sits in. A
+A built-in (`builtIn`) is announced with the `cratis.scene.builtIn` event, and `close` also closes the dialog it sits in. A
 navigation target goes through the navigation host, or is announced with `cratis.scene.navigate` outside one. An action
 whose confirmation is set asks first.
 

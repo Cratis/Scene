@@ -18,7 +18,7 @@ export const dialogActionsOutlet: Outlet = {
     name: dialogActionsOutletName,
     kind: OutletKind.Actions,
     defaults: [
-        { kind: OutletItemKind.Button, id: 'cancel', title: 'Cancel', runs: OutletBuiltInAction.Close },
-        { kind: OutletItemKind.Button, id: 'submit', title: 'Submit', runs: OutletBuiltInAction.Submit, emphasis: ToolbarEmphasis.Primary },
+        { kind: OutletItemKind.Button, id: 'cancel', title: 'Cancel', builtIn: OutletBuiltInAction.Close },
+        { kind: OutletItemKind.Button, id: 'submit', title: 'Submit', builtIn: OutletBuiltInAction.Submit, emphasis: ToolbarEmphasis.Primary },
     ],
 };

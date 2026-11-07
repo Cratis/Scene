@@ -526,7 +526,7 @@
               "provenance": { "owner": "Products", "level": "screen", "source": "own" }, "editable": true
             },
             {
-              "item": { "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" },
+              "item": { "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" },
               "provenance": { "owner": "Catalog", "level": "feature", "source": "default" }, "editable": false
             },
             {

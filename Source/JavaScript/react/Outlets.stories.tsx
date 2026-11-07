@@ -33,7 +33,7 @@ const chain: OutletLevel[] = [
         kind: OutletLevelKind.Template, name: 'ListPage', outlets: [
             {
                 name: 'toolbar', kind: OutletKind.Actions, defaults: [
-                    { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', runs: OutletBuiltInAction.Refresh },
+                    { kind: OutletItemKind.Button, id: 'refresh', title: 'Refresh', builtIn: OutletBuiltInAction.Refresh },
                     { kind: OutletItemKind.Button, id: 'export', title: 'Export' },
                 ],
             },

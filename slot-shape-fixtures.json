@@ -260,7 +260,7 @@
           "name": "ListPage",
           "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
           "outlets": [
-            { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] },
+            { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] },
             { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
           ]
         }]
@@ -271,7 +271,7 @@
             "name": "ListPage",
             "slots": [{ "name": "main" }, { "name": "detail", "role": "pane", "routed": true }],
             "outlets": [
-              { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "runs": "refresh" }] },
+              { "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] },
               { "name": "detailTabs", "kind": "tabs", "slot": "detail", "defaults": [] }
             ]
           }]

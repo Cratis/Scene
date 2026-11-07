@@ -116,7 +116,7 @@ function openOverPage(services: ActivationServices, activation: OutletActionActi
  * @returns Whether it opens a dialog or a drawer.
  */
 export function outletActionOpensOverPage(action: OutletAction, inspection: ActionInspection | undefined, model: SceneNavigationModel | undefined): boolean {
-    if (action.runs !== undefined || action.navigateTo !== undefined) return false;
+    if (action.builtIn !== undefined || action.navigateTo !== undefined) return false;
     const resolved = inspection?.placement?.resolved;
     if (resolved !== undefined) return resolved === Opens.Dialog || resolved === Opens.Drawer;
     const sliceId = inspection?.slice ?? action.slice;
@@ -130,7 +130,7 @@ export function outletActionOpensOverPage(action: OutletAction, inspection: Acti
  * @returns Whether it is empty.
  */
 export function isEmptyOutletAction(action: OutletAction): boolean {
-    return action.slice === undefined && action.command === undefined && action.navigateTo === undefined && action.runs === undefined;
+    return action.slice === undefined && action.command === undefined && action.navigateTo === undefined && action.builtIn === undefined;
 }
 
 function announceCommand(activation: OutletActionActivation, command: string, payload: Record<string, unknown>) {
@@ -152,9 +152,9 @@ function announceCommand(activation: OutletActionActivation, command: string, pa
  */
 export function activateOutletAction(services: ActivationServices, activation: OutletActionActivation): void {
     const { action, inspection } = activation;
-    if (action.runs !== undefined) {
-        if (action.runs === OutletBuiltInAction.Close) services.navigation?.closeDialog();
-        globalThis.dispatchEvent(new CustomEvent(outletBuiltInEventName, { detail: { action: action.runs, id: action.id, element: activation.elementId } }));
+    if (action.builtIn !== undefined) {
+        if (action.builtIn === OutletBuiltInAction.Close) services.navigation?.closeDialog();
+        globalThis.dispatchEvent(new CustomEvent(outletBuiltInEventName, { detail: { action: action.builtIn, id: action.id, element: activation.elementId } }));
         return;
     }
 

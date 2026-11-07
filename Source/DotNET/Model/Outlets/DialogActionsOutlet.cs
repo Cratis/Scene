@@ -24,7 +24,7 @@ public static class DialogActionsOutlet
         Name,
         OutletKind.Actions,
         [
-            new OutletButton { Id = "cancel", Title = "Cancel", Runs = OutletBuiltInAction.Close },
-            new OutletButton { Id = "submit", Title = "Submit", Runs = OutletBuiltInAction.Submit, Emphasis = ToolbarEmphasis.Primary },
+            new OutletButton { Id = "cancel", Title = "Cancel", BuiltIn = OutletBuiltInAction.Close },
+            new OutletButton { Id = "submit", Title = "Submit", BuiltIn = OutletBuiltInAction.Submit, Emphasis = ToolbarEmphasis.Primary },
         ]);
 }
