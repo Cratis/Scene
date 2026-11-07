@@ -24,7 +24,8 @@ Every outlet has a kind, and the kind decides which items it takes. Each item ha
 | `navigation` | `navigation`: `title`, `icon`, `target`, `slot`, `children` | a module, feature or screen |
 
 A button and a menu entry also carry `subject` (`item` or `screen`), `enabledWhen`, `confirm`, `authorize`, `opens`
-(`automatic`, `none`, `dialog`, `drawer`, `slot`) and `opensIn`. Only an outlet of actions has a `subject`.
+(`automatic`, `none`, `dialog`, `drawer`, `slot`) and `opensIn`. Only an outlet of actions has a `subject`. Where an
+action's slice opens and whether the action is enabled are worked out by [placement and enablement](placement.md).
 
 ## Declaring and refining
 

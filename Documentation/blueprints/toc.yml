@@ -26,6 +26,8 @@
   href: navigation-regions.md
 - name: Outlets
   href: outlets.md
+- name: Placement, Opens and enablement
+  href: placement.md
 - name: Preview host
   href: preview-host.md
 
