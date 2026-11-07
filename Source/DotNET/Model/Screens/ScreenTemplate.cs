@@ -4,6 +4,7 @@
 using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Interactions;
 using Cratis.Scene.Model.Layouts;
+using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Model.Screens;
 
@@ -63,4 +64,9 @@ public record ScreenTemplate(
     /// Gets optional semantic type, browse category and scope restrictions.
     /// </summary>
     public TemplateMetadata? Metadata { get; init; }
+
+    /// <summary>
+    /// Gets the outlets - item lists such as a toolbar, filters or row actions - the template offers, with their default items.
+    /// </summary>
+    public IReadOnlyList<Outlet>? Outlets { get; init; }
 }

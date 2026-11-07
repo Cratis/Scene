@@ -4,6 +4,7 @@
 using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Interactions;
 using Cratis.Scene.Model.Layouts;
+using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Model.Screens;
 
@@ -43,4 +44,10 @@ public record DialogTemplate(
     /// Gets optional semantic type, browse category and scope restrictions.
     /// </summary>
     public TemplateMetadata? Metadata { get; init; }
+
+    /// <summary>
+    /// Gets the outlets the template offers. Every dialog and drawer template offers the <c language="screenplay">actions</c> outlet with Cancel and
+    /// Submit (<see cref="DialogActionsOutlet"/>); declaring an <c language="screenplay">actions</c> outlet here replaces it.
+    /// </summary>
+    public IReadOnlyList<Outlet>? Outlets { get; init; }
 }

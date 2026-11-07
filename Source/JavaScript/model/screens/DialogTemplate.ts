@@ -5,6 +5,7 @@ import { SceneElement } from '../elements';
 import { Arrangement, Slot } from '../layouts';
 import { Behavior } from '../interactions';
 import { TemplateMetadata } from './TemplateMetadata';
+import type { Outlet } from '../outlets/Outlet';
 
 /**
  * A reusable dialog structure — the same idea as a {@link ScreenTemplate}, for content that opens over an
@@ -55,6 +56,12 @@ export interface DialogTemplate {
 
     /** Optional semantic type, browse category and scope restrictions. */
     metadata?: TemplateMetadata;
+
+    /**
+     * The outlets the template offers. Every dialog and drawer template offers the `actions` outlet with Cancel and Submit
+     * ({@link dialogActionsOutlet}); declaring an `actions` outlet here replaces it.
+     */
+    outlets?: Outlet[];
 }
 
 export const DialogTemplatePropertyNames: (keyof DialogTemplate)[] = [
@@ -66,4 +73,5 @@ export const DialogTemplatePropertyNames: (keyof DialogTemplate)[] = [
     'description',
     'behaviors',
     'metadata',
+    'outlets',
 ];

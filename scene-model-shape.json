@@ -92,7 +92,8 @@
       "slots",
       "arrangement",
       "behaviors",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "Slot": [
       "name",
@@ -334,7 +335,8 @@
       "displayName",
       "description",
       "behaviors",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "DialogTemplate": [
       "name",
@@ -344,7 +346,8 @@
       "displayName",
       "description",
       "behaviors",
-      "metadata"
+      "metadata",
+      "outlets"
     ],
     "TemplateMetadata": [
       "type",
@@ -683,6 +686,22 @@
     "Toolbar": [
       "buttons"
     ],
+    "QueryParameterReference": ["query", "parameter"],
+    "QueryFieldReference": ["query", "field"],
+    "OutletItem": ["kind", "id", "before", "after"],
+    "OutletAction": ["title", "icon", "slice", "command", "navigateTo", "runs", "opens", "opensIn", "subject", "enabledWhen", "confirm", "authorize"],
+    "OutletButton": ["kind", "emphasis"],
+    "OutletMenuEntry": ["kind"],
+    "OutletSeparator": ["kind"],
+    "OutletGroup": ["kind", "title", "icon", "items"],
+    "OutletFilter": ["kind", "title", "control", "sets"],
+    "OutletTab": ["kind", "title", "shows"],
+    "OutletStat": ["kind", "title", "valueFrom", "trend"],
+    "OutletNavigationItem": ["kind", "title", "icon", "target", "slot", "children"],
+    "Outlet": ["name", "kind", "subject", "slot", "defaults"],
+    "OutletRefinement": ["outlet", "mode", "items", "hide"],
+    "OutletContribution": ["outlet", "items"],
+    "DialogActionsOutlet": [],
     "BlueprintScreen": [
       "name",
       "title",
@@ -882,6 +901,13 @@
       "Secondary",
       "Quiet"
     ],
+    "OutletKind": ["Actions", "Filters", "Tabs", "Stats", "Navigation"],
+    "OutletSubject": ["Item", "Screen"],
+    "OutletMode": ["Inherits", "Extends", "Overrides"],
+    "OutletItemKind": ["Button", "MenuEntry", "Separator", "Group", "Filter", "Tab", "Stat", "Navigation"],
+    "OutletBuiltInAction": ["Close", "Submit", "Refresh"],
+    "Opens": ["Automatic", "None", "Dialog", "Drawer", "Slot"],
+    "FilterControl": ["Search", "Choice", "Range", "Date"],
     "ColorScheme": [
       "Light",
       "Dark",

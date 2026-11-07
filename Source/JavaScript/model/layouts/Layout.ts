@@ -5,6 +5,7 @@ import { Arrangement } from './Arrangement';
 import { Slot } from './Slot';
 import { Behavior } from '../interactions';
 import { TemplateMetadata } from '../screens/TemplateMetadata';
+import type { Outlet } from '../outlets/Outlet';
 
 /**
  * A named template of slots that a {@link Screen} fills with content. Mirrors Screenplay's `layout`
@@ -31,6 +32,9 @@ export interface Layout {
 
     /** Optional browse metadata; ApplicationShell retains this existing Layout role. */
     metadata?: TemplateMetadata;
+
+    /** The outlets - item lists such as the shell's navigation - the layout offers, with their default items. */
+    outlets?: Outlet[];
 }
 
-export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors', 'metadata'];
+export const LayoutPropertyNames: (keyof Layout)[] = ['name', 'slots', 'arrangement', 'behaviors', 'metadata', 'outlets'];
