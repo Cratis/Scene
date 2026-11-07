@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DialogTemplate, Outlet, OutletItem, OutletItemKind, OutletRefinement, Toolbar } from '@cratis/scene.model';
-import { EffectiveOutlet, OutletDiagnostic, OutletLevel } from '../../index';
+import { EffectiveOutlet, OutletChainSource, OutletDiagnostic, OutletLevel } from '../../index';
 
 export interface ExpectedOutlet {
     kind: string | null;
@@ -24,9 +24,18 @@ export interface OutletCase {
     expectedDiagnostics: string[];
 }
 
+export interface ChainCase {
+    name: string;
+    source: OutletChainSource;
+    screen: string;
+    expected: { chain: string[]; contributors: string[] };
+    resolve: { outlet: string; expected: ExpectedOutlet }[];
+}
+
 export const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../../outlet-resolution-fixtures.json'), 'utf-8')) as {
     itemKinds: Record<string, string[]>;
     cases: OutletCase[];
+    chains: ChainCase[];
     dialogTemplates: { name: string; template: DialogTemplate; expected: string[] }[];
     toolbars: { name: string; toolbar: Toolbar; expected: OutletRefinement }[];
 };
@@ -47,6 +56,11 @@ export const describeOutlet = (outlet: EffectiveOutlet): ExpectedOutlet => ({
     removed: outlet.removed.map(entry => `${entry.item.id}|${entry.removal}|by ${entry.removedBy}|from ${entry.provenance.owner}`),
     diagnostics: outlet.diagnostics.map(describeDiagnostic),
 });
+
+const outletsOf = (names: string[]): string => (names.length > 0 ? names.join(',') : '-');
+
+export const describeLevel = (level: OutletLevel): string =>
+    `${level.kind}|${level.name}|outlets:${outletsOf((level.outlets ?? []).map(outlet => outlet.name))}|refinements:${outletsOf((level.refinements ?? []).map(refinement => refinement.outlet))}|contributions:${outletsOf((level.contributions ?? []).map(contribution => contribution.outlet))}`;
 
 export const describeDialogOutlet = (outlet: Outlet): string =>
     `${outlet.name}|${outlet.kind}|${outlet.defaults.map(item => item.kind === OutletItemKind.Button ? `${item.id}:${item.builtIn ?? '-'}:${item.emphasis ?? '-'}` : item.id).join(',')}`;

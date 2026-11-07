@@ -30,7 +30,7 @@ itself draws it with `OutletView`.
 
 | Value | What it gives the outlets |
 | --- | --- |
-| `chain`, `contributors` | The levels the outlets resolve through, from the top down, and the levels outside the chain that contribute. |
+| `chain`, `contributors` | The levels the outlets resolve through, from the top down, and the levels outside the chain that contribute. Build them with `outletChainOf(source, screen)` rather than by hand. |
 | `slices` | The slices the actions run: screen, fits, inputs and authorization (`ActionSlice`). |
 | `slots` | The page's slots as placement sees them (`placementSlotsOf`). |
 | `persona`, `conditions` | Who sees the page, and the host's answer to each action's `enabled when`. |

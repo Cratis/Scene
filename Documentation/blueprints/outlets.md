@@ -69,6 +69,25 @@ either.
 `contributions` - and resolves the outlet for the last level. `contributors` are levels outside the chain, such as
 another feature that contributes a tab.
 
+A host does not assemble the chain itself. `outletChainOf(source, screen)` (`OutletChains.Of`) builds it for a screen
+from an `OutletChainSource`: the `layouts`, `screenTemplates` and `screens` of a Scene document, the `navigation`
+model, and the host's `levels` for modules and features. The chain is, from the top down:
+
+1. the application level of the navigation model;
+2. the screen's layout;
+3. its screen template;
+4. a level for each name in the screen's `path`: the first a module, the rest features. A module's navigation
+   refinements and contributions, and the host's level of that name, join it;
+5. the screen, with its `outletContributions`.
+
+Every other screen's outlet contributions, every other module's navigation contributions and every host level not on
+the path become the `contributors`.
+
+```ts
+const { chain, contributors } = outletChainOf({ ...document, navigation, levels: featureLevels }, 'ProductList');
+const toolbar = effectiveOutlet(chain, 'toolbar', contributors);
+```
+
 The result, `EffectiveOutlet`, has:
 
 - `items`, each with its `provenance` (`owner`, `level`, `source`: `default`, `own` or `contribution`) and whether the

@@ -1,5 +1,5 @@
 {
-  "description": "Shared outlet corpus asserted by both the C# engine (Engine.Specs/for_EffectiveOutlets) and the TypeScript engine (engine/for_effectiveOutlet). An outlet is a list of items a layout or template offers. A case is a chain of levels from the top down (layout, template, module, feature, slice, screen) plus contributors outside the chain; each entry of resolve resolves one outlet for the last level of the chain (effectiveOutlet / EffectiveOutlets.Resolve). Items are id|kind|owner|level|source|editable or locked, a group's kind lists its children as group(a,b); removed items are id|removal|by <level>|from <owner>; diagnostics are code|severity|outlet|owner|item|message with - for what is absent. expectedDiagnostics is what diagnoseOutlets / OutletDiagnostics.Diagnose reports for the whole chain. itemKinds lists what each outlet kind takes. dialogTemplates are the outlets a dialog template offers. navigationContributions turn the items of a navigation contribution point into a contribution to the outlet of navigation. toolbars turn a feature or module toolbar into a refinement that extends the toolbar outlet.",
+  "description": "Shared outlet corpus asserted by both the C# engine (Engine.Specs/for_EffectiveOutlets) and the TypeScript engine (engine/for_effectiveOutlet). chains build the chain of a screen from a document, a navigation model and a host's levels (outletChainOf / OutletChains.Of); a level is kind|name|outlets:<names>|refinements:<outlets>|contributions:<outlets> with - for none, and each entry of resolve resolves an outlet through the built chain. An outlet is a list of items a layout or template offers. A case is a chain of levels from the top down (layout, template, module, feature, slice, screen) plus contributors outside the chain; each entry of resolve resolves one outlet for the last level of the chain (effectiveOutlet / EffectiveOutlets.Resolve). Items are id|kind|owner|level|source|editable or locked, a group's kind lists its children as group(a,b); removed items are id|removal|by <level>|from <owner>; diagnostics are code|severity|outlet|owner|item|message with - for what is absent. expectedDiagnostics is what diagnoseOutlets / OutletDiagnostics.Diagnose reports for the whole chain. itemKinds lists what each outlet kind takes. dialogTemplates are the outlets a dialog template offers. navigationContributions turn the items of a navigation contribution point into a contribution to the outlet of navigation. toolbars turn a feature or module toolbar into a refinement that extends the toolbar outlet.",
   "itemKinds": {
     "actions": ["button", "menuEntry", "separator", "group"],
     "filters": ["filter"],
@@ -665,6 +665,92 @@
           { "kind": "button", "id": "price", "title": "Set price", "command": "SetProductPrice" }
         ]
       }
+    }
+  ],
+  "chains": [
+    {
+      "name": "a screen's chain runs from the application through its layout, template, module and features to the screen, and everything else contributes",
+      "source": {
+        "navigation": {
+          "application": { "outlets": [{ "name": "sidebar", "kind": "navigation", "defaults": [{ "kind": "navigation", "id": "home", "title": "Home", "target": { "screen": "Home" } }] }] },
+          "modules": [
+            { "module": "Catalog", "refinements": [{ "outlet": "sidebar", "items": [{ "kind": "navigation", "id": "products", "title": "Products", "target": { "module": "Catalog", "feature": "Products" } }] }] },
+            { "module": "Sales", "contributions": [{ "outlet": "sidebar", "items": [{ "kind": "navigation", "id": "orders", "title": "Orders", "target": { "module": "Sales" } }] }] }
+          ]
+        },
+        "layouts": [{ "name": "AppShell", "slots": [{ "name": "content" }] }],
+        "screenTemplates": [{ "name": "ListPage", "slots": [{ "name": "main" }], "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh", "builtIn": "refresh" }] }] }],
+        "screens": [
+          { "name": "ProductList", "layout": "AppShell", "screenTemplate": "ListPage", "slotContent": {}, "forms": [], "contributions": [], "path": ["Catalog", "Products"] },
+          { "name": "PricingPanel", "layout": "AppShell", "slotContent": {}, "forms": [], "contributions": [], "path": ["Catalog", "Pricing"], "outletContributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "price", "title": "Set price", "slice": "catalog.pricing.SetPrice" }] }] }
+        ],
+        "levels": [
+          { "kind": "feature", "name": "Products", "refinements": [{ "outlet": "toolbar", "mode": "extends", "items": [{ "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct" }] }] },
+          { "kind": "feature", "name": "Audit", "contributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "audit", "title": "Audit trail" }] }] }
+        ]
+      },
+      "screen": "ProductList",
+      "expected": {
+        "chain": [
+          "layout|Application|outlets:sidebar,topbar,topbarButtons,sidebarButtons|refinements:-|contributions:-",
+          "layout|AppShell|outlets:-|refinements:-|contributions:-",
+          "template|ListPage|outlets:toolbar|refinements:-|contributions:-",
+          "module|Catalog|outlets:-|refinements:sidebar|contributions:-",
+          "feature|Products|outlets:-|refinements:toolbar|contributions:-",
+          "screen|ProductList|outlets:-|refinements:-|contributions:-"
+        ],
+        "contributors": [
+          "screen|PricingPanel|outlets:-|refinements:-|contributions:toolbar",
+          "module|Sales|outlets:-|refinements:-|contributions:sidebar",
+          "feature|Audit|outlets:-|refinements:-|contributions:toolbar"
+        ]
+      },
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "ListPage",
+            "mode": "inherits",
+            "summary": "ListPage + Products + PricingPanel + Audit",
+            "items": ["refresh|button|ListPage|template|default|locked", "add|button|Products|feature|own|locked", "price|button|PricingPanel|screen|contribution|locked", "audit|button|Audit|feature|contribution|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        },
+        {
+          "outlet": "sidebar",
+          "expected": {
+            "kind": "navigation",
+            "declaredBy": "Application",
+            "mode": "inherits",
+            "summary": "Application + Catalog + Sales",
+            "items": ["home|navigation|Application|layout|default|locked", "products|navigation|Catalog|module|own|locked", "orders|navigation|Sales|module|contribution|locked"],
+            "removed": [],
+            "diagnostics": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "a screen the document does not have has no chain",
+      "source": { "screens": [] },
+      "screen": "Missing",
+      "expected": { "chain": [], "contributors": [] },
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": null,
+            "declaredBy": null,
+            "mode": null,
+            "summary": "",
+            "items": [],
+            "removed": [],
+            "diagnostics": ["unknownOutlet|error|toolbar|-|-|No level declares the outlet 'toolbar'"]
+          }
+        }
+      ]
     }
   ]
 }

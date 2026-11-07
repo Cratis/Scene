@@ -17,3 +17,6 @@ export * from './outletDiagnostics';
 export * from './effectiveOutletResolution';
 export * from './diagnoseOutlets';
 export * from './dialogTemplateOutlets';
+export * from './OutletChain';
+export * from './OutletChainSource';
+export * from './outletChainOf';
