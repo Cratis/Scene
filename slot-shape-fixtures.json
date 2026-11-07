@@ -939,6 +939,39 @@
   ],
   "validations": [
     {
+      "name": "outlet items of an unknown kind, of a kind their outlet or group does not take, or missing what their kind needs",
+      "document": {
+        "screenTemplates": [{
+          "name": "ListPage",
+          "slots": [{ "name": "main" }],
+          "outlets": [
+            { "name": "toolbar", "kind": "actions", "defaults": [
+              { "kind": "tab", "id": "pricing", "title": "Pricing", "shows": "catalog.pricing.ProductPricing" },
+              { "kind": "widget", "id": "odd", "title": "Odd" },
+              { "kind": "button", "title": "No id" },
+              { "kind": "group", "id": "more", "title": "More", "items": [{ "kind": "stat", "id": "count", "title": "Count" }, { "kind": "menuEntry", "id": "print", "title": "Print" }] },
+              { "kind": "separator", "id": "gap" }
+            ] },
+            { "name": "detailTabs", "kind": "Tabs", "slot": "main", "defaults": [{ "kind": "Tab", "id": "notes", "title": "Notes" }] }
+          ]
+        }],
+        "screens": [{
+          "name": "Products",
+          "refinements": [{ "outlet": "toolbar", "mode": "extends", "items": [{ "id": "export", "title": "Export" }] }],
+          "outletContributions": [{ "outlet": "sidebar", "items": [{ "kind": "navigation", "id": "home" }] }]
+        }]
+      },
+      "expected": [
+        { "code": "outletItemKindMismatch", "path": "$.screenTemplates[0].outlets[0].defaults[0].kind", "message": "The tab 'pricing' cannot go in the actions outlet 'toolbar', which takes buttons, menu entries, separators and groups" },
+        { "code": "unknownOutletItemKind", "path": "$.screenTemplates[0].outlets[0].defaults[1].kind", "message": "The item 'odd' of the outlet 'toolbar' has the kind 'widget'; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item" },
+        { "code": "incompleteOutletItem", "path": "$.screenTemplates[0].outlets[0].defaults[2].id", "message": "The button '(no id)' of the outlet 'toolbar' has no id" },
+        { "code": "outletItemKindMismatch", "path": "$.screenTemplates[0].outlets[0].defaults[3].items[0].kind", "message": "The stat 'count' cannot go in the group 'more' of the outlet 'toolbar', which takes buttons, menu entries and separators" },
+        { "code": "incompleteOutletItem", "path": "$.screenTemplates[0].outlets[1].defaults[0].shows", "message": "The tab 'notes' of the outlet 'detailTabs' has no screen to show" },
+        { "code": "unknownOutletItemKind", "path": "$.screens[0].refinements[0].items[0].kind", "message": "The item 'export' of the outlet 'toolbar' has no kind; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item" },
+        { "code": "incompleteOutletItem", "path": "$.screens[0].outletContributions[0].items[0].title", "message": "The navigation item 'home' of the outlet 'sidebar' has no title" }
+      ]
+    },
+    {
       "name": "values a user typed in an element's properties and a kind of outlet on something that is not a destination",
       "document": {
         "screens": [{ "name": "Stores", "slotContent": { "main": [

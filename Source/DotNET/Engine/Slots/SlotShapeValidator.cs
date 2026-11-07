@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text.Json.Nodes;
+using Cratis.Scene.Engine.Outlets;
 using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Engine.Slots;
@@ -23,6 +24,7 @@ public static class SlotShapeValidator
     static readonly HashSet<string> _opens = new(StringComparer.OrdinalIgnoreCase) { "automatic", "none", "dialog", "drawer", "slot" };
     static readonly HashSet<string> _fits = new(StringComparer.OrdinalIgnoreCase) { "dialog", "drawer", "pane", "panel", "page" };
     static readonly HashSet<string> _actionItemKinds = new(StringComparer.OrdinalIgnoreCase) { "button", "menuEntry" };
+    static readonly string[] _outletItemListKeys = ["refinements", "contributions", "outletContributions"];
 
     /// <summary>
     /// Checks a stored document given as JSON text.
@@ -223,6 +225,22 @@ public static class SlotShapeValidator
                 $"'{ownerName}' has a toolbar whose buttons every screen gets. {LegacyOutletShape.ToolbarMigrationHint}"));
         }
 
+        foreach (var key in _outletItemListKeys)
+        {
+            if (owner[key] is not JsonArray entries)
+            {
+                continue;
+            }
+
+            for (var index = 0; index < entries.Count; index++)
+            {
+                if (entries[index] is JsonObject entry && LegacyOutletShape.Text(entry["outlet"]) is { } outletName && entry["items"] is JsonArray items)
+                {
+                    CheckOutletItems(items, new(outletName, null, null), $"{path}.{key}[{index}].items", diagnostics);
+                }
+            }
+        }
+
         if (owner["outlets"] is not JsonArray outlets || LegacyOutletShape.IsOutletList(outlets))
         {
             return;
@@ -235,8 +253,13 @@ public static class SlotShapeValidator
                 continue;
             }
 
-            if (LegacyOutletShape.Text(outlet["kind"]) is { } kind && Enum.TryParse<OutletKind>(kind, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed) && !int.TryParse(kind, out _))
+            if (OutletKindOf(outlet["kind"]) is { } outletKind)
             {
+                if (outlet["defaults"] is JsonArray defaults)
+                {
+                    CheckOutletItems(defaults, new(outletName, outletKind, null), $"{path}.outlets[{index}].defaults", diagnostics);
+                }
+
                 continue;
             }
 
@@ -245,6 +268,83 @@ public static class SlotShapeValidator
                 SlotShapeDiagnosticCode.UnknownOutletKind,
                 $"{path}.outlets[{index}].kind",
                 $"The outlet '{outletName}' of '{ownerName}' has {described}; an outlet lists actions, filters, tabs, stats or navigation"));
+        }
+    }
+
+    static OutletKind? OutletKindOf(JsonNode? value) =>
+        LegacyOutletShape.Text(value) is { } kind && Enum.TryParse<OutletKind>(kind, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed) && !int.TryParse(kind, out _)
+            ? parsed
+            : null;
+
+    static OutletItemKind? OutletItemKindOf(JsonNode? value) =>
+        LegacyOutletShape.Text(value) is { } kind && Enum.TryParse<OutletItemKind>(kind, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed) && !int.TryParse(kind, out _)
+            ? parsed
+            : null;
+
+    static void CheckOutletItems(JsonArray items, OutletItemsOwner owner, string path, List<SlotShapeDiagnostic> diagnostics)
+    {
+        for (var index = 0; index < items.Count; index++)
+        {
+            if (items[index] is not JsonObject item)
+            {
+                continue;
+            }
+
+            var itemPath = $"{path}[{index}]";
+            var id = LegacyOutletShape.Text(item["id"]) is { Length: > 0 } text ? text : null;
+            var named = id ?? "(no id)";
+            if (OutletItemKindOf(item["kind"]) is not { } kind)
+            {
+                var described = item.ContainsKey("kind") ? $"the kind '{LegacyOutletShape.Describe(item["kind"])}'" : "no kind";
+                diagnostics.Add(new(
+                    SlotShapeDiagnosticCode.UnknownOutletItemKind,
+                    $"{itemPath}.kind",
+                    $"The item '{named}' of the outlet '{owner.Outlet}' has {described}; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item"));
+                continue;
+            }
+
+            var name = OutletItemKinds.NameOf(kind);
+            var allowed = owner.Group is not null ? OutletItemKinds.InGroup : owner.Kind is { } outletKind ? OutletItemKinds.AllowedIn(outletKind) : null;
+            if (allowed?.Contains(kind) == false)
+            {
+                var message = owner.Group is not null
+                    ? $"The {name} '{named}' cannot go in the group '{owner.Group}' of the outlet '{owner.Outlet}', which takes buttons, menu entries and separators"
+                    : $"The {name} '{named}' cannot go in the {OutletItemKinds.NameOf(owner.Kind!.Value)} outlet '{owner.Outlet}', which takes {OutletItemKinds.Describe(owner.Kind!.Value)}";
+                diagnostics.Add(new(SlotShapeDiagnosticCode.OutletItemKindMismatch, $"{itemPath}.kind", message));
+                continue;
+            }
+
+            void Incomplete(string field, string what) => diagnostics.Add(new(
+                SlotShapeDiagnosticCode.IncompleteOutletItem,
+                $"{itemPath}.{field}",
+                $"The {name} '{named}' of the outlet '{owner.Outlet}' has no {what}"));
+
+            if (id is null)
+            {
+                Incomplete("id", "id");
+            }
+
+            if (kind != OutletItemKind.Separator && LegacyOutletShape.Text(item["title"]) is not { Length: > 0 })
+            {
+                Incomplete("title", "title");
+            }
+
+            if (kind == OutletItemKind.Tab && LegacyOutletShape.Text(item["shows"]) is not { Length: > 0 })
+            {
+                Incomplete("shows", "screen to show");
+            }
+
+            if (kind == OutletItemKind.Group)
+            {
+                if (item["items"] is JsonArray children)
+                {
+                    CheckOutletItems(children, owner with { Group = named }, $"{itemPath}.items", diagnostics);
+                }
+                else
+                {
+                    Incomplete("items", "items");
+                }
+            }
         }
     }
 
@@ -297,4 +397,6 @@ public static class SlotShapeValidator
     }
 
     static bool IsTrue(JsonNode? value) => value is JsonValue json && json.TryGetValue<bool>(out var flag) && flag;
+
+    sealed record OutletItemsOwner(string Outlet, OutletKind? Kind, string? Group);
 }

@@ -53,4 +53,13 @@ export enum SlotShapeDiagnosticCode {
      * actions drawn by `core:outletItems`; or such a toolbar holds something an outlet button cannot carry.
      */
     LegacyToolbarElement = 'legacyToolbarElement',
+
+    /** An outlet item has no kind, or one that is not a button, menu entry, separator, group, filter, tab, stat or navigation item. */
+    UnknownOutletItemKind = 'unknownOutletItemKind',
+
+    /** An outlet item is of a kind its outlet, or the group it sits in, does not take, such as a tab in an outlet of actions. */
+    OutletItemKindMismatch = 'outletItemKindMismatch',
+
+    /** An outlet item lacks what its kind needs: an id, a title, the screen a tab shows or the items of a group. */
+    IncompleteOutletItem = 'incompleteOutletItem',
 }

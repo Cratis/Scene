@@ -3,6 +3,7 @@
 
 import { Opens, OutletItemKind, OutletKind, ScreenFit, SlotRole } from '@cratis/scene.model';
 import { actionPresentationMigrationHint, isLegacyActionPresentation, legacyActionPresentationProperty } from './upgradeActionPresentation';
+import { describeOutletItemKinds, groupItemKinds, outletItemKindName, outletItemKinds } from '../outlets/outletItemKinds';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
@@ -89,7 +90,6 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
     }
 }
 
-const outletKinds = new Set<string>(Object.values(OutletKind));
 const opensValues = new Set<string>(Object.values(Opens));
 const screenFits = new Set<string>(Object.values(ScreenFit));
 const actionItemKinds = new Set<string>([OutletItemKind.Button, OutletItemKind.MenuEntry].map(kind => kind.toLowerCase()));
@@ -176,16 +176,84 @@ function checkOutlets(owner: JsonObject, path: string, diagnostics: SlotShapeDia
             message: `'${ownerName}' has a toolbar whose buttons every screen gets. ${toolbarShapeMigrationHint}`,
         });
     }
+    for (const key of outletItemListKeys) {
+        if (!Array.isArray(owner[key])) continue;
+        (owner[key] as unknown[]).forEach((entry, index) => {
+            if (!isObject(entry) || typeof entry.outlet !== 'string' || !Array.isArray(entry.items)) return;
+            checkOutletItems(entry.items, { outlet: entry.outlet }, `${path}.${key}[${index}].items`, diagnostics);
+        });
+    }
+
     if (!Array.isArray(owner.outlets) || isLegacyOutletList(owner.outlets)) return;
     owner.outlets.forEach((outlet: unknown, index: number) => {
         if (!isObject(outlet) || typeof outlet.name !== 'string') return;
-        if (typeof outlet.kind === 'string' && outletKinds.has(outlet.kind.toLowerCase())) return;
-        const kind = outlet.kind === undefined ? 'no kind' : `the kind '${String(outlet.kind)}'`;
+        const written = typeof outlet.kind === 'string' ? outlet.kind.toLowerCase() : undefined;
+        const kind = Object.values(OutletKind).find(candidate => candidate === written);
+        if (kind !== undefined) {
+            if (Array.isArray(outlet.defaults)) checkOutletItems(outlet.defaults, { outlet: outlet.name, kind }, `${path}.outlets[${index}].defaults`, diagnostics);
+            return;
+        }
+        const described = outlet.kind === undefined ? 'no kind' : `the kind '${String(outlet.kind)}'`;
         diagnostics.push({
             code: SlotShapeDiagnosticCode.UnknownOutletKind,
             path: `${path}.outlets[${index}].kind`,
-            message: `The outlet '${outlet.name}' of '${ownerName}' has ${kind}; an outlet lists actions, filters, tabs, stats or navigation`,
+            message: `The outlet '${outlet.name}' of '${ownerName}' has ${described}; an outlet lists actions, filters, tabs, stats or navigation`,
         });
+    });
+}
+
+/** The keys of an owner that list refinements of, or contributions to, outlets: each entry names its `outlet` and has `items`. */
+const outletItemListKeys = ['refinements', 'contributions', 'outletContributions'];
+
+interface OutletItemsOwner {
+    outlet: string;
+    kind?: OutletKind;
+    group?: string;
+}
+
+function checkOutletItems(items: unknown[], owner: OutletItemsOwner, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    items.forEach((item, index) => {
+        if (!isObject(item)) return;
+        const itemPath = `${path}[${index}]`;
+        const id = typeof item.id === 'string' && item.id.length > 0 ? item.id : undefined;
+        const named = id ?? '(no id)';
+        const written = typeof item.kind === 'string' ? item.kind.toLowerCase() : undefined;
+        const kind = Object.values(OutletItemKind).find(candidate => candidate.toLowerCase() === written);
+        if (kind === undefined) {
+            const described = item.kind === undefined ? 'no kind' : `the kind '${String(item.kind)}'`;
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.UnknownOutletItemKind,
+                path: `${itemPath}.kind`,
+                message: `The item '${named}' of the outlet '${owner.outlet}' has ${described}; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item`,
+            });
+            return;
+        }
+
+        const name = outletItemKindName(kind);
+        const allowed = owner.group !== undefined ? groupItemKinds : owner.kind !== undefined ? outletItemKinds(owner.kind) : undefined;
+        if (allowed !== undefined && !allowed.includes(kind)) {
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.OutletItemKindMismatch,
+                path: `${itemPath}.kind`,
+                message: owner.group !== undefined
+                    ? `The ${name} '${named}' cannot go in the group '${owner.group}' of the outlet '${owner.outlet}', which takes buttons, menu entries and separators`
+                    : `The ${name} '${named}' cannot go in the ${owner.kind} outlet '${owner.outlet}', which takes ${describeOutletItemKinds(owner.kind!)}`,
+            });
+            return;
+        }
+
+        const incomplete = (field: string, what: string) => diagnostics.push({
+            code: SlotShapeDiagnosticCode.IncompleteOutletItem,
+            path: `${itemPath}.${field}`,
+            message: `The ${name} '${named}' of the outlet '${owner.outlet}' has no ${what}`,
+        });
+        if (id === undefined) incomplete('id', 'id');
+        if (kind !== OutletItemKind.Separator && (typeof item.title !== 'string' || item.title.length === 0)) incomplete('title', 'title');
+        if (kind === OutletItemKind.Tab && (typeof item.shows !== 'string' || item.shows.length === 0)) incomplete('shows', 'screen to show');
+        if (kind === OutletItemKind.Group) {
+            if (!Array.isArray(item.items)) incomplete('items', 'items');
+            else checkOutletItems(item.items, { ...owner, group: named }, `${itemPath}.items`, diagnostics);
+        }
     });
 }
 

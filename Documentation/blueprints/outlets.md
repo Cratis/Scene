@@ -97,6 +97,13 @@ The result, `EffectiveOutlet`, has:
 | `tabsNeedSlot` | error | An outlet of tabs names no slot. |
 | `subjectOnlyForActions` | warning | An outlet that is not of actions names a subject. |
 
+Saving a document also checks every outlet item it stores: the defaults of each outlet it declares, and the items of its
+`refinements`, `contributions` and `outletContributions`. `validateSlotShape` (`SlotShapeValidator.Validate`) refuses the
+save with `invalidSlotShape` when an item has no known kind (`unknownOutletItemKind`), is of a kind its outlet or group
+does not take (`outletItemKindMismatch`), or lacks what its kind needs: an id, a title, the screen a tab `shows` or the
+`items` of a group (`incompleteOutletItem`). The kind of a refined or contributed outlet is declared elsewhere, so only
+the defaults are checked against their outlet's kind.
+
 ## What outlets replace
 
 - [Navigation regions](navigation-regions.md) are stored as outlets of navigation on the application's navigation

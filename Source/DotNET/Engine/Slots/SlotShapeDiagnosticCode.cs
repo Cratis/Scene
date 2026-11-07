@@ -87,4 +87,19 @@ public enum SlotShapeDiagnosticCode
     /// something an outlet button cannot carry.
     /// </summary>
     LegacyToolbarElement = 14,
+
+    /// <summary>
+    /// An outlet item has no kind, or one that is not a button, menu entry, separator, group, filter, tab, stat or navigation item.
+    /// </summary>
+    UnknownOutletItemKind = 15,
+
+    /// <summary>
+    /// An outlet item is of a kind its outlet, or the group it sits in, does not take, such as a tab in an outlet of actions.
+    /// </summary>
+    OutletItemKindMismatch = 16,
+
+    /// <summary>
+    /// An outlet item lacks what its kind needs: an id, a title, the screen a tab shows or the items of a group.
+    /// </summary>
+    IncompleteOutletItem = 17,
 }
