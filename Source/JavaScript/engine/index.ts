@@ -48,6 +48,7 @@ export * from './resolveStrings';
 export * from './navigation';
 export * from './slots';
 export * from './outlets';
+export * from './placement';
 export * from './validateNavigationDestinations';
 export * from './editing';
 export * from './sampleData';
