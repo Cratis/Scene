@@ -43,10 +43,24 @@ A refinement without a `mode` extends when it has items or hides, and inherits o
 
 - `inherits` keeps the inherited items unchanged.
 - `extends` keeps them, minus the hidden ones, and adds the level's own items after them.
-- `overrides` replaces them with the level's own items; the inherited ones are listed as overridden.
+- `overrides` replaces the inherited items (the defaults and what the levels above added) with the level's own items;
+  the inherited ones are listed as overridden. Contributions are not inherited items: they belong to the module or
+  feature that contributed them, so they still apply after an override.
 
-An item without `before` or `after` always goes last, so a level's own items never move above the ones it inherits.
-`before` and `after` place an item next to the item they name.
+The order is always inherited items, then the level's own items, then contributions. A level's own items never move
+above the ones it inherits:
+
+- An item without `before` or `after` goes last in its group.
+- `before` and `after` place an item next to an item of its own group: one of the level's own items, or another
+  contribution.
+- `after` an inherited item puts it first after the inherited items.
+- `before` an inherited item does the same and reports `placementAboveInherited`.
+
+Contributions are ordered the same way among themselves. Each keeps its provenance.
+
+`hide <id>` works on any item the outlet would show, including a contributed one. A hide that names no inherited item
+is applied once the contributions are added, and is reported as `hiddenItemMissing` only if no contribution has that id
+either.
 
 ## Resolving an outlet
 
@@ -59,7 +73,8 @@ The result, `EffectiveOutlet`, has:
 
 - `items`, each with its `provenance` (`owner`, `level`, `source`: `default`, `own` or `contribution`) and whether the
   last level can edit it.
-- `removed`: the inherited items that are hidden or overridden, with the level that removed them.
+- `removed`: the inherited or contributed items that are hidden, and the inherited items that are overridden, with the
+  level that removed them.
 - `mode`: how the last level treats the outlet; absent when that level declares it.
 - `sources` and `summary`, such as `Catalog + Products`: the declaring level, then each level that extended, overrode
   or contributed.
@@ -73,8 +88,9 @@ The result, `EffectiveOutlet`, has:
 | `duplicateOutlet` | error | A level declares an outlet a level above it already declares. |
 | `refinementOfUnknownOutlet` | error | A level refines an outlet no level above it declares. |
 | `contributionToUnknownOutlet` | error | A level contributes to an outlet no level declares. |
-| `hiddenItemMissing` | warning | A level hides an item the outlet it inherits does not have. |
+| `hiddenItemMissing` | warning | A level hides an item the outlet neither inherits nor receives as a contribution. |
 | `placementTargetMissing` | warning | `before` or `after` names an item the outlet does not have; the item goes last. |
+| `placementAboveInherited` | warning | `before` names an inherited item, or a contribution names an inherited or own item; the item goes first after them. |
 | `itemKindMismatch` | error | An item is of a kind the outlet (or group) does not take; it is left out. |
 | `duplicateItemId` | error | An item has the id of an item the outlet already has; it is left out. |
 | `itemsIgnoredWhenInheriting` | warning | A level inherits unchanged but has items or hides. |

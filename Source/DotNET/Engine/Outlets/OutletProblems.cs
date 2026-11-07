@@ -38,13 +38,13 @@ public static class OutletProblems
     public static OutletDiagnostic ContributionToUnknownOutlet(string outlet, string owner) =>
         new(OutletDiagnosticCode.ContributionToUnknownOutlet, OutletDiagnosticSeverity.Error, outlet, $"{owner} contributes to the outlet '{outlet}', which no level declares", owner);
 
-    /// <summary>A level hides an item the outlet it inherits does not have.</summary>
+    /// <summary>A level hides an item the outlet neither inherits nor receives as a contribution.</summary>
     /// <param name="outlet">The outlet name.</param>
     /// <param name="owner">The level.</param>
     /// <param name="item">The hidden id.</param>
     /// <returns>The diagnostic.</returns>
     public static OutletDiagnostic HiddenItemMissing(string outlet, string owner, string item) =>
-        new(OutletDiagnosticCode.HiddenItemMissing, OutletDiagnosticSeverity.Warning, outlet, $"{owner} hides '{item}', which the outlet '{outlet}' it inherits does not have", owner, item);
+        new(OutletDiagnosticCode.HiddenItemMissing, OutletDiagnosticSeverity.Warning, outlet, $"{owner} hides '{item}', which the outlet '{outlet}' neither inherits nor receives as a contribution", owner, item);
 
     /// <summary>An item goes before or after an item the outlet does not have.</summary>
     /// <param name="outlet">The outlet name.</param>
@@ -55,6 +55,15 @@ public static class OutletProblems
     /// <returns>The diagnostic.</returns>
     public static OutletDiagnostic PlacementTargetMissing(string outlet, string owner, string item, string placement, string target) =>
         new(OutletDiagnosticCode.PlacementTargetMissing, OutletDiagnosticSeverity.Warning, outlet, $"{owner} places '{item}' {placement} '{target}', which the outlet '{outlet}' does not have, so it goes last", owner, item);
+
+    /// <summary>A level places an item before one that comes from above it; it goes first after those instead.</summary>
+    /// <param name="outlet">The outlet name.</param>
+    /// <param name="owner">The level.</param>
+    /// <param name="item">The placed item.</param>
+    /// <param name="target">The id it is placed before.</param>
+    /// <returns>The diagnostic.</returns>
+    public static OutletDiagnostic PlacementAboveInherited(string outlet, string owner, string item, string target) =>
+        new(OutletDiagnosticCode.PlacementAboveInherited, OutletDiagnosticSeverity.Warning, outlet, $"{owner} places '{item}' before '{target}' in the outlet '{outlet}', but own items never go above inherited ones and contributions never above either, so it goes first after them", owner, item);
 
     /// <summary>An item is of a kind the outlet does not take.</summary>
     /// <param name="outlet">The outlet name.</param>

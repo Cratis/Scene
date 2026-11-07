@@ -30,11 +30,15 @@ export const outletDiagnostics = {
     }),
     hiddenItemMissing: (outlet: string, owner: string, item: string): OutletDiagnostic => ({
         code: OutletDiagnosticCode.HiddenItemMissing, severity: warning, outlet, owner, item,
-        message: `${owner} hides '${item}', which the outlet '${outlet}' it inherits does not have`,
+        message: `${owner} hides '${item}', which the outlet '${outlet}' neither inherits nor receives as a contribution`,
     }),
     placementTargetMissing: (outlet: string, owner: string, item: string, placement: 'before' | 'after', target: string): OutletDiagnostic => ({
         code: OutletDiagnosticCode.PlacementTargetMissing, severity: warning, outlet, owner, item,
         message: `${owner} places '${item}' ${placement} '${target}', which the outlet '${outlet}' does not have, so it goes last`,
+    }),
+    placementAboveInherited: (outlet: string, owner: string, item: string, target: string): OutletDiagnostic => ({
+        code: OutletDiagnosticCode.PlacementAboveInherited, severity: warning, outlet, owner, item,
+        message: `${owner} places '${item}' before '${target}' in the outlet '${outlet}', but own items never go above inherited ones and contributions never above either, so it goes first after them`,
     }),
     itemKindMismatch: (outlet: string, kind: OutletKind, owner: string, item: OutletItem): OutletDiagnostic => ({
         code: OutletDiagnosticCode.ItemKindMismatch, severity: error, outlet, owner, item: item.id,

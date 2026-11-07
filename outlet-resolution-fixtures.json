@@ -216,7 +216,7 @@
       "expectedDiagnostics": []
     },
     {
-      "name": "extending with hide and before: the lighter alternative to overriding",
+      "name": "extending with hide and before: the lighter alternative to overriding, before orders own items among themselves",
       "chain": [
         {
           "kind": "template",
@@ -241,8 +241,8 @@
               "mode": "extends",
               "hide": ["export"],
               "items": [
-                { "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct", "before": "refresh" },
-                { "kind": "button", "id": "price", "title": "Set price", "slice": "catalog.products.SetProductPrice" }
+                { "kind": "button", "id": "add", "title": "Add product", "slice": "catalog.products.DraftProduct" },
+                { "kind": "button", "id": "price", "title": "Set price", "slice": "catalog.products.SetProductPrice", "before": "add" }
               ]
             }
           ]
@@ -256,7 +256,7 @@
             "declaredBy": "Catalog",
             "mode": "extends",
             "summary": "Catalog + Products",
-            "items": ["add|button|Products|feature|own|editable", "refresh|button|Catalog|template|default|locked", "price|button|Products|feature|own|editable"],
+            "items": ["refresh|button|Catalog|template|default|locked", "price|button|Products|feature|own|editable", "add|button|Products|feature|own|editable"],
             "removed": ["export|hidden|by Products|from Catalog"],
             "diagnostics": []
           }
@@ -353,17 +353,89 @@
             "items": ["refresh|button|Catalog|template|default|locked", "add|button|Products|feature|own|editable", "price|button|Products|feature|own|editable"],
             "removed": [],
             "diagnostics": [
-              "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' it inherits does not have",
               "placementTargetMissing|warning|toolbar|Products|add|Products places 'add' before 'new', which the outlet 'toolbar' does not have, so it goes last",
-              "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last"
+              "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last",
+              "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' neither inherits nor receives as a contribution"
             ]
           }
         }
       ],
       "expectedDiagnostics": [
-        "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' it inherits does not have",
         "placementTargetMissing|warning|toolbar|Products|add|Products places 'add' before 'new', which the outlet 'toolbar' does not have, so it goes last",
-        "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last"
+        "placementTargetMissing|warning|toolbar|Products|price|Products places 'price' after 'missing', which the outlet 'toolbar' does not have, so it goes last",
+        "hiddenItemMissing|warning|toolbar|Products|export|Products hides 'export', which the outlet 'toolbar' neither inherits nor receives as a contribution"
+      ]
+    },
+    {
+      "name": "own items never go above inherited ones: before an inherited item puts it first after them, after one keeps it below them",
+      "chain": [
+        { "kind": "layout", "name": "AppShell", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "help", "title": "Help" }, { "kind": "button", "id": "settings", "title": "Settings" }] }] },
+        {
+          "kind": "feature",
+          "name": "Orders",
+          "refinements": [
+            {
+              "outlet": "toolbar",
+              "items": [
+                { "kind": "button", "id": "place", "title": "Place order" },
+                { "kind": "button", "id": "cancel", "title": "Cancel order", "before": "help" },
+                { "kind": "button", "id": "copy", "title": "Copy order", "after": "help" },
+                { "kind": "button", "id": "print", "title": "Print", "after": "place" }
+              ]
+            }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "AppShell",
+            "mode": "extends",
+            "summary": "AppShell + Orders",
+            "items": ["help|button|AppShell|layout|default|locked", "settings|button|AppShell|layout|default|locked", "copy|button|Orders|feature|own|editable", "cancel|button|Orders|feature|own|editable", "place|button|Orders|feature|own|editable", "print|button|Orders|feature|own|editable"],
+            "removed": [],
+            "diagnostics": [
+              "placementAboveInherited|warning|toolbar|Orders|cancel|Orders places 'cancel' before 'help' in the outlet 'toolbar', but own items never go above inherited ones and contributions never above either, so it goes first after them"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "placementAboveInherited|warning|toolbar|Orders|cancel|Orders places 'cancel' before 'help' in the outlet 'toolbar', but own items never go above inherited ones and contributions never above either, so it goes first after them"
+      ]
+    },
+    {
+      "name": "contributions go after inherited and own items, survive overriding, keep their provenance and can be hidden",
+      "chain": [
+        { "kind": "template", "name": "Catalog", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [{ "kind": "button", "id": "refresh", "title": "Refresh" }] }] },
+        { "kind": "module", "name": "Sales", "contributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "report", "title": "Report", "before": "add" }] }] },
+        { "kind": "feature", "name": "Products", "refinements": [{ "outlet": "toolbar", "mode": "overrides", "items": [{ "kind": "button", "id": "add", "title": "Add product" }] }] },
+        { "kind": "screen", "name": "ProductList", "refinements": [{ "outlet": "toolbar", "hide": ["audit"] }] }
+      ],
+      "contributors": [
+        { "kind": "feature", "name": "Audit", "contributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "audit", "title": "Audit trail" }] }] },
+        { "kind": "feature", "name": "Pricing", "contributions": [{ "outlet": "toolbar", "items": [{ "kind": "button", "id": "price", "title": "Set price", "after": "report" }] }] }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Catalog",
+            "mode": "extends",
+            "summary": "Catalog + Products + ProductList + Sales + Audit + Pricing",
+            "items": ["add|button|Products|feature|own|locked", "report|button|Sales|module|contribution|locked", "price|button|Pricing|feature|contribution|locked"],
+            "removed": ["refresh|overridden|by Products|from Catalog", "audit|hidden|by ProductList|from Audit"],
+            "diagnostics": [
+              "placementAboveInherited|warning|toolbar|Sales|report|Sales places 'report' before 'add' in the outlet 'toolbar', but own items never go above inherited ones and contributions never above either, so it goes first after them"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "placementAboveInherited|warning|toolbar|Sales|report|Sales places 'report' before 'add' in the outlet 'toolbar', but own items never go above inherited ones and contributions never above either, so it goes first after them"
       ]
     },
     {

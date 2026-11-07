@@ -17,7 +17,7 @@ export enum OutletDiagnosticCode {
     /** A level contributes to an outlet no level declares. */
     ContributionToUnknownOutlet = 'contributionToUnknownOutlet',
 
-    /** A level hides an item the outlet it inherits does not have. */
+    /** A level hides an item the outlet neither inherits nor receives as a contribution. */
     HiddenItemMissing = 'hiddenItemMissing',
 
     /** An item goes before or after an item the outlet does not have; it goes last. */
@@ -37,4 +37,7 @@ export enum OutletDiagnosticCode {
 
     /** An outlet that is not of actions names a subject. */
     SubjectOnlyForActions = 'subjectOnlyForActions',
+
+    /** A level places an item before one that comes from above it; own items never go above inherited ones, so it goes first after them. */
+    PlacementAboveInherited = 'placementAboveInherited',
 }

@@ -20,7 +20,7 @@ public enum OutletDiagnosticCode
     /// <summary>A level contributes to an outlet no level declares.</summary>
     ContributionToUnknownOutlet = 3,
 
-    /// <summary>A level hides an item the outlet it inherits does not have.</summary>
+    /// <summary>A level hides an item the outlet neither inherits nor receives as a contribution.</summary>
     HiddenItemMissing = 4,
 
     /// <summary>An item goes before or after an item the outlet does not have; it goes last.</summary>
@@ -40,4 +40,7 @@ public enum OutletDiagnosticCode
 
     /// <summary>An outlet that is not of actions names a subject.</summary>
     SubjectOnlyForActions = 10,
+
+    /// <summary>A level places an item before one that comes from above it; own items never go above inherited ones, so it goes first after them.</summary>
+    PlacementAboveInherited = 11,
 }

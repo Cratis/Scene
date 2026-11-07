@@ -19,13 +19,23 @@ interface Resolution {
     items: EffectiveOutletItem[];
     removed: RemovedOutletItem[];
     diagnostics: OutletDiagnostic[];
+
+    /** The number of items the level being placed inherits; its own items never go above them. */
+    floor: number;
+
+    /** Hides that named no inherited item; they apply to the contributions once those are added. */
+    pendingHides: { id: string; owner: string }[];
 }
 
 /**
  * Resolves an outlet for the last level of a chain. The first level that declares the outlet supplies its defaults; each
- * level below it inherits, extends (hiding some and adding its own after the inherited ones) or overrides; then every
- * contribution - from the chain and from the contributors - is added. An item without `before` or `after` always goes
- * last, so a level's own items never move above the ones it inherits.
+ * level below it inherits, extends (hiding some and adding its own after the inherited ones) or overrides (replacing the
+ * inherited ones); then every contribution - from the chain and from the contributors - is added after all of those, as
+ * contributions belong to someone else and overriding does not remove them. A level's own items never move above the ones
+ * it inherits: `before` and `after` only order them among themselves, and `before` an inherited item puts it first after
+ * the inherited ones. Contributions likewise only order among the contributions. A `hide` works on any item, including a
+ * contributed one.
+ * @remarks An item without `before` or `after` goes last.
  * @param chain The levels from the top down, such as layout, template, module, feature and screen; the last is the level the outlet is resolved for.
  * @param outlet The name of the outlet.
  * @param contributors Levels outside the chain that may contribute to the outlet, such as another feature.
@@ -40,7 +50,7 @@ export function effectiveOutlet(chain: OutletLevel[], outlet: string, contributo
     const last = chain.length - 1;
     const declaringLevel = chain[declaringIndex];
     const declaration = declaringLevel.outlets!.find(candidate => candidate.name === outlet)!;
-    const resolution: Resolution = { outlet, kind: declaration.kind, items: [], removed: [], diagnostics: [] };
+    const resolution: Resolution = { outlet, kind: declaration.kind, items: [], removed: [], diagnostics: [], floor: 0, pendingHides: [] };
     checkDeclaration(declaration, declaringLevel.name, resolution.diagnostics);
 
     const sources = [declaringLevel.name];
@@ -65,6 +75,7 @@ export function effectiveOutlet(chain: OutletLevel[], outlet: string, contributo
         if (index === last) mode = levelMode;
     }
 
+    resolution.floor = resolution.items.length;
     [...chain, ...contributors].forEach((level, index) => {
         const contributions = (level.contributions ?? []).filter(candidate => candidate.outlet === outlet);
         if (contributions.length === 0) return;
@@ -74,6 +85,7 @@ export function effectiveOutlet(chain: OutletLevel[], outlet: string, contributo
         }
         if (!sources.includes(level.name)) sources.push(level.name);
     });
+    hideContributions(resolution);
 
     const result: EffectiveOutlet = {
         name: outlet,
@@ -112,7 +124,7 @@ function refine(resolution: Resolution, level: OutletLevel, refinement: OutletRe
     for (const id of hide) {
         const index = resolution.items.findIndex(entry => entry.item.id === id);
         if (index < 0) {
-            resolution.diagnostics.push(outletDiagnostics.hiddenItemMissing(resolution.outlet, level.name, id));
+            resolution.pendingHides.push({ id, owner: level.name });
             continue;
         }
         const [entry] = resolution.items.splice(index, 1);
@@ -126,9 +138,22 @@ function refine(resolution: Resolution, level: OutletLevel, refinement: OutletRe
         resolution.items = [];
     }
 
+    resolution.floor = resolution.items.length;
     const provenance: OutletProvenance = { owner: level.name, level: level.kind, source: OutletItemSource.Own };
     for (const item of items) place(resolution, item, provenance, editable);
     return mode;
+}
+
+function hideContributions(resolution: Resolution): void {
+    for (const { id, owner } of resolution.pendingHides) {
+        const index = resolution.items.findIndex(entry => entry.item.id === id && entry.provenance.source === OutletItemSource.Contribution);
+        if (index < 0) {
+            resolution.diagnostics.push(outletDiagnostics.hiddenItemMissing(resolution.outlet, owner, id));
+            continue;
+        }
+        const [entry] = resolution.items.splice(index, 1);
+        resolution.removed.push({ item: entry.item, provenance: entry.provenance, removal: OutletRemoval.Hidden, removedBy: owner });
+    }
 }
 
 function place(resolution: Resolution, item: OutletItem, provenance: OutletProvenance, editable: boolean): void {
@@ -159,7 +184,12 @@ function place(resolution: Resolution, item: OutletItem, provenance: OutletProve
         const target = (placement === 'before' ? item.before : item.after)!;
         const index = resolution.items.findIndex(candidate => candidate.item.id === target);
         if (index >= 0) {
-            resolution.items.splice(placement === 'before' ? index : index + 1, 0, entry);
+            let at = placement === 'before' ? index : index + 1;
+            if (at < resolution.floor) {
+                if (placement === 'before') diagnostics.push(outletDiagnostics.placementAboveInherited(outlet, provenance.owner, item.id, target));
+                at = resolution.floor;
+            }
+            resolution.items.splice(at, 0, entry);
             return;
         }
         diagnostics.push(outletDiagnostics.placementTargetMissing(outlet, provenance.owner, item.id, placement, target));

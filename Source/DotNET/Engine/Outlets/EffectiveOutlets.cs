@@ -7,9 +7,12 @@ namespace Cratis.Scene.Engine.Outlets;
 
 /// <summary>
 /// Resolves an outlet for the last level of a chain. The first level that declares the outlet supplies its defaults; each
-/// level below it inherits, extends (hiding some and adding its own after the inherited ones) or overrides; then every
-/// contribution - from the chain and from the contributors - is added. An item without before or after always goes last,
-/// so a level's own items never move above the ones it inherits. The TypeScript engine's <c language="typescript">effectiveOutlet</c>
+/// level below it inherits, extends (hiding some and adding its own after the inherited ones) or overrides (replacing the
+/// inherited ones); then every contribution - from the chain and from the contributors - is added after all of those, as
+/// contributions belong to someone else and overriding does not remove them. A level's own items never move above the ones
+/// it inherits: before and after only order them among themselves, and before an inherited item puts it first after the
+/// inherited ones. Contributions likewise only order among the contributions. A hide works on any item, including a
+/// contributed one. An item without before or after goes last. The TypeScript engine's <c language="typescript">effectiveOutlet</c>
 /// returns the same result; both are asserted against <c language="json">outlet-resolution-fixtures.json</c>.
 /// </summary>
 public static class EffectiveOutlets
@@ -61,6 +64,7 @@ public static class EffectiveOutlets
             if (index == last) mode = levelMode;
         }
 
+        resolution.Floor = resolution.Items.Count;
         var contributing = chain.Concat(contributors ?? []).ToList();
         for (var index = 0; index < contributing.Count; index++)
         {
@@ -74,6 +78,7 @@ public static class EffectiveOutlets
             }
             if (!sources.Contains(level.Name)) sources.Add(level.Name);
         }
+        HideContributions(resolution);
 
         return new(
             outlet,
@@ -117,7 +122,7 @@ public static class EffectiveOutlets
             var index = resolution.Items.FindIndex(entry => entry.Item.Id == id);
             if (index < 0)
             {
-                resolution.Diagnostics.Add(OutletProblems.HiddenItemMissing(resolution.Outlet, level.Name, id));
+                resolution.PendingHides.Add((id, level.Name));
                 continue;
             }
             var entry = resolution.Items[index];
@@ -131,9 +136,26 @@ public static class EffectiveOutlets
             resolution.Items.Clear();
         }
 
+        resolution.Floor = resolution.Items.Count;
         var provenance = new OutletProvenance(level.Name, level.Kind, OutletItemSource.Own);
         foreach (var item in items) Place(resolution, item, provenance, editable);
         return mode;
+    }
+
+    static void HideContributions(Resolution resolution)
+    {
+        foreach (var (id, owner) in resolution.PendingHides)
+        {
+            var index = resolution.Items.FindIndex(entry => entry.Item.Id == id && entry.Provenance.Source == OutletItemSource.Contribution);
+            if (index < 0)
+            {
+                resolution.Diagnostics.Add(OutletProblems.HiddenItemMissing(resolution.Outlet, owner, id));
+                continue;
+            }
+            var entry = resolution.Items[index];
+            resolution.Items.RemoveAt(index);
+            resolution.Removed.Add(new(entry.Item, entry.Provenance, OutletRemoval.Hidden, owner));
+        }
     }
 
     static void Place(Resolution resolution, OutletItem item, OutletProvenance provenance, bool editable)
@@ -168,7 +190,13 @@ public static class EffectiveOutlets
             var index = resolution.Items.FindIndex(candidate => candidate.Item.Id == target);
             if (index >= 0)
             {
-                resolution.Items.Insert(placement == "before" ? index : index + 1, entry);
+                var at = placement == "before" ? index : index + 1;
+                if (at < resolution.Floor)
+                {
+                    if (placement == "before") resolution.Diagnostics.Add(OutletProblems.PlacementAboveInherited(resolution.Outlet, provenance.Owner, item.Id, target));
+                    at = resolution.Floor;
+                }
+                resolution.Items.Insert(at, entry);
                 return;
             }
             resolution.Diagnostics.Add(OutletProblems.PlacementTargetMissing(resolution.Outlet, provenance.Owner, item.Id, placement, target));
@@ -183,5 +211,9 @@ public static class EffectiveOutlets
         public List<RemovedOutletItem> Removed { get; } = [];
 
         public List<OutletDiagnostic> Diagnostics { get; } = [];
+
+        public List<(string Id, string Owner)> PendingHides { get; } = [];
+
+        public int Floor { get; set; }
     }
 }
