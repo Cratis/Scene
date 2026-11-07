@@ -8,6 +8,9 @@ each module may leave them as they are, add to them, or replace them. The engine
 shows - `effectiveNavigation` - so React renderers, Stage, Studio design mode and Studio preview all draw the same
 items and nothing re-implements the rules.
 
+A region is an [outlet](outlets.md) of navigation, and its buttons an outlet of actions: `effectiveNavigation`
+resolves the inheritance through `effectiveOutlet`, the same rule every outlet follows.
+
 ## The model
 
 `NavigationModel` (`@cratis/scene.model`, `Cratis.Scene.Model.Navigation`):
