@@ -30,7 +30,7 @@ action's slice opens and whether the action is enabled are worked out by [placem
 An item names its type in `kind`, and TypeScript may write `kind` after the other properties. In C#, read outlet items
 with `SceneJson.Options`, or pass a host's own `JsonSerializerOptions` through `SceneJson.Configure` before using them.
 Both turn on `AllowOutOfOrderMetadataProperties`; without it `System.Text.Json` cannot read an item whose `kind` is not
-first.
+first. The setting exists from .NET 9; on .NET 8 an item must still name its `kind` first.
 
 ## Declaring and refining
 
