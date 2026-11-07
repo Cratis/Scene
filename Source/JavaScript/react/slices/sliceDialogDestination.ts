@@ -11,6 +11,32 @@ export interface SliceDialogParameters {
     slice: string;
     command: string;
     title: string;
+
+    /** Whether the slice's screen opens as a dialog or as a drawer; a dialog when absent. */
+    presentation?: SliceDialogPresentation;
+}
+
+/** How a slice's screen sits over the page: centered as a dialog, or docked to the side as a drawer. Neither is routed. */
+export type SliceDialogPresentation = 'dialog' | 'drawer';
+
+/**
+ * The destination that opens a slice's screen over the page, as a dialog or a drawer, through the navigation host.
+ * @param dialog The dialog template, slice and command (`sliceDialogFor`).
+ * @param dialog.template The dialog template.
+ * @param dialog.slice The qualified id of the slice.
+ * @param dialog.command The command the slice submits.
+ * @param title The title of the dialog.
+ * @param presentation Whether it opens as a dialog or a drawer.
+ * @returns The destination.
+ */
+export function sliceScreenDestination(dialog: { template: string; slice: string; command: string }, title: string, presentation: SliceDialogPresentation = 'dialog'): DestinationReference {
+    const routeParameterBindings: Record<string, BindingExpression> = {
+        slice: literal(dialog.slice),
+        command: literal(dialog.command),
+        title: literal(title),
+    };
+    if (presentation === 'drawer') routeParameterBindings.presentation = literal(presentation);
+    return { kind: DestinationKind.Dialog, dialog: dialog.template, routeParameterBindings };
 }
 
 /**
@@ -36,5 +62,8 @@ export function sliceDialogDestination(button: ResolvedToolbarButton): Destinati
 export function sliceDialogParameters(parameters: Record<string, string> | undefined): SliceDialogParameters | undefined {
     const slice = parameters?.slice;
     const command = parameters?.command;
-    return slice && command ? { slice, command, title: parameters?.title || command } : undefined;
+    if (!slice || !command) return undefined;
+    const opened: SliceDialogParameters = { slice, command, title: parameters?.title || command };
+    if (parameters?.presentation === 'drawer') opened.presentation = 'drawer';
+    return opened;
 }

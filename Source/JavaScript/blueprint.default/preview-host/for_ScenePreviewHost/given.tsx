@@ -75,9 +75,9 @@ const screen = (name: string, content: SceneElement[], template?: string): Scree
     name, layout: 'AppShell', slotContent: { content }, forms: [], contributions: [], ...(template === undefined ? {} : { screenTemplate: template }),
 });
 
-const ordersToolbar = element('orders-toolbar', 'core:toolbar', { name: 'orders' }, { items: [
-    element('new', 'core:toolbarItem', { name: 'new', kind: 'Action', label: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' }),
-    element('cancel', 'core:toolbarItem', { name: 'cancel', kind: 'Action', label: 'Cancel order', emphasis: 'secondary' }),
+const ordersToolbar = element('orders-toolbar', 'core:outletItems', { name: 'orders', kind: 'actions', items: [
+    { kind: 'button', id: 'new', title: 'New order', slice: 'sales.orders.PlaceOrder', emphasis: 'primary' },
+    { kind: 'button', id: 'cancel', title: 'Cancel order', emphasis: 'secondary' },
 ] });
 
 export function ordersApplication(): ApplicationDocument {

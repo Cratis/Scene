@@ -157,7 +157,8 @@ export function SliceDialogView({ slice: sliceProp, command: commandProp, title:
         }
     };
 
-    return <form ref={form} className='scene-slice-dialog' data-scene-slice-dialog={slice} data-scene-command={command} noValidate onSubmit={submit} onKeyDown={onKeyDown}>
+    const presentation = opened?.slice === slice ? opened.presentation ?? 'dialog' : 'dialog';
+    return <form ref={form} className={`scene-slice-dialog scene-slice-dialog-${presentation}`} data-scene-presentation={presentation} data-scene-slice-dialog={slice} data-scene-command={command} noValidate onSubmit={submit} onKeyDown={onKeyDown}>
         <header className='scene-slice-dialog-header'>
             <h2 className='scene-slice-dialog-title'>{title}</h2>
             <p className='scene-slice-dialog-subtitle'>State Change · {sliceName}</p>

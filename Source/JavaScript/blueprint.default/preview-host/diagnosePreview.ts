@@ -1,10 +1,10 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
+import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, OutletItem, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
 import {
     ApplicationStructureIndex, collectComponents, diagnoseNavigationOutlets, resolveScreenTemplates,
-    toolbarButtonFromItem, validateSampleDataSelection, validateToolbarButtons,
+    outletActionAsToolbarButton, outletActionsOf, validateSampleDataSelection, validateToolbarButtons,
 } from '@cratis/scene.engine';
 import { ApplicationDocument } from './ApplicationDocument';
 import { CompositionOptions, effectiveShellOf, findLayout, shellLayout, templatePoolFor, templatesOf } from './composeApplication';
@@ -108,8 +108,9 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
     }
 
     const buttons = screens.flatMap(candidate => collectComponents(candidate)
-        .filter(component => component.componentName.endsWith('toolbarItem'))
-        .map(component => toolbarButtonFromItem(component.id, component.properties as Record<string, unknown>))
+        .filter(component => component.componentName.endsWith(':outletItems') && Array.isArray(component.properties.items))
+        .flatMap(component => outletActionsOf(component.properties.items as OutletItem[]))
+        .map(outletActionAsToolbarButton)
         .filter((button): button is ToolbarButton => button !== undefined));
     const toolbar: Toolbar = { buttons };
     for (const diagnostic of validateToolbarButtons(index, toolbar)) {

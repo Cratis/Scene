@@ -68,7 +68,7 @@ describe('when diagnosing a preview', () => {
     describe('and a toolbar button names a slice that is not there', () => {
         const document = ordersApplication();
         document.screens = document.screens.map(screen => screen.name === 'sales.customers'
-            ? { ...screen, slotContent: { content: [{ id: 'bad', componentName: 'core:toolbarItem', properties: { kind: 'Action', label: 'Bad', slice: 'sales.orders.Ghost' }, slots: {} } as never] } }
+            ? { ...screen, slotContent: { content: [{ id: 'toolbar', componentName: 'core:outletItems', properties: { name: 'toolbar', kind: 'actions', items: [{ kind: 'button', id: 'bad', title: 'Bad', slice: 'sales.orders.Ghost' }] }, slots: {} } as never] } }
             : screen);
         const { problems } = diagnosePreview({ document, structure, navigation, target: { module: 'sales' } });
 

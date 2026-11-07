@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, Opens, OutletSubject, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
+import { ComponentDescriptor, Opens, OutletKind, OutletSubject, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { componentRegistryKey, describeComponents } from '../packages';
 import { coreComponentMetadata } from './coreComponentMetadata';
 
@@ -102,44 +102,64 @@ const describedCore: ComponentDescriptor[] = [
         ],
     },
     {
-        component: key('toolbarItem'),
-        displayName: 'Toolbar button',
-        description: 'One toolbar button. An Action button invokes a state change slice and opens it as a task dialog over the page; a button with no slice is allowed while designing and is flagged.',
+        component: key('outletItems'),
+        displayName: 'Outlet',
+        description: 'Draws the items of an outlet where the template or screen places it: actions as a toolbar, filters, tabs, stats or navigation. Inside a page that declares the outlet it draws what the page resolves; on its own it draws the items it carries.',
         properties: [
-            { path: 'label', label: 'Title', group: 'Content', valueType: PropertyValueType.String, default: 'Button' },
+            { path: 'name', label: 'Outlet', group: 'Content', valueType: PropertyValueType.String, constraints: { required: true }, description: 'The name of the outlet, such as toolbar or filters.' },
             {
-                path: 'slice', label: 'Slice to invoke', group: 'Behavior', valueType: PropertyValueType.String,
-                editorKind: PropertyEditorKind.Slice, editorOptions: { kinds: ['StateChange'] },
-                description: 'Only State Change slices can be picked. State Views and Automations never take user input, so they are listed as unavailable.',
-            },
-            {
-                path: 'emphasis', label: 'Emphasis', group: 'Appearance', valueType: PropertyValueType.Enum, default: ToolbarEmphasis.Secondary,
+                path: 'kind', label: 'Kind', group: 'Content', valueType: PropertyValueType.Enum, default: OutletKind.Actions,
                 editorKind: PropertyEditorKind.Enum,
                 choices: [
-                    { value: ToolbarEmphasis.Primary, label: 'Primary' },
-                    { value: ToolbarEmphasis.Secondary, label: 'Secondary' },
-                    { value: ToolbarEmphasis.Quiet, label: 'Quiet' },
+                    { value: OutletKind.Actions, label: 'Actions' },
+                    { value: OutletKind.Filters, label: 'Filters' },
+                    { value: OutletKind.Tabs, label: 'Tabs' },
+                    { value: OutletKind.Stats, label: 'Stats' },
+                    { value: OutletKind.Navigation, label: 'Navigation' },
                 ],
-            },
-            { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
-            {
-                path: 'confirm', label: 'Confirmation', group: 'Behavior', valueType: PropertyValueType.String,
-                description: 'Optional question the user answers before the button runs its command or opens its dialog. Empty means it runs at once.',
+                description: 'What the outlet lists; the kind decides which items it takes.',
             },
             {
-                path: 'presentation', label: 'Presentation', group: 'Appearance', valueType: PropertyValueType.Object, open: true,
-                description: 'How the item is shown: what it displays (icon, text or both) and the placement hint a host or theme can style by. Hints other than these are kept as authored.',
-                properties: [
-                    {
-                        path: 'mode', label: 'Shows', group: 'Appearance', valueType: PropertyValueType.Enum, default: 'both', editorKind: PropertyEditorKind.Enum,
-                        choices: [{ value: 'both', label: 'Icon and text' }, { value: 'icon', label: 'Icon only' }, { value: 'text', label: 'Text only' }],
-                    },
-                    { path: 'placement', label: 'Placement', group: 'Appearance', valueType: PropertyValueType.String, description: 'A hint such as `primary` or `overflow` a host or theme can place the item by.' },
+                path: 'subject', label: 'Acts on', group: 'Behavior', valueType: PropertyValueType.Enum,
+                editorKind: PropertyEditorKind.Enum,
+                choices: [
+                    { value: OutletSubject.Item, label: 'The selected item' },
+                    { value: OutletSubject.Screen, label: 'The screen' },
                 ],
+                description: 'Only for actions: actions for an item wait for one to be selected.',
             },
+            { path: 'slot', label: 'Slot', group: 'Behavior', valueType: PropertyValueType.String, description: 'Only for tabs: the slot the tabs own and show the chosen screen in.' },
+            { path: 'item', label: 'Selected item', group: 'Data', valueType: PropertyValueType.Object, open: true, description: 'What actions for an item act on, usually a table\'s selected row.' },
             {
-                path: 'target', label: 'Command (legacy)', group: 'Behavior', valueType: PropertyValueType.String, editorKind: 'stateChangeReference',
-                description: 'A hand-typed command for a button that has no slice. It is converted to the slice that accepts the command when exactly one does; prefer a slice.',
+                path: 'items', label: 'Items', group: 'Content', valueType: PropertyValueType.Collection,
+                description: 'The items the outlet shows when no page around it declares the outlet.',
+                item: {
+                    label: 'Item',
+                    properties: [
+                        { path: 'id', label: 'Id', group: 'Content', valueType: PropertyValueType.String, constraints: { required: true } },
+                        { path: 'title', label: 'Title', group: 'Content', valueType: PropertyValueType.String },
+                        {
+                            path: 'slice', label: 'Slice to invoke', group: 'Behavior', valueType: PropertyValueType.String,
+                            editorKind: PropertyEditorKind.Slice, editorOptions: { kinds: ['StateChange'] },
+                            description: 'Only State Change slices can be picked.',
+                        },
+                        {
+                            path: 'emphasis', label: 'Emphasis', group: 'Appearance', valueType: PropertyValueType.Enum, default: ToolbarEmphasis.Secondary,
+                            editorKind: PropertyEditorKind.Enum,
+                            choices: [
+                                { value: ToolbarEmphasis.Primary, label: 'Primary' },
+                                { value: ToolbarEmphasis.Secondary, label: 'Secondary' },
+                                { value: ToolbarEmphasis.Quiet, label: 'Quiet' },
+                            ],
+                        },
+                        { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
+                        {
+                            path: 'confirm', label: 'Confirmation', group: 'Behavior', valueType: PropertyValueType.String,
+                            description: 'Optional question the user answers before the action runs.',
+                        },
+                        ...actionPlacementProperties,
+                    ],
+                },
             },
         ],
     },

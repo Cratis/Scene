@@ -8,7 +8,7 @@ import { CoreButton } from './CoreButton';
 import { CoreGuardedAction } from './CoreGuardedAction';
 import { CoreCard } from './CoreCard';
 import { CoreNavigationBar } from './CoreNavigationBar';
-import { CoreToolbar, CoreToolbarItem } from './CoreToolbar';
+import { CoreOutletItems } from '../outlets/CoreOutletItems';
 import { CoreSlot } from '../navigation/CoreSlot';
 import { CoreSliceDialog } from '../slices/CoreSliceDialog';
 import {
@@ -47,7 +47,6 @@ export const coreComponents: ComponentRegistry = {
     [componentRegistryKey('core', 'file')]: CoreFile,
     [componentRegistryKey('core', 'navigationBar')]: CoreNavigationBar,
     [componentRegistryKey('core', 'slot')]: CoreSlot,
-    [componentRegistryKey('core', 'toolbar')]: CoreToolbar,
-    [componentRegistryKey('core', 'toolbarItem')]: CoreToolbarItem,
+    [componentRegistryKey('core', 'outletItems')]: CoreOutletItems,
     [componentRegistryKey('core', 'sliceDialog')]: CoreSliceDialog,
 };

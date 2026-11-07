@@ -23,7 +23,6 @@ export const coreComponentMetadata: Record<string, ComponentMetadata> = {
     file: m('File reference', ComponentCategory.DataDisplay, 'file', ['include', 'import', 'screen file']),
     navigationBar: m('Navigation bar', ComponentCategory.Navigation, 'navigation', ['menu', 'nav', 'links'], undefined, navigationDesignMode({ itemsPath: 'items' })),
     slot: m('Slot', ComponentCategory.Layout, 'panel-right', ['region', 'slot', 'side panel']),
-    toolbar: m('Toolbar', ComponentCategory.Actions, 'wrench', ['actions', 'buttons', 'command bar'], 'Tl', toolbarDesignMode()),
+    outletItems: m('Outlet', ComponentCategory.Actions, 'wrench', ['toolbar', 'actions', 'filters', 'tabs', 'stats', 'navigation', 'command bar'], 'Ou', toolbarDesignMode('items')),
     sliceDialog: m('Slice dialog', ComponentCategory.Overlay, 'square-pen', ['task dialog', 'state change', 'form', 'command'], undefined),
-    toolbarItem: m('Toolbar item', ComponentCategory.Actions, 'mouse-pointer-click', ['button', 'action']),
 };
