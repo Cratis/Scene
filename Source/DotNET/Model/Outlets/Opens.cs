@@ -4,8 +4,10 @@
 namespace Cratis.Scene.Model.Outlets;
 
 /// <summary>
-/// Where the screen of the slice an action runs opens. The placement resolver that picks a fit for
-/// <see cref="Automatic"/> is not part of this release yet; the value is stored so a model keeps what its author chose.
+/// Where the screen of the slice an action runs opens: Screenplay's <c language="screenplay">opens</c>. Buttons and menu
+/// entries of an outlet of actions and the <c language="csharp">action</c> component share it. The engine's placement resolver
+/// works out what <see cref="Automatic"/> resolves to, and checks an explicit choice against what the slice's screen fits and
+/// the slots the page has.
 /// </summary>
 public enum Opens
 {

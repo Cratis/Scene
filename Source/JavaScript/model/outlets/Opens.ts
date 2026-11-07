@@ -2,8 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 /**
- * Where the screen of the slice an action runs opens. The placement resolver that picks a fit for `Automatic` is not
- * part of this release yet; the value is stored so a model keeps what its author chose.
+ * Where the screen of the slice an action runs opens: Screenplay's `opens`. Buttons and menu entries of an outlet of
+ * actions and the `action` component share it. `resolvePlacement` works out what `Automatic` resolves to, and checks an
+ * explicit choice against what the slice's screen fits and the slots the page has.
  */
 export enum Opens {
     /** The first fit the page has free; the default. */

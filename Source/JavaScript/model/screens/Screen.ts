@@ -6,6 +6,7 @@ import { Form } from '../forms';
 import { Contribution } from '../contributionPoints';
 import { Behavior } from '../interactions';
 import type { OutletContribution } from '../outlets/OutletContribution';
+import type { ScreenFit } from './ScreenFit';
 
 /**
  * A named screen: the structure it fills, the content that fills it, the forms it hosts, and whatever it
@@ -75,6 +76,13 @@ export interface Screen {
      * the application's own, a blueprint's, a hand-authored one - which belongs to the application and so to every preview.
      */
     owner?: string;
+
+    /**
+     * The places the screen fits, in order of preference: Screenplay's `fits dialog, drawer, pane`. An action that opens
+     * the screen automatically takes the first one the page has free (`resolvePlacement`). Absent or empty, the screen
+     * fits a dialog, where a command's form opened before screens listed what they fit.
+     */
+    fits?: ScreenFit[];
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'outletContributions', 'screenTemplate', 'behaviors', 'path', 'owner'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'outletContributions', 'screenTemplate', 'behaviors', 'path', 'owner', 'fits'];

@@ -65,4 +65,11 @@ public record Screen(
     /// blueprint's, a hand-authored one - which belongs to the application and so to every preview.
     /// </summary>
     public string? Owner { get; init; }
+
+    /// <summary>
+    /// Gets the places the screen fits, in order of preference: Screenplay's <c language="screenplay">fits dialog, drawer, pane</c>.
+    /// An action that opens the screen automatically takes the first one the page has free. <see langword="null"/> or empty, the
+    /// screen fits a dialog, where a command's form opened before screens listed what they fit.
+    /// </summary>
+    public IReadOnlyList<ScreenFit>? Fits { get; init; }
 }

@@ -307,7 +307,8 @@
       "screenTemplate",
       "behaviors",
       "path",
-      "owner"
+      "owner",
+      "fits"
     ],
     "UiStarter": [
       "name",
@@ -870,6 +871,7 @@
     "OutletItemKind": ["Button", "MenuEntry", "Separator", "Group", "Filter", "Tab", "Stat", "Navigation"],
     "OutletBuiltInAction": ["Close", "Submit", "Refresh"],
     "Opens": ["Automatic", "None", "Dialog", "Drawer", "Slot"],
+    "ScreenFit": ["Dialog", "Drawer", "Pane", "Panel", "Page"],
     "FilterControl": ["Search", "Choice", "Range", "Date"],
     "ColorScheme": [
       "Light",
