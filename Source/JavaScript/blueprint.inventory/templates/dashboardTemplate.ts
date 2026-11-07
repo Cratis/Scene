@@ -15,6 +15,7 @@ export const inventoryDashboardTemplate: ScreenTemplate = {
     name: 'InventoryDashboard',
     fitsSlot: 'content',
     slots: dashboardScreenTemplate.slots,
+    outlets: dashboardScreenTemplate.outlets,
     arrangement: dashboardScreenTemplate.arrangement,
     content: {
         header: [component('inventory-dashboard-header', 'pageHeader', { title: 'Inventory dashboard', subtitle: 'Stock levels and movements this week' })],

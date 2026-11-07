@@ -18,6 +18,7 @@ export const administrationRolesTemplate: ScreenTemplate = {
     name: 'AdministrationRoles',
     fitsSlot: 'content',
     slots: masterDetailScreenTemplate.slots,
+    outlets: masterDetailScreenTemplate.outlets,
     arrangement: masterDetailScreenTemplate.arrangement,
     content: {
         list: [

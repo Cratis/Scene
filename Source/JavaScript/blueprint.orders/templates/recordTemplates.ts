@@ -16,6 +16,7 @@ export const orderPageTemplate: ScreenTemplate = {
     name: 'OrderPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('OrderPage-header', 'pageHeader', { title: fromQuery(order.record, '0.number'), subtitle: fromQuery(order.record, '0.summary') }, {

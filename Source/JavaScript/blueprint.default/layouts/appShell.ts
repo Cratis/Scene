@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FlowArrangement, HeightSizeClass, Layout, NavigationRegionKind, OutletKind, WidthSizeClass } from '@cratis/scene.model';
+import { FlowArrangement, HeightSizeClass, Layout, NavigationRegionKind, OutletKind, SlotRole, WidthSizeClass } from '@cratis/scene.model';
 import { LayoutName } from './LayoutName';
 import { SlotName } from './SlotName';
 import { column, row, slotLeaf } from './flowBuilders';
@@ -102,10 +102,10 @@ export const appShellLayout: Layout = {
         { name: SlotName.Sidebar },
         { name: SlotName.Menu },
         { name: SlotName.Breadcrumb },
-        { name: SlotName.Content },
+        { name: SlotName.Content, role: SlotRole.Page, routed: true, primary: true },
         { name: SlotName.Footer },
-        { name: SlotName.RightPanel },
-        { name: SlotName.ConfigPanel },
+        { name: SlotName.RightPanel, role: SlotRole.Panel, optional: true },
+        { name: SlotName.ConfigPanel, role: SlotRole.Panel, optional: true },
     ],
     arrangement: appShellArrangement,
     outlets: [

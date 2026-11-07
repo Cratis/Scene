@@ -54,7 +54,34 @@
           "description": "Every work order with its site, priority, assignee, due date and status, filtered by status, priority, site and assignee.",
           "type": "List",
           "category": "Business / Work orders",
-          "thumbnail": "thumbnails/WorkOrdersList.svg"
+          "thumbnail": "thumbnails/WorkOrdersList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "WorkOrderPage",
@@ -63,7 +90,19 @@
           "description": "One work order: status, priority, days to its due date and hours logged, its details, tasks, parts and time, and its activity.",
           "type": "Detail",
           "category": "Business / Work orders",
-          "thumbnail": "thumbnails/WorkOrderPage.svg"
+          "thumbnail": "thumbnails/WorkOrderPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "WorkOrdersBoard",

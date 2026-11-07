@@ -54,7 +54,34 @@
           "description": "Every order with customer, placed and delivery dates, total and status, filtered by customer, status, channel and date.",
           "type": "List",
           "category": "Business / Orders",
-          "thumbnail": "thumbnails/OrdersList.svg"
+          "thumbnail": "thumbnails/OrdersList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "OrderPage",
@@ -63,7 +90,19 @@
           "description": "One order: key facts, its lines and shipments, and its activity.",
           "type": "Detail",
           "category": "Business / Orders",
-          "thumbnail": "thumbnails/OrderPage.svg"
+          "thumbnail": "thumbnails/OrderPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "OrdersFulfilmentBoard",

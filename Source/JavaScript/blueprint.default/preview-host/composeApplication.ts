@@ -298,7 +298,7 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
         : shell === ComponentName.FullPageShell ? {} : defaultApplicationChrome(options.logo, options.identity);
     const screenSlots: Record<string, SceneElement[]> = { [slot]: [...(chrome[slot] ?? []), ...content, ...(slot === effective.primarySlot ? options.trailing ?? [] : [])] };
     for (const name of hostedShellSlots(effective, options)) {
-        screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`slot-${name}`, 'core:slot', { name, closable: true })];
+        screenSlots[name] = [...(screenSlots[name] ?? chrome[name] ?? []), externalComponent(`slot-${name}`, 'core:slot', hostedSlotProperties(effective, name))];
     }
 
     // An own root template that fills a slot itself - the storefront's topbar with its basket - says what is drawn there: the host's default chrome only seeds the slots the application's template leaves empty. A blueprint's root template content is placeholder seed, which the host's chrome replaces.
@@ -308,6 +308,22 @@ export function composeApplicationScreen(application: ApplicationDocument, scree
         : externalComponent(`screen-${screen.name}`, shell, { screenName: screen.name }, { ...chrome, ...screenSlots });
 
     return { element: finish(composed, profile, previewCatalog(options), options), configuration: configurationOf(application, screen, options), templates };
+}
+
+/**
+ * The properties of the `core:slot` a hosted shell slot is drawn with: closable, and the role, routing and optionality the shell
+ * declares for it - a panel docks beside the content, a routed pane takes its screen from the router.
+ */
+export function hostedSlotProperties(shell: EffectiveShell, name: string): Record<string, unknown> {
+    const slot = shell.template.slots.find(candidate => candidate.name === name);
+    return {
+        name,
+        closable: true,
+        ...(slot?.role === undefined ? {} : { role: slot.role }),
+        ...(slot?.routed === undefined ? {} : { routed: slot.routed }),
+        ...(slot?.routedBy === undefined ? {} : { routedBy: slot.routedBy }),
+        ...(slot?.optional === undefined ? {} : { optional: slot.optional }),
+    };
 }
 
 /** The slots the host asked to hold screens that this shell has, other than the one every screen is placed in. */

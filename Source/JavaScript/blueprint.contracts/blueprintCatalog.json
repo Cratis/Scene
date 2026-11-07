@@ -54,7 +54,34 @@
           "description": "Every contract with its counterparty, type, end date, value and status, filtered by status, type, owner and date.",
           "type": "List",
           "category": "Business / Contracts",
-          "thumbnail": "thumbnails/ContractsList.svg"
+          "thumbnail": "thumbnails/ContractsList.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 2
+            },
+            {
+              "name": "filters",
+              "kind": "filters",
+              "defaults": 1
+            },
+            {
+              "name": "stats",
+              "kind": "stats",
+              "defaults": 0
+            },
+            {
+              "name": "rowActions",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "emptyActions",
+              "kind": "actions",
+              "defaults": 0
+            }
+          ]
         },
         {
           "name": "ContractPage",
@@ -63,7 +90,19 @@
           "description": "One contract: status, value, days to its end and notice period, its details, parties, obligations and amendments, and its activity.",
           "type": "Detail",
           "category": "Business / Contracts",
-          "thumbnail": "thumbnails/ContractPage.svg"
+          "thumbnail": "thumbnails/ContractPage.svg",
+          "outlets": [
+            {
+              "name": "toolbar",
+              "kind": "actions",
+              "defaults": 0
+            },
+            {
+              "name": "recordTabs",
+              "kind": "tabs",
+              "defaults": 1
+            }
+          ]
         },
         {
           "name": "ContractsTimeline",

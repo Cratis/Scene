@@ -17,6 +17,7 @@ export const projectPageTemplate: ScreenTemplate = {
     name: 'ProjectPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('ProjectPage-header', 'pageHeader', { title: fromQuery(project.record, '0.name'), subtitle: fromQuery(project.record, '0.summary') }, {

@@ -16,6 +16,7 @@ export const requestPageTemplate: ScreenTemplate = {
     name: 'RequestPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('request-header', 'pageHeader', { title: fromQuery(ApprovalsQuery.Request, '0.title'), subtitle: fromQuery(ApprovalsQuery.Request, '0.reference') }, {

@@ -16,6 +16,7 @@ export const administrationUserPageTemplate: ScreenTemplate = {
     name: 'AdministrationUserPage',
     fitsSlot: 'content',
     slots: recordPageTemplate.slots,
+    outlets: recordPageTemplate.outlets,
     arrangement: recordPageTemplate.arrangement,
     content: {
         header: [component('AdministrationUserPage-header', 'pageHeader', { title: fromQuery(user.record, '0.name'), subtitle: fromQuery(user.record, '0.email') }, {

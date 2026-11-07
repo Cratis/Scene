@@ -36,7 +36,7 @@ describe('when arranging each foundation template for each width', () => {
     it('should read the master/detail as a navigation stack on a phone: the list, then the record', () => {
         const masterDetail = foundationScreenTemplates.find(template => template.name === 'MasterDetailScreen')!;
         slotsIn(evaluate(masterDetail, WidthSizeClass.Compact)).should.deep.equal(['list', 'details']);
-        masterDetail.slots.filter(slot => slot.routed === true).should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', routed: true, accepts: ['Detail'] }]);
+        masterDetail.slots.filter(slot => slot.routed === true).should.deep.equal([{ name: 'master-detail.detail', description: 'The selected record.', role: 'pane', routed: true, routedBy: ['id'], optional: true, accepts: ['Detail'] }]);
     });
 
     it('should put the workspace sections before its content on a phone, where the rail reads as tabs', () => {

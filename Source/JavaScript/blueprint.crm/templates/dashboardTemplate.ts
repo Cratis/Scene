@@ -15,6 +15,7 @@ export const crmDashboardTemplate: ScreenTemplate = {
     name: 'CrmDashboard',
     fitsSlot: 'content',
     slots: dashboardScreenTemplate.slots,
+    outlets: dashboardScreenTemplate.outlets,
     arrangement: dashboardScreenTemplate.arrangement,
     content: {
         header: [component('crm-dashboard-header', 'pageHeader', { title: 'Sales dashboard', subtitle: 'Pipeline, wins and conversion this month' })],

@@ -16,6 +16,7 @@ export const knowledgeBaseTemplate: ScreenTemplate = {
     name: 'KnowledgeBase',
     fitsSlot: 'content',
     slots: masterDetailScreenTemplate.slots,
+    outlets: masterDetailScreenTemplate.outlets,
     arrangement: masterDetailScreenTemplate.arrangement,
     content: {
         list: [

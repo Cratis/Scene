@@ -33,6 +33,7 @@ function dashboardOf(options: DashboardOptions): ScreenTemplate {
         name: options.name,
         fitsSlot: 'content',
         slots: dashboardScreenTemplate.slots,
+        outlets: dashboardScreenTemplate.outlets,
         arrangement: dashboardScreenTemplate.arrangement,
         content: {
             header: [component(`${id}-header`, 'pageHeader', { title: options.title, subtitle: options.subtitle }, {
