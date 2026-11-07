@@ -54,7 +54,20 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 
     [Fact]
     void should_inspect_the_actions_of_every_outlet() =>
-        Mismatches(_corpus["inspection"]!["outlets"]!.AsArray(), fixture => ActionInspector.InspectOutlet(fixture["outlet"].Deserialize<EffectiveOutlet>(_read)!, _context)).ShouldBeEmpty();
+        Mismatches(_corpus["inspection"]!["outlets"]!.AsArray(), fixture => ActionInspector.InspectOutlet(fixture["outlet"].Deserialize<EffectiveOutlet>(_read)!, ContextOf(fixture))).ShouldBeEmpty();
+
+    /// <summary>
+    /// The shared inspection context with what a fixture's own <c language="json">context</c> sets laid over it.
+    /// </summary>
+    /// <param name="fixture">The fixture.</param>
+    /// <returns>The context to inspect with.</returns>
+    ActionInspectionContext ContextOf(JsonNode fixture)
+    {
+        if (fixture["context"] is not JsonObject own) return _context;
+        var merged = _corpus["inspection"]!["context"]!.AsObject().DeepClone().AsObject();
+        foreach (var (key, value) in own) merged[key] = value?.DeepClone();
+        return merged.Deserialize<ActionInspectionContext>(_read)!;
+    }
 
     [Fact]
     void should_inspect_every_action_component() =>

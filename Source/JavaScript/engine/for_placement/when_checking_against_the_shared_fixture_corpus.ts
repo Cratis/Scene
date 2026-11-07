@@ -14,7 +14,7 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../pl
     enablement: { name: string; request: EnablementRequest; expected: unknown }[];
     inspection: {
         context: ActionInspectionContext;
-        outlets: { name: string; outlet: EffectiveOutlet; expected: unknown[] }[];
+        outlets: { name: string; outlet: EffectiveOutlet; context?: Partial<ActionInspectionContext>; expected: unknown[] }[];
         elements: { name: string; element: SceneElement; expected: unknown }[];
     };
     argumentSources: { source: string; expected: string | null }[];
@@ -36,7 +36,7 @@ describe('when checking placement, Opens and enablement against the shared fixtu
 
     for (const fixture of corpus.inspection.outlets) {
         it(`should inspect the actions of ${fixture.name}`, () =>
-            inspectOutletActions(structuredClone(fixture.outlet), structuredClone(corpus.inspection.context)).should.deep.equal(fixture.expected));
+            inspectOutletActions(structuredClone(fixture.outlet), structuredClone({ ...corpus.inspection.context, ...fixture.context })).should.deep.equal(fixture.expected));
     }
 
     for (const fixture of corpus.inspection.elements) {

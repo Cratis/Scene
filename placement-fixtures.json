@@ -673,6 +673,66 @@
             }
           }
         ]
+      },
+      {
+        "name": "row actions whose enabled when is evaluated from the model against the selected row",
+        "context": { "selected": true, "item": { "status": "draft", "stock": 3 }, "conditions": {} },
+        "outlet": {
+          "name": "rowActions", "kind": "actions", "subject": "item", "declaredBy": "Products",
+          "items": [
+            {
+              "item": { "kind": "button", "id": "publish", "title": "Publish", "command": "WithdrawProduct", "subject": "item", "enabledWhen": "item.status == \"onSale\" and item.stock > 0" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true
+            },
+            {
+              "item": { "kind": "button", "id": "restock", "title": "Restock", "command": "WithdrawProduct", "subject": "item", "enabledWhen": "item.stock < 5" },
+              "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true
+            }
+          ],
+          "removed": [], "sources": ["Products"], "summary": "Products", "diagnostics": []
+        },
+        "expected": [
+          {
+            "id": "publish", "title": "Publish", "slice": "Catalog.Products.WithdrawProduct",
+            "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true,
+            "placement": {
+              "requested": "automatic", "resolved": "none", "routed": false, "reason": "Runs directly: the slice has no screen",
+              "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+              ]
+            },
+            "enablement": {
+              "state": "disabled", "reason": "Enabled when item.status == \"onSale\", which does not hold",
+              "steps": [
+                { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+                { "check": "condition", "outcome": "blocked", "reason": "Enabled when item.status == \"onSale\", which does not hold" }
+              ]
+            }
+          },
+          {
+            "id": "restock", "title": "Restock", "slice": "Catalog.Products.WithdrawProduct",
+            "provenance": { "owner": "Products", "level": "screen", "source": "default" }, "editable": true,
+            "placement": {
+              "requested": "automatic", "resolved": "none", "routed": false, "reason": "Runs directly: the slice has no screen",
+              "runDirectly": { "available": true, "missing": [], "reason": "Every input has a source" },
+              "slots": [
+                { "name": "content", "role": "page", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "detail", "role": "pane", "routed": true, "offered": false, "reason": "Not offered: the slice has no screen" },
+                { "name": "activity", "role": "panel", "routed": false, "offered": false, "reason": "Not offered: the slice has no screen" }
+              ]
+            },
+            "enablement": {
+              "state": "enabled", "reason": "Enabled",
+              "steps": [
+                { "check": "subject", "outcome": "passed", "reason": "An item is selected" },
+                { "check": "condition", "outcome": "passed", "reason": "item.stock < 5 holds" }
+              ]
+            }
+          }
+        ]
       }
     ],
     "elements": [
