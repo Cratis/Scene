@@ -7,6 +7,7 @@ import { SlotShapeDiagnostic, SlotShapeUpgrade } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationModel, upgradeNavigationContributions, upgradeNavigationModel } from './upgradeNavigationShape';
 import { upgradeActionPresentation } from './upgradeActionPresentation';
+import { upgradeToolbarElement } from './upgradeToolbarElement';
 
 type JsonObject = { [key: string]: unknown };
 
@@ -92,6 +93,8 @@ function renamedKind(kind: string): string {
  * - An `action` component's `presentation` becomes `opens` ({@link upgradeActionPresentation}): `none` runs directly,
  *   `modal` becomes `dialog` and `drawer` stays `drawer`. An action that stores no presentation keeps opening
  *   automatically.
+ * - A screen's `core:toolbar` element, whose `items` slot held `core:toolbarItem` elements, becomes the `core:outletItems`
+ *   element that draws an outlet of actions ({@link upgradeToolbarElement}).
  * - The function is idempotent: a document already in the slot shape comes back unchanged.
  * - What cannot be mapped is reported in `diagnostics` (never thrown) and stays as it was, so validation on save
  *   still refuses it.
@@ -126,6 +129,7 @@ function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[
     }
     changed = upgradeNavigationContributions(value) || changed;
     changed = upgradeActionPresentation(value, path, diagnostics) || changed;
+    changed = upgradeToolbarElement(value, path, diagnostics) || changed;
     if (value.componentName === legacyOutletComponentName) {
         value.componentName = slotComponentName;
         changed = true;

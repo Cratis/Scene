@@ -489,6 +489,386 @@
           { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[1].properties.presentation", "message": "The action 'torn' is presented as 'drawer' but opens 'dialog'; keep one" }
         ]
       }
+    },
+    {
+      "name": "a screen's toolbar element becomes the element that draws an outlet of actions",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "orders-toolbar",
+                  "componentName": "core:toolbar",
+                  "properties": {
+                    "name": "orders"
+                  },
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "new",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "new",
+                          "kind": "Action",
+                          "label": "New order",
+                          "slice": "sales.orders.PlaceOrder",
+                          "emphasis": "Primary",
+                          "icon": "plus",
+                          "presentation": {
+                            "mode": "both"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "ship",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "ship",
+                          "kind": "Action",
+                          "label": "Ship",
+                          "target": "ShipOrder",
+                          "confirm": "Ship the order?"
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "details",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "details",
+                          "kind": "Navigate",
+                          "target": "OrderDetails",
+                          "label": "Details",
+                          "parameters": {
+                            "orderId": {
+                              "kind": "dataContext",
+                              "path": "order.id"
+                            },
+                            "tab": "lines"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "help",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "help",
+                          "kind": "Dialog",
+                          "target": "HelpDialog"
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "open",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "name": "open",
+                          "kind": "Navigate",
+                          "label": "Open",
+                          "destination": {
+                            "screen": "OrderDetails",
+                            "slot": "detail"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "orders-toolbar",
+                    "componentName": "core:outletItems",
+                    "slots": {},
+                    "properties": {
+                      "name": "orders",
+                      "kind": "actions",
+                      "items": [
+                        {
+                          "kind": "button",
+                          "id": "new",
+                          "title": "New order",
+                          "icon": "plus",
+                          "slice": "sales.orders.PlaceOrder",
+                          "emphasis": "primary"
+                        },
+                        {
+                          "kind": "button",
+                          "id": "ship",
+                          "title": "Ship",
+                          "command": "ShipOrder",
+                          "confirm": "Ship the order?"
+                        },
+                        {
+                          "kind": "button",
+                          "id": "details",
+                          "title": "Details",
+                          "navigateTo": {
+                            "screen": "OrderDetails",
+                            "routeParameterBindings": {
+                              "orderId": {
+                                "kind": "dataContext",
+                                "path": "order.id"
+                              },
+                              "tab": {
+                                "kind": "literal",
+                                "path": "",
+                                "value": "lines"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "kind": "button",
+                          "id": "help",
+                          "title": "help",
+                          "navigateTo": {
+                            "kind": "dialog",
+                            "dialog": "HelpDialog"
+                          }
+                        },
+                        {
+                          "kind": "button",
+                          "id": "open",
+                          "title": "Open",
+                          "navigateTo": {
+                            "screen": "OrderDetails",
+                            "slot": "detail"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a toolbar element that names no outlet becomes the toolbar outlet",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": []
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:outletItems",
+                    "properties": {
+                      "name": "toolbar",
+                      "kind": "actions",
+                      "items": []
+                    },
+                    "slots": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "a toolbar element whose item passes parameters to its command is reported and kept",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {
+                    "name": "main"
+                  },
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "edit",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "target": "EditInvoice",
+                          "parameters": {
+                            "invoiceId": "i-7"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:toolbar",
+                    "properties": {
+                      "name": "main"
+                    },
+                    "slots": {
+                      "items": [
+                        {
+                          "id": "edit",
+                          "componentName": "core:toolbarItem",
+                          "properties": {
+                            "kind": "Action",
+                            "target": "EditInvoice",
+                            "parameters": {
+                              "invoiceId": "i-7"
+                            }
+                          },
+                          "slots": {}
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyToolbarElement",
+            "path": "$.screens[0].slotContent.main[0].slots.items",
+            "message": "The toolbar 'bar' has the item 'edit' that passes parameters to its command, which an outlet button takes from the slice's inputs instead, so it is kept as it is"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a toolbar element whose item has presentation hints is reported and kept",
+      "input": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "info",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Navigate",
+                          "target": "Info",
+                          "presentation": {
+                            "mode": "icon",
+                            "placement": "end"
+                          }
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "document": {
+          "screens": [
+            {
+              "name": "Orders",
+              "slotContent": {
+                "main": [
+                  {
+                    "id": "bar",
+                    "componentName": "core:toolbar",
+                    "properties": {},
+                    "slots": {
+                      "items": [
+                        {
+                          "id": "info",
+                          "componentName": "core:toolbarItem",
+                          "properties": {
+                            "kind": "Navigate",
+                            "target": "Info",
+                            "presentation": {
+                              "mode": "icon",
+                              "placement": "end"
+                            }
+                          },
+                          "slots": {}
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "changed": false,
+        "diagnostics": [
+          {
+            "code": "legacyToolbarElement",
+            "path": "$.screens[0].slotContent.main[0].slots.items",
+            "message": "The toolbar 'bar' has the item 'info' with the presentation hints mode, placement, which an outlet button has no place for, so it is kept as it is"
+          }
+        ]
+      }
     }
   ],
   "validations": [
@@ -609,6 +989,50 @@
       "document": { "screens": [{ "name": "Orders", "contributions": [{ "contributionPointName": "Stats", "content": { "properties": { "label": "Revenue" } } }, { "contributionPointName": "Navigation", "content": { "properties": { "label": "Orders", "targetScreen": "OrderList", "routeParameterBindings": {} } } }] }] },
       "expected": [
         { "code": "legacyNavigationContribution", "path": "$.screens[0].contributions[1]", "message": "A navigation item is contributed to the contribution point 'Navigation'. Scene 5 replaced navigation regions and navigation contribution points with outlets of navigation: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "a document that still has a toolbar element and its items",
+      "document": {
+        "screens": [
+          {
+            "name": "Orders",
+            "slotContent": {
+              "main": [
+                {
+                  "id": "bar",
+                  "componentName": "core:toolbar",
+                  "properties": {},
+                  "slots": {
+                    "items": [
+                      {
+                        "id": "new",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "slice": "sales.orders.PlaceOrder"
+                        },
+                        "slots": {}
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected": [
+        {
+          "code": "legacyToolbarElement",
+          "path": "$.screens[0].slotContent.main[0].componentName",
+          "message": "The element 'bar' is a core:toolbar. Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source"
+        },
+        {
+          "code": "legacyToolbarElement",
+          "path": "$.screens[0].slotContent.main[0].slots.items[0].componentName",
+          "message": "The element 'new' is a core:toolbarItem. Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source"
+        }
       ]
     }
   ]

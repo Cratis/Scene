@@ -6,6 +6,7 @@ import { actionPresentationMigrationHint, isLegacyActionPresentation, legacyActi
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
+import { isLegacyToolbarElement, toolbarElementMigrationHint } from './upgradeToolbarElement';
 import { isLegacyDestination, isLegacyDestinationKind, isLegacyOutletList, isLegacyToolbar, legacyOutletComponentName } from './upgradeSlotShape';
 
 type JsonObject = { [key: string]: unknown };
@@ -75,6 +76,14 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
 
     if (isLegacyDestination(value)) {
         diagnostics.push(legacy(`${path}.outlet`, `A destination names the outlet '${String(value.outlet)}'`));
+    }
+
+    if (isLegacyToolbarElement(value)) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.LegacyToolbarElement,
+            path: `${path}.componentName`,
+            message: `The element '${String(value.id)}' is a ${String(value.componentName)}. ${toolbarElementMigrationHint}`,
+        });
     }
 }
 

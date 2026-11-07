@@ -47,4 +47,10 @@ export enum SlotShapeDiagnosticCode {
 
     /** A screen fits a place that is not a dialog, a drawer, a pane, a panel or a page. */
     UnknownScreenFit = 'unknownScreenFit',
+
+    /**
+     * The document still has a `core:toolbar` element or its `core:toolbarItem` items, which Scene 5 replaced with an outlet of
+     * actions drawn by `core:outletItems`; or such a toolbar holds something an outlet button cannot carry.
+     */
+    LegacyToolbarElement = 'legacyToolbarElement',
 }

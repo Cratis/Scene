@@ -7,4 +7,5 @@ export * from './SlotShapeDiagnosticCode';
 export * from './upgradeSlotShape';
 export * from './upgradeActionPresentation';
 export * from './upgradeNavigationShape';
+export * from './upgradeToolbarElement';
 export * from './validateSlotShape';

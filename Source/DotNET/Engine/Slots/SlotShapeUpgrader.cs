@@ -29,6 +29,9 @@ namespace Cratis.Scene.Engine.Slots;
 /// <item><description>An <c language="json">action</c> component's <c language="json">presentation</c> becomes <c language="json">opens</c>:
 /// <c language="json">none</c> runs directly, <c language="json">modal</c> becomes <c language="json">dialog</c> and <c language="json">drawer</c> stays
 /// (<see cref="LegacyActionPresentation.Upgrade"/>). An action that stores no presentation keeps opening automatically.</description></item>
+/// <item><description>A screen's <c language="csharp">core:toolbar</c> element, whose <c language="csharp">items</c> slot held
+/// <c language="csharp">core:toolbarItem</c> elements, becomes the <c language="csharp">core:outletItems</c> element that draws an outlet
+/// of actions (<see cref="LegacyToolbarElement.Upgrade"/>).</description></item>
 /// <item><description>The upgrade is idempotent, and what cannot be mapped is reported (never thrown) and stays as it was.</description></item>
 /// </list>
 /// </remarks>
@@ -86,6 +89,7 @@ public static class SlotShapeUpgrader
 
         ownChanged = LegacyNavigationShape.UpgradeNavigationContributions(owner) || ownChanged;
         ownChanged = LegacyActionPresentation.Upgrade(owner, path, diagnostics) || ownChanged;
+        ownChanged = LegacyToolbarElement.Upgrade(owner, path, diagnostics) || ownChanged;
         if (LegacyOutletShape.Text(owner["componentName"]) == LegacyOutletShape.OutletComponentName)
         {
             owner["componentName"] = LegacyOutletShape.SlotComponentName;

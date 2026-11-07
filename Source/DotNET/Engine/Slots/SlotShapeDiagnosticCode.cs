@@ -80,4 +80,11 @@ public enum SlotShapeDiagnosticCode
     /// A screen fits a place that is not a dialog, a drawer, a pane, a panel or a page.
     /// </summary>
     UnknownScreenFit = 13,
+
+    /// <summary>
+    /// The document still has a <c language="csharp">core:toolbar</c> element or its <c language="csharp">core:toolbarItem</c> items,
+    /// which Scene 5 replaced with an outlet of actions drawn by <c language="csharp">core:outletItems</c>; or such a toolbar holds
+    /// something an outlet button cannot carry.
+    /// </summary>
+    LegacyToolbarElement = 14,
 }

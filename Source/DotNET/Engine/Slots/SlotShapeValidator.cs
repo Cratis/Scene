@@ -132,6 +132,14 @@ public static class SlotShapeValidator
         {
             diagnostics.Add(Legacy($"{path}.outlet", $"A destination names the outlet '{LegacyOutletShape.Text(value["outlet"])}'"));
         }
+
+        if (LegacyToolbarElement.IsLegacy(value))
+        {
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.LegacyToolbarElement,
+                $"{path}.componentName",
+                $"The element '{LegacyOutletShape.Describe(value["id"])}' is a {LegacyOutletShape.Text(value["componentName"])}. {LegacyToolbarElement.MigrationHint}"));
+        }
     }
 
     static (JsonObject Action, string Path, string Name)? ActionOf(JsonObject value, string path)
