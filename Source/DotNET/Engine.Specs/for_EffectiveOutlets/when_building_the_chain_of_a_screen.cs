@@ -3,7 +3,7 @@
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
+using Cratis.Scene.Model;
 using Cratis.Scene.Model.Layouts;
 using Cratis.Scene.Model.Navigation;
 using Cratis.Scene.Model.Screens;
@@ -12,7 +12,7 @@ namespace Cratis.Scene.Engine.Outlets.for_EffectiveOutlets;
 
 public class when_building_the_chain_of_a_screen : Specification
 {
-    static readonly JsonSerializerOptions _read = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
+    static readonly JsonSerializerOptions _read = SceneJson.Options;
 
     JsonArray _chains = null!;
 

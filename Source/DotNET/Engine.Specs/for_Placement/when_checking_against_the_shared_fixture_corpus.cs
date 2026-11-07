@@ -5,13 +5,14 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Cratis.Scene.Engine.Outlets;
+using Cratis.Scene.Model;
 using Cratis.Scene.Model.Elements;
 
 namespace Cratis.Scene.Engine.Placement.for_Placement;
 
 public class when_checking_against_the_shared_fixture_corpus : Specification
 {
-    static readonly JsonSerializerOptions _read = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
+    static readonly JsonSerializerOptions _read = SceneJson.Options;
 
     static readonly JsonSerializerOptions _write = new(JsonSerializerDefaults.Web)
     {

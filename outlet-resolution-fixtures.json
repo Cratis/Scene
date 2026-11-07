@@ -380,7 +380,7 @@
                 { "kind": "button", "id": "place", "title": "Place order" },
                 { "kind": "button", "id": "cancel", "title": "Cancel order", "before": "help" },
                 { "kind": "button", "id": "copy", "title": "Copy order", "after": "help" },
-                { "kind": "button", "id": "print", "title": "Print", "after": "place" }
+                { "id": "print", "title": "Print", "after": "place", "kind": "button" }
               ]
             }
           ]

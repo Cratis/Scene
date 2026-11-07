@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Cratis.Scene.Engine.Toolbar;
+using Cratis.Scene.Model;
 using Cratis.Scene.Model.Outlets;
 using Cratis.Scene.Model.Screens;
 
@@ -12,7 +13,7 @@ namespace Cratis.Scene.Engine.Outlets.for_EffectiveOutlets;
 
 public class when_resolving_the_shared_corpus : Specification
 {
-    static readonly JsonSerializerOptions _read = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
+    static readonly JsonSerializerOptions _read = SceneJson.Options;
 
     static readonly JsonSerializerOptions _write = new(JsonSerializerDefaults.Web)
     {

@@ -27,6 +27,11 @@ A button and a menu entry also carry `subject` (`item` or `screen`), `enabledWhe
 (`automatic`, `none`, `dialog`, `drawer`, `slot`) and `opensIn`. Only an outlet of actions has a `subject`. Where an
 action's slice opens and whether the action is enabled are worked out by [placement and enablement](placement.md).
 
+An item names its type in `kind`, and TypeScript may write `kind` after the other properties. In C#, read outlet items
+with `SceneJson.Options`, or pass a host's own `JsonSerializerOptions` through `SceneJson.Configure` before using them.
+Both turn on `AllowOutOfOrderMetadataProperties`; without it `System.Text.Json` cannot read an item whose `kind` is not
+first.
+
 ## Declaring and refining
 
 | Type | Properties |

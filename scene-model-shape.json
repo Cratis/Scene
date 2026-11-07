@@ -671,6 +671,7 @@
     "OutletRefinement": ["outlet", "mode", "items", "hide"],
     "OutletContribution": ["outlet", "items"],
     "DialogActionsOutlet": [],
+    "SceneJson": [],
     "BlueprintScreen": [
       "name",
       "title",
