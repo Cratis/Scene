@@ -20,6 +20,9 @@ public static class SlotShapeValidator
     public const string MigrationHint = LegacyOutletShape.MigrationHint;
 
     static readonly HashSet<string> _roles = new(StringComparer.OrdinalIgnoreCase) { "page", "pane", "panel" };
+    static readonly HashSet<string> _opens = new(StringComparer.OrdinalIgnoreCase) { "automatic", "none", "dialog", "drawer", "slot" };
+    static readonly HashSet<string> _fits = new(StringComparer.OrdinalIgnoreCase) { "dialog", "drawer", "pane", "panel", "page" };
+    static readonly HashSet<string> _actionItemKinds = new(StringComparer.OrdinalIgnoreCase) { "button", "menuEntry" };
 
     /// <summary>
     /// Checks a stored document given as JSON text.
@@ -61,6 +64,7 @@ public static class SlotShapeValidator
         CheckSlots(owner, path, diagnostics);
         CheckOutlets(owner, path, diagnostics);
         CheckNavigation(owner, path, diagnostics);
+        CheckPlacement(owner, path, diagnostics);
 
         foreach (var (key, child) in owner)
         {
@@ -127,6 +131,69 @@ public static class SlotShapeValidator
         if (LegacyOutletShape.IsDestination(value))
         {
             diagnostics.Add(Legacy($"{path}.outlet", $"A destination names the outlet '{LegacyOutletShape.Text(value["outlet"])}'"));
+        }
+    }
+
+    static (JsonObject Action, string Path, string Name)? ActionOf(JsonObject value, string path)
+    {
+        if (LegacyActionPresentation.IsActionComponent(value) && value["properties"] is JsonObject properties)
+        {
+            return (properties, $"{path}.properties", LegacyOutletShape.Describe(value["id"]));
+        }
+
+        return LegacyOutletShape.Text(value["kind"]) is { } kind && _actionItemKinds.Contains(kind)
+            ? (value, path, LegacyOutletShape.Describe(value["id"]))
+            : null;
+    }
+
+    static void CheckPlacement(JsonObject value, string path, List<SlotShapeDiagnostic> diagnostics)
+    {
+        if (LegacyActionPresentation.IsLegacy(value))
+        {
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.LegacyActionPresentation,
+                $"{path}.properties.{LegacyActionPresentation.Property}",
+                $"The action '{LegacyOutletShape.Describe(value["id"])}' stores a presentation. {LegacyActionPresentation.MigrationHint}"));
+        }
+
+        if (ActionOf(value, path) is var (action, actionPath, name))
+        {
+            var opens = action["opens"];
+            var text = LegacyOutletShape.Text(opens);
+            if (opens is not null && (text is null || !_opens.Contains(text)))
+            {
+                diagnostics.Add(new(
+                    SlotShapeDiagnosticCode.UnknownOpens,
+                    $"{actionPath}.opens",
+                    $"The action '{name}' opens '{LegacyOutletShape.Describe(opens)}'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot"));
+            }
+
+            if (string.Equals(text, "slot", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(LegacyOutletShape.Text(action["opensIn"])))
+            {
+                diagnostics.Add(new(
+                    SlotShapeDiagnosticCode.OpensSlotWithoutName,
+                    $"{actionPath}.opensIn",
+                    $"The action '{name}' opens in a slot but does not name one"));
+            }
+        }
+
+        if (value["fits"] is not JsonArray fits)
+        {
+            return;
+        }
+
+        var screen = LegacyOutletShape.Text(value["name"]) ?? "(unnamed)";
+        for (var index = 0; index < fits.Count; index++)
+        {
+            if (LegacyOutletShape.Text(fits[index]) is { } fit && _fits.Contains(fit))
+            {
+                continue;
+            }
+
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.UnknownScreenFit,
+                $"{path}.fits[{index}]",
+                $"The screen '{screen}' fits '{LegacyOutletShape.Describe(fits[index])}'; a screen fits a dialog, a drawer, a pane, a panel or a page"));
         }
     }
 

@@ -6,6 +6,7 @@ import { toolbarAsOutletRefinement } from '../toolbar/toolbarOutlet';
 import { SlotShapeDiagnostic, SlotShapeUpgrade } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationModel, upgradeNavigationContributions, upgradeNavigationModel } from './upgradeNavigationShape';
+import { upgradeActionPresentation } from './upgradeActionPresentation';
 
 type JsonObject = { [key: string]: unknown };
 
@@ -88,6 +89,9 @@ function renamedKind(kind: string): string {
  *   region that extends or overrides becomes a refinement of it.
  * - Navigation items a screen contributes to a contribution point become contributions to the outlet of navigation of
  *   that name, in the screen's `outletContributions` ({@link upgradeNavigationContributions}).
+ * - An `action` component's `presentation` becomes `opens` ({@link upgradeActionPresentation}): `none` runs directly,
+ *   `modal` becomes `dialog` and `drawer` stays `drawer`. An action that stores no presentation keeps opening
+ *   automatically.
  * - The function is idempotent: a document already in the slot shape comes back unchanged.
  * - What cannot be mapped is reported in `diagnostics` (never thrown) and stays as it was, so validation on save
  *   still refuses it.
@@ -121,6 +125,7 @@ function upgrade(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[
         changed = true;
     }
     changed = upgradeNavigationContributions(value) || changed;
+    changed = upgradeActionPresentation(value, path, diagnostics) || changed;
     if (value.componentName === legacyOutletComponentName) {
         value.componentName = slotComponentName;
         changed = true;

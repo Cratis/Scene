@@ -59,4 +59,25 @@ public enum SlotShapeDiagnosticCode
     /// upgrade it before saving.
     /// </summary>
     LegacyNavigationContribution = 9,
+
+    /// <summary>
+    /// An <c language="csharp">action</c> component stores a presentation, which Scene 5 replaced with <c language="csharp">opens</c>; or its
+    /// presentation cannot become one.
+    /// </summary>
+    LegacyActionPresentation = 10,
+
+    /// <summary>
+    /// An action opens somewhere that is not automatic, none, dialog, drawer or slot.
+    /// </summary>
+    UnknownOpens = 11,
+
+    /// <summary>
+    /// An action opens in a slot but does not name one.
+    /// </summary>
+    OpensSlotWithoutName = 12,
+
+    /// <summary>
+    /// A screen fits a place that is not a dialog, a drawer, a pane, a panel or a page.
+    /// </summary>
+    UnknownScreenFit = 13,
 }

@@ -440,9 +440,89 @@
         "changed": true,
         "diagnostics": []
       }
+    },
+    {
+      "name": "an action component's presentation becomes opens",
+      "input": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "add", "componentName": "core:action", "properties": { "label": "Add product", "command": "DraftProduct", "presentation": "modal" }, "slots": {} },
+          { "id": "withdraw", "componentName": "core:action", "properties": { "command": "WithdrawProduct", "presentation": "none", "arguments": [{ "name": "sku", "source": "component.products.selectedItem.sku" }] }, "slots": {} },
+          { "id": "price", "componentName": "thirdparty:action", "properties": { "command": "SetProductPrice", "presentation": "Drawer" }, "slots": {} },
+          { "id": "draft", "componentName": "core:action", "properties": { "command": "DraftProduct", "opens": "dialog", "presentation": "modal" }, "slots": {} },
+          { "id": "refresh", "componentName": "core:action", "properties": { "command": "RefreshCatalog" }, "slots": {} },
+          { "id": "note", "componentName": "core:text", "properties": { "presentation": "modal" }, "slots": {} }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Products", "slotContent": { "main": [
+            { "id": "add", "componentName": "core:action", "properties": { "label": "Add product", "command": "DraftProduct", "opens": "dialog" }, "slots": {} },
+            { "id": "withdraw", "componentName": "core:action", "properties": { "command": "WithdrawProduct", "opens": "none", "arguments": [{ "name": "sku", "source": "component.products.selectedItem.sku" }] }, "slots": {} },
+            { "id": "price", "componentName": "thirdparty:action", "properties": { "command": "SetProductPrice", "opens": "drawer" }, "slots": {} },
+            { "id": "draft", "componentName": "core:action", "properties": { "command": "DraftProduct", "opens": "dialog" }, "slots": {} },
+            { "id": "refresh", "componentName": "core:action", "properties": { "command": "RefreshCatalog" }, "slots": {} },
+            { "id": "note", "componentName": "core:text", "properties": { "presentation": "modal" }, "slots": {} }
+          ] } }]
+        },
+        "changed": true,
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "an action presentation that cannot become opens is reported and kept",
+      "input": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "odd", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+          { "id": "torn", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "drawer", "opens": "dialog" }, "slots": {} }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Products", "slotContent": { "main": [
+            { "id": "odd", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+            { "id": "torn", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "drawer", "opens": "dialog" }, "slots": {} }
+          ] } }]
+        },
+        "changed": false,
+        "diagnostics": [
+          { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[0].properties.presentation", "message": "The action 'odd' is presented as 'popover', which is not none, modal or drawer, so it has no opens to become" },
+          { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[1].properties.presentation", "message": "The action 'torn' is presented as 'drawer' but opens 'dialog'; keep one" }
+        ]
+      }
     }
   ],
   "validations": [
+    {
+      "name": "an action component that still stores a presentation",
+      "document": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "id": "add", "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "modal" }, "slots": {} }
+        ] } }]
+      },
+      "expected": [
+        { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[0].properties.presentation", "message": "The action 'add' stores a presentation. Scene 5 replaced an action's presentation with opens: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
+      ]
+    },
+    {
+      "name": "fits, opens and a slot that are not known or not named",
+      "document": {
+        "screens": [{ "name": "Products", "fits": ["Drawer", "sidebar", "pane"], "slotContent": { "main": [
+          { "id": "price", "componentName": "core:action", "properties": { "command": "SetProductPrice", "opens": "slot" }, "slots": {} },
+          { "id": "detail", "componentName": "core:action", "properties": { "command": "ShowProduct", "opens": "Slot", "opensIn": "detail" }, "slots": {} }
+        ] } }],
+        "screenTemplates": [{ "name": "ListPage", "outlets": [{ "name": "toolbar", "kind": "actions", "defaults": [
+          { "kind": "button", "id": "export", "title": "Export", "slice": "Catalog.Products.ExportProducts", "opens": "popover" },
+          { "kind": "menuEntry", "id": "archive", "title": "Archive", "slice": "Catalog.Products.ArchiveProduct", "opens": "slot", "opensIn": "" },
+          { "kind": "button", "id": "add", "title": "Add", "slice": "Catalog.Products.DraftProduct", "opens": "Dialog" }
+        ] }] }]
+      },
+      "expected": [
+        { "code": "unknownScreenFit", "path": "$.screens[0].fits[1]", "message": "The screen 'Products' fits 'sidebar'; a screen fits a dialog, a drawer, a pane, a panel or a page" },
+        { "code": "opensSlotWithoutName", "path": "$.screens[0].slotContent.main[0].properties.opensIn", "message": "The action 'price' opens in a slot but does not name one" },
+        { "code": "unknownOpens", "path": "$.screenTemplates[0].outlets[0].defaults[0].opens", "message": "The action 'export' opens 'popover'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot" },
+        { "code": "opensSlotWithoutName", "path": "$.screenTemplates[0].outlets[0].defaults[1].opensIn", "message": "The action 'archive' opens in a slot but does not name one" }
+      ]
+    },
     {
       "name": "a document in the slot shape",
       "document": {

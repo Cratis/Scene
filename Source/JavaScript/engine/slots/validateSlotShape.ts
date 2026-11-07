@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { OutletKind, SlotRole } from '@cratis/scene.model';
+import { Opens, OutletItemKind, OutletKind, ScreenFit, SlotRole } from '@cratis/scene.model';
+import { actionPresentationMigrationHint, isLegacyActionPresentation, legacyActionPresentationProperty } from './upgradeActionPresentation';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
@@ -43,6 +44,7 @@ function visit(value: unknown, path: string, diagnostics: SlotShapeDiagnostic[])
     checkSlots(value, path, diagnostics);
     checkOutlets(value, path, diagnostics);
     checkNavigation(value, path, diagnostics);
+    checkPlacement(value, path, diagnostics);
 
     for (const [key, child] of Object.entries(value)) {
         visit(child, `${path}.${key}`, diagnostics);
@@ -77,6 +79,57 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
 }
 
 const outletKinds = new Set<string>(Object.values(OutletKind));
+const opensValues = new Set<string>(Object.values(Opens));
+const screenFits = new Set<string>(Object.values(ScreenFit));
+const actionItemKinds = new Set<string>([OutletItemKind.Button, OutletItemKind.MenuEntry].map(kind => kind.toLowerCase()));
+
+function actionOf(value: JsonObject, path: string): { action: JsonObject; path: string; name: string } | undefined {
+    if (typeof value.componentName === 'string' && value.componentName.endsWith(':action') && isObject(value.properties)) {
+        return { action: value.properties, path: `${path}.properties`, name: String(value.id) };
+    }
+    if (typeof value.kind === 'string' && actionItemKinds.has(value.kind.toLowerCase())) return { action: value, path, name: String(value.id) };
+    return undefined;
+}
+
+function checkPlacement(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (isLegacyActionPresentation(value)) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.LegacyActionPresentation,
+            path: `${path}.properties.${legacyActionPresentationProperty}`,
+            message: `The action '${String(value.id)}' stores a presentation. ${actionPresentationMigrationHint}`,
+        });
+    }
+
+    const found = actionOf(value, path);
+    if (found !== undefined) {
+        const opens = found.action.opens;
+        if (opens !== undefined && (typeof opens !== 'string' || !opensValues.has(opens.toLowerCase()))) {
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.UnknownOpens,
+                path: `${found.path}.opens`,
+                message: `The action '${found.name}' opens '${String(opens)}'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot`,
+            });
+        }
+        if (typeof opens === 'string' && opens.toLowerCase() === Opens.Slot && (typeof found.action.opensIn !== 'string' || found.action.opensIn.length === 0)) {
+            diagnostics.push({
+                code: SlotShapeDiagnosticCode.OpensSlotWithoutName,
+                path: `${found.path}.opensIn`,
+                message: `The action '${found.name}' opens in a slot but does not name one`,
+            });
+        }
+    }
+
+    if (!Array.isArray(value.fits)) return;
+    const name = typeof value.name === 'string' ? value.name : '(unnamed)';
+    value.fits.forEach((fit: unknown, index: number) => {
+        if (typeof fit === 'string' && screenFits.has(fit.toLowerCase())) return;
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.UnknownScreenFit,
+            path: `${path}.fits[${index}]`,
+            message: `The screen '${name}' fits '${String(fit)}'; a screen fits a dialog, a drawer, a pane, a panel or a page`,
+        });
+    });
+}
 
 /** What the validator tells a document that still has a feature or module toolbar. */
 export const toolbarShapeMigrationHint = 'Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
