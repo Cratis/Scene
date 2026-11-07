@@ -3,7 +3,7 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { DialogTemplate, NavigationItem, Outlet, OutletContribution, OutletItem, OutletItemKind, OutletRefinement, Toolbar } from '@cratis/scene.model';
+import { DialogTemplate, Outlet, OutletItem, OutletItemKind, OutletRefinement, Toolbar } from '@cratis/scene.model';
 import { EffectiveOutlet, OutletDiagnostic, OutletLevel } from '../../index';
 
 export interface ExpectedOutlet {
@@ -28,7 +28,6 @@ export const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../.
     itemKinds: Record<string, string[]>;
     cases: OutletCase[];
     dialogTemplates: { name: string; template: DialogTemplate; expected: string[] }[];
-    navigationContributions: { name: string; outlet: string; items: NavigationItem[]; expected: OutletContribution }[];
     toolbars: { name: string; toolbar: Toolbar; expected: OutletRefinement }[];
 };
 

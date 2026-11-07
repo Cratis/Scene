@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { workOrdersScreenDefinitions } from './workOrdersScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,17 +36,17 @@ export const workOrdersStructure: ApplicationStructure = (() => {
 export const workOrdersNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Work orders' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'workorders', title: 'Work orders', target: { module: workOrdersModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'workorders', title: 'Work orders', target: { module: workOrdersModule } }] }],
     },
     modules: [{
         module: workOrdersModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'list', title: 'Work orders', target: { module: workOrdersModule, feature: 'list' } },
-                { id: 'board', title: 'Board', target: { module: workOrdersModule, feature: 'board' } },
-                { id: 'schedule', title: 'Schedule', target: { module: workOrdersModule, feature: 'schedule' } },
+                { kind: OutletItemKind.Navigation, id: 'list', title: 'Work orders', target: { module: workOrdersModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'board', title: 'Board', target: { module: workOrdersModule, feature: 'board' } },
+                { kind: OutletItemKind.Navigation, id: 'schedule', title: 'Schedule', target: { module: workOrdersModule, feature: 'schedule' } },
             ],
         }],
     }],

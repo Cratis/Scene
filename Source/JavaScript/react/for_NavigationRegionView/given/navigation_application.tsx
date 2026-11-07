@@ -14,7 +14,7 @@ import { CoreSlot } from '../../navigation/CoreSlot';
 
 export interface NavigationFixtureView {
     module?: string;
-    region: NavigationRegionKind;
+    outlet: NavigationRegionKind;
     expected: { mode?: string; sources: string; items: string[] };
 }
 

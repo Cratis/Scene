@@ -4,10 +4,8 @@
 /**
  * One entry in the gallery's navigation.
  *
- * The fields are deliberately the ones {@link NavigationItem} carries, plus an icon. That is what lets a
- * single declaration become both a sidebar entry and a `Navigation` contribution: the element built from
- * it carries these values in its `properties` bag, `extractNavigationItem` reads them straight back out,
- * and neither side has to be kept in step with the other by hand.
+ * One declaration becomes both a sidebar entry (a menu item element) and a navigation item contributed to the
+ * `Navigation` outlet of navigation, so neither side has to be kept in step with the other by hand.
  */
 export interface NavigationEntry {
     /** What the entry is called. */

@@ -4,7 +4,7 @@
 import { expect } from 'chai';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach } from 'vitest';
-import { ApplicationStructure, NavigationModel, NavigationRegionKind } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { coreComponents } from '../core';
 import { IconAdapterProvider, createIconAdapterRegistry } from '../icons';
@@ -15,8 +15,8 @@ import { SceneNavigationModel } from '../navigation/region/SceneNavigationModel'
 
 const structure = { modules: [{ id: 'warehouse', name: 'Warehouse', features: [], slices: [] }] } as unknown as ApplicationStructure;
 const navigation: NavigationModel = {
-    application: { regions: [{ region: NavigationRegionKind.Sidebar, items: [
-        { id: 'stock', title: 'Warehouse', icon: 'box', target: { module: 'warehouse' } },
+    application: { outlets: [{ name: NavigationRegionKind.Sidebar, kind: OutletKind.Navigation, defaults: [
+        { kind: OutletItemKind.Navigation, id: 'stock', title: 'Warehouse', icon: 'box', target: { module: 'warehouse' } },
     ] }] },
     modules: [],
 };

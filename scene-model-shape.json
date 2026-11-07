@@ -203,18 +203,6 @@
       "content",
       "order"
     ],
-    "NavigationItem": [
-      "id",
-      "label",
-      "icon",
-      "presentation",
-      "targetScreen",
-      "routeParameterBindings",
-      "destination",
-      "order",
-      "group",
-      "hierarchy"
-    ],
     "UiProfile": [
       "name",
       "targetPlatform",
@@ -315,6 +303,7 @@
       "slotContent",
       "forms",
       "contributions",
+      "outletContributions",
       "screenTemplate",
       "behaviors",
       "path",
@@ -637,39 +626,18 @@
       "command",
       "dialogTemplate"
     ],
-    "NavItem": [
-      "id",
-      "title",
-      "icon",
-      "target",
-      "slot",
-      "children"
-    ],
-    "NavigationRegion": [
-      "region",
-      "mode",
-      "items",
-      "buttons"
-    ],
-    "NavigationButton": [
-      "id",
-      "title",
-      "slice",
-      "emphasis",
-      "icon",
-      "authorize"
-    ],
     "ApplicationLogo": [
       "image",
       "title"
     ],
     "ApplicationNavigation": [
-      "regions",
+      "outlets",
       "logo"
     ],
     "ModuleNavigation": [
       "module",
-      "regions"
+      "refinements",
+      "contributions"
     ],
     "NavigationModel": [
       "application",
@@ -890,11 +858,6 @@
     "NavigationRegionKind": [
       "Topbar",
       "Sidebar"
-    ],
-    "NavigationRegionMode": [
-      "Inherit",
-      "Extend",
-      "Override"
     ],
     "ToolbarEmphasis": [
       "Primary",

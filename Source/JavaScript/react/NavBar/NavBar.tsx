@@ -1,53 +1,44 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Contribution, NavigationItem } from '@cratis/scene.model';
-import { aggregateContributions } from '@cratis/scene.engine';
-import { extractNavigationItem } from './extractNavigationItem';
+import { OutletNavigationItem } from '@cratis/scene.model';
 
 export interface NavBarProps {
-    /** Every contribution in scope - `NavBar` aggregates the ones targeting `Navigation` itself. */
-    contributions: Contribution[];
+    /**
+     * The items of an outlet of navigation, in the order they are shown - typically the effective items of the
+     * `Navigation` outlet, contributions included (`effectiveOutlet`). An item with sub-items is a group.
+     */
+    items: OutletNavigationItem[];
 
     /**
-     * Turns a {@link NavigationItem}'s target screen and route parameters into a concrete route - a URL
-     * path, a query string, or a native deep link. Owning this as a caller-supplied function, rather than
-     * a fixed URL scheme, is what makes `NavBar` usable unmodified across renderers (Cratis/Scene#2).
+     * Turns a navigation item's target into a concrete route - a URL path, a query string, or a native deep link.
+     * Owning this as a caller-supplied function, rather than a fixed URL scheme, is what makes `NavBar` usable
+     * unmodified across renderers.
      */
-    renderRoute: (item: NavigationItem) => string;
+    renderRoute: (item: OutletNavigationItem) => string;
 }
 
 /**
- * Renders the aggregated `Navigation` contributions from across the current element tree - part of
- * Cratis/Scene#2. `NavBar` is not wired to a fixed source: pass it whatever contributions are currently
- * in scope and it recomputes, the same way any contribution-point consumer does.
+ * Renders the items of an outlet of navigation as links. `NavBar` is not wired to a fixed source: pass it the resolved
+ * items in scope and it recomputes. An item with sub-items renders as a group of its sub-items; an item without a
+ * target that groups nothing is skipped rather than rendered as a broken link.
+ * @param props The items and how to turn each into a route.
+ * @returns The navigation.
  */
-export function NavBar({ contributions, renderRoute }: NavBarProps) {
-    const items = aggregateContributions(contributions, 'Navigation')
-        .map(extractNavigationItem)
-        .filter((item): item is NavigationItem => item !== undefined);
-
-    const hasGroups = items.some(item => item.group !== undefined);
-    if (!hasGroups) {
-        return (
-            <nav data-scene-navbar="">
-                {items.map(item => <NavBarItem key={item.targetScreen} item={item} href={renderRoute(item)} />)}
-            </nav>
-        );
-    }
-
-    const groupNames = [...new Set(items.map(item => item.group ?? ''))];
+export function NavBar({ items, renderRoute }: NavBarProps) {
     return (
         <nav data-scene-navbar="">
-            {groupNames.map(groupName => (
-                <section key={groupName} data-scene-navbar-group={groupName}>
-                    {items.filter(item => (item.group ?? '') === groupName).map(item => <NavBarItem key={item.targetScreen} item={item} href={renderRoute(item)} />)}
-                </section>
-            ))}
+            {items.map(item => (item.children?.length ?? 0) > 0
+                ? (
+                    <section key={item.id} data-scene-navbar-group={item.title}>
+                        {item.children!.filter(child => child.target !== undefined).map(child => <NavBarItem key={child.id} item={child} href={renderRoute(child)} />)}
+                    </section>
+                )
+                : item.target === undefined ? null : <NavBarItem key={item.id} item={item} href={renderRoute(item)} />)}
         </nav>
     );
 }
 
-function NavBarItem({ item, href }: { item: NavigationItem; href: string }) {
-    return <a href={href}>{item.label}</a>;
+function NavBarItem({ item, href }: { item: OutletNavigationItem; href: string }) {
+    return <a href={href}>{item.title}</a>;
 }

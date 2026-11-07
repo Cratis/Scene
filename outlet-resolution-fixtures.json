@@ -576,25 +576,6 @@
       "expected": ["actions|actions|next:submit:primary"]
     }
   ],
-  "navigationContributions": [
-    {
-      "name": "the items of a navigation contribution point become navigation items, ordered",
-      "outlet": "Navigation",
-      "items": [
-        { "label": "Orders", "targetScreen": "sales.orders.OrderList", "routeParameterBindings": {}, "order": 2 },
-        { "id": "quotes", "label": "Quotes", "icon": "lucide:file", "targetScreen": "sales.quotes.QuoteList", "routeParameterBindings": {} },
-        { "id": "customers", "label": "Customers", "targetScreen": "sales.customers.CustomerList", "routeParameterBindings": {}, "destination": { "module": "sales", "feature": "customers" }, "order": 1 }
-      ],
-      "expected": {
-        "outlet": "Navigation",
-        "items": [
-          { "kind": "navigation", "id": "customers", "title": "Customers", "target": { "module": "sales", "feature": "customers" } },
-          { "kind": "navigation", "id": "sales.orders.OrderList", "title": "Orders", "target": { "screen": "sales.orders.OrderList" } },
-          { "kind": "navigation", "id": "quotes", "title": "Quotes", "icon": "lucide:file", "target": { "screen": "sales.quotes.QuoteList" } }
-        ]
-      }
-    }
-  ],
   "toolbars": [
     {
       "name": "a feature toolbar extends the toolbar outlet, a command target becomes the button's command",

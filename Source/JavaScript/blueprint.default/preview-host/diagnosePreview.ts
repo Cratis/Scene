@@ -3,7 +3,7 @@
 
 import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, Screen, SampleDataPack, Toolbar, ToolbarButton } from '@cratis/scene.model';
 import {
-    ApplicationStructureIndex, collectComponents, diagnoseNavigationRegions, resolveScreenTemplates,
+    ApplicationStructureIndex, collectComponents, diagnoseNavigationOutlets, resolveScreenTemplates,
     toolbarButtonFromItem, validateSampleDataSelection, validateToolbarButtons,
 } from '@cratis/scene.engine';
 import { ApplicationDocument } from './ApplicationDocument';
@@ -51,7 +51,7 @@ const make = (code: PreviewProblemCode, severity: PreviewProblemSeverity, messag
  *
  * - the target must be in the structure, and a module must have a feature;
  * - the page - the screen named by the target's feature - must exist, with a layout and a template that can be found and placed;
- * - navigation (`diagnoseNavigationRegions`), toolbar buttons (`validateToolbarButtons`, whatever their severity), the structure's own
+ * - navigation (`diagnoseNavigationOutlets`), toolbar buttons (`validateToolbarButtons`, whatever their severity), the structure's own
  *   ids and the sample data selection are reported as warnings: the preview still renders, an item or button just will not behave
  *   as authored.
  *
@@ -102,7 +102,7 @@ export function diagnosePreview(input: PreviewDiagnosisInput): PreviewDiagnosis 
     }
 
     if (input.navigation) {
-        for (const diagnostic of diagnoseNavigationRegions(index, input.navigation)) {
+        for (const diagnostic of diagnoseNavigationOutlets(index, input.navigation)) {
             problems.push(make(PreviewProblemCode.NavigationInvalid, PreviewProblemSeverity.Warning, diagnostic.message, diagnostic.entry));
         }
     }

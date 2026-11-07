@@ -21,7 +21,7 @@ const document = {
     uiProfiles: [previewProfile(undefined)],
 };
 const structure = { modules: [{ id: 'dashboard', name: 'Dashboard', features: [{ id: 'overview', name: 'Overview', features: [], slices: [] }] }] };
-const navigation = { application: { logo: { image: '', title: 'Acme' }, regions: [] }, modules: [] };
+const navigation = { application: { logo: { image: '', title: 'Acme' }, outlets: [] }, modules: [] };
 createRoot(window.document.getElementById('root')).render(
     <ScenePreviewHost document={document} structure={structure} navigation={navigation} target={{ application: 'Acme' }}
         registry={{ ...coreComponents, ...defaultBlueprintComponents }} />);

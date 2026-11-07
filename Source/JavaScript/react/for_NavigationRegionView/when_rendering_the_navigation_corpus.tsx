@@ -30,7 +30,7 @@ describe('when rendering the shared navigation corpora through the navigation ho
         for (const fixture of corpus.cases) {
             for (const view of fixture.views) {
                 const where = view.module ?? 'application';
-                describe(`and the ${where} ${view.region} of ${fixture.name}`, () => {
+                describe(`and the ${where} ${view.outlet} of ${fixture.name}`, () => {
                     let container: HTMLElement;
                     let region: Element;
 
@@ -38,7 +38,7 @@ describe('when rendering the shared navigation corpora through the navigation ho
                         const index = new ApplicationStructureIndex(fixture.structure!);
                         const initialScreen = (view.module ? index.firstFeatureId(view.module) : undefined) ?? 'dashboard.overview';
                         ({ container } = render(<NavigationApplication structure={fixture.structure!} navigation={fixture.navigation} initialScreen={initialScreen}
-                            regions={[{ region: view.region, ...(view.module ? { module: view.module } : { application: true }), expand: 'all' }]} />));
+                            regions={[{ region: view.outlet, ...(view.module ? { module: view.module } : { application: true }), expand: 'all' }]} />));
                         region = container.querySelector('nav[data-scene-nav-region]')!;
                     });
 

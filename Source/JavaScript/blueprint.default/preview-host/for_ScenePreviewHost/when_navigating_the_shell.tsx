@@ -235,7 +235,7 @@ describe('when navigating the shell of a preview', () => {
     describe('and an item of the region has no target', () => {
         it('should draw it with the warning marker and not navigate', () => {
             const model = JSON.parse(JSON.stringify(preview().props.children.props.navigation));
-            model.modules[0].regions[0].items.push({ id: 'soon', title: 'Soon' });
+            model.modules[0].refinements[0].items.push({ kind: 'navigation', id: 'soon', title: 'Soon' });
             render(preview({ navigation: model }));
             const item = within(sidebar()).getByText('Soon').closest('li')!;
             fireEvent.click(within(sidebar()).getByText('Soon'));

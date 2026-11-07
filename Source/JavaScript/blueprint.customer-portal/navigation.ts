@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { customerPortalScreenDefinitions } from './customerPortalScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,19 +36,19 @@ export const customerPortalStructure: ApplicationStructure = (() => {
 export const customerPortalNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Customer portal' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'portal', title: 'Customer portal', target: { module: customerPortalModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'portal', title: 'Customer portal', target: { module: customerPortalModule } }] }],
     },
     modules: [{
         module: customerPortalModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'home', title: 'Home', target: { module: customerPortalModule, feature: 'home' } },
-                { id: 'orders', title: 'Orders', target: { module: customerPortalModule, feature: 'orders' } },
-                { id: 'invoices', title: 'Invoices', target: { module: customerPortalModule, feature: 'invoices' } },
-                { id: 'support', title: 'Support', target: { module: customerPortalModule, feature: 'support' } },
-                { id: 'profile', title: 'Profile', target: { module: customerPortalModule, feature: 'profile' } },
+                { kind: OutletItemKind.Navigation, id: 'home', title: 'Home', target: { module: customerPortalModule, feature: 'home' } },
+                { kind: OutletItemKind.Navigation, id: 'orders', title: 'Orders', target: { module: customerPortalModule, feature: 'orders' } },
+                { kind: OutletItemKind.Navigation, id: 'invoices', title: 'Invoices', target: { module: customerPortalModule, feature: 'invoices' } },
+                { kind: OutletItemKind.Navigation, id: 'support', title: 'Support', target: { module: customerPortalModule, feature: 'support' } },
+                { kind: OutletItemKind.Navigation, id: 'profile', title: 'Profile', target: { module: customerPortalModule, feature: 'profile' } },
             ],
         }],
     }],

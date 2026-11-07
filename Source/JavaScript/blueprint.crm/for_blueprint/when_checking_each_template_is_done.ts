@@ -102,7 +102,7 @@ describe('when checking the CRM screen set agrees with itself', () => {
 
     it('should lead every navigation item to a screen of the set', () => {
         const screens = new Set(crmScreenDefinitions.map(definition => definition.name));
-        const targets = [...crmNavigation.application.regions, ...crmNavigation.modules.flatMap(module => module.regions)].flatMap(region => itemsOf(region.items));
+        const targets = [...crmNavigation.application.outlets.map(outlet => outlet.defaults), ...crmNavigation.modules.flatMap(module => (module.refinements ?? []).map(refinement => refinement.items ?? []))].flatMap(items => itemsOf(items as never));
         targets.length.should.be.greaterThan(0);
         targets.filter(target => !screens.has(`${target.module}.${target.feature ?? ''}`) && target.feature !== undefined).should.deep.equal([]);
     });

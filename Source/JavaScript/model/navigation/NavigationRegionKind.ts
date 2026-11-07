@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 /**
- * The navigation regions an application shell has.
+ * The navigation regions an application shell has. Each is the name of the outlet of navigation the shell offers for
+ * it.
  */
 export enum NavigationRegionKind {
     /** The flat strip along the top. */

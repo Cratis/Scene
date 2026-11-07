@@ -3,4 +3,3 @@
 
 export * from './ContributionPoint';
 export * from './Contribution';
-export * from './NavigationItem';

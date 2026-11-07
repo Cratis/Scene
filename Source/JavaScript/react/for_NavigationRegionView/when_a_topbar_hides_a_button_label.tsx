@@ -3,7 +3,7 @@
 
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach } from 'vitest';
-import { ApplicationStructure, NavigationModel, NavigationRegionKind } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind } from '@cratis/scene.model';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { coreComponents } from '../core';
 import { NavigationRegionView } from '../navigation/region/NavigationRegionView';
@@ -12,9 +12,12 @@ import { SceneNavigationModel } from '../navigation/region/SceneNavigationModel'
 
 const structure = { modules: [{ id: 'warehouse', name: 'Warehouse', features: [{ id: 'stock', name: 'Stock', features: [{ id: 'levels', name: 'Levels', features: [], slices: [{ id: 'RegisterSku', name: 'Register SKU', kind: 'StateChange', command: 'RegisterSku' }] }], slices: [] }], slices: [] }] } as unknown as ApplicationStructure;
 const navigation: NavigationModel = {
-    application: { regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'stock', title: 'Stock', target: { module: 'warehouse', feature: 'stock' } }], buttons: [
-        { id: 'registerSku', title: 'Register SKU', icon: 'box', slice: 'warehouse.stock.levels.RegisterSku' },
-    ] }] },
+    application: { outlets: [
+        { name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'stock', title: 'Stock', target: { module: 'warehouse', feature: 'stock' } }] },
+        { name: 'topbarButtons', kind: OutletKind.Actions, defaults: [
+            { kind: OutletItemKind.Button, id: 'registerSku', title: 'Register SKU', icon: 'box', slice: 'warehouse.stock.levels.RegisterSku' },
+        ] },
+    ] },
     modules: [],
 };
 

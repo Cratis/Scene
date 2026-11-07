@@ -19,7 +19,7 @@ export const structure = {
     ] }] }],
 } as unknown as ApplicationStructure;
 
-export const navigation: NavigationModel = { application: { regions: [] }, modules: [] };
+export const navigation: NavigationModel = { application: { outlets: [] }, modules: [] };
 
 export const fields: Record<string, SliceCommandField[]> = {
     PlaceOrder: [

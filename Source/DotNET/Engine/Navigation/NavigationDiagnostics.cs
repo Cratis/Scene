@@ -11,7 +11,7 @@ namespace Cratis.Scene.Engine.Navigation;
 /// <summary>
 /// Diagnoses how destinations, slots, routes and targets fit together: duplicate routes, duplicate, missing
 /// or incompatible slots, hosting cycles and unavailable targets - and, when the graph carries an application structure and
-/// navigation regions, the regions too. Nothing is rewritten and no URL is constructed.
+/// navigation, its navigation outlets too. Nothing is rewritten and no URL is constructed.
 /// </summary>
 /// <remarks>
 /// The TypeScript engine (<c language="csharp">diagnoseNavigation</c>) reports the same codes and messages in the same order for
@@ -86,7 +86,7 @@ public static class NavigationDiagnostics
 
         if (graph.Structure is not null && graph.Navigation is not null)
         {
-            diagnostics.AddRange(NavigationRegionDiagnostics.Diagnose(new ApplicationStructureIndex(graph.Structure), graph.Navigation, graph.Slots));
+            diagnostics.AddRange(NavigationOutletDiagnostics.Diagnose(new ApplicationStructureIndex(graph.Structure), graph.Navigation, graph.Slots));
         }
 
         return diagnostics;

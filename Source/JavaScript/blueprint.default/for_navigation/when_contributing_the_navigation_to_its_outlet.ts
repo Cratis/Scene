@@ -1,50 +1,46 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { NavigationItem } from '@cratis/scene.model';
-import { aggregateContributions } from '@cratis/scene.engine';
-import { extractNavigationItem } from '@cratis/scene.react';
-import { galleryScreen, galleryScreenTemplates, navigationContributionPoint, navigationContributions, navigationEntries } from '../gallery';
+import { OutletItemKind, OutletKind, OutletNavigationItem } from '@cratis/scene.model';
+import { OutletLevelKind, effectiveOutlet } from '@cratis/scene.engine';
+import { galleryScreen, galleryScreenTemplates, navigationEntries, navigationGroups, navigationOutlet } from '../gallery';
 
-describe('when aggregating the navigation contributions', () => {
-    const aggregated = aggregateContributions(navigationContributions, navigationContributionPoint);
-    const items = aggregated.map(extractNavigationItem).filter((item): item is NavigationItem => item !== undefined);
+describe('when contributing the navigation to its outlet', () => {
+    const dashboard = galleryScreen('Dashboard')!;
+    const resolved = effectiveOutlet(
+        [
+            { kind: OutletLevelKind.Layout, name: 'AppShell', outlets: [{ name: navigationOutlet, kind: OutletKind.Navigation, defaults: [] }] },
+            { kind: OutletLevelKind.Screen, name: dashboard.name, contributions: dashboard.outletContributions },
+        ],
+        navigationOutlet);
+    const groups = resolved.items.map(entry => entry.item as OutletNavigationItem);
+    const items = groups.flatMap(group => group.children ?? []);
 
-    it('should aggregate one contribution per navigation entry', () => {
-        aggregated.should.have.lengthOf(navigationEntries.length);
+    it('should resolve without problems', () => resolved.diagnostics.should.be.empty);
+
+    it('should contribute one navigation item per group, in first-declared order', () => {
+        groups.map(group => group.title).should.deep.equal(navigationGroups);
     });
 
-    it('should extract every one of them as a navigation item', () => {
+    it('should contribute every entry as a sub-item of its group', () => {
         items.should.have.lengthOf(navigationEntries.length);
+        items.every(item => item.kind === OutletItemKind.Navigation).should.be.true;
     });
 
-    it('should carry the label and target screen through the property bag unchanged', () => {
-        const dashboard = items.find(item => item.targetScreen === 'Dashboard');
-        dashboard!.label.should.equal('Dashboard');
-    });
-
-    it('should carry the group so an aggregated navigation can section itself', () => {
-        items.filter(item => item.group === undefined).should.be.empty;
-    });
-
-    it('should carry a route parameter bag rather than leaving it undefined', () => {
-        items.filter(item => item.routeParameterBindings === undefined).should.be.empty;
+    it('should carry the title and target screen of the entry', () => {
+        items.find(item => item.target?.screen === 'Dashboard')!.title.should.equal('Dashboard');
     });
 
     it('should point every entry at a screen template this blueprint provides', () => {
         const provided = new Set(galleryScreenTemplates.map(template => template.name));
-        items.filter(item => !provided.has(item.targetScreen ?? '')).map(item => item.targetScreen).should.be.empty;
+        items.filter(item => !provided.has(item.target?.screen ?? '')).map(item => item.target?.screen).should.be.empty;
     });
 
     it('should point every entry at a screen the gallery actually ships', () => {
-        items.filter(item => galleryScreen(item.targetScreen ?? '') === undefined).map(item => item.targetScreen).should.be.empty;
-    });
-
-    it('should carry the contributions on every application-shell screen', () => {
-        galleryScreen('Dashboard')!.contributions.should.have.lengthOf(navigationEntries.length);
+        items.filter(item => galleryScreen(item.target?.screen ?? '') === undefined).map(item => item.target?.screen).should.be.empty;
     });
 
     it('should not carry navigation on a full-page screen, which has no navigation to render', () => {
-        galleryScreen('Login')!.contributions.should.be.empty;
+        (galleryScreen('Login')!.outletContributions === undefined).should.be.true;
     });
 });

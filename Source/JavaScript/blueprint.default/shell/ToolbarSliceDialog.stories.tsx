@@ -24,7 +24,7 @@ function OrdersToolbar({ warnEmptySlices }: { warnEmptySlices: boolean }) {
     return <SliceInvokerProvider invoker={createDryRunInvoker({ onInvoked: invocation => console.info('Dry run', invocation) })} warnEmptySlices={warnEmptySlices}>
         <SliceCommandFieldsProvider fieldsFor={() => [{ name: 'customer', type: 'string', required: true }, { name: 'product', type: 'string' }, { name: 'quantity', type: 'number' }]}>
             <SceneNavigationHost screens={{ Orders: toolbar }} initialScreen='Orders' registry={coreComponents}
-                navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation: { application: { regions: [] }, modules: [] } }} />
+                navigationModel={{ structure: new ApplicationStructureIndex(structure), navigation: { application: { outlets: [] }, modules: [] } }} />
         </SliceCommandFieldsProvider>
     </SliceInvokerProvider>;
 }

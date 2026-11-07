@@ -5,6 +5,7 @@ using Cratis.Scene.Model.ContributionPoints;
 using Cratis.Scene.Model.Elements;
 using Cratis.Scene.Model.Forms;
 using Cratis.Scene.Model.Interactions;
+using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Model.Screens;
 
@@ -41,6 +42,12 @@ public record Screen(
     /// Gets the behaviors attached to the screen. Additive with whatever is attached further out or further in.
     /// </summary>
     public IReadOnlyList<Behavior> Behaviors { get; init; } = [];
+
+    /// <summary>
+    /// Gets the items the screen contributes to outlets (<c language="csharp">contribute to &lt;outlet&gt;</c>), such as navigation items for the
+    /// <c language="csharp">Navigation</c> outlet of navigation. <see langword="null"/> when it contributes none.
+    /// </summary>
+    public IReadOnlyList<OutletContribution>? OutletContributions { get; init; }
 
     /// <summary>
     /// Gets the modules and features, outermost first, the screen was declared in - its place in the application

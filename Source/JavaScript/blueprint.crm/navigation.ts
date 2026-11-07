@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { crmScreenDefinitions } from './crmScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,25 +36,25 @@ export const crmStructure: ApplicationStructure = (() => {
 export const crmNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'CRM' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'crm', title: 'CRM', target: { module: crmModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'crm', title: 'CRM', target: { module: crmModule } }] }],
     },
     modules: [{
         module: crmModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'dashboard', title: 'Dashboard', target: { module: crmModule, feature: 'dashboard' } },
-                { id: 'leads', title: 'Leads', target: { module: crmModule, feature: 'leads' } },
-                { id: 'contacts', title: 'Contacts', target: { module: crmModule, feature: 'contacts' } },
-                { id: 'companies', title: 'Companies', target: { module: crmModule, feature: 'companies' } },
+                { kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: crmModule, feature: 'dashboard' } },
+                { kind: OutletItemKind.Navigation, id: 'leads', title: 'Leads', target: { module: crmModule, feature: 'leads' } },
+                { kind: OutletItemKind.Navigation, id: 'contacts', title: 'Contacts', target: { module: crmModule, feature: 'contacts' } },
+                { kind: OutletItemKind.Navigation, id: 'companies', title: 'Companies', target: { module: crmModule, feature: 'companies' } },
                 {
-                    id: 'deals', title: 'Deals', target: { module: crmModule, feature: 'deals' }, children: [
-                        { id: 'pipeline', title: 'Pipeline', target: { module: crmModule, feature: 'deals' } },
-                        { id: 'deal-list', title: 'List', target: { module: crmModule, feature: 'deals.list' } },
+                    kind: OutletItemKind.Navigation, id: 'deals', title: 'Deals', target: { module: crmModule, feature: 'deals' }, children: [
+                        { kind: OutletItemKind.Navigation, id: 'pipeline', title: 'Pipeline', target: { module: crmModule, feature: 'deals' } },
+                        { kind: OutletItemKind.Navigation, id: 'deal-list', title: 'List', target: { module: crmModule, feature: 'deals.list' } },
                     ],
                 },
-                { id: 'activities', title: 'Activities', target: { module: crmModule, feature: 'activities' } },
+                { kind: OutletItemKind.Navigation, id: 'activities', title: 'Activities', target: { module: crmModule, feature: 'activities' } },
             ],
         }],
     }],

@@ -7,7 +7,7 @@ import { LayoutName, appShellLayout, fullPageLayout } from '../layouts';
 import { BreadcrumbEntry, applicationChrome, fullPageChrome } from './applicationChrome';
 import { nestScreenTemplates, templateContentInLayout } from './composeScreen';
 import { authTemplates } from './authTemplates';
-import { navigationContributions } from './navigation';
+import { navigationContribution } from './navigation';
 import { nestingChainTemplates } from './nesting';
 import { statusTemplates } from './statusTemplates';
 import { supportTemplates } from './supportTemplates';
@@ -90,7 +90,8 @@ function screenFor(template: ScreenTemplate): Screen {
         screenTemplate: template.name,
         slotContent: mergeSlotContent(chrome, templateContentInLayout(placeable, layout)),
         forms: [],
-        contributions: isFullPage ? [] : navigationContributions,
+        contributions: [],
+        ...(isFullPage ? {} : { outletContributions: [navigationContribution] }),
     };
 }
 

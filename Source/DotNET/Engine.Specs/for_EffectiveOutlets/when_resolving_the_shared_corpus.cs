@@ -4,9 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using Cratis.Scene.Engine.Navigation;
 using Cratis.Scene.Engine.Toolbar;
-using Cratis.Scene.Model.ContributionPoints;
 using Cratis.Scene.Model.Outlets;
 using Cratis.Scene.Model.Screens;
 
@@ -96,20 +94,6 @@ public class when_resolving_the_shared_corpus : Specification
             {
                 var template = fixture["template"].Deserialize<DialogTemplate>(_read)!;
                 var actual = new JsonArray([.. DialogTemplateOutlets.Of(template).Select(outlet => (JsonNode)JsonValue.Create(DescribeDialogOutlet(outlet)))]);
-                return !JsonNode.DeepEquals(actual, fixture["expected"]);
-            })
-            .Select(fixture => fixture["name"]!.GetValue<string>());
-        mismatches.ShouldBeEmpty();
-    }
-
-    [Fact]
-    void should_contribute_navigation_items_to_the_outlet_of_navigation()
-    {
-        var mismatches = Cases("navigationContributions")
-            .Where(fixture =>
-            {
-                var items = fixture["items"].Deserialize<List<NavigationItem>>(_read)!;
-                var actual = JsonSerializer.SerializeToNode(NavigationOutlets.AsContribution(fixture["outlet"]!.GetValue<string>(), items), _write);
                 return !JsonNode.DeepEquals(actual, fixture["expected"]);
             })
             .Select(fixture => fixture["name"]!.GetValue<string>());

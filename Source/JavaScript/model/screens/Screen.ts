@@ -5,6 +5,7 @@ import { SceneElement } from '../elements';
 import { Form } from '../forms';
 import { Contribution } from '../contributionPoints';
 import { Behavior } from '../interactions';
+import type { OutletContribution } from '../outlets/OutletContribution';
 
 /**
  * A named screen: the structure it fills, the content that fills it, the forms it hosts, and whatever it
@@ -41,6 +42,12 @@ export interface Screen {
     contributions: Contribution[];
 
     /**
+     * The items this screen contributes to outlets (`contribute to <outlet>`), such as navigation items for the
+     * `Navigation` outlet of navigation. Absent when it contributes none.
+     */
+    outletContributions?: OutletContribution[];
+
+    /**
      * The resolved name of the {@link ScreenTemplate} this screen fills, or undefined when it fills the
      * `layout`'s own slots directly. The template's `fitsSlot` is what decides where it lands, so a screen
      * never has to state its own position.
@@ -70,4 +77,4 @@ export interface Screen {
     owner?: string;
 }
 
-export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'screenTemplate', 'behaviors', 'path', 'owner'];
+export const ScreenPropertyNames: (keyof Screen)[] = ['name', 'layout', 'slotContent', 'forms', 'contributions', 'outletContributions', 'screenTemplate', 'behaviors', 'path', 'owner'];

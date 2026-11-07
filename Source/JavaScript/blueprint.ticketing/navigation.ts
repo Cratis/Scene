@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { ticketingScreenDefinitions } from './ticketingScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,24 +36,24 @@ export const ticketingStructure: ApplicationStructure = (() => {
 export const ticketingNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Support' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'support', title: 'Support', target: { module: supportModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'support', title: 'Support', target: { module: supportModule } }] }],
     },
     modules: [{
         module: supportModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'dashboard', title: 'Dashboard', target: { module: supportModule, feature: 'dashboard' } },
+                { kind: OutletItemKind.Navigation, id: 'dashboard', title: 'Dashboard', target: { module: supportModule, feature: 'dashboard' } },
                 {
-                    id: 'queue', title: 'Queue', target: { module: supportModule, feature: 'queue' }, children: [
-                        { id: 'list', title: 'List', target: { module: supportModule, feature: 'queue' } },
-                        { id: 'board', title: 'Board', target: { module: supportModule, feature: 'queue.board' } },
+                    kind: OutletItemKind.Navigation, id: 'queue', title: 'Queue', target: { module: supportModule, feature: 'queue' }, children: [
+                        { kind: OutletItemKind.Navigation, id: 'list', title: 'List', target: { module: supportModule, feature: 'queue' } },
+                        { kind: OutletItemKind.Navigation, id: 'board', title: 'Board', target: { module: supportModule, feature: 'queue.board' } },
                     ],
                 },
-                { id: 'mine', title: 'My tickets', target: { module: supportModule, feature: 'mine' } },
-                { id: 'customers', title: 'Customers', target: { module: supportModule, feature: 'customers' } },
-                { id: 'knowledge', title: 'Knowledge base', target: { module: supportModule, feature: 'knowledge' } },
+                { kind: OutletItemKind.Navigation, id: 'mine', title: 'My tickets', target: { module: supportModule, feature: 'mine' } },
+                { kind: OutletItemKind.Navigation, id: 'customers', title: 'Customers', target: { module: supportModule, feature: 'customers' } },
+                { kind: OutletItemKind.Navigation, id: 'knowledge', title: 'Knowledge base', target: { module: supportModule, feature: 'knowledge' } },
             ],
         }],
     }],

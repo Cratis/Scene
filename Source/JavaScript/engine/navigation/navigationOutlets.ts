@@ -2,87 +2,158 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-    NavigationButton,
-    NavigationItem,
+    ModuleNavigation,
     NavigationModel,
     NavigationRegionKind,
-    NavigationRegionMode,
-    NavItem,
-    OutletButton,
-    OutletContribution,
-    OutletItemKind,
+    Outlet,
+    OutletItem,
     OutletKind,
     OutletMode,
     OutletNavigationItem,
+    OutletRefinement,
 } from '@cratis/scene.model';
 import { OutletLevel } from '../outlets/OutletLevel';
 import { OutletLevelKind } from '../outlets/OutletLevelKind';
-import { findModuleNavigation, findNavigationRegion, navigationRegionOrder } from './navigationRegions';
 
 /** The name of the level the application's navigation is declared at. */
 export const applicationNavigationLevel = 'Application';
 
+/** The navigation regions in the order every result lists them; each is the name of an outlet of navigation. */
+export const navigationRegionOrder: NavigationRegionKind[] = [NavigationRegionKind.Topbar, NavigationRegionKind.Sidebar];
+
+/** The slot an item renders into when it names none: the primary slot. */
+export const primarySlot = 'content';
+
 /**
- * The name of the outlet of actions that holds a navigation region's buttons, such as `topbarButtons`.
- * @param region The region.
+ * The name of the outlet of actions that holds a navigation outlet's buttons, such as `topbarButtons`.
+ * @param outlet The name of the outlet of navigation.
  * @returns The outlet name.
  */
-export function navigationButtonsOutlet(region: NavigationRegionKind): string {
-    return `${region}Buttons`;
+export function navigationButtonsOutlet(outlet: string): string {
+    return `${outlet}Buttons`;
 }
 
-const modes: Record<NavigationRegionMode, OutletMode> = {
-    [NavigationRegionMode.Inherit]: OutletMode.Inherits,
-    [NavigationRegionMode.Extend]: OutletMode.Extends,
-    [NavigationRegionMode.Override]: OutletMode.Overrides,
-};
-
 /**
- * Turns an item of a navigation region into the item of the outlet of navigation the region is.
- * @param item The region item.
- * @returns The outlet item.
+ * The outlets the shell always offers, whether or not the application gives them default items: the `topbar` and
+ * `sidebar` outlets of navigation and their `topbarButtons` and `sidebarButtons` outlets of actions.
+ * @returns The outlets, without defaults.
  */
-export function navItemAsOutletItem(item: NavItem): OutletNavigationItem {
-    const result: OutletNavigationItem = { kind: OutletItemKind.Navigation, id: item.id, title: item.title };
-    if (item.icon !== undefined) result.icon = item.icon;
-    if (item.target !== undefined) result.target = item.target;
-    if (item.slot !== undefined) result.slot = item.slot;
-    if (item.children !== undefined) result.children = item.children.map(navItemAsOutletItem);
-    return result;
+export function standardNavigationOutlets(): Outlet[] {
+    return navigationRegionOrder.flatMap(region => [
+        { name: region, kind: OutletKind.Navigation, defaults: [] },
+        { name: navigationButtonsOutlet(region), kind: OutletKind.Actions, defaults: [] },
+    ]);
 }
 
 /**
- * Turns an item of an outlet of navigation back into a navigation region item.
- * @param item The outlet item.
- * @returns The region item.
+ * The outlets the application level offers: the ones it declares, followed by the standard ones it does not.
+ * @param navigation The navigation model.
+ * @returns The outlets.
  */
-export function outletItemAsNavItem(item: OutletNavigationItem): NavItem {
-    const result: NavItem = { id: item.id, title: item.title };
-    if (item.icon !== undefined) result.icon = item.icon;
-    if (item.target !== undefined) result.target = item.target;
-    if (item.slot !== undefined) result.slot = item.slot;
-    if (item.children !== undefined) result.children = item.children.map(outletItemAsNavItem);
-    return result;
+export function applicationNavigationOutlets(navigation: NavigationModel): Outlet[] {
+    const declared = navigation.application.outlets ?? [];
+    const names = new Set(declared.map(outlet => outlet.name));
+    return [...declared, ...standardNavigationOutlets().filter(outlet => !names.has(outlet.name))];
 }
 
 /**
- * Turns a button of a navigation region into a button of an outlet of actions.
- * @param button The region button.
- * @returns The outlet button.
+ * Finds an outlet the application level offers, declared or standard.
+ * @param navigation The navigation model.
+ * @param outlet The outlet name.
+ * @returns The outlet, or undefined when the application offers none of that name.
  */
-export function navigationButtonAsOutletButton(button: NavigationButton): OutletButton {
-    const result: OutletButton = { kind: OutletItemKind.Button, id: button.id, title: button.title };
-    if (button.icon !== undefined) result.icon = button.icon;
-    if (button.slice !== undefined) result.slice = button.slice;
-    if (button.emphasis !== undefined) result.emphasis = button.emphasis;
-    if (button.authorize !== undefined) result.authorize = button.authorize;
-    return result;
+export function findApplicationOutlet(navigation: NavigationModel, outlet: string): Outlet | undefined {
+    return applicationNavigationOutlets(navigation).find(candidate => candidate.name === outlet);
 }
 
 /**
- * The chain of outlet levels a navigation model is: the application declares an outlet of navigation per region (and an
- * outlet of actions for the region's buttons), and a module refines them with the region's mode. Navigation regions are
- * outlets of navigation; this is the one place that says how.
+ * Finds what a module declares.
+ * @param navigation The navigation model.
+ * @param module The module identity.
+ * @returns The module's navigation, or undefined when it declares nothing.
+ */
+export function findModuleNavigation(navigation: NavigationModel, module: string): ModuleNavigation | undefined {
+    return navigation.modules.find(candidate => candidate.module === module);
+}
+
+/**
+ * Finds how a module refines an outlet.
+ * @param navigation The navigation model.
+ * @param module The module identity.
+ * @param outlet The outlet name.
+ * @returns The refinement, or undefined when the module does not refine the outlet.
+ */
+export function findModuleRefinement(navigation: NavigationModel, module: string, outlet: string): OutletRefinement | undefined {
+    return findModuleNavigation(navigation, module)?.refinements?.find(refinement => refinement.outlet === outlet);
+}
+
+/**
+ * The mode a refinement resolves with: the one it states, or `extends` when it adds or hides items and `inherits` when
+ * it does neither - the rule outlet resolution applies.
+ * @param refinement The refinement, or undefined for none.
+ * @returns The mode.
+ */
+export function modeOfRefinement(refinement: OutletRefinement | undefined): OutletMode {
+    if (refinement === undefined) return OutletMode.Inherits;
+    return refinement.mode ?? ((refinement.items?.length ?? 0) > 0 || (refinement.hide?.length ?? 0) > 0 ? OutletMode.Extends : OutletMode.Inherits);
+}
+
+/**
+ * How a module treats an outlet it inherits from the application: `inherits` when it does not refine it.
+ * @param navigation The navigation model.
+ * @param module The module identity.
+ * @param outlet The outlet name.
+ * @returns The mode.
+ */
+export function modeOfModuleOutlet(navigation: NavigationModel, module: string, outlet: string): OutletMode {
+    return modeOfRefinement(findModuleRefinement(navigation, module, outlet));
+}
+
+/**
+ * The items a level puts in an outlet itself: the application's defaults, or a module's refinement items.
+ * @param navigation The navigation model.
+ * @param module The module; undefined for the application.
+ * @param outlet The outlet name.
+ * @returns The items, in order.
+ */
+export function ownOutletItems(navigation: NavigationModel, module: string | undefined, outlet: string): OutletItem[] {
+    return module === undefined
+        ? findApplicationOutlet(navigation, outlet)?.defaults ?? []
+        : findModuleRefinement(navigation, module, outlet)?.items ?? [];
+}
+
+/**
+ * Whether items of an outlet may have sub-items: only items of an outlet of navigation other than the flat topbar.
+ * @param outlet The outlet name.
+ * @param kind What the outlet lists.
+ * @returns Whether sub-items are allowed.
+ */
+export function allowsSubItems(outlet: string, kind: OutletKind | undefined): boolean {
+    return kind === OutletKind.Navigation && outlet !== NavigationRegionKind.Topbar;
+}
+
+/**
+ * Every id in a list of items, depth first. Sub-items count only where the outlet allows them.
+ * @param items The items.
+ * @param nested Whether sub-items count.
+ * @returns The ids.
+ */
+export function collectItemIds(items: OutletItem[], nested: boolean): string[] {
+    return items.flatMap(item => [item.id, ...(nested ? collectItemIds(childrenOf(item), nested) : [])]);
+}
+
+/**
+ * The sub-items of an item: a navigation item's children; nothing for any other item.
+ * @param item The item.
+ * @returns The sub-items.
+ */
+export function childrenOf(item: OutletItem): OutletNavigationItem[] {
+    return 'children' in item && Array.isArray(item.children) ? item.children : [];
+}
+
+/**
+ * The chain of outlet levels a navigation model is: the application level declares the outlets of its shell layout (and
+ * the standard ones it does not declare), and a module refines them and contributes to them.
  * @param navigation The navigation model.
  * @param module The module to resolve for; undefined for the application.
  * @param moduleName The name editors show for the module; the module id when absent.
@@ -92,57 +163,13 @@ export function navigationOutletLevels(navigation: NavigationModel, module?: str
     const application: OutletLevel = {
         kind: OutletLevelKind.Layout,
         name: applicationNavigationLevel,
-        outlets: navigationRegionOrder.flatMap(region => {
-            const declared = findNavigationRegion(navigation.application.regions, region);
-            return [
-                { name: region, kind: OutletKind.Navigation, defaults: (declared?.items ?? []).map(navItemAsOutletItem) },
-                { name: navigationButtonsOutlet(region), kind: OutletKind.Actions, defaults: (declared?.buttons ?? []).map(navigationButtonAsOutletButton) },
-            ];
-        }),
+        outlets: applicationNavigationOutlets(navigation),
     };
     if (module === undefined) return [application];
 
-    const regions = findModuleNavigation(navigation, module)?.regions ?? [];
-    return [application, {
-        kind: OutletLevelKind.Module,
-        name: moduleName ?? module,
-        refinements: regions.flatMap(region => {
-            const mode = modes[region.mode ?? NavigationRegionMode.Inherit] ?? OutletMode.Inherits;
-            const own = mode === OutletMode.Inherits ? undefined : region.items.map(navItemAsOutletItem);
-            const buttons = mode === OutletMode.Inherits ? undefined : (region.buttons ?? []).map(navigationButtonAsOutletButton);
-            return [
-                { outlet: region.region, mode, ...(own ? { items: own } : {}) },
-                { outlet: navigationButtonsOutlet(region.region), mode, ...(buttons ? { items: buttons } : {}) },
-            ];
-        }),
-    }];
-}
-
-/**
- * Turns the items a screen contributes to a navigation contribution point into a contribution to the outlet of
- * navigation of that name. Items keep their declared `order`; items without one follow in the order given.
- * @param outlet The name of the outlet of navigation - the contribution point's name.
- * @param items The contributed navigation items.
- * @returns The contribution.
- */
-export function navigationItemsAsOutletContribution(outlet: string, items: NavigationItem[]): OutletContribution {
-    const ordered = items
-        .map((item, index) => ({ item, index }))
-        .sort((a, b) => {
-            if (a.item.order === undefined && b.item.order === undefined) return a.index - b.index;
-            if (a.item.order === undefined) return 1;
-            if (b.item.order === undefined) return -1;
-            return a.item.order - b.item.order || a.index - b.index;
-        })
-        .map(({ item }) => {
-            const result: OutletNavigationItem = {
-                kind: OutletItemKind.Navigation,
-                id: item.id ?? item.targetScreen,
-                title: item.label,
-                target: item.destination ?? { screen: item.targetScreen },
-            };
-            if (item.icon !== undefined) result.icon = item.icon;
-            return result;
-        });
-    return { outlet, items: ordered };
+    const declared = findModuleNavigation(navigation, module);
+    const level: OutletLevel = { kind: OutletLevelKind.Module, name: moduleName ?? module };
+    if (declared?.refinements !== undefined) level.refinements = declared.refinements;
+    if (declared?.contributions !== undefined) level.contributions = declared.contributions;
+    return [application, level];
 }

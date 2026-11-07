@@ -4,7 +4,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeAll } from 'vitest';
 import { ApplicationStructureIndex } from '@cratis/scene.engine';
-import { NavigationRegionKind, NavigationRegionMode, type NavigationModel } from '@cratis/scene.model';
+import { NavigationRegionKind, OutletMode, type NavigationModel } from '@cratis/scene.model';
 import { ApplicationHost } from '../ApplicationHost';
 import { ApplicationDocument } from '../ApplicationDocument';
 import { element, navigation, ordersApplication, registry, structure, withPrime } from '../for_ScenePreviewHost/given';
@@ -26,9 +26,9 @@ function application(): ApplicationDocument {
 const withSideItem: NavigationModel = {
     ...navigation,
     modules: navigation.modules.map(module => module.module === 'support'
-        ? { ...module, regions: module.regions.map(region => region.region === NavigationRegionKind.Sidebar
-            ? { ...region, mode: NavigationRegionMode.Override, items: region.items.map(item => item.id === 'kb' ? { ...item, slot: 'side' } : item) }
-            : region) }
+        ? { ...module, refinements: (module.refinements ?? []).map(refinement => refinement.outlet === NavigationRegionKind.Sidebar
+            ? { ...refinement, mode: OutletMode.Overrides, items: (refinement.items ?? []).map(item => item.id === 'kb' ? { ...item, slot: 'side' } : item) }
+            : refinement) }
         : module),
 };
 

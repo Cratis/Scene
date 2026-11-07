@@ -2,16 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Cratis.Scene.Engine.Outlets;
-using Cratis.Scene.Model.Common;
-using Cratis.Scene.Model.ContributionPoints;
 using Cratis.Scene.Model.Navigation;
 using Cratis.Scene.Model.Outlets;
 
 namespace Cratis.Scene.Engine.Navigation;
 
 /// <summary>
-/// Navigation regions are outlets of navigation, and a region's buttons an outlet of actions: this is the one place that
-/// says how. The TypeScript engine's <c language="typescript">navigationOutletLevels</c> builds the same chain.
+/// Looks things up in a navigation model's outlets, and builds the chain of outlet levels it is: the application level
+/// declares the outlets of its shell layout, and a module refines them and contributes to them. The TypeScript engine's
+/// <c language="typescript">navigationOutlets</c> answers the same.
 /// </summary>
 public static class NavigationOutlets
 {
@@ -21,11 +20,14 @@ public static class NavigationOutlets
     public const string ApplicationLevel = "Application";
 
     /// <summary>
-    /// Gets the name of the outlet of actions that holds a navigation region's buttons, such as <c language="screenplay">topbarButtons</c>.
+    /// The slot an item renders into when it names none: the primary slot.
     /// </summary>
-    /// <param name="region">The region.</param>
-    /// <returns>The outlet name.</returns>
-    public static string ButtonsOutlet(NavigationRegionKind region) => $"{RegionOutlet(region)}Buttons";
+    public const string PrimarySlot = "content";
+
+    /// <summary>
+    /// The navigation regions in the order every result lists them; each is the name of an outlet of navigation.
+    /// </summary>
+    public static readonly NavigationRegionKind[] Order = [NavigationRegionKind.Topbar, NavigationRegionKind.Sidebar];
 
     /// <summary>
     /// Gets the name of the outlet of navigation a region is, such as <c language="screenplay">sidebar</c>.
@@ -35,46 +37,125 @@ public static class NavigationOutlets
     public static string RegionOutlet(NavigationRegionKind region) => region.ToString().ToLowerInvariant();
 
     /// <summary>
-    /// Turns an item of a navigation region into the item of the outlet of navigation the region is.
+    /// Gets the name of the outlet of actions that holds a navigation outlet's buttons, such as <c language="screenplay">topbarButtons</c>.
     /// </summary>
-    /// <param name="item">The region item.</param>
-    /// <returns>The outlet item.</returns>
-    public static OutletNavigationItem AsOutletItem(NavItem item) => new()
+    /// <param name="outlet">The name of the outlet of navigation.</param>
+    /// <returns>The outlet name.</returns>
+    public static string ButtonsOutlet(string outlet) => $"{outlet}Buttons";
+
+    /// <summary>
+    /// Gets the outlets the shell always offers, whether or not the application gives them default items: the
+    /// <c language="screenplay">topbar</c> and <c language="screenplay">sidebar</c> outlets of navigation and their
+    /// <c language="screenplay">topbarButtons</c> and <c language="screenplay">sidebarButtons</c> outlets of actions.
+    /// </summary>
+    /// <returns>The outlets, without defaults.</returns>
+    public static IReadOnlyList<Outlet> Standard() =>
+        [.. Order.SelectMany(region => new Outlet[]
+        {
+            new(RegionOutlet(region), OutletKind.Navigation, []),
+            new(ButtonsOutlet(RegionOutlet(region)), OutletKind.Actions, []),
+        })];
+
+    /// <summary>
+    /// Gets the outlets the application level offers: the ones it declares, followed by the standard ones it does not.
+    /// </summary>
+    /// <param name="navigation">The navigation model.</param>
+    /// <returns>The outlets.</returns>
+    public static IReadOnlyList<Outlet> ApplicationOutlets(NavigationModel navigation)
     {
-        Id = item.Id,
-        Title = item.Title,
-        Icon = item.Icon,
-        Target = item.Target,
-        Slot = item.Slot,
-        Children = item.Children is null ? null : [.. item.Children.Select(AsOutletItem)],
-    };
+        var declared = navigation.Application.Outlets ?? [];
+        var names = declared.Select(outlet => outlet.Name).ToHashSet(StringComparer.Ordinal);
+        return [.. declared, .. Standard().Where(outlet => !names.Contains(outlet.Name))];
+    }
 
     /// <summary>
-    /// Turns an item of an outlet of navigation back into a navigation region item.
+    /// Finds an outlet the application level offers, declared or standard.
     /// </summary>
-    /// <param name="item">The outlet item.</param>
-    /// <returns>The region item.</returns>
-    public static NavItem AsNavItem(OutletNavigationItem item) =>
-        new(item.Id, item.Title, item.Icon, item.Target, item.Slot, item.Children is null ? null : [.. item.Children.Select(AsNavItem)]);
+    /// <param name="navigation">The navigation model.</param>
+    /// <param name="outlet">The outlet name.</param>
+    /// <returns>The outlet, or <see langword="null"/> when the application offers none of that name.</returns>
+    public static Outlet? FindApplicationOutlet(NavigationModel navigation, string outlet) =>
+        ApplicationOutlets(navigation).FirstOrDefault(candidate => candidate.Name == outlet);
 
     /// <summary>
-    /// Turns a button of a navigation region into a button of an outlet of actions.
+    /// Finds what a module declares.
     /// </summary>
-    /// <param name="button">The region button.</param>
-    /// <returns>The outlet button.</returns>
-    public static OutletButton AsOutletButton(NavigationButton button) => new()
-    {
-        Id = button.Id,
-        Title = button.Title,
-        Icon = button.Icon,
-        Slice = button.Slice,
-        Emphasis = button.Emphasis,
-        Authorize = button.Authorize,
-    };
+    /// <param name="navigation">The navigation model.</param>
+    /// <param name="module">The module identity.</param>
+    /// <returns>The module's navigation, or <see langword="null"/> when it declares nothing.</returns>
+    public static ModuleNavigation? FindModule(NavigationModel navigation, string module) =>
+        navigation.Modules.FirstOrDefault(candidate => candidate.Module == module);
 
     /// <summary>
-    /// Builds the chain of outlet levels a navigation model is: the application declares an outlet of navigation per region
-    /// (and an outlet of actions for the region's buttons), and a module refines them with the region's mode.
+    /// Finds how a module refines an outlet.
+    /// </summary>
+    /// <param name="navigation">The navigation model.</param>
+    /// <param name="module">The module identity.</param>
+    /// <param name="outlet">The outlet name.</param>
+    /// <returns>The refinement, or <see langword="null"/> when the module does not refine the outlet.</returns>
+    public static OutletRefinement? FindRefinement(NavigationModel navigation, string module, string outlet) =>
+        FindModule(navigation, module)?.Refinements?.FirstOrDefault(refinement => refinement.Outlet == outlet);
+
+    /// <summary>
+    /// Gets the mode a refinement resolves with: the one it states, or <see cref="OutletMode.Extends"/> when it adds or hides items
+    /// and <see cref="OutletMode.Inherits"/> when it does neither - the rule outlet resolution applies.
+    /// </summary>
+    /// <param name="refinement">The refinement, or <see langword="null"/> for none.</param>
+    /// <returns>The mode.</returns>
+    public static OutletMode ModeOf(OutletRefinement? refinement) =>
+        refinement is null
+            ? OutletMode.Inherits
+            : refinement.Mode ?? ((refinement.Items?.Count ?? 0) > 0 || (refinement.Hide?.Count ?? 0) > 0 ? OutletMode.Extends : OutletMode.Inherits);
+
+    /// <summary>
+    /// Gets how a module treats an outlet it inherits from the application: <see cref="OutletMode.Inherits"/> when it does not refine it.
+    /// </summary>
+    /// <param name="navigation">The navigation model.</param>
+    /// <param name="module">The module identity.</param>
+    /// <param name="outlet">The outlet name.</param>
+    /// <returns>The mode.</returns>
+    public static OutletMode ModeOf(NavigationModel navigation, string module, string outlet) => ModeOf(FindRefinement(navigation, module, outlet));
+
+    /// <summary>
+    /// Gets the items a level puts in an outlet itself: the application's defaults, or a module's refinement items.
+    /// </summary>
+    /// <param name="navigation">The navigation model.</param>
+    /// <param name="module">The module; <see langword="null"/> for the application.</param>
+    /// <param name="outlet">The outlet name.</param>
+    /// <returns>The items, in order.</returns>
+    public static IReadOnlyList<OutletItem> OwnItems(NavigationModel navigation, string? module, string outlet) =>
+        module is null
+            ? FindApplicationOutlet(navigation, outlet)?.Defaults ?? []
+            : FindRefinement(navigation, module, outlet)?.Items ?? [];
+
+    /// <summary>
+    /// Tells whether items of an outlet may have sub-items: only items of an outlet of navigation other than the flat topbar.
+    /// </summary>
+    /// <param name="outlet">The outlet name.</param>
+    /// <param name="kind">What the outlet lists.</param>
+    /// <returns>Whether sub-items are allowed.</returns>
+    public static bool AllowsSubItems(string outlet, OutletKind? kind) =>
+        kind == OutletKind.Navigation && outlet != RegionOutlet(NavigationRegionKind.Topbar);
+
+    /// <summary>
+    /// Gets the sub-items of an item: a navigation item's children; nothing for any other item.
+    /// </summary>
+    /// <param name="item">The item.</param>
+    /// <returns>The sub-items.</returns>
+    public static IReadOnlyList<OutletNavigationItem> ChildrenOf(OutletItem item) => item is OutletNavigationItem navigation ? navigation.Children ?? [] : [];
+
+    /// <summary>
+    /// Gets every id in a list of items, depth first. Sub-items count only where the outlet allows them.
+    /// </summary>
+    /// <param name="items">The items.</param>
+    /// <param name="nested">Whether sub-items count.</param>
+    /// <returns>The ids.</returns>
+    public static IReadOnlyList<string> CollectIds(IEnumerable<OutletItem> items, bool nested) =>
+        [.. items.SelectMany(item => new[] { item.Id }.Concat(nested ? CollectIds(ChildrenOf(item), nested) : []))];
+
+    /// <summary>
+    /// Builds the chain of outlet levels a navigation model is: the application level declares the outlets of its shell layout
+    /// (and the standard ones it does not declare), and a module refines them and contributes to them.
     /// </summary>
     /// <param name="navigation">The navigation model.</param>
     /// <param name="module">The module to resolve for; <see langword="null"/> for the application.</param>
@@ -82,65 +163,10 @@ public static class NavigationOutlets
     /// <returns>The levels, from the top down.</returns>
     public static IReadOnlyList<OutletLevel> Levels(NavigationModel navigation, string? module = null, string? moduleName = null)
     {
-        var application = new OutletLevel(
-            OutletLevelKind.Layout,
-            ApplicationLevel,
-            [.. NavigationRegions.Order.SelectMany(region =>
-            {
-                var declared = NavigationRegions.Find(navigation.Application.Regions, region);
-                return new Outlet[]
-                {
-                    new(RegionOutlet(region), OutletKind.Navigation, [.. (declared?.Items ?? []).Select(AsOutletItem)]),
-                    new(ButtonsOutlet(region), OutletKind.Actions, [.. (declared?.Buttons ?? []).Select(AsOutletButton)]),
-                };
-            })]);
+        var application = new OutletLevel(OutletLevelKind.Layout, ApplicationLevel, ApplicationOutlets(navigation));
         if (module is null) return [application];
 
-        var regions = NavigationRegions.FindModule(navigation, module)?.Regions ?? [];
-        return
-        [
-            application,
-            new OutletLevel(
-                OutletLevelKind.Module,
-                moduleName ?? module,
-                Refinements: [.. regions.SelectMany(region =>
-                {
-                    var mode = ModeOf(region.Mode ?? NavigationRegionMode.Inherit);
-                    var inherits = mode == OutletMode.Inherits;
-                    return new OutletRefinement[]
-                    {
-                        new(RegionOutlet(region.Region), mode, inherits ? null : [.. region.Items.Select(AsOutletItem)]),
-                        new(ButtonsOutlet(region.Region), mode, inherits ? null : [.. (region.Buttons ?? []).Select(AsOutletButton)]),
-                    };
-                })])
-        ];
+        var declared = FindModule(navigation, module);
+        return [application, new OutletLevel(OutletLevelKind.Module, moduleName ?? module, Refinements: declared?.Refinements, Contributions: declared?.Contributions)];
     }
-
-    /// <summary>
-    /// Turns the items a screen contributes to a navigation contribution point into a contribution to the outlet of navigation
-    /// of that name. Items keep their declared order; items without one follow in the order given.
-    /// </summary>
-    /// <param name="outlet">The name of the outlet of navigation - the contribution point's name.</param>
-    /// <param name="items">The contributed navigation items.</param>
-    /// <returns>The contribution.</returns>
-    public static OutletContribution AsContribution(string outlet, IReadOnlyList<NavigationItem> items) =>
-        new(outlet, [.. items
-            .Select((item, index) => (item, index))
-            .OrderBy(entry => entry.item.Order is null ? 1 : 0)
-            .ThenBy(entry => entry.item.Order ?? 0)
-            .ThenBy(entry => entry.index)
-            .Select(entry => (OutletItem)new OutletNavigationItem
-            {
-                Id = entry.item.Id ?? entry.item.TargetScreen,
-                Title = entry.item.Label,
-                Icon = entry.item.Icon,
-                Target = entry.item.Destination ?? new DestinationReference(Screen: entry.item.TargetScreen),
-            })]);
-
-    static OutletMode ModeOf(NavigationRegionMode mode) => mode switch
-    {
-        NavigationRegionMode.Extend => OutletMode.Extends,
-        NavigationRegionMode.Override => OutletMode.Overrides,
-        _ => OutletMode.Inherits,
-    };
 }

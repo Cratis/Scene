@@ -96,7 +96,7 @@ describe('when checking the Catalog screen set agrees with itself', () => {
 
     it('should lead every navigation item to a screen of the set', () => {
         const screens = new Set(catalogScreenDefinitions.map(definition => definition.name));
-        const targets = [...catalogNavigation.application.regions, ...catalogNavigation.modules.flatMap(module => module.regions)].flatMap(region => itemsOf(region.items));
+        const targets = [...catalogNavigation.application.outlets.map(outlet => outlet.defaults), ...catalogNavigation.modules.flatMap(module => (module.refinements ?? []).map(refinement => refinement.items ?? []))].flatMap(items => itemsOf(items as never));
         targets.length.should.be.greaterThan(0);
         targets.filter(target => !screens.has(`${target.module}.${target.feature ?? ''}`) && target.feature !== undefined).should.deep.equal([]);
     });

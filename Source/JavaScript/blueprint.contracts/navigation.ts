@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { contractsScreenDefinitions } from './contractsScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,17 +36,17 @@ export const contractsStructure: ApplicationStructure = (() => {
 export const contractsNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Contracts' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'contracts', title: 'Contracts', target: { module: contractsModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'contracts', title: 'Contracts', target: { module: contractsModule } }] }],
     },
     modules: [{
         module: contractsModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'list', title: 'Contracts', target: { module: contractsModule, feature: 'list' } },
-                { id: 'timeline', title: 'Timeline', target: { module: contractsModule, feature: 'timeline' } },
-                { id: 'review', title: 'Needs attention', target: { module: contractsModule, feature: 'review' } },
+                { kind: OutletItemKind.Navigation, id: 'list', title: 'Contracts', target: { module: contractsModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'timeline', title: 'Timeline', target: { module: contractsModule, feature: 'timeline' } },
+                { kind: OutletItemKind.Navigation, id: 'review', title: 'Needs attention', target: { module: contractsModule, feature: 'review' } },
             ],
         }],
     }],

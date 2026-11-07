@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ApplicationStructure, NavigationModel, NavigationRegionKind, NavigationRegionMode } from '@cratis/scene.model';
+import { ApplicationStructure, NavigationModel, NavigationRegionKind, OutletItemKind, OutletKind, OutletMode } from '@cratis/scene.model';
 import { invoicingScreenDefinitions } from './invoicingScreenSet';
 
 /** The module the blueprint's screens live in, and so the first segment of every screen's qualified name. */
@@ -36,18 +36,18 @@ export const invoicingStructure: ApplicationStructure = (() => {
 export const invoicingNavigation: NavigationModel = {
     application: {
         logo: { image: '', title: 'Invoicing' },
-        regions: [{ region: NavigationRegionKind.Topbar, items: [{ id: 'invoicing', title: 'Invoicing', target: { module: invoicingModule } }] }],
+        outlets: [{ name: NavigationRegionKind.Topbar, kind: OutletKind.Navigation, defaults: [{ kind: OutletItemKind.Navigation, id: 'invoicing', title: 'Invoicing', target: { module: invoicingModule } }] }],
     },
     modules: [{
         module: invoicingModule,
-        regions: [{
-            region: NavigationRegionKind.Sidebar,
-            mode: NavigationRegionMode.Override,
+        refinements: [{
+            outlet: NavigationRegionKind.Sidebar,
+            mode: OutletMode.Overrides,
             items: [
-                { id: 'overview', title: 'Overview', target: { module: invoicingModule, feature: 'overview' } },
-                { id: 'list', title: 'Invoices', target: { module: invoicingModule, feature: 'list' } },
-                { id: 'payments', title: 'Payments', target: { module: invoicingModule, feature: 'payments' } },
-                { id: 'due', title: 'Due dates', target: { module: invoicingModule, feature: 'due' } },
+                { kind: OutletItemKind.Navigation, id: 'overview', title: 'Overview', target: { module: invoicingModule, feature: 'overview' } },
+                { kind: OutletItemKind.Navigation, id: 'list', title: 'Invoices', target: { module: invoicingModule, feature: 'list' } },
+                { kind: OutletItemKind.Navigation, id: 'payments', title: 'Payments', target: { module: invoicingModule, feature: 'payments' } },
+                { kind: OutletItemKind.Navigation, id: 'due', title: 'Due dates', target: { module: invoicingModule, feature: 'due' } },
             ],
         }],
     }],

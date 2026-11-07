@@ -3,13 +3,13 @@
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll } from 'vitest';
-import { NavigationRegionKind } from '@cratis/scene.model';
+import { NavigationRegionKind, OutletNavigationItem } from '@cratis/scene.model';
 import { ticketingNavigation, supportModule } from '../index';
 import { preview, provideBrowserApis } from './given';
 
 const sidebar = () => screen.getByRole('navigation', { name: 'Sidebar' });
 const onPage = () => document.querySelector('[data-scene-slot="primary"]')!.getAttribute('data-scene-screen');
-const sidebarItems = ticketingNavigation.modules[0].regions.find(region => region.region === NavigationRegionKind.Sidebar)!.items;
+const sidebarItems = ticketingNavigation.modules[0].refinements!.find(refinement => refinement.outlet === NavigationRegionKind.Sidebar)!.items as OutletNavigationItem[];
 const topLevel = sidebarItems.filter(item => item.target?.feature !== undefined);
 
 // Spec N1 and N4 for a blueprint: every item of the sidebar swaps the content slot to its feature, becomes the current one and leaves the address alone.
