@@ -22,7 +22,7 @@ named `<region>Buttons`. A navigation contribution point, such as `Navigation`, 
 | `ApplicationNavigation` | `outlets` (`Outlet[]`), `logo?` |
 | `ModuleNavigation` | `module`, `refinements?` (`OutletRefinement[]`), `contributions?` (`OutletContribution[]`) |
 | `OutletNavigationItem` | `kind: navigation`, `id`, `title`, `icon?`, `target?`, `slot?`, `children?`, `before?`, `after?` |
-| `OutletButton` | `kind: button`, `id`, `title`, `slice?`, `emphasis?`, `icon?`, `authorize?`, `before?`, `after?` |
+| `OutletButton` | `kind: button`, `id`, `title`, `slice?`, `emphasis?`, `display?`, `icon?`, `authorize?`, `before?`, `after?` |
 | `ApplicationLogo` | `image`, `title` |
 
 ```json

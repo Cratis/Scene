@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, Opens, OutletKind, OutletSubject, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
+import { ComponentDescriptor, Opens, OutletButtonDisplay, OutletKind, OutletSubject, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { componentRegistryKey, describeComponents } from '../packages';
 import { coreComponentMetadata } from './coreComponentMetadata';
 
@@ -153,6 +153,16 @@ const describedCore: ComponentDescriptor[] = [
                             ],
                         },
                         { path: 'icon', label: 'Icon', group: 'Appearance', valueType: PropertyValueType.Icon, editorKind: 'iconPicker' },
+                        {
+                            path: 'display', label: 'Shows', group: 'Appearance', valueType: PropertyValueType.Enum, default: OutletButtonDisplay.IconAndTitle,
+                            editorKind: PropertyEditorKind.Enum,
+                            choices: [
+                                { value: OutletButtonDisplay.IconAndTitle, label: 'Icon and title' },
+                                { value: OutletButtonDisplay.Icon, label: 'Icon only' },
+                                { value: OutletButtonDisplay.Title, label: 'Title only' },
+                            ],
+                            description: 'Only for buttons: what the button shows. An icon-only button keeps its title as its accessible name and tooltip.',
+                        },
                         {
                             path: 'confirm', label: 'Confirmation', group: 'Behavior', valueType: PropertyValueType.String,
                             description: 'Optional question the user answers before the action runs.',

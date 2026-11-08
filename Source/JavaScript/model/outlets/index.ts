@@ -12,6 +12,7 @@ export * from './QueryParameterReference';
 export * from './QueryFieldReference';
 export * from './OutletItemBase';
 export * from './OutletAction';
+export * from './OutletButtonDisplay';
 export * from './OutletButton';
 export * from './OutletMenuEntry';
 export * from './OutletSeparator';

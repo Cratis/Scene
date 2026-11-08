@@ -31,6 +31,12 @@ const defaultToolbarOutlet = 'toolbar';
 export const toolbarElementMigrationHint = 'Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source';
 
 const emphases = new Set(['primary', 'secondary', 'quiet']);
+
+/**
+ * What an old toolbar item's `presentation.mode` becomes on the outlet button: `icon` and `text` become its `display`, and
+ * `both` is what a button shows anyway, so it becomes nothing.
+ */
+const displays = new Map<string, string | undefined>([['both', undefined], ['icon', 'icon'], ['text', 'title']]);
 const destinationKeys = ['screen', 'module', 'route', 'dialog', 'slot'];
 
 function isDestination(value: unknown): value is JsonObject {
@@ -59,7 +65,9 @@ function asButton(element: unknown): { button: JsonObject; dropped: string[] } |
     const properties = element.properties;
     const id = String(element.id);
     const presentation = isObject(properties.presentation) ? properties.presentation : {};
-    const dropped = Object.entries(presentation).filter(([key, value]) => !(key === 'mode' && value === 'both')).map(([key]) => key);
+    const mode = typeof presentation.mode === 'string' ? presentation.mode.toLowerCase() : undefined;
+    const display = mode !== undefined ? displays.get(mode) : undefined;
+    const dropped = Object.keys(presentation).filter(key => !(key === 'mode' && mode !== undefined && displays.has(mode)));
 
     const kind = text(properties, 'kind')?.toLowerCase();
     const target = text(properties, 'target');
@@ -90,6 +98,7 @@ function asButton(element: unknown): { button: JsonObject; dropped: string[] } |
     if (emphasis !== undefined && emphases.has(emphasis)) button.emphasis = emphasis;
     const confirm = text(properties, 'confirm');
     if (confirm !== undefined) button.confirm = confirm;
+    if (display !== undefined) button.display = display;
     return { button, dropped };
 }
 
@@ -106,8 +115,9 @@ export function isLegacyToolbarElement(value: JsonObject): boolean {
  * Turns a `core:toolbar` element - whose `items` slot held `core:toolbarItem` elements - into the `core:outletItems`
  * element that draws an outlet of actions: the toolbar's `name` names the outlet (`toolbar` when it names none), and each
  * item a button - its slice, its navigation target or dialog as `navigateTo`, or its hand-typed command as `command`, with
- * its title, icon, emphasis and confirmation. Presentation hints other than showing icon and text are only cosmetic: they
- * are dropped and reported (`droppedPresentationHints`), and the item is upgraded. A toolbar holding something that cannot
+ * its title, icon, emphasis and confirmation. What the item shows (`presentation.mode` of `icon`, `text` or `both`) becomes
+ * the button's `display`; other presentation hints, such as a placement, have no place on a button: they are dropped and
+ * reported (`droppedPresentationHints`), and the item is upgraded. A toolbar holding something that cannot
  * become a button - another element, parameters passed to a command - is reported and left as it was.
  * @param owner The object, which is changed in place.
  * @param path The JSON path of the object.

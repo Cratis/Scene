@@ -24,6 +24,7 @@ public static class SlotShapeValidator
     static readonly HashSet<string> _opens = new(StringComparer.OrdinalIgnoreCase) { "automatic", "none", "dialog", "drawer", "slot" };
     static readonly HashSet<string> _fits = new(StringComparer.OrdinalIgnoreCase) { "dialog", "drawer", "pane", "panel", "page" };
     static readonly HashSet<string> _actionItemKinds = new(StringComparer.OrdinalIgnoreCase) { "button", "menuEntry" };
+    static readonly HashSet<string> _buttonDisplays = new(StringComparer.OrdinalIgnoreCase) { "iconAndTitle", "icon", "title" };
     static readonly string[] _outletItemListKeys = ["refinements", "contributions", "outletContributions"];
 
     /// <summary>
@@ -192,6 +193,17 @@ public static class SlotShapeValidator
                     $"{actionPath}.opensIn",
                     $"The action '{name}' opens in a slot but does not name one"));
             }
+        }
+
+        var display = value["display"];
+        if (string.Equals(LegacyOutletShape.Text(value["kind"]), "button", StringComparison.OrdinalIgnoreCase)
+            && display is not null
+            && (LegacyOutletShape.Text(display) is not { } shows || !_buttonDisplays.Contains(shows)))
+        {
+            diagnostics.Add(new(
+                SlotShapeDiagnosticCode.UnknownButtonDisplay,
+                $"{path}.display",
+                $"The button '{LegacyOutletShape.Describe(value["id"])}' shows '{LegacyOutletShape.Describe(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)"));
         }
 
         if (value["fits"] is not JsonArray fits)

@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Opens, OutletItemKind, OutletKind, ScreenFit, SlotRole } from '@cratis/scene.model';
+import { Opens, OutletButtonDisplay, OutletItemKind, OutletKind, ScreenFit, SlotRole } from '@cratis/scene.model';
 import { actionPresentationMigrationHint, isLegacyActionPresentation, legacyActionPresentationProperty } from './upgradeActionPresentation';
 import { describeOutletItemKinds, groupItemKinds, outletItemKindName, outletItemKinds } from '../outlets/outletItemKinds';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
@@ -92,6 +92,7 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
 
 const opensValues = new Set<string>(Object.values(Opens));
 const screenFits = new Set<string>(Object.values(ScreenFit));
+const buttonDisplays = new Set<string>(Object.values(OutletButtonDisplay).map(display => display.toLowerCase()));
 const actionItemKinds = new Set<string>([OutletItemKind.Button, OutletItemKind.MenuEntry].map(kind => kind.toLowerCase()));
 
 function actionOf(value: JsonObject, path: string): { action: JsonObject; path: string; name: string } | undefined {
@@ -128,6 +129,16 @@ function checkPlacement(value: JsonObject, path: string, diagnostics: SlotShapeD
                 message: `The action '${found.name}' opens in a slot but does not name one`,
             });
         }
+    }
+
+    const display = value.display;
+    if (typeof value.kind === 'string' && value.kind.toLowerCase() === OutletItemKind.Button && display !== undefined
+        && (typeof display !== 'string' || !buttonDisplays.has(display.toLowerCase()))) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.UnknownButtonDisplay,
+            path: `${path}.display`,
+            message: `The button '${String(value.id)}' shows '${String(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)`,
+        });
     }
 
     if (!Array.isArray(value.fits)) return;

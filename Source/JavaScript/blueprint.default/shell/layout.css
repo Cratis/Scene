@@ -1094,6 +1094,12 @@
     border-color: transparent;
 }
 
+/* A button that shows only its icon: square, with the title as its accessible name and tooltip. */
+.scene-toolbar-button-icon-only {
+    justify-content: center;
+    padding: 0.5rem;
+}
+
 .scene-toolbar-confirm {
     position: fixed;
     inset: 0;

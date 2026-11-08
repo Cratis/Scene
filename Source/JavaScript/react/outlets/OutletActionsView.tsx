@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from 'react';
 import { ActionInspection, EffectiveOutlet, EnablementState, inspectOutletActions } from '@cratis/scene.engine';
-import { OutletAction, OutletButton, OutletGroup, OutletItem, OutletItemKind, ToolbarEmphasis } from '@cratis/scene.model';
+import { OutletAction, OutletButton, OutletButtonDisplay, OutletGroup, OutletItem, OutletItemKind, ToolbarEmphasis } from '@cratis/scene.model';
 import { useSceneOutlets } from './SceneOutletsContext';
 import { usePageRouteValues } from './usePageRouteValues';
 import { isEmptyOutletAction, outletActionOpensOverPage, useOutletActionActivation } from './useOutletActionActivation';
@@ -43,6 +43,21 @@ export function outletActionState(inspection: ActionInspection | undefined): Out
     return { hidden: false, disabled: false };
 }
 
+/**
+ * What a button shows, as the renderer draws it: what it says it shows, except that a button with no icon to show shows its
+ * title, and a menu entry always shows both.
+ * @param action The button or menu entry.
+ * @returns What it shows.
+ */
+export function outletActionDisplay(action: OutletAction): OutletButtonDisplay {
+    if (action.kind !== OutletItemKind.Button) return OutletButtonDisplay.IconAndTitle;
+    const declared: unknown = (action as OutletButton).display;
+    const display = typeof declared === 'string' ? declared.toLowerCase() : undefined;
+    if (display === OutletButtonDisplay.Title.toLowerCase()) return OutletButtonDisplay.Title;
+    if (display === OutletButtonDisplay.Icon.toLowerCase() && action.icon) return OutletButtonDisplay.Icon;
+    return OutletButtonDisplay.IconAndTitle;
+}
+
 function isAction(item: OutletItem): item is OutletItem & OutletAction {
     return item.kind === OutletItemKind.Button || item.kind === OutletItemKind.MenuEntry;
 }
@@ -68,6 +83,8 @@ function ActionControl({ action, inspection, role, item, routeValues, elementId,
     const popup = outletActionOpensOverPage(action, inspection, model);
 
     const emphasis = action.kind === OutletItemKind.Button ? (action as OutletButton).emphasis ?? ToolbarEmphasis.Secondary : undefined;
+    const display = outletActionDisplay(action);
+    const iconOnly = display === OutletButtonDisplay.Icon;
     const run = () => {
         activate({ action, inspection, item, routeValues, elementId });
         onActivated?.();
@@ -80,19 +97,21 @@ function ActionControl({ action, inspection, role, item, routeValues, elementId,
             data-scene-outlet-item={action.id}
             data-scene-item-kind={action.kind}
             data-scene-emphasis={emphasis}
+            data-scene-display={display === OutletButtonDisplay.IconAndTitle ? undefined : display}
             data-scene-slice={inspection?.slice ?? action.slice}
             data-scene-opens={inspection?.placement?.resolved}
             data-scene-enablement={inspection?.enablement.state}
             data-scene-warning={empty ? 'emptySlice' : undefined}
             aria-haspopup={popup ? 'dialog' : undefined}
-            className={role === 'menuitem' ? 'scene-outlet-menu-item' : `scene-toolbar-button scene-toolbar-button-${emphasis ?? 'secondary'}`}
+            className={role === 'menuitem' ? 'scene-outlet-menu-item' : `scene-toolbar-button scene-toolbar-button-${emphasis ?? 'secondary'}${iconOnly ? ' scene-toolbar-button-icon-only' : ''}`}
             disabled={state.disabled}
-            title={state.reason}
+            title={state.reason ?? (iconOnly ? action.title : undefined)}
+            aria-label={iconOnly ? action.title : undefined}
             aria-description={state.reason}
             onClick={() => (action.confirm ? setAsking(true) : run())}
         >
-            {action.icon && <span aria-hidden='true' data-scene-icon-name={action.icon} />}
-            {action.title}
+            {action.icon && display !== OutletButtonDisplay.Title && <span aria-hidden='true' data-scene-icon-name={action.icon} />}
+            {!iconOnly && action.title}
             {empty && <span role='img' aria-label='No slice is linked to this button' title='No slice is linked to this button' data-scene-badge='warning'>!</span>}
         </button>
         {asking && (

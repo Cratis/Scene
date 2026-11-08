@@ -64,8 +64,11 @@ export enum SlotShapeDiagnosticCode {
     IncompleteOutletItem = 'incompleteOutletItem',
 
     /**
-     * An old toolbar item had presentation hints, such as showing only its icon, which an outlet button has no place for;
+     * An old toolbar item had presentation hints, such as a placement, which an outlet button has no place for;
      * the upgrade drops them and upgrades the item.
      */
     DroppedPresentationHints = 'droppedPresentationHints',
+
+    /** A button of an outlet of actions shows something that is not its icon and title, its icon or its title. */
+    UnknownButtonDisplay = 'unknownButtonDisplay',
 }

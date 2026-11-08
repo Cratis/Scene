@@ -659,7 +659,7 @@
     "QueryFieldReference": ["query", "field"],
     "OutletItem": ["kind", "id", "before", "after"],
     "OutletAction": ["title", "icon", "slice", "command", "navigateTo", "builtIn", "opens", "opensIn", "subject", "enabledWhen", "confirm", "authorize"],
-    "OutletButton": ["kind", "emphasis"],
+    "OutletButton": ["kind", "emphasis", "display"],
     "OutletMenuEntry": ["kind"],
     "OutletSeparator": ["kind"],
     "OutletGroup": ["kind", "title", "icon", "items"],
@@ -872,6 +872,7 @@
     "OutletItemKind": ["Button", "MenuEntry", "Separator", "Group", "Filter", "Tab", "Stat", "Navigation"],
     "OutletBuiltInAction": ["Close", "Submit", "Refresh"],
     "Opens": ["Automatic", "None", "Dialog", "Drawer", "Slot"],
+    "OutletButtonDisplay": ["IconAndTitle", "Icon", "Title"],
     "ScreenFit": ["Dialog", "Drawer", "Pane", "Panel", "Page"],
     "FilterControl": ["Search", "Choice", "Range", "Date"],
     "ColorScheme": [
