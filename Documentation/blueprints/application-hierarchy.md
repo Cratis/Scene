@@ -42,6 +42,7 @@ A toolbar button of the screen editor is a button of the toolbar outlet with a `
 | `slice` | The qualified id of the **state change** slice the button invokes, for example `sales.orders.PlaceOrder`. Edited with the `slice` editor (`editorOptions.kinds: ['StateChange']`): the whole slice tree is listed, state changes are selectable, state views and automations are greyed |
 | `emphasis` | `primary`, `secondary` (the default) or `quiet`, edited as chips |
 | `icon` | Qualified icon reference |
+| `display` | What the button shows: `iconAndTitle` (the default), `icon` or `title`. An icon-only button keeps its title as its accessible name and tooltip |
 | `command` | The hand-typed command of a legacy button; kept for compatibility |
 | `confirm` | Optional question the user answers before the button runs: an accessible alert dialog with Cancel and the button's title as the accept action. Empty runs at once. Screenplay's `confirm "..."` line on a toolbar item or button, also on the toolbar a feature or module contributes |
 

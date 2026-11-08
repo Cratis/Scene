@@ -62,6 +62,18 @@ Choosing an enabled action does what placement decided:
 | `dialog`, `drawer` | The slice's screen opens over the page through the navigation host. A drawer carries `data-scene-presentation="drawer"`. Neither changes the URL. |
 | `slot` | The screen opens in the slot through the router, with the slot's route values - from the page, or from the item it acts on - and the slice's segment. |
 
+A button shows what its `display` says:
+
+| `display` | What the button shows |
+| --- | --- |
+| `iconAndTitle`, or absent | Its icon followed by its title. |
+| `icon` | Only its icon. The title stays the button's accessible name (`aria-label`) and is its tooltip unless a reason holds the button back. A button without an icon shows its title instead. |
+| `title` | Only its title, even when it has an icon. |
+
+The button carries `data-scene-display="icon"` or `data-scene-display="title"`, and an icon-only button the
+`scene-toolbar-button-icon-only` class, for a theme to style by. A menu entry always shows its icon and title. The slot
+shape validator reports any other value (`unknownButtonDisplay`).
+
 A built-in (`builtIn`) is announced with the `cratis.scene.builtIn` event, and `close` also closes the dialog it sits in. A
 navigation target goes through the navigation host, or is announced with `cratis.scene.navigate` outside one. An action
 whose confirmation is set asks first.
@@ -111,8 +123,10 @@ The `core:toolbar` component and its `core:toolbarItem` items are gone: a screen
 by `core:outletItems`. The document upgrader (`upgradeSlotShape`, `SlotShapeUpgrader` in C#) rewrites a stored toolbar
 element. Its `name` names the outlet, `toolbar` when it names none. Each item becomes a button: its slice, its navigation
 target or dialog as `navigateTo`, or its hand-typed command as `command`, with its title, icon, emphasis and
-confirmation. Presentation hints other than showing both icon and text, such as showing only the icon, are cosmetic: an
-outlet button has no place for them, so they are dropped, reported (`droppedPresentationHints`) and the item is upgraded.
+confirmation. What the item shows becomes the button's `display`: a `presentation.mode` of `icon` becomes `icon`, `text`
+becomes `title`, and `both` is what a button shows anyway. Other presentation hints, such as a placement or a mode that
+is none of these, have no place on an outlet button, so they are dropped, reported (`droppedPresentationHints`) and the
+item is upgraded.
 A toolbar that holds something a button cannot carry is reported and kept as it was:
 
 - an element that is not a toolbar item;
