@@ -17,4 +17,7 @@ public record OutletButton : OutletAction
 
     /// <summary>Gets how prominent the button is; secondary when absent.</summary>
     public ToolbarEmphasis? Emphasis { get; init; }
+
+    /// <summary>Gets what the button shows - its icon, its title or both; both when absent. The title stays the accessible name.</summary>
+    public OutletButtonDisplay? Display { get; init; }
 }

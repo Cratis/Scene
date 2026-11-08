@@ -3,6 +3,7 @@
 
 import { ToolbarEmphasis } from '../toolbar/ToolbarEmphasis';
 import { OutletAction } from './OutletAction';
+import { OutletButtonDisplay } from './OutletButtonDisplay';
 import { OutletItemKind } from './OutletItemKind';
 
 /**
@@ -14,7 +15,10 @@ export interface OutletButton extends OutletAction {
 
     /** How prominent the button is; secondary when absent. */
     emphasis?: ToolbarEmphasis;
+
+    /** What the button shows - its icon, its title or both; both when absent. The title stays the accessible name. */
+    display?: OutletButtonDisplay;
 }
 
 /** The own property names of {@link OutletButton}, checked against the shared shape manifest. */
-export const OutletButtonPropertyNames: (keyof OutletButton)[] = ['kind', 'emphasis'];
+export const OutletButtonPropertyNames: (keyof OutletButton)[] = ['kind', 'emphasis', 'display'];
