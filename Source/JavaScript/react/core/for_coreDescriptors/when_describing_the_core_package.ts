@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Opens, OutletKind, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
+import { Opens, OutletButtonDisplay, OutletKind, PropertyEditorKind, PropertyValueType, ToolbarEmphasis } from '@cratis/scene.model';
 import { corePackage, coreDescriptors } from '../../index';
 
 describe('when describing the core package', () => {
@@ -54,9 +54,9 @@ describe('when describing the core package', () => {
             .should.deep.equal([OutletKind.Actions, OutletKind.Filters, OutletKind.Tabs, OutletKind.Stats, OutletKind.Navigation]);
     });
 
-    it('should describe an outlet item as a title, a state change slice, an emphasis, an icon, a confirmation and where it opens', () => {
+    it('should describe an outlet item as a title, a state change slice, an emphasis, an icon, what it shows, a confirmation and where it opens', () => {
         const items = coreDescriptors.find(descriptor => descriptor.component === 'core:outletItems')!.properties.find(property => property.path === 'items')!;
-        items.item!.properties.map(property => property.path).should.deep.equal(['id', 'title', 'slice', 'emphasis', 'icon', 'confirm', 'opens', 'opensIn', 'subject', 'enabledWhen']);
+        items.item!.properties.map(property => property.path).should.deep.equal(['id', 'title', 'slice', 'emphasis', 'icon', 'display', 'confirm', 'opens', 'opensIn', 'subject', 'enabledWhen']);
 
         const slice = items.item!.properties.find(property => property.path === 'slice')!;
         slice.editorKind!.should.equal(PropertyEditorKind.Slice);
@@ -66,5 +66,10 @@ describe('when describing the core package', () => {
         emphasis.valueType.should.equal(PropertyValueType.Enum);
         emphasis.choices!.map(choice => choice.value).should.deep.equal([ToolbarEmphasis.Primary, ToolbarEmphasis.Secondary, ToolbarEmphasis.Quiet]);
         (emphasis.default as string).should.equal(ToolbarEmphasis.Secondary);
+
+        const display = items.item!.properties.find(property => property.path === 'display')!;
+        display.valueType.should.equal(PropertyValueType.Enum);
+        display.choices!.map(choice => choice.value).should.deep.equal([OutletButtonDisplay.IconAndTitle, OutletButtonDisplay.Icon, OutletButtonDisplay.Title]);
+        (display.default as string).should.equal(OutletButtonDisplay.IconAndTitle);
     });
 });

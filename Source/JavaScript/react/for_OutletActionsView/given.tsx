@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ActionSlice, EnablementPersona, InputSourceKind, OutletLevel, OutletLevelKind, PlacementSlot } from '@cratis/scene.engine';
-import { ExternalComponent, Opens, OutletItemKind, OutletKind, OutletSubject, ScreenFit, SlotRole } from '@cratis/scene.model';
+import { ExternalComponent, Opens, OutletButtonDisplay, OutletItemKind, OutletKind, OutletSubject, ScreenFit, SlotRole } from '@cratis/scene.model';
 import { coreComponents } from '../core';
 import { SceneNavigationHost } from '../navigation/SceneNavigationHost';
 import { SceneOutletsProvider } from '../outlets/SceneOutletsContext';
@@ -33,6 +33,9 @@ export const chain: OutletLevel[] = [{
             { kind: OutletItemKind.Button, id: 'details', title: 'Details', slice: 'Catalog.Products.ProductDetails', opens: Opens.Slot, opensIn: 'detail' },
             { kind: OutletItemKind.Group, id: 'more', title: 'More', items: [{ kind: OutletItemKind.MenuEntry, id: 'delete', title: 'Delete', slice: 'Catalog.Products.DeleteProduct' }] },
             { kind: OutletItemKind.MenuEntry, id: 'archive', title: 'Archive', navigateTo: { screen: 'Archive' } },
+            { kind: OutletItemKind.Button, id: 'create', title: 'New product', icon: 'add', display: OutletButtonDisplay.Icon, navigateTo: { screen: 'NewProduct' } },
+            { kind: OutletItemKind.Button, id: 'print', title: 'Print', icon: 'print', display: OutletButtonDisplay.Title, navigateTo: { screen: 'PrintProducts' } },
+            { kind: OutletItemKind.Button, id: 'label', title: 'Label', display: OutletButtonDisplay.Icon, navigateTo: { screen: 'LabelProducts' } },
         ],
     }],
 }];

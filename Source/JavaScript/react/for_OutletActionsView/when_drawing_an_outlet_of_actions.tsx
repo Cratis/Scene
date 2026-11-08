@@ -19,7 +19,7 @@ describe('when drawing an outlet of actions', () => {
 
         it('should draw the buttons, separators and groups in the order the outlet resolves them', () =>
             Array.from(document.querySelectorAll('[data-scene-outlet="rowActions"] > [data-scene-outlet-item]')).map(node => node.getAttribute('data-scene-outlet-item'))
-                .should.deep.equal(['price', 'withdraw', 'gap', 'details', 'more', 'rowActions-more']));
+                .should.deep.equal(['price', 'withdraw', 'gap', 'details', 'more', 'create', 'print', 'label', 'rowActions-more']));
         it('should draw a group and the menu entries outside any group as menus', () => screen.getAllByRole('button', { name: 'More' }).length.should.equal(2));
         it('should disable an action for an item until one is selected', () => (button('Set price') as HTMLButtonElement).disabled.should.be.true);
         it('should give the enablement reason as the tooltip', () => button('Set price').getAttribute('title')!.should.equal('It is for item, so it waits for a selection'));
