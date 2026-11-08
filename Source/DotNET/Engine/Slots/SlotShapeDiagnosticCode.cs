@@ -104,8 +104,13 @@ public enum SlotShapeDiagnosticCode
     IncompleteOutletItem = 17,
 
     /// <summary>
-    /// An old toolbar item had presentation hints, such as showing only its icon, which an outlet button has no place for;
+    /// An old toolbar item had presentation hints, such as a placement, which an outlet button has no place for;
     /// the upgrade drops them and upgrades the item.
     /// </summary>
     DroppedPresentationHints = 18,
+
+    /// <summary>
+    /// A button of an outlet of actions shows something that is not its icon and title, its icon or its title.
+    /// </summary>
+    UnknownButtonDisplay = 19,
 }

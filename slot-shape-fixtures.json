@@ -871,7 +871,7 @@
       }
     },
     {
-      "name": "a toolbar element whose item has presentation hints is upgraded with the hints dropped and reported",
+      "name": "a toolbar element whose items say what they show keep it as the display of their buttons, with other hints dropped and reported",
       "input": {
         "screens": [
           {
@@ -893,6 +893,60 @@
                           "presentation": {
                             "mode": "icon",
                             "placement": "end"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "create",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "label": "New work item",
+                          "icon": "add",
+                          "slice": "work.items.CreateWorkItem",
+                          "presentation": {
+                            "mode": "Icon"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "print",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "label": "Print",
+                          "icon": "print",
+                          "target": "PrintOrder",
+                          "presentation": {
+                            "mode": "text"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "ship",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "label": "Ship",
+                          "target": "ShipOrder",
+                          "presentation": {
+                            "mode": "both"
+                          }
+                        },
+                        "slots": {}
+                      },
+                      {
+                        "id": "odd",
+                        "componentName": "core:toolbarItem",
+                        "properties": {
+                          "kind": "Action",
+                          "label": "Odd",
+                          "target": "OddCommand",
+                          "presentation": {
+                            "mode": "sideways"
                           }
                         },
                         "slots": {}
@@ -918,7 +972,13 @@
                     "properties": {
                       "name": "toolbar",
                       "kind": "actions",
-                      "items": [{ "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" } }]
+                      "items": [
+                        { "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" }, "display": "icon" },
+                        { "kind": "button", "id": "create", "title": "New work item", "icon": "add", "slice": "work.items.CreateWorkItem", "display": "icon" },
+                        { "kind": "button", "id": "print", "title": "Print", "icon": "print", "command": "PrintOrder", "display": "title" },
+                        { "kind": "button", "id": "ship", "title": "Ship", "command": "ShipOrder" },
+                        { "kind": "button", "id": "odd", "title": "Odd", "command": "OddCommand" }
+                      ]
                     },
                     "slots": {}
                   }
@@ -932,7 +992,12 @@
           {
             "code": "droppedPresentationHints",
             "path": "$.screens[0].slotContent.main[0].slots.items[0].properties.presentation",
-            "message": "The toolbar 'bar' has the item 'info' with the presentation hints mode, placement, which an outlet button has no place for, so they are dropped"
+            "message": "The toolbar 'bar' has the item 'info' with the presentation hints placement, which an outlet button has no place for, so they are dropped"
+          },
+          {
+            "code": "droppedPresentationHints",
+            "path": "$.screens[0].slotContent.main[0].slots.items[4].properties.presentation",
+            "message": "The toolbar 'bar' has the item 'odd' with the presentation hints mode, which an outlet button has no place for, so they are dropped"
           }
         ]
       }
@@ -1011,6 +1076,35 @@
         { "code": "opensSlotWithoutName", "path": "$.screens[0].slotContent.main[0].properties.opensIn", "message": "The action 'price' opens in a slot but does not name one" },
         { "code": "unknownOpens", "path": "$.screenTemplates[0].outlets[0].defaults[0].opens", "message": "The action 'export' opens 'popover'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot" },
         { "code": "opensSlotWithoutName", "path": "$.screenTemplates[0].outlets[0].defaults[1].opensIn", "message": "The action 'archive' opens in a slot but does not name one" }
+      ]
+    },
+    {
+      "name": "what a button shows that is not its icon and title, its icon or its title",
+      "document": {
+        "screenTemplates": [
+          {
+            "name": "ListPage",
+            "outlets": [
+              {
+                "name": "toolbar",
+                "kind": "actions",
+                "defaults": [
+                  { "kind": "button", "id": "create", "title": "New work item", "icon": "add", "slice": "Work.Items.CreateWorkItem", "display": "icon" },
+                  { "kind": "button", "id": "export", "title": "Export", "icon": "download", "slice": "Work.Items.ExportWorkItems", "display": "Title" },
+                  { "kind": "button", "id": "print", "title": "Print", "slice": "Work.Items.PrintWorkItems", "display": "iconAndTitle" },
+                  { "kind": "button", "id": "share", "title": "Share", "icon": "share", "slice": "Work.Items.ShareWorkItem", "display": "iconOnly" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expected": [
+        {
+          "code": "unknownButtonDisplay",
+          "path": "$.screenTemplates[0].outlets[0].defaults[3].display",
+          "message": "The button 'share' shows 'iconOnly'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)"
+        }
       ]
     },
     {

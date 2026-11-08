@@ -36,6 +36,17 @@ static class LegacyToolbarElement
     const string DefaultToolbarOutlet = "toolbar";
 
     static readonly HashSet<string> _emphases = ["primary", "secondary", "quiet"];
+
+    /// <summary>
+    /// What an old toolbar item's presentation mode becomes on the outlet button: icon and text become its display, and both
+    /// is what a button shows anyway, so it becomes nothing.
+    /// </summary>
+    static readonly Dictionary<string, string?> _displays = new()
+    {
+        ["both"] = null,
+        ["icon"] = "icon",
+        ["text"] = "title",
+    };
     static readonly string[] _destinationKeys = ["screen", "module", "route", "dialog", "slot"];
 
     /// <summary>
@@ -52,8 +63,10 @@ static class LegacyToolbarElement
     /// <summary>
     /// Turns a <c language="csharp">core:toolbar</c> element into the <c language="csharp">core:outletItems</c> element that draws an
     /// outlet of actions: the toolbar's <c language="csharp">name</c> names the outlet (<c language="csharp">toolbar</c> when it names
-    /// none), and each item becomes a button. Presentation hints other than showing icon and text are only cosmetic: they are
-    /// dropped and reported (<see cref="SlotShapeDiagnosticCode.DroppedPresentationHints"/>), and the item is upgraded. A toolbar
+    /// none), and each item becomes a button. What the item shows (a presentation mode of <c language="json">icon</c>,
+    /// <c language="json">text</c> or <c language="json">both</c>) becomes the button's <c language="json">display</c>; other
+    /// presentation hints, such as a placement, have no place on a button: they are dropped and reported
+    /// (<see cref="SlotShapeDiagnosticCode.DroppedPresentationHints"/>), and the item is upgraded. A toolbar
     /// holding something that cannot become a button - another element, parameters passed to a command - is reported and kept.
     /// </summary>
     /// <param name="owner">The object, which is changed in place.</param>
@@ -137,8 +150,11 @@ static class LegacyToolbarElement
         }
 
         var id = LegacyOutletShape.Describe(item["id"]);
-        var hints = (properties["presentation"] as JsonObject ?? [])
-            .Where(hint => !(hint.Key == "mode" && LegacyOutletShape.Text(hint.Value) == "both"))
+        var presentation = properties["presentation"] as JsonObject ?? [];
+        var mode = LegacyOutletShape.Text(presentation["mode"])?.ToLowerInvariant();
+        var mapsMode = mode is not null && _displays.ContainsKey(mode);
+        var hints = presentation
+            .Where(hint => !(hint.Key == "mode" && mapsMode))
             .Select(hint => hint.Key)
             .ToList();
         var kind = NonEmpty(properties["kind"])?.ToLowerInvariant();
@@ -204,6 +220,11 @@ static class LegacyToolbarElement
         if (NonEmpty(properties["confirm"]) is { } confirm)
         {
             button["confirm"] = confirm;
+        }
+
+        if (mapsMode && _displays[mode!] is { } display)
+        {
+            button["display"] = display;
         }
 
         return (button, string.Empty, hints);
