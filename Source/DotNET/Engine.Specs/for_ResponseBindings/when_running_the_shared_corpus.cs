@@ -17,7 +17,7 @@ public class when_running_the_shared_corpus : Specification
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
-        _corpus = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "command-response-fixtures.json"))).RootElement;
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "command-response-fixtures.json")));
     }
 
     [Fact]

@@ -28,7 +28,7 @@ function trx(counters, outcomes) {
 }
 
 function fixture(t, options = {}) {
-    const { count = 5, args = [], missing = -1, exits = {}, totals = {}, documents = {}, noTrx = -1, windows = false, missingPython = false } = options;
+    const { count = 5, args = [], missing = -1, exits = {}, totals = {}, documents = {}, noTrx = -1, windows = false, missingPython = false, framework = 'net11.0', runnerFramework = framework } = options;
     mkdirSync(join(root, '.ai-work'), { recursive: true });
     const directory = mkdtempSync(join(root, '.ai-work/run-specifications-test-'));
     t.after(() => rmSync(directory, { recursive: true }));
@@ -37,7 +37,7 @@ function fixture(t, options = {}) {
     copyFileSync(join(scripts, 'run-specifications.sh'), join(target, 'run-specifications.sh'));
     for (let index = 0; index < count; index++) {
         const project = join(directory, `Source/DotNET/Project${index}.Specs`);
-        const output = join(project, 'bin/Release/net10.0');
+        const output = join(project, `bin/Release/${framework}`);
         mkdirSync(output, { recursive: true });
         writeFileSync(join(project, `Project${index}.Specs.csproj`), `<Project><AssemblyName>Assembly${index}</AssemblyName></Project>`);
         if (index === missing) continue;
@@ -59,6 +59,7 @@ exit ${exits[index] ?? 0}
             ...process.env,
             EXPECTED_SPECIFICATION_PROJECTS: '5',
             OS: windows ? 'Windows_NT' : 'Linux',
+            SPEC_TARGET_FRAMEWORK: runnerFramework,
             PATH: missingPython ? pathWithoutPython(directory) : process.env.PATH
         }
     });
@@ -75,6 +76,32 @@ test('runs all five executables and reports their logs and totals', t => {
     const files = readdirSync(join(runs, readdirSync(runs)[0]));
     assert.equal(files.filter(name => name.endsWith('.trx')).length, 5);
     assert.equal(files.filter(name => name.endsWith('.log')).length, 5);
+});
+
+test('runs .NET 10 library compatibility executables', t => {
+    const result = fixture(t, { framework: 'net10.0' });
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.equal((result.stdout.match(/executed/g) ?? []).length, 5);
+});
+
+test('defaults to .NET 11 without a framework override', t => {
+    const result = fixture(t, { runnerFramework: '' });
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.equal((result.stdout.match(/executed/g) ?? []).length, 5);
+});
+
+test('rejects unsupported specification frameworks', t => {
+    const result = fixture(t, { runnerFramework: 'net9.0' });
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /Unsupported specification framework: net9\.0/);
+    assert.doesNotMatch(result.stdout, /executed/);
+});
+
+test('does not fall back to a different framework executable', t => {
+    const result = fixture(t, { framework: 'net10.0', runnerFramework: 'net11.0' });
+    assert.equal(result.status, 2);
+    assert.match(result.stdout, /Missing specification executable: .*net11\.0/);
+    assert.doesNotMatch(result.stdout, /executed/);
 });
 
 test('requires Python before starting any project', t => {

@@ -15,6 +15,14 @@ fi
 configuration=${1:-Release}
 # An optional second argument selects one specification project directory (relative to the repository root).
 selected=${2:-}
+framework=${SPEC_TARGET_FRAMEWORK:-net11.0}
+case "$framework" in
+    net10.0|net11.0) ;;
+    *)
+        echo "Unsupported specification framework: $framework (expected net10.0 or net11.0)." >&2
+        exit 2
+        ;;
+esac
 shopt -s nullglob
 if [[ -n $selected ]]; then
     expected=1
@@ -40,7 +48,7 @@ for project in "${projects[@]}"; do
         echo "::error::Expected one AssemblyName in $project"
         exit 2
     fi
-    executable="${project%/*}/bin/$configuration/net10.0/$assembly$suffix"
+    executable="${project%/*}/bin/$configuration/$framework/$assembly$suffix"
     if [[ ! -x $executable ]]; then
         echo "::error::Missing specification executable: $executable"
         exit 2
