@@ -27,15 +27,9 @@ public static class SceneJson
     /// </summary>
     /// <param name="options">The options, which are changed in place; they must not be in use yet.</param>
     /// <returns>The same options, for chaining.</returns>
-    /// <remarks>
-    /// <c language="csharp">AllowOutOfOrderMetadataProperties</c> exists from .NET 9. On .NET 8 the options are
-    /// returned as they are, and an item must still name its <c language="json">kind</c> first.
-    /// </remarks>
     public static JsonSerializerOptions Configure(JsonSerializerOptions options)
     {
-#if NET9_0_OR_GREATER
         options.AllowOutOfOrderMetadataProperties = true;
-#endif
         return options;
     }
 

@@ -17,6 +17,12 @@ forms, contribution points, ui profiles and themes), `Scene.Engine` (binding/res
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.engine?label=@cratis/scene.engine&logo=npm)](https://www.npmjs.com/package/@cratis/scene.engine)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.react?label=@cratis/scene.react&logo=npm)](https://www.npmjs.com/package/@cratis/scene.react)
 
+## .NET support
+
+`Cratis.Scene.Model` and `Cratis.Scene.Engine` target .NET 10 and .NET 11. .NET 8 and .NET 9 are no longer supported.
+Building from source requires the .NET 11 SDK selected by `global.json`. Specifications run on .NET 11 by default;
+CI also runs both library specification projects on .NET 10.
+
 ## Builds
 
 [![.NET Build](https://github.com/cratis/scene/actions/workflows/dotnet-build.yml/badge.svg)](https://github.com/cratis/scene/actions/workflows/dotnet-build.yml)

@@ -7,7 +7,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOTNET_VERSION: "10.0.x"
+  DOTNET_VERSION: |
+    10.0.x
+    11.0.x
 
 on:
   workflow_dispatch:
@@ -68,6 +70,7 @@ jobs:
       - name: Setup .Net
         uses: actions/setup-dotnet@v4
         with:
+          global-json-file: global.json
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore NuGet packages
@@ -81,6 +84,9 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release
+
+      - name: Build Debug
+        run: dotnet build --configuration Debug
 
       # Only a manual run on main refreshes the shared cache; pull request runs never save it.
       - name: Save NuGet packages
@@ -109,6 +115,7 @@ jobs:
       fail-fast: false
       matrix:
         project: ${{ fromJson(needs.dotnet-build.outputs.spec-projects) }}
+        framework: [net11.0, net10.0]
 
     steps:
       - name: Checkout code
@@ -120,6 +127,7 @@ jobs:
       - name: Setup .Net
         uses: actions/setup-dotnet@v4
         with:
+          global-json-file: global.json
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Download build output
@@ -133,14 +141,20 @@ jobs:
       - name: Verify specification runner
         run: bash .github/scripts/run-specifications.sh --self-test
 
-      - name: Run specification project (${{ matrix.project }})
+      - name: Build .NET 10 library specifications
+        if: matrix.framework == 'net10.0'
+        run: dotnet build ${{ matrix.project }} --configuration Release -p:SpecTargetFramework=net10.0
+
+      - name: Run specification project (${{ matrix.project }}, ${{ matrix.framework }})
+        env:
+          SPEC_TARGET_FRAMEWORK: ${{ matrix.framework }}
         run: bash .github/scripts/run-specifications.sh Release ${{ matrix.project }}
 
       - name: Upload specification results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: specification-results-${{ strategy.job-index }}
+          name: specification-results-${{ strategy.job-index }}-${{ matrix.framework }}
           path: TestResults/
           retention-days: 3
           if-no-files-found: ignore

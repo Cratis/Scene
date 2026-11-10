@@ -36,7 +36,7 @@ public class when_running_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "sample-data-resolution-fixtures.json"))).RootElement;
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "sample-data-resolution-fixtures.json")));
     }
 
     void Because()
