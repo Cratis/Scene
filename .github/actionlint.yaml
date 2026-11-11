@@ -1,0 +1,7 @@
+# actionlint does not yet know the `queue` key of `concurrency` (GitHub Actions, May 2026:
+# https://github.blog/changelog/2026-05-07-github-actions-concurrency-groups-now-allow-larger-queues/).
+# Accept it until actionlint supports it; every other check stays on.
+paths:
+  .github/workflows/publish.yml:
+    ignore:
+      - 'unexpected key "queue" for "concurrency" section'
