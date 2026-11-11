@@ -59,7 +59,7 @@ export function compareVersions(left: string, right: string): number {
 
 type Version = [number, number, number];
 
-const matchesAnyVersion = (trimmedRange: string | undefined): boolean => !trimmedRange || trimmedRange === '*';
+const matchesAnyVersion = (trimmedRange: string | undefined): trimmedRange is undefined | '' | '*' => !trimmedRange || trimmedRange === '*';
 
 function satisfies(operator: string, actual: Version, required: Version): boolean {
     switch (operator) {

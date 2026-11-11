@@ -71,76 +71,77 @@ const unusableShell = new Set<ShellDiagnosticCode>([
  * @returns The blockers, empty when the profile can be applied.
  */
 export function findProfileBlockers(profile: UiProfile, context: ProfileBlockerContext): ProfileBlocker[] {
-    const blockers: Omit<ProfileBlocker, 'severity' | 'section'>[] = [];
-    const name = profile.name;
-
-    const selection = resolvePackageDependencies(profile.packages, [...context.packages]);
-    for (const missing of selection.missing) {
-        blockers.push({ code: ProfileBlockerCode.MissingDependency, subject: missing.dependsOn, message: `Package '${missing.package}' needs '${missing.dependsOn}', which is not available` });
-    }
-
-    for (const conflict of selection.versionConflicts) {
-        blockers.push({
-            code: ProfileBlockerCode.VersionConflict,
-            subject: conflict.dependsOn,
-            message: `Package '${conflict.package}' needs '${conflict.dependsOn}' ${conflict.requiredRange}, but version ${conflict.actualVersion} is what is available`,
-        });
-    }
-
-    for (const cycle of selection.cycles) {
-        blockers.push({ code: ProfileBlockerCode.DependencyCycle, subject: cycle.join(' → '), message: `Packages depend on each other in a circle: ${cycle.join(' → ')}` });
-    }
-
-    for (const diagnostic of context.shell?.diagnostics ?? []) {
-        if (unusableShell.has(diagnostic.code)) {
-            blockers.push({ code: ProfileBlockerCode.ShellUnusable, subject: diagnostic.subject ?? context.shell!.name, message: diagnostic.message, shellCode: diagnostic.code });
-        }
-    }
-
-    if (context.theme !== undefined) {
-        const missing = incompatiblePackages(context.theme, profile);
-        if (missing.length > 0) {
-            blockers.push({
-                code: ProfileBlockerCode.ThemeIncompatible,
-                subject: context.theme.name,
-                message: `Theme '${context.theme.name}' is not marked compatible with ${missing.map(item => `'${item}'`).join(', ')}, which profile '${name}' uses`,
-            });
-        }
-    }
-
     const vocabulary = vocabularyOf(profile, context.library);
-    const defaultTemplate = profile.defaults?.newScreenTemplate;
-    if (defaultTemplate !== undefined && !vocabulary.screenTemplates.has(defaultTemplate.id)) {
-        blockers.push({
-            code: ProfileBlockerCode.DefaultScreenTemplateUnavailable,
-            subject: defaultTemplate.id,
-            message: `Screen template '${defaultTemplate.id}', the default for new screens of profile '${name}', is not provided by the application or its packages`,
-        });
-    }
-
-    for (const usage of context.usages ?? []) {
-        for (const layout of usage.layouts.filter(item => !vocabulary.layouts.has(item))) {
-            blockers.push({ code: ProfileBlockerCode.UsedLayoutUnavailable, subject: layout, message: `Screen '${usage.screen}' uses layout '${layout}', which the packages of profile '${name}' do not provide` });
-        }
-
-        for (const template of usage.screenTemplates.filter(item => !vocabulary.screenTemplates.has(item))) {
-            blockers.push({ code: ProfileBlockerCode.UsedScreenTemplateUnavailable, subject: template, message: `Screen '${usage.screen}' uses screen template '${template}', which the packages of profile '${name}' do not provide` });
-        }
-
-        for (const template of usage.dialogTemplates.filter(item => !vocabulary.dialogTemplates.has(item))) {
-            blockers.push({ code: ProfileBlockerCode.UsedDialogTemplateUnavailable, subject: template, message: `Screen '${usage.screen}' uses dialog template '${template}', which the packages of profile '${name}' do not provide` });
-        }
-
-        for (const { owner, slot } of usage.slots) {
-            const slots = vocabulary.layouts.get(owner) ?? vocabulary.screenTemplates.get(owner) ?? vocabulary.dialogTemplates.get(owner);
-            if (slots !== undefined && !slots.includes(slot)) {
-                blockers.push({ code: ProfileBlockerCode.UsedSlotUnavailable, subject: `${owner}.${slot}`, message: `Screen '${usage.screen}' places content in slot '${slot}' of '${owner}', which no longer has it` });
-            }
-        }
-    }
+    const blockers: UnclassifiedBlocker[] = [
+        ...dependencyBlockers(profile, context),
+        ...shellBlockers(context),
+        ...themeBlockers(profile, context),
+        ...defaultTemplateBlockers(profile, vocabulary),
+        ...(context.usages ?? []).flatMap(usage => usageBlockers(profile.name, usage, vocabulary)),
+    ];
 
     return blockers.map(blocker => ({ ...blocker, severity: ProblemSeverity.Blocker, section: sectionOf[blocker.code] }));
 }
+
+type UnclassifiedBlocker = Omit<ProfileBlocker, 'severity' | 'section'>;
+
+function dependencyBlockers(profile: UiProfile, context: ProfileBlockerContext): UnclassifiedBlocker[] {
+    const selection = resolvePackageDependencies(profile.packages, [...context.packages]);
+    return [
+        ...selection.missing.map(missing => ({ code: ProfileBlockerCode.MissingDependency, subject: missing.dependsOn, message: `Package '${missing.package}' needs '${missing.dependsOn}', which is not available` })),
+        ...selection.versionConflicts.map(conflict => ({
+            code: ProfileBlockerCode.VersionConflict,
+            subject: conflict.dependsOn,
+            message: `Package '${conflict.package}' needs '${conflict.dependsOn}' ${conflict.requiredRange}, but version ${conflict.actualVersion} is what is available`,
+        })),
+        ...selection.cycles.map(cycle => ({ code: ProfileBlockerCode.DependencyCycle, subject: cycle.join(' → '), message: `Packages depend on each other in a circle: ${cycle.join(' → ')}` })),
+    ];
+}
+
+const shellBlockers = (context: ProfileBlockerContext): UnclassifiedBlocker[] =>
+    (context.shell?.diagnostics ?? [])
+        .filter(diagnostic => unusableShell.has(diagnostic.code))
+        .map(diagnostic => ({ code: ProfileBlockerCode.ShellUnusable, subject: diagnostic.subject ?? context.shell!.name, message: diagnostic.message, shellCode: diagnostic.code }));
+
+function themeBlockers(profile: UiProfile, context: ProfileBlockerContext): UnclassifiedBlocker[] {
+    if (context.theme === undefined) return [];
+    const missing = incompatiblePackages(context.theme, profile);
+    return missing.length === 0
+        ? []
+        : [{
+            code: ProfileBlockerCode.ThemeIncompatible,
+            subject: context.theme.name,
+            message: `Theme '${context.theme.name}' is not marked compatible with ${missing.map(item => `'${item}'`).join(', ')}, which profile '${profile.name}' uses`,
+        }];
+}
+
+function defaultTemplateBlockers(profile: UiProfile, vocabulary: Vocabulary): UnclassifiedBlocker[] {
+    const defaultTemplate = profile.defaults?.newScreenTemplate;
+    return defaultTemplate !== undefined && !vocabulary.screenTemplates.has(defaultTemplate.id)
+        ? [{
+            code: ProfileBlockerCode.DefaultScreenTemplateUnavailable,
+            subject: defaultTemplate.id,
+            message: `Screen template '${defaultTemplate.id}', the default for new screens of profile '${profile.name}', is not provided by the application or its packages`,
+        }]
+        : [];
+}
+
+function usageBlockers(profileName: string, usage: ProfileUsage, vocabulary: Vocabulary): UnclassifiedBlocker[] {
+    return [
+        ...unavailable(usage.layouts, vocabulary.layouts, ProfileBlockerCode.UsedLayoutUnavailable, item => `Screen '${usage.screen}' uses layout '${item}', which the packages of profile '${profileName}' do not provide`),
+        ...unavailable(usage.screenTemplates, vocabulary.screenTemplates, ProfileBlockerCode.UsedScreenTemplateUnavailable, item => `Screen '${usage.screen}' uses screen template '${item}', which the packages of profile '${profileName}' do not provide`),
+        ...unavailable(usage.dialogTemplates, vocabulary.dialogTemplates, ProfileBlockerCode.UsedDialogTemplateUnavailable, item => `Screen '${usage.screen}' uses dialog template '${item}', which the packages of profile '${profileName}' do not provide`),
+        ...usage.slots
+            .filter(({ owner, slot }) => slotsOf(vocabulary, owner)?.includes(slot) === false)
+            .map(({ owner, slot }) => ({ code: ProfileBlockerCode.UsedSlotUnavailable, subject: `${owner}.${slot}`, message: `Screen '${usage.screen}' places content in slot '${slot}' of '${owner}', which no longer has it` })),
+    ];
+}
+
+const unavailable = (used: readonly string[], provided: Map<string, string[]>, code: ProfileBlockerCode, message: (item: string) => string): UnclassifiedBlocker[] =>
+    used.filter(item => !provided.has(item)).map(item => ({ code, subject: item, message: message(item) }));
+
+const slotsOf = (vocabulary: Vocabulary, owner: string): string[] | undefined =>
+    vocabulary.layouts.get(owner) ?? vocabulary.screenTemplates.get(owner) ?? vocabulary.dialogTemplates.get(owner);
 
 interface Vocabulary {
     layouts: Map<string, string[]>;
@@ -154,10 +155,16 @@ function vocabularyOf(profile: UiProfile, library: TemplateLibrary): Vocabulary 
     const installed = library.blueprints.filter(candidate => profile.packages.includes(candidate.manifest.name));
     for (const source of [library.own, ...installed]) {
         if (source === undefined) continue;
-        for (const layout of source.layouts ?? []) if (!vocabulary.layouts.has(layout.name)) vocabulary.layouts.set(layout.name, layout.slots.map(slot => slot.name));
-        for (const template of source.screenTemplates ?? []) if (!vocabulary.screenTemplates.has(template.name)) vocabulary.screenTemplates.set(template.name, template.slots.map(slot => slot.name));
-        for (const template of source.dialogTemplates ?? []) if (!vocabulary.dialogTemplates.has(template.name)) vocabulary.dialogTemplates.set(template.name, template.slots.map(slot => slot.name));
+        addAll(vocabulary.layouts, source.layouts);
+        addAll(vocabulary.screenTemplates, source.screenTemplates);
+        addAll(vocabulary.dialogTemplates, source.dialogTemplates);
     }
 
     return vocabulary;
+}
+
+function addAll(target: Map<string, string[]>, items: readonly { name: string; slots: readonly { name: string }[] }[] | undefined): void {
+    for (const item of items ?? []) {
+        if (!target.has(item.name)) target.set(item.name, item.slots.map(slot => slot.name));
+    }
 }
