@@ -57,3 +57,4 @@ export * from './toolbar';
 export * from './uiProfileJson';
 export * from './shell';
 export * from './profiles';
+export * from './extensions/resolveExtensionComponent';
