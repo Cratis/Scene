@@ -37,6 +37,8 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     JsonArray _cases = null!;
     List<(string Name, JsonNode Expected, JsonNode Actual)> _results = null!;
     List<string> _mutated = null!;
+    string _listing = null!;
+    string _themeEdit = null!;
 
     void Establish()
     {
@@ -59,16 +61,21 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         {
             var profile = item["profile"].Deserialize<UiProfile>(_readOptions);
             var packages = item["packages"]?.Deserialize<List<ScenePackage>>(_readOptions) ?? _packages;
-            var before = JsonSerializer.Serialize((profile, packages), _options);
+            var before = JsonSerializer.Serialize(new { profile, packages }, _options);
             var result = Run(item, profile, packages);
-            if (JsonSerializer.Serialize((profile, packages), _options) != before)
+            if (JsonSerializer.Serialize(new { profile, packages }, _options) != before)
             {
                 _mutated.Add(item["name"].GetValue<string>());
             }
 
             return result;
         })];
+        _listing = JsonSerializer.Serialize(PackageList.Describe(CaseProfile("a package another needs"), _packages), _options);
+        _themeEdit = JsonSerializer.Serialize(PackageList.ChooseTheme(CaseProfile("choose a theme whose package is missing"), _packages, "Material Ocean"), _options);
     }
+
+    UiProfile CaseProfile(string name) =>
+        _cases.Single(candidate => candidate["name"].GetValue<string>() == name)["profile"].Deserialize<UiProfile>(_readOptions)!;
 
     static (string Name, JsonNode Expected, JsonNode Actual) Run(JsonNode item, UiProfile profile, List<ScenePackage> packages)
     {
@@ -140,21 +147,13 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     [Fact]
     void should_write_the_listing_the_way_the_designer_reads_it()
     {
-        var item = _cases.Single(candidate => candidate["name"].GetValue<string>() == "a package another needs");
-
-        var written = JsonSerializer.Serialize(PackageList.Describe(item["profile"].Deserialize<UiProfile>(_readOptions), _packages), _options);
-
-        written.ShouldEqual(/*lang=json,strict*/ """{"rows":[{"position":1,"name":"material","displayName":"Material Components","version":"1.0.0","kind":"componentLibrary","description":"Material components.","reason":{"kind":"chosen","packages":[],"text":"Chosen"},"canMoveUp":false,"canMoveDown":false},{"position":2,"name":"tailwind","displayName":"Tailwind","version":"1.0.0","kind":"styling","description":"Utility styling.","reason":{"kind":"neededBy","packages":["Material Components"],"text":"Needed by Material Components"},"canMoveUp":false,"canMoveDown":true,"lock":{"kind":"neededBy","packages":["Material Components"],"text":"Tailwind is needed by Material Components, so it stays while they are listed."}},{"position":3,"name":"primereact","displayName":"PrimeReact","version":"1.0.0","kind":"componentLibrary","description":"PrimeReact components.","reason":{"kind":"chosen","packages":[],"text":"Chosen"},"canMoveUp":true,"canMoveDown":false},{"position":4,"name":"core","displayName":"Core","version":"1.0.0","kind":"componentLibrary","description":"The fallback components.","reason":{"kind":"alwaysLast","packages":[],"text":"Always last"},"canMoveUp":false,"canMoveDown":false,"lock":{"kind":"core","packages":[],"text":"Core is the fallback every component name resolves against, so it is always last and cannot be removed."}}],"addable":[{"name":"material-themes","displayName":"Material Themes","version":"1.0.0","kind":"styling","description":"Material themes.","alsoAdds":[],"text":""},{"name":"bp.default","displayName":"Cratis Default","version":"1.4.2","kind":"blueprint","description":"The default blueprint.","alsoAdds":[],"text":""},{"name":"bp.dashboard","displayName":"Dashboard","version":"2.0.0","kind":"blueprint","description":"Horizontal navigation.","alsoAdds":[],"text":""},{"name":"broken","displayName":"Broken","version":"1.0.0","kind":"componentLibrary","description":"Needs a package nobody has.","alsoAdds":[],"text":""}],"suppliers":[{"component":"button","winner":"material","others":["primereact","core"]},{"component":"card","winner":"primereact","others":["core"]},{"component":"datatable","winner":"material","others":["primereact"]},{"component":"table","winner":"core","others":[]}]}""");
+        _listing.ShouldEqual(/*lang=json,strict*/ """{"rows":[{"position":1,"name":"material","displayName":"Material Components","version":"1.0.0","kind":"componentLibrary","description":"Material components.","reason":{"kind":"chosen","packages":[],"text":"Chosen"},"canMoveUp":false,"canMoveDown":false},{"position":2,"name":"tailwind","displayName":"Tailwind","version":"1.0.0","kind":"styling","description":"Utility styling.","reason":{"kind":"neededBy","packages":["Material Components"],"text":"Needed by Material Components"},"canMoveUp":false,"canMoveDown":true,"lock":{"kind":"neededBy","packages":["Material Components"],"text":"Tailwind is needed by Material Components, so it stays while they are listed."}},{"position":3,"name":"primereact","displayName":"PrimeReact","version":"1.0.0","kind":"componentLibrary","description":"PrimeReact components.","reason":{"kind":"chosen","packages":[],"text":"Chosen"},"canMoveUp":true,"canMoveDown":false},{"position":4,"name":"core","displayName":"Core","version":"1.0.0","kind":"componentLibrary","description":"The fallback components.","reason":{"kind":"alwaysLast","packages":[],"text":"Always last"},"canMoveUp":false,"canMoveDown":false,"lock":{"kind":"core","packages":[],"text":"Core is the fallback every component name resolves against, so it is always last and cannot be removed."}}],"addable":[{"name":"material-themes","displayName":"Material Themes","version":"1.0.0","kind":"styling","description":"Material themes.","alsoAdds":[],"text":""},{"name":"bp.default","displayName":"Cratis Default","version":"1.4.2","kind":"blueprint","description":"The default blueprint.","alsoAdds":[],"text":""},{"name":"bp.dashboard","displayName":"Dashboard","version":"2.0.0","kind":"blueprint","description":"Horizontal navigation.","alsoAdds":[],"text":""},{"name":"broken","displayName":"Broken","version":"1.0.0","kind":"componentLibrary","description":"Needs a package nobody has.","alsoAdds":[],"text":""}],"suppliers":[{"component":"button","winner":"material","others":["primereact","core"]},{"component":"card","winner":"primereact","others":["core"]},{"component":"datatable","winner":"material","others":["primereact"]},{"component":"table","winner":"core","others":[]}]}""");
     }
 
     [Fact]
     void should_write_an_edit_with_what_it_added_in_the_order_it_added_it()
     {
-        var item = _cases.Single(candidate => candidate["name"].GetValue<string>() == "choose a theme whose package is missing");
-
-        var edit = PackageList.ChooseTheme(item["profile"].Deserialize<UiProfile>(_readOptions), _packages, "Material Ocean");
-
-        JsonSerializer.Serialize(edit, _options).ShouldEqual(/*lang=json,strict*/ """{"profile":{"name":"Desktop","targetPlatform":"web","packages":["core","tailwind","material","material-themes","primereact"],"theme":"Material Ocean"},"outcome":"changed","added":["tailwind","material","material-themes"],"removed":[],"message":"Theme \u0027Material Ocean\u0027 needs Material Themes, which was added."}""");
+        _themeEdit.ShouldEqual(/*lang=json,strict*/ """{"profile":{"name":"Desktop","targetPlatform":"web","packages":["core","tailwind","material","material-themes","primereact"],"theme":"Material Ocean"},"outcome":"changed","added":["tailwind","material","material-themes"],"removed":[],"message":"Theme \u0027Material Ocean\u0027 needs Material Themes, which was added."}""");
     }
 
     [Fact]
