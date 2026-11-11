@@ -7417,6 +7417,213 @@
         "Template 'LeadList' declares no display name",
         "Template 'LeadList' declares no description"
       ]
+    },
+    {
+      "name": "a blueprint with problems in every group",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "one",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "",
+            "description": "",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "",
+                "order": 0
+              }
+            ],
+            "defaultSampleData": "zzz"
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "nowhere",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares an invalid version 'one'",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no domain",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no description",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no thumbnail",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Dashboard' declares no title",
+        "Blueprint '@cratis/scene.blueprint.crm' declares default sample data 'zzz', which is not one of its sample data packs",
+        "Blueprint '@cratis/scene.blueprint.crm' does not depend on the foundation set 'Cratis.Blueprint.Default'",
+        "Package '@cratis/scene.blueprint.crm' sample data pack 'crm-en' declares no title",
+        "Blueprint '@cratis/scene.blueprint.crm' sample data pack 'crm-en' names 'sampleData/crm-en.json', which is not in the package",
+        "Template 'LeadList' declares no display name",
+        "Template 'LeadDetail' is unplaced: no layout or template declares slot 'nowhere'"
+      ]
     }
   ],
   "catalog": [
