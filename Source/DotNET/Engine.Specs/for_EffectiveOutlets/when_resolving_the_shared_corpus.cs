@@ -75,6 +75,32 @@ public class when_resolving_the_shared_corpus : Specification
     }
 
     [Fact]
+    void should_write_the_resolved_outlet_in_the_order_it_is_built()
+    {
+        var fixture = Cases("cases").Single(candidate => candidate["name"].GetValue<string>().StartsWith("contributions go after inherited", StringComparison.Ordinal));
+        var (chain, contributors) = Levels(fixture);
+
+        var written = JsonSerializer.Serialize(EffectiveOutlets.Resolve(chain, fixture["resolve"][0]["outlet"].GetValue<string>(), contributors), _write);
+
+        written.ShouldEqual("""{"name":"toolbar","items":[{"item":{"kind":"button","title":"Add product","id":"add"},"provenance":{"owner":"Products","level":"feature","source":"own"},"editable":false},{"item":{"kind":"button","title":"Report","id":"report","before":"add"},"provenance":{"owner":"Sales","level":"module","source":"contribution"},"editable":false},{"item":{"kind":"button","title":"Set price","id":"price","after":"report"},"provenance":{"owner":"Pricing","level":"feature","source":"contribution"},"editable":false}],"removed":[{"item":{"kind":"button","title":"Refresh","id":"refresh"},"provenance":{"owner":"Catalog","level":"template","source":"default"},"removal":"overridden","removedBy":"Products"},{"item":{"kind":"button","title":"Audit trail","id":"audit"},"provenance":{"owner":"Audit","level":"feature","source":"contribution"},"removal":"hidden","removedBy":"ProductList"}],"sources":["Catalog","Products","ProductList","Sales","Audit","Pricing"],"summary":"Catalog \u002B Products \u002B ProductList \u002B Sales \u002B Audit \u002B Pricing","diagnostics":[{"code":"placementAboveInherited","severity":"warning","outlet":"toolbar","message":"Sales places \u0027report\u0027 before \u0027add\u0027 in the outlet \u0027toolbar\u0027, but own items never go above inherited ones and contributions never above either, so it goes first after them","owner":"Sales","item":"report"}],"kind":"actions","declaredBy":"Catalog","mode":"extends"}""");
+    }
+
+    [Fact]
+    void should_leave_every_chain_as_it_was()
+    {
+        var mismatches = new List<string>();
+        foreach (var fixture in Cases("cases"))
+        {
+            var (chain, contributors) = Levels(fixture);
+            var before = JsonSerializer.Serialize(new { chain, contributors }, _write);
+            foreach (var entry in fixture["resolve"].AsArray()) EffectiveOutlets.Resolve(chain, entry["outlet"].GetValue<string>(), contributors);
+            OutletDiagnostics.Diagnose(chain, contributors);
+            if (JsonSerializer.Serialize(new { chain, contributors }, _write) != before) mismatches.Add(fixture["name"].GetValue<string>());
+        }
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
     void should_diagnose_every_chain()
     {
         var mismatches = new List<string>();
