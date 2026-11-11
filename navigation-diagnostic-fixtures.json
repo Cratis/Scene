@@ -186,6 +186,15 @@
         {"code": "navDuplicateId", "entry": "application:topbar:drawer", "message": "Navigation item 'drawer' is used more than once in the application topbar."},
         {"code": "navTargetOutOfScope", "entry": "support:topbar:orders", "message": "Navigation item 'orders' of module 'support' targets module 'sales'; a module's own items may only target that module."}
       ]
+    },
+    {
+      "name": "a slot destination that names no screen, and entries without an id",
+      "graph": {"layouts":[{"name":"AppShell","slots":[{"name":"content","routed":true}]}],"entries":[{"destination":{"module":"Sales","slot":"content","route":"sales"}},{"destination":{"module":"Sales","slot":"sidebar"}},{"id":"ext","destination":{"kind":"external","route":"https://x.test","slot":"content"}},{"destination":{}}]},
+      "expectedDiagnostics": [
+        {"code": "missingSlot", "entry": "#2", "message": "Destination '#2' targets missing slot 'sidebar'."},
+        {"code": "incompatibleSlot", "entry": "ext", "message": "Destination 'ext' opens an external target but names slot 'content'; only slot destinations render in slots."},
+        {"code": "unavailableTarget", "entry": "#4", "message": "Destination '#4' names no screen, stable identity, route or dialog."}
+      ]
     }
   ]
 }

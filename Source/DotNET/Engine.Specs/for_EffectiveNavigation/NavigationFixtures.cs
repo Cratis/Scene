@@ -35,6 +35,18 @@ public static class NavigationFixtures
 
     public record EditCase(string Name, NavigationModel Navigation, JsonElement Call, JsonElement Expected);
 
+    public record PlanCase(string Name, NavigationModel? Navigation, JsonElement Call, JsonElement Expected);
+
+    public record ApplyCase(string Name, NavigationModel? Navigation, IReadOnlyList<NavigationEdit> Edits, JsonElement Expected);
+
+    public record Characterization(NavigationModel Navigation, IReadOnlyList<PlanCase> PlanCases, IReadOnlyList<ApplyCase> ApplyCases);
+
+    public static Characterization LoadCharacterization(string file)
+    {
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), file)));
+        return document.RootElement.GetProperty("characterization").Deserialize<Characterization>(_read)!;
+    }
+
     public static (ApplicationStructure Structure, IReadOnlyList<Case> Cases) LoadCases(string file)
     {
         using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), file)));
