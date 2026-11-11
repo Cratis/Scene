@@ -49,9 +49,11 @@
         "up": "yarn g:up"
     },
     "dependencies": {
+        "@cratis/scene.extensions": "1.0.0",
         "@cratis/scene.model": "1.0.0"
     },
     "devDependencies": {
+        "@cratis/scene.extensions": "1.0.0",
         "@cratis/scene.model": "1.0.0"
     }
 }
