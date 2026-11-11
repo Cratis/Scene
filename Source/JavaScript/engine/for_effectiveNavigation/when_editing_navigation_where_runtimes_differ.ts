@@ -16,6 +16,8 @@ const item = (id: string) => ({ kind: 'navigation', id, title: id.toUpperCase() 
 const declaring = (...outlets: { name: string; kind: string; defaults: unknown[] }[]): NavigationModel =>
     ({ application: { outlets }, modules: [] }) as unknown as NavigationModel;
 
+const childrenOf = (value: unknown): { id: string }[] => (value as { children?: { id: string }[] }).children ?? [];
+
 const edit = (value: object) => value as unknown as NavigationEdit;
 
 describe('when editing navigation where the runtimes differ', () => {
@@ -30,9 +32,9 @@ describe('when editing navigation where the runtimes differ', () => {
         // The runtimes differ on which declaration receives the sub-item (Cratis/Scene#300); the TypeScript engine edits the first one.
         const [first, second] = outcome.model.application.outlets!;
         first.defaults.map(candidate => candidate.id).should.deep.equal(['a']);
-        (first.defaults[0].children ?? []).map(candidate => candidate.id).should.deep.equal(['c']);
+        childrenOf(first.defaults[0]).map(candidate => candidate.id).should.deep.equal(['c']);
         second.defaults.map(candidate => candidate.id).should.deep.equal(['a', 'b']);
-        second.defaults.forEach(candidate => (candidate.children ?? []).should.deep.equal([]));
+        second.defaults.forEach(candidate => childrenOf(candidate).should.deep.equal([]));
     });
 
     it('should move under the parent using the items without the moved one', () => {
@@ -42,7 +44,7 @@ describe('when editing navigation where the runtimes differ', () => {
 
         const [outlet] = outcome.model.application.outlets!;
         outlet.defaults.map(candidate => candidate.id).should.deep.equal(['a']);
-        (outlet.defaults[0].children ?? []).map(candidate => candidate.id).should.deep.equal(['b']);
+        childrenOf(outlet.defaults[0]).map(candidate => candidate.id).should.deep.equal(['b']);
     });
 
     it('should refuse a sub-item of a flat outlet without reading the items of the level', () => {
