@@ -16,6 +16,12 @@ public class when_running_the_shared_corpus : Specification
         Converters = { new JsonStringEnumConverter() }
     };
 
+    static readonly JsonSerializerOptions _raw = new()
+    {
+        Converters = { new JsonStringEnumConverter() },
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     List<VerificationCase> _verification = null!;
     List<CatalogCase> _catalog = null!;
     List<PinCase> _pin = null!;
@@ -53,6 +59,33 @@ public class when_running_the_shared_corpus : Specification
         {
             (fixture.Name, string.Join('\n', problems)).ShouldEqual((fixture.Name, string.Join('\n', fixture.ExpectedProblems)));
         }
+    }
+
+    [Fact]
+    void should_write_the_problems_in_the_order_they_are_found()
+    {
+        var fixture = _verification.Single(candidate => candidate.Name == "screen set that is inconsistent");
+
+        var written = JsonSerializer.Serialize(BlueprintVerification.Verify(fixture.Source, fixture.Library, fixture.Options), _raw);
+
+        written.ShouldEqual("[\"Blueprint '@cratis/scene.blueprint.crm' declares screen 'Leads' more than once\",\"Blueprint '@cratis/scene.blueprint.crm' declares a screen set entry without a name\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' uses template 'Missing', which is not available\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' declares no title\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' has parent 'Nowhere', which is not in the screen set\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'A' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'B' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'A' is its own ancestor\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'B' is its own ancestor\"]");
+    }
+
+    [Fact]
+    void should_leave_the_blueprint_the_library_and_the_options_as_they_were()
+    {
+        var mismatches = new List<string>();
+        foreach (var fixture in _verification)
+        {
+            var before = JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw);
+            BlueprintVerification.Verify(fixture.Source, fixture.Library, fixture.Options);
+            if (JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw) != before)
+            {
+                mismatches.Add(fixture.Name);
+            }
+        }
+
+        mismatches.ShouldBeEmpty();
     }
 
     [Fact]

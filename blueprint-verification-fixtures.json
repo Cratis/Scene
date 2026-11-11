@@ -2277,9 +2277,9 @@
             },
             {
               "id": "crm-nb",
-              "title": "Pack crm-nb",
+              "title": "Pack crm-en",
               "locale": "en-GB",
-              "path": "sampleData/crm-nb.json"
+              "path": "sampleData/crm-en.json"
             }
           ],
           "blueprint": {
@@ -2361,8 +2361,7 @@
           "thumbnails/crm.svg",
           "thumbnails/lead-list.svg",
           "thumbnails/lead-detail.svg",
-          "sampleData/crm-en.json",
-          "sampleData/crm-nb.json"
+          "sampleData/crm-en.json"
         ],
         "screens": [
           {
@@ -2391,23 +2390,6 @@
           {
             "id": "crm-en",
             "title": "Pack crm-en",
-            "locale": "en-GB",
-            "owner": "blueprint:crm",
-            "sets": [
-              {
-                "shape": "Customer",
-                "rows": [
-                  {
-                    "id": "1",
-                    "name": "Northgate Ltd"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "crm-nb",
-            "title": "Pack crm-nb",
             "locale": "en-GB",
             "owner": "blueprint:crm",
             "sets": [
@@ -2492,7 +2474,8 @@
         }
       ],
       "expectedProblems": [
-        "Blueprint '@cratis/scene.blueprint.crm' ships several sample data packs but declares no default"
+        "Blueprint '@cratis/scene.blueprint.crm' ships several sample data packs but declares no default",
+        "Package '@cratis/scene.blueprint.crm' sample data pack 'crm-nb' reuses the path 'sampleData/crm-en.json'"
       ]
     },
     {
@@ -4795,6 +4778,2644 @@
       "library": [],
       "expectedProblems": [
         "Template 'MinimalShell' declares no thumbnail"
+      ]
+    },
+    {
+      "name": "a blueprint verified without a library or options",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' has no layout to place its screen templates in"
+      ]
+    },
+    {
+      "name": "a manifest without a version",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares an invalid version ''"
+      ]
+    },
+    {
+      "name": "blueprint metadata without domain, description, screen set or sample data",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "blueprint": {
+            "thumbnail": "thumbnails/crm.svg"
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares no domain",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no description",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no ready-to-use screen set",
+        "Blueprint '@cratis/scene.blueprint.crm' ships no sample data pack"
+      ]
+    },
+    {
+      "name": "a blank domain and description",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "   ",
+            "description": "   ",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares no domain",
+        "Blueprint '@cratis/scene.blueprint.crm' declares no description"
+      ]
+    },
+    {
+      "name": "screen set entries without a name or a title",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads"
+              },
+              {
+                "title": "No name"
+              },
+              {
+                "name": "Untitled"
+              },
+              {
+                "name": "Spaces",
+                "title": "  "
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares a screen set entry without a name",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Untitled' declares no title",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Untitled' is named in the screen set but the package does not provide it",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Spaces' declares no title",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Spaces' is named in the screen set but the package does not provide it"
+      ]
+    },
+    {
+      "name": "a screen under a cycle it is not part of and a screen that is its own parent",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads"
+              },
+              {
+                "name": "Tail",
+                "title": "Tail",
+                "parent": "Loop1"
+              },
+              {
+                "name": "Loop1",
+                "title": "Loop1",
+                "parent": "Loop2"
+              },
+              {
+                "name": "Loop2",
+                "title": "Loop2",
+                "parent": "Loop1"
+              },
+              {
+                "name": "Self",
+                "title": "Self",
+                "parent": "Self"
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Tail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Loop1",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Loop2",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Self",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Loop1' is its own ancestor",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Loop2' is its own ancestor",
+        "Blueprint '@cratis/scene.blueprint.crm' screen 'Self' is its own ancestor"
+      ]
+    },
+    {
+      "name": "a dialog template without a display name or description",
+      "source": {
+        "manifest": {
+          "name": "Cratis.Blueprint.Default",
+          "version": "4.32.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "AppShell"
+          ],
+          "screenTemplates": [
+            "ListScreen"
+          ],
+          "dialogTemplates": [
+            "Confirm"
+          ],
+          "themes": []
+        },
+        "layouts": [
+          {
+            "name": "AppShell",
+            "slots": [
+              {
+                "name": "topbar"
+              },
+              {
+                "name": "content"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Shell",
+              "type": "Shell"
+            }
+          }
+        ],
+        "screenTemplates": [
+          {
+            "name": "ListScreen",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "ListScreen",
+            "description": "The ListScreen template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / List",
+              "type": "List"
+            }
+          }
+        ],
+        "dialogTemplates": [
+          {
+            "name": "Confirm",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "  ",
+            "description": "",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Foundation / Dialog",
+              "type": "Dialog"
+            }
+          }
+        ]
+      },
+      "library": [],
+      "expectedProblems": [
+        "Template 'Confirm' declares no display name",
+        "Template 'Confirm' declares no description"
+      ]
+    },
+    {
+      "name": "domain templates with a blank category, no category, no type and no metadata",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail",
+            "Bare",
+            "Typeless"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "thumbnail": "thumbnails/lead-list.svg",
+              "category": "   ",
+              "type": "List"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "thumbnail": "thumbnails/lead-list.svg",
+              "type": "Detail"
+            }
+          },
+          {
+            "name": "Bare",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "Bare",
+            "description": "The Bare template."
+          },
+          {
+            "name": "Typeless",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "Typeless",
+            "description": "The Typeless template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "thumbnail": "thumbnails/lead-list.svg",
+              "category": "Business / crm"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Template 'LeadList' declares no category",
+        "Template 'LeadDetail' declares no category",
+        "Template 'Bare' declares no compatibility",
+        "Template 'Bare' declares no author",
+        "Template 'Bare' declares no license",
+        "Template 'Bare' declares no category",
+        "Template 'Bare' declares no type",
+        "Template 'Bare' declares no thumbnail",
+        "Template 'Typeless' declares no type"
+      ]
+    },
+    {
+      "name": "a blueprint that provides no screen templates",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads"
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard"
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": []
+    },
+    {
+      "name": "a library package without layouts or templates",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          }
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' has no layout to place its screen templates in"
+      ]
+    },
+    {
+      "name": "a foundation package with unplaced, ambiguous and nested templates",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "Lost",
+            "Ambiguous",
+            "Other",
+            "Loop1",
+            "Loop2"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "Lost",
+            "fitsSlot": "nowhere",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "Lost",
+            "description": "The Lost template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "Ambiguous",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "x"
+              }
+            ],
+            "displayName": "Ambiguous",
+            "description": "The Ambiguous template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "Other",
+            "fitsSlot": "content",
+            "slots": [
+              {
+                "name": "body"
+              }
+            ],
+            "displayName": "Other",
+            "description": "The Other template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "Loop1",
+            "fitsSlot": "loop2",
+            "slots": [
+              {
+                "name": "loop1"
+              }
+            ],
+            "displayName": "Loop1",
+            "description": "The Loop1 template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "Loop2",
+            "fitsSlot": "loop1",
+            "slots": [
+              {
+                "name": "loop2"
+              }
+            ],
+            "displayName": "Loop2",
+            "description": "The Loop2 template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Template 'Lost' is unplaced: no layout or template declares slot 'nowhere'",
+        "Template 'Loop1' is nested inside itself",
+        "Template 'Loop2' is nested inside itself"
+      ]
+    },
+    {
+      "name": "a default sample data pack named while the manifest lists none",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ],
+            "defaultSampleData": "crm-en"
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "displayName": "LeadList",
+            "description": "The LeadList template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Blueprint '@cratis/scene.blueprint.crm' declares default sample data 'crm-en', which is not one of its sample data packs",
+        "Blueprint '@cratis/scene.blueprint.crm' ships no sample data pack"
+      ]
+    },
+    {
+      "name": "a screen template without a display name or description key",
+      "source": {
+        "manifest": {
+          "name": "@cratis/scene.blueprint.crm",
+          "version": "1.2.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "Cratis.Blueprint.Default",
+              "versionRange": "^4.0.0"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [
+            "LeadList",
+            "LeadDetail"
+          ],
+          "dialogTemplates": [],
+          "themes": [],
+          "sampleData": [
+            {
+              "id": "crm-en",
+              "title": "Pack crm-en",
+              "locale": "en-GB",
+              "path": "sampleData/crm-en.json"
+            }
+          ],
+          "blueprint": {
+            "domain": "crm",
+            "description": "Leads, accounts and deals for a sales team.",
+            "thumbnail": "thumbnails/crm.svg",
+            "screenSet": [
+              {
+                "name": "Leads",
+                "title": "Leads",
+                "template": "LeadList",
+                "order": 1
+              },
+              {
+                "name": "LeadDetail",
+                "title": "Lead",
+                "template": "LeadDetail",
+                "parent": "Leads"
+              },
+              {
+                "name": "Dashboard",
+                "title": "Dashboard",
+                "order": 0
+              }
+            ]
+          },
+          "displayName": "CRM",
+          "license": "MIT"
+        },
+        "screenTemplates": [
+          {
+            "name": "LeadList",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "rows"
+              }
+            ],
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "List",
+              "thumbnail": "thumbnails/lead-list.svg"
+            }
+          },
+          {
+            "name": "LeadDetail",
+            "fitsSlot": "body",
+            "slots": [
+              {
+                "name": "panels"
+              }
+            ],
+            "displayName": "LeadDetail",
+            "description": "The LeadDetail template.",
+            "metadata": {
+              "compatibility": {
+                "scene": "^4.0.0"
+              },
+              "attribution": {
+                "author": "Cratis"
+              },
+              "license": "MIT",
+              "category": "Business / crm",
+              "type": "Detail",
+              "thumbnail": "thumbnails/lead-detail.svg"
+            }
+          }
+        ],
+        "files": [
+          "thumbnails/crm.svg",
+          "thumbnails/lead-list.svg",
+          "thumbnails/lead-detail.svg",
+          "sampleData/crm-en.json"
+        ],
+        "screens": [
+          {
+            "name": "Leads",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "LeadDetail",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          },
+          {
+            "name": "Dashboard",
+            "layout": "AppShell",
+            "slotContent": {},
+            "forms": [],
+            "contributions": []
+          }
+        ],
+        "packs": [
+          {
+            "id": "crm-en",
+            "title": "Pack crm-en",
+            "locale": "en-GB",
+            "owner": "blueprint:crm",
+            "sets": [
+              {
+                "shape": "Customer",
+                "rows": [
+                  {
+                    "id": "1",
+                    "name": "Northgate Ltd"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "library": [
+        {
+          "manifest": {
+            "name": "Cratis.Blueprint.Default",
+            "version": "4.32.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "AppShell"
+            ],
+            "screenTemplates": [
+              "ListScreen"
+            ],
+            "dialogTemplates": [],
+            "themes": []
+          },
+          "layouts": [
+            {
+              "name": "AppShell",
+              "slots": [
+                {
+                  "name": "topbar"
+                },
+                {
+                  "name": "content"
+                }
+              ],
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / Shell",
+                "type": "Shell"
+              }
+            }
+          ],
+          "screenTemplates": [
+            {
+              "name": "ListScreen",
+              "fitsSlot": "content",
+              "slots": [
+                {
+                  "name": "body"
+                }
+              ],
+              "displayName": "ListScreen",
+              "description": "The ListScreen template.",
+              "metadata": {
+                "compatibility": {
+                  "scene": "^4.0.0"
+                },
+                "attribution": {
+                  "author": "Cratis"
+                },
+                "license": "MIT",
+                "category": "Foundation / List",
+                "type": "List"
+              }
+            }
+          ]
+        }
+      ],
+      "expectedProblems": [
+        "Template 'LeadList' declares no display name",
+        "Template 'LeadList' declares no description"
       ]
     }
   ],
