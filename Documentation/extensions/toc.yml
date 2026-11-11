@@ -1,0 +1,4 @@
+- name: Extension component contract
+  href: contract.md
+- name: Build an extension component
+  href: build-a-component.md

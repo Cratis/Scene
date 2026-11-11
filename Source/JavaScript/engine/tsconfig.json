@@ -4,7 +4,8 @@
         "rootDir": ".",
         "outDir": "dist/esm",
         "paths": {
-            "@cratis/scene.model/*": ["../model/dist/esm/*"]
+            "@cratis/scene.model/*": ["../model/dist/esm/*"],
+            "@cratis/scene.extensions/*": ["../extensions/dist/esm/*"]
         }
     },
     "files": [
@@ -17,6 +18,9 @@
     "references": [
         {
             "path": "../model"
+        },
+        {
+            "path": "../extensions"
         }
     ],
     "exclude": [
