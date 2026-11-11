@@ -12,13 +12,13 @@ import {
     TemplateScope,
     UiProfile,
 } from '@cratis/scene.model';
-import { BlueprintPinEvaluation, defaultBlueprintPin, evaluateBlueprintPin } from '../blueprints/evaluateBlueprintPin';
+import { defaultBlueprintPin, evaluateBlueprintPin } from '../blueprints/evaluateBlueprintPin';
 import { resolveScreenTemplates } from '../resolveScreenTemplates';
 import { primarySlotOf } from '../slots/resolveSlotRole';
 import { validateLayoutApplicability, validateScreenTemplateApplicability } from '../templateApplicability';
 import { incompatiblePackages } from '../themeCompatibility';
 import { TemplateCatalogKind } from '../templates/TemplateCatalogKind';
-import { TemplateReferenceStatus } from '../templates/TemplateReferenceResolution';
+import { TemplateReferenceResolution, TemplateReferenceStatus } from '../templates/TemplateReferenceResolution';
 import { TemplateSource } from '../templates/TemplateSource';
 import { resolveTemplateReference } from '../templates/resolveTemplateReference';
 import { EffectiveShell, ShellKind, ShellOrigin, ShellSource } from './EffectiveShell';
@@ -32,6 +32,12 @@ const defaultPrimarySlot = 'content';
 export const bareShellName = 'Bare';
 
 const bareShell: Layout = { name: bareShellName, slots: [{ name: defaultPrimarySlot }] };
+
+interface RootRequest {
+    reference: TemplateReference;
+    origin: ShellOrigin;
+    options: Record<string, unknown> | undefined;
+}
 
 interface Found {
     template: Layout | ScreenTemplate;
@@ -63,11 +69,11 @@ export function resolveEffectiveShell(profile: UiProfile, context: ShellResoluti
 
     let shell: EffectiveShell | undefined;
     if (profile.root !== undefined) {
-        shell = fromReference(profile.root.template, ShellOrigin.Root, profile, context, diagnostics, profile.root.options);
+        shell = fromReference({ reference: profile.root.template, origin: ShellOrigin.Root, options: profile.root.options }, profile, context, diagnostics);
     }
 
-    if (shell === undefined && profile.layout !== undefined && profile.layout.trim() !== '') {
-        shell = fromLegacyLayout(profile.layout, profile, context, installed, diagnostics);
+    if (shell === undefined && namesLegacyLayout(profile)) {
+        shell = fromLegacyLayout(profile, context, installed, diagnostics);
     }
 
     shell ??= fromBlueprintDefault(installed);
@@ -83,82 +89,91 @@ export function resolveEffectiveShell(profile: UiProfile, context: ShellResoluti
     return shell;
 }
 
+function namesLegacyLayout(profile: UiProfile): boolean {
+    return profile.layout !== undefined && profile.layout.trim() !== '';
+}
+
 function installedBlueprints(profile: UiProfile, context: ShellResolutionContext): TemplateSource[] {
     return profile.packages
         .map(name => context.library.blueprints.find(source => source.manifest.name === name && source.manifest.kind === PackageKind.Blueprint))
         .filter((source): source is TemplateSource => source !== undefined);
 }
 
-function fromReference(
-    reference: TemplateReference,
-    origin: ShellOrigin,
-    profile: UiProfile,
-    context: ShellResolutionContext,
-    diagnostics: ShellDiagnostic[],
-    options: Record<string, unknown> | undefined,
-): EffectiveShell | undefined {
+function fromReference(request: RootRequest, profile: UiProfile, context: ShellResolutionContext, diagnostics: ShellDiagnostic[]): EffectiveShell | undefined {
+    const { reference } = request;
     const resolution = resolveTemplateReference(reference, context.library);
-    const label = referenceLabel(reference);
+    let rejection = rejectUnresolved(reference, resolution);
+    const found = rejection === undefined ? findReferenced(reference, context) : undefined;
+    rejection ??= found === undefined ? rejectNotAShell(reference, resolution) : rejectProblems(found, reference);
+    if (rejection !== undefined) {
+        diagnostics.push(rejection);
+        return undefined;
+    }
 
+    diagnostics.push(...referenceWarnings(found!, reference, resolution, profile));
+    return build(found!, request.origin, reference, request.options);
+}
+
+function rejectUnresolved(reference: TemplateReference, resolution: TemplateReferenceResolution): ShellDiagnostic | undefined {
+    const label = referenceLabel(reference);
     switch (resolution.status) {
         case TemplateReferenceStatus.Malformed:
         case TemplateReferenceStatus.UnknownTemplate:
-            diagnostics.push({ code: ShellDiagnosticCode.RootTemplateUnknown, subject: reference.id, message: `Root template ${label} cannot be used: ${resolution.message}` });
-            return undefined;
+            return { code: ShellDiagnosticCode.RootTemplateUnknown, subject: reference.id, message: `Root template ${label} cannot be used: ${resolution.message}` };
         case TemplateReferenceStatus.UnknownBlueprint:
-            diagnostics.push({ code: ShellDiagnosticCode.RootTemplateBlueprintNotInstalled, subject: reference.blueprint, message: `Root template ${label} comes from blueprint '${reference.blueprint}', which is not installed` });
-            return undefined;
+            return { code: ShellDiagnosticCode.RootTemplateBlueprintNotInstalled, subject: reference.blueprint, message: `Root template ${label} comes from blueprint '${reference.blueprint}', which is not installed` };
         default:
-            break;
+            return undefined;
     }
+}
 
-    const source = reference.source === TemplateReferenceSource.Own
-        ? context.library.own
-        : context.library.blueprints.find(candidate => candidate.manifest.name === reference.blueprint);
-    const found = source === undefined ? undefined : findShell(reference.id, source, reference.source === TemplateReferenceSource.Blueprint);
-    if (found === undefined) {
-        if (resolution.status === TemplateReferenceStatus.Resolved) {
-            diagnostics.push({
-                code: ShellDiagnosticCode.RootTemplateNotApplicable,
-                subject: reference.id,
-                message: `Root template ${label} cannot be the application's shell: it is a ${kindName(resolution.kind)}, and only a layout or a screen template with the root role can be a shell`,
-            });
-        } else {
-            diagnostics.push({ code: ShellDiagnosticCode.RootTemplateVersionNotSatisfied, subject: reference.id, message: `Root template ${label} cannot be used: ${resolution.message}` });
+function findReferenced(reference: TemplateReference, context: ShellResolutionContext): Found | undefined {
+    const isBlueprint = reference.source === TemplateReferenceSource.Blueprint;
+    const source = isBlueprint
+        ? context.library.blueprints.find(candidate => candidate.manifest.name === reference.blueprint)
+        : context.library.own;
+    return source === undefined ? undefined : findShell(reference.id, source, isBlueprint);
+}
+
+function rejectNotAShell(reference: TemplateReference, resolution: TemplateReferenceResolution): ShellDiagnostic {
+    const label = referenceLabel(reference);
+    return resolution.status === TemplateReferenceStatus.Resolved
+        ? {
+            code: ShellDiagnosticCode.RootTemplateNotApplicable,
+            subject: reference.id,
+            message: `Root template ${label} cannot be the application's shell: it is a ${kindName(resolution.kind)}, and only a layout or a screen template with the root role can be a shell`,
         }
-        return undefined;
-    }
+        : { code: ShellDiagnosticCode.RootTemplateVersionNotSatisfied, subject: reference.id, message: `Root template ${label} cannot be used: ${resolution.message}` };
+}
 
+function rejectProblems(found: Found, reference: TemplateReference): ShellDiagnostic | undefined {
     const problems = found.kind === ShellKind.Layout
         ? validateLayoutApplicability(found.template as Layout, TemplateScope.Application)
         : validateScreenTemplateApplicability(found.template as ScreenTemplate, TemplateScope.Application);
-    if (problems.length > 0) {
-        diagnostics.push({ code: ShellDiagnosticCode.RootTemplateNotApplicable, subject: reference.id, message: `Root template ${label} cannot be the application's shell: ${problems.join('; ')}` });
-        return undefined;
-    }
+    return problems.length > 0
+        ? { code: ShellDiagnosticCode.RootTemplateNotApplicable, subject: reference.id, message: `Root template ${referenceLabel(reference)} cannot be the application's shell: ${problems.join('; ')}` }
+        : undefined;
+}
 
+function referenceWarnings(found: Found, reference: TemplateReference, resolution: TemplateReferenceResolution, profile: UiProfile): ShellDiagnostic[] {
+    const warnings: ShellDiagnostic[] = [];
     if (resolution.status === TemplateReferenceStatus.VersionNotSatisfied) {
-        diagnostics.push({ code: ShellDiagnosticCode.RootTemplateVersionNotSatisfied, subject: reference.id, message: resolution.message! });
+        warnings.push({ code: ShellDiagnosticCode.RootTemplateVersionNotSatisfied, subject: reference.id, message: resolution.message! });
     }
 
     if (found.isBlueprint && !profile.packages.includes(reference.blueprint!)) {
-        diagnostics.push({
+        warnings.push({
             code: ShellDiagnosticCode.RootTemplateBlueprintNotInstalled,
             subject: reference.blueprint,
-            message: `Root template ${label} comes from blueprint '${reference.blueprint}', which is available but not among the packages of profile '${profile.name}'`,
+            message: `Root template ${referenceLabel(reference)} comes from blueprint '${reference.blueprint}', which is available but not among the packages of profile '${profile.name}'`,
         });
     }
 
-    return build(found, origin, reference, options);
+    return warnings;
 }
 
-function fromLegacyLayout(
-    name: string,
-    profile: UiProfile,
-    context: ShellResolutionContext,
-    installed: TemplateSource[],
-    diagnostics: ShellDiagnostic[],
-): EffectiveShell | undefined {
+function fromLegacyLayout(profile: UiProfile, context: ShellResolutionContext, installed: TemplateSource[], diagnostics: ShellDiagnostic[]): EffectiveShell | undefined {
+    const name = profile.layout!;
     const own = context.library.own === undefined ? undefined : findLayout(name, context.library.own, false);
     if (own !== undefined) return build(own, ShellOrigin.LegacyLayout, { source: TemplateReferenceSource.Own, id: name });
 
@@ -204,10 +219,8 @@ function bare(): EffectiveShell {
 function build(found: Found, origin: ShellOrigin, reference: TemplateReference, options?: Record<string, unknown>): EffectiveShell {
     const template = found.template;
     const primarySlot = primarySlotOf(template.slots) ?? defaultPrimarySlot;
-    let pin: BlueprintPinEvaluation | undefined;
-    if (found.isBlueprint && found.source !== undefined) {
-        pin = evaluateBlueprintPin(reference.version, found.source.manifest.version);
-    }
+    const manifest = found.isBlueprint ? found.source?.manifest : undefined;
+    const pin = manifest === undefined ? undefined : evaluateBlueprintPin(reference.version, manifest.version);
 
     return {
         origin,
@@ -216,7 +229,7 @@ function build(found: Found, origin: ShellOrigin, reference: TemplateReference, 
         kind: found.kind,
         source: found.isBlueprint ? ShellSource.Blueprint : ShellSource.Own,
         name: template.name,
-        ...(found.isBlueprint && found.source !== undefined ? { package: found.source.manifest.name, packageVersion: found.source.manifest.version } : {}),
+        ...(manifest === undefined ? {} : { package: manifest.name, packageVersion: manifest.version }),
         ...(pin === undefined ? {} : { pin }),
         slots: template.slots.map(slot => slot.name),
         primarySlot,
@@ -299,26 +312,34 @@ function checkCycles(shell: EffectiveShell, templates: readonly ScreenTemplate[]
 }
 
 function checkProfile(shell: EffectiveShell, profile: UiProfile, context: ShellResolutionContext): void {
-    const theme = profile.theme === undefined ? undefined : context.themes?.find(candidate => candidate.name === profile.theme);
-    if (theme !== undefined) {
-        const incompatible = incompatiblePackages(theme, profile);
-        if (incompatible.length > 0) {
-            shell.diagnostics.push({
-                code: ShellDiagnosticCode.ProfileThemeIncompatible,
-                subject: theme.name,
-                message: `Theme '${theme.name}' does not support ${incompatible.length === 1 ? 'package' : 'packages'} ${incompatible.map(name => `'${name}'`).join(', ')} of profile '${profile.name}'`,
-            });
-        }
-    }
+    checkTheme(shell, profile, context);
+    checkAvailablePackages(shell, profile, context);
+}
 
-    if (context.availablePackages !== undefined) {
-        for (const name of profile.packages.filter(candidate => !context.availablePackages!.includes(candidate))) {
-            shell.diagnostics.push({
-                code: ShellDiagnosticCode.ProfilePackageMissing,
-                subject: name,
-                message: `Package '${name}' of profile '${profile.name}' is not available`,
-            });
-        }
+function checkTheme(shell: EffectiveShell, profile: UiProfile, context: ShellResolutionContext): void {
+    const theme = profile.theme === undefined ? undefined : context.themes?.find(candidate => candidate.name === profile.theme);
+    if (theme === undefined) return;
+
+    const incompatible = incompatiblePackages(theme, profile);
+    if (incompatible.length > 0) {
+        shell.diagnostics.push({
+            code: ShellDiagnosticCode.ProfileThemeIncompatible,
+            subject: theme.name,
+            message: `Theme '${theme.name}' does not support ${incompatible.length === 1 ? 'package' : 'packages'} ${incompatible.map(name => `'${name}'`).join(', ')} of profile '${profile.name}'`,
+        });
+    }
+}
+
+function checkAvailablePackages(shell: EffectiveShell, profile: UiProfile, context: ShellResolutionContext): void {
+    const available = context.availablePackages;
+    if (available === undefined) return;
+
+    for (const name of profile.packages.filter(candidate => !available.includes(candidate))) {
+        shell.diagnostics.push({
+            code: ShellDiagnosticCode.ProfilePackageMissing,
+            subject: name,
+            message: `Package '${name}' of profile '${profile.name}' is not available`,
+        });
     }
 }
 
@@ -364,17 +385,24 @@ export function templatePlacement(templateName: string, shellName: string, templ
     while (current !== undefined && !visited.has(current.name)) {
         visited.add(current.name);
         if (current.fitsSlot === undefined) return undefined;
-        const separator = current.fitsSlot.lastIndexOf('.');
-        const qualifier = separator < 0 ? undefined : current.fitsSlot.slice(0, separator);
-        const slot = separator < 0 ? current.fitsSlot : current.fitsSlot.slice(separator + 1);
-        if (qualifier === shellName) return { template: current.name, slot: slot, qualifier };
-        const self: ScreenTemplate = current;
-        const container = templates.find(template => template !== self && (qualifier === undefined || template.name === qualifier) && template.slots.some(candidate => candidate.name === slot));
-        if (container === undefined) return { template: current.name, slot: slot, qualifier };
+        const { qualifier, slot } = splitFitsSlot(current.fitsSlot);
+        const container = qualifier === shellName ? undefined : containerOf(current, qualifier, slot, templates);
+        if (container === undefined) return { template: current.name, slot, qualifier };
         current = container;
     }
 
     return undefined;
+}
+
+function splitFitsSlot(fitsSlot: string): { qualifier: string | undefined; slot: string } {
+    const separator = fitsSlot.lastIndexOf('.');
+    return separator < 0
+        ? { qualifier: undefined, slot: fitsSlot }
+        : { qualifier: fitsSlot.slice(0, separator), slot: fitsSlot.slice(separator + 1) };
+}
+
+function containerOf(template: ScreenTemplate, qualifier: string | undefined, slot: string, templates: readonly ScreenTemplate[]): ScreenTemplate | undefined {
+    return templates.find(candidate => candidate !== template && (qualifier === undefined || candidate.name === qualifier) && candidate.slots.some(item => item.name === slot));
 }
 
 /**

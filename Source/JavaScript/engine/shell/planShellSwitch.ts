@@ -21,6 +21,17 @@ const blocking = new Set<ShellDiagnosticCode>([
     ShellDiagnosticCode.RootTemplateCycle,
 ]);
 
+interface ShellPair {
+    current: EffectiveShell;
+    candidate: EffectiveShell;
+}
+
+interface SlotUse {
+    slot: string;
+    screens: string[];
+    remap: SlotRemap | undefined;
+}
+
 /**
  * Plans switching the application's shell: where the content of every slot of the current shell goes in the new one, what would be
  * lost, and what stops the switch. The pre-flight of "Use this shell"; the host shows the plan, offers the choices of any unresolved
@@ -45,33 +56,12 @@ export function planShellSwitch(
     templates: readonly ScreenTemplate[] = [],
     remaps: SlotRemaps = {},
 ): ShellSwitchPlan {
-    const users = new Map<string, string[]>();
-    const used: string[] = [];
-    for (const screen of screens) {
-        for (const slot of slotsUsedBy(screen, current.name, templates)) {
-            const names = users.get(slot) ?? [];
-            if (!names.includes(screen.name)) names.push(screen.name);
-            users.set(slot, names);
-            if (!used.includes(slot)) used.push(slot);
-        }
-    }
-
+    const users = usersBySlot(screens, current, templates);
+    const shells: ShellPair = { current, candidate };
     const blockers: ShellDiagnostic[] = [];
-    const slots = [...current.slots, ...used.filter(slot => !current.slots.includes(slot))];
-    const moves = slots.map(slot => moveOf(slot, current, candidate, users.get(slot) ?? [], remaps[slot], blockers));
-
-    const addPackages: string[] = [];
-    const warnings: ShellDiagnostic[] = [];
-    for (const diagnostic of candidate.diagnostics) {
-        if (diagnostic.code === ShellDiagnosticCode.ProfileSlotUnplaced) continue;
-        if (diagnostic.code === ShellDiagnosticCode.RootTemplateBlueprintNotInstalled) {
-            if (candidate.package !== undefined && !addPackages.includes(candidate.package)) addPackages.push(candidate.package);
-        } else if (blocking.has(diagnostic.code)) {
-            blockers.unshift(diagnostic);
-        } else {
-            warnings.push(diagnostic);
-        }
-    }
+    const slots = [...current.slots, ...[...users.keys()].filter(slot => !current.slots.includes(slot))];
+    const moves = slots.map(slot => moveOf({ slot, screens: users.get(slot) ?? [], remap: remaps[slot] }, shells, blockers));
+    const { addPackages, warnings } = sortCandidateDiagnostics(candidate, blockers);
 
     return {
         from: current.name,
@@ -87,53 +77,102 @@ export function planShellSwitch(
     };
 }
 
-function moveOf(slot: string, current: EffectiveShell, candidate: EffectiveShell, screens: string[], remap: SlotRemap | undefined, blockers: ShellDiagnostic[]): ShellSlotMove {
-    const move = (action: ShellSlotAction, target: string | undefined, description: string): ShellSlotMove =>
-        target === undefined ? { slot, action, screens, description } : { slot, action, target, screens, description };
-
-    if (current.slots.includes(slot) && slot === current.primarySlot) {
-        return candidate.primarySlot === slot
-            ? move(ShellSlotAction.Keep, slot, keepText(slot, screens))
-            : move(ShellSlotAction.Primary, candidate.primarySlot, primaryText(slot, candidate, screens));
+function usersBySlot(screens: readonly Screen[], current: EffectiveShell, templates: readonly ScreenTemplate[]): Map<string, string[]> {
+    const users = new Map<string, string[]>();
+    for (const screen of screens) {
+        for (const slot of slotsUsedBy(screen, current.name, templates)) {
+            const names = users.get(slot) ?? [];
+            if (!names.includes(screen.name)) names.push(screen.name);
+            users.set(slot, names);
+        }
     }
 
-    if (candidate.slots.includes(slot)) return move(ShellSlotAction.Keep, slot, keepText(slot, screens));
-    if (slot === contentSlot && current.slots.includes(slot)) return move(ShellSlotAction.Primary, candidate.primarySlot, primaryText(slot, candidate, screens));
-    if (screens.length === 0) return move(ShellSlotAction.Unused, undefined, `Slot '${slot}' of shell '${current.name}' has no counterpart in shell '${candidate.name}'; no screen uses it`);
-
-    return remapped(slot, candidate, screens, remap, blockers);
+    return users;
 }
 
-function remapped(slot: string, candidate: EffectiveShell, screens: string[], remap: SlotRemap | undefined, blockers: ShellDiagnostic[]): ShellSlotMove {
+function sortCandidateDiagnostics(candidate: EffectiveShell, blockers: ShellDiagnostic[]): { addPackages: string[]; warnings: ShellDiagnostic[] } {
+    const addPackages: string[] = [];
+    const warnings: ShellDiagnostic[] = [];
+    for (const diagnostic of candidate.diagnostics.filter(item => item.code !== ShellDiagnosticCode.ProfileSlotUnplaced)) {
+        if (diagnostic.code === ShellDiagnosticCode.RootTemplateBlueprintNotInstalled) {
+            addOnce(addPackages, candidate.package);
+        } else if (blocking.has(diagnostic.code)) {
+            blockers.unshift(diagnostic);
+        } else {
+            warnings.push(diagnostic);
+        }
+    }
+
+    return { addPackages, warnings };
+}
+
+function addOnce(packages: string[], name: string | undefined): void {
+    if (name !== undefined && !packages.includes(name)) packages.push(name);
+}
+
+function moveFor(use: SlotUse, action: ShellSlotAction, target: string | undefined, description: string): ShellSlotMove {
+    const { slot, screens } = use;
+    return target === undefined ? { slot, action, screens, description } : { slot, action, target, screens, description };
+}
+
+function moveOf(use: SlotUse, shells: ShellPair, blockers: ShellDiagnostic[]): ShellSlotMove {
+    const { slot, screens } = use;
+    const unused = `Slot '${slot}' of shell '${shells.current.name}' has no counterpart in shell '${shells.candidate.name}'; no screen uses it`;
+    return defaultMove(use, shells)
+        ?? (screens.length === 0 ? moveFor(use, ShellSlotAction.Unused, undefined, unused) : remapped(use, shells.candidate, blockers));
+}
+
+function defaultMove(use: SlotUse, { current, candidate }: ShellPair): ShellSlotMove | undefined {
+    const { slot, screens } = use;
+    const inCurrent = current.slots.includes(slot);
+    const keep = (): ShellSlotMove => moveFor(use, ShellSlotAction.Keep, slot, keepText(slot, screens));
+    const primary = (): ShellSlotMove => moveFor(use, ShellSlotAction.Primary, candidate.primarySlot, primaryText(slot, candidate, screens));
+
+    if (inCurrent && slot === current.primarySlot) return candidate.primarySlot === slot ? keep() : primary();
+    if (candidate.slots.includes(slot)) return keep();
+    return slot === contentSlot && inCurrent ? primary() : undefined;
+}
+
+function remapped(use: SlotUse, candidate: EffectiveShell, blockers: ShellDiagnostic[]): ShellSlotMove {
+    const { slot, screens, remap } = use;
+    const decided = decidedMove(use, candidate);
+    if (decided !== undefined) return decided;
+
     const who = screensText(screens);
-    const place = screens.length === 1 ? 'places' : 'place';
-    const choices: SlotRemap[] = [
+    const message = remap?.action === ShellSlotAction.MapTo
+        ? `The content in slot '${slot}' cannot be mapped to '${remap.target ?? ''}': shell '${candidate.name}' has no such slot`
+        : `${who.count} (${who.names}) ${placeVerb(screens)} content in slot '${slot}', which shell '${candidate.name}' does not have: move it into '${candidate.primarySlot}', map it to another slot or drop it`;
+    blockers.push({ code: ShellDiagnosticCode.ProfileSlotUnplaced, subject: slot, message });
+    return { slot, action: ShellSlotAction.Unresolved, screens, description: message, choices: choicesFor(candidate) };
+}
+
+function decidedMove(use: SlotUse, candidate: EffectiveShell): ShellSlotMove | undefined {
+    const { slot, screens, remap } = use;
+    const content = `The content that ${screensText(screens).names} ${placeVerb(screens)} in slot '${slot}'`;
+    switch (remap?.action) {
+        case ShellSlotAction.MoveToPrimary:
+            return moveFor(use, ShellSlotAction.MoveToPrimary, candidate.primarySlot, `${content} moves into '${candidate.primarySlot}', the primary slot of shell '${candidate.name}'`);
+        case ShellSlotAction.Drop:
+            return moveFor(use, ShellSlotAction.Drop, undefined, `${content} is dropped`);
+        case ShellSlotAction.MapTo:
+            return remap.target !== undefined && candidate.slots.includes(remap.target)
+                ? moveFor(use, ShellSlotAction.MapTo, remap.target, `${content} moves into '${remap.target}' of shell '${candidate.name}'`)
+                : undefined;
+        default:
+            return undefined;
+    }
+}
+
+function choicesFor(candidate: EffectiveShell): SlotRemap[] {
+    return [
         { action: ShellSlotAction.MoveToPrimary, target: candidate.primarySlot },
         ...candidate.slots.filter(name => name !== candidate.primarySlot).map((name): SlotRemap => ({ action: ShellSlotAction.MapTo, target: name })),
         { action: ShellSlotAction.Drop },
     ];
-    const decided = (action: ShellSlotAction, target: string | undefined, description: string): ShellSlotMove =>
-        target === undefined ? { slot, action, screens, description } : { slot, action, target, screens, description };
+}
 
-    if (remap?.action === ShellSlotAction.MoveToPrimary) {
-        return decided(ShellSlotAction.MoveToPrimary, candidate.primarySlot, `The content that ${who.names} ${place} in slot '${slot}' moves into '${candidate.primarySlot}', the primary slot of shell '${candidate.name}'`);
-    }
-
-    if (remap?.action === ShellSlotAction.Drop) {
-        return decided(ShellSlotAction.Drop, undefined, `The content that ${who.names} ${place} in slot '${slot}' is dropped`);
-    }
-
-    let message = `${who.count} (${who.names}) ${place} content in slot '${slot}', which shell '${candidate.name}' does not have: move it into '${candidate.primarySlot}', map it to another slot or drop it`;
-    if (remap?.action === ShellSlotAction.MapTo) {
-        if (remap.target !== undefined && candidate.slots.includes(remap.target)) {
-            return decided(ShellSlotAction.MapTo, remap.target, `The content that ${who.names} ${place} in slot '${slot}' moves into '${remap.target}' of shell '${candidate.name}'`);
-        }
-
-        message = `The content in slot '${slot}' cannot be mapped to '${remap.target ?? ''}': shell '${candidate.name}' has no such slot`;
-    }
-
-    blockers.push({ code: ShellDiagnosticCode.ProfileSlotUnplaced, subject: slot, message });
-    return { slot, action: ShellSlotAction.Unresolved, screens, description: message, choices };
+function placeVerb(screens: string[]): string {
+    return screens.length === 1 ? 'places' : 'place';
 }
 
 function keepText(slot: string, screens: string[]): string {

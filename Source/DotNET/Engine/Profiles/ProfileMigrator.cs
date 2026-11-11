@@ -51,7 +51,7 @@ public static partial class ProfileMigrator
         var root = profile.Root;
         if (root is null)
         {
-            var template = DeriveRoot(NonBlank(legacy.Shell), layout, profile, library, diagnostics);
+            var template = DeriveRoot(NonBlank(legacy.Shell), layout, new Resolution(profile, library, diagnostics));
             if (template is not null)
             {
                 root = new RootTemplate(template);
@@ -63,25 +63,7 @@ public static partial class ProfileMigrator
             layout = null;
         }
 
-        var navigationMode = NonBlank(legacy.NavigationMode);
-        if (navigationMode is not null)
-        {
-            if (root is null)
-            {
-                diagnostics.Add(new(
-                    ProfileMigrationDiagnosticCode.LegacyNavigationModeWithoutRoot,
-                    $"Navigation mode '{navigationMode}' of profile '{profile.Name}' cannot be kept: the profile has no root template to carry it",
-                    navigationMode));
-            }
-            else if (root.Options?.ContainsKey(NavigationModeOption) != true)
-            {
-                var options = new Dictionary<string, JsonNode?>(root.Options ?? new Dictionary<string, JsonNode?>(), StringComparer.Ordinal)
-                {
-                    [NavigationModeOption] = JsonValue.Create(navigationMode)
-                };
-                root = root with { Options = options };
-            }
-        }
+        root = WithNavigationMode(root, NonBlank(legacy.NavigationMode), profile, diagnostics);
 
         var migrated = profile with
         {
@@ -106,7 +88,35 @@ public static partial class ProfileMigrator
         return match.Success ? $"^{match.Groups["major"].Value}.{match.Groups["minor"].Value}" : null;
     }
 
-    static TemplateReference? DeriveRoot(string? shell, string? layout, UiProfile profile, TemplateLibrary library, List<ProfileMigrationDiagnostic> diagnostics)
+    static RootTemplate? WithNavigationMode(RootTemplate? root, string? navigationMode, UiProfile profile, List<ProfileMigrationDiagnostic> diagnostics)
+    {
+        if (navigationMode is null)
+        {
+            return root;
+        }
+
+        if (root is null)
+        {
+            diagnostics.Add(new(
+                ProfileMigrationDiagnosticCode.LegacyNavigationModeWithoutRoot,
+                $"Navigation mode '{navigationMode}' of profile '{profile.Name}' cannot be kept: the profile has no root template to carry it",
+                navigationMode));
+            return root;
+        }
+
+        if (root.Options?.ContainsKey(NavigationModeOption) == true)
+        {
+            return root;
+        }
+
+        var options = new Dictionary<string, JsonNode?>(root.Options ?? new Dictionary<string, JsonNode?>(), StringComparer.Ordinal)
+        {
+            [NavigationModeOption] = JsonValue.Create(navigationMode)
+        };
+        return root with { Options = options };
+    }
+
+    static TemplateReference? DeriveRoot(string? shell, string? layout, Resolution resolution)
     {
         if (shell is null && layout is null)
         {
@@ -115,30 +125,32 @@ public static partial class ProfileMigrator
 
         if (shell is null)
         {
-            return FromLayoutName(layout!, null, profile, library, diagnostics);
+            return FromLayoutName(layout!, null, resolution);
         }
 
-        var blueprint = library.Blueprints.FirstOrDefault(candidate => candidate.Manifest.Name == shell && candidate.Manifest.Kind == PackageKind.Blueprint);
+        var blueprint = resolution.Library.Blueprints.FirstOrDefault(candidate => candidate.Manifest.Name == shell && candidate.Manifest.Kind == PackageKind.Blueprint);
         if (blueprint is null)
         {
-            diagnostics.Add(new(
+            resolution.Diagnostics.Add(new(
                 ProfileMigrationDiagnosticCode.LegacyShellNotInstalled,
-                $"Shell '{shell}' of profile '{profile.Name}' is not an available blueprint",
+                $"Shell '{shell}' of profile '{resolution.Profile.Name}' is not an available blueprint",
                 shell));
-            return layout is null ? null : FromLayoutName(layout, null, profile, library, diagnostics);
+            return layout is null ? null : FromLayoutName(layout, null, resolution);
         }
 
-        if (layout is not null)
-        {
-            return FromLayoutName(layout, blueprint, profile, library, diagnostics);
-        }
+        return layout is not null
+            ? FromLayoutName(layout, blueprint, resolution)
+            : FirstShellReference(blueprint, shell, resolution);
+    }
 
+    static TemplateReference? FirstShellReference(TemplateSource blueprint, string shell, Resolution resolution)
+    {
         var first = FirstShellOf(blueprint);
         if (first is null)
         {
-            diagnostics.Add(new(
+            resolution.Diagnostics.Add(new(
                 ProfileMigrationDiagnosticCode.LegacyShellHasNoLayout,
-                $"Blueprint '{shell}' of profile '{profile.Name}' provides no layout or root template an application can use as its shell",
+                $"Blueprint '{shell}' of profile '{resolution.Profile.Name}' provides no layout or root template an application can use as its shell",
                 shell));
             return null;
         }
@@ -146,8 +158,9 @@ public static partial class ProfileMigrator
         return BlueprintReference(blueprint, first);
     }
 
-    static TemplateReference? FromLayoutName(string name, TemplateSource? preferred, UiProfile profile, TemplateLibrary library, List<ProfileMigrationDiagnostic> diagnostics)
+    static TemplateReference? FromLayoutName(string name, TemplateSource? preferred, Resolution resolution)
     {
+        var (profile, library, diagnostics) = resolution;
         if (preferred is not null && HasShell(preferred, name))
         {
             return BlueprintReference(preferred, name);
@@ -269,4 +282,6 @@ public static partial class ProfileMigrator
 
     [GeneratedRegex(@"^(?<major>\d+)\.(?<minor>\d+)", RegexOptions.None, matchTimeoutMilliseconds: 200)]
     private static partial Regex VersionPrefix();
+
+    sealed record Resolution(UiProfile Profile, TemplateLibrary Library, List<ProfileMigrationDiagnostic> Diagnostics);
 }

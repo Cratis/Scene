@@ -21,6 +21,22 @@ export interface VersionRangeFixtureCase {
     expected: boolean;
 }
 
+export interface VersionRangeValidityFixtureCase {
+    range: string | null;
+    expected: boolean;
+}
+
+export interface VersionValidityFixtureCase {
+    version: string | null;
+    expected: boolean;
+}
+
+export interface VersionComparisonFixtureCase {
+    left: string;
+    right: string;
+    expected: number;
+}
+
 export interface CatalogFixtureCase {
     name: string;
     query: string;
@@ -32,6 +48,9 @@ interface FixtureCorpus {
     catalog: ScenePackage[];
     resolutionCases: ResolutionFixtureCase[];
     versionRangeCases: VersionRangeFixtureCase[];
+    versionRangeValidityCases: VersionRangeValidityFixtureCase[];
+    versionValidityCases: VersionValidityFixtureCase[];
+    versionComparisonCases: VersionComparisonFixtureCase[];
     catalogCases: CatalogFixtureCase[];
 }
 

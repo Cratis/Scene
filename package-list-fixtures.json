@@ -1805,6 +1805,2723 @@
         "message": "",
         "theme": "Nowhere"
       }
+    },
+    {
+      "name": "add a package with several missing dependencies",
+      "description": "a message names every missing dependency and says \"are\"",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "add",
+        "name": "twoGhosts"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Package 'Two Ghosts' needs 'ghost1', 'ghost2', which are not available."
+      }
+    },
+    {
+      "name": "choose a blueprint that has no shell",
+      "description": "no layouts and no shell given: refused",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpNone"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Blueprint None has no shell to offer."
+      }
+    },
+    {
+      "name": "choose a named shell on a blueprint with no layouts",
+      "description": "the named shell is enough",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpNone",
+        "shell": "Custom"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bpNone"
+        ],
+        "added": [
+          "bpNone"
+        ],
+        "removed": [],
+        "message": "Shell set to Blueprint None.",
+        "root": {
+          "source": "Blueprint",
+          "id": "Custom",
+          "blueprint": "bpNone",
+          "version": "^1.0"
+        }
+      }
+    },
+    {
+      "name": "choose a blueprint with several missing dependencies",
+      "description": "refused with every missing dependency named",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpGhost"
+      },
+      "expected": {
+        "outcome": "refused",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Blueprint Ghost needs 'ghost1', 'ghost2', which are not available."
+      }
+    },
+    {
+      "name": "choose a blueprint that is already listed",
+      "description": "it is moved to the strongest position",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC",
+          "lib"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpC"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "lib",
+          "bpC"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Shell set to Blueprint C.",
+        "root": {
+          "source": "Blueprint",
+          "id": "CShell",
+          "blueprint": "bpC",
+          "version": "^1.0"
+        }
+      }
+    },
+    {
+      "name": "choose a blueprint another package needs",
+      "description": "it stays where it is because a package above depends on it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC",
+          "x"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpC"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bpC",
+          "x"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Shell set to Blueprint C.",
+        "root": {
+          "source": "Blueprint",
+          "id": "CShell",
+          "blueprint": "bpC",
+          "version": "^1.0"
+        }
+      }
+    },
+    {
+      "name": "swap away from a blueprint another package needs",
+      "description": "the previous blueprint stays listed",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC",
+          "x"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CShell",
+            "blueprint": "bpC"
+          }
+        }
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpD"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bpC",
+          "x",
+          "bpD"
+        ],
+        "added": [
+          "bpD"
+        ],
+        "removed": [],
+        "message": "Shell set to Blueprint D.",
+        "root": {
+          "source": "Blueprint",
+          "id": "DShell",
+          "blueprint": "bpD",
+          "version": "^2.1"
+        }
+      }
+    },
+    {
+      "name": "swap from a shell blueprint that is not listed",
+      "description": "nothing to remove",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CShell",
+            "blueprint": "bpC"
+          }
+        }
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpD"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bpD"
+        ],
+        "added": [
+          "bpD"
+        ],
+        "removed": [],
+        "message": "Shell set to Blueprint D.",
+        "root": {
+          "source": "Blueprint",
+          "id": "DShell",
+          "blueprint": "bpD",
+          "version": "^2.1"
+        }
+      }
+    },
+    {
+      "name": "choose the current shell blueprint again",
+      "description": "the previous blueprint is the one chosen, so it is not removed",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CShell",
+            "blueprint": "bpC"
+          }
+        }
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "blueprint",
+        "blueprint": "bpC"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core",
+          "bpC"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Shell set to Blueprint C.",
+        "root": {
+          "source": "Blueprint",
+          "id": "CShell",
+          "blueprint": "bpC",
+          "version": "^1.0"
+        }
+      }
+    },
+    {
+      "name": "describe a shell blueprint another package needs",
+      "description": "the shell reason wins over needed by",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC",
+          "x"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "CShell",
+            "blueprint": "bpC"
+          }
+        }
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "x",
+            "displayName": "X",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "bpC",
+            "displayName": "Blueprint C",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "reason": {
+              "kind": "usedByShell",
+              "packages": [],
+              "text": "Used by Shell"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "shell",
+              "packages": [],
+              "text": "Blueprint C is the blueprint of the current shell, so it stays while it is the shell."
+            }
+          },
+          {
+            "position": 3,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "lib",
+            "displayName": "Lib",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpD",
+            "displayName": "Blueprint D",
+            "version": "2.1.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpNone",
+            "displayName": "Blueprint None",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpGhost",
+            "displayName": "Blueprint Ghost",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "twoGhosts",
+            "displayName": "Two Ghosts",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "themed",
+            "displayName": "Themed",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "describe a package needed by one that lists it twice",
+      "description": "needed by names the dependant once",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "bpC",
+          "x"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "describe"
+      },
+      "expected": {
+        "rows": [
+          {
+            "position": 1,
+            "name": "x",
+            "displayName": "X",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "reason": {
+              "kind": "chosen",
+              "packages": [],
+              "text": "Chosen"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false
+          },
+          {
+            "position": 2,
+            "name": "bpC",
+            "displayName": "Blueprint C",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "reason": {
+              "kind": "neededBy",
+              "packages": [
+                "X"
+              ],
+              "text": "Needed by X"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "neededBy",
+              "packages": [
+                "X"
+              ],
+              "text": "Blueprint C is needed by X, so it stays while they are listed."
+            }
+          },
+          {
+            "position": 3,
+            "name": "core",
+            "displayName": "Core",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "reason": {
+              "kind": "alwaysLast",
+              "packages": [],
+              "text": "Always last"
+            },
+            "canMoveUp": false,
+            "canMoveDown": false,
+            "lock": {
+              "kind": "core",
+              "packages": [],
+              "text": "Core is the fallback every component name resolves against, so it is always last and cannot be removed."
+            }
+          }
+        ],
+        "addable": [
+          {
+            "name": "lib",
+            "displayName": "Lib",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpD",
+            "displayName": "Blueprint D",
+            "version": "2.1.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpNone",
+            "displayName": "Blueprint None",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "bpGhost",
+            "displayName": "Blueprint Ghost",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "twoGhosts",
+            "displayName": "Two Ghosts",
+            "version": "1.0.0",
+            "kind": "ComponentLibrary",
+            "alsoAdds": [],
+            "text": ""
+          },
+          {
+            "name": "themed",
+            "displayName": "Themed",
+            "version": "1.0.0",
+            "kind": "Styling",
+            "alsoAdds": [],
+            "text": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "move without listing core",
+      "description": "core stays unlisted in the written list",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "lib",
+          "bpC"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "move",
+        "name": "lib",
+        "direction": "down"
+      },
+      "expected": {
+        "outcome": "unchanged",
+        "packages": [
+          "lib",
+          "bpC"
+        ],
+        "added": [],
+        "removed": [],
+        "message": ""
+      }
+    },
+    {
+      "name": "remove without listing core",
+      "description": "core stays unlisted in the written list",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "lib",
+          "bpC"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "remove",
+        "name": "lib"
+      },
+      "expected": {
+        "outcome": "removed",
+        "packages": [
+          "bpC"
+        ],
+        "added": [],
+        "removed": [
+          "lib"
+        ],
+        "message": "Removed Lib."
+      }
+    },
+    {
+      "name": "choose a theme whose package cannot be added",
+      "description": "the theme is chosen and the refusal is the message",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core"
+        ]
+      },
+      "packages": [
+        {
+          "name": "core",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Core"
+        },
+        {
+          "name": "lib",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [],
+          "components": [
+            "button"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Lib"
+        },
+        {
+          "name": "bpC",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "CShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint C"
+        },
+        {
+          "name": "bpD",
+          "version": "2.1.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [
+            "DShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint D"
+        },
+        {
+          "name": "bpNone",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint None"
+        },
+        {
+          "name": "bpGhost",
+          "version": "1.0.0",
+          "kind": "Blueprint",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [
+            "GShell"
+          ],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Blueprint Ghost"
+        },
+        {
+          "name": "x",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "bpC"
+            },
+            {
+              "name": "bpC"
+            }
+          ],
+          "components": [
+            "card"
+          ],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "X"
+        },
+        {
+          "name": "twoGhosts",
+          "version": "1.0.0",
+          "kind": "ComponentLibrary",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            },
+            {
+              "name": "ghost2"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [],
+          "displayName": "Two Ghosts"
+        },
+        {
+          "name": "themed",
+          "version": "1.0.0",
+          "kind": "Styling",
+          "dependencies": [
+            {
+              "name": "ghost1"
+            }
+          ],
+          "components": [],
+          "layouts": [],
+          "screenTemplates": [],
+          "dialogTemplates": [],
+          "themes": [
+            "Ghostly"
+          ],
+          "displayName": "Themed"
+        }
+      ],
+      "action": {
+        "kind": "theme",
+        "theme": "Ghostly"
+      },
+      "expected": {
+        "outcome": "changed",
+        "packages": [
+          "core"
+        ],
+        "added": [],
+        "removed": [],
+        "message": "Package 'Themed' needs 'ghost1', which is not available.",
+        "theme": "Ghostly"
+      }
     }
   ]
 }

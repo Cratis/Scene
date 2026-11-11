@@ -15,7 +15,7 @@
  */
 export function isVersionSatisfiedBy(version: string, range: string | undefined): boolean {
     const trimmed = range?.trim();
-    if (!trimmed || trimmed === '*') return true;
+    if (matchesAnyVersion(trimmed)) return true;
 
     const actual = parseVersion(version);
     if (!actual) return false;
@@ -24,22 +24,7 @@ export function isVersionSatisfiedBy(version: string, range: string | undefined)
     const required = parseVersion(literal);
     if (!required) return false;
 
-    switch (operator) {
-        case '^':
-            return compare(actual, required) >= 0 && compare(actual, caretUpperBound(required)) < 0;
-        case '~':
-            return compare(actual, required) >= 0 && compare(actual, [required[0], required[1] + 1, 0]) < 0;
-        case '>=':
-            return compare(actual, required) >= 0;
-        case '>':
-            return compare(actual, required) > 0;
-        case '<=':
-            return compare(actual, required) <= 0;
-        case '<':
-            return compare(actual, required) < 0;
-        default:
-            return compare(actual, required) === 0;
-    }
+    return satisfies(operator, actual, required);
 }
 
 /**
@@ -49,7 +34,7 @@ export function isVersionSatisfiedBy(version: string, range: string | undefined)
  */
 export function isValidVersionRange(range: string | undefined): boolean {
     const trimmed = range?.trim();
-    if (!trimmed || trimmed === '*') return true;
+    if (matchesAnyVersion(trimmed)) return true;
     return parseVersion(splitRange(trimmed)[1]) !== undefined;
 }
 
@@ -73,6 +58,37 @@ export function compareVersions(left: string, right: string): number {
 }
 
 type Version = [number, number, number];
+
+const matchesAnyVersion = (trimmedRange: string | undefined): trimmedRange is undefined | '' | '*' => !trimmedRange || trimmedRange === '*';
+
+function satisfies(operator: string, actual: Version, required: Version): boolean {
+    switch (operator) {
+        case '^':
+            return isWithin(actual, required, caretUpperBound(required));
+        case '~':
+            return isWithin(actual, required, [required[0], required[1] + 1, 0]);
+        default:
+            return satisfiesComparison(operator, compare(actual, required));
+    }
+}
+
+function satisfiesComparison(operator: string, comparison: number): boolean {
+    switch (operator) {
+        case '>=':
+            return comparison >= 0;
+        case '>':
+            return comparison > 0;
+        case '<=':
+            return comparison <= 0;
+        case '<':
+            return comparison < 0;
+        default:
+            return comparison === 0;
+    }
+}
+
+const isWithin = (actual: Version, lower: Version, upperExclusive: Version): boolean =>
+    compare(actual, lower) >= 0 && compare(actual, upperExclusive) < 0;
 
 function splitRange(range: string): [string, string] {
     for (const operator of ['>=', '<=', '^', '~', '>', '<', '=']) {

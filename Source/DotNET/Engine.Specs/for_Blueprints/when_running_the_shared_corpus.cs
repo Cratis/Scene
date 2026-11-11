@@ -16,10 +16,17 @@ public class when_running_the_shared_corpus : Specification
         Converters = { new JsonStringEnumConverter() }
     };
 
+    static readonly JsonSerializerOptions _raw = new()
+    {
+        Converters = { new JsonStringEnumConverter() },
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     List<VerificationCase> _verification = null!;
     List<CatalogCase> _catalog = null!;
     List<PinCase> _pin = null!;
     List<CompareCase> _compare = null!;
+    List<string> _pristine = null!;
     List<(VerificationCase Case, IReadOnlyList<string> Problems)> _verified = null!;
     List<(CatalogCase Case, IReadOnlyList<BlueprintCatalogEntry> Entries)> _described = null!;
     List<(PinCase Case, BlueprintPinEvaluation Evaluation)> _evaluated = null!;
@@ -37,6 +44,7 @@ public class when_running_the_shared_corpus : Specification
         _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options);
         _pin = document.RootElement.GetProperty("pin").Deserialize<List<PinCase>>(_options);
         _compare = document.RootElement.GetProperty("compare").Deserialize<List<CompareCase>>(_options);
+        _pristine = [.. _verification.Select(Snapshot)];
     }
 
     void Because()
@@ -53,6 +61,24 @@ public class when_running_the_shared_corpus : Specification
         {
             (fixture.Name, string.Join('\n', problems)).ShouldEqual((fixture.Name, string.Join('\n', fixture.ExpectedProblems)));
         }
+    }
+
+    [Fact]
+    void should_write_the_problems_in_the_order_they_are_found()
+    {
+        var fixture = _verification.Single(candidate => candidate.Name == "screen set that is inconsistent");
+
+        var written = JsonSerializer.Serialize(BlueprintVerification.Verify(fixture.Source, fixture.Library, fixture.Options), _raw);
+
+        written.ShouldEqual("[\"Blueprint '@cratis/scene.blueprint.crm' declares screen 'Leads' more than once\",\"Blueprint '@cratis/scene.blueprint.crm' declares a screen set entry without a name\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' uses template 'Missing', which is not available\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' declares no title\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' has parent 'Nowhere', which is not in the screen set\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'A' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'B' is named in the screen set but the package does not provide it\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'A' is its own ancestor\",\"Blueprint '@cratis/scene.blueprint.crm' screen 'B' is its own ancestor\"]");
+    }
+
+    [Fact]
+    void should_leave_the_blueprint_the_library_and_the_options_as_they_were()
+    {
+        var mismatches = _verification.Where((fixture, index) => Snapshot(fixture) != _pristine[index]).Select(fixture => fixture.Name);
+
+        mismatches.ShouldBeEmpty();
     }
 
     [Fact]
@@ -81,6 +107,8 @@ public class when_running_the_shared_corpus : Specification
             ((fixture.Left, fixture.Right), Math.Sign(PackageVersionRange.CompareVersions(fixture.Left, fixture.Right))).ShouldEqual(((fixture.Left, fixture.Right), fixture.Expected));
         }
     }
+
+    static string Snapshot(VerificationCase fixture) => JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw);
 
     record VerificationCase(string Name, BlueprintSource Source, IReadOnlyList<TemplateSource> Library, BlueprintVerificationOptions? Options, IReadOnlyList<string> ExpectedProblems);
 

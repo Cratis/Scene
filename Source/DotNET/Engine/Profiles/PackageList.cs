@@ -42,79 +42,13 @@ public static class PackageList
     {
         var index = IndexOf(catalog);
         var stored = StoredOf(profile);
-        var names = Enumerable.Reverse(stored).ToList();
+        List<string> names = [.. Enumerable.Reverse(stored)];
         var shell = ShellBlueprintOf(profile);
 
-        var rows = names.Select((name, at) =>
-        {
-            index.TryGetValue(name, out var item);
-            var needed = names.Where(other => other != name && DependenciesOf(other, index).Contains(name)).Select(other => NameOf(index, other)).ToList();
-            var displayName = NameOf(index, name);
-            PackageReason reason;
-            PackageLock? packageLock = null;
-            if (name == PackageResolver.Core)
-            {
-                reason = new(PackageReasonKind.AlwaysLast, [], "Always last");
-                packageLock = new(PackageLockKind.Core, [], $"{displayName} is the fallback every component name resolves against, so it is always last and cannot be removed.");
-            }
-            else if (name == shell)
-            {
-                reason = new(PackageReasonKind.UsedByShell, [], "Used by Shell");
-                packageLock = new(PackageLockKind.Shell, [], $"{displayName} is the blueprint of the current shell, so it stays while it is the shell.");
-            }
-            else if (needed.Count > 0)
-            {
-                reason = new(PackageReasonKind.NeededBy, needed, $"Needed by {string.Join(", ", needed)}");
-                packageLock = new(PackageLockKind.NeededBy, needed, $"{displayName} is needed by {string.Join(", ", needed)}, so it stays while they are listed.");
-            }
-            else
-            {
-                reason = new(PackageReasonKind.Chosen, [], "Chosen");
-            }
-
-            return new PackageRow(
-                at + 1,
-                name,
-                displayName,
-                item?.Version ?? string.Empty,
-                item?.Kind ?? PackageKind.ComponentLibrary,
-                item?.Description,
-                reason,
-                name != PackageResolver.Core && at > 0 && MoveIsValid(stored, name, MoveDirection.Up, index),
-                name != PackageResolver.Core && at < names.Count - 1 && MoveIsValid(stored, name, MoveDirection.Down, index),
-                packageLock);
-        }).ToList();
-
-        var listed = stored.ToHashSet(StringComparer.Ordinal);
-        var addable = catalog.Where(item => !listed.Contains(item.Name)).Select(item =>
-        {
-            var alsoAdds = ClosureOf(item.Name, listed, index).Order.Where(name => name != item.Name).Select(name => NameOf(index, name)).ToList();
-            return new AddablePackage(item.Name, NameOf(index, item.Name), item.Version, item.Kind, item.Description, alsoAdds, alsoAdds.Count == 0 ? string.Empty : $"Also adds {string.Join(", ", alsoAdds)}");
-        }).ToList();
-
-        var byComponent = new Dictionary<string, List<string>>(StringComparer.Ordinal);
-        foreach (var name in names)
-        {
-            foreach (var component in index.TryGetValue(name, out var item) ? item.Components : [])
-            {
-                if (!byComponent.TryGetValue(component, out var suppliers))
-                {
-                    byComponent[component] = suppliers = [];
-                }
-
-                if (!suppliers.Contains(name))
-                {
-                    suppliers.Add(name);
-                }
-            }
-        }
-
-        var supplierTable = byComponent
-            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-            .Select(pair => new ComponentSupplier(pair.Key, pair.Value[0], pair.Value.Skip(1).ToList()))
-            .ToList();
-
-        return new PackageListing(rows, addable, supplierTable);
+        var context = new RowContext(names, stored, shell, index);
+        var rows = names.Select((name, at) => RowOf(name, at, context)).ToList();
+        var addable = AddableOf(catalog, stored.ToHashSet(StringComparer.Ordinal), index);
+        return new PackageListing(rows, addable, SuppliersOf(names, index));
     }
 
     /// <summary>
@@ -141,7 +75,7 @@ public static class PackageList
         var (order, unknown) = ClosureOf(name, stored.ToHashSet(StringComparer.Ordinal), index);
         if (unknown.Count > 0)
         {
-            return Refused(profile, $"Package '{NameOf(index, name)}' needs {string.Join(", ", unknown.Select(item => $"'{item}'"))}, which {(unknown.Count == 1 ? "is" : "are")} not available.");
+            return Refused(profile, NeedsMessage($"Package '{NameOf(index, name)}'", unknown));
         }
 
         var added = order.ConvertAll(item => NameOf(index, item));
@@ -236,41 +170,15 @@ public static class PackageList
             return Refused(profile, $"{NameOf(index, blueprint)} has no shell to offer.");
         }
 
-        var stored = StoredOf(profile);
-        var previous = ShellBlueprintOf(profile);
-        var removed = new List<string>();
-        if (previous is not null && previous != blueprint && stored.Contains(previous))
-        {
-            var needed = stored.Exists(other => other != previous && DependenciesOf(other, index).Contains(previous));
-            if (!needed)
-            {
-                stored = [.. stored.Where(candidate => candidate != previous)];
-                removed.Add(previous);
-            }
-        }
-
+        var (stored, removed) = RetirePreviousShell(StoredOf(profile), ShellBlueprintOf(profile), blueprint, index);
         var (order, unknown) = ClosureOf(blueprint, stored.ToHashSet(StringComparer.Ordinal), index);
         if (unknown.Count > 0)
         {
-            return Refused(profile, $"{NameOf(index, blueprint)} needs {string.Join(", ", unknown.Select(item => $"'{item}'"))}, which {(unknown.Count == 1 ? "is" : "are")} not available.");
+            return Refused(profile, NeedsMessage(NameOf(index, blueprint), unknown));
         }
 
         var added = order.Where(item => item != blueprint).ToList();
-        stored = InsertAboveCore(stored, added, index);
-
-        var dependedOn = stored.Exists(other => other != blueprint && DependenciesOf(other, index).Contains(blueprint));
-        if (stored.Contains(blueprint))
-        {
-            if (!dependedOn)
-            {
-                stored = [.. stored.Where(candidate => candidate != blueprint), blueprint];
-            }
-        }
-        else
-        {
-            stored.Add(blueprint);
-            added.Add(blueprint);
-        }
+        stored = PlaceBlueprint(InsertAboveCore(stored, added, index), blueprint, added, index);
 
         var template = new TemplateReference(TemplateReferenceSource.Blueprint, shellId, blueprint, ProfileMigrator.PinOf(scenePackage.Version));
         var next = WithPackages(profile, stored) with { Root = new RootTemplate(template, profile.Root?.Options) };
@@ -300,6 +208,106 @@ public static class PackageList
             : added with { Profile = chosen, Outcome = PackageEditOutcome.Changed };
     }
 
+    static PackageRow RowOf(string name, int at, RowContext context)
+    {
+        var (names, stored, shell, index) = context;
+        index.TryGetValue(name, out var item);
+        var needed = names.Where(other => other != name && DependenciesOf(other, index).Contains(name)).Select(other => NameOf(index, other)).ToList();
+        var displayName = NameOf(index, name);
+        var (reason, packageLock) = ReasonOf(name, shell, displayName, needed);
+        return new PackageRow(
+            at + 1,
+            name,
+            displayName,
+            item?.Version ?? string.Empty,
+            item?.Kind ?? PackageKind.ComponentLibrary,
+            item?.Description,
+            reason,
+            name != PackageResolver.Core && at > 0 && MoveIsValid(stored, name, MoveDirection.Up, index),
+            name != PackageResolver.Core && at < names.Count - 1 && MoveIsValid(stored, name, MoveDirection.Down, index),
+            packageLock);
+    }
+
+    static (PackageReason Reason, PackageLock? Lock) ReasonOf(string name, string? shell, string displayName, List<string> needed)
+    {
+        if (name == PackageResolver.Core)
+        {
+            return (new(PackageReasonKind.AlwaysLast, [], "Always last"), new(PackageLockKind.Core, [], $"{displayName} is the fallback every component name resolves against, so it is always last and cannot be removed."));
+        }
+
+        if (name == shell)
+        {
+            return (new(PackageReasonKind.UsedByShell, [], "Used by Shell"), new(PackageLockKind.Shell, [], $"{displayName} is the blueprint of the current shell, so it stays while it is the shell."));
+        }
+
+        if (needed.Count > 0)
+        {
+            return (new(PackageReasonKind.NeededBy, needed, $"Needed by {string.Join(", ", needed)}"), new(PackageLockKind.NeededBy, needed, $"{displayName} is needed by {string.Join(", ", needed)}, so it stays while they are listed."));
+        }
+
+        return (new(PackageReasonKind.Chosen, [], "Chosen"), null);
+    }
+
+    static List<AddablePackage> AddableOf(IReadOnlyList<ScenePackage> catalog, HashSet<string> listed, Dictionary<string, ScenePackage> index) =>
+        [.. catalog.Where(item => !listed.Contains(item.Name)).Select(item =>
+        {
+            var alsoAdds = ClosureOf(item.Name, listed, index).Order.Where(name => name != item.Name).Select(name => NameOf(index, name)).ToList();
+            return new AddablePackage(item.Name, NameOf(index, item.Name), item.Version, item.Kind, item.Description, alsoAdds, alsoAdds.Count == 0 ? string.Empty : $"Also adds {string.Join(", ", alsoAdds)}");
+        })];
+
+    static List<ComponentSupplier> SuppliersOf(List<string> names, Dictionary<string, ScenePackage> index)
+    {
+        var byComponent = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        foreach (var name in names)
+        {
+            foreach (var component in index.TryGetValue(name, out var item) ? item.Components : [])
+            {
+                if (!byComponent.TryGetValue(component, out var suppliers))
+                {
+                    byComponent[component] = suppliers = [];
+                }
+
+                if (!suppliers.Contains(name))
+                {
+                    suppliers.Add(name);
+                }
+            }
+        }
+
+        return [.. byComponent
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .Select(pair => new ComponentSupplier(pair.Key, pair.Value[0], pair.Value.Skip(1).ToList()))];
+    }
+
+    static string NeedsMessage(string subject, List<string> unknown) =>
+        $"{subject} needs {string.Join(", ", unknown.Select(item => $"'{item}'"))}, which {(unknown.Count == 1 ? "is" : "are")} not available.";
+
+    static (List<string> Stored, List<string> Removed) RetirePreviousShell(List<string> stored, string? previous, string blueprint, Dictionary<string, ScenePackage> index)
+    {
+        if (previous is null || !IsRetirable(stored, previous, blueprint))
+        {
+            return (stored, []);
+        }
+
+        var needed = stored.Exists(other => other != previous && DependenciesOf(other, index).Contains(previous));
+        return needed ? (stored, []) : ([.. stored.Where(candidate => candidate != previous)], [previous]);
+    }
+
+    static bool IsRetirable(List<string> stored, string previous, string blueprint) => previous != blueprint && stored.Contains(previous);
+
+    static List<string> PlaceBlueprint(List<string> stored, string blueprint, List<string> added, Dictionary<string, ScenePackage> index)
+    {
+        var dependedOn = stored.Exists(other => other != blueprint && DependenciesOf(other, index).Contains(blueprint));
+        if (!stored.Contains(blueprint))
+        {
+            stored.Add(blueprint);
+            added.Add(blueprint);
+            return stored;
+        }
+
+        return dependedOn ? stored : [.. stored.Where(candidate => candidate != blueprint), blueprint];
+    }
+
     static Dictionary<string, ScenePackage> IndexOf(IReadOnlyList<ScenePackage> catalog)
     {
         var index = new Dictionary<string, ScenePackage>(StringComparer.Ordinal);
@@ -326,13 +334,15 @@ public static class PackageList
 
     static (List<string> Order, List<string> Unknown) ClosureOf(string name, HashSet<string> listed, Dictionary<string, ScenePackage> index)
     {
-        var order = new List<string>();
-        var unknown = new List<string>();
+        List<string> order = [];
+        List<string> unknown = [];
         var visiting = new HashSet<string>(StringComparer.Ordinal);
+
+        bool IsVisited(string current) => order.Contains(current) || visiting.Contains(current);
 
         void Visit(string current)
         {
-            if (listed.Contains(current) || order.Contains(current) || visiting.Contains(current))
+            if (listed.Contains(current) || IsVisited(current))
             {
                 return;
             }
@@ -383,15 +393,20 @@ public static class PackageList
     {
         var at = stored.IndexOf(name);
         var other = direction == MoveDirection.Up ? at + 1 : at - 1;
-        if (at < 0 || other < 0 || other >= stored.Count || stored[other] == PackageResolver.Core || name == PackageResolver.Core)
+        if (name == PackageResolver.Core || !IsSwappable(stored, at, other))
         {
             return false;
         }
 
-        var next = new List<string>(stored);
+        List<string> next = [.. stored];
         (next[at], next[other]) = (next[other], next[at]);
         return IsOrdered(next, index);
     }
+
+    static bool IsInsideList(List<string> stored, int position) => position >= 0 && position < stored.Count;
+
+    static bool IsSwappable(List<string> stored, int at, int other) =>
+        IsInsideList(stored, at) && IsInsideList(stored, other) && stored[other] != PackageResolver.Core;
 
     static UiProfile WithPackages(UiProfile profile, List<string> packages) =>
         profile with { Packages = profile.Packages.Contains(PackageResolver.Core) ? packages : [.. packages.Where(name => name != PackageResolver.Core)] };
@@ -399,4 +414,6 @@ public static class PackageList
     static PackageEdit Unchanged(UiProfile profile) => new(profile, PackageEditOutcome.Unchanged, [], [], string.Empty);
 
     static PackageEdit Refused(UiProfile profile, string message) => new(profile, PackageEditOutcome.Refused, [], [], message);
+
+    sealed record RowContext(List<string> Names, List<string> Stored, string? Shell, Dictionary<string, ScenePackage> Index);
 }

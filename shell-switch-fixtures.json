@@ -153,6 +153,21 @@
             "name": "Aside Note",
             "slots": [],
             "fitsSlot": "ToolShell.subject"
+          },
+          {
+            "name": "SideFrame",
+            "slots": [
+              {
+                "name": "content"
+              },
+              {
+                "name": "side",
+                "primary": true
+              }
+            ],
+            "metadata": {
+              "role": "Root"
+            }
           }
         ],
         "dialogTemplates": [
@@ -2505,6 +2520,178 @@
             "target": "content",
             "screens": [],
             "description": "Slot 'content' is kept; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "primary slot nobody uses follows the primary slot",
+      "description": "the primary slot of the current shell becomes the primary slot of the next even when no screen uses it",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "OwnShell"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "AnalyticsRoot",
+        "blueprint": "analytics"
+      },
+      "screens": [],
+      "remaps": {},
+      "expected": {
+        "from": "OwnShell",
+        "to": "AnalyticsRoot",
+        "fromPrimary": "content",
+        "toPrimary": "main",
+        "isNoOp": false,
+        "moves": [
+          {
+            "slot": "sidebar",
+            "action": "unused",
+            "screens": [],
+            "description": "Slot 'sidebar' of shell 'OwnShell' has no counterpart in shell 'AnalyticsRoot'; no screen uses it"
+          },
+          {
+            "slot": "content",
+            "action": "primary",
+            "target": "main",
+            "screens": [],
+            "description": "Slot 'content' becomes 'main', the primary slot of shell 'AnalyticsRoot'; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "content slot that is not the primary one follows the primary slot",
+      "description": "a slot named content that the current shell has beside its primary slot goes to the primary slot of a shell without one",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "SideFrame"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "AnalyticsRoot",
+        "blueprint": "analytics"
+      },
+      "screens": [
+        {
+          "name": "Orders",
+          "layout": "x",
+          "slotContent": {
+            "content": [
+              {
+                "type": "test",
+                "id": "Orders-content"
+              }
+            ]
+          },
+          "forms": [],
+          "contributions": []
+        }
+      ],
+      "remaps": {},
+      "expected": {
+        "from": "SideFrame",
+        "to": "AnalyticsRoot",
+        "fromPrimary": "side",
+        "toPrimary": "main",
+        "isNoOp": false,
+        "moves": [
+          {
+            "slot": "content",
+            "action": "primary",
+            "target": "main",
+            "screens": [
+              "Orders"
+            ],
+            "description": "'Orders' moves from slot 'content' to 'main', the primary slot of shell 'AnalyticsRoot'"
+          },
+          {
+            "slot": "side",
+            "action": "primary",
+            "target": "main",
+            "screens": [],
+            "description": "Slot 'side' becomes 'main', the primary slot of shell 'AnalyticsRoot'; no screen uses it"
+          }
+        ],
+        "addPackages": [],
+        "blockers": [],
+        "warnings": [],
+        "canSwitch": true
+      }
+    },
+    {
+      "name": "content slot nobody uses follows the primary slot",
+      "description": "an unused content slot beside the primary slot becomes the primary slot of a shell without one",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm",
+          "hr",
+          "analytics"
+        ]
+      },
+      "currentRoot": {
+        "source": "Own",
+        "id": "SideFrame"
+      },
+      "candidateRoot": {
+        "source": "Blueprint",
+        "id": "AnalyticsRoot",
+        "blueprint": "analytics"
+      },
+      "screens": [],
+      "remaps": {},
+      "expected": {
+        "from": "SideFrame",
+        "to": "AnalyticsRoot",
+        "fromPrimary": "side",
+        "toPrimary": "main",
+        "isNoOp": false,
+        "moves": [
+          {
+            "slot": "content",
+            "action": "primary",
+            "target": "main",
+            "screens": [],
+            "description": "Slot 'content' becomes 'main', the primary slot of shell 'AnalyticsRoot'; no screen uses it"
+          },
+          {
+            "slot": "side",
+            "action": "primary",
+            "target": "main",
+            "screens": [],
+            "description": "Slot 'side' becomes 'main', the primary slot of shell 'AnalyticsRoot'; no screen uses it"
           }
         ],
         "addPackages": [],

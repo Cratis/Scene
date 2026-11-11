@@ -20,12 +20,27 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../bl
     compare: CompareCase[];
 };
 
-for (const fixture of corpus.verification) {
+const snapshot = (fixture: VerificationCase) => JSON.stringify({ source: fixture.source, library: fixture.library, options: fixture.options });
+const pristine = corpus.verification.map(snapshot);
+
+for (const [index, fixture] of corpus.verification.entries()) {
     describe(`when verifying a blueprint for ${fixture.name}`, () => {
         it('should report the same problems, in the same order, as the C# engine', () =>
             verifyBlueprintPackage(fixture.source, fixture.library, fixture.options).should.deep.equal(fixture.expectedProblems));
+
+        it('should leave the blueprint, the library and the options as they were', () => {
+            verifyBlueprintPackage(fixture.source, fixture.library, fixture.options);
+            snapshot(fixture).should.equal(pristine[index]);
+        });
     });
 }
+
+describe('when writing the problems of a blueprint', () => {
+    const fixture = corpus.verification.find(candidate => candidate.name === 'screen set that is inconsistent')!;
+
+    it('should write them in the order they are found', () =>
+        JSON.stringify(verifyBlueprintPackage(fixture.source, fixture.library, fixture.options)).should.equal(`["Blueprint '@cratis/scene.blueprint.crm' declares screen 'Leads' more than once","Blueprint '@cratis/scene.blueprint.crm' declares a screen set entry without a name","Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' uses template 'Missing', which is not available","Blueprint '@cratis/scene.blueprint.crm' screen 'Leads' declares no title","Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' has parent 'Nowhere', which is not in the screen set","Blueprint '@cratis/scene.blueprint.crm' screen 'Orphan' is named in the screen set but the package does not provide it","Blueprint '@cratis/scene.blueprint.crm' screen 'A' is named in the screen set but the package does not provide it","Blueprint '@cratis/scene.blueprint.crm' screen 'B' is named in the screen set but the package does not provide it","Blueprint '@cratis/scene.blueprint.crm' screen 'A' is its own ancestor","Blueprint '@cratis/scene.blueprint.crm' screen 'B' is its own ancestor"]`));
+});
 
 for (const fixture of corpus.catalog) {
     describe(`when describing the blueprint catalog for ${fixture.name}`, () => {
