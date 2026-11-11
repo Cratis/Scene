@@ -18,15 +18,26 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../pr
 describe('when fixing sparse profiles against the shared fixture corpus', () => {
     for (const fixture of corpus.fixEdgeCases) {
         let result: unknown;
+        let before: string;
+        let after: string;
 
         beforeEach(() => {
+            before = JSON.stringify(fixture.profile);
             result = JSON.parse(JSON.stringify(applyProfileFix(fixture.profile, fixture.fix, [])));
+            after = JSON.stringify(fixture.profile);
         });
 
         it(`should give the profile the corpus expects for ${fixture.name}`, () => (result as UiProfile).should.deep.equal(fixture.expected));
+        it(`should leave the input profile untouched for ${fixture.name}`, () => after.should.equal(before));
     }
 
-    it('should find no problems when there is no shell, theme, usage or own library', () => {
-        findProfileProblems(corpus.fixEdgeCases[0].profile, { packages: [], library: { blueprints: [] } }).should.deep.equal([]);
+    describe('with no shell, theme, usage or own library', () => {
+        let problems: unknown;
+
+        beforeEach(() => {
+            problems = findProfileProblems(corpus.fixEdgeCases[0].profile, { packages: [], library: { blueprints: [] } });
+        });
+
+        it('should find no problems', () => (problems as unknown[]).should.deep.equal([]));
     });
 });
