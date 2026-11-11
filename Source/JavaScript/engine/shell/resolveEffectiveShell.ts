@@ -157,7 +157,7 @@ function rejectProblems(found: Found, reference: TemplateReference): ShellDiagno
 
 function referenceWarnings(found: Found, reference: TemplateReference, resolution: TemplateReferenceResolution, profile: UiProfile): ShellDiagnostic[] {
     const warnings: ShellDiagnostic[] = [];
-    if (resolution.status === TemplateReferenceStatus.Resolved) {
+    if (resolution.status === TemplateReferenceStatus.VersionNotSatisfied) {
         warnings.push({ code: ShellDiagnosticCode.RootTemplateVersionNotSatisfied, subject: reference.id, message: resolution.message! });
     }
 
