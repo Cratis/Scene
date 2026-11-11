@@ -25,8 +25,8 @@ public class when_adding_submit_continuations : Specification
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
-        var corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "command-response-fixtures.json")));
-        var form = corpus.GetProperty("legacyForm").Deserialize<Form>(_options)!;
+        var corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory.FullName, "command-response-fixtures.json")));
+        var form = corpus.GetProperty("legacyForm").Deserialize<Form>(_options);
         form.ForCommand.ShouldEqual("Create");
         form.OnSubmit.ShouldBeEmpty();
     }

@@ -26,6 +26,17 @@ public static class NavigationEdits
     const string LogoLevel = "The logo is defined at the application level only.";
     const string NeedsOutlet = "A navigation edit names the outlet it changes.";
 
+    static readonly Dictionary<NavigationEditKind, Func<EditTarget, (NavigationModel Model, string? Rejected)>> _handlers = new()
+    {
+        [NavigationEditKind.SetOutletMode] = ApplySetOutletMode,
+        [NavigationEditKind.SetOutletItems] = ApplySetOutletItems,
+        [NavigationEditKind.AddItem] = ApplyAddItem,
+        [NavigationEditKind.UpdateItem] = ApplyUpdateItem,
+        [NavigationEditKind.MoveItem] = ApplyMoveItem,
+        [NavigationEditKind.RemoveItem] = ApplyRemoveItem,
+        [NavigationEditKind.HideItem] = ApplyHideItem
+    };
+
     /// <summary>
     /// Plans switching how a module treats an outlet it inherits.
     /// </summary>
@@ -43,7 +54,7 @@ public static class NavigationEdits
         var current = NavigationOutlets.ModeOf(navigation, module, outlet);
         if (current == mode) return new([]);
         var setMode = new NavigationEdit(NavigationEditKind.SetOutletMode, module, outlet, mode);
-        if (mode == OutletMode.Overrides && current == OutletMode.Inherits && copy)
+        if (StartsFromCopy(current, mode, copy))
         {
             return new([new NavigationEdit(NavigationEditKind.SetOutletItems, module, outlet, Items: declared.Defaults), setMode]);
         }
@@ -67,10 +78,8 @@ public static class NavigationEdits
         if (declared is null) return new([], UnknownOutlet(outlet));
         if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return new([], KindMismatch(declared, item));
         var nested = NavigationOutlets.AllowsSubItems(outlet, declared.Kind);
-        if (parent is not null && !nested) return new([], Flat(outlet));
-        var ids = NavigationOutlets.CollectIds(NavigationOutlets.OwnItems(navigation, module, outlet), nested);
-        if (ids.Contains(item.Id)) return new([], DuplicateId(item.Id));
-        if (parent is not null && !ids.Contains(parent)) return new([], MissingParent(parent));
+        var refused = RefuseAdd(new(outlet, nested), () => NavigationOutlets.CollectIds(NavigationOutlets.OwnItems(navigation, module, outlet), nested), item, parent);
+        if (refused is not null) return new([], refused);
 
         var add = new NavigationEdit(NavigationEditKind.AddItem, module, outlet, Parent: parent, Index: index, Item: item);
         if (module is not null && NavigationOutlets.ModeOf(navigation, module, outlet) == OutletMode.Inherits)
@@ -96,16 +105,7 @@ public static class NavigationEdits
         if (declared is null) return new([], UnknownOutlet(outlet));
         var location = Locate(NavigationOutlets.OwnItems(navigation, module, outlet), id, NavigationOutlets.AllowsSubItems(outlet, declared.Kind));
         if (location is null) return new([], MissingOrInherited(navigation, module, declared, id));
-        OutletItem? renamed = location.Item switch
-        {
-            OutletNavigationItem item => item with { Title = title },
-            OutletAction item => item with { Title = title },
-            OutletGroup item => item with { Title = title },
-            OutletFilter item => item with { Title = title },
-            OutletTab item => item with { Title = title },
-            OutletStat item => item with { Title = title },
-            _ => null
-        };
+        var renamed = Retitled(location.Item, title);
         return renamed is null ? new([], NoTitle(id)) : new([new NavigationEdit(NavigationEditKind.UpdateItem, module, outlet, Id: id, Item: renamed)]);
     }
 
@@ -128,12 +128,8 @@ public static class NavigationEdits
         var own = NavigationOutlets.OwnItems(navigation, module, outlet);
         var location = Locate(own, id, nested);
         if (location is null) return new([], MissingOrInherited(navigation, module, declared, id));
-        if (parent is not null)
-        {
-            if (!nested) return new([], Flat(outlet));
-            if (parent == id || NavigationOutlets.CollectIds(NavigationOutlets.ChildrenOf(location.Item), true).Contains(parent)) return new([], IntoItself(id));
-            if (!NavigationOutlets.CollectIds(own, true).Contains(parent)) return new([], MissingParent(parent));
-        }
+        var refused = parent is null ? null : RefuseMoveUnder(new(outlet, nested), parent, own, location.Item);
+        if (refused is not null) return new([], refused);
 
         return new([new NavigationEdit(NavigationEditKind.MoveItem, module, outlet, Id: id, Parent: parent, Index: index)]);
     }
@@ -180,17 +176,7 @@ public static class NavigationEdits
             return new([new NavigationEdit(NavigationEditKind.RemoveItem, module, outlet, Id: id)]);
         }
 
-        if (module is null) return new([], MissingItem(id));
-        var mode = NavigationOutlets.ModeOf(navigation, module, outlet);
-        if (mode == OutletMode.Overrides || !declared.Defaults.Any(item => item.Id == id))
-        {
-            return new([], MissingOrInherited(navigation, module, declared, id));
-        }
-
-        var hide = new NavigationEdit(NavigationEditKind.HideItem, module, outlet, Id: id);
-        return mode == OutletMode.Inherits
-            ? new([new NavigationEdit(NavigationEditKind.SetOutletMode, module, outlet, OutletMode.Extends), hide])
-            : new([hide]);
+        return module is null ? new([], MissingItem(id)) : HideInherited(navigation, module, declared, id);
     }
 
     /// <summary>
@@ -223,6 +209,56 @@ public static class NavigationEdits
         }
 
         return new(true, model);
+    }
+
+    static OutletItem? Retitled(OutletItem item, string title) => item switch
+    {
+        OutletNavigationItem navigation => navigation with { Title = title },
+        OutletAction action => action with { Title = title },
+        OutletGroup group => group with { Title = title },
+        _ => RetitledOther(item, title)
+    };
+
+    static OutletItem? RetitledOther(OutletItem item, string title) => item switch
+    {
+        OutletFilter filter => filter with { Title = title },
+        OutletTab tab => tab with { Title = title },
+        OutletStat stat => stat with { Title = title },
+        _ => null
+    };
+
+    static bool StartsFromCopy(OutletMode current, OutletMode mode, bool copy) => mode == OutletMode.Overrides && current == OutletMode.Inherits && copy;
+
+    static NavigationEditPlan HideInherited(NavigationModel navigation, string module, Outlet declared, string id)
+    {
+        var outlet = declared.Name;
+        var mode = NavigationOutlets.ModeOf(navigation, module, outlet);
+        if (mode == OutletMode.Overrides || !declared.Defaults.Any(item => item.Id == id))
+        {
+            return new([], MissingOrInherited(navigation, module, declared, id));
+        }
+
+        var hide = new NavigationEdit(NavigationEditKind.HideItem, module, outlet, Id: id);
+        return mode == OutletMode.Inherits
+            ? new([new NavigationEdit(NavigationEditKind.SetOutletMode, module, outlet, OutletMode.Extends), hide])
+            : new([hide]);
+    }
+
+    static string? RefuseAdd(OutletScope scope, Func<IReadOnlyList<string>> collectIds, OutletItem item, string? parent)
+    {
+        if (parent is not null && !scope.Nested) return Flat(scope.Outlet);
+        var ids = collectIds();
+        if (ids.Contains(item.Id)) return DuplicateId(item.Id);
+        if (parent is not null && !ids.Contains(parent)) return MissingParent(parent);
+        return null;
+    }
+
+    static string? RefuseMoveUnder(OutletScope scope, string parent, IReadOnlyList<OutletItem> own, OutletItem moved)
+    {
+        if (!scope.Nested) return Flat(scope.Outlet);
+        if (parent == moved.Id || NavigationOutlets.CollectIds(NavigationOutlets.ChildrenOf(moved), true).Contains(parent)) return IntoItself(moved.Id);
+        if (!NavigationOutlets.CollectIds(own, true).Contains(parent)) return MissingParent(parent);
+        return null;
     }
 
     static string UnknownOutlet(string outlet) => $"There is no outlet '{outlet}' to edit.";
@@ -349,77 +385,100 @@ public static class NavigationEdits
 
     static (NavigationModel Model, string? Rejected) ApplyOne(NavigationModel model, NavigationEdit edit)
     {
-        if (edit.Kind == NavigationEditKind.SetLogo)
-        {
-            return edit.Module is null ? (model with { Application = model.Application with { Logo = edit.Logo } }, null) : (model, LogoLevel);
-        }
+        if (edit.Kind == NavigationEditKind.SetLogo) return ApplySetLogo(model, edit);
+        var (target, rejected) = TargetOf(model, edit);
+        return target is null ? (model, rejected) : ApplyToTarget(target);
+    }
 
-        if (!Enum.IsDefined(edit.Kind)) return (model, $"'{edit.Kind}' is not a navigation edit.");
-        if (edit.Outlet is null) return (model, NeedsOutlet);
+    static (NavigationModel Model, string? Rejected) ApplySetLogo(NavigationModel model, NavigationEdit edit) =>
+        edit.Module is null ? (model with { Application = model.Application with { Logo = edit.Logo } }, null) : (model, LogoLevel);
+
+    static (EditTarget? Target, string? Rejected) TargetOf(NavigationModel model, NavigationEdit edit)
+    {
+        if (!Enum.IsDefined(edit.Kind)) return (null, $"'{edit.Kind}' is not a navigation edit.");
+        if (edit.Outlet is null) return (null, NeedsOutlet);
         var outlet = edit.Outlet;
         var declared = NavigationOutlets.FindApplicationOutlet(model, outlet);
-        if (declared is null) return (model, UnknownOutlet(outlet));
+        if (declared is null) return (null, UnknownOutlet(outlet));
         var nested = NavigationOutlets.AllowsSubItems(outlet, declared.Kind);
-        var own = NavigationOutlets.OwnItems(model, edit.Module, outlet);
+        return (new EditTarget(model, edit, outlet, declared, nested, NavigationOutlets.OwnItems(model, edit.Module, outlet)), null);
+    }
 
-        switch (edit.Kind)
+    static (NavigationModel Model, string? Rejected) ApplyToTarget(EditTarget target) =>
+        _handlers.TryGetValue(target.Edit.Kind, out var handler) ? handler(target) : (target.Model, $"'{target.Edit.Kind}' is not a navigation edit.");
+
+    static (NavigationModel Model, string? Rejected) ApplySetOutletItems(EditTarget target) =>
+        (WithOwnItems(target.Model, target.Edit.Module, target.Declared, _ => target.Edit.Items ?? []), null);
+
+    static (NavigationModel Model, string? Rejected) ApplySetOutletMode(EditTarget target)
+    {
+        var (model, edit, outlet, _, _, _) = target;
+        if (edit.Module is null) return (model, NoMode);
+        if (edit.Mode != OutletMode.Inherits)
         {
-            case NavigationEditKind.SetOutletMode:
-                if (edit.Module is null) return (model, NoMode);
-                if (edit.Mode == OutletMode.Inherits)
-                {
-                    var block = NavigationOutlets.FindModule(model, edit.Module);
-                    if (block?.Refinements is null) return (model, null);
-                    var remaining = block.Refinements.Where(refinement => refinement.Outlet != outlet).ToList();
-                    var updated = block with { Refinements = remaining.Count == 0 ? null : remaining };
-                    return (model with { Modules = [.. model.Modules.Select(candidate => candidate.Module == edit.Module ? updated : candidate)] }, null);
-                }
-
-                return (WithRefinement(model, edit.Module, outlet, refinement => refinement with { Mode = edit.Mode }), null);
-
-            case NavigationEditKind.SetOutletItems:
-                return (WithOwnItems(model, edit.Module, declared, _ => edit.Items ?? []), null);
-
-            case NavigationEditKind.AddItem:
-            {
-                var item = edit.Item!;
-                if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return (model, KindMismatch(declared, item));
-                if (NavigationOutlets.CollectIds(own, nested).Contains(item.Id)) return (model, DuplicateId(item.Id));
-                if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, items => Insert(items, item, edit.Index)), null);
-                if (!nested || item is not OutletNavigationItem navigationItem) return (model, Flat(outlet));
-                if (Locate(own, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
-                return (WithOwnItems(model, edit.Module, declared, items => InsertUnder(items, edit.Parent, navigationItem, edit.Index)), null);
-            }
-
-            case NavigationEditKind.UpdateItem:
-                if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));
-                return (WithOwnItems(model, edit.Module, declared, items => Replace(items, edit.Id!, edit.Item!, nested)), null);
-
-            case NavigationEditKind.MoveItem:
-            {
-                var location = Locate(own, edit.Id ?? string.Empty, nested);
-                if (location is null) return (model, MissingItem(edit.Id ?? string.Empty));
-                var without = Remove(own, location.Item.Id, nested);
-                if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, _ => Insert(without, location.Item, edit.Index)), null);
-                if (!nested || location.Item is not OutletNavigationItem moved) return (model, Flat(outlet));
-                if (Locate(without, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
-                return (WithOwnItems(model, edit.Module, declared, _ => InsertUnder(without, edit.Parent, moved, edit.Index)), null);
-            }
-
-            case NavigationEditKind.RemoveItem:
-                if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));
-                return (WithOwnItems(model, edit.Module, declared, items => Remove(items, edit.Id!, nested)), null);
-
-            case NavigationEditKind.HideItem:
-                if (edit.Module is null) return (model, NoMode);
-                return (WithRefinement(model, edit.Module, outlet, refinement => refinement.Hide?.Contains(edit.Id ?? string.Empty) == true
-                    ? refinement
-                    : refinement with { Hide = [.. refinement.Hide ?? [], edit.Id ?? string.Empty] }), null);
-
-            default:
-                return (model, $"'{edit.Kind}' is not a navigation edit.");
+            return (WithRefinement(model, edit.Module, outlet, refinement => refinement with { Mode = edit.Mode }), null);
         }
+
+        var block = NavigationOutlets.FindModule(model, edit.Module);
+        if (block?.Refinements is null) return (model, null);
+        var remaining = block.Refinements.Where(refinement => refinement.Outlet != outlet).ToList();
+        var updated = block with { Refinements = remaining.Count == 0 ? null : remaining };
+        return (model with { Modules = [.. model.Modules.Select(candidate => candidate.Module == edit.Module ? updated : candidate)] }, null);
+    }
+
+    static (NavigationModel Model, string? Rejected) ApplyAddItem(EditTarget target)
+    {
+        var (model, edit, _, declared, nested, own) = target;
+        var item = edit.Item!;
+        if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return (model, KindMismatch(declared, item));
+        if (NavigationOutlets.CollectIds(own, nested).Contains(item.Id)) return (model, DuplicateId(item.Id));
+        return Place(target, own, item, items => items);
+    }
+
+    static (NavigationModel Model, string? Rejected) ApplyUpdateItem(EditTarget target)
+    {
+        var (model, edit, _, declared, nested, own) = target;
+        if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));
+        return (WithOwnItems(model, edit.Module, declared, items => Replace(items, edit.Id!, edit.Item!, nested)), null);
+    }
+
+    static (NavigationModel Model, string? Rejected) ApplyMoveItem(EditTarget target)
+    {
+        var (model, edit, _, _, nested, own) = target;
+        var location = Locate(own, edit.Id ?? string.Empty, nested);
+        if (location is null) return (model, MissingItem(edit.Id ?? string.Empty));
+        var without = Remove(own, location.Item.Id, nested);
+        return Place(target, without, location.Item, _ => without);
+    }
+
+    static (NavigationModel Model, string? Rejected) ApplyRemoveItem(EditTarget target)
+    {
+        var (model, edit, _, declared, nested, own) = target;
+        if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));
+        return (WithOwnItems(model, edit.Module, declared, items => Remove(items, edit.Id!, nested)), null);
+    }
+
+    static (NavigationModel Model, string? Rejected) ApplyHideItem(EditTarget target)
+    {
+        var (model, edit, outlet, _, _, _) = target;
+        if (edit.Module is null) return (model, NoMode);
+        return (WithRefinement(model, edit.Module, outlet, refinement => refinement.Hide?.Contains(edit.Id ?? string.Empty) == true
+            ? refinement
+            : refinement with { Hide = [.. refinement.Hide ?? [], edit.Id ?? string.Empty] }), null);
+    }
+
+    static (NavigationModel Model, string? Rejected) Place(EditTarget target, IReadOnlyList<OutletItem> items, OutletItem item, Func<IReadOnlyList<OutletItem>, IReadOnlyList<OutletItem>> baseOf)
+    {
+        var (model, edit, outlet, declared, nested, _) = target;
+        if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, listed => Insert(baseOf(listed), item, edit.Index)), null);
+        if (!nested || item is not OutletNavigationItem navigationItem) return (model, Flat(outlet));
+        if (Locate(items, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
+        return (WithOwnItems(model, edit.Module, declared, listed => InsertUnder(baseOf(listed), edit.Parent, navigationItem, edit.Index)), null);
     }
 
     sealed record Location(OutletItem Item, int Index, string? Parent);
+
+    sealed record OutletScope(string Outlet, bool Nested);
+
+    sealed record EditTarget(NavigationModel Model, NavigationEdit Edit, string Outlet, Outlet Declared, bool Nested, IReadOnlyList<OutletItem> Own);
 }

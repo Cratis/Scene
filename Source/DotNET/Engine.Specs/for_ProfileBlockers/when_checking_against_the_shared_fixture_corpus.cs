@@ -42,15 +42,15 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "profile-blockers-fixtures.json")));
-        _library = document.RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options)!;
-        _packages = document.RootElement.GetProperty("packages").Deserialize<List<ScenePackage>>(_options)!;
-        _contrastCorpus = JsonNode.Parse(document.RootElement.GetProperty("contrast").GetRawText())!.AsArray();
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "profile-blockers-fixtures.json")));
+        _library = document.RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options);
+        _packages = document.RootElement.GetProperty("packages").Deserialize<List<ScenePackage>>(_options);
+        _contrastCorpus = JsonNode.Parse(document.RootElement.GetProperty("contrast").GetRawText()).AsArray();
         _cases = [.. document.RootElement.GetProperty("cases").EnumerateArray().Select(element => new BlockerCase(
-            element.GetProperty("name").GetString()!,
-            element.GetProperty("profile").Deserialize<UiProfile>(_options)!,
+            element.GetProperty("name").GetString(),
+            element.GetProperty("profile").Deserialize<UiProfile>(_options),
             element.GetProperty("theme").ValueKind == JsonValueKind.Null ? null : element.GetProperty("theme").Deserialize<Theme>(_options),
-            element.GetProperty("usages").Deserialize<List<ProfileUsage>>(_options)!,
+            element.GetProperty("usages").Deserialize<List<ProfileUsage>>(_options),
             string.Join('\n', element.GetProperty("expected").EnumerateArray().Select(item =>
                 $"{item.GetProperty("code").GetString()}|{item.GetProperty("subject").GetString()}|{item.GetProperty("message").GetString()}|{(item.GetProperty("shellCode").ValueKind == JsonValueKind.Null ? string.Empty : item.GetProperty("shellCode").GetString())}|{item.GetProperty("severity").GetString()}|{item.GetProperty("section").GetString()}|{FixText(item.GetProperty("fix"))}")),
             element.TryGetProperty("fixed", out var fixedProfile) ? JsonNode.Parse(fixedProfile.GetRawText()) : null))];
@@ -70,12 +70,12 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 
         _fixes = [.. problems.Where(item => item.Case.Fixed is not null).Select(item =>
         {
-            var fix = item.Found.First(blocker => blocker.Fix is not null).Fix!;
+            var fix = item.Found.First(blocker => blocker.Fix is not null).Fix;
             var fixedProfile = ProfileBlockers.ApplyFix(item.Case.Profile, fix, _packages);
             return (item.Case.Name, item.Case.Fixed, JsonNode.Parse(UiProfileJson.Serialize(fixedProfile)));
         })];
 
-        _contrasts = [.. _contrastCorpus.Select(item => (item!["color"]!.GetValue<string>(), item["expected"], JsonSerializer.SerializeToNode(Contrast.AgainstWhite(item["color"]!.GetValue<string>()), _camelCase)))];
+        _contrasts = [.. _contrastCorpus.Select(item => (item["color"].GetValue<string>(), item["expected"], JsonSerializer.SerializeToNode(Contrast.AgainstWhite(item["color"].GetValue<string>()), _camelCase)))];
     }
 
     [Fact]

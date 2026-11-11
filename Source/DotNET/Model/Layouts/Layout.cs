@@ -15,7 +15,7 @@ namespace Cratis.Scene.Model.Layouts;
 /// <remarks>
 /// A layout is application-level and there is one in force: it is what an application *selects*, usually
 /// from a <see cref="Packages.PackageKind.Blueprint"/> package. What goes inside it - the shapes a module,
-/// feature or slice brings - are <see cref="Screens.ScreenTemplate"/>s, and an application has many. The
+/// feature or slice brings - are <see cref="ScreenTemplate"/>s, and an application has many. The
 /// two are structurally alike on purpose (both are slots plus an arrangement, evaluated by the same
 /// engine); they differ in role, and a screen template additionally declares which slot it fits into.
 /// </remarks>
@@ -25,7 +25,7 @@ namespace Cratis.Scene.Model.Layouts;
 /// How the layout's own <paramref name="Slots"/> position relative to each other - a <see cref="FlowArrangement"/>
 /// (leaves are <see cref="FlowSlotLeaf"/>) or <see cref="FreeformSlotArrangement"/>, or <see langword="null"/>
 /// for the slots' declaration order with no further positioning information. Distinct from each
-/// <see cref="Layouts.Slot"/>'s own <see cref="Slot.Arrangement"/>, which positions that one slot's filled
+/// <see cref="Slot"/>'s own <see cref="Slot.Arrangement"/>, which positions that one slot's filled
 /// content instead of positioning the slots themselves.
 /// </param>
 public record Layout(string Name, IReadOnlyList<Slot> Slots, Arrangement? Arrangement = null)

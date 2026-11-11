@@ -18,19 +18,19 @@ public class when_resolving_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "argument-source-fixtures.json")))!.AsObject();
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "argument-source-fixtures.json"))).AsObject();
     }
 
     void Because()
     {
-        var scopeNode = _corpus["scope"]!;
+        var scopeNode = _corpus["scope"];
         var scope = new BindingScope(
             scopeNode["dataContext"]?.DeepClone(),
-            ComponentOutputs: scopeNode["componentOutputs"]!.AsObject().ToDictionary(entry => entry.Key, entry => entry.Value!.DeepClone().AsObject()));
+            ComponentOutputs: scopeNode["componentOutputs"].AsObject().ToDictionary(entry => entry.Key, entry => entry.Value.DeepClone().AsObject()));
 
-        _results = [.. _corpus["cases"]!.AsArray().Select(node =>
+        _results = [.. _corpus["cases"].AsArray().Select(node =>
         {
-            var source = node!["source"]!.GetValue<string>();
+            var source = node["source"].GetValue<string>();
             var value = ArgumentSources.Resolve(source, scope);
             var actual = value.IsAbsent ? "absent" : value.Node?.ToJsonString() ?? "null";
             var expected = node["expectedAbsent"] is not null ? "absent" : node["expected"]?.ToJsonString() ?? "null";

@@ -25,8 +25,8 @@ public class when_diagnosing_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "navigation-diagnostic-fixtures.json")));
-        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "navigation-diagnostic-fixtures.json")));
+        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options);
     }
 
     void Because() => _results = [.. _cases.Select(fixture => (fixture, NavigationDiagnostics.Diagnose(fixture.Graph)))];

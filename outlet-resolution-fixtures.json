@@ -629,6 +629,46 @@
         "refinementOfUnknownOutlet|error|stats|Products|-|Products refines the outlet 'stats', which no level above it declares",
         "contributionToUnknownOutlet|error|detailTabs|Pricing|-|Pricing contributes to the outlet 'detailTabs', which no level declares"
       ]
+    },
+    {
+      "name": "lists a level leaves out: no defaults, no items, an explicit inherit with only a hide, and a hide with no mode",
+      "chain": [
+        { "kind": "layout", "name": "Shell", "outlets": [{ "name": "toolbar", "kind": "actions" }] },
+        { "kind": "module", "name": "Catalog" },
+        {
+          "kind": "feature",
+          "name": "Products",
+          "refinements": [
+            { "outlet": "toolbar", "mode": "inherits", "hide": ["refresh"] },
+            { "outlet": "toolbar", "hide": ["ghost"] }
+          ],
+          "contributions": [
+            { "outlet": "toolbar" },
+            { "outlet": "toolbar", "items": [{ "kind": "group", "id": "more", "title": "More" }] }
+          ]
+        }
+      ],
+      "resolve": [
+        {
+          "outlet": "toolbar",
+          "expected": {
+            "kind": "actions",
+            "declaredBy": "Shell",
+            "mode": "extends",
+            "summary": "Shell + Products",
+            "items": ["more|group()|Products|feature|contribution|editable"],
+            "removed": [],
+            "diagnostics": [
+              "itemsIgnoredWhenInheriting|warning|toolbar|Products|-|Products inherits the outlet 'toolbar' unchanged, so its items and hides are ignored; extend or override it to use them",
+              "hiddenItemMissing|warning|toolbar|Products|ghost|Products hides 'ghost', which the outlet 'toolbar' neither inherits nor receives as a contribution"
+            ]
+          }
+        }
+      ],
+      "expectedDiagnostics": [
+        "itemsIgnoredWhenInheriting|warning|toolbar|Products|-|Products inherits the outlet 'toolbar' unchanged, so its items and hides are ignored; extend or override it to use them",
+        "hiddenItemMissing|warning|toolbar|Products|ghost|Products hides 'ghost', which the outlet 'toolbar' neither inherits nor receives as a contribution"
+      ]
     }
   ],
   "dialogTemplates": [

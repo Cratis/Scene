@@ -25,7 +25,7 @@ static class FixtureFile
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "template-applicability-fixtures.json")));
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "template-applicability-fixtures.json")));
         return document.RootElement.Clone();
     }
 }

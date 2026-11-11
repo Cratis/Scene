@@ -20,7 +20,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         _cases =
         [
             .. document.RootElement.GetProperty("versionRangeCases").EnumerateArray().Select(element => new FixtureCase(
-                element.GetProperty("version").GetString()!,
+                element.GetProperty("version").GetString(),
                 element.GetProperty("range").ValueKind == JsonValueKind.Null ? null : element.GetProperty("range").GetString(),
                 element.GetProperty("expected").GetBoolean()))
         ];

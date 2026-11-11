@@ -11,9 +11,9 @@ public class when_reading_invalid_documents : given.a_package_set_document
 
     [Fact] void should_refuse_text_that_is_not_json() => Diagnose("{").Single().StartsWith("The package set is not a valid document", StringComparison.Ordinal).ShouldBeTrue();
 
-    [Fact] void should_refuse_an_unknown_member() => Diagnose("""{ "version": 1, "packages": [], "bundles": [] }""").Single().ShouldContain("bundles");
+    [Fact] void should_refuse_an_unknown_member() => Diagnose(/*lang=json,strict*/ """{ "version": 1, "packages": [], "bundles": [] }""").Single().ShouldContain("bundles");
 
-    [Fact] void should_refuse_another_version() => Diagnose("""{ "version": 2, "packages": [] }""").Single().ShouldContain("version 2");
+    [Fact] void should_refuse_another_version() => Diagnose(/*lang=json,strict*/ """{ "version": 2, "packages": [] }""").Single().ShouldContain("version 2");
 
     [Fact] void should_refuse_a_name_a_host_ships() => Diagnose(WithPackage(GoodManifest.Replace("Acme.Charts", "core"), GoodModule), "core").Single().ShouldContain("name of a package the host ships");
 

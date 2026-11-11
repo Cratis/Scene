@@ -35,6 +35,18 @@ public static class NavigationFixtures
 
     public record EditCase(string Name, NavigationModel Navigation, JsonElement Call, JsonElement Expected);
 
+    public record PlanCase(string Name, NavigationModel? Navigation, JsonElement Call, JsonElement Expected);
+
+    public record ApplyCase(string Name, NavigationModel? Navigation, IReadOnlyList<NavigationEdit> Edits, JsonElement Expected);
+
+    public record Characterization(NavigationModel Navigation, IReadOnlyList<PlanCase> PlanCases, IReadOnlyList<ApplyCase> ApplyCases);
+
+    public static Characterization LoadCharacterization(string file)
+    {
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), file)));
+        return document.RootElement.GetProperty("characterization").Deserialize<Characterization>(_read)!;
+    }
+
     public static (ApplicationStructure Structure, IReadOnlyList<Case> Cases) LoadCases(string file)
     {
         using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), file)));
@@ -71,7 +83,7 @@ public static class NavigationFixtures
     public static NavigationEditPlan Plan(NavigationModel navigation, JsonElement call)
     {
         var module = call.TryGetProperty("module", out var moduleElement) ? moduleElement.GetString() : null;
-        var outlet = call.TryGetProperty("outlet", out var outletElement) ? outletElement.GetString()! : string.Empty;
+        var outlet = call.TryGetProperty("outlet", out var outletElement) ? outletElement.GetString() : string.Empty;
         string? Text(string name) => call.TryGetProperty(name, out var element) ? element.GetString() : null;
         int? Index() => call.TryGetProperty("index", out var element) ? element.GetInt32() : null;
         switch (call.GetProperty("op").GetString())
@@ -84,21 +96,29 @@ public static class NavigationFixtures
                     call.GetProperty("mode").Deserialize<OutletMode>(_read),
                     call.TryGetProperty("copy", out var copy) && copy.GetBoolean());
             case "addNavigationItem":
-                return NavigationEdits.AddItem(navigation, module, outlet, call.GetProperty("item").Deserialize<OutletItem>(_read)!, Text("parent"), Index());
+                return NavigationEdits.AddItem(navigation, module, outlet, call.GetProperty("item").Deserialize<OutletItem>(_read), Text("parent"), Index());
             case "renameNavigationItem":
-                return NavigationEdits.RenameItem(navigation, module, outlet, Text("id")!, Text("title")!);
+                return NavigationEdits.RenameItem(navigation, module, outlet, Text("id"), Text("title"));
             case "moveNavigationItem":
-                return NavigationEdits.MoveItem(navigation, module, outlet, Text("id")!, Text("parent"), Index());
+                return NavigationEdits.MoveItem(navigation, module, outlet, Text("id"), Text("parent"), Index());
             case "duplicateNavigationItem":
-                return NavigationEdits.DuplicateItem(navigation, module, outlet, Text("id")!, Text("newId"));
+                return NavigationEdits.DuplicateItem(navigation, module, outlet, Text("id"), Text("newId"));
             case "removeNavigationItem":
-                return NavigationEdits.RemoveItem(navigation, module, outlet, Text("id")!);
+                return NavigationEdits.RemoveItem(navigation, module, outlet, Text("id"));
             case "setApplicationLogo":
-                return NavigationEdits.SetApplicationLogo(module, call.GetProperty("logo").Deserialize<ApplicationLogo>(_read)!);
+                return NavigationEdits.SetApplicationLogo(module, call.GetProperty("logo").Deserialize<ApplicationLogo>(_read));
             default:
                 throw new InvalidOperationException($"Unknown edit helper '{call.GetProperty("op").GetString()}'.");
         }
     }
+
+    public static string RawGolden(string name)
+    {
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), "navigation-edit-raw-goldens.json")));
+        return document.RootElement.GetProperty(name).GetProperty("cs").GetString()!;
+    }
+
+    public static string Raw(object value) => JsonSerializer.Serialize(value, _write);
 
     public static string Canonical(object value) => Canonical(JsonSerializer.SerializeToElement(value, _write));
 

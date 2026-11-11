@@ -109,13 +109,13 @@ public static class GuardConditions
     }
 
     static bool CompareValues(JsonElement left, JsonElement right, string operation) => operation switch
-        {
-            "Equal" => Same(left, right),
-            "NotEqual" => Scalar(left) && Compatible(left, right) && !Same(left, right),
-            "Contains" => Contains(left, right),
-            "StartsWith" => left.ValueKind == JsonValueKind.String && right.ValueKind == JsonValueKind.String && left.GetString()!.StartsWith(right.GetString()!, StringComparison.Ordinal),
-            _ => Numeric(left, right, operation)
-        };
+    {
+        "Equal" => Same(left, right),
+        "NotEqual" => Scalar(left) && Compatible(left, right) && !Same(left, right),
+        "Contains" => Contains(left, right),
+        "StartsWith" => left.ValueKind == JsonValueKind.String && right.ValueKind == JsonValueKind.String && left.GetString()!.StartsWith(right.GetString()!, StringComparison.Ordinal),
+        _ => Numeric(left, right, operation)
+    };
 
     static JsonElement Normalize(JsonElement value, JsonElement enumeration, JsonElement enumerationNumbers)
     {
@@ -146,13 +146,13 @@ public static class GuardConditions
     }
 
     static bool CompareNumbers(double first, double second, string operation) => operation switch
-        {
-            "GreaterThan" => first > second,
-            "GreaterThanOrEqual" => first >= second,
-            "LessThan" => first < second,
-            "LessThanOrEqual" => first <= second,
-            _ => false
-        };
+    {
+        "GreaterThan" => first > second,
+        "GreaterThanOrEqual" => first >= second,
+        "LessThan" => first < second,
+        "LessThanOrEqual" => first <= second,
+        _ => false
+    };
 
     static bool Contains(JsonElement left, JsonElement right) => left.ValueKind switch
     {

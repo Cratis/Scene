@@ -31,6 +31,12 @@ const inheritedItem = (id: string): string => `Item '${id}' is inherited from th
 const intoItself = (id: string): string => `Item '${id}' cannot become a sub-item of itself.`;
 const noTitle = (id: string): string => `Item '${id}' has no title to rename.`;
 
+/** The outlet an edit changes and whether its items may have sub-items. */
+interface OutletScope {
+    outlet: string;
+    nested: boolean;
+}
+
 /** Where an item sits among the items a level puts in an outlet. */
 interface Location {
     siblings: OutletItem[];
@@ -62,7 +68,7 @@ export function switchOutletMode(
     const current = modeOfModuleOutlet(navigation, module, outlet);
     if (current === mode) return { edits: [] };
     const setMode: NavigationEdit = { kind: NavigationEditKind.SetOutletMode, module, outlet, mode };
-    if (mode === OutletMode.Overrides && current === OutletMode.Inherits && options.copy === true) {
+    if (startsFromCopy(current, mode, options)) {
         return { edits: [{ kind: NavigationEditKind.SetOutletItems, module, outlet, items: structuredClone(declared.defaults) }, setMode] };
     }
     return { edits: [setMode] };
@@ -91,10 +97,8 @@ export function addNavigationItem(
     if (!declared) return { edits: [], rejected: unknownOutlet(outlet) };
     if (!outletItemKinds(declared.kind).includes(item.kind)) return { edits: [], rejected: kindMismatch(declared, item) };
     const nested = allowsSubItems(outlet, declared.kind);
-    if (parent !== undefined && !nested) return { edits: [], rejected: flat(outlet) };
-    const ids = collectItemIds(ownOutletItems(navigation, module, outlet), nested);
-    if (ids.includes(item.id)) return { edits: [], rejected: duplicateId(item.id) };
-    if (parent !== undefined && !ids.includes(parent)) return { edits: [], rejected: missingParent(parent) };
+    const refused = refuseAdd({ outlet, nested }, () => collectItemIds(ownOutletItems(navigation, module, outlet), nested), item, parent);
+    if (refused !== undefined) return { edits: [], rejected: refused };
 
     const add: NavigationEdit = { kind: NavigationEditKind.AddItem, module, outlet, item: structuredClone(item) };
     if (parent !== undefined) add.parent = parent;
@@ -148,12 +152,8 @@ export function moveNavigationItem(
     const own = ownOutletItems(navigation, module, outlet);
     const location = locate(own, id, nested);
     if (!location) return { edits: [], rejected: missingOrInherited(navigation, module, declared, id) };
-    if (to.parent !== undefined) {
-        if (!nested) return { edits: [], rejected: flat(outlet) };
-        const moved = location.siblings[location.index];
-        if (to.parent === id || collectItemIds(childrenOf(moved), true).includes(to.parent)) return { edits: [], rejected: intoItself(id) };
-        if (!collectItemIds(own, true).includes(to.parent)) return { edits: [], rejected: missingParent(to.parent) };
-    }
+    const refused = to.parent === undefined ? undefined : refuseMoveUnder({ outlet, nested }, to.parent, own, location.siblings[location.index]);
+    if (refused !== undefined) return { edits: [], rejected: refused };
     const move: NavigationEdit = { kind: NavigationEditKind.MoveItem, module, outlet, id };
     if (to.parent !== undefined) move.parent = to.parent;
     if (to.index !== undefined) move.index = to.index;
@@ -204,12 +204,35 @@ export function removeNavigationItem(navigation: NavigationModel, module: string
         return { edits: [{ kind: NavigationEditKind.RemoveItem, module, outlet, id }] };
     }
     if (module === undefined) return { edits: [], rejected: missingItem(id) };
+    return hideInherited(navigation, module, declared, id);
+}
+
+/** Plans hiding an item the module inherits, or says why it cannot be removed. */
+function hideInherited(navigation: NavigationModel, module: string, declared: Outlet, id: string): NavigationEditPlan {
+    const outlet = declared.name;
     const mode = modeOfModuleOutlet(navigation, module, outlet);
     if (mode === OutletMode.Overrides || !declared.defaults.some(item => item.id === id)) {
         return { edits: [], rejected: missingOrInherited(navigation, module, declared, id) };
     }
     const hide: NavigationEdit = { kind: NavigationEditKind.HideItem, module, outlet, id };
     return { edits: mode === OutletMode.Inherits ? [{ kind: NavigationEditKind.SetOutletMode, module, outlet, mode: OutletMode.Extends }, hide] : [hide] };
+}
+
+/** Why adding the item is refused, when it is: a flat outlet with a parent, a taken id or a parent that is not there. */
+function refuseAdd({ outlet, nested }: OutletScope, collectIds: () => string[], item: OutletItem, parent: string | undefined): string | undefined {
+    if (parent !== undefined && !nested) return flat(outlet);
+    const ids = collectIds();
+    if (ids.includes(item.id)) return duplicateId(item.id);
+    if (parent !== undefined && !ids.includes(parent)) return missingParent(parent);
+    return undefined;
+}
+
+/** Why moving the item under the parent is refused, when it is: a flat outlet, the item itself or one of its sub-items, or a parent that is not there. */
+function refuseMoveUnder({ outlet, nested }: OutletScope, parent: string, own: OutletItem[], moved: OutletItem): string | undefined {
+    if (!nested) return flat(outlet);
+    if (parent === moved.id || collectItemIds(childrenOf(moved), true).includes(parent)) return intoItself(moved.id);
+    if (!collectItemIds(own, true).includes(parent)) return missingParent(parent);
+    return undefined;
 }
 
 /**
@@ -240,6 +263,10 @@ export function applyNavigationEdits(navigation: NavigationModel, edits: Navigat
     return { applied: true, model };
 }
 
+function startsFromCopy(current: OutletMode, mode: OutletMode, options: { copy?: boolean }): boolean {
+    return mode === OutletMode.Overrides && current === OutletMode.Inherits && options.copy === true;
+}
+
 function missingOrInherited(navigation: NavigationModel, module: string | undefined, declared: Outlet, id: string): string {
     if (module === undefined || modeOfModuleOutlet(navigation, module, declared.name) === OutletMode.Overrides) return missingItem(id);
     return locate(declared.defaults, id, true) ? inheritedItem(id) : missingItem(id);
@@ -249,10 +276,8 @@ function locate(items: OutletItem[], id: string, nested: boolean, parent?: strin
     for (let index = 0; index < items.length; index++) {
         const item = items[index];
         if (item.id === id) return parent === undefined ? { siblings: items, index } : { siblings: items, index, parent };
-        if (nested) {
-            const found = locate(childrenOf(item), id, nested, item.id);
-            if (found) return found;
-        }
+        const found = nested ? locate(childrenOf(item), id, nested, item.id) : undefined;
+        if (found) return found;
     }
     return undefined;
 }
@@ -312,92 +337,123 @@ function insert(siblings: OutletItem[], item: OutletItem, index: number | undefi
 }
 
 function apply(model: NavigationModel, edit: NavigationEdit): string | undefined {
-    if (edit.kind === NavigationEditKind.SetLogo) {
-        if (edit.module !== undefined) return logoLevel;
-        model.application.logo = { ...edit.logo! };
-        return undefined;
-    }
+    if (edit.kind === NavigationEditKind.SetLogo) return applySetLogo(model, edit);
+    const target = targetOf(model, edit);
+    return typeof target === 'string' ? target : applyToTarget(target);
+}
+
+function applySetLogo(model: NavigationModel, edit: NavigationEdit): string | undefined {
+    if (edit.module !== undefined) return logoLevel;
+    model.application.logo = { ...edit.logo! };
+    return undefined;
+}
+
+/** Finds the outlet an edit names, or says why the edit is refused: it is not a navigation edit, names no outlet or an outlet that is not there. */
+function targetOf(model: NavigationModel, edit: NavigationEdit): EditTarget | string {
     if (!Object.values(NavigationEditKind).includes(edit.kind)) return `'${String(edit.kind)}' is not a navigation edit.`;
     if (edit.outlet === undefined) return needsOutlet;
     const outlet = edit.outlet;
     const declared = findApplicationOutlet(model, outlet);
     if (!declared) return unknownOutlet(outlet);
-    const nested = allowsSubItems(outlet, declared.kind);
+    return { model, edit, outlet, declared, nested: allowsSubItems(outlet, declared.kind) };
+}
 
+function applyToTarget(target: EditTarget): string | undefined {
+    const edit = target.edit;
     switch (edit.kind) {
-        case NavigationEditKind.SetOutletMode: {
-            if (edit.module === undefined) return noMode;
-            if (edit.mode === OutletMode.Inherits) {
-                const block = findModuleNavigation(model, edit.module);
-                if (block?.refinements) {
-                    block.refinements = block.refinements.filter(refinement => refinement.outlet !== outlet);
-                    if (block.refinements.length === 0) delete block.refinements;
-                }
-                return undefined;
-            }
-            refinementOf(model, edit.module, outlet).mode = edit.mode;
-            return undefined;
-        }
-        case NavigationEditKind.SetOutletItems: {
-            const items = structuredClone(edit.items ?? []);
-            if (edit.module === undefined) applicationOutletOf(model, outlet)!.defaults = items;
-            else refinementOf(model, edit.module, outlet).items = items;
-            return undefined;
-        }
-        case NavigationEditKind.AddItem: {
-            const own = ownListOf(model, edit.module, outlet)!;
-            const item = structuredClone(edit.item!);
-            if (!outletItemKinds(declared.kind).includes(item.kind)) return kindMismatch(declared, item);
-            if (collectItemIds(own, nested).includes(item.id)) return duplicateId(item.id);
-            if (edit.parent === undefined) {
-                insert(own, item, edit.index);
-                return undefined;
-            }
-            if (!nested || item.kind !== OutletItemKind.Navigation) return flat(outlet);
-            const owner = locate(own, edit.parent, nested);
-            if (!owner) return missingParent(edit.parent);
-            const parentItem = owner.siblings[owner.index] as OutletNavigationItem;
-            parentItem.children ??= [];
-            insert(parentItem.children, item, edit.index);
-            return undefined;
-        }
-        case NavigationEditKind.UpdateItem: {
-            const location = locate(ownListOf(model, edit.module, outlet)!, edit.id ?? '', nested);
-            if (!location) return missingItem(edit.id ?? '');
-            location.siblings[location.index] = structuredClone(edit.item!);
-            return undefined;
-        }
-        case NavigationEditKind.MoveItem: {
-            const own = ownListOf(model, edit.module, outlet)!;
-            const location = locate(own, edit.id ?? '', nested);
-            if (!location) return missingItem(edit.id ?? '');
-            const [moved] = location.siblings.splice(location.index, 1);
-            if (edit.parent === undefined) {
-                insert(own, moved, edit.index);
-                return undefined;
-            }
-            if (!nested || moved.kind !== OutletItemKind.Navigation) return flat(outlet);
-            const owner = locate(own, edit.parent, nested);
-            if (!owner) return missingParent(edit.parent);
-            const parentItem = owner.siblings[owner.index] as OutletNavigationItem;
-            parentItem.children ??= [];
-            insert(parentItem.children, moved, edit.index);
-            return undefined;
-        }
-        case NavigationEditKind.RemoveItem: {
-            const location = locate(ownListOf(model, edit.module, outlet)!, edit.id ?? '', nested);
-            if (!location) return missingItem(edit.id ?? '');
-            location.siblings.splice(location.index, 1);
-            return undefined;
-        }
-        case NavigationEditKind.HideItem: {
-            if (edit.module === undefined) return noMode;
-            const refinement = refinementOf(model, edit.module, outlet);
-            refinement.hide ??= [];
-            if (!refinement.hide.includes(edit.id ?? '')) refinement.hide.push(edit.id ?? '');
-            return undefined;
-        }
+        case NavigationEditKind.SetOutletMode: return applySetOutletMode(target);
+        case NavigationEditKind.SetOutletItems: return applySetOutletItems(target);
+        case NavigationEditKind.AddItem: return applyAddItem(target);
+        case NavigationEditKind.UpdateItem: return applyUpdateItem(target);
+        case NavigationEditKind.MoveItem: return applyMoveItem(target);
+        case NavigationEditKind.RemoveItem: return applyRemoveItem(target);
+        case NavigationEditKind.HideItem: return applyHideItem(target);
         default:
             return `'${String((edit as NavigationEdit).kind)}' is not a navigation edit.`;
     }
+}
+
+/** What an edit changes: the model, the edit, and the outlet it names with what is known about it. */
+interface EditTarget {
+    model: NavigationModel;
+    edit: NavigationEdit;
+    outlet: string;
+    declared: Outlet;
+    nested: boolean;
+}
+
+function applySetOutletMode({ model, edit, outlet }: EditTarget): string | undefined {
+    if (edit.module === undefined) return noMode;
+    if (edit.mode === OutletMode.Inherits) {
+        const block = findModuleNavigation(model, edit.module);
+        if (block?.refinements) {
+            block.refinements = block.refinements.filter(refinement => refinement.outlet !== outlet);
+            if (block.refinements.length === 0) delete block.refinements;
+        }
+        return undefined;
+    }
+    refinementOf(model, edit.module, outlet).mode = edit.mode;
+    return undefined;
+}
+
+function applySetOutletItems({ model, edit, outlet }: EditTarget): string | undefined {
+    const items = structuredClone(edit.items ?? []);
+    if (edit.module === undefined) applicationOutletOf(model, outlet)!.defaults = items;
+    else refinementOf(model, edit.module, outlet).items = items;
+    return undefined;
+}
+
+function applyAddItem(target: EditTarget): string | undefined {
+    const { model, edit, outlet, declared, nested } = target;
+    const own = ownListOf(model, edit.module, outlet)!;
+    const item = structuredClone(edit.item!);
+    if (!outletItemKinds(declared.kind).includes(item.kind)) return kindMismatch(declared, item);
+    if (collectItemIds(own, nested).includes(item.id)) return duplicateId(item.id);
+    return place(own, item, target);
+}
+
+function applyUpdateItem({ model, edit, outlet, nested }: EditTarget): string | undefined {
+    const location = locate(ownListOf(model, edit.module, outlet)!, edit.id ?? '', nested);
+    if (!location) return missingItem(edit.id ?? '');
+    location.siblings[location.index] = structuredClone(edit.item!);
+    return undefined;
+}
+
+function applyMoveItem(target: EditTarget): string | undefined {
+    const { model, edit, outlet, nested } = target;
+    const own = ownListOf(model, edit.module, outlet)!;
+    const location = locate(own, edit.id ?? '', nested);
+    if (!location) return missingItem(edit.id ?? '');
+    const [moved] = location.siblings.splice(location.index, 1);
+    return place(own, moved, target);
+}
+
+function applyRemoveItem({ model, edit, outlet, nested }: EditTarget): string | undefined {
+    const location = locate(ownListOf(model, edit.module, outlet)!, edit.id ?? '', nested);
+    if (!location) return missingItem(edit.id ?? '');
+    location.siblings.splice(location.index, 1);
+    return undefined;
+}
+
+function applyHideItem({ model, edit, outlet }: EditTarget): string | undefined {
+    if (edit.module === undefined) return noMode;
+    const refinement = refinementOf(model, edit.module, outlet);
+    refinement.hide ??= [];
+    if (!refinement.hide.includes(edit.id ?? '')) refinement.hide.push(edit.id ?? '');
+    return undefined;
+}
+
+/** Puts an item among the level's own items, at the top level or under the parent the edit names. */
+function place(own: OutletItem[], item: OutletItem, { edit, outlet, nested }: EditTarget): string | undefined {
+    if (edit.parent === undefined) {
+        insert(own, item, edit.index);
+        return undefined;
+    }
+    if (!nested || item.kind !== OutletItemKind.Navigation) return flat(outlet);
+    const owner = locate(own, edit.parent, nested);
+    if (!owner) return missingParent(edit.parent);
+    const parentItem = owner.siblings[owner.index] as OutletNavigationItem;
+    parentItem.children ??= [];
+    insert(parentItem.children, item, edit.index);
+    return undefined;
 }

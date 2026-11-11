@@ -12,6 +12,8 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 {
     static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
 
+    static readonly JsonSerializerOptions _written = new() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
     JsonNode _corpus = null!;
 
     void Establish()
@@ -22,17 +24,17 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "slot-shape-fixtures.json")))!;
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "slot-shape-fixtures.json")));
     }
 
-    [Fact] void should_state_the_same_migration_hint() => SlotShapeValidator.MigrationHint.ShouldEqual(_corpus["hint"]!.GetValue<string>());
+    [Fact] void should_state_the_same_migration_hint() => SlotShapeValidator.MigrationHint.ShouldEqual(_corpus["hint"].GetValue<string>());
 
     [Fact]
     void should_cover_every_diagnostic_code()
     {
-        var covered = Cases("upgrades").SelectMany(fixture => fixture["expected"]!["diagnostics"]!.AsArray())
-            .Concat(Cases("validations").SelectMany(fixture => fixture["expected"]!.AsArray()))
-            .Select(diagnostic => diagnostic!["code"]!.GetValue<string>())
+        var covered = Cases("upgrades").SelectMany(fixture => fixture["expected"]["diagnostics"].AsArray())
+            .Concat(Cases("validations").SelectMany(fixture => fixture["expected"].AsArray()))
+            .Select(diagnostic => diagnostic["code"].GetValue<string>())
             .Distinct()
             .Order();
         covered.ShouldContainOnly(Enum.GetNames<SlotShapeDiagnosticCode>().Select(ToCamelCase).Order());
@@ -42,8 +44,8 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     void should_resolve_every_role()
     {
         var mismatches = Cases("roles")
-            .Where(fixture => !string.Equals(SlotRoles.Resolve(fixture["slot"].Deserialize<Slot>(_options)!).ToString(), fixture["expected"]!.GetValue<string>(), StringComparison.OrdinalIgnoreCase))
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Where(fixture => !string.Equals(SlotRoles.Resolve(fixture["slot"].Deserialize<Slot>(_options)).ToString(), fixture["expected"].GetValue<string>(), StringComparison.OrdinalIgnoreCase))
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 
@@ -52,7 +54,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     {
         var mismatches = Cases("primary")
             .Where(fixture => SlotRoles.PrimaryOf(fixture["slots"].Deserialize<List<Slot>>(_options)) != fixture["expected"]?.GetValue<string>())
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 
@@ -62,20 +64,20 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         var mismatches = new List<string>();
         foreach (var fixture in Cases("upgrades"))
         {
-            var input = fixture["input"]!.DeepClone();
+            var input = fixture["input"].DeepClone();
             var result = SlotShapeUpgrader.Upgrade(input);
-            var expected = fixture["expected"]!;
+            var expected = fixture["expected"];
             if (!JsonNode.DeepEquals(result.Document, expected["document"]))
             {
                 mismatches.Add($"{fixture["name"]}: document {result.Document?.ToJsonString()}");
             }
 
-            if (result.Changed != expected["changed"]!.GetValue<bool>())
+            if (result.Changed != expected["changed"].GetValue<bool>())
             {
                 mismatches.Add($"{fixture["name"]}: changed {result.Changed}");
             }
 
-            if (!Describe(result.Diagnostics).SequenceEqual(Describe(expected["diagnostics"]!.AsArray())))
+            if (!Describe(result.Diagnostics).SequenceEqual(Describe(expected["diagnostics"].AsArray())))
             {
                 mismatches.Add($"{fixture["name"]}: diagnostics {string.Join(" / ", Describe(result.Diagnostics))}");
             }
@@ -96,11 +98,47 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     }
 
     [Fact]
+    void should_write_every_upgraded_document_in_the_order_the_upgrade_builds_it()
+    {
+        var mismatches = Cases("upgradeRaw")
+            .Where(fixture => SlotShapeUpgrader.Upgrade(fixture["input"].DeepClone()).Document?.ToJsonString() != fixture["expected"].GetValue<string>())
+            .Select(fixture => $"{fixture["name"]}: {SlotShapeUpgrader.Upgrade(fixture["input"].DeepClone()).Document?.ToJsonString()}");
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
     void should_validate_every_document()
     {
         var mismatches = Cases("validations")
-            .Where(fixture => !Describe(SlotShapeValidator.Validate(fixture["document"])).SequenceEqual(Describe(fixture["expected"]!.AsArray())))
+            .Where(fixture => !Describe(SlotShapeValidator.Validate(fixture["document"])).SequenceEqual(Describe(fixture["expected"].AsArray())))
             .Select(fixture => $"{fixture["name"]}: {string.Join(" / ", Describe(SlotShapeValidator.Validate(fixture["document"])))}");
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
+    void should_report_every_characterized_document_in_order_as_written()
+    {
+        var mismatches = Cases("characterization")
+            .Where(fixture => Write(SlotShapeValidator.Validate(fixture["document"].DeepClone())) != fixture["expected"].GetValue<string>())
+            .Select(fixture => $"{fixture["name"]}: {Write(SlotShapeValidator.Validate(fixture["document"].DeepClone()))}");
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
+    void should_leave_every_characterized_document_as_it_was()
+    {
+        var mismatches = new List<string>();
+        foreach (var fixture in Cases("characterization"))
+        {
+            var document = fixture["document"].DeepClone();
+            var written = document.ToJsonString();
+            SlotShapeValidator.Validate(document);
+            if (document.ToJsonString() != written)
+            {
+                mismatches.Add(fixture["name"].GetValue<string>());
+            }
+        }
+
         mismatches.ShouldBeEmpty();
     }
 
@@ -108,19 +146,24 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     void should_upgrade_every_mappable_document_into_the_slot_shape()
     {
         var unexpected = Cases("upgrades")
-            .Where(fixture => fixture["expected"]!["diagnostics"]!.AsArray().Count == 0
+            .Where(fixture => fixture["expected"]["diagnostics"].AsArray().Count == 0
                 && SlotShapeValidator.Validate(SlotShapeUpgrader.Upgrade(fixture["input"]).Document).Count > 0)
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         unexpected.ShouldBeEmpty();
     }
 
     IEnumerable<JsonNode> Cases(string section) => _corpus[section]!.AsArray().Select(fixture => fixture!);
 
+    static string Write(IEnumerable<SlotShapeDiagnostic> diagnostics) =>
+        JsonSerializer.Serialize(
+            diagnostics.Select(diagnostic => new { code = ToCamelCase(diagnostic.Code.ToString()), path = diagnostic.Path, message = diagnostic.Message }),
+            _written);
+
     static IEnumerable<string> Describe(IEnumerable<SlotShapeDiagnostic> diagnostics) =>
         diagnostics.Select(diagnostic => $"{ToCamelCase(diagnostic.Code.ToString())}|{diagnostic.Path}|{diagnostic.Message}");
 
     static IEnumerable<string> Describe(JsonArray diagnostics) =>
-        diagnostics.Select(diagnostic => $"{diagnostic!["code"]}|{diagnostic["path"]}|{diagnostic["message"]}");
+        diagnostics.Select(diagnostic => $"{diagnostic["code"]}|{diagnostic["path"]}|{diagnostic["message"]}");
 
     static string ToCamelCase(string name) => JsonNamingPolicy.CamelCase.ConvertName(name);
 }

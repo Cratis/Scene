@@ -27,14 +27,14 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "profile-migration-fixtures.json")));
-        _library = document.RootElement.GetProperty("library").Deserialize<TemplateLibrary>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "profile-migration-fixtures.json")));
+        _library = document.RootElement.GetProperty("library").Deserialize<TemplateLibrary>(_options);
         _cases = [.. document.RootElement.GetProperty("cases").EnumerateArray().Select(element =>
         {
             var legacy = element.GetProperty("legacy");
             var expected = element.GetProperty("expected");
             return new MigrationCase(
-                element.GetProperty("name").GetString()!,
+                element.GetProperty("name").GetString(),
                 new LegacyProfile(
                     UiProfileJson.Parse(legacy.GetProperty("profile")),
                     Optional(legacy, "shell"),
@@ -43,7 +43,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
                     Optional(legacy, "colorScheme"),
                     Optional(legacy, "accent"),
                     Optional(legacy, "defaultScreenTemplate")),
-                expected.GetProperty("profile").GetString()!,
+                expected.GetProperty("profile").GetString(),
                 expected.GetProperty("changed").GetBoolean(),
                 [.. expected.GetProperty("diagnostics").EnumerateArray().Select(item =>
                     $"{item.GetProperty("code").GetString()}|{(item.GetProperty("subject").ValueKind == JsonValueKind.Null ? string.Empty : item.GetProperty("subject").GetString())}|{item.GetProperty("message").GetString()}")]);

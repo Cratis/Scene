@@ -20,10 +20,10 @@ public class when_querying_against_the_shared_fixture_corpus : Specification
         _cases =
         [
             .. document.RootElement.GetProperty("catalogCases").EnumerateArray().Select(element => new FixtureCase(
-                element.GetProperty("name").GetString()!,
-                element.GetProperty("query").GetString()!,
-                element.TryGetProperty("selected", out var selected) ? [.. selected.EnumerateArray().Select(value => value.GetString()!)] : [],
-                [.. element.GetProperty("expected").EnumerateArray().Select(value => value.GetString()!)]))
+                element.GetProperty("name").GetString(),
+                element.GetProperty("query").GetString(),
+                element.TryGetProperty("selected", out var selected) ? [.. selected.EnumerateArray().Select(value => value.GetString())] : [],
+                [.. element.GetProperty("expected").EnumerateArray().Select(value => value.GetString())]))
         ];
     }
 

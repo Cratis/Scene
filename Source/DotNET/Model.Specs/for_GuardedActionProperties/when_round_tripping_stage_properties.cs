@@ -20,7 +20,7 @@ public class when_round_tripping_stage_properties : Specification
 
     void Establish()
     {
-        var bag = JsonSerializer.Deserialize<Dictionary<string, object?>>(StageProperties, _options)!;
+        var bag = JsonSerializer.Deserialize<Dictionary<string, object?>>(StageProperties, _options);
         _properties = GuardedActionProperties.Read(new ExternalComponent { Id = "approve", Name = "approve", ComponentName = GuardedActionProperties.ComponentName, Properties = bag });
     }
 
@@ -68,7 +68,7 @@ public class when_round_tripping_stage_properties : Specification
 
     [Fact] void should_preserve_the_command() => _roundTrip.Alternatives[0].Command.ShouldEqual("Approve");
     [Fact] void should_accept_stage_properties_without_a_subject_binding() => _roundTrip.Item.ShouldBeNull();
-    [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments!["id"].Subject.ShouldEqual("item.id");
+    [Fact] void should_preserve_explicit_arguments() => _roundTrip.Alternatives[0].Arguments["id"].Subject.ShouldEqual("item.id");
     [Fact] void should_preserve_the_nested_guard() => _roundTrip.Alternatives[0].Condition.ShouldBeOfExactType<LogicalGuardCondition>();
     [Fact] void should_preserve_declared_enumeration_numbers() => ((ComparisonGuardCondition)((LogicalGuardCondition)_roundTrip.Alternatives[0].Condition).Left).EnumerationNumbers.ShouldEqual(10d, 20d);
     [Fact] void should_preserve_interaction_branches() => _interaction.GetProperty("alternatives").GetArrayLength().ShouldEqual(1);

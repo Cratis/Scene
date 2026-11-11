@@ -15,7 +15,7 @@ public class when_running_the_shared_corpus : Specification
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
-        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "guarded-selection-fixtures.json")));
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory.FullName, "guarded-selection-fixtures.json")));
     }
 
     [Fact]

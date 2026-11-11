@@ -40,6 +40,7 @@ public class when_serializing_an_external_component : Specification
 
     [Fact] void should_include_the_concrete_component_name() => _json.GetProperty("componentName").GetString().ShouldEqual("core:section");
     [Fact] void should_include_the_framework_element_name() => _json.GetProperty("name").GetString().ShouldEqual("section");
-    [Fact] void should_serialize_nested_scene_elements_polymorphically() =>
+    [Fact]
+    void should_serialize_nested_scene_elements_polymorphically() =>
         _json.GetProperty("slots").GetProperty("content")[0].GetProperty("componentName").GetString().ShouldEqual("core:title");
 }

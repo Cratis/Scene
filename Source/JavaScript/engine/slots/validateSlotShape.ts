@@ -59,15 +59,19 @@ function legacy(path: string, what: string): SlotShapeDiagnostic {
     return { code: SlotShapeDiagnosticCode.LegacyOutletShape, path, message: `${what}. ${slotShapeMigrationHint}` };
 }
 
-function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[], inValues: boolean): void {
+function checkOutletDeclarations(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     const name = typeof value.name === 'string' ? `'${value.name}'` : 'The object';
-    if (!inValues && isLegacyOutletList(value.outlets)) {
+    if (isLegacyOutletList(value.outlets)) {
         diagnostics.push(legacy(`${path}.outlets`, `${name} declares outlets`));
     }
 
-    if (!inValues && isObject(value.metadata) && typeof value.metadata.primaryOutlet === 'string') {
+    if (isObject(value.metadata) && typeof value.metadata.primaryOutlet === 'string') {
         diagnostics.push(legacy(`${path}.metadata.primaryOutlet`, `${name} names its primary outlet in its metadata`));
     }
+}
+
+function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[], inValues: boolean): void {
+    if (!inValues) checkOutletDeclarations(value, path, diagnostics);
 
     if (isDestinationOfLegacyKind(value)) {
         diagnostics.push(legacy(`${path}.kind`, `A destination opens the kind '${String(value.kind)}'`));
@@ -95,52 +99,87 @@ const screenFits = new Set<string>(Object.values(ScreenFit));
 const buttonDisplays = new Set<string>(Object.values(OutletButtonDisplay).map(display => display.toLowerCase()));
 const actionItemKinds = new Set<string>([OutletItemKind.Button, OutletItemKind.MenuEntry].map(kind => kind.toLowerCase()));
 
+function isActionComponent(value: JsonObject): boolean {
+    return typeof value.componentName === 'string' && value.componentName.endsWith(':action');
+}
+
+function isActionItem(value: JsonObject): boolean {
+    return typeof value.kind === 'string' && actionItemKinds.has(value.kind.toLowerCase());
+}
+
 function actionOf(value: JsonObject, path: string): { action: JsonObject; path: string; name: string } | undefined {
-    if (typeof value.componentName === 'string' && value.componentName.endsWith(':action') && isObject(value.properties)) {
+    if (isActionComponent(value) && isObject(value.properties)) {
         return { action: value.properties, path: `${path}.properties`, name: String(value.id) };
     }
-    if (typeof value.kind === 'string' && actionItemKinds.has(value.kind.toLowerCase())) return { action: value, path, name: String(value.id) };
+    if (isActionItem(value)) return { action: value, path, name: String(value.id) };
     return undefined;
 }
 
-function checkPlacement(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
-    if (isLegacyActionPresentation(value)) {
-        diagnostics.push({
-            code: SlotShapeDiagnosticCode.LegacyActionPresentation,
-            path: `${path}.properties.${legacyActionPresentationProperty}`,
-            message: `The action '${String(value.id)}' stores a presentation. ${actionPresentationMigrationHint}`,
-        });
-    }
+function isUnknownOpens(opens: unknown): boolean {
+    return opens !== undefined && (typeof opens !== 'string' || !opensValues.has(opens.toLowerCase()));
+}
 
+function opensSlotWithoutName(opens: unknown, action: JsonObject): boolean {
+    const opensSlot = typeof opens === 'string' && opens.toLowerCase() === Opens.Slot;
+    return opensSlot && (typeof action.opensIn !== 'string' || action.opensIn.length === 0);
+}
+
+function checkActionPresentation(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (!isLegacyActionPresentation(value)) return;
+    diagnostics.push({
+        code: SlotShapeDiagnosticCode.LegacyActionPresentation,
+        path: `${path}.properties.${legacyActionPresentationProperty}`,
+        message: `The action '${String(value.id)}' stores a presentation. ${actionPresentationMigrationHint}`,
+    });
+}
+
+function checkActionOpens(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     const found = actionOf(value, path);
-    if (found !== undefined) {
-        const opens = found.action.opens;
-        if (opens !== undefined && (typeof opens !== 'string' || !opensValues.has(opens.toLowerCase()))) {
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.UnknownOpens,
-                path: `${found.path}.opens`,
-                message: `The action '${found.name}' opens '${String(opens)}'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot`,
-            });
-        }
-        if (typeof opens === 'string' && opens.toLowerCase() === Opens.Slot && (typeof found.action.opensIn !== 'string' || found.action.opensIn.length === 0)) {
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.OpensSlotWithoutName,
-                path: `${found.path}.opensIn`,
-                message: `The action '${found.name}' opens in a slot but does not name one`,
-            });
-        }
-    }
+    if (found === undefined) return;
 
-    const display = value.display;
-    if (typeof value.kind === 'string' && value.kind.toLowerCase() === OutletItemKind.Button && display !== undefined
-        && (typeof display !== 'string' || !buttonDisplays.has(display.toLowerCase()))) {
+    const opens = found.action.opens;
+    if (isUnknownOpens(opens)) {
         diagnostics.push({
-            code: SlotShapeDiagnosticCode.UnknownButtonDisplay,
-            path: `${path}.display`,
-            message: `The button '${String(value.id)}' shows '${String(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)`,
+            code: SlotShapeDiagnosticCode.UnknownOpens,
+            path: `${found.path}.opens`,
+            message: `The action '${found.name}' opens '${String(opens)}'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot`,
         });
     }
+    if (opensSlotWithoutName(opens, found.action)) {
+        diagnostics.push({
+            code: SlotShapeDiagnosticCode.OpensSlotWithoutName,
+            path: `${found.path}.opensIn`,
+            message: `The action '${found.name}' opens in a slot but does not name one`,
+        });
+    }
+}
 
+function isButton(value: JsonObject): boolean {
+    return typeof value.kind === 'string' && value.kind.toLowerCase() === OutletItemKind.Button;
+}
+
+function isUnknownButtonDisplay(display: unknown): boolean {
+    return display !== undefined && (typeof display !== 'string' || !buttonDisplays.has(display.toLowerCase()));
+}
+
+function checkButtonDisplay(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    const display = value.display;
+    if (!isButton(value) || !isUnknownButtonDisplay(display)) return;
+    diagnostics.push({
+        code: SlotShapeDiagnosticCode.UnknownButtonDisplay,
+        path: `${path}.display`,
+        message: `The button '${String(value.id)}' shows '${String(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)`,
+    });
+}
+
+function checkPlacement(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    checkActionPresentation(value, path, diagnostics);
+    checkActionOpens(value, path, diagnostics);
+    checkButtonDisplay(value, path, diagnostics);
+    checkScreenFits(value, path, diagnostics);
+}
+
+function checkScreenFits(value: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     if (!Array.isArray(value.fits)) return;
     const name = typeof value.name === 'string' ? value.name : '(unnamed)';
     value.fits.forEach((fit: unknown, index: number) => {
@@ -178,39 +217,56 @@ function checkNavigation(owner: JsonObject, path: string, diagnostics: SlotShape
     });
 }
 
-function checkOutlets(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
-    const ownerName = typeof owner.name === 'string' ? owner.name : '(unnamed)';
-    if (isLegacyToolbar(owner.toolbar)) {
-        diagnostics.push({
-            code: SlotShapeDiagnosticCode.LegacyToolbarShape,
-            path: `${path}.toolbar`,
-            message: `'${ownerName}' has a toolbar whose buttons every screen gets. ${toolbarShapeMigrationHint}`,
-        });
-    }
+function ownerNameOf(owner: JsonObject): string {
+    return typeof owner.name === 'string' ? owner.name : '(unnamed)';
+}
+
+function checkToolbar(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (!isLegacyToolbar(owner.toolbar)) return;
+    diagnostics.push({
+        code: SlotShapeDiagnosticCode.LegacyToolbarShape,
+        path: `${path}.toolbar`,
+        message: `'${ownerNameOf(owner)}' has a toolbar whose buttons every screen gets. ${toolbarShapeMigrationHint}`,
+    });
+}
+
+function isOutletItemList(entry: unknown): entry is { outlet: string; items: unknown[] } {
+    return isObject(entry) && typeof entry.outlet === 'string' && Array.isArray(entry.items);
+}
+
+function checkOutletItemLists(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     for (const key of outletItemListKeys) {
         if (!Array.isArray(owner[key])) continue;
         (owner[key] as unknown[]).forEach((entry, index) => {
-            if (!isObject(entry) || typeof entry.outlet !== 'string' || !Array.isArray(entry.items)) return;
+            if (!isOutletItemList(entry)) return;
             checkOutletItems(entry.items, { outlet: entry.outlet }, `${path}.${key}[${index}].items`, diagnostics);
         });
     }
+}
+
+function checkOutlet(outlet: unknown, ownerName: string, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    if (!isObject(outlet) || typeof outlet.name !== 'string') return;
+    const written = typeof outlet.kind === 'string' ? outlet.kind.toLowerCase() : undefined;
+    const kind = Object.values(OutletKind).find(candidate => candidate === written);
+    if (kind !== undefined) {
+        if (Array.isArray(outlet.defaults)) checkOutletItems(outlet.defaults, { outlet: outlet.name, kind }, `${path}.defaults`, diagnostics);
+        return;
+    }
+    const described = outlet.kind === undefined ? 'no kind' : `the kind '${String(outlet.kind)}'`;
+    diagnostics.push({
+        code: SlotShapeDiagnosticCode.UnknownOutletKind,
+        path: `${path}.kind`,
+        message: `The outlet '${outlet.name}' of '${ownerName}' has ${described}; an outlet lists actions, filters, tabs, stats or navigation`,
+    });
+}
+
+function checkOutlets(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
+    checkToolbar(owner, path, diagnostics);
+    checkOutletItemLists(owner, path, diagnostics);
 
     if (!Array.isArray(owner.outlets) || isLegacyOutletList(owner.outlets)) return;
-    owner.outlets.forEach((outlet: unknown, index: number) => {
-        if (!isObject(outlet) || typeof outlet.name !== 'string') return;
-        const written = typeof outlet.kind === 'string' ? outlet.kind.toLowerCase() : undefined;
-        const kind = Object.values(OutletKind).find(candidate => candidate === written);
-        if (kind !== undefined) {
-            if (Array.isArray(outlet.defaults)) checkOutletItems(outlet.defaults, { outlet: outlet.name, kind }, `${path}.outlets[${index}].defaults`, diagnostics);
-            return;
-        }
-        const described = outlet.kind === undefined ? 'no kind' : `the kind '${String(outlet.kind)}'`;
-        diagnostics.push({
-            code: SlotShapeDiagnosticCode.UnknownOutletKind,
-            path: `${path}.outlets[${index}].kind`,
-            message: `The outlet '${outlet.name}' of '${ownerName}' has ${described}; an outlet lists actions, filters, tabs, stats or navigation`,
-        });
-    });
+    const ownerName = ownerNameOf(owner);
+    owner.outlets.forEach((outlet: unknown, index: number) => checkOutlet(outlet, ownerName, `${path}.outlets[${index}]`, diagnostics));
 }
 
 /** The keys of an owner that list refinements of, or contributions to, outlets: each entry names its `outlet` and has `items`. */
@@ -222,77 +278,132 @@ interface OutletItemsOwner {
     group?: string;
 }
 
+interface OutletItemContext {
+    item: JsonObject;
+    itemPath: string;
+    id: string | undefined;
+    named: string;
+    owner: OutletItemsOwner;
+    diagnostics: SlotShapeDiagnostic[];
+}
+
+function kindOfItem(item: JsonObject): OutletItemKind | undefined {
+    const written = typeof item.kind === 'string' ? item.kind.toLowerCase() : undefined;
+    return Object.values(OutletItemKind).find(candidate => candidate.toLowerCase() === written);
+}
+
+function reportUnknownItemKind(context: OutletItemContext): void {
+    const { item, itemPath, named, owner } = context;
+    const described = item.kind === undefined ? 'no kind' : `the kind '${String(item.kind)}'`;
+    context.diagnostics.push({
+        code: SlotShapeDiagnosticCode.UnknownOutletItemKind,
+        path: `${itemPath}.kind`,
+        message: `The item '${named}' of the outlet '${owner.outlet}' has ${described}; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item`,
+    });
+}
+
+function reportMismatchedItemKind(context: OutletItemContext, kind: OutletItemKind): boolean {
+    const { itemPath, named, owner } = context;
+    const allowed = owner.group !== undefined ? groupItemKinds : owner.kind !== undefined ? outletItemKinds(owner.kind) : undefined;
+    if (allowed === undefined || allowed.includes(kind)) return false;
+
+    const name = outletItemKindName(kind);
+    context.diagnostics.push({
+        code: SlotShapeDiagnosticCode.OutletItemKindMismatch,
+        path: `${itemPath}.kind`,
+        message: owner.group !== undefined
+            ? `The ${name} '${named}' cannot go in the group '${owner.group}' of the outlet '${owner.outlet}', which takes buttons, menu entries and separators`
+            : `The ${name} '${named}' cannot go in the ${owner.kind} outlet '${owner.outlet}', which takes ${describeOutletItemKinds(owner.kind!)}`,
+    });
+    return true;
+}
+
+function isBlank(value: unknown): boolean {
+    return typeof value !== 'string' || value.length === 0;
+}
+
+function checkOutletItemCompleteness(context: OutletItemContext, kind: OutletItemKind): void {
+    const { item, itemPath, id, named, owner } = context;
+    const name = outletItemKindName(kind);
+    const incomplete = (field: string, what: string) => context.diagnostics.push({
+        code: SlotShapeDiagnosticCode.IncompleteOutletItem,
+        path: `${itemPath}.${field}`,
+        message: `The ${name} '${named}' of the outlet '${owner.outlet}' has no ${what}`,
+    });
+    if (id === undefined) incomplete('id', 'id');
+    if (kind !== OutletItemKind.Separator && isBlank(item.title)) incomplete('title', 'title');
+    if (kind === OutletItemKind.Tab && isBlank(item.shows)) incomplete('shows', 'screen to show');
+    if (kind !== OutletItemKind.Group) return;
+
+    if (!Array.isArray(item.items)) incomplete('items', 'items');
+    else checkOutletItems(item.items, { ...owner, group: named }, `${itemPath}.items`, context.diagnostics);
+}
+
+function checkOutletItem(item: unknown, itemPath: string, owner: OutletItemsOwner, diagnostics: SlotShapeDiagnostic[]): void {
+    if (!isObject(item)) return;
+    const id = typeof item.id === 'string' && item.id.length > 0 ? item.id : undefined;
+    const context: OutletItemContext = { item, itemPath, id, named: id ?? '(no id)', owner, diagnostics };
+    const kind = kindOfItem(item);
+    if (kind === undefined) {
+        reportUnknownItemKind(context);
+        return;
+    }
+
+    if (reportMismatchedItemKind(context, kind)) return;
+    checkOutletItemCompleteness(context, kind);
+}
+
 function checkOutletItems(items: unknown[], owner: OutletItemsOwner, path: string, diagnostics: SlotShapeDiagnostic[]): void {
-    items.forEach((item, index) => {
-        if (!isObject(item)) return;
-        const itemPath = `${path}[${index}]`;
-        const id = typeof item.id === 'string' && item.id.length > 0 ? item.id : undefined;
-        const named = id ?? '(no id)';
-        const written = typeof item.kind === 'string' ? item.kind.toLowerCase() : undefined;
-        const kind = Object.values(OutletItemKind).find(candidate => candidate.toLowerCase() === written);
-        if (kind === undefined) {
-            const described = item.kind === undefined ? 'no kind' : `the kind '${String(item.kind)}'`;
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.UnknownOutletItemKind,
-                path: `${itemPath}.kind`,
-                message: `The item '${named}' of the outlet '${owner.outlet}' has ${described}; an outlet item is a button, menu entry, separator, group, filter, tab, stat or navigation item`,
-            });
-            return;
-        }
+    items.forEach((item, index) => checkOutletItem(item, `${path}[${index}]`, owner, diagnostics));
+}
 
-        const name = outletItemKindName(kind);
-        const allowed = owner.group !== undefined ? groupItemKinds : owner.kind !== undefined ? outletItemKinds(owner.kind) : undefined;
-        if (allowed !== undefined && !allowed.includes(kind)) {
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.OutletItemKindMismatch,
-                path: `${itemPath}.kind`,
-                message: owner.group !== undefined
-                    ? `The ${name} '${named}' cannot go in the group '${owner.group}' of the outlet '${owner.outlet}', which takes buttons, menu entries and separators`
-                    : `The ${name} '${named}' cannot go in the ${owner.kind} outlet '${owner.outlet}', which takes ${describeOutletItemKinds(owner.kind!)}`,
-            });
-            return;
-        }
+interface SlotContext {
+    slot: JsonObject;
+    name: string;
+    ownerName: string;
+    path: string;
+    diagnostics: SlotShapeDiagnostic[];
+}
 
-        const incomplete = (field: string, what: string) => diagnostics.push({
-            code: SlotShapeDiagnosticCode.IncompleteOutletItem,
-            path: `${itemPath}.${field}`,
-            message: `The ${name} '${named}' of the outlet '${owner.outlet}' has no ${what}`,
-        });
-        if (id === undefined) incomplete('id', 'id');
-        if (kind !== OutletItemKind.Separator && (typeof item.title !== 'string' || item.title.length === 0)) incomplete('title', 'title');
-        if (kind === OutletItemKind.Tab && (typeof item.shows !== 'string' || item.shows.length === 0)) incomplete('shows', 'screen to show');
-        if (kind === OutletItemKind.Group) {
-            if (!Array.isArray(item.items)) incomplete('items', 'items');
-            else checkOutletItems(item.items, { ...owner, group: named }, `${itemPath}.items`, diagnostics);
-        }
+function isUnknownRole(role: unknown): boolean {
+    return role !== undefined && (typeof role !== 'string' || !roles.has(role.toLowerCase()));
+}
+
+function isRoutedByWithoutRouting(slot: JsonObject): boolean {
+    const routedBy = Array.isArray(slot.routedBy) ? slot.routedBy : [];
+    return routedBy.length > 0 && slot.routed !== true;
+}
+
+function checkSlotRole(context: SlotContext): void {
+    const { slot, name, ownerName, path } = context;
+    if (!isUnknownRole(slot.role)) return;
+    context.diagnostics.push({
+        code: SlotShapeDiagnosticCode.UnknownSlotRole,
+        path: `${path}.role`,
+        message: `The slot '${name}' of '${ownerName}' has the role '${String(slot.role)}'; a slot is a page, a pane or a panel`,
+    });
+}
+
+function checkSlotRouting(context: SlotContext): void {
+    const { slot, name, ownerName, path } = context;
+    if (!isRoutedByWithoutRouting(slot)) return;
+    context.diagnostics.push({
+        code: SlotShapeDiagnosticCode.RouteParametersWithoutRouting,
+        path: `${path}.routedBy`,
+        message: `The slot '${name}' of '${ownerName}' is routed by ${(slot.routedBy as unknown[]).map(String).join(', ')} but is not routed`,
     });
 }
 
 function checkSlots(owner: JsonObject, path: string, diagnostics: SlotShapeDiagnostic[]): void {
     if (!Array.isArray(owner.slots)) return;
 
-    const ownerName = typeof owner.name === 'string' ? owner.name : '(unnamed)';
+    const ownerName = ownerNameOf(owner);
     const primaries: string[] = [];
     owner.slots.forEach((slot: unknown, index: number) => {
         if (!isObject(slot) || typeof slot.name !== 'string') return;
-        const slotPath = `${path}.slots[${index}]`;
-
-        if (slot.role !== undefined && (typeof slot.role !== 'string' || !roles.has(slot.role.toLowerCase()))) {
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.UnknownSlotRole,
-                path: `${slotPath}.role`,
-                message: `The slot '${slot.name}' of '${ownerName}' has the role '${String(slot.role)}'; a slot is a page, a pane or a panel`,
-            });
-        }
-
-        if (Array.isArray(slot.routedBy) && slot.routedBy.length > 0 && slot.routed !== true) {
-            diagnostics.push({
-                code: SlotShapeDiagnosticCode.RouteParametersWithoutRouting,
-                path: `${slotPath}.routedBy`,
-                message: `The slot '${slot.name}' of '${ownerName}' is routed by ${slot.routedBy.map(String).join(', ')} but is not routed`,
-            });
-        }
-
+        const context: SlotContext = { slot, name: slot.name, ownerName, path: `${path}.slots[${index}]`, diagnostics };
+        checkSlotRole(context);
+        checkSlotRouting(context);
         if (slot.primary === true) primaries.push(slot.name);
     });
 

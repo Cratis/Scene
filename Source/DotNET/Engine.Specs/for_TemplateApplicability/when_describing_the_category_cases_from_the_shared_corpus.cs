@@ -11,7 +11,7 @@ public class when_describing_the_category_cases_from_the_shared_corpus : Specifi
     List<CategoryCase> _cases = null!;
     List<(CategoryCase Case, IReadOnlyList<TemplateCatalogEntry> Entries)> _described = null!;
 
-    void Establish() => _cases = FixtureFile.Load().GetProperty("categories").Deserialize<List<CategoryCase>>(FixtureFile.Options)!;
+    void Establish() => _cases = FixtureFile.Load().GetProperty("categories").Deserialize<List<CategoryCase>>(FixtureFile.Options);
 
     void Because() => _described = [.. _cases.Select(fixture => (fixture, TemplateCatalog.Describe(fixture.Sources)))];
 

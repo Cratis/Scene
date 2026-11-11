@@ -29,7 +29,7 @@ public record SampleDataCatalogEntry(
     string? Description = null,
     IReadOnlyList<string>? Columns = null,
     string? StatusColumn = null,
-    Cratis.Scene.Model.SampleData.SampleStatusClassification? Statuses = null)
+    Model.SampleData.SampleStatusClassification? Statuses = null)
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SampleDataCatalogEntry"/> record with the members it had before the description, columns and statuses.

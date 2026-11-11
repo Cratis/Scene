@@ -54,7 +54,7 @@ public class when_composing_a_screen_with_a_flow_and_freeform_layout : Specifica
     [Fact] void should_have_two_slots() => _layout.Slots.Count.ShouldEqual(2);
     [Fact] void should_use_flow_arrangement_for_the_header_slot() => _layout.Slots[0].Arrangement.ShouldBeOfExactType<FlowArrangement>();
     [Fact] void should_use_freeform_arrangement_for_the_widgets_slot() => _layout.Slots[1].Arrangement.ShouldBeOfExactType<FreeformArrangement>();
-    [Fact] void should_have_a_freeform_variant_per_targeted_size_class() => ((FreeformArrangement)_layout.Slots[1].Arrangement!).Variants.Count.ShouldEqual(2);
+    [Fact] void should_have_a_freeform_variant_per_targeted_size_class() => ((FreeformArrangement)_layout.Slots[1].Arrangement).Variants.Count.ShouldEqual(2);
     [Fact] void should_carry_one_navigation_contribution() => _screen.Contributions.Count.ShouldEqual(1);
     [Fact] void should_target_the_navigation_contribution_point() => _screen.Contributions[0].ContributionPointName.ShouldEqual("Navigation");
 }

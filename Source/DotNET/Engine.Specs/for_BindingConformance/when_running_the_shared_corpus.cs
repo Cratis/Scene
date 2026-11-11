@@ -26,12 +26,12 @@ public class when_running_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "binding-resolution-fixtures.json")))!["scenarios"]!.AsArray();
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "binding-resolution-fixtures.json")))["scenarios"].AsArray();
     }
 
     JsonArray _corpus = null!;
 
-    void Because() => _results = [.. _corpus.Select(scenario => (scenario!["name"]!.GetValue<string>(), Run(Scope(scenario["scope"]), scenario["steps"]!.AsArray()), Expectations(scenario["steps"]!.AsArray())))];
+    void Because() => _results = [.. _corpus.Select(scenario => (scenario["name"].GetValue<string>(), Run(Scope(scenario["scope"]), scenario["steps"].AsArray()), Expectations(scenario["steps"].AsArray())))];
 
     [Fact]
     void should_run_every_scenario() => _results.Count.ShouldEqual(10);
@@ -54,7 +54,7 @@ public class when_running_the_shared_corpus : Specification
 
         for (var index = 0; index < steps.Count; index++)
         {
-            var step = steps[index]!.AsObject();
+            var step = steps[index].AsObject();
             var line = $"{index}: ok";
             if (step["nest"] is JsonNode nested)
             {
@@ -62,11 +62,11 @@ public class when_running_the_shared_corpus : Specification
             }
             else if (step["remove"] is JsonArray removed)
             {
-                scope = scope.WithoutComponentOutputs(removed.Select(id => id!.GetValue<string>()));
+                scope = scope.WithoutComponentOutputs(removed.Select(id => id.GetValue<string>()));
             }
             else if (step["begin"] is JsonNode begin)
             {
-                tickets[step["as"]!.GetValue<string>()] = queries.Begin(begin.GetValue<string>());
+                tickets[step["as"].GetValue<string>()] = queries.Begin(begin.GetValue<string>());
             }
             else if (step["complete"] is JsonNode complete)
             {
@@ -87,7 +87,7 @@ public class when_running_the_shared_corpus : Specification
                     Binding(validate),
                     Effective(),
                     step["targetElementId"]?.GetValue<string>(),
-                    step["resolvingElementIds"]?.AsArray().Select(id => id!.GetValue<string>()).ToList());
+                    step["resolvingElementIds"]?.AsArray().Select(id => id.GetValue<string>()).ToList());
                 line = $"{index}: {Diagnostics(diagnostics.Select(diagnostic => (diagnostic.Code, diagnostic.Message, diagnostic.Path)))}";
             }
 
@@ -99,12 +99,12 @@ public class when_running_the_shared_corpus : Specification
 
     static IReadOnlyList<string> Expectations(JsonArray steps) => [.. steps.Select((node, index) =>
     {
-        var step = node!.AsObject();
-        if (step.ContainsKey("complete")) return $"{index}: accepted {(step["accepted"]!.GetValue<bool>() ? "true" : "false")}";
+        var step = node.AsObject();
+        if (step.ContainsKey("complete")) return $"{index}: accepted {(step["accepted"].GetValue<bool>() ? "true" : "false")}";
         if (step.ContainsKey("resolve")) return $"{index}: {(step.ContainsKey("expectedAbsent") ? "absent" : Json(step["expected"]))}";
         if (step.ContainsKey("validate"))
         {
-            return $"{index}: {Diagnostics(step["expectedDiagnostics"]!.AsArray().Select(diagnostic => (diagnostic!["code"]!.GetValue<string>(), diagnostic["message"]!.GetValue<string>(), diagnostic["path"]?.GetValue<string>())))}";
+            return $"{index}: {Diagnostics(step["expectedDiagnostics"].AsArray().Select(diagnostic => (diagnostic["code"].GetValue<string>(), diagnostic["message"].GetValue<string>(), diagnostic["path"]?.GetValue<string>())))}";
         }
 
         return $"{index}: ok";
@@ -115,7 +115,7 @@ public class when_running_the_shared_corpus : Specification
     static BindingScope Scope(JsonNode? node) => new(
         node?["dataContext"]?.DeepClone(),
         node?["queryResults"]?.AsObject().ToDictionary(entry => entry.Key, entry => entry.Value?.DeepClone()),
-        node?["componentOutputs"]?.AsObject().ToDictionary(entry => entry.Key, entry => entry.Value!.DeepClone().AsObject()));
+        node?["componentOutputs"]?.AsObject().ToDictionary(entry => entry.Key, entry => entry.Value.DeepClone().AsObject()));
 
     static Dictionary<string, JsonNode?> Merge(IReadOnlyDictionary<string, JsonNode?>? first, IReadOnlyDictionary<string, JsonNode?> second)
     {

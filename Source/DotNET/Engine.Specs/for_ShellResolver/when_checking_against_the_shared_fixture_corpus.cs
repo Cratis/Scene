@@ -30,12 +30,12 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "effective-shell-fixtures.json")));
-        _libraries = document.RootElement.GetProperty("libraries").Deserialize<Dictionary<string, TemplateLibrary>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "effective-shell-fixtures.json")));
+        _libraries = document.RootElement.GetProperty("libraries").Deserialize<Dictionary<string, TemplateLibrary>>(_options);
         _cases = [.. document.RootElement.GetProperty("cases").EnumerateArray().Select(element => new ShellCase(
-            element.GetProperty("name").GetString()!,
-            element.GetProperty("library").GetString()!,
-            JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options)!,
+            element.GetProperty("name").GetString(),
+            element.GetProperty("library").GetString(),
+            JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options),
             element.TryGetProperty("screens", out var screens) ? screens.Deserialize<List<Screen>>(_options) : null,
             element.TryGetProperty("themes", out var themes) ? themes.Deserialize<List<Theme>>(_options) : null,
             element.TryGetProperty("availablePackages", out var packages) ? packages.Deserialize<List<string>>(_options) : null,
@@ -76,7 +76,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             $"kind {expected.GetProperty("kind").GetString()}",
             $"source {expected.GetProperty("source").GetString()}",
             $"name {expected.GetProperty("name").GetString()}",
-            $"reference {(expected.TryGetProperty("reference", out var reference) ? Reference(reference.GetProperty("source").GetString()!, reference.GetProperty("id").GetString()!, Optional(reference, "blueprint"), Optional(reference, "version")) : string.Empty)}",
+            $"reference {(expected.TryGetProperty("reference", out var reference) ? Reference(reference.GetProperty("source").GetString(), reference.GetProperty("id").GetString(), Optional(reference, "blueprint"), Optional(reference, "version")) : string.Empty)}",
             $"package {Optional(expected, "package")} {Optional(expected, "packageVersion")}",
             $"pin {Optional(expected, "pinStatus")} {Optional(expected, "pin")}",
             $"slots {string.Join(',', expected.GetProperty("slots").EnumerateArray().Select(item => item.GetString()))}",

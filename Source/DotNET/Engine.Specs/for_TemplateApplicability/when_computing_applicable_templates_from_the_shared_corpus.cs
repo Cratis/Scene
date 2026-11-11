@@ -16,8 +16,8 @@ public class when_computing_applicable_templates_from_the_shared_corpus : Specif
     void Establish()
     {
         var root = FixtureFile.Load();
-        _library = root.GetProperty("library").Deserialize<TemplateLibrary>(FixtureFile.Options)!;
-        _cases = root.GetProperty("applicable").Deserialize<List<ApplicableCase>>(FixtureFile.Options)!;
+        _library = root.GetProperty("library").Deserialize<TemplateLibrary>(FixtureFile.Options);
+        _cases = root.GetProperty("applicable").Deserialize<List<ApplicableCase>>(FixtureFile.Options);
     }
 
     void Because() => _results = [.. _cases.Select(fixture => (fixture, ApplicableTemplates.Compute(_library, fixture.Target)))];

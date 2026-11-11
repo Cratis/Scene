@@ -17,7 +17,7 @@ public class a_package_set_document : Specification
     protected static string WithPackage(string manifest, string module) =>
         $$"""{ "version": 1, "packages": [ { "manifest": {{manifest}}, "module": {{module}} } ] }""";
 
-    protected const string GoodManifest = """{ "name": "Acme.Charts", "version": "1.0.0", "kind": "ComponentLibrary", "components": ["chart"] }""";
+    protected const string GoodManifest = /*lang=json,strict*/ """{ "name": "Acme.Charts", "version": "1.0.0", "kind": "ComponentLibrary", "components": ["chart"] }""";
 
-    protected const string GoodModule = """{ "npm": "@acme/charts", "version": "1.0.0", "export": "acmeCharts" }""";
+    protected const string GoodModule = /*lang=json,strict*/ """{ "npm": "@acme/charts", "version": "1.0.0", "export": "acmeCharts" }""";
 }

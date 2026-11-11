@@ -28,9 +28,9 @@ public class when_validating_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "template-metadata-fixtures.json")));
-        _validation = document.RootElement.GetProperty("validation").Deserialize<List<ValidationCase>>(_options)!;
-        _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "template-metadata-fixtures.json")));
+        _validation = document.RootElement.GetProperty("validation").Deserialize<List<ValidationCase>>(_options);
+        _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options);
     }
 
     void Because()

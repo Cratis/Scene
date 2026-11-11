@@ -4,7 +4,7 @@
 namespace Cratis.Scene.Engine.Templates;
 
 /// <summary>
-/// The outcome of resolving a <see cref="Cratis.Scene.Model.Screens.TemplateReference"/> against a <see cref="TemplateLibrary"/>.
+/// The outcome of resolving a <see cref="Model.Screens.TemplateReference"/> against a <see cref="TemplateLibrary"/>.
 /// </summary>
 public enum TemplateReferenceStatus
 {

@@ -24,8 +24,8 @@ public class when_reading_an_outlet_item_whose_kind_is_not_first : Specification
 
     void Because()
     {
-        _items = JsonSerializer.Deserialize<List<OutletItem>>(Written, SceneJson.Options)!;
-        _configured = JsonSerializer.Deserialize<List<OutletItem>>(WrittenWithoutEnumerations, _hostOptions)!;
+        _items = JsonSerializer.Deserialize<List<OutletItem>>(Written, SceneJson.Options);
+        _configured = JsonSerializer.Deserialize<List<OutletItem>>(WrittenWithoutEnumerations, _hostOptions);
         try
         {
             JsonSerializer.Deserialize<List<OutletItem>>(WrittenWithoutEnumerations, _unconfiguredOptions);

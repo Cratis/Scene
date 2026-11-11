@@ -22,12 +22,12 @@ public class when_reading_a_blueprint_manifest : given.a_package_set_document
     void Because()
     {
         _result = ApprovedPackageSetJson.Read(WithPackage(Manifest, GoodModule), ["core"]);
-        _written = ApprovedPackageSetJson.Write(_result.Set!);
+        _written = ApprovedPackageSetJson.Write(_result.Set);
     }
 
     [Fact] void should_accept_the_manifest_as_published() => _result.Succeeded.ShouldBeTrue();
 
-    [Fact] void should_keep_the_kind_and_templates() => (_result.Set!.Packages.Single().Manifest.Kind, string.Join(',', _result.Set.Packages.Single().Manifest.ScreenTemplates)).ShouldEqual((PackageKind.Blueprint, "CrmLeadList"));
+    [Fact] void should_keep_the_kind_and_templates() => (_result.Set.Packages.Single().Manifest.Kind, string.Join(',', _result.Set.Packages.Single().Manifest.ScreenTemplates)).ShouldEqual((PackageKind.Blueprint, "CrmLeadList"));
 
     [Fact] void should_leave_the_sample_data_out_of_the_runtime_document() => _written.ShouldNotContain("sampleData");
 

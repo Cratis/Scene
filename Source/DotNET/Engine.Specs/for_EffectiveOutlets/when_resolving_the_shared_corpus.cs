@@ -31,7 +31,7 @@ public class when_resolving_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "outlet-resolution-fixtures.json")))!;
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "outlet-resolution-fixtures.json")));
     }
 
     [Fact]
@@ -49,9 +49,9 @@ public class when_resolving_the_shared_corpus : Specification
     void should_cover_every_diagnostic_code()
     {
         var covered = Cases("cases")
-            .SelectMany(fixture => fixture["expectedDiagnostics"]!.AsArray()
-                .Concat(fixture["resolve"]!.AsArray().SelectMany(entry => entry!["expected"]!["diagnostics"]!.AsArray())))
-            .Select(line => line!.GetValue<string>().Split('|')[0])
+            .SelectMany(fixture => fixture["expectedDiagnostics"].AsArray()
+                .Concat(fixture["resolve"].AsArray().SelectMany(entry => entry["expected"]["diagnostics"].AsArray())))
+            .Select(line => line.GetValue<string>().Split('|')[0])
             .Distinct()
             .Order();
         covered.ShouldContainOnly(Enum.GetNames<OutletDiagnosticCode>().Select(Camel).Order());
@@ -64,12 +64,40 @@ public class when_resolving_the_shared_corpus : Specification
         foreach (var fixture in Cases("cases"))
         {
             var (chain, contributors) = Levels(fixture);
-            foreach (var entry in fixture["resolve"]!.AsArray())
+            foreach (var entry in fixture["resolve"].AsArray())
             {
-                var outlet = entry!["outlet"]!.GetValue<string>();
+                var outlet = entry["outlet"].GetValue<string>();
                 var actual = Describe(EffectiveOutlets.Resolve(chain, outlet, contributors));
                 if (!JsonNode.DeepEquals(actual, entry["expected"])) mismatches.Add($"{fixture["name"]} / {outlet}: {actual.ToJsonString()}");
             }
+        }
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
+    void should_write_the_resolved_outlet_in_the_order_it_is_built()
+    {
+        var fixture = Cases("cases").Single(candidate => candidate["name"].GetValue<string>().StartsWith("contributions go after inherited", StringComparison.Ordinal));
+        var (chain, contributors) = Levels(fixture);
+
+        var written = JsonSerializer.Serialize(EffectiveOutlets.Resolve(chain, fixture["resolve"][0]["outlet"].GetValue<string>(), contributors), _write);
+
+        const string resolvedBody = "\"name\":\"toolbar\",\"items\":[{\"item\":{\"kind\":\"button\",\"title\":\"Add product\",\"id\":\"add\"},\"provenance\":{\"owner\":\"Products\",\"level\":\"feature\",\"source\":\"own\"},\"editable\":false},{\"item\":{\"kind\":\"button\",\"title\":\"Report\",\"id\":\"report\",\"before\":\"add\"},\"provenance\":{\"owner\":\"Sales\",\"level\":\"module\",\"source\":\"contribution\"},\"editable\":false},{\"item\":{\"kind\":\"button\",\"title\":\"Set price\",\"id\":\"price\",\"after\":\"report\"},\"provenance\":{\"owner\":\"Pricing\",\"level\":\"feature\",\"source\":\"contribution\"},\"editable\":false}],\"removed\":[{\"item\":{\"kind\":\"button\",\"title\":\"Refresh\",\"id\":\"refresh\"},\"provenance\":{\"owner\":\"Catalog\",\"level\":\"template\",\"source\":\"default\"},\"removal\":\"overridden\",\"removedBy\":\"Products\"},{\"item\":{\"kind\":\"button\",\"title\":\"Audit trail\",\"id\":\"audit\"},\"provenance\":{\"owner\":\"Audit\",\"level\":\"feature\",\"source\":\"contribution\"},\"removal\":\"hidden\",\"removedBy\":\"ProductList\"}],\"sources\":[\"Catalog\",\"Products\",\"ProductList\",\"Sales\",\"Audit\",\"Pricing\"],\"summary\":\"Catalog \\u002B Products \\u002B ProductList \\u002B Sales \\u002B Audit \\u002B Pricing\",\"diagnostics\":[{\"code\":\"placementAboveInherited\",\"severity\":\"warning\",\"outlet\":\"toolbar\",\"message\":\"Sales places \\u0027report\\u0027 before \\u0027add\\u0027 in the outlet \\u0027toolbar\\u0027, but own items never go above inherited ones and contributions never above either, so it goes first after them\",\"owner\":\"Sales\",\"item\":\"report\"}],\"kind\":\"actions\",\"declaredBy\":\"Catalog\",\"mode\":\"extends\"";
+
+        written.ShouldEqual("{" + resolvedBody + "}");
+    }
+
+    [Fact]
+    void should_leave_every_chain_as_it_was()
+    {
+        var mismatches = new List<string>();
+        foreach (var fixture in Cases("cases"))
+        {
+            var (chain, contributors) = Levels(fixture);
+            var before = JsonSerializer.Serialize(new { chain, contributors }, _write);
+            foreach (var entry in fixture["resolve"].AsArray()) EffectiveOutlets.Resolve(chain, entry["outlet"].GetValue<string>(), contributors);
+            OutletDiagnostics.Diagnose(chain, contributors);
+            if (JsonSerializer.Serialize(new { chain, contributors }, _write) != before) mismatches.Add(fixture["name"].GetValue<string>());
         }
         mismatches.ShouldBeEmpty();
     }
@@ -93,11 +121,11 @@ public class when_resolving_the_shared_corpus : Specification
         var mismatches = Cases("dialogTemplates")
             .Where(fixture =>
             {
-                var template = fixture["template"].Deserialize<DialogTemplate>(_read)!;
+                var template = fixture["template"].Deserialize<DialogTemplate>(_read);
                 var actual = new JsonArray([.. DialogTemplateOutlets.Of(template).Select(outlet => (JsonNode)JsonValue.Create(DescribeDialogOutlet(outlet)))]);
                 return !JsonNode.DeepEquals(actual, fixture["expected"]);
             })
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 
@@ -107,11 +135,11 @@ public class when_resolving_the_shared_corpus : Specification
         var mismatches = Cases("toolbars")
             .Where(fixture =>
             {
-                var toolbar = fixture["toolbar"].Deserialize<Model.Toolbar.Toolbar>(_read)!;
+                var toolbar = fixture["toolbar"].Deserialize<Model.Toolbar.Toolbar>(_read);
                 var actual = JsonSerializer.SerializeToNode(ToolbarOutlet.AsRefinement(toolbar), _write);
                 return !JsonNode.DeepEquals(actual, fixture["expected"]);
             })
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 

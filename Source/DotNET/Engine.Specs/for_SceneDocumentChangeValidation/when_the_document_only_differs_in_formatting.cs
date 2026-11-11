@@ -7,12 +7,12 @@ namespace Cratis.Scene.Engine.Editing.for_SceneDocumentChangeValidation;
 
 public class when_the_document_only_differs_in_formatting : Specification
 {
-    const string Stored = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"gap":8}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string Stored = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"gap":8}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
     /// <summary>
     /// The same layout with its keys in another order and its number written another way.
     /// </summary>
-    const string Resubmitted = """{ "instanceContributions": [], "exposures": [], "dialogTemplates": [], "screenTemplates": [], "screens": [ { "forms": [], "contributions": [], "layout": "Shell", "name": "Home", "slotContent": {} } ], "layouts": [ { "gap": 8.0, "slots": [ { "name": "content" } ], "name": "Shell" } ] }""";
+    const string Resubmitted = /*lang=json,strict*/ """{ "instanceContributions": [], "exposures": [], "dialogTemplates": [], "screenTemplates": [], "screens": [ { "forms": [], "contributions": [], "layout": "Shell", "name": "Home", "slotContent": {} } ], "layouts": [ { "gap": 8.0, "slots": [ { "name": "content" } ], "name": "Shell" } ] }""";
 
     SceneDocumentChangeResult _result = null!;
 
