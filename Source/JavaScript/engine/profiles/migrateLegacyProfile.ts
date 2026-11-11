@@ -7,6 +7,7 @@ import {
     PackageKind,
     ProfileAppearance,
     ProfileDefaults,
+    RootTemplate,
     ScreenTemplate,
     TemplateReference,
     TemplateReferenceSource,
@@ -49,7 +50,7 @@ export function migrateLegacyProfile(legacy: LegacyProfile, library: TemplateLib
 
     let root = legacy.profile.root;
     if (root === undefined) {
-        const template = deriveRoot(nonBlank(legacy.shell), layout, legacy.profile, library, diagnostics);
+        const template = deriveRoot(nonBlank(legacy.shell), layout, { profile: legacy.profile, library, diagnostics });
         if (template !== undefined) {
             root = { template };
             layout = undefined;
@@ -58,18 +59,7 @@ export function migrateLegacyProfile(legacy: LegacyProfile, library: TemplateLib
         layout = undefined;
     }
 
-    const navigationMode = nonBlank(legacy.navigationMode);
-    if (navigationMode !== undefined) {
-        if (root === undefined) {
-            diagnostics.push({
-                code: ProfileMigrationDiagnosticCode.LegacyNavigationModeWithoutRoot,
-                subject: navigationMode,
-                message: `Navigation mode '${navigationMode}' of profile '${legacy.profile.name}' cannot be kept: the profile has no root template to carry it`,
-            });
-        } else if (root.options?.[navigationModeOption] === undefined) {
-            root = { ...root, options: { ...root.options, [navigationModeOption]: navigationMode } };
-        }
-    }
+    root = withNavigationMode(root, nonBlank(legacy.navigationMode), legacy.profile, diagnostics);
 
     const migrated: UiProfile = { ...rest };
     if (layout !== undefined) migrated.layout = layout;
@@ -86,39 +76,60 @@ export function migrateLegacyProfile(legacy: LegacyProfile, library: TemplateLib
     return { profile: migrated, changed: serializeUiProfile(migrated) !== serializeUiProfile(legacy.profile), diagnostics };
 }
 
-function deriveRoot(shell: string | undefined, layout: string | undefined, profile: UiProfile, library: TemplateLibrary, diagnostics: ProfileMigrationDiagnostic[]): TemplateReference | undefined {
-    if (shell === undefined && layout === undefined) return undefined;
-
-    if (shell !== undefined) {
-        const blueprint = library.blueprints.find(candidate => candidate.manifest.name === shell && candidate.manifest.kind === PackageKind.Blueprint);
-        if (blueprint === undefined) {
-            diagnostics.push({
-                code: ProfileMigrationDiagnosticCode.LegacyShellNotInstalled,
-                subject: shell,
-                message: `Shell '${shell}' of profile '${profile.name}' is not an available blueprint`,
-            });
-            return layout === undefined ? undefined : fromLayoutName(layout, undefined, profile, library, diagnostics);
-        }
-
-        if (layout !== undefined) return fromLayoutName(layout, blueprint, profile, library, diagnostics);
-
-        const first = firstShellOf(blueprint);
-        if (first === undefined) {
-            diagnostics.push({
-                code: ProfileMigrationDiagnosticCode.LegacyShellHasNoLayout,
-                subject: shell,
-                message: `Blueprint '${shell}' of profile '${profile.name}' provides no layout or root template an application can use as its shell`,
-            });
-            return undefined;
-        }
-
-        return blueprintReference(blueprint, first);
-    }
-
-    return fromLayoutName(layout!, undefined, profile, library, diagnostics);
+interface Resolution {
+    profile: UiProfile;
+    library: TemplateLibrary;
+    diagnostics: ProfileMigrationDiagnostic[];
 }
 
-function fromLayoutName(name: string, preferred: TemplateSource | undefined, profile: UiProfile, library: TemplateLibrary, diagnostics: ProfileMigrationDiagnostic[]): TemplateReference | undefined {
+function withNavigationMode(root: RootTemplate | undefined, navigationMode: string | undefined, profile: UiProfile, diagnostics: ProfileMigrationDiagnostic[]): RootTemplate | undefined {
+    if (navigationMode === undefined) return root;
+
+    if (root === undefined) {
+        diagnostics.push({
+            code: ProfileMigrationDiagnosticCode.LegacyNavigationModeWithoutRoot,
+            subject: navigationMode,
+            message: `Navigation mode '${navigationMode}' of profile '${profile.name}' cannot be kept: the profile has no root template to carry it`,
+        });
+        return root;
+    }
+
+    if (root.options?.[navigationModeOption] !== undefined) return root;
+    return { ...root, options: { ...root.options, [navigationModeOption]: navigationMode } };
+}
+
+function deriveRoot(shell: string | undefined, layout: string | undefined, resolution: Resolution): TemplateReference | undefined {
+    if (shell === undefined && layout === undefined) return undefined;
+    if (shell === undefined) return fromLayoutName(layout!, undefined, resolution);
+
+    const blueprint = resolution.library.blueprints.find(candidate => candidate.manifest.name === shell && candidate.manifest.kind === PackageKind.Blueprint);
+    if (blueprint === undefined) {
+        resolution.diagnostics.push({
+            code: ProfileMigrationDiagnosticCode.LegacyShellNotInstalled,
+            subject: shell,
+            message: `Shell '${shell}' of profile '${resolution.profile.name}' is not an available blueprint`,
+        });
+        return layout === undefined ? undefined : fromLayoutName(layout, undefined, resolution);
+    }
+
+    return layout !== undefined ? fromLayoutName(layout, blueprint, resolution) : firstShellReference(blueprint, shell, resolution);
+}
+
+function firstShellReference(blueprint: TemplateSource, shell: string, resolution: Resolution): TemplateReference | undefined {
+    const first = firstShellOf(blueprint);
+    if (first === undefined) {
+        resolution.diagnostics.push({
+            code: ProfileMigrationDiagnosticCode.LegacyShellHasNoLayout,
+            subject: shell,
+            message: `Blueprint '${shell}' of profile '${resolution.profile.name}' provides no layout or root template an application can use as its shell`,
+        });
+        return undefined;
+    }
+
+    return blueprintReference(blueprint, first);
+}
+
+function fromLayoutName(name: string, preferred: TemplateSource | undefined, { profile, library, diagnostics }: Resolution): TemplateReference | undefined {
     if (preferred !== undefined && hasShell(preferred, name)) return blueprintReference(preferred, name);
     if (library.own !== undefined && hasShell(library.own, name)) return { source: TemplateReferenceSource.Own, id: name };
 
