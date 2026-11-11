@@ -42,7 +42,7 @@ public static class PackageList
     {
         var index = IndexOf(catalog);
         var stored = StoredOf(profile);
-        var names = Enumerable.Reverse(stored).ToList();
+        List<string> names = [.. Enumerable.Reverse(stored)];
         var shell = ShellBlueprintOf(profile);
 
         var context = new RowContext(names, stored, shell, index);
@@ -334,8 +334,8 @@ public static class PackageList
 
     static (List<string> Order, List<string> Unknown) ClosureOf(string name, HashSet<string> listed, Dictionary<string, ScenePackage> index)
     {
-        var order = new List<string>();
-        var unknown = new List<string>();
+        List<string> order = [];
+        List<string> unknown = [];
         var visiting = new HashSet<string>(StringComparer.Ordinal);
 
         bool IsVisited(string current) => order.Contains(current) || visiting.Contains(current);
@@ -398,7 +398,7 @@ public static class PackageList
             return false;
         }
 
-        var next = new List<string>(stored);
+        List<string> next = [.. stored];
         (next[at], next[other]) = (next[other], next[at]);
         return IsOrdered(next, index);
     }
