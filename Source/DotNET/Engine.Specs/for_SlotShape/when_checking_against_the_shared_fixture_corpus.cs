@@ -98,6 +98,15 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     }
 
     [Fact]
+    void should_write_every_upgraded_document_in_the_order_the_upgrade_builds_it()
+    {
+        var mismatches = Cases("upgradeRaw")
+            .Where(fixture => SlotShapeUpgrader.Upgrade(fixture["input"].DeepClone()).Document?.ToJsonString() != fixture["expected"].GetValue<string>())
+            .Select(fixture => $"{fixture["name"]}: {SlotShapeUpgrader.Upgrade(fixture["input"].DeepClone()).Document?.ToJsonString()}");
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
     void should_validate_every_document()
     {
         var mismatches = Cases("validations")

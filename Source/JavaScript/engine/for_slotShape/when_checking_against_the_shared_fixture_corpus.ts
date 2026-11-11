@@ -13,6 +13,7 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../sl
     roles: { name: string; slot: Slot; expected: string }[];
     primary: { name: string; slots: Slot[]; expected: string | null }[];
     upgrades: { name: string; input: unknown; expected: { document: unknown; changed: boolean; diagnostics: Diagnostic[] } }[];
+    upgradeRaw: { name: string; input: unknown; expected: string }[];
     validations: { name: string; document: unknown; expected: Diagnostic[] }[];
     characterization: { name: string; document: unknown; expected: string }[];
 };
@@ -33,6 +34,12 @@ describe('when checking the slot shape against the shared fixture corpus', () =>
 
     for (const fixture of corpus.primary) {
         it(`should find the primary slot when ${fixture.name}`, () => [primarySlotOf(fixture.slots) ?? null].should.deep.equal([fixture.expected]));
+    }
+
+    for (const fixture of corpus.upgradeRaw) {
+        it(`should write the upgraded document in the order the upgrade builds it when ${fixture.name}`, () => {
+            JSON.stringify(upgradeSlotShape(structuredClone(fixture.input)).document).should.equal(fixture.expected);
+        });
     }
 
     for (const fixture of corpus.upgrades) {
