@@ -97,7 +97,7 @@ export function addNavigationItem(
     if (!declared) return { edits: [], rejected: unknownOutlet(outlet) };
     if (!outletItemKinds(declared.kind).includes(item.kind)) return { edits: [], rejected: kindMismatch(declared, item) };
     const nested = allowsSubItems(outlet, declared.kind);
-    const refused = refuseAdd({ outlet, nested }, collectItemIds(ownOutletItems(navigation, module, outlet), nested), item, parent);
+    const refused = refuseAdd({ outlet, nested }, () => collectItemIds(ownOutletItems(navigation, module, outlet), nested), item, parent);
     if (refused !== undefined) return { edits: [], rejected: refused };
 
     const add: NavigationEdit = { kind: NavigationEditKind.AddItem, module, outlet, item: structuredClone(item) };
@@ -219,8 +219,9 @@ function hideInherited(navigation: NavigationModel, module: string, declared: Ou
 }
 
 /** Why adding the item is refused, when it is: a flat outlet with a parent, a taken id or a parent that is not there. */
-function refuseAdd({ outlet, nested }: OutletScope, ids: string[], item: OutletItem, parent: string | undefined): string | undefined {
+function refuseAdd({ outlet, nested }: OutletScope, collectIds: () => string[], item: OutletItem, parent: string | undefined): string | undefined {
     if (parent !== undefined && !nested) return flat(outlet);
+    const ids = collectIds();
     if (ids.includes(item.id)) return duplicateId(item.id);
     if (parent !== undefined && !ids.includes(parent)) return missingParent(parent);
     return undefined;

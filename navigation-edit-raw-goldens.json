@@ -1,0 +1,11 @@
+{
+  "description": "The serialized text of an edit plan and of an edited model, per runtime. Each runtime pins its own property order, so a change to the order is a visible change.",
+  "plan": {
+    "cs": "[{\"kind\":\"setOutletMode\",\"module\":\"plain\",\"outlet\":\"sidebar\",\"mode\":\"extends\"},{\"kind\":\"addItem\",\"module\":\"plain\",\"outlet\":\"sidebar\",\"index\":1,\"item\":{\"kind\":\"navigation\",\"title\":\"N\",\"id\":\"n\"}}]",
+    "ts": "[{\"kind\":\"setOutletMode\",\"module\":\"plain\",\"outlet\":\"sidebar\",\"mode\":\"extends\"},{\"kind\":\"addItem\",\"module\":\"plain\",\"outlet\":\"sidebar\",\"item\":{\"kind\":\"navigation\",\"id\":\"n\",\"title\":\"N\"},\"index\":1}]"
+  },
+  "apply": {
+    "cs": "{\"application\":{\"outlets\":[{\"name\":\"sidebar\",\"kind\":\"navigation\",\"defaults\":[{\"kind\":\"navigation\",\"title\":\"A\",\"children\":[{\"kind\":\"navigation\",\"title\":\"C\",\"id\":\"c\"}],\"id\":\"a\"}]}]},\"modules\":[]}",
+    "ts": "{\"application\":{\"outlets\":[{\"name\":\"sidebar\",\"kind\":\"navigation\",\"defaults\":[{\"kind\":\"navigation\",\"id\":\"a\",\"title\":\"A\",\"children\":[{\"kind\":\"navigation\",\"id\":\"c\",\"title\":\"C\"}]}]}]},\"modules\":[]}"
+  }
+}

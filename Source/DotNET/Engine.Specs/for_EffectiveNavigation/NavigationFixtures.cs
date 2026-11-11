@@ -112,6 +112,14 @@ public static class NavigationFixtures
         }
     }
 
+    public static string RawGolden(string name)
+    {
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(FindRepositoryRoot(), "navigation-edit-raw-goldens.json")));
+        return document.RootElement.GetProperty(name).GetProperty("cs").GetString()!;
+    }
+
+    public static string Raw(object value) => JsonSerializer.Serialize(value, _write);
+
     public static string Canonical(object value) => Canonical(JsonSerializer.SerializeToElement(value, _write));
 
     public static string Canonical(JsonElement element) => element.ValueKind switch

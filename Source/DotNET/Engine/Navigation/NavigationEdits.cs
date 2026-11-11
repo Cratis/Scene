@@ -78,7 +78,7 @@ public static class NavigationEdits
         if (declared is null) return new([], UnknownOutlet(outlet));
         if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return new([], KindMismatch(declared, item));
         var nested = NavigationOutlets.AllowsSubItems(outlet, declared.Kind);
-        var refused = RefuseAdd(new(outlet, nested), NavigationOutlets.CollectIds(NavigationOutlets.OwnItems(navigation, module, outlet), nested), item, parent);
+        var refused = RefuseAdd(new(outlet, nested), () => NavigationOutlets.CollectIds(NavigationOutlets.OwnItems(navigation, module, outlet), nested), item, parent);
         if (refused is not null) return new([], refused);
 
         var add = new NavigationEdit(NavigationEditKind.AddItem, module, outlet, Parent: parent, Index: index, Item: item);
@@ -244,9 +244,10 @@ public static class NavigationEdits
             : new([hide]);
     }
 
-    static string? RefuseAdd(OutletScope scope, IReadOnlyList<string> ids, OutletItem item, string? parent)
+    static string? RefuseAdd(OutletScope scope, Func<IReadOnlyList<string>> collectIds, OutletItem item, string? parent)
     {
         if (parent is not null && !scope.Nested) return Flat(scope.Outlet);
+        var ids = collectIds();
         if (ids.Contains(item.Id)) return DuplicateId(item.Id);
         if (parent is not null && !ids.Contains(parent)) return MissingParent(parent);
         return null;
@@ -431,7 +432,7 @@ public static class NavigationEdits
         var item = edit.Item!;
         if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return (model, KindMismatch(declared, item));
         if (NavigationOutlets.CollectIds(own, nested).Contains(item.Id)) return (model, DuplicateId(item.Id));
-        return Place(target, own, item, items => Insert(items, item, edit.Index));
+        return Place(target, own, item, items => items);
     }
 
     static (NavigationModel Model, string? Rejected) ApplyUpdateItem(EditTarget target)
@@ -447,7 +448,7 @@ public static class NavigationEdits
         var location = Locate(own, edit.Id ?? string.Empty, nested);
         if (location is null) return (model, MissingItem(edit.Id ?? string.Empty));
         var without = Remove(own, location.Item.Id, nested);
-        return Place(target, without, location.Item, _ => Insert(without, location.Item, edit.Index));
+        return Place(target, without, location.Item, _ => without);
     }
 
     static (NavigationModel Model, string? Rejected) ApplyRemoveItem(EditTarget target)
@@ -466,13 +467,13 @@ public static class NavigationEdits
             : refinement with { Hide = [.. refinement.Hide ?? [], edit.Id ?? string.Empty] }), null);
     }
 
-    static (NavigationModel Model, string? Rejected) Place(EditTarget target, IReadOnlyList<OutletItem> items, OutletItem item, Func<IReadOnlyList<OutletItem>, IReadOnlyList<OutletItem>> atTopLevel)
+    static (NavigationModel Model, string? Rejected) Place(EditTarget target, IReadOnlyList<OutletItem> items, OutletItem item, Func<IReadOnlyList<OutletItem>, IReadOnlyList<OutletItem>> baseOf)
     {
         var (model, edit, outlet, declared, nested, _) = target;
-        if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, atTopLevel), null);
+        if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, listed => Insert(baseOf(listed), item, edit.Index)), null);
         if (!nested || item is not OutletNavigationItem navigationItem) return (model, Flat(outlet));
         if (Locate(items, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
-        return (WithOwnItems(model, edit.Module, declared, _ => InsertUnder(items, edit.Parent, navigationItem, edit.Index)), null);
+        return (WithOwnItems(model, edit.Module, declared, listed => InsertUnder(baseOf(listed), edit.Parent, navigationItem, edit.Index)), null);
     }
 
     sealed record Location(OutletItem Item, int Index, string? Parent);
