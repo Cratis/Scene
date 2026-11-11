@@ -19,27 +19,27 @@ sealed class ParsedSceneDocument
     /// <summary>
     /// Gets the layouts by name.
     /// </summary>
-    public Dictionary<string, JsonElement> Layouts { get; } = new(StringComparer.Ordinal);
+    public Dictionary<string, JsonElement> Layouts { get; } = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets the screen templates by name.
     /// </summary>
-    public Dictionary<string, JsonElement> ScreenTemplates { get; } = new(StringComparer.Ordinal);
+    public Dictionary<string, JsonElement> ScreenTemplates { get; } = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets the dialog templates by name.
     /// </summary>
-    public Dictionary<string, JsonElement> DialogTemplates { get; } = new(StringComparer.Ordinal);
+    public Dictionary<string, JsonElement> DialogTemplates { get; } = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets the screens by name.
     /// </summary>
-    public Dictionary<string, JsonElement> Screens { get; } = new(StringComparer.Ordinal);
+    public Dictionary<string, JsonElement> Screens { get; } = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets what each layout or template exposes, by owner.
     /// </summary>
-    public Dictionary<string, ExposureEntry> Exposures { get; } = new(StringComparer.Ordinal);
+    public Dictionary<string, ExposureEntry> Exposures { get; } = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets what each instance set, in the order stored.
