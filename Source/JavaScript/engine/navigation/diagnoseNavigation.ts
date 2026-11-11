@@ -22,42 +22,19 @@ import { SlotOwner } from './SlotOwner';
  */
 export function diagnoseNavigation(graph: NavigationGraph, routeKey: NavigationRouteKey = authoredRouteKey): NavigationDiagnostic[] {
     const diagnostics: NavigationDiagnostic[] = [];
-    const slots = collectSlots(graph, diagnostics);
-    const screens = graph.screens ? new Map(graph.screens.map(screen => [screen.name, screen])) : undefined;
-    const routes = new Map<string, { entry: string; target: string }>();
-    const hostedIn = new Map<string, string[]>();
+    const run: DiagnosisRun = {
+        graph,
+        routeKey,
+        diagnostics,
+        slots: collectSlots(graph, diagnostics),
+        screens: graph.screens ? new Map(graph.screens.map(screen => [screen.name, screen])) : undefined,
+        routes: new Map(),
+        hostedIn: new Map(),
+    };
 
-    graph.entries.forEach((navigationEntry, index) => {
-        const entry = navigationEntry.id ?? `#${index + 1}`;
-        const destination = navigationEntry.destination;
-        const kind = destination.kind ?? (destination.dialog ? DestinationKind.Dialog : DestinationKind.Slot);
-        const report = (code: NavigationDiagnosticCode, message: string) => diagnostics.push({ code, message, entry });
+    graph.entries.forEach((navigationEntry, index) => diagnoseEntry(run, navigationEntry, index));
 
-        if (!destination.screen && !destination.module && !destination.route && !destination.dialog) {
-            report(NavigationDiagnosticCode.UnavailableTarget, `Destination '${entry}' names no screen, stable identity, route or dialog.`);
-            return;
-        }
-
-        diagnoseTarget(graph, screens, destination, kind, entry, report);
-        const owner = diagnoseSlot(graph, slots, screens, destination, kind, entry, report);
-        if (owner?.ownerKind === 'ScreenTemplate' && destination.screen && screens?.has(destination.screen)) {
-            const hosts = graph.screens!.filter(screen => screen.screenTemplate === owner.owner).map(screen => screen.name);
-            hostedIn.set(destination.screen, [...new Set([...(hostedIn.get(destination.screen) ?? []), ...hosts])]);
-        }
-
-        const route = kind === DestinationKind.External ? undefined : routeKey(destination);
-        if (route) {
-            const target = navigationTarget(destination, kind);
-            const existing = routes.get(route);
-            if (!existing) {
-                routes.set(route, { entry, target });
-            } else if (existing.target !== target) {
-                report(NavigationDiagnosticCode.DuplicateRoute, `Route '${destination.route ?? route}' is used by destinations '${existing.entry}' and '${entry}', which open different targets.`);
-            }
-        }
-    });
-
-    for (const cycle of findHostingCycles(graph.screens?.map(screen => screen.name) ?? [], hostedIn)) {
+    for (const cycle of findHostingCycles(graph.screens?.map(screen => screen.name) ?? [], run.hostedIn)) {
         diagnostics.push({
             code: NavigationDiagnosticCode.NavigationCycle,
             message: `Navigation cycle ${[...cycle, cycle[0]].join(' -> ')}: each screen is placed in a slot owned by the next, so composition never terminates.`,
@@ -73,37 +50,100 @@ export function diagnoseNavigation(graph: NavigationGraph, routeKey: NavigationR
 
 type Report = (code: NavigationDiagnosticCode, message: string) => void;
 
-function diagnoseTarget(
-    graph: NavigationGraph,
-    screens: Map<string, Screen> | undefined,
-    destination: DestinationReference,
-    kind: DestinationKind,
-    entry: string,
-    report: Report,
-) {
-    if (kind === DestinationKind.Dialog) {
-        if (!destination.dialog) {
-            report(NavigationDiagnosticCode.UnavailableTarget, `Dialog destination '${entry}' names no dialog.`);
-        } else if (graph.dialogTemplates && !graph.dialogTemplates.some(template => template.name === destination.dialog)) {
-            report(NavigationDiagnosticCode.UnavailableTarget, `Destination '${entry}' opens dialog '${destination.dialog}', which no dialog template provides.`);
-        }
+/** Everything diagnosing a graph builds up as it goes through the entries. */
+interface DiagnosisRun {
+    graph: NavigationGraph;
+    routeKey: NavigationRouteKey;
+    diagnostics: NavigationDiagnostic[];
+    slots: Map<string, SlotOwner>;
+    screens: Map<string, Screen> | undefined;
+    routes: Map<string, { entry: string; target: string }>;
+    hostedIn: Map<string, string[]>;
+}
+
+function diagnoseEntry(run: DiagnosisRun, navigationEntry: NavigationGraph['entries'][number], index: number): void {
+    const { graph, screens, routes, hostedIn, routeKey } = run;
+    const entry = navigationEntry.id ?? `#${index + 1}`;
+    const destination = navigationEntry.destination;
+    const kind = destination.kind ?? (destination.dialog ? DestinationKind.Dialog : DestinationKind.Slot);
+    const report = (code: NavigationDiagnosticCode, message: string) => run.diagnostics.push({ code, message, entry });
+
+    if (namesNoTarget(destination)) {
+        report(NavigationDiagnosticCode.UnavailableTarget, `Destination '${entry}' names no screen, stable identity, route or dialog.`);
         return;
     }
 
-    if (kind === DestinationKind.Slot && destination.screen && screens && !screens.has(destination.screen)) {
+    const placement: Placement = { graph, screens, destination, kind, entry, report };
+    diagnoseTarget(placement);
+    const owner = diagnoseSlot(placement, run.slots);
+    if (owner?.ownerKind === 'ScreenTemplate' && destination.screen && screens?.has(destination.screen)) {
+        recordHosts(graph, owner, destination.screen, hostedIn);
+    }
+
+    const route = kind === DestinationKind.External ? undefined : routeKey(destination);
+    if (route) {
+        const conflict = claimRoute(routes, route, { entry, target: navigationTarget(destination, kind) }, destination.route ?? route);
+        if (conflict) report(NavigationDiagnosticCode.DuplicateRoute, conflict);
+    }
+}
+
+/** A destination with what it is checked against and where to report what is wrong with it. */
+interface Placement {
+    graph: NavigationGraph;
+    screens: Map<string, Screen> | undefined;
+    destination: DestinationReference;
+    kind: DestinationKind;
+    entry: string;
+    report: Report;
+}
+
+function namesNoTarget(destination: DestinationReference): boolean {
+    return !destination.screen && !destination.module && !destination.route && !destination.dialog;
+}
+
+function recordHosts(graph: NavigationGraph, owner: SlotOwner, screen: string, hostedIn: Map<string, string[]>): void {
+    const hosts = graph.screens!.filter(candidate => candidate.screenTemplate === owner.owner).map(candidate => candidate.name);
+    hostedIn.set(screen, [...new Set([...(hostedIn.get(screen) ?? []), ...hosts])]);
+}
+
+/** Claims the route for a destination; says what is wrong when another destination that opens something else already has it. */
+function claimRoute(routes: Map<string, { entry: string; target: string }>, route: string, claim: { entry: string; target: string }, shown: string): string | undefined {
+    const existing = routes.get(route);
+    if (!existing) {
+        routes.set(route, claim);
+        return undefined;
+    }
+    return existing.target === claim.target
+        ? undefined
+        : `Route '${shown}' is used by destinations '${existing.entry}' and '${claim.entry}', which open different targets.`;
+}
+
+function diagnoseTarget(placement: Placement) {
+    const { screens, destination, kind, entry, report } = placement;
+    if (kind === DestinationKind.Dialog) {
+        diagnoseDialogTarget(placement);
+        return;
+    }
+
+    if (kind === DestinationKind.Slot && opensMissingScreen(destination, screens)) {
         report(NavigationDiagnosticCode.UnavailableTarget, `Destination '${entry}' opens screen '${destination.screen}', which does not exist.`);
     }
 }
 
-function diagnoseSlot(
-    graph: NavigationGraph,
-    slots: Map<string, SlotOwner>,
-    screens: Map<string, Screen> | undefined,
-    destination: DestinationReference,
-    kind: DestinationKind,
-    entry: string,
-    report: Report,
-): SlotOwner | undefined {
+function opensMissingScreen(destination: DestinationReference, screens: Map<string, Screen> | undefined): boolean {
+    return !!destination.screen && !!screens && !screens.has(destination.screen);
+}
+
+function diagnoseDialogTarget({ graph, destination, entry, report }: Placement) {
+    if (!destination.dialog) {
+        report(NavigationDiagnosticCode.UnavailableTarget, `Dialog destination '${entry}' names no dialog.`);
+    } else if (graph.dialogTemplates && !graph.dialogTemplates.some(template => template.name === destination.dialog)) {
+        report(NavigationDiagnosticCode.UnavailableTarget, `Destination '${entry}' opens dialog '${destination.dialog}', which no dialog template provides.`);
+    }
+}
+
+function diagnoseSlot(placement: Placement, slots: Map<string, SlotOwner>): SlotOwner | undefined {
+    const { screens, destination, kind, entry, report } = placement;
     if (!destination.slot) return undefined;
 
     if (kind !== DestinationKind.Slot) {
@@ -119,8 +159,11 @@ function diagnoseSlot(
     }
 
     const screen = destination.screen ? screens?.get(destination.screen) : undefined;
-    if (!screen) return owner;
+    if (screen) diagnosePlacedScreen(placement, owner, screen);
+    return owner;
+}
 
+function diagnosePlacedScreen({ graph, entry, report }: Placement, owner: SlotOwner, screen: Screen): void {
     if (owner.ownerKind === 'Layout' && screen.layout !== owner.owner) {
         report(
             NavigationDiagnosticCode.IncompatibleSlot,
@@ -128,15 +171,12 @@ function diagnoseSlot(
         );
     }
 
-    if (owner.slot.accepts) {
-        const type = graph.screenTemplates?.find(template => template.name === screen.screenTemplate)?.metadata?.type;
-        if (!type || !owner.slot.accepts.includes(type)) {
-            report(
-                NavigationDiagnosticCode.IncompatibleSlot,
-                `Slot '${owner.slot.name}' accepts ${owner.slot.accepts.join(', ')} screens, but destination '${entry}' places '${screen.name}' of type '${type ?? 'untyped'}'.`,
-            );
-        }
+    if (!owner.slot.accepts) return;
+    const type = graph.screenTemplates?.find(template => template.name === screen.screenTemplate)?.metadata?.type;
+    if (!type || !owner.slot.accepts.includes(type)) {
+        report(
+            NavigationDiagnosticCode.IncompatibleSlot,
+            `Slot '${owner.slot.name}' accepts ${owner.slot.accepts.join(', ')} screens, but destination '${entry}' places '${screen.name}' of type '${type ?? 'untyped'}'.`,
+        );
     }
-
-    return owner;
 }
