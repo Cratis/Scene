@@ -75,23 +75,34 @@ public static class EffectiveOutlets
         for (var index = declaringIndex; index < chain.Count; index++)
         {
             var level = chain[index];
-            var declarations = (level.Outlets ?? []).Count(candidate => candidate.Name == resolution.Outlet);
-            var duplicates = index == declaringIndex ? declarations - 1 : declarations;
-            for (var duplicate = 0; duplicate < duplicates; duplicate++)
-            {
-                resolution.Diagnostics.Add(OutletProblems.DuplicateOutlet(resolution.Outlet, level.Name, chain[declaringIndex].Name));
-            }
+            ReportDuplicateDeclarations(resolution, level, index == declaringIndex, chain[declaringIndex].Name);
             if (index == declaringIndex) continue;
 
-            var levelMode = OutletMode.Inherits;
-            foreach (var refinement in (level.Refinements ?? []).Where(candidate => candidate.Outlet == resolution.Outlet))
-            {
-                levelMode = Refine(resolution, level, refinement, index == last);
-            }
+            var levelMode = RefineLevel(resolution, level, index == last);
             if (levelMode != OutletMode.Inherits && !sources.Contains(level.Name)) sources.Add(level.Name);
             if (index == last) mode = levelMode;
         }
         return mode;
+    }
+
+    static void ReportDuplicateDeclarations(Resolution resolution, OutletLevel level, bool declaring, string declaredBy)
+    {
+        var declarations = (level.Outlets ?? []).Count(candidate => candidate.Name == resolution.Outlet);
+        var duplicates = declaring ? declarations - 1 : declarations;
+        for (var duplicate = 0; duplicate < duplicates; duplicate++)
+        {
+            resolution.Diagnostics.Add(OutletProblems.DuplicateOutlet(resolution.Outlet, level.Name, declaredBy));
+        }
+    }
+
+    static OutletMode RefineLevel(Resolution resolution, OutletLevel level, bool editable)
+    {
+        var levelMode = OutletMode.Inherits;
+        foreach (var refinement in (level.Refinements ?? []).Where(candidate => candidate.Outlet == resolution.Outlet))
+        {
+            levelMode = Refine(resolution, level, refinement, editable);
+        }
+        return levelMode;
     }
 
     static void AddContributions(Resolution resolution, List<OutletLevel> contributing, int last, List<string> sources)
@@ -124,30 +135,40 @@ public static class EffectiveOutlets
 
     static OutletMode Refine(Resolution resolution, OutletLevel level, OutletRefinement refinement, bool editable)
     {
-        var items = refinement.Items ?? [];
-        var hide = refinement.Hide ?? [];
-        var mode = refinement.Mode ?? (items.Count > 0 || hide.Count > 0 ? OutletMode.Extends : OutletMode.Inherits);
+        var mode = refinement.Mode ?? (HasChanges(refinement) ? OutletMode.Extends : OutletMode.Inherits);
         if (mode == OutletMode.Inherits)
         {
-            if (items.Count > 0 || hide.Count > 0) resolution.Diagnostics.Add(OutletProblems.ItemsIgnoredWhenInheriting(resolution.Outlet, level.Name));
+            if (HasChanges(refinement)) resolution.Diagnostics.Add(OutletProblems.ItemsIgnoredWhenInheriting(resolution.Outlet, level.Name));
             return mode;
         }
 
-        foreach (var id in hide)
-        {
-            if (!TryHide(resolution, entry => entry.Item.Id == id, level.Name)) resolution.PendingHides.Add((id, level.Name));
-        }
+        HideInherited(resolution, refinement.Hide ?? [], level.Name);
+        if (mode == OutletMode.Overrides) OverrideInherited(resolution, level.Name);
+        PlaceOwn(resolution, level, refinement.Items ?? [], editable);
+        return mode;
+    }
 
-        if (mode == OutletMode.Overrides)
-        {
-            resolution.Removed.AddRange(resolution.Items.Select(entry => new RemovedOutletItem(entry.Item, entry.Provenance, OutletRemoval.Overridden, level.Name)));
-            resolution.Items.Clear();
-        }
+    static bool HasChanges(OutletRefinement refinement) => (refinement.Items?.Count ?? 0) > 0 || (refinement.Hide?.Count ?? 0) > 0;
 
+    static void PlaceOwn(Resolution resolution, OutletLevel level, IReadOnlyList<OutletItem> items, bool editable)
+    {
         resolution.Floor = resolution.Items.Count;
         var provenance = new OutletProvenance(level.Name, level.Kind, OutletItemSource.Own);
         foreach (var item in items) Place(resolution, item, provenance, editable);
-        return mode;
+    }
+
+    static void HideInherited(Resolution resolution, IReadOnlyList<string> hide, string levelName)
+    {
+        foreach (var id in hide)
+        {
+            if (!TryHide(resolution, entry => entry.Item.Id == id, levelName)) resolution.PendingHides.Add((id, levelName));
+        }
+    }
+
+    static void OverrideInherited(Resolution resolution, string levelName)
+    {
+        resolution.Removed.AddRange(resolution.Items.Select(entry => new RemovedOutletItem(entry.Item, entry.Provenance, OutletRemoval.Overridden, levelName)));
+        resolution.Items.Clear();
     }
 
     static void HideContributions(Resolution resolution)
@@ -176,8 +197,7 @@ public static class EffectiveOutlets
         if (!Accepts(resolution, item, provenance)) return;
 
         var entry = new EffectiveOutletItem(KeepFittingChildren(resolution, item, provenance), provenance, editable);
-        var (placement, target) = item.Before is not null ? ("before", item.Before) : item.After is not null ? ("after", item.After) : (null, null);
-        if (placement is not null && target is not null && TryInsertNextTo(resolution, entry, item, provenance, placement, target)) return;
+        if (AnchorOf(item) is { } anchor && TryInsertNextTo(resolution, entry, provenance, anchor)) return;
         resolution.Items.Add(entry);
     }
 
@@ -208,24 +228,31 @@ public static class EffectiveOutlets
         return kept.Count != group.Items.Count ? group with { Items = kept } : item;
     }
 
-    static bool TryInsertNextTo(Resolution resolution, EffectiveOutletItem entry, OutletItem item, OutletProvenance provenance, string placement, string target)
+    static Anchor? AnchorOf(OutletItem item) =>
+        item.Before is not null ? new("before", item.Before) : item.After is not null ? new("after", item.After) : null;
+
+    static bool TryInsertNextTo(Resolution resolution, EffectiveOutletItem entry, OutletProvenance provenance, Anchor anchor)
     {
+        var (placement, target) = anchor;
+        var id = entry.Item.Id;
         var index = resolution.Items.FindIndex(candidate => candidate.Item.Id == target);
         if (index < 0)
         {
-            resolution.Diagnostics.Add(OutletProblems.PlacementTargetMissing(resolution.Outlet, provenance.Owner, item.Id, placement, target));
+            resolution.Diagnostics.Add(OutletProblems.PlacementTargetMissing(resolution.Outlet, provenance.Owner, id, placement, target));
             return false;
         }
 
         var at = placement == "before" ? index : index + 1;
         if (at < resolution.Floor)
         {
-            if (placement == "before") resolution.Diagnostics.Add(OutletProblems.PlacementAboveInherited(resolution.Outlet, provenance.Owner, item.Id, target));
+            if (placement == "before") resolution.Diagnostics.Add(OutletProblems.PlacementAboveInherited(resolution.Outlet, provenance.Owner, id, target));
             at = resolution.Floor;
         }
         resolution.Items.Insert(at, entry);
         return true;
     }
+
+    sealed record Anchor(string Placement, string Target);
 
     sealed record Resolution(string Outlet, OutletKind Kind)
     {

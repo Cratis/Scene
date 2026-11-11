@@ -9,6 +9,14 @@ function isObject(value: unknown): value is JsonObject {
 
 const legacyModes: Record<string, string> = { inherit: 'inherits', extend: 'extends', override: 'overrides' };
 
+function textOf(value: unknown): string | undefined {
+    return typeof value === 'string' ? value : undefined;
+}
+
+function numberOf(value: unknown): number | undefined {
+    return typeof value === 'number' ? value : undefined;
+}
+
 /**
  * Tells whether a value is a list of navigation regions in the shape Scene 5 replaced with outlets of navigation: every
  * entry names its `region` and lists its `items`.
@@ -69,48 +77,62 @@ function itemsOf(region: JsonObject, key: 'items' | 'buttons'): JsonObject[] {
  */
 export function upgradeNavigationModel(navigation: JsonObject): void {
     const application = navigation.application as JsonObject;
-    const regions = application.regions as JsonObject[];
     const buttonRegions = new Set<string>();
+    navigation.application = upgradeApplication(application, buttonRegions);
+
+    navigation.modules = (navigation.modules as JsonObject[]).map(module =>
+        Array.isArray(module.regions) ? upgradeModule(module, module.regions as JsonObject[], buttonRegions) : module);
+}
+
+function upgradeApplication(application: JsonObject, buttonRegions: Set<string>): JsonObject {
     const outlets: JsonObject[] = [];
-    for (const region of regions) {
-        const name = region.region as string;
-        outlets.push({ name, kind: 'navigation', defaults: itemsOf(region, 'items').map(navigationItem) });
-        const buttons = itemsOf(region, 'buttons');
-        if (buttons.length > 0) {
-            buttonRegions.add(name);
-            outlets.push({ name: `${name}Buttons`, kind: 'actions', defaults: buttons.map(button) });
-        }
-    }
+    for (const region of application.regions as JsonObject[]) outlets.push(...outletsOf(region, buttonRegions));
 
     const upgraded: JsonObject = { outlets };
     for (const [key, value] of Object.entries(application)) {
         if (key !== 'regions') upgraded[key] = value;
     }
-    navigation.application = upgraded;
+    return upgraded;
+}
 
-    navigation.modules = (navigation.modules as JsonObject[]).map(module => {
-        if (!Array.isArray(module.regions)) return module;
-        const refinements: JsonObject[] = [];
-        for (const region of module.regions as JsonObject[]) {
-            const name = region.region as string;
-            const mode = legacyModes[typeof region.mode === 'string' ? region.mode : 'inherit'] ?? 'inherits';
-            if (mode === 'inherits') continue;
-            refinements.push({ outlet: name, mode, items: itemsOf(region, 'items').map(navigationItem) });
-            const buttons = itemsOf(region, 'buttons');
-            if (buttons.length > 0 || (mode === 'overrides' && buttonRegions.has(name))) {
-                refinements.push({ outlet: `${name}Buttons`, mode, items: buttons.map(button) });
-            }
+function outletsOf(region: JsonObject, buttonRegions: Set<string>): JsonObject[] {
+    const name = region.region as string;
+    const outlets: JsonObject[] = [{ name, kind: 'navigation', defaults: itemsOf(region, 'items').map(navigationItem) }];
+    const buttons = itemsOf(region, 'buttons');
+    if (buttons.length > 0) {
+        buttonRegions.add(name);
+        outlets.push({ name: `${name}Buttons`, kind: 'actions', defaults: buttons.map(button) });
+    }
+    return outlets;
+}
+
+function upgradeModule(module: JsonObject, regions: JsonObject[], buttonRegions: Set<string>): JsonObject {
+    const refinements = refinementsOf(regions, buttonRegions);
+    const result: JsonObject = {};
+    for (const [key, value] of Object.entries(module)) {
+        if (key !== 'regions') result[key] = value;
+        else if (refinements.length > 0) result.refinements = refinements;
+    }
+    return result;
+}
+
+function refinesButtons(buttons: JsonObject[], replacesApplicationButtons: boolean): boolean {
+    return buttons.length > 0 || replacesApplicationButtons;
+}
+
+function refinementsOf(regions: JsonObject[], buttonRegions: Set<string>): JsonObject[] {
+    const refinements: JsonObject[] = [];
+    for (const region of regions) {
+        const name = region.region as string;
+        const mode = legacyModes[textOf(region.mode) ?? 'inherit'] ?? 'inherits';
+        if (mode === 'inherits') continue;
+        refinements.push({ outlet: name, mode, items: itemsOf(region, 'items').map(navigationItem) });
+        const buttons = itemsOf(region, 'buttons');
+        if (refinesButtons(buttons, mode === 'overrides' && buttonRegions.has(name))) {
+            refinements.push({ outlet: `${name}Buttons`, mode, items: buttons.map(button) });
         }
-        const result: JsonObject = {};
-        for (const [key, value] of Object.entries(module)) {
-            if (key === 'regions') {
-                if (refinements.length > 0) result.refinements = refinements;
-            } else {
-                result[key] = value;
-            }
-        }
-        return result;
-    });
+    }
+    return refinements;
 }
 
 /**
@@ -120,28 +142,73 @@ export function upgradeNavigationModel(navigation: JsonObject): void {
  * @returns Whether it is a legacy navigation contribution.
  */
 export function isLegacyNavigationContribution(value: unknown): value is JsonObject {
-    if (!isObject(value) || typeof value.contributionPointName !== 'string' || !isObject(value.content)) return false;
-    const properties = value.content.properties;
-    return isObject(properties) && typeof properties.label === 'string' && typeof properties.targetScreen === 'string';
+    if (!isObject(value) || typeof value.contributionPointName !== 'string') return false;
+    return isObject(value.content) && isNavigationItemProperties(value.content.properties);
+}
+
+function isNavigationItemProperties(properties: unknown): boolean {
+    return isObject(properties) && ['label', 'targetScreen'].every(key => typeof properties[key] === 'string');
+}
+
+function targetOf(properties: JsonObject, targetScreen: string): JsonObject {
+    if (isObject(properties.destination)) return properties.destination;
+
+    const target: JsonObject = { screen: targetScreen };
+    if (isObject(properties.routeParameterBindings) && Object.keys(properties.routeParameterBindings).length > 0) {
+        target.routeParameterBindings = properties.routeParameterBindings;
+    }
+    return target;
 }
 
 function contributedItem(contribution: JsonObject): { item: JsonObject; group?: string; order?: number } {
     const properties = (contribution.content as JsonObject).properties as JsonObject;
     const targetScreen = properties.targetScreen as string;
-    let target: JsonObject;
-    if (isObject(properties.destination)) {
-        target = properties.destination;
-    } else {
-        target = { screen: targetScreen };
-        if (isObject(properties.routeParameterBindings) && Object.keys(properties.routeParameterBindings).length > 0) {
-            target.routeParameterBindings = properties.routeParameterBindings;
-        }
-    }
-    const item: JsonObject = { kind: 'navigation', id: typeof properties.id === 'string' ? properties.id : targetScreen, title: properties.label };
-    if (typeof properties.icon === 'string') item.icon = properties.icon;
+    const target = targetOf(properties, targetScreen);
+    const item: JsonObject = { kind: 'navigation', id: textOf(properties.id) ?? targetScreen, title: properties.label };
+    const icon = textOf(properties.icon);
+    if (icon !== undefined) item.icon = icon;
     item.target = target;
-    const order = typeof properties.order === 'number' ? properties.order : typeof contribution.order === 'number' ? contribution.order : undefined;
-    return { item, group: typeof properties.group === 'string' ? properties.group : undefined, order };
+    return { item, group: textOf(properties.group), order: numberOf(properties.order) ?? numberOf(contribution.order) };
+}
+
+interface Contributed { item: JsonObject; group?: string; order?: number; index: number }
+
+function groupByPoint(contributions: unknown[]): Map<string, Contributed[]> {
+    const byPoint = new Map<string, Contributed[]>();
+    contributions.forEach((contribution, index) => {
+        if (!isLegacyNavigationContribution(contribution)) return;
+        const point = contribution.contributionPointName as string;
+        if (!byPoint.has(point)) byPoint.set(point, []);
+        byPoint.get(point)!.push({ ...contributedItem(contribution), index });
+    });
+    return byPoint;
+}
+
+function orderedItems(entries: Contributed[]): JsonObject[] {
+    const ordered = [...entries].sort((a, b) => {
+        if (a.order === undefined && b.order === undefined) return a.index - b.index;
+        if (a.order === undefined) return 1;
+        if (b.order === undefined) return -1;
+        return a.order - b.order || a.index - b.index;
+    });
+    const items: JsonObject[] = [];
+    const groups = new Map<string, JsonObject>();
+    for (const entry of ordered) append(items, groups, entry);
+    return items;
+}
+
+function append(items: JsonObject[], groups: Map<string, JsonObject>, entry: Contributed): void {
+    if (entry.group === undefined) {
+        items.push(entry.item);
+        return;
+    }
+    let group = groups.get(entry.group);
+    if (!group) {
+        group = { kind: 'navigation', id: entry.group, title: entry.group, children: [] };
+        groups.set(entry.group, group);
+        items.push(group);
+    }
+    (group.children as JsonObject[]).push(entry.item);
 }
 
 /**
@@ -155,38 +222,9 @@ function contributedItem(contribution: JsonObject): { item: JsonObject; group?: 
 export function upgradeNavigationContributions(owner: JsonObject): boolean {
     if (!Array.isArray(owner.contributions) || !owner.contributions.some(isLegacyNavigationContribution)) return false;
 
-    const byPoint = new Map<string, { item: JsonObject; group?: string; order?: number; index: number }[]>();
-    (owner.contributions as unknown[]).forEach((contribution, index) => {
-        if (!isLegacyNavigationContribution(contribution)) return;
-        const point = contribution.contributionPointName as string;
-        if (!byPoint.has(point)) byPoint.set(point, []);
-        byPoint.get(point)!.push({ ...contributedItem(contribution), index });
-    });
-
     const contributions: JsonObject[] = [];
-    for (const [outlet, entries] of byPoint) {
-        const ordered = [...entries].sort((a, b) => {
-            if (a.order === undefined && b.order === undefined) return a.index - b.index;
-            if (a.order === undefined) return 1;
-            if (b.order === undefined) return -1;
-            return a.order - b.order || a.index - b.index;
-        });
-        const items: JsonObject[] = [];
-        const groups = new Map<string, JsonObject>();
-        for (const entry of ordered) {
-            if (entry.group === undefined) {
-                items.push(entry.item);
-                continue;
-            }
-            let group = groups.get(entry.group);
-            if (!group) {
-                group = { kind: 'navigation', id: entry.group, title: entry.group, children: [] };
-                groups.set(entry.group, group);
-                items.push(group);
-            }
-            (group.children as JsonObject[]).push(entry.item);
-        }
-        contributions.push({ outlet, items });
+    for (const [outlet, entries] of groupByPoint(owner.contributions as unknown[])) {
+        contributions.push({ outlet, items: orderedItems(entries) });
     }
 
     owner.contributions = (owner.contributions as unknown[]).filter(contribution => !isLegacyNavigationContribution(contribution));

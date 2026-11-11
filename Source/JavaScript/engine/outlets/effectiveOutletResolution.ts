@@ -84,21 +84,30 @@ function refineDownTheChain(resolution: Resolution, chain: OutletLevel[], declar
     let mode: OutletMode | undefined;
     for (let index = declaringIndex; index < chain.length; index++) {
         const level = chain[index];
-        const declarations = (level.outlets ?? []).filter(candidate => candidate.name === resolution.outlet);
-        const duplicates = index === declaringIndex ? declarations.length - 1 : declarations.length;
-        for (let duplicate = 0; duplicate < duplicates; duplicate++) {
-            resolution.diagnostics.push(outletDiagnostics.duplicateOutlet(resolution.outlet, level.name, chain[declaringIndex].name));
-        }
+        reportDuplicateDeclarations(resolution, level, index === declaringIndex, chain[declaringIndex].name);
         if (index === declaringIndex) continue;
 
-        let levelMode = OutletMode.Inherits;
-        for (const refinement of (level.refinements ?? []).filter(candidate => candidate.outlet === resolution.outlet)) {
-            levelMode = refine(resolution, level, refinement, index === last);
-        }
+        const levelMode = refineLevel(resolution, level, index === last);
         if (levelMode !== OutletMode.Inherits && !sources.includes(level.name)) sources.push(level.name);
         if (index === last) mode = levelMode;
     }
     return mode;
+}
+
+function reportDuplicateDeclarations(resolution: Resolution, level: OutletLevel, declaring: boolean, declaredBy: string): void {
+    const declarations = (level.outlets ?? []).filter(candidate => candidate.name === resolution.outlet);
+    const duplicates = declaring ? declarations.length - 1 : declarations.length;
+    for (let duplicate = 0; duplicate < duplicates; duplicate++) {
+        resolution.diagnostics.push(outletDiagnostics.duplicateOutlet(resolution.outlet, level.name, declaredBy));
+    }
+}
+
+function refineLevel(resolution: Resolution, level: OutletLevel, editable: boolean): OutletMode {
+    let levelMode = OutletMode.Inherits;
+    for (const refinement of (level.refinements ?? []).filter(candidate => candidate.outlet === resolution.outlet)) {
+        levelMode = refine(resolution, level, refinement, editable);
+    }
+    return levelMode;
 }
 
 function addContributions(resolution: Resolution, contributing: OutletLevel[], last: number, sources: string[]): void {
@@ -125,27 +134,37 @@ function checkDeclaration(declaration: Outlet, owner: string, diagnostics: Outle
 function refine(resolution: Resolution, level: OutletLevel, refinement: OutletRefinement, editable: boolean): OutletMode {
     const items = refinement.items ?? [];
     const hide = refinement.hide ?? [];
-    const mode = refinement.mode ?? (items.length > 0 || hide.length > 0 ? OutletMode.Extends : OutletMode.Inherits);
+    const hasChanges = items.length > 0 || hide.length > 0;
+    const mode = refinement.mode ?? (hasChanges ? OutletMode.Extends : OutletMode.Inherits);
     if (mode === OutletMode.Inherits) {
-        if (items.length > 0 || hide.length > 0) resolution.diagnostics.push(outletDiagnostics.itemsIgnoredWhenInheriting(resolution.outlet, level.name));
+        if (hasChanges) resolution.diagnostics.push(outletDiagnostics.itemsIgnoredWhenInheriting(resolution.outlet, level.name));
         return mode;
     }
 
-    for (const id of hide) {
-        if (!tryHide(resolution, entry => entry.item.id === id, level.name)) resolution.pendingHides.push({ id, owner: level.name });
-    }
+    hideInherited(resolution, hide, level.name);
+    if (mode === OutletMode.Overrides) overrideInherited(resolution, level.name);
 
-    if (mode === OutletMode.Overrides) {
-        for (const entry of resolution.items) {
-            resolution.removed.push({ item: entry.item, provenance: entry.provenance, removal: OutletRemoval.Overridden, removedBy: level.name });
-        }
-        resolution.items = [];
-    }
+    placeOwn(resolution, level, items, editable);
+    return mode;
+}
 
+function placeOwn(resolution: Resolution, level: OutletLevel, items: OutletItem[], editable: boolean): void {
     resolution.floor = resolution.items.length;
     const provenance: OutletProvenance = { owner: level.name, level: level.kind, source: OutletItemSource.Own };
     for (const item of items) place(resolution, item, provenance, editable);
-    return mode;
+}
+
+function hideInherited(resolution: Resolution, hide: string[], levelName: string): void {
+    for (const id of hide) {
+        if (!tryHide(resolution, entry => entry.item.id === id, levelName)) resolution.pendingHides.push({ id, owner: levelName });
+    }
+}
+
+function overrideInherited(resolution: Resolution, levelName: string): void {
+    for (const entry of resolution.items) {
+        resolution.removed.push({ item: entry.item, provenance: entry.provenance, removal: OutletRemoval.Overridden, removedBy: levelName });
+    }
+    resolution.items = [];
 }
 
 function hideContributions(resolution: Resolution): void {

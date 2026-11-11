@@ -50,27 +50,23 @@ public static class LegacyNavigationShape
     {
         var application = navigation["application"]!.AsObject();
         var buttonRegions = new HashSet<string>(StringComparer.Ordinal);
+        navigation["application"] = UpgradeApplication(application, buttonRegions);
+
+        var modules = new JsonArray();
+        foreach (var module in navigation["modules"]!.AsArray().OfType<JsonObject>())
+        {
+            modules.Add(module["regions"] is JsonArray regions ? UpgradeModule(module, regions, buttonRegions) : module.DeepClone());
+        }
+
+        navigation["modules"] = modules;
+    }
+
+    static JsonObject UpgradeApplication(JsonObject application, HashSet<string> buttonRegions)
+    {
         var outlets = new JsonArray();
         foreach (var region in application["regions"]!.AsArray().OfType<JsonObject>())
         {
-            var name = Text(region["region"])!;
-            outlets.Add(new JsonObject
-            {
-                ["name"] = name,
-                ["kind"] = "navigation",
-                ["defaults"] = new JsonArray([.. ItemsOf(region, "items").Select(NavigationItem)]),
-            });
-            var buttons = ItemsOf(region, "buttons");
-            if (buttons.Count > 0)
-            {
-                buttonRegions.Add(name);
-                outlets.Add(new JsonObject
-                {
-                    ["name"] = $"{name}Buttons",
-                    ["kind"] = "actions",
-                    ["defaults"] = new JsonArray([.. buttons.Select(Button)]),
-                });
-            }
+            foreach (var outlet in OutletsOf(region, buttonRegions)) outlets.Add(outlet);
         }
 
         var upgraded = new JsonObject { ["outlets"] = outlets };
@@ -79,59 +75,72 @@ public static class LegacyNavigationShape
             if (key != "regions") upgraded[key] = value?.DeepClone();
         }
 
-        navigation["application"] = upgraded;
+        return upgraded;
+    }
 
-        var modules = new JsonArray();
-        foreach (var module in navigation["modules"]!.AsArray().OfType<JsonObject>())
+    static List<JsonObject> OutletsOf(JsonObject region, HashSet<string> buttonRegions)
+    {
+        var name = Text(region["region"])!;
+        var outlets = new List<JsonObject>
         {
-            if (module["regions"] is not JsonArray regions)
+            new()
             {
-                modules.Add(module.DeepClone());
-                continue;
+                ["name"] = name,
+                ["kind"] = "navigation",
+                ["defaults"] = new JsonArray([.. ItemsOf(region, "items").Select(NavigationItem)]),
             }
-
-            var refinements = new JsonArray();
-            foreach (var region in regions.OfType<JsonObject>())
+        };
+        var buttons = ItemsOf(region, "buttons");
+        if (buttons.Count > 0)
+        {
+            buttonRegions.Add(name);
+            outlets.Add(new()
             {
-                var name = Text(region["region"])!;
-                var mode = _modes.GetValueOrDefault(Text(region["mode"]) ?? "inherit") ?? "inherits";
-                if (mode == "inherits") continue;
-                refinements.Add(new JsonObject
-                {
-                    ["outlet"] = name,
-                    ["mode"] = mode,
-                    ["items"] = new JsonArray([.. ItemsOf(region, "items").Select(NavigationItem)]),
-                });
-                var buttons = ItemsOf(region, "buttons");
-                if (buttons.Count > 0 || (mode == "overrides" && buttonRegions.Contains(name)))
-                {
-                    refinements.Add(new JsonObject
-                    {
-                        ["outlet"] = $"{name}Buttons",
-                        ["mode"] = mode,
-                        ["items"] = new JsonArray([.. buttons.Select(Button)]),
-                    });
-                }
-            }
-
-            var result = new JsonObject();
-            foreach (var (key, value) in module.ToList())
-            {
-                if (key == "regions")
-                {
-                    if (refinements.Count > 0) result["refinements"] = refinements;
-                }
-                else
-                {
-                    result[key] = value?.DeepClone();
-                }
-            }
-
-            modules.Add(result);
+                ["name"] = $"{name}Buttons",
+                ["kind"] = "actions",
+                ["defaults"] = new JsonArray([.. buttons.Select(Button)]),
+            });
         }
 
-        navigation["modules"] = modules;
+        return outlets;
     }
+
+    static JsonObject UpgradeModule(JsonObject module, JsonArray regions, HashSet<string> buttonRegions)
+    {
+        var refinements = RefinementsOf(regions, buttonRegions);
+        var result = new JsonObject();
+        foreach (var (key, value) in module.ToList())
+        {
+            if (key != "regions") result[key] = value?.DeepClone();
+            else if (refinements.Count > 0) result["refinements"] = refinements;
+        }
+
+        return result;
+    }
+
+    static JsonArray RefinementsOf(JsonArray regions, HashSet<string> buttonRegions)
+    {
+        var refinements = new JsonArray();
+        foreach (var region in regions.OfType<JsonObject>())
+        {
+            var name = Text(region["region"])!;
+            var mode = _modes.GetValueOrDefault(Text(region["mode"]) ?? "inherit") ?? "inherits";
+            if (mode == "inherits") continue;
+            refinements.Add(Refinement(name, mode, ItemsOf(region, "items").Select(NavigationItem)));
+            var buttons = ItemsOf(region, "buttons");
+            if (RefinesButtons(buttons, mode == "overrides" && buttonRegions.Contains(name)))
+            {
+                refinements.Add(Refinement($"{name}Buttons", mode, buttons.Select(Button)));
+            }
+        }
+
+        return refinements;
+    }
+
+    static bool RefinesButtons(List<JsonObject> buttons, bool replacesApplicationButtons) => buttons.Count > 0 || replacesApplicationButtons;
+
+    static JsonObject Refinement(string outlet, string mode, IEnumerable<JsonObject> items) =>
+        new() { ["outlet"] = outlet, ["mode"] = mode, ["items"] = new JsonArray([.. items]) };
 
     /// <summary>
     /// Tells whether a contribution is a navigation item contributed to a contribution point: content whose properties are a
@@ -162,6 +171,20 @@ public static class LegacyNavigationShape
             return false;
         }
 
+        var upgraded = new List<JsonNode?>();
+        foreach (var (point, entries) in GroupByPoint(contributions))
+        {
+            upgraded.Add(new JsonObject { ["outlet"] = point, ["items"] = OrderedItems(entries) });
+        }
+
+        owner["contributions"] = new JsonArray([.. contributions.Where(contribution => !IsNavigationContribution(contribution)).Select(contribution => contribution?.DeepClone())]);
+        var existing = owner["outletContributions"] is JsonArray current ? [.. current.Select(contribution => contribution?.DeepClone())] : new List<JsonNode?>();
+        owner["outletContributions"] = new JsonArray([.. existing, .. upgraded]);
+        return true;
+    }
+
+    static List<(string Point, List<Contributed> Entries)> GroupByPoint(JsonArray contributions)
+    {
         var byPoint = new List<(string Point, List<Contributed> Entries)>();
         var index = 0;
         foreach (var contribution in contributions)
@@ -182,59 +205,58 @@ public static class LegacyNavigationShape
             index++;
         }
 
-        var upgraded = new List<JsonNode?>();
-        foreach (var (point, entries) in byPoint)
+        return byPoint;
+    }
+
+    static JsonArray OrderedItems(List<Contributed> entries)
+    {
+        var ordered = entries
+            .OrderBy(entry => entry.Order is null ? 1 : 0)
+            .ThenBy(entry => entry.Order ?? 0)
+            .ThenBy(entry => entry.Index);
+        var items = new JsonArray();
+        var groups = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
+        foreach (var entry in ordered) Append(items, groups, entry);
+
+        return items;
+    }
+
+    static void Append(JsonArray items, Dictionary<string, JsonArray> groups, Contributed entry)
+    {
+        if (entry.Group is null)
         {
-            var ordered = entries
-                .OrderBy(entry => entry.Order is null ? 1 : 0)
-                .ThenBy(entry => entry.Order ?? 0)
-                .ThenBy(entry => entry.Index);
-            var items = new JsonArray();
-            var groups = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
-            foreach (var entry in ordered)
-            {
-                if (entry.Group is null)
-                {
-                    items.Add(entry.Item);
-                    continue;
-                }
-
-                if (!groups.TryGetValue(entry.Group, out var children))
-                {
-                    children = [];
-                    groups[entry.Group] = children;
-                    items.Add(new JsonObject { ["kind"] = "navigation", ["id"] = entry.Group, ["title"] = entry.Group, ["children"] = children });
-                }
-
-                children.Add(entry.Item);
-            }
-
-            upgraded.Add(new JsonObject { ["outlet"] = point, ["items"] = items });
+            items.Add(entry.Item);
+            return;
         }
 
-        owner["contributions"] = new JsonArray([.. contributions.Where(contribution => !IsNavigationContribution(contribution)).Select(contribution => contribution?.DeepClone())]);
-        var existing = owner["outletContributions"] is JsonArray current ? [.. current.Select(contribution => contribution?.DeepClone())] : new List<JsonNode?>();
-        owner["outletContributions"] = new JsonArray([.. existing, .. upgraded]);
-        return true;
+        if (!groups.TryGetValue(entry.Group, out var children))
+        {
+            children = [];
+            groups[entry.Group] = children;
+            items.Add(new JsonObject { ["kind"] = "navigation", ["id"] = entry.Group, ["title"] = entry.Group, ["children"] = children });
+        }
+
+        children.Add(entry.Item);
+    }
+
+    static JsonObject TargetOf(JsonObject properties, string targetScreen)
+    {
+        if (properties["destination"] is JsonObject destination) return destination.DeepClone().AsObject();
+
+        var target = new JsonObject { ["screen"] = targetScreen };
+        if (properties["routeParameterBindings"] is JsonObject bindings && bindings.Count > 0)
+        {
+            target["routeParameterBindings"] = bindings.DeepClone();
+        }
+
+        return target;
     }
 
     static Contributed Contribute(JsonObject contribution, int index)
     {
         var properties = contribution["content"]!["properties"]!.AsObject();
         var targetScreen = Text(properties["targetScreen"])!;
-        JsonObject target;
-        if (properties["destination"] is JsonObject destination)
-        {
-            target = destination.DeepClone().AsObject();
-        }
-        else
-        {
-            target = new JsonObject { ["screen"] = targetScreen };
-            if (properties["routeParameterBindings"] is JsonObject bindings && bindings.Count > 0)
-            {
-                target["routeParameterBindings"] = bindings.DeepClone();
-            }
-        }
+        var target = TargetOf(properties, targetScreen);
 
         var item = new JsonObject
         {
