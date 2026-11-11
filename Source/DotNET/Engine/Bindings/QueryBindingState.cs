@@ -11,8 +11,8 @@ namespace Cratis.Scene.Engine.Bindings;
 /// </summary>
 public class QueryBindingState
 {
-    readonly Dictionary<string, int> _generations = new(StringComparer.Ordinal);
-    readonly Dictionary<string, JsonNode?> _results = new(StringComparer.Ordinal);
+    readonly Dictionary<string, int> _generations = [with(StringComparer.Ordinal)];
+    readonly Dictionary<string, JsonNode?> _results = [with(StringComparer.Ordinal)];
 
     /// <summary>
     /// Gets the accepted results, as the query results of a binding scope.
