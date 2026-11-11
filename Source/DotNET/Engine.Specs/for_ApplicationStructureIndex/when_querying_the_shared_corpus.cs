@@ -26,8 +26,8 @@ public class when_querying_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "application-structure-fixtures.json")));
-        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "application-structure-fixtures.json")));
+        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options);
     }
 
     void Because() => _indexes = [.. _cases.Select(fixture => (fixture, new ApplicationStructureIndex(fixture.Structure)))];

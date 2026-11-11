@@ -33,5 +33,5 @@ public class when_filtering_for_a_nested_scope : Specification
 
     [Fact] void should_preserve_browse_order() => string.Join(',', _result.Select(template => template.Name)).ShouldEqual("custom,legacy");
     [Fact] void should_preserve_the_inherited_definition() => ReferenceEquals(_result[0], _custom).ShouldBeTrue();
-    [Fact] void should_preserve_unknown_package_categories() => _result[0].Metadata!.Category.ShouldEqual("Acme/Dispatch");
+    [Fact] void should_preserve_unknown_package_categories() => _result[0].Metadata.Category.ShouldEqual("Acme/Dispatch");
 }

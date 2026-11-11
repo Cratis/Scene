@@ -26,15 +26,15 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 
     void Establish()
     {
-        _library = Fixture("shell-switch-fixtures.json").RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options)!;
+        _library = Fixture("shell-switch-fixtures.json").RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options);
         _cases = [.. Fixture("shell-switch-apply-fixtures.json").RootElement.GetProperty("cases").EnumerateArray().Select(element =>
         {
             var document = element.GetProperty("document");
             return new ApplyCase(
-                element.GetProperty("name").GetString()!,
-                JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options)!,
-                element.GetProperty("currentRoot").Deserialize<TemplateReference>(_options)!,
-                element.GetProperty("candidateRoot").Deserialize<TemplateReference>(_options)!,
+                element.GetProperty("name").GetString(),
+                JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options),
+                element.GetProperty("currentRoot").Deserialize<TemplateReference>(_options),
+                element.GetProperty("candidateRoot").Deserialize<TemplateReference>(_options),
                 RemapsOf(element.GetProperty("remaps")),
                 [.. document.GetProperty("screens").EnumerateArray().Select(ScreenOf)],
                 [.. document.GetProperty("screenTemplates").EnumerateArray().Select(TemplateOf)],
@@ -101,30 +101,30 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        return JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, name)));
+        return JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, name)));
     }
 
     static Screen ScreenOf(JsonElement element) => new(
-        element.GetProperty("name").GetString()!,
-        element.GetProperty("layout").GetString()!,
+        element.GetProperty("name").GetString(),
+        element.GetProperty("layout").GetString(),
         element.GetProperty("slotContent").EnumerateObject().ToDictionary(
             slot => slot.Name,
-            slot => (IReadOnlyList<SceneElement>)[.. slot.Value.EnumerateArray().Select(item => (SceneElement)new ExternalComponent { Id = item.GetProperty("id").GetString()!, Name = item.GetProperty("id").GetString()!, ComponentName = item.GetProperty("type").GetString()! })],
+            slot => (IReadOnlyList<SceneElement>)[.. slot.Value.EnumerateArray().Select(item => (SceneElement)new ExternalComponent { Id = item.GetProperty("id").GetString(), Name = item.GetProperty("id").GetString(), ComponentName = item.GetProperty("type").GetString() })],
             StringComparer.Ordinal),
         [],
         [],
         element.TryGetProperty("screenTemplate", out var template) ? template.GetString() : null);
 
     static ScreenTemplate TemplateOf(JsonElement element) => new(
-        element.GetProperty("name").GetString()!,
+        element.GetProperty("name").GetString(),
         element.TryGetProperty("fitsSlot", out var fits) ? fits.GetString() : null,
-        [.. element.GetProperty("slots").EnumerateArray().Select(slot => new Slot(slot.GetProperty("name").GetString()!))]);
+        [.. element.GetProperty("slots").EnumerateArray().Select(slot => new Slot(slot.GetProperty("name").GetString()))]);
 
     static Dictionary<string, SlotRemap> RemapsOf(JsonElement element) =>
         element.EnumerateObject().ToDictionary(
             property => property.Name,
             property => new SlotRemap(
-                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
+                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString(), ignoreCase: true),
                 property.Value.TryGetProperty("target", out var target) ? target.GetString() : null),
             StringComparer.Ordinal);
 

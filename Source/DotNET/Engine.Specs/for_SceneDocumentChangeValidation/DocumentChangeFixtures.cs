@@ -31,16 +31,16 @@ public static class DocumentChangeFixtures
         var submitted = element.GetProperty("submitted");
 
         return new FixtureCase(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             new EditingScope(
-                ParseKind(scope.GetProperty("kind").GetString()!),
-                scope.GetProperty("name").GetString()!,
+                ParseKind(scope.GetProperty("kind").GetString()),
+                scope.GetProperty("name").GetString(),
                 scope.TryGetProperty("layout", out var layout) ? layout.GetString() : null),
             element.GetProperty("references").EnumerateObject().ToDictionary(reference => reference.Name, reference => reference.Value.GetRawText()),
             previous.ValueKind == JsonValueKind.Null ? null : previous.GetRawText(),
-            submitted.ValueKind == JsonValueKind.String ? submitted.GetString()! : submitted.GetRawText(),
+            submitted.ValueKind == JsonValueKind.String ? submitted.GetString() : submitted.GetRawText(),
             expected.GetProperty("accepted").GetBoolean(),
-            [.. expected.GetProperty("codes").EnumerateArray().Select(code => code.GetString()!).Order(StringComparer.Ordinal)]);
+            [.. expected.GetProperty("codes").EnumerateArray().Select(code => code.GetString()).Order(StringComparer.Ordinal)]);
     }
 
     static EditingScopeKind ParseKind(string kind) => kind switch

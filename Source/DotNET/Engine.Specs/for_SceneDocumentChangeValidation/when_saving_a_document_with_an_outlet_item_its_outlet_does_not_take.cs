@@ -7,7 +7,7 @@ namespace Cratis.Scene.Engine.Editing.for_SceneDocumentChangeValidation;
 
 public class when_saving_a_document_with_an_outlet_item_its_outlet_does_not_take : Specification
 {
-    const string Stored = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"outlets":[{"name":"toolbar","kind":"actions","defaults":[]}]}],"screenTemplates":[],"dialogTemplates":[],"screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string Stored = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"outlets":[{"name":"toolbar","kind":"actions","defaults":[]}]}],"screenTemplates":[],"dialogTemplates":[],"screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
     static readonly EditingScope _scope = new(EditingScopeKind.Layout, "Shell");
 

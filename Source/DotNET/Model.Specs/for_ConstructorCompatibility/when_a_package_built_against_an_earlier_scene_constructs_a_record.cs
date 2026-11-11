@@ -62,6 +62,6 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
     void should_build_the_same_profile_through_the_earlier_constructor()
     {
         var earlier = new UiProfile("Desktop", "web", ["core"], null, null, "Aurora", null, null, new ProfileAppearance(ColorScheme.Dark, "#4f46e5"), null);
-        (earlier.Identity is null && earlier.Appearance!.Corners is null && earlier.Appearance.Font is null && earlier.Appearance.Accent == "#4f46e5").ShouldBeTrue();
+        (earlier.Identity is null && earlier.Appearance.Corners is null && earlier.Appearance.Font is null && earlier.Appearance.Accent == "#4f46e5").ShouldBeTrue();
     }
 }

@@ -27,7 +27,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        _cases = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "shell-regions-fixtures.json")))!["cases"]!.AsArray();
+        _cases = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "shell-regions-fixtures.json")))["cases"].AsArray();
     }
 
     void Because() => _results = [.. _cases.Select(item =>

@@ -31,7 +31,7 @@ public class when_resolving_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "outlet-resolution-fixtures.json")))!;
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "outlet-resolution-fixtures.json")));
     }
 
     [Fact]
@@ -49,9 +49,9 @@ public class when_resolving_the_shared_corpus : Specification
     void should_cover_every_diagnostic_code()
     {
         var covered = Cases("cases")
-            .SelectMany(fixture => fixture["expectedDiagnostics"]!.AsArray()
-                .Concat(fixture["resolve"]!.AsArray().SelectMany(entry => entry!["expected"]!["diagnostics"]!.AsArray())))
-            .Select(line => line!.GetValue<string>().Split('|')[0])
+            .SelectMany(fixture => fixture["expectedDiagnostics"].AsArray()
+                .Concat(fixture["resolve"].AsArray().SelectMany(entry => entry["expected"]["diagnostics"].AsArray())))
+            .Select(line => line.GetValue<string>().Split('|')[0])
             .Distinct()
             .Order();
         covered.ShouldContainOnly(Enum.GetNames<OutletDiagnosticCode>().Select(Camel).Order());
@@ -64,9 +64,9 @@ public class when_resolving_the_shared_corpus : Specification
         foreach (var fixture in Cases("cases"))
         {
             var (chain, contributors) = Levels(fixture);
-            foreach (var entry in fixture["resolve"]!.AsArray())
+            foreach (var entry in fixture["resolve"].AsArray())
             {
-                var outlet = entry!["outlet"]!.GetValue<string>();
+                var outlet = entry["outlet"].GetValue<string>();
                 var actual = Describe(EffectiveOutlets.Resolve(chain, outlet, contributors));
                 if (!JsonNode.DeepEquals(actual, entry["expected"])) mismatches.Add($"{fixture["name"]} / {outlet}: {actual.ToJsonString()}");
             }
@@ -93,11 +93,11 @@ public class when_resolving_the_shared_corpus : Specification
         var mismatches = Cases("dialogTemplates")
             .Where(fixture =>
             {
-                var template = fixture["template"].Deserialize<DialogTemplate>(_read)!;
+                var template = fixture["template"].Deserialize<DialogTemplate>(_read);
                 var actual = new JsonArray([.. DialogTemplateOutlets.Of(template).Select(outlet => (JsonNode)JsonValue.Create(DescribeDialogOutlet(outlet)))]);
                 return !JsonNode.DeepEquals(actual, fixture["expected"]);
             })
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 
@@ -107,11 +107,11 @@ public class when_resolving_the_shared_corpus : Specification
         var mismatches = Cases("toolbars")
             .Where(fixture =>
             {
-                var toolbar = fixture["toolbar"].Deserialize<Model.Toolbar.Toolbar>(_read)!;
+                var toolbar = fixture["toolbar"].Deserialize<Model.Toolbar.Toolbar>(_read);
                 var actual = JsonSerializer.SerializeToNode(ToolbarOutlet.AsRefinement(toolbar), _write);
                 return !JsonNode.DeepEquals(actual, fixture["expected"]);
             })
-            .Select(fixture => fixture["name"]!.GetValue<string>());
+            .Select(fixture => fixture["name"].GetValue<string>());
         mismatches.ShouldBeEmpty();
     }
 

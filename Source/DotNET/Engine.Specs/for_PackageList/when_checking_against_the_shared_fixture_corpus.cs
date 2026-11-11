@@ -44,26 +44,26 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        var corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "package-list-fixtures.json")))!;
-        _packages = corpus["packages"].Deserialize<List<ScenePackage>>(_readOptions)!;
-        _cases = corpus["cases"]!.AsArray();
+        var corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "package-list-fixtures.json")));
+        _packages = corpus["packages"].Deserialize<List<ScenePackage>>(_readOptions);
+        _cases = corpus["cases"].AsArray();
     }
 
     void Because() => _results = [.. _cases.Select(item =>
     {
-        var profile = item!["profile"].Deserialize<UiProfile>(_readOptions)!;
-        var action = item["action"]!;
-        var kind = action["kind"]!.GetValue<string>();
-        var expected = item["expected"]!;
+        var profile = item["profile"].Deserialize<UiProfile>(_readOptions);
+        var action = item["action"];
+        var kind = action["kind"].GetValue<string>();
+        var expected = item["expected"];
         JsonNode actual;
         if (kind == "describe")
         {
             var listing = PackageList.Describe(profile, _packages);
             actual = new JsonObject { ["rows"] = JsonSerializer.SerializeToNode(listing.Rows, _options), ["addable"] = JsonSerializer.SerializeToNode(listing.Addable, _options) };
-            foreach (var entry in actual["rows"]!.AsArray().Concat(actual["addable"]!.AsArray()))
+            foreach (var entry in actual["rows"].AsArray().Concat(actual["addable"].AsArray()))
             {
                 // The package kind is the model's enum, written PascalCase like everywhere else in a profile or package; the engine's own enums are camelCase.
-                var packageKind = entry!["kind"]!.GetValue<string>();
+                var packageKind = entry["kind"].GetValue<string>();
                 entry["kind"] = char.ToUpperInvariant(packageKind[0]) + packageKind[1..];
             }
 
@@ -79,9 +79,9 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             {
                 "add" => PackageList.Add(profile, _packages, name),
                 "remove" => PackageList.Remove(profile, _packages, name),
-                "move" => PackageList.Move(profile, _packages, name, action["direction"]!.GetValue<string>() == "up" ? MoveDirection.Up : MoveDirection.Down),
-                "blueprint" => PackageList.ChooseBlueprint(profile, _packages, action["blueprint"]!.GetValue<string>(), action["shell"]?.GetValue<string>()),
-                _ => PackageList.ChooseTheme(profile, _packages, action["theme"]!.GetValue<string>())
+                "move" => PackageList.Move(profile, _packages, name, action["direction"].GetValue<string>() == "up" ? MoveDirection.Up : MoveDirection.Down),
+                "blueprint" => PackageList.ChooseBlueprint(profile, _packages, action["blueprint"].GetValue<string>(), action["shell"]?.GetValue<string>()),
+                _ => PackageList.ChooseTheme(profile, _packages, action["theme"].GetValue<string>())
             };
             var result = new JsonObject
             {
@@ -104,7 +104,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             actual = result;
         }
 
-        return (item["name"]!.GetValue<string>(), expected.DeepClone(), actual);
+        return (item["name"].GetValue<string>(), expected.DeepClone(), actual);
     })];
 
     [Fact]

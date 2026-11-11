@@ -45,9 +45,9 @@ public static class PackageFixtures
 
     static ScenePackage ToPackage(JsonElement element) =>
         new(
-            element.GetProperty("name").GetString()!,
-            element.GetProperty("version").GetString()!,
-            Enum.Parse<PackageKind>(element.GetProperty("kind").GetString()!),
+            element.GetProperty("name").GetString(),
+            element.GetProperty("version").GetString(),
+            Enum.Parse<PackageKind>(element.GetProperty("kind").GetString()),
             [.. element.GetProperty("dependencies").EnumerateArray().Select(ToDependency)],
             Strings(element, "components"),
             Strings(element, "layouts"),
@@ -57,9 +57,9 @@ public static class PackageFixtures
 
     static PackageDependency ToDependency(JsonElement element) =>
         new(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             element.TryGetProperty("versionRange", out var range) ? range.GetString() : null);
 
     static IReadOnlyList<string> Strings(JsonElement element, string property) =>
-        [.. element.GetProperty(property).EnumerateArray().Select(value => value.GetString()!)];
+        [.. element.GetProperty(property).EnumerateArray().Select(value => value.GetString())];
 }

@@ -19,7 +19,7 @@ public class when_resolving_the_targets_corpus : Specification
     {
         foreach (var fixture in _cases)
         {
-            var index = new ApplicationStructureIndex(fixture.Structure!);
+            var index = new ApplicationStructureIndex(fixture.Structure);
             foreach (var view in fixture.Views)
             {
                 (fixture.Name, view.Module, view.Outlet, NavigationFixtures.DescribeView(index, fixture.Navigation, view))
@@ -33,7 +33,7 @@ public class when_resolving_the_targets_corpus : Specification
     {
         foreach (var fixture in _cases)
         {
-            var actual = NavigationOutletDiagnostics.Diagnose(new ApplicationStructureIndex(fixture.Structure!), fixture.Navigation, fixture.Slots);
+            var actual = NavigationOutletDiagnostics.Diagnose(new ApplicationStructureIndex(fixture.Structure), fixture.Navigation, fixture.Slots);
             (fixture.Name, string.Join('\n', NavigationFixtures.DescribeDiagnostics(actual)))
                 .ShouldEqual((fixture.Name, string.Join('\n', NavigationFixtures.DescribeExpected(fixture.ExpectedDiagnostics))));
         }

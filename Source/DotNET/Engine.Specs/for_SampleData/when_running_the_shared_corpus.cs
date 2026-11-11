@@ -36,7 +36,7 @@ public class when_running_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "sample-data-resolution-fixtures.json")));
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory.FullName, "sample-data-resolution-fixtures.json")));
     }
 
     void Because()
@@ -153,11 +153,11 @@ public class when_running_the_shared_corpus : Specification
 
     static string Name(JsonElement fixture) => fixture.GetProperty("name").GetString()!;
 
-    static IReadOnlyList<string> Problems(JsonElement fixture) => [.. fixture.GetProperty("expectedProblems").EnumerateArray().Select(problem => problem.GetString()!)];
+    static IReadOnlyList<string> Problems(JsonElement fixture) => [.. fixture.GetProperty("expectedProblems").EnumerateArray().Select(problem => problem.GetString())];
 
     static (string Name, string Expected, string Actual) Generate(JsonElement fixture)
     {
-        var shape = fixture.GetProperty("shape").Deserialize<SampleShape>(_options)!;
+        var shape = fixture.GetProperty("shape").Deserialize<SampleShape>(_options);
         var seed = fixture.TryGetProperty("seed", out var seedElement) ? seedElement.GetInt64() : (long?)null;
         var rowCount = fixture.TryGetProperty("rowCount", out var countElement) ? countElement.GetInt32() : (int?)null;
         var locale = fixture.TryGetProperty("locale", out var localeElement) ? localeElement.GetString() : null;
@@ -165,11 +165,11 @@ public class when_running_the_shared_corpus : Specification
         var expected = fixture.GetProperty("expectedRows");
         if (expected.ValueKind == JsonValueKind.Array)
         {
-            return (Name(fixture), JsonNode.Parse(expected.GetRawText())!.ToJsonString(), new JsonArray([.. rows.Select(row => row.DeepClone())]).ToJsonString());
+            return (Name(fixture), JsonNode.Parse(expected.GetRawText()).ToJsonString(), new JsonArray([.. rows.Select(row => row.DeepClone())]).ToJsonString());
         }
 
         var summary = $"{rows.Count}|{rows[0].ToJsonString()}|{rows[^1].ToJsonString()}";
-        var expectedSummary = $"{expected.GetProperty("count").GetInt32()}|{JsonNode.Parse(expected.GetProperty("first").GetRawText())!.ToJsonString()}|{JsonNode.Parse(expected.GetProperty("last").GetRawText())!.ToJsonString()}";
+        var expectedSummary = $"{expected.GetProperty("count").GetInt32()}|{JsonNode.Parse(expected.GetProperty("first").GetRawText()).ToJsonString()}|{JsonNode.Parse(expected.GetProperty("last").GetRawText()).ToJsonString()}";
         return (Name(fixture), expectedSummary, summary);
     }
 
@@ -182,16 +182,16 @@ public class when_running_the_shared_corpus : Specification
 
     static (string Name, JsonNode? Expected, JsonNode? Actual) Resolve(JsonElement fixture)
     {
-        var request = fixture.GetProperty("request").Deserialize<SampleDataRequest>(_options)!;
-        var context = fixture.GetProperty("context").Deserialize<SampleDataContext>(_options)!;
+        var request = fixture.GetProperty("request").Deserialize<SampleDataRequest>(_options);
+        var context = fixture.GetProperty("context").Deserialize<SampleDataContext>(_options);
         var resolution = SampleDataResolver.Resolve(request, context);
         return (Name(fixture), JsonNode.Parse(fixture.GetProperty("expected").GetRawText()), JsonSerializer.SerializeToNode(resolution, _options));
     }
 
     static (string Name, JsonNode? Expected, JsonNode? Actual) DescribeCatalog(JsonElement fixture)
     {
-        var sources = fixture.GetProperty("sources").Deserialize<List<SampleDataPackSource>>(_options)!;
-        var own = fixture.GetProperty("ownPacks").Deserialize<List<SampleDataPackReference>>(_options)!;
+        var sources = fixture.GetProperty("sources").Deserialize<List<SampleDataPackSource>>(_options);
+        var own = fixture.GetProperty("ownPacks").Deserialize<List<SampleDataPackReference>>(_options);
         var active = fixture.TryGetProperty("activePack", out var activeElement) ? activeElement.GetString() : null;
         var catalog = SampleDataCatalogs.Describe(sources, own, active);
         return (Name(fixture), JsonNode.Parse(fixture.GetProperty("expected").GetRawText()), JsonSerializer.SerializeToNode(catalog, _options));

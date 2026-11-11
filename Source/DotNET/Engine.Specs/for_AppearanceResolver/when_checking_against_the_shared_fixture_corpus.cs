@@ -29,29 +29,29 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        var corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "profile-appearance-fixtures.json")))!;
-        _results = [.. corpus["cases"]!.AsArray().Select(item =>
+        var corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "profile-appearance-fixtures.json")));
+        _results = [.. corpus["cases"].AsArray().Select(item =>
         {
-            var theme = item!["theme"].Deserialize<Theme>(_options);
+            var theme = item["theme"].Deserialize<Theme>(_options);
             var appearance = item["appearance"].Deserialize<ProfileAppearance>(_options);
             var fonts = item["availableFonts"].Deserialize<List<string>>(_options);
-            var resolved = AppearanceResolver.Resolve(theme, appearance, item["systemIsDark"]!.GetValue<bool>(), fonts);
-            var actual = JsonSerializer.SerializeToNode(resolved, _options)!;
+            var resolved = AppearanceResolver.Resolve(theme, appearance, item["systemIsDark"].GetValue<bool>(), fonts);
+            var actual = JsonSerializer.SerializeToNode(resolved, _options);
             actual.AsObject().Remove("fontStylesheet");
             if (resolved.FontStylesheet is not null)
             {
                 actual["fontStylesheet"] = resolved.FontStylesheet;
             }
 
-            foreach (var diagnostic in actual["diagnostics"]!.AsArray())
+            foreach (var diagnostic in actual["diagnostics"].AsArray())
             {
-                var code = diagnostic!["code"]!.GetValue<string>();
+                var code = diagnostic["code"].GetValue<string>();
                 diagnostic["code"] = char.ToLowerInvariant(code[0]) + code[1..];
             }
 
-            return (item["name"]!.GetValue<string>(), item["expected"]!.DeepClone(), actual);
+            return (item["name"].GetValue<string>(), item["expected"].DeepClone(), actual);
         })];
-        _coveredCodes = [.. _results.SelectMany(result => result.Expected["diagnostics"]!.AsArray().Select(diagnostic => diagnostic!["code"]!.GetValue<string>())).Distinct().Order(StringComparer.Ordinal)];
+        _coveredCodes = [.. _results.SelectMany(result => result.Expected["diagnostics"].AsArray().Select(diagnostic => diagnostic["code"].GetValue<string>())).Distinct().Order(StringComparer.Ordinal)];
     }
 
     [Fact]

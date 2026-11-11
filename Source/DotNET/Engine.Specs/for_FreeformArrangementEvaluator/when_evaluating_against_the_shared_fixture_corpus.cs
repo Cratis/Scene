@@ -37,20 +37,20 @@ public class when_evaluating_against_the_shared_fixture_corpus : Specification
 
     static FixtureCase ToFixtureCase(JsonElement element)
     {
-        var name = element.GetProperty("name").GetString()!;
+        var name = element.GetProperty("name").GetString();
 
         var variants = element.GetProperty("variants").EnumerateArray()
             .Select(variantElement => new FreeformVariant(
                 new SizeClass(
-                    Enum.Parse<WidthSizeClass>(variantElement.GetProperty("width").GetString()!),
-                    Enum.Parse<HeightSizeClass>(variantElement.GetProperty("height").GetString()!)),
-                [Placement(variantElement.GetProperty("tag").GetString()!)]))
+                    Enum.Parse<WidthSizeClass>(variantElement.GetProperty("width").GetString()),
+                    Enum.Parse<HeightSizeClass>(variantElement.GetProperty("height").GetString())),
+                [Placement(variantElement.GetProperty("tag").GetString())]))
             .ToList();
 
         var sizeClassElement = element.GetProperty("sizeClass");
         var sizeClass = new SizeClass(
-            Enum.Parse<WidthSizeClass>(sizeClassElement.GetProperty("width").GetString()!),
-            Enum.Parse<HeightSizeClass>(sizeClassElement.GetProperty("height").GetString()!));
+            Enum.Parse<WidthSizeClass>(sizeClassElement.GetProperty("width").GetString()),
+            Enum.Parse<HeightSizeClass>(sizeClassElement.GetProperty("height").GetString()));
 
         var expectedTagElement = element.GetProperty("expectedTag");
         var expectedTag = expectedTagElement.ValueKind == JsonValueKind.Null ? null : expectedTagElement.GetString();

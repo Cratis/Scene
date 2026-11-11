@@ -16,8 +16,8 @@ public class when_resolving_template_references_from_the_shared_corpus : Specifi
     void Establish()
     {
         var root = FixtureFile.Load();
-        _library = root.GetProperty("library").Deserialize<TemplateLibrary>(FixtureFile.Options)!;
-        _cases = root.GetProperty("references").Deserialize<List<ReferenceCase>>(FixtureFile.Options)!;
+        _library = root.GetProperty("library").Deserialize<TemplateLibrary>(FixtureFile.Options);
+        _cases = root.GetProperty("references").Deserialize<List<ReferenceCase>>(FixtureFile.Options);
     }
 
     void Because() => _results = [.. _cases.Select(fixture => (fixture, TemplateReferenceResolver.Resolve(fixture.Reference, _library)))];

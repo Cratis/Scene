@@ -8,7 +8,7 @@ namespace Cratis.Scene.Engine.Editing.for_SceneDocumentChangeValidation;
 
 public class when_saving_a_document_in_the_outlet_shape : Specification
 {
-    const string Stored = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"outlets":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[],"screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string Stored = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}],"outlets":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[],"screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
     static readonly EditingScope _scope = new(EditingScopeKind.Layout, "Shell");
 
@@ -19,9 +19,9 @@ public class when_saving_a_document_in_the_outlet_shape : Specification
     void Because()
     {
         _legacy = SceneDocumentChangeValidation.Validate(_scope, Stored, Stored);
-        var upgraded = SlotShapeUpgrader.Upgrade(Stored).Document!.ToJsonString();
+        var upgraded = SlotShapeUpgrader.Upgrade(Stored).Document.ToJsonString();
         _upgraded = SceneDocumentChangeValidation.Validate(_scope, Stored, upgraded);
-        _twoPrimarySlots = SceneDocumentChangeValidation.Validate(_scope, upgraded, upgraded.Replace("""{"name":"content","routed":true}""", """{"name":"content","routed":true,"primary":true},{"name":"side","primary":true}"""));
+        _twoPrimarySlots = SceneDocumentChangeValidation.Validate(_scope, upgraded, upgraded.Replace(/*lang=json,strict*/ """{"name":"content","routed":true}""", """{"name":"content","routed":true,"primary":true},{"name":"side","primary":true}"""));
     }
 
     [Fact] void should_refuse_the_outlet_shape() => _legacy.Violations.Select(violation => violation.CodeName).ShouldContainOnly("invalidSlotShape");

@@ -71,7 +71,7 @@ public static class NavigationFixtures
     public static NavigationEditPlan Plan(NavigationModel navigation, JsonElement call)
     {
         var module = call.TryGetProperty("module", out var moduleElement) ? moduleElement.GetString() : null;
-        var outlet = call.TryGetProperty("outlet", out var outletElement) ? outletElement.GetString()! : string.Empty;
+        var outlet = call.TryGetProperty("outlet", out var outletElement) ? outletElement.GetString() : string.Empty;
         string? Text(string name) => call.TryGetProperty(name, out var element) ? element.GetString() : null;
         int? Index() => call.TryGetProperty("index", out var element) ? element.GetInt32() : null;
         switch (call.GetProperty("op").GetString())
@@ -84,17 +84,17 @@ public static class NavigationFixtures
                     call.GetProperty("mode").Deserialize<OutletMode>(_read),
                     call.TryGetProperty("copy", out var copy) && copy.GetBoolean());
             case "addNavigationItem":
-                return NavigationEdits.AddItem(navigation, module, outlet, call.GetProperty("item").Deserialize<OutletItem>(_read)!, Text("parent"), Index());
+                return NavigationEdits.AddItem(navigation, module, outlet, call.GetProperty("item").Deserialize<OutletItem>(_read), Text("parent"), Index());
             case "renameNavigationItem":
-                return NavigationEdits.RenameItem(navigation, module, outlet, Text("id")!, Text("title")!);
+                return NavigationEdits.RenameItem(navigation, module, outlet, Text("id"), Text("title"));
             case "moveNavigationItem":
-                return NavigationEdits.MoveItem(navigation, module, outlet, Text("id")!, Text("parent"), Index());
+                return NavigationEdits.MoveItem(navigation, module, outlet, Text("id"), Text("parent"), Index());
             case "duplicateNavigationItem":
-                return NavigationEdits.DuplicateItem(navigation, module, outlet, Text("id")!, Text("newId"));
+                return NavigationEdits.DuplicateItem(navigation, module, outlet, Text("id"), Text("newId"));
             case "removeNavigationItem":
-                return NavigationEdits.RemoveItem(navigation, module, outlet, Text("id")!);
+                return NavigationEdits.RemoveItem(navigation, module, outlet, Text("id"));
             case "setApplicationLogo":
-                return NavigationEdits.SetApplicationLogo(module, call.GetProperty("logo").Deserialize<ApplicationLogo>(_read)!);
+                return NavigationEdits.SetApplicationLogo(module, call.GetProperty("logo").Deserialize<ApplicationLogo>(_read));
             default:
                 throw new InvalidOperationException($"Unknown edit helper '{call.GetProperty("op").GetString()}'.");
         }

@@ -67,26 +67,26 @@ public class when_resolving_against_the_shared_fixture_corpus : Specification
 
     static FixtureCase ToFixtureCase(JsonElement element) =>
         new(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             ToLayout(element.GetProperty("layout")),
             [.. element.GetProperty("templates").EnumerateArray().Select(ToTemplate)],
             [.. element.GetProperty("expectedPlacements").EnumerateArray().Select(placement =>
                 $"{placement.GetProperty("template").GetString()}@{placement.GetProperty("slot").GetString()}->{placement.GetProperty("container").GetString()}#{placement.GetProperty("depth").GetInt32()}")],
             [.. element.GetProperty("expectedUnplaced").EnumerateArray().Select(unplaced =>
                 $"{unplaced.GetProperty("template").GetString()}@{unplaced.GetProperty("slot").GetString()}?{string.Join('|', unplaced.GetProperty("candidates").EnumerateArray().Select(candidate => candidate.GetString()))}")],
-            [.. element.GetProperty("expectedCycles").EnumerateArray().Select(cycle => string.Join('>', cycle.EnumerateArray().Select(name => name.GetString()!)))]);
+            [.. element.GetProperty("expectedCycles").EnumerateArray().Select(cycle => string.Join('>', cycle.EnumerateArray().Select(name => name.GetString())))]);
 
     static Layout ToLayout(JsonElement element) =>
-        new(element.GetProperty("name").GetString()!, [.. Slots(element)]);
+        new(element.GetProperty("name").GetString(), [.. Slots(element)]);
 
     static ScreenTemplate ToTemplate(JsonElement element) =>
         new(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             element.GetProperty("fitsSlot").ValueKind == JsonValueKind.Null ? null : element.GetProperty("fitsSlot").GetString(),
             [.. Slots(element)]);
 
     static IEnumerable<Slot> Slots(JsonElement element) =>
-        element.GetProperty("slots").EnumerateArray().Select(slot => new Slot(slot.GetString()!));
+        element.GetProperty("slots").EnumerateArray().Select(slot => new Slot(slot.GetString()));
 
     static string FindRepositoryRoot()
     {

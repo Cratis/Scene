@@ -17,7 +17,7 @@ public class when_running_the_shared_corpus : Specification
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
-        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "command-response-fixtures.json")));
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory.FullName, "command-response-fixtures.json")));
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class when_running_the_shared_corpus : Specification
             var contracts = Substitute.For<IResponseValidationContracts>();
             contracts.CommandResponse("create").Returns(entry.TryGetProperty("response", out var response) ? response.Deserialize<ResponseContract>(_options) : null);
             contracts.TargetType(Arg.Any<InteractionAction>(), Arg.Any<ResponseOperand>()).Returns(entry.TryGetProperty("target", out var target) ? target.Deserialize<ResponseValueType>(_options) : null);
-            var binding = new BindingExpression(entry.GetProperty("path").GetString()!, BindingSourceKind.CommandResponse, Mode: entry.TryGetProperty("mode", out _) ? BindingMode.TwoWay : null, ExpectedValueType: entry.TryGetProperty("expectedValueType", out var expected) ? expected.GetString() : null);
+            var binding = new BindingExpression(entry.GetProperty("path").GetString(), BindingSourceKind.CommandResponse, Mode: entry.TryGetProperty("mode", out _) ? BindingMode.TwoWay : null, ExpectedValueType: entry.TryGetProperty("expectedValueType", out var expected) ? expected.GetString() : null);
             var action = new SetStateAction("id", binding);
             (ResponseBindings.Validate(new("form", Command: "create", OnSubmit: [action]), contracts).Count == 0).ShouldEqual(entry.GetProperty("valid").GetBoolean());
         }
@@ -51,9 +51,9 @@ public class when_running_the_shared_corpus : Specification
     {
         InteractionAction action = entry.GetProperty("kind").GetString() switch
         {
-            "ExecuteCommand" => new ExecuteCommandAction(entry.GetProperty("command").GetString()!),
-            "SetState" => new SetStateAction(entry.GetProperty("target").GetString()!, new(entry.GetProperty("value").GetProperty("path").GetString()!, BindingSourceKind.CommandResponse)),
-            "RefreshQuery" => new RefreshQueryAction(entry.GetProperty("query").GetString()!),
+            "ExecuteCommand" => new ExecuteCommandAction(entry.GetProperty("command").GetString()),
+            "SetState" => new SetStateAction(entry.GetProperty("target").GetString(), new(entry.GetProperty("value").GetProperty("path").GetString(), BindingSourceKind.CommandResponse)),
+            "RefreshQuery" => new RefreshQueryAction(entry.GetProperty("query").GetString()),
             _ => throw new InvalidOperationException("Unknown fixture action")
         };
         return action with { OnSuccess = ReadContinuation(entry, "onSuccess"), OnFailure = ReadContinuation(entry, "onFailure"), OnResult = ReadContinuation(entry, "onResult") };

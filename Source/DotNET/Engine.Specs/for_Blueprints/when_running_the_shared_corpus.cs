@@ -32,11 +32,11 @@ public class when_running_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "blueprint-verification-fixtures.json")));
-        _verification = document.RootElement.GetProperty("verification").Deserialize<List<VerificationCase>>(_options)!;
-        _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options)!;
-        _pin = document.RootElement.GetProperty("pin").Deserialize<List<PinCase>>(_options)!;
-        _compare = document.RootElement.GetProperty("compare").Deserialize<List<CompareCase>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "blueprint-verification-fixtures.json")));
+        _verification = document.RootElement.GetProperty("verification").Deserialize<List<VerificationCase>>(_options);
+        _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options);
+        _pin = document.RootElement.GetProperty("pin").Deserialize<List<PinCase>>(_options);
+        _compare = document.RootElement.GetProperty("compare").Deserialize<List<CompareCase>>(_options);
     }
 
     void Because()

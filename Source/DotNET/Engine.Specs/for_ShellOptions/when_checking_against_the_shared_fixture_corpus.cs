@@ -27,7 +27,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "shell-options-fixtures.json")))!;
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "shell-options-fixtures.json")));
     }
 
     void Because()

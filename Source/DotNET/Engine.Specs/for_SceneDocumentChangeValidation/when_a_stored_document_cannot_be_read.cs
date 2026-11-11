@@ -7,7 +7,7 @@ namespace Cratis.Scene.Engine.Editing.for_SceneDocumentChangeValidation;
 
 public class when_a_stored_document_cannot_be_read : Specification
 {
-    const string Submitted = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string Submitted = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
     SceneDocumentChangeResult _result = null!;
 

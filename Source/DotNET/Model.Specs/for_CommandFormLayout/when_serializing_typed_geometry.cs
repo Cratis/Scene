@@ -26,10 +26,10 @@ public class when_serializing_typed_geometry : Specification
                 [new("amount", 1, 2, ColumnSpan: 1, Width: new(FormWidthUnit.Percent, 100))]));
 
     void Because() =>
-        _roundTripped = JsonSerializer.Deserialize<Form>(JsonSerializer.Serialize(_form, _options), _options)!;
+        _roundTripped = JsonSerializer.Deserialize<Form>(JsonSerializer.Serialize(_form, _options), _options);
 
     [Fact] void should_keep_generation_mode_separate_from_geometry() => _roundTripped.GenerationMode.ShouldEqual(FormGenerationMode.Manual);
-    [Fact] void should_roundtrip_unequal_column_widths() => _roundTripped.Layout!.Columns[1].Width!.Unit.ShouldEqual(FormWidthUnit.Pixels);
-    [Fact] void should_roundtrip_field_placement() => _roundTripped.Layout!.Placements[0].Column.ShouldEqual(2);
+    [Fact] void should_roundtrip_unequal_column_widths() => _roundTripped.Layout.Columns[1].Width.Unit.ShouldEqual(FormWidthUnit.Pixels);
+    [Fact] void should_roundtrip_field_placement() => _roundTripped.Layout.Placements[0].Column.ShouldEqual(2);
     [Fact] void should_keep_compose_using_as_a_composition_reference() => _roundTripped.Fields[0].ComposeUsing.ShouldEqual("calculateAmount");
 }

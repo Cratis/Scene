@@ -31,13 +31,13 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "shell-switch-fixtures.json")));
-        _library = document.RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "shell-switch-fixtures.json")));
+        _library = document.RootElement.GetProperty("libraries").GetProperty("default").Deserialize<TemplateLibrary>(_options);
         _cases = [.. document.RootElement.GetProperty("cases").EnumerateArray().Select(element => new SwitchCase(
-            element.GetProperty("name").GetString()!,
-            JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options)!,
-            element.GetProperty("currentRoot").Deserialize<TemplateReference>(_options)!,
-            element.GetProperty("candidateRoot").Deserialize<TemplateReference>(_options)!,
+            element.GetProperty("name").GetString(),
+            JsonSerializer.Deserialize<UiProfile>(element.GetProperty("profile").GetRawText(), _options),
+            element.GetProperty("currentRoot").Deserialize<TemplateReference>(_options),
+            element.GetProperty("candidateRoot").Deserialize<TemplateReference>(_options),
             [.. element.GetProperty("screens").EnumerateArray().Select(ScreenOf)],
             RemapsOf(element.GetProperty("remaps")),
             DescribeExpected(element.GetProperty("expected"))))];
@@ -92,11 +92,11 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     }
 
     static Screen ScreenOf(JsonElement element) => new(
-        element.GetProperty("name").GetString()!,
-        element.GetProperty("layout").GetString()!,
+        element.GetProperty("name").GetString(),
+        element.GetProperty("layout").GetString(),
         element.GetProperty("slotContent").EnumerateObject().ToDictionary(
             slot => slot.Name,
-            slot => (IReadOnlyList<SceneElement>)[.. slot.Value.EnumerateArray().Select(item => (SceneElement)new ExternalComponent { Id = item.GetProperty("id").GetString()!, Name = item.GetProperty("id").GetString()!, ComponentName = item.GetProperty("type").GetString()! })],
+            slot => (IReadOnlyList<SceneElement>)[.. slot.Value.EnumerateArray().Select(item => (SceneElement)new ExternalComponent { Id = item.GetProperty("id").GetString(), Name = item.GetProperty("id").GetString(), ComponentName = item.GetProperty("type").GetString() })],
             StringComparer.Ordinal),
         [],
         [],
@@ -106,7 +106,7 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         element.EnumerateObject().ToDictionary(
             property => property.Name,
             property => new SlotRemap(
-                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString()!, ignoreCase: true),
+                Enum.Parse<ShellSlotAction>(property.Value.GetProperty("action").GetString(), ignoreCase: true),
                 property.Value.TryGetProperty("target", out var target) ? target.GetString() : null),
             StringComparer.Ordinal);
 

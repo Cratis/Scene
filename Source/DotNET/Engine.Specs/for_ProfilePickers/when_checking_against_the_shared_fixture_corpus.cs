@@ -36,44 +36,44 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             directory = directory.Parent;
         }
 
-        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "profile-pickers-fixtures.json")))!;
+        _corpus = JsonNode.Parse(File.ReadAllText(Path.Combine(directory.FullName, "profile-pickers-fixtures.json")));
     }
 
     void Because()
     {
-        var themes = _corpus["themes"].Deserialize<List<Theme>>(_read)!;
-        var packages = _corpus["packages"].Deserialize<List<ScenePackage>>(_read)!;
+        var themes = _corpus["themes"].Deserialize<List<Theme>>(_read);
+        var packages = _corpus["packages"].Deserialize<List<ScenePackage>>(_read);
         _results = [];
 
-        foreach (var item in _corpus["themeCards"]!.AsArray())
+        foreach (var item in _corpus["themeCards"].AsArray())
         {
-            var profile = item!["profile"].Deserialize<UiProfile>(_read)!;
-            var scheme = item["scheme"] is null ? (ColorScheme?)null : Enum.Parse<ColorScheme>(item["scheme"]!.GetValue<string>());
+            var profile = item["profile"].Deserialize<UiProfile>(_read);
+            var scheme = item["scheme"] is null ? (ColorScheme?)null : Enum.Parse<ColorScheme>(item["scheme"].GetValue<string>());
             _results.Add(($"theme cards: {item["name"]}", item["expected"], JsonSerializer.SerializeToNode(ThemeCards.Describe(profile, themes, packages, scheme), _write)));
         }
 
-        foreach (var item in _corpus["colorSchemeSwitch"]!.AsArray())
+        foreach (var item in _corpus["colorSchemeSwitch"].AsArray())
         {
-            var profile = item!["profile"].Deserialize<UiProfile>(_read)!;
-            var edit = ThemeCards.SwitchColorScheme(profile, Enum.Parse<ColorScheme>(item["scheme"]!.GetValue<string>()), themes);
+            var profile = item["profile"].Deserialize<UiProfile>(_read);
+            var edit = ThemeCards.SwitchColorScheme(profile, Enum.Parse<ColorScheme>(item["scheme"].GetValue<string>()), themes);
             var actual = new JsonObject { ["profile"] = JsonNode.Parse(UiProfileJson.Serialize(edit.Profile)), ["themeChanged"] = edit.ThemeChanged, ["message"] = edit.Message };
             _results.Add(($"colour scheme: {item["name"]}", item["expected"], actual));
         }
 
-        foreach (var item in _corpus["versionRules"]!.AsArray())
+        foreach (var item in _corpus["versionRules"].AsArray())
         {
-            var rule = VersionRules.Describe(item!["pin"]?.GetValue<string>(), item["installed"]!.GetValue<string>(), item["latest"]?.GetValue<string>());
+            var rule = VersionRules.Describe(item["pin"]?.GetValue<string>(), item["installed"].GetValue<string>(), item["latest"]?.GetValue<string>());
             _results.Add(($"version rule: {item["name"]}", item["expected"], JsonSerializer.SerializeToNode(rule, _write)));
         }
 
-        foreach (var item in _corpus["ownShell"]!.AsArray())
+        foreach (var item in _corpus["ownShell"].AsArray())
         {
-            _results.Add(($"own shell: {item!["value"]}", item["expected"], JsonSerializer.SerializeToNode(OwnShells.Describe(item["value"]!.GetValue<string>()), _write)));
+            _results.Add(($"own shell: {item["value"]}", item["expected"], JsonSerializer.SerializeToNode(OwnShells.Describe(item["value"].GetValue<string>()), _write)));
         }
 
-        foreach (var item in _corpus["shellCards"]!.AsArray())
+        foreach (var item in _corpus["shellCards"].AsArray())
         {
-            var library = item!["library"].Deserialize<TemplateLibrary>(_read)!;
+            var library = item["library"].Deserialize<TemplateLibrary>(_read);
             _results.Add(($"shell cards: {item["name"]}", item["expected"], JsonSerializer.SerializeToNode(ShellCards.Describe(library), _write)));
         }
     }

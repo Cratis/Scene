@@ -19,9 +19,9 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
         using var document = JsonDocument.Parse(File.ReadAllText(manifestPath));
 
         _cases = [.. document.RootElement.GetProperty("cases").EnumerateArray().Select(element => new FixtureCase(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             element.GetProperty("input").GetRawText(),
-            element.GetProperty("canonical").GetString()!))];
+            element.GetProperty("canonical").GetString()))];
     }
 
     void Because() => _results = [.. _cases.Select(fixtureCase =>

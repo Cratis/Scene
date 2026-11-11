@@ -17,8 +17,8 @@ public static class IconReferenceFixtures
 
     public static IconReference ToReference(JsonElement element) =>
         new(
-            element.GetProperty("library").GetString()!,
-            element.GetProperty("key").GetString()!,
+            element.GetProperty("library").GetString(),
+            element.GetProperty("key").GetString(),
             element.TryGetProperty("variant", out var variant) ? variant.GetString() : null);
 
     static string FindRepositoryRoot()

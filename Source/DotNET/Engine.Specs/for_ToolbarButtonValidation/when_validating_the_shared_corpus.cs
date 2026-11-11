@@ -35,10 +35,10 @@ public class when_validating_the_shared_corpus : Specification
             directory = directory.Parent;
         }
 
-        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "toolbar-slice-fixtures.json")));
-        _index = new ApplicationStructureIndex(document.RootElement.GetProperty("structure").Deserialize<ApplicationStructure>(_options)!);
-        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options)!;
-        _itemCases = document.RootElement.GetProperty("itemCases").Deserialize<List<ItemCase>>(_options)!;
+        using var document = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "toolbar-slice-fixtures.json")));
+        _index = new ApplicationStructureIndex(document.RootElement.GetProperty("structure").Deserialize<ApplicationStructure>(_options));
+        _cases = document.RootElement.GetProperty("cases").Deserialize<List<FixtureCase>>(_options);
+        _itemCases = document.RootElement.GetProperty("itemCases").Deserialize<List<ItemCase>>(_options);
     }
 
     [Fact]

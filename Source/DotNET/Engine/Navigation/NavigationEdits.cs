@@ -381,30 +381,30 @@ public static class NavigationEdits
                 return (WithOwnItems(model, edit.Module, declared, _ => edit.Items ?? []), null);
 
             case NavigationEditKind.AddItem:
-            {
-                var item = edit.Item!;
-                if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return (model, KindMismatch(declared, item));
-                if (NavigationOutlets.CollectIds(own, nested).Contains(item.Id)) return (model, DuplicateId(item.Id));
-                if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, items => Insert(items, item, edit.Index)), null);
-                if (!nested || item is not OutletNavigationItem navigationItem) return (model, Flat(outlet));
-                if (Locate(own, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
-                return (WithOwnItems(model, edit.Module, declared, items => InsertUnder(items, edit.Parent, navigationItem, edit.Index)), null);
-            }
+                {
+                    var item = edit.Item!;
+                    if (!OutletItemKinds.AllowedIn(declared.Kind).Contains(item.Kind)) return (model, KindMismatch(declared, item));
+                    if (NavigationOutlets.CollectIds(own, nested).Contains(item.Id)) return (model, DuplicateId(item.Id));
+                    if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, items => Insert(items, item, edit.Index)), null);
+                    if (!nested || item is not OutletNavigationItem navigationItem) return (model, Flat(outlet));
+                    if (Locate(own, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
+                    return (WithOwnItems(model, edit.Module, declared, items => InsertUnder(items, edit.Parent, navigationItem, edit.Index)), null);
+                }
 
             case NavigationEditKind.UpdateItem:
                 if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));
                 return (WithOwnItems(model, edit.Module, declared, items => Replace(items, edit.Id!, edit.Item!, nested)), null);
 
             case NavigationEditKind.MoveItem:
-            {
-                var location = Locate(own, edit.Id ?? string.Empty, nested);
-                if (location is null) return (model, MissingItem(edit.Id ?? string.Empty));
-                var without = Remove(own, location.Item.Id, nested);
-                if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, _ => Insert(without, location.Item, edit.Index)), null);
-                if (!nested || location.Item is not OutletNavigationItem moved) return (model, Flat(outlet));
-                if (Locate(without, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
-                return (WithOwnItems(model, edit.Module, declared, _ => InsertUnder(without, edit.Parent, moved, edit.Index)), null);
-            }
+                {
+                    var location = Locate(own, edit.Id ?? string.Empty, nested);
+                    if (location is null) return (model, MissingItem(edit.Id ?? string.Empty));
+                    var without = Remove(own, location.Item.Id, nested);
+                    if (edit.Parent is null) return (WithOwnItems(model, edit.Module, declared, _ => Insert(without, location.Item, edit.Index)), null);
+                    if (!nested || location.Item is not OutletNavigationItem moved) return (model, Flat(outlet));
+                    if (Locate(without, edit.Parent, nested) is null) return (model, MissingParent(edit.Parent));
+                    return (WithOwnItems(model, edit.Module, declared, _ => InsertUnder(without, edit.Parent, moved, edit.Index)), null);
+                }
 
             case NavigationEditKind.RemoveItem:
                 if (Locate(own, edit.Id ?? string.Empty, nested) is null) return (model, MissingItem(edit.Id ?? string.Empty));

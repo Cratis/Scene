@@ -37,22 +37,22 @@ public class when_evaluating_against_the_shared_fixture_corpus : Specification
 
     static FixtureCase ToFixtureCase(JsonElement element)
     {
-        var name = element.GetProperty("name").GetString()!;
-        var root = Leaf(element.GetProperty("rootTag").GetString()!);
+        var name = element.GetProperty("name").GetString();
+        var root = Leaf(element.GetProperty("rootTag").GetString());
 
         var overrides = element.GetProperty("overrides").EnumerateArray()
             .Select(overrideElement => new FlowOverride(
                 ParseWidth(overrideElement),
                 ParseHeight(overrideElement),
-                Leaf(overrideElement.GetProperty("tag").GetString()!)))
+                Leaf(overrideElement.GetProperty("tag").GetString())))
             .ToList();
 
         var sizeClassElement = element.GetProperty("sizeClass");
         var sizeClass = new SizeClass(
-            Enum.Parse<WidthSizeClass>(sizeClassElement.GetProperty("width").GetString()!),
-            Enum.Parse<HeightSizeClass>(sizeClassElement.GetProperty("height").GetString()!));
+            Enum.Parse<WidthSizeClass>(sizeClassElement.GetProperty("width").GetString()),
+            Enum.Parse<HeightSizeClass>(sizeClassElement.GetProperty("height").GetString()));
 
-        var expectedTag = element.GetProperty("expectedTag").GetString()!;
+        var expectedTag = element.GetProperty("expectedTag").GetString();
 
         return new(name, new FlowArrangement(root, overrides), sizeClass, expectedTag);
     }
@@ -60,13 +60,13 @@ public class when_evaluating_against_the_shared_fixture_corpus : Specification
     static WidthSizeClass? ParseWidth(JsonElement overrideElement)
     {
         var widthElement = overrideElement.GetProperty("width");
-        return widthElement.ValueKind == JsonValueKind.Null ? null : Enum.Parse<WidthSizeClass>(widthElement.GetString()!);
+        return widthElement.ValueKind == JsonValueKind.Null ? null : Enum.Parse<WidthSizeClass>(widthElement.GetString());
     }
 
     static HeightSizeClass? ParseHeight(JsonElement overrideElement)
     {
         var heightElement = overrideElement.GetProperty("height");
-        return heightElement.ValueKind == JsonValueKind.Null ? null : Enum.Parse<HeightSizeClass>(heightElement.GetString()!);
+        return heightElement.ValueKind == JsonValueKind.Null ? null : Enum.Parse<HeightSizeClass>(heightElement.GetString());
     }
 
     static FlowLeaf Leaf(string tag) => new(new ExternalComponent { Id = tag, Name = tag, ComponentName = "core:text" });

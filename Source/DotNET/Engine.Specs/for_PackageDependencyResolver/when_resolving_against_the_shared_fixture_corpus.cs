@@ -78,15 +78,15 @@ public class when_resolving_against_the_shared_fixture_corpus : Specification
 
     static FixtureCase ToFixtureCase(JsonElement element) =>
         new(
-            element.GetProperty("name").GetString()!,
+            element.GetProperty("name").GetString(),
             Strings(element, "selected"),
             Strings(element, "expectedPackages"),
             Strings(element, "expectedAdded"),
             [.. element.GetProperty("expectedMissing").EnumerateArray().Select(missing => $"{missing.GetProperty("package").GetString()}->{missing.GetProperty("dependsOn").GetString()}")],
             [.. element.GetProperty("expectedVersionConflicts").EnumerateArray().Select(conflict =>
                 $"{conflict.GetProperty("package").GetString()}->{conflict.GetProperty("dependsOn").GetString()}@{conflict.GetProperty("requiredRange").GetString()}!={conflict.GetProperty("actualVersion").GetString()}")],
-            [.. element.GetProperty("expectedCycles").EnumerateArray().Select(cycle => string.Join('>', cycle.EnumerateArray().Select(name => name.GetString()!)))]);
+            [.. element.GetProperty("expectedCycles").EnumerateArray().Select(cycle => string.Join('>', cycle.EnumerateArray().Select(name => name.GetString())))]);
 
     static IReadOnlyList<string> Strings(JsonElement element, string property) =>
-        [.. element.GetProperty(property).EnumerateArray().Select(value => value.GetString()!)];
+        [.. element.GetProperty(property).EnumerateArray().Select(value => value.GetString())];
 }

@@ -19,14 +19,15 @@ public class when_reading_and_writing_what_a_button_shows : Specification
 
     void Because()
     {
-        _items = JsonSerializer.Deserialize<List<OutletItem>>(Written, SceneJson.Options)!;
-        _written = JsonNode.Parse(JsonSerializer.Serialize(_items, SceneJson.Options))!.AsArray();
+        _items = JsonSerializer.Deserialize<List<OutletItem>>(Written, SceneJson.Options);
+        _written = JsonNode.Parse(JsonSerializer.Serialize(_items, SceneJson.Options)).AsArray();
     }
 
     [Fact] void should_read_a_button_that_shows_only_its_icon() => ((OutletButton)_items[0]).Display.ShouldEqual(OutletButtonDisplay.Icon);
     [Fact] void should_read_a_button_that_shows_only_its_title() => ((OutletButton)_items[1]).Display.ShouldEqual(OutletButtonDisplay.Title);
     [Fact] void should_read_a_button_that_says_nothing_as_showing_the_default() => ((OutletButton)_items[2]).Display.ShouldBeNull();
-    [Fact] void should_write_what_it_shows_as_typescript_reads_it() => _written[0]!["display"]!.GetValue<string>().ShouldEqual("icon");
-    [Fact] void should_write_both_as_typescript_reads_it() =>
+    [Fact] void should_write_what_it_shows_as_typescript_reads_it() => _written[0]["display"].GetValue<string>().ShouldEqual("icon");
+    [Fact]
+    void should_write_both_as_typescript_reads_it() =>
         JsonSerializer.Serialize(OutletButtonDisplay.IconAndTitle, SceneJson.Options).ShouldEqual("\"iconAndTitle\"");
 }

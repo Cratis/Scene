@@ -16,7 +16,7 @@ public class when_writing_the_shared_fixture : Specification
 
     void Establish() => _fixture = File.ReadAllText(Path.Combine(FindRepositoryRoot(), "approved-package-set-fixture.json"));
 
-    void Because() => _written = ApprovedPackageSetJson.Write(ApprovedPackageSetJson.Read(_fixture).Set!);
+    void Because() => _written = ApprovedPackageSetJson.Write(ApprovedPackageSetJson.Read(_fixture).Set);
 
     [Fact] void should_be_the_canonical_document() => _written.ShouldEqual(_fixture.ReplaceLineEndings("\n"));
 

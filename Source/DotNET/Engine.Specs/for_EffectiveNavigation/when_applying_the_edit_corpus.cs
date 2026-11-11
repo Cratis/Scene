@@ -34,7 +34,7 @@ public class when_applying_the_edit_corpus : Specification
     {
         foreach (var fixture in _cases.Where(fixture => !fixture.Expected.TryGetProperty("rejected", out _)))
         {
-            var outcome = Cratis.Scene.Engine.Navigation.NavigationEdits.Apply(fixture.Navigation, NavigationFixtures.Plan(fixture.Navigation, fixture.Call).Edits);
+            var outcome = NavigationEdits.Apply(fixture.Navigation, NavigationFixtures.Plan(fixture.Navigation, fixture.Call).Edits);
             (fixture.Name, outcome.Applied).ShouldEqual((fixture.Name, true));
             (fixture.Name, NavigationFixtures.Canonical(outcome.Model)).ShouldEqual((fixture.Name, NavigationFixtures.Canonical(fixture.Expected.GetProperty("model"))));
         }

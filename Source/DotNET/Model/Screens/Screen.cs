@@ -27,7 +27,7 @@ namespace Cratis.Scene.Model.Screens;
 /// <param name="ScreenTemplate">
 /// The resolved name of the <see cref="Screens.ScreenTemplate"/> this screen fills, or
 /// <see langword="null"/> when it fills the <paramref name="Layout"/>'s own slots directly. The template's
-/// <see cref="Screens.ScreenTemplate.FitsSlot"/> is what decides where it lands, so a screen never has to
+/// <see cref="ScreenTemplate.FitsSlot"/> is what decides where it lands, so a screen never has to
 /// state its own position.
 /// </param>
 public record Screen(

@@ -7,11 +7,11 @@ namespace Cratis.Scene.Engine.Editing.for_SceneDocumentChangeValidation;
 
 public class when_the_scope_is_a_layout : Specification
 {
-    const string Stored = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string Stored = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
-    const string LayoutChanged = """{"layouts":[{"name":"Shell","slots":[{"name":"content"},{"name":"footer"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string LayoutChanged = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"},{"name":"footer"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
-    const string ScreenChanged = """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{"content":[]},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
+    const string ScreenChanged = /*lang=json,strict*/ """{"layouts":[{"name":"Shell","slots":[{"name":"content"}]}],"screenTemplates":[],"dialogTemplates":[], "screens":[{"name":"Home","layout":"Shell","slotContent":{"content":[]},"forms":[],"contributions":[]}],"exposures":[],"instanceContributions":[]}""";
 
     static readonly EditingScope _scope = new(EditingScopeKind.Layout, "Shell");
 
