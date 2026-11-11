@@ -14,7 +14,7 @@ public class when_running_the_shared_corpus : Specification
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "Scene.slnx"))) directory = directory.Parent;
-        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory!.FullName, "guard-condition-text-fixtures.json")));
+        _corpus = JsonElement.Parse(File.ReadAllText(Path.Combine(directory.FullName, "guard-condition-text-fixtures.json")));
     }
 
     [Fact]
@@ -23,7 +23,7 @@ public class when_running_the_shared_corpus : Specification
         var failures = new List<string>();
         foreach (var entry in _corpus.GetProperty("parse").EnumerateArray())
         {
-            var parsed = GuardConditionText.Parse(entry.GetProperty("text").GetString()!);
+            var parsed = GuardConditionText.Parse(entry.GetProperty("text").GetString());
             var actual = parsed is { } element ? element.GetRawText() : "null";
             var expected = JsonSerializer.Serialize(entry.GetProperty("expected"));
             if (actual != expected) failures.Add($"{entry.GetProperty("name").GetString()}: expected {expected} but was {actual}");
