@@ -58,12 +58,12 @@ public static class ShellResolver
         EffectiveShell? shell = null;
         if (profile.Root is not null)
         {
-            shell = FromReference(profile.Root.Template, ShellOrigin.Root, profile, context, diagnostics, profile.Root.Options);
+            shell = FromReference(new RootRequest(profile.Root.Template, ShellOrigin.Root, profile.Root.Options), profile, context, diagnostics);
         }
 
         if (shell is null && !string.IsNullOrWhiteSpace(profile.Layout))
         {
-            shell = FromLegacyLayout(profile.Layout, profile, context, installed, diagnostics);
+            shell = FromLegacyLayout(profile, context, installed, diagnostics);
         }
 
         shell ??= FromBlueprintDefault(installed);
@@ -87,82 +87,78 @@ public static class ShellResolver
             .Select(name => context.Library.Blueprints.FirstOrDefault(source => source.Manifest.Name == name && source.Manifest.Kind == PackageKind.Blueprint))
             .OfType<TemplateSource>()];
 
-    static EffectiveShell? FromReference(
-        TemplateReference reference,
-        ShellOrigin origin,
-        UiProfile profile,
-        ShellResolutionContext context,
-        List<ShellDiagnostic> diagnostics,
-        IReadOnlyDictionary<string, JsonNode?>? options)
+    static EffectiveShell? FromReference(RootRequest request, UiProfile profile, ShellResolutionContext context, List<ShellDiagnostic> diagnostics)
     {
+        var reference = request.Reference;
         var resolution = TemplateReferenceResolver.Resolve(reference, context.Library);
-        var label = ReferenceLabel(reference);
-
-        switch (resolution.Status)
+        var rejection = RejectUnresolved(reference, resolution);
+        var found = rejection is null ? FindReferenced(reference, context.Library) : null;
+        rejection ??= found is null ? RejectNotAShell(reference, resolution) : RejectProblems(found, reference);
+        if (rejection is not null)
         {
-            case TemplateReferenceStatus.Malformed:
-            case TemplateReferenceStatus.UnknownTemplate:
-                diagnostics.Add(new(ShellDiagnosticCode.RootTemplateUnknown, $"Root template {label} cannot be used: {resolution.Message}", reference.Id));
-                return null;
-            case TemplateReferenceStatus.UnknownBlueprint:
-                diagnostics.Add(new(ShellDiagnosticCode.RootTemplateBlueprintNotInstalled, $"Root template {label} comes from blueprint '{reference.Blueprint}', which is not installed", reference.Blueprint));
-                return null;
-        }
-
-        var isBlueprint = reference.Source == TemplateReferenceSource.Blueprint;
-        var source = isBlueprint
-            ? context.Library.Blueprints.FirstOrDefault(candidate => candidate.Manifest.Name == reference.Blueprint)
-            : context.Library.Own;
-        var found = source is null ? null : FindShell(reference.Id, source, isBlueprint);
-        if (found is null)
-        {
-            if (resolution.Status == TemplateReferenceStatus.Resolved)
-            {
-                diagnostics.Add(new(
-                    ShellDiagnosticCode.RootTemplateNotApplicable,
-                    $"Root template {label} cannot be the application's shell: it is a {KindName(resolution.Kind)}, and only a layout or a screen template with the root role can be a shell",
-                    reference.Id));
-            }
-            else
-            {
-                diagnostics.Add(new(ShellDiagnosticCode.RootTemplateVersionNotSatisfied, $"Root template {label} cannot be used: {resolution.Message}", reference.Id));
-            }
-
+            diagnostics.Add(rejection);
             return null;
         }
 
+        diagnostics.AddRange(ReferenceWarnings(found!, reference, resolution, profile));
+        return Build(found!, request.Origin, reference, request.Options);
+    }
+
+    static ShellDiagnostic? RejectUnresolved(TemplateReference reference, TemplateReferenceResolution resolution) => resolution.Status switch
+    {
+        TemplateReferenceStatus.Malformed or TemplateReferenceStatus.UnknownTemplate =>
+            new(ShellDiagnosticCode.RootTemplateUnknown, $"Root template {ReferenceLabel(reference)} cannot be used: {resolution.Message}", reference.Id),
+        TemplateReferenceStatus.UnknownBlueprint =>
+            new(ShellDiagnosticCode.RootTemplateBlueprintNotInstalled, $"Root template {ReferenceLabel(reference)} comes from blueprint '{reference.Blueprint}', which is not installed", reference.Blueprint),
+        _ => null
+    };
+
+    static Found? FindReferenced(TemplateReference reference, TemplateLibrary library)
+    {
+        var isBlueprint = reference.Source == TemplateReferenceSource.Blueprint;
+        var source = isBlueprint
+            ? library.Blueprints.FirstOrDefault(candidate => candidate.Manifest.Name == reference.Blueprint)
+            : library.Own;
+        return source is null ? null : FindShell(reference.Id, source, isBlueprint);
+    }
+
+    static ShellDiagnostic RejectNotAShell(TemplateReference reference, TemplateReferenceResolution resolution) =>
+        resolution.Status == TemplateReferenceStatus.Resolved
+            ? new(
+                ShellDiagnosticCode.RootTemplateNotApplicable,
+                $"Root template {ReferenceLabel(reference)} cannot be the application's shell: it is a {KindName(resolution.Kind)}, and only a layout or a screen template with the root role can be a shell",
+                reference.Id)
+            : new(ShellDiagnosticCode.RootTemplateVersionNotSatisfied, $"Root template {ReferenceLabel(reference)} cannot be used: {resolution.Message}", reference.Id);
+
+    static ShellDiagnostic? RejectProblems(Found found, TemplateReference reference)
+    {
         var problems = found.Kind == ShellKind.Layout
             ? TemplateApplicability.ValidateLayout(found.Layout, TemplateScope.Application)
             : TemplateApplicability.ValidateScreenTemplate(found.ScreenTemplate, TemplateScope.Application);
-        if (problems.Count > 0)
-        {
-            diagnostics.Add(new(ShellDiagnosticCode.RootTemplateNotApplicable, $"Root template {label} cannot be the application's shell: {string.Join("; ", problems)}", reference.Id));
-            return null;
-        }
+        return problems.Count > 0
+            ? new(ShellDiagnosticCode.RootTemplateNotApplicable, $"Root template {ReferenceLabel(reference)} cannot be the application's shell: {string.Join("; ", problems)}", reference.Id)
+            : null;
+    }
 
+    static IEnumerable<ShellDiagnostic> ReferenceWarnings(Found found, TemplateReference reference, TemplateReferenceResolution resolution, UiProfile profile)
+    {
         if (resolution.Status == TemplateReferenceStatus.VersionNotSatisfied)
         {
-            diagnostics.Add(new(ShellDiagnosticCode.RootTemplateVersionNotSatisfied, resolution.Message!, reference.Id));
+            yield return new(ShellDiagnosticCode.RootTemplateVersionNotSatisfied, resolution.Message!, reference.Id);
         }
 
         if (found.IsBlueprint && !profile.Packages.Contains(reference.Blueprint!))
         {
-            diagnostics.Add(new(
+            yield return new(
                 ShellDiagnosticCode.RootTemplateBlueprintNotInstalled,
-                $"Root template {label} comes from blueprint '{reference.Blueprint}', which is available but not among the packages of profile '{profile.Name}'",
-                reference.Blueprint));
+                $"Root template {ReferenceLabel(reference)} comes from blueprint '{reference.Blueprint}', which is available but not among the packages of profile '{profile.Name}'",
+                reference.Blueprint);
         }
-
-        return Build(found, origin, reference, options);
     }
 
-    static EffectiveShell? FromLegacyLayout(
-        string name,
-        UiProfile profile,
-        ShellResolutionContext context,
-        List<TemplateSource> installed,
-        List<ShellDiagnostic> diagnostics)
+    static EffectiveShell? FromLegacyLayout(UiProfile profile, ShellResolutionContext context, List<TemplateSource> installed, List<ShellDiagnostic> diagnostics)
     {
+        var name = profile.Layout!;
         var own = context.Library.Own is null ? null : FindLayout(name, context.Library.Own, false);
         if (own is not null)
         {
@@ -217,9 +213,9 @@ public static class ShellResolver
 
     static EffectiveShell Build(Found found, ShellOrigin origin, TemplateReference reference, IReadOnlyDictionary<string, JsonNode?>? options = null)
     {
-        var name = found.Kind == ShellKind.Layout ? found.Layout!.Name : found.ScreenTemplate!.Name;
-        var slots = found.Kind == ShellKind.Layout ? found.Layout!.Slots : found.ScreenTemplate!.Slots;
-        var pin = found.IsBlueprint && found.Source is not null ? BlueprintVersionPin.Evaluate(reference.Version, found.Source.Manifest.Version) : null;
+        var (name, slots) = found.Layout is { } layout ? (layout.Name, layout.Slots) : (found.ScreenTemplate!.Name, found.ScreenTemplate.Slots);
+        var manifest = found.IsBlueprint ? found.Source?.Manifest : null;
+        var pin = manifest is null ? null : BlueprintVersionPin.Evaluate(reference.Version, manifest.Version);
 
         return new(
             origin,
@@ -231,8 +227,8 @@ public static class ShellResolver
             SlotRoles.PrimaryOf(slots) ?? DefaultPrimarySlot,
             new Dictionary<string, JsonNode?>(options ?? new Dictionary<string, JsonNode?>()),
             [],
-            found.IsBlueprint && found.Source is not null ? found.Source.Manifest.Name : null,
-            found.IsBlueprint && found.Source is not null ? found.Source.Manifest.Version : null,
+            manifest?.Name,
+            manifest?.Version,
             pin,
             found.Layout,
             found.ScreenTemplate);
@@ -286,25 +282,38 @@ public static class ShellResolver
 
     static void CheckProfile(UiProfile profile, ShellResolutionContext context, List<ShellDiagnostic> diagnostics)
     {
+        CheckTheme(profile, context, diagnostics);
+        CheckAvailablePackages(profile, context, diagnostics);
+    }
+
+    static void CheckTheme(UiProfile profile, ShellResolutionContext context, List<ShellDiagnostic> diagnostics)
+    {
         var theme = profile.Theme is null ? null : context.Themes?.FirstOrDefault(candidate => candidate.Name == profile.Theme);
-        if (theme is not null)
+        if (theme is null)
         {
-            var incompatible = ThemeCompatibility.IncompatiblePackages(theme, profile);
-            if (incompatible.Count > 0)
-            {
-                diagnostics.Add(new(
-                    ShellDiagnosticCode.ProfileThemeIncompatible,
-                    $"Theme '{theme.Name}' does not support {(incompatible.Count == 1 ? "package" : "packages")} {string.Join(", ", incompatible.Select(name => $"'{name}'"))} of profile '{profile.Name}'",
-                    theme.Name));
-            }
+            return;
         }
 
-        if (context.AvailablePackages is not null)
+        var incompatible = ThemeCompatibility.IncompatiblePackages(theme, profile);
+        if (incompatible.Count > 0)
         {
-            foreach (var name in profile.Packages.Where(candidate => !context.AvailablePackages.Contains(candidate)))
-            {
-                diagnostics.Add(new(ShellDiagnosticCode.ProfilePackageMissing, $"Package '{name}' of profile '{profile.Name}' is not available", name));
-            }
+            diagnostics.Add(new(
+                ShellDiagnosticCode.ProfileThemeIncompatible,
+                $"Theme '{theme.Name}' does not support {(incompatible.Count == 1 ? "package" : "packages")} {string.Join(", ", incompatible.Select(name => $"'{name}'"))} of profile '{profile.Name}'",
+                theme.Name));
+        }
+    }
+
+    static void CheckAvailablePackages(UiProfile profile, ShellResolutionContext context, List<ShellDiagnostic> diagnostics)
+    {
+        if (context.AvailablePackages is null)
+        {
+            return;
+        }
+
+        foreach (var name in profile.Packages.Where(candidate => !context.AvailablePackages.Contains(candidate)))
+        {
+            diagnostics.Add(new(ShellDiagnosticCode.ProfilePackageMissing, $"Package '{name}' of profile '{profile.Name}' is not available", name));
         }
     }
 
@@ -318,6 +327,8 @@ public static class ShellResolver
             }
         }
     }
+
+    sealed record RootRequest(TemplateReference Reference, ShellOrigin Origin, IReadOnlyDictionary<string, JsonNode?>? Options);
 
     sealed record Found(Layout? Layout, ScreenTemplate? ScreenTemplate, ShellKind Kind, TemplateSource? Source, bool IsBlueprint);
 }
