@@ -1260,6 +1260,31 @@
       "name": "outlets of an unnamed owner with kinds of every type",
       "document": {"toolbar":{"buttons":[]},"outlets":[{"name":"o1","kind":"Actions","defaults":[{"kind":"button","id":"ok","title":"Ok"},{"kind":"stat","id":"s","title":"S"}]},{"name":"o2","kind":2},{"name":"o3","kind":"1"},{"name":"o4","kind":null},{"kind":"actions"},"text"]},
       "expected": "[{\"code\":\"legacyToolbarShape\",\"path\":\"$.toolbar\",\"message\":\"'(unnamed)' has a toolbar whose buttons every screen gets. Scene 5 replaced feature and module toolbars with the toolbar outlet: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source\"},{\"code\":\"outletItemKindMismatch\",\"path\":\"$.outlets[0].defaults[1].kind\",\"message\":\"The stat 's' cannot go in the actions outlet 'o1', which takes buttons, menu entries, separators and groups\"},{\"code\":\"unknownOutletKind\",\"path\":\"$.outlets[1].kind\",\"message\":\"The outlet 'o2' of '(unnamed)' has the kind '2'; an outlet lists actions, filters, tabs, stats or navigation\"},{\"code\":\"unknownOutletKind\",\"path\":\"$.outlets[2].kind\",\"message\":\"The outlet 'o3' of '(unnamed)' has the kind '1'; an outlet lists actions, filters, tabs, stats or navigation\"},{\"code\":\"unknownOutletKind\",\"path\":\"$.outlets[3].kind\",\"message\":\"The outlet 'o4' of '(unnamed)' has the kind 'null'; an outlet lists actions, filters, tabs, stats or navigation\"}]"
+    },
+    {
+      "name": "a permitted group without items",
+      "document": {"name":"O","outlets":[{"name":"o","kind":"actions","defaults":[{"kind":"group","id":"g","title":"G"},{"kind":"group","id":"h","title":"H","items":[]}]}]},
+      "expected": "[{\"code\":\"incompleteOutletItem\",\"path\":\"$.outlets[0].defaults[0].items\",\"message\":\"The group 'g' of the outlet 'o' has no items\"}]"
+    },
+    {
+      "name": "items that are not objects, and a group whose items are not a list",
+      "document": {"name":"O","outlets":[{"name":"o","kind":"actions","defaults":[5,"text",null,{"kind":"group","id":"g","title":"G","items":{"a":1}},{"kind":"group","id":"h","title":"H","items":[7,"x"]}]}],"refinements":[{"outlet":"o","items":[1,{"kind":"button"}]},7,{"outlet":"o","items":"text"}]},
+      "expected": "[{\"code\":\"incompleteOutletItem\",\"path\":\"$.refinements[0].items[1].id\",\"message\":\"The button '(no id)' of the outlet 'o' has no id\"},{\"code\":\"incompleteOutletItem\",\"path\":\"$.refinements[0].items[1].title\",\"message\":\"The button '(no id)' of the outlet 'o' has no title\"},{\"code\":\"incompleteOutletItem\",\"path\":\"$.outlets[0].defaults[3].items\",\"message\":\"The group 'g' of the outlet 'o' has no items\"}]"
+    },
+    {
+      "name": "a tab with empty or missing shows",
+      "document": {"name":"O","outlets":[{"name":"t","kind":"tabs","defaults":[{"kind":"tab","id":"a","title":"A","shows":""},{"kind":"tab","id":"b","title":"B"},{"kind":"tab","id":"c","title":"C","shows":7},{"kind":"tab","id":"d","title":"D","shows":"Screen"}]}]},
+      "expected": "[{\"code\":\"incompleteOutletItem\",\"path\":\"$.outlets[0].defaults[0].shows\",\"message\":\"The tab 'a' of the outlet 't' has no screen to show\"},{\"code\":\"incompleteOutletItem\",\"path\":\"$.outlets[0].defaults[1].shows\",\"message\":\"The tab 'b' of the outlet 't' has no screen to show\"},{\"code\":\"incompleteOutletItem\",\"path\":\"$.outlets[0].defaults[2].shows\",\"message\":\"The tab 'c' of the outlet 't' has no screen to show\"}]"
+    },
+    {
+      "name": "a group nested in a group is a kind mismatch, and never reaches the missing items check",
+      "document": {"refinements":[{"outlet":"o","items":[{"kind":"group","id":"g","title":"G","items":[{"kind":"group","id":"h","title":"H"},{"kind":"button","id":"b","title":"B"}]},{"kind":"group","id":"k","title":"K"}]}]},
+      "expected": "[{\"code\":\"outletItemKindMismatch\",\"path\":\"$.refinements[0].items[0].items[0].kind\",\"message\":\"The group 'h' cannot go in the group 'g' of the outlet 'o', which takes buttons, menu entries and separators\"},{\"code\":\"incompleteOutletItem\",\"path\":\"$.refinements[0].items[1].items\",\"message\":\"The group 'k' of the outlet 'o' has no items\"}]"
+    },
+    {
+      "name": "unnamed owners with fits and slots",
+      "document": {"fits":["bogus",5,"page"],"slots":[{"name":"a","role":"x"},{"name":"b","routedBy":["id"]},{"name":"c","primary":true},{"name":"d","primary":true},{"role":"zzz"}]},
+      "expected": "[{\"code\":\"unknownSlotRole\",\"path\":\"$.slots[0].role\",\"message\":\"The slot 'a' of '(unnamed)' has the role 'x'; a slot is a page, a pane or a panel\"},{\"code\":\"routeParametersWithoutRouting\",\"path\":\"$.slots[1].routedBy\",\"message\":\"The slot 'b' of '(unnamed)' is routed by id but is not routed\"},{\"code\":\"multiplePrimarySlots\",\"path\":\"$.slots\",\"message\":\"'(unnamed)' marks 'c', 'd' as primary; only one slot can be\"},{\"code\":\"unknownScreenFit\",\"path\":\"$.fits[0]\",\"message\":\"The screen '(unnamed)' fits 'bogus'; a screen fits a dialog, a drawer, a pane, a panel or a page\"},{\"code\":\"unknownScreenFit\",\"path\":\"$.fits[1]\",\"message\":\"The screen '(unnamed)' fits '5'; a screen fits a dialog, a drawer, a pane, a panel or a page\"}]"
     }
   ]
 }
