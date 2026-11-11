@@ -47,67 +47,15 @@ public static class ShellSwitchPlanner
         IReadOnlyList<ScreenTemplate>? templates = null,
         IReadOnlyDictionary<string, SlotRemap>? remaps = null)
     {
-        templates ??= [];
-        var users = new Dictionary<string, List<string>>(StringComparer.Ordinal);
-        var used = new List<string>();
-        foreach (var screen in screens)
-        {
-            foreach (var slot in ShellPlacement.SlotsUsedBy(screen, current.Name, templates))
-            {
-                if (!users.TryGetValue(slot, out var names))
-                {
-                    users[slot] = names = [];
-                }
-
-                if (!names.Contains(screen.Name))
-                {
-                    names.Add(screen.Name);
-                }
-
-                if (!used.Contains(slot))
-                {
-                    used.Add(slot);
-                }
-            }
-        }
-
+        var users = UsersBySlot(screens, current, templates ?? []);
+        var shells = new ShellPair(current, candidate);
         var blockers = new List<ShellDiagnostic>();
-        var slots = current.Slots.Concat(used.Where(slot => !current.Slots.Contains(slot)));
+        var slots = current.Slots.Concat(users.Keys.Where(slot => !current.Slots.Contains(slot)));
         var moves = slots
-            .Select(slot => MoveOf(
-                slot,
-                current,
-                candidate,
-                users.TryGetValue(slot, out var found) ? found : [],
-                remaps is not null && remaps.TryGetValue(slot, out var remap) ? remap : null,
-                blockers))
+            .Select(slot => MoveOf(new SlotUse(slot, users.GetValueOrDefault(slot, []), RemapOf(remaps, slot)), shells, blockers))
             .ToList();
 
-        var addPackages = new List<string>();
-        var warnings = new List<ShellDiagnostic>();
-        foreach (var diagnostic in candidate.Diagnostics)
-        {
-            if (diagnostic.Code == ShellDiagnosticCode.ProfileSlotUnplaced)
-            {
-                continue;
-            }
-
-            if (diagnostic.Code == ShellDiagnosticCode.RootTemplateBlueprintNotInstalled)
-            {
-                if (candidate.Package is not null && !addPackages.Contains(candidate.Package))
-                {
-                    addPackages.Add(candidate.Package);
-                }
-            }
-            else if (_blocking.Contains(diagnostic.Code))
-            {
-                blockers.Insert(0, diagnostic);
-            }
-            else
-            {
-                warnings.Add(diagnostic);
-            }
-        }
+        var (addPackages, warnings) = SortCandidateDiagnostics(candidate, blockers);
 
         return new ShellSwitchPlan(
             current.Name,
@@ -121,68 +69,129 @@ public static class ShellSwitchPlanner
             warnings);
     }
 
-    static ShellSlotMove MoveOf(string slot, EffectiveShell current, EffectiveShell candidate, List<string> screens, SlotRemap? remap, List<ShellDiagnostic> blockers)
+    static OrderedDictionary<string, List<string>> UsersBySlot(IReadOnlyList<Screen> screens, EffectiveShell current, IReadOnlyList<ScreenTemplate> templates)
     {
-        if (current.Slots.Contains(slot) && slot == current.PrimarySlot)
+        var users = new OrderedDictionary<string, List<string>>(StringComparer.Ordinal);
+        var uses = screens.SelectMany(screen => ShellPlacement.SlotsUsedBy(screen, current.Name, templates).Select(slot => (Slot: slot, Screen: screen.Name)));
+        foreach (var (slot, screen) in uses)
         {
-            return candidate.PrimarySlot == slot
-                ? new(slot, ShellSlotAction.Keep, screens, KeepText(slot, screens), slot)
-                : new(slot, ShellSlotAction.Primary, screens, PrimaryText(slot, candidate, screens), candidate.PrimarySlot);
+            if (!users.TryGetValue(slot, out var names))
+            {
+                users[slot] = names = [];
+            }
+
+            if (!names.Contains(screen))
+            {
+                names.Add(screen);
+            }
+        }
+
+        return users;
+    }
+
+    static SlotRemap? RemapOf(IReadOnlyDictionary<string, SlotRemap>? remaps, string slot) =>
+        remaps is not null && remaps.TryGetValue(slot, out var remap) ? remap : null;
+
+    static (List<string> AddPackages, List<ShellDiagnostic> Warnings) SortCandidateDiagnostics(EffectiveShell candidate, List<ShellDiagnostic> blockers)
+    {
+        var addPackages = new List<string>();
+        var warnings = new List<ShellDiagnostic>();
+        foreach (var diagnostic in candidate.Diagnostics.Where(diagnostic => diagnostic.Code != ShellDiagnosticCode.ProfileSlotUnplaced))
+        {
+            if (diagnostic.Code == ShellDiagnosticCode.RootTemplateBlueprintNotInstalled)
+            {
+                AddOnce(addPackages, candidate.Package);
+            }
+            else if (_blocking.Contains(diagnostic.Code))
+            {
+                blockers.Insert(0, diagnostic);
+            }
+            else
+            {
+                warnings.Add(diagnostic);
+            }
+        }
+
+        return (addPackages, warnings);
+    }
+
+    static void AddOnce(List<string> packages, string? package)
+    {
+        if (package is not null && !packages.Contains(package))
+        {
+            packages.Add(package);
+        }
+    }
+
+    static ShellSlotMove MoveOf(SlotUse use, ShellPair shells, List<ShellDiagnostic> blockers)
+    {
+        var (slot, screens, _) = use;
+        var (current, candidate) = shells;
+        return DefaultMove(use, shells) ?? (screens.Count == 0
+            ? new ShellSlotMove(slot, ShellSlotAction.Unused, screens, $"Slot '{slot}' of shell '{current.Name}' has no counterpart in shell '{candidate.Name}'; no screen uses it")
+            : Remapped(use, candidate, blockers));
+    }
+
+    static ShellSlotMove? DefaultMove(SlotUse use, ShellPair shells)
+    {
+        var (slot, screens, _) = use;
+        var (current, candidate) = shells;
+        var inCurrent = current.Slots.Contains(slot);
+        var keep = new ShellSlotMove(slot, ShellSlotAction.Keep, screens, KeepText(slot, screens), slot);
+        var primary = new ShellSlotMove(slot, ShellSlotAction.Primary, screens, PrimaryText(slot, candidate, screens), candidate.PrimarySlot);
+
+        if (inCurrent && slot == current.PrimarySlot)
+        {
+            return candidate.PrimarySlot == slot ? keep : primary;
         }
 
         if (candidate.Slots.Contains(slot))
         {
-            return new(slot, ShellSlotAction.Keep, screens, KeepText(slot, screens), slot);
+            return keep;
         }
 
-        if (slot == ContentSlot && current.Slots.Contains(slot))
-        {
-            return new(slot, ShellSlotAction.Primary, screens, PrimaryText(slot, candidate, screens), candidate.PrimarySlot);
-        }
-
-        if (screens.Count == 0)
-        {
-            return new(slot, ShellSlotAction.Unused, screens, $"Slot '{slot}' of shell '{current.Name}' has no counterpart in shell '{candidate.Name}'; no screen uses it");
-        }
-
-        return Remapped(slot, candidate, screens, remap, blockers);
+        return slot == ContentSlot && inCurrent ? primary : null;
     }
 
-    static ShellSlotMove Remapped(string slot, EffectiveShell candidate, List<string> screens, SlotRemap? remap, List<ShellDiagnostic> blockers)
+    static ShellSlotMove Remapped(SlotUse use, EffectiveShell candidate, List<ShellDiagnostic> blockers)
     {
+        var (slot, screens, remap) = use;
+        var decided = Decided(use, candidate);
+        if (decided is not null)
+        {
+            return decided;
+        }
+
         var (count, names) = ScreensText(screens);
-        var place = screens.Count == 1 ? "places" : "place";
-        List<SlotRemap> choices =
-        [
-            new(ShellSlotAction.MoveToPrimary, candidate.PrimarySlot),
-            .. candidate.Slots.Where(name => name != candidate.PrimarySlot).Select(name => new SlotRemap(ShellSlotAction.MapTo, name)),
-            new(ShellSlotAction.Drop)
-        ];
-
-        if (remap?.Action == ShellSlotAction.MoveToPrimary)
-        {
-            return new(slot, ShellSlotAction.MoveToPrimary, screens, $"The content that {names} {place} in slot '{slot}' moves into '{candidate.PrimarySlot}', the primary slot of shell '{candidate.Name}'", candidate.PrimarySlot);
-        }
-
-        if (remap?.Action == ShellSlotAction.Drop)
-        {
-            return new(slot, ShellSlotAction.Drop, screens, $"The content that {names} {place} in slot '{slot}' is dropped");
-        }
-
-        var message = $"{count} ({names}) {place} content in slot '{slot}', which shell '{candidate.Name}' does not have: move it into '{candidate.PrimarySlot}', map it to another slot or drop it";
-        if (remap?.Action == ShellSlotAction.MapTo)
-        {
-            if (remap.Target is not null && candidate.Slots.Contains(remap.Target))
-            {
-                return new(slot, ShellSlotAction.MapTo, screens, $"The content that {names} {place} in slot '{slot}' moves into '{remap.Target}' of shell '{candidate.Name}'", remap.Target);
-            }
-
-            message = $"The content in slot '{slot}' cannot be mapped to '{remap.Target ?? string.Empty}': shell '{candidate.Name}' has no such slot";
-        }
-
+        var message = remap?.Action == ShellSlotAction.MapTo
+            ? $"The content in slot '{slot}' cannot be mapped to '{remap.Target ?? string.Empty}': shell '{candidate.Name}' has no such slot"
+            : $"{count} ({names}) {PlaceVerb(screens)} content in slot '{slot}', which shell '{candidate.Name}' does not have: move it into '{candidate.PrimarySlot}', map it to another slot or drop it";
         blockers.Add(new ShellDiagnostic(ShellDiagnosticCode.ProfileSlotUnplaced, message, slot));
-        return new(slot, ShellSlotAction.Unresolved, screens, message, null, choices);
+        return new(slot, ShellSlotAction.Unresolved, screens, message, null, ChoicesFor(candidate));
     }
+
+    static ShellSlotMove? Decided(SlotUse use, EffectiveShell candidate)
+    {
+        var (slot, screens, remap) = use;
+        var content = $"The content that {ScreensText(screens).Names} {PlaceVerb(screens)} in slot '{slot}'";
+        return remap?.Action switch
+        {
+            ShellSlotAction.MoveToPrimary => new(slot, ShellSlotAction.MoveToPrimary, screens, $"{content} moves into '{candidate.PrimarySlot}', the primary slot of shell '{candidate.Name}'", candidate.PrimarySlot),
+            ShellSlotAction.Drop => new(slot, ShellSlotAction.Drop, screens, $"{content} is dropped"),
+            ShellSlotAction.MapTo when remap.Target is not null && candidate.Slots.Contains(remap.Target) =>
+                new(slot, ShellSlotAction.MapTo, screens, $"{content} moves into '{remap.Target}' of shell '{candidate.Name}'", remap.Target),
+            _ => null
+        };
+    }
+
+    static List<SlotRemap> ChoicesFor(EffectiveShell candidate) =>
+    [
+        new(ShellSlotAction.MoveToPrimary, candidate.PrimarySlot),
+        .. candidate.Slots.Where(name => name != candidate.PrimarySlot).Select(name => new SlotRemap(ShellSlotAction.MapTo, name)),
+        new(ShellSlotAction.Drop)
+    ];
+
+    static string PlaceVerb(List<string> screens) => screens.Count == 1 ? "places" : "place";
 
     static string KeepText(string slot, List<string> screens)
     {
@@ -215,4 +224,8 @@ public static class ShellSwitchPlanner
 
         return (count, $"{string.Join(", ", quoted.Take(NamedScreens))} and {screens.Count - NamedScreens} more");
     }
+
+    sealed record ShellPair(EffectiveShell Current, EffectiveShell Candidate);
+
+    sealed record SlotUse(string Slot, List<string> Screens, SlotRemap? Remap);
 }
