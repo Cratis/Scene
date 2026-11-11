@@ -61,6 +61,47 @@ public static class LegacyNavigationShape
         navigation["modules"] = modules;
     }
 
+    /// <summary>
+    /// Tells whether a contribution is a navigation item contributed to a contribution point: content whose properties are a
+    /// navigation item's (<c language="json">label</c> and <c language="json">targetScreen</c>).
+    /// </summary>
+    /// <param name="value">An entry of a screen's <c language="json">contributions</c>.</param>
+    /// <returns>Whether it is a legacy navigation contribution.</returns>
+    public static bool IsNavigationContribution(JsonNode? value) =>
+        value is JsonObject contribution
+        && Text(contribution["contributionPointName"]) is not null
+        && contribution["content"] is JsonObject content
+        && content["properties"] is JsonObject properties
+        && Text(properties["label"]) is not null
+        && Text(properties["targetScreen"]) is not null;
+
+    /// <summary>
+    /// Upgrades the navigation items an owner - a screen - contributes to contribution points into contributions to the outlets of
+    /// navigation those points are, in its <c language="json">outletContributions</c>, in place. Items keep their declared order (items without
+    /// one follow in the order given); items with a group become the sub-items of a navigation item named after the group, placed
+    /// where the group's first item was. Every other contribution stays where it is.
+    /// </summary>
+    /// <param name="owner">The object with the <c language="json">contributions</c>.</param>
+    /// <returns>Whether anything changed.</returns>
+    public static bool UpgradeNavigationContributions(JsonObject owner)
+    {
+        if (owner["contributions"] is not JsonArray contributions || !contributions.Any(IsNavigationContribution))
+        {
+            return false;
+        }
+
+        var upgraded = new List<JsonNode?>();
+        foreach (var (point, entries) in GroupByPoint(contributions))
+        {
+            upgraded.Add(new JsonObject { ["outlet"] = point, ["items"] = OrderedItems(entries) });
+        }
+
+        owner["contributions"] = new JsonArray([.. contributions.Where(contribution => !IsNavigationContribution(contribution)).Select(contribution => contribution?.DeepClone())]);
+        var existing = owner["outletContributions"] is JsonArray current ? [.. current.Select(contribution => contribution?.DeepClone())] : new List<JsonNode?>();
+        owner["outletContributions"] = new JsonArray([.. existing, .. upgraded]);
+        return true;
+    }
+
     static JsonObject UpgradeApplication(JsonObject application, HashSet<string> buttonRegions)
     {
         var outlets = new JsonArray();
@@ -141,47 +182,6 @@ public static class LegacyNavigationShape
 
     static JsonObject Refinement(string outlet, string mode, IEnumerable<JsonObject> items) =>
         new() { ["outlet"] = outlet, ["mode"] = mode, ["items"] = new JsonArray([.. items]) };
-
-    /// <summary>
-    /// Tells whether a contribution is a navigation item contributed to a contribution point: content whose properties are a
-    /// navigation item's (<c language="json">label</c> and <c language="json">targetScreen</c>).
-    /// </summary>
-    /// <param name="value">An entry of a screen's <c language="json">contributions</c>.</param>
-    /// <returns>Whether it is a legacy navigation contribution.</returns>
-    public static bool IsNavigationContribution(JsonNode? value) =>
-        value is JsonObject contribution
-        && Text(contribution["contributionPointName"]) is not null
-        && contribution["content"] is JsonObject content
-        && content["properties"] is JsonObject properties
-        && Text(properties["label"]) is not null
-        && Text(properties["targetScreen"]) is not null;
-
-    /// <summary>
-    /// Upgrades the navigation items an owner - a screen - contributes to contribution points into contributions to the outlets of
-    /// navigation those points are, in its <c language="json">outletContributions</c>, in place. Items keep their declared order (items without
-    /// one follow in the order given); items with a group become the sub-items of a navigation item named after the group, placed
-    /// where the group's first item was. Every other contribution stays where it is.
-    /// </summary>
-    /// <param name="owner">The object with the <c language="json">contributions</c>.</param>
-    /// <returns>Whether anything changed.</returns>
-    public static bool UpgradeNavigationContributions(JsonObject owner)
-    {
-        if (owner["contributions"] is not JsonArray contributions || !contributions.Any(IsNavigationContribution))
-        {
-            return false;
-        }
-
-        var upgraded = new List<JsonNode?>();
-        foreach (var (point, entries) in GroupByPoint(contributions))
-        {
-            upgraded.Add(new JsonObject { ["outlet"] = point, ["items"] = OrderedItems(entries) });
-        }
-
-        owner["contributions"] = new JsonArray([.. contributions.Where(contribution => !IsNavigationContribution(contribution)).Select(contribution => contribution?.DeepClone())]);
-        var existing = owner["outletContributions"] is JsonArray current ? [.. current.Select(contribution => contribution?.DeepClone())] : new List<JsonNode?>();
-        owner["outletContributions"] = new JsonArray([.. existing, .. upgraded]);
-        return true;
-    }
 
     static List<(string Point, List<Contributed> Entries)> GroupByPoint(JsonArray contributions)
     {
