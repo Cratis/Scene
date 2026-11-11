@@ -172,8 +172,9 @@ function closureOf(name: string, listed: ReadonlySet<string>, index: Map<string,
     const order: string[] = [];
     const unknown: string[] = [];
     const visiting = new Set<string>();
+    const isVisited = (current: string) => order.includes(current) || visiting.has(current);
     const visit = (current: string) => {
-        if (listed.has(current) || order.includes(current) || visiting.has(current)) return;
+        if (listed.has(current) || isVisited(current)) return;
         if (!index.has(current)) {
             if (!unknown.includes(current)) unknown.push(current);
             return;
@@ -228,45 +229,70 @@ export function describePackageList(profile: UiProfile, catalog: readonly SceneP
     const names = [...stored].reverse();
     const shell = shellBlueprintOf(profile);
 
-    const needers = (name: string) => names.filter(other => other !== name && dependenciesOf(other, index).includes(name));
+    const context: RowContext = { names, stored, shell, index };
+    const rows = names.map((name, at) => rowOf(name, at, context));
+    const addable = addableOf(catalog, new Set(stored), index);
+    return { rows, addable, suppliers: suppliersOf(names, index) };
+}
 
-    const rows = names.map((name, at): PackageRow => {
-        const item = index.get(name);
-        const needed = needers(name).map(other => nameOf(index.get(other), other));
-        const shellName = nameOf(item, name);
-        let reason: PackageReason;
-        let lock: PackageLock | undefined;
-        if (name === corePackage) {
-            reason = { kind: PackageReasonKind.AlwaysLast, packages: [], text: 'Always last' };
-            lock = { kind: PackageLockKind.Core, packages: [], text: `${shellName} is the fallback every component name resolves against, so it is always last and cannot be removed.` };
-        } else if (name === shell) {
-            reason = { kind: PackageReasonKind.UsedByShell, packages: [], text: 'Used by Shell' };
-            lock = { kind: PackageLockKind.Shell, packages: [], text: `${shellName} is the blueprint of the current shell, so it stays while it is the shell.` };
-        } else if (needed.length > 0) {
-            reason = { kind: PackageReasonKind.NeededBy, packages: needed, text: `Needed by ${needed.join(', ')}` };
-            lock = { kind: PackageLockKind.NeededBy, packages: needed, text: `${shellName} is needed by ${needed.join(', ')}, so it stays while they are listed.` };
-        } else {
-            reason = { kind: PackageReasonKind.Chosen, packages: [], text: 'Chosen' };
-        }
+interface RowContext {
+    names: string[];
+    stored: string[];
+    shell: string | undefined;
+    index: Map<string, ScenePackage>;
+}
 
-        const canMoveUp = name !== corePackage && at > 0 && moveIsValid(stored, name, MoveDirection.Up, index);
-        const canMoveDown = name !== corePackage && at < names.length - 1 && moveIsValid(stored, name, MoveDirection.Down, index);
+const canMove = (name: string, at: number, direction: MoveDirection, { names, stored, index }: RowContext) =>
+    name !== corePackage && (direction === MoveDirection.Up ? at > 0 : at < names.length - 1) && moveIsValid(stored, name, direction, index);
+
+function rowOf(name: string, at: number, context: RowContext): PackageRow {
+    const { names, shell, index } = context;
+    const item = index.get(name);
+    const needed = names.filter(other => other !== name && dependenciesOf(other, index).includes(name)).map(other => nameOf(index.get(other), other));
+    const { reason, lock } = reasonOf(name, shell, nameOf(item, name), needed);
+    const canMoveUp = canMove(name, at, MoveDirection.Up, context);
+    const canMoveDown = canMove(name, at, MoveDirection.Down, context);
+    return {
+        position: at + 1,
+        name,
+        displayName: nameOf(item, name),
+        version: item?.version ?? '',
+        kind: item?.kind ?? PackageKind.ComponentLibrary,
+        ...(item?.description === undefined ? {} : { description: item.description }),
+        reason,
+        canMoveUp,
+        canMoveDown,
+        ...(lock === undefined ? {} : { lock }),
+    };
+}
+
+function reasonOf(name: string, shell: string | undefined, displayName: string, needed: string[]): { reason: PackageReason; lock?: PackageLock } {
+    if (name === corePackage) {
         return {
-            position: at + 1,
-            name,
-            displayName: nameOf(item, name),
-            version: item?.version ?? '',
-            kind: item?.kind ?? PackageKind.ComponentLibrary,
-            ...(item?.description === undefined ? {} : { description: item.description }),
-            reason,
-            canMoveUp,
-            canMoveDown,
-            ...(lock === undefined ? {} : { lock }),
+            reason: { kind: PackageReasonKind.AlwaysLast, packages: [], text: 'Always last' },
+            lock: { kind: PackageLockKind.Core, packages: [], text: `${displayName} is the fallback every component name resolves against, so it is always last and cannot be removed.` },
         };
-    });
+    }
 
-    const listed = new Set(stored);
-    const addable = catalog.filter(item => !listed.has(item.name)).map((item): AddablePackage => {
+    if (name === shell) {
+        return {
+            reason: { kind: PackageReasonKind.UsedByShell, packages: [], text: 'Used by Shell' },
+            lock: { kind: PackageLockKind.Shell, packages: [], text: `${displayName} is the blueprint of the current shell, so it stays while it is the shell.` },
+        };
+    }
+
+    if (needed.length > 0) {
+        return {
+            reason: { kind: PackageReasonKind.NeededBy, packages: needed, text: `Needed by ${needed.join(', ')}` },
+            lock: { kind: PackageLockKind.NeededBy, packages: needed, text: `${displayName} is needed by ${needed.join(', ')}, so it stays while they are listed.` },
+        };
+    }
+
+    return { reason: { kind: PackageReasonKind.Chosen, packages: [], text: 'Chosen' } };
+}
+
+function addableOf(catalog: readonly ScenePackage[], listed: ReadonlySet<string>, index: Map<string, ScenePackage>): AddablePackage[] {
+    return catalog.filter(item => !listed.has(item.name)).map((item): AddablePackage => {
         const alsoAdds = closureOf(item.name, listed, index).order.filter(name => name !== item.name).map(name => nameOf(index.get(name), name));
         return {
             name: item.name,
@@ -278,7 +304,9 @@ export function describePackageList(profile: UiProfile, catalog: readonly SceneP
             text: alsoAdds.length === 0 ? '' : `Also adds ${alsoAdds.join(', ')}`,
         };
     });
+}
 
+function suppliersOf(names: readonly string[], index: Map<string, ScenePackage>): ComponentSupplier[] {
     const byComponent = new Map<string, string[]>();
     for (const name of names) {
         for (const component of index.get(name)?.components ?? []) {
@@ -288,11 +316,30 @@ export function describePackageList(profile: UiProfile, catalog: readonly SceneP
         }
     }
 
-    const suppliers = [...byComponent.entries()]
+    return [...byComponent.entries()]
         .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
         .map(([component, supplying]): ComponentSupplier => ({ component, winner: supplying[0], others: supplying.slice(1) }));
+}
 
-    return { rows, addable, suppliers };
+const needsMessage = (subject: string, unknown: readonly string[]) =>
+    `${subject} needs ${unknown.map(item => `'${item}'`).join(', ')}, which ${unknown.length === 1 ? 'is' : 'are'} not available.`;
+
+function retirePreviousShell(stored: string[], previous: string | undefined, blueprint: string, index: Map<string, ScenePackage>): { stored: string[]; removed: string[] } {
+    if (previous === undefined || !isRetirable(stored, previous, blueprint)) return { stored, removed: [] };
+    const needed = stored.some(other => other !== previous && dependenciesOf(other, index).includes(previous));
+    return needed ? { stored, removed: [] } : { stored: stored.filter(candidate => candidate !== previous), removed: [previous] };
+}
+
+const isRetirable = (stored: readonly string[], previous: string, blueprint: string) => previous !== blueprint && stored.includes(previous);
+
+function placeBlueprint(stored: string[], blueprint: string, added: string[], index: Map<string, ScenePackage>): string[] {
+    const dependedOn = stored.some(other => other !== blueprint && dependenciesOf(other, index).includes(blueprint));
+    if (!stored.includes(blueprint)) {
+        added.push(blueprint);
+        return [...stored, blueprint];
+    }
+
+    return dependedOn ? stored : [...stored.filter(candidate => candidate !== blueprint), blueprint];
 }
 
 /** Who supplies a component name in the list, or undefined when no listed package does. */
@@ -300,11 +347,15 @@ export function findSupplier(list: PackageList, component: string): ComponentSup
     return list.suppliers.find(supplier => supplier.component === component);
 }
 
+const isInsideList = (stored: readonly string[], position: number) => position >= 0 && position < stored.length;
+
+const isSwappable = (stored: readonly string[], at: number, other: number) => isInsideList(stored, at) && isInsideList(stored, other) && stored[other] !== corePackage;
+
 function moveIsValid(stored: readonly string[], name: string, direction: MoveDirection, index: Map<string, ScenePackage>): boolean {
     const at = stored.indexOf(name);
     // Up in the designer is later in the stored list.
     const other = direction === MoveDirection.Up ? at + 1 : at - 1;
-    if (at < 0 || other < 0 || other >= stored.length || stored[other] === corePackage || name === corePackage) return false;
+    if (name === corePackage || !isSwappable(stored, at, other)) return false;
     const next = [...stored];
     [next[at], next[other]] = [next[other], next[at]];
     return isOrdered(next, index);
@@ -325,7 +376,7 @@ export function addPackage(profile: UiProfile, catalog: readonly ScenePackage[],
     if (!index.has(name)) return refused(profile, `Package '${name}' is not available.`);
 
     const { order, unknown } = closureOf(name, new Set(stored), index);
-    if (unknown.length > 0) return refused(profile, `Package '${nameOf(index.get(name), name)}' needs ${unknown.map(item => `'${item}'`).join(', ')}, which ${unknown.length === 1 ? 'is' : 'are'} not available.`);
+    if (unknown.length > 0) return refused(profile, needsMessage(`Package '${nameOf(index.get(name), name)}'`, unknown));
 
     const added = order.map(item => nameOf(index.get(item), item));
     return {
@@ -403,29 +454,12 @@ export function chooseBlueprint(profile: UiProfile, catalog: readonly ScenePacka
     const shellId = shell ?? scenePackage.layouts[0];
     if (shellId === undefined) return refused(profile, `${nameOf(scenePackage, blueprint)} has no shell to offer.`);
 
-    let stored = storedOf(profile);
-    const previous = shellBlueprintOf(profile);
-    const removed: string[] = [];
-    if (previous !== undefined && previous !== blueprint && stored.includes(previous)) {
-        const needed = stored.some(other => other !== previous && dependenciesOf(other, index).includes(previous));
-        if (!needed) {
-            stored = stored.filter(candidate => candidate !== previous);
-            removed.push(previous);
-        }
-    }
-
-    const { order, unknown } = closureOf(blueprint, new Set(stored), index);
-    if (unknown.length > 0) return refused(profile, `${nameOf(scenePackage, blueprint)} needs ${unknown.map(item => `'${item}'`).join(', ')}, which ${unknown.length === 1 ? 'is' : 'are'} not available.`);
+    const retired = retirePreviousShell(storedOf(profile), shellBlueprintOf(profile), blueprint, index);
+    const { removed } = retired;
+    const { order, unknown } = closureOf(blueprint, new Set(retired.stored), index);
+    if (unknown.length > 0) return refused(profile, needsMessage(nameOf(scenePackage, blueprint), unknown));
     const added = order.filter(item => item !== blueprint);
-    stored = insertAboveCore(stored, added, index);
-
-    const dependedOn = stored.some(other => other !== blueprint && dependenciesOf(other, index).includes(blueprint));
-    if (stored.includes(blueprint)) {
-        if (!dependedOn) stored = [...stored.filter(candidate => candidate !== blueprint), blueprint];
-    } else {
-        stored = [...stored, blueprint];
-        added.push(blueprint);
-    }
+    const stored = placeBlueprint(insertAboveCore(retired.stored, added, index), blueprint, added, index);
 
     const version = pinOf(scenePackage.version);
     const template: TemplateReference = { source: TemplateReferenceSource.Blueprint, id: shellId, blueprint, ...(version === undefined ? {} : { version }) };
