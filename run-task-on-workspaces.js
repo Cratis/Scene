@@ -88,6 +88,39 @@ function updateDependencyVersionsFromLocalWorkspaces(file, packageJson, version)
 }
 
 const publishFailures = [];
+const publishBlocked = [];
+
+// The workspaces a package needs at install time: a consumer installs dependencies, peer and optional dependencies, never devDependencies.
+function localInstallDependenciesOf(workspaceName) {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(workspaces[workspaceName], 'package.json')).toString());
+    return ['dependencies', 'peerDependencies', 'optionalDependencies']
+        .flatMap(field => Object.keys(packageJson[field] ?? {}))
+        .filter(dependencyName => dependencyName !== workspaceName && workspaceNames.includes(dependencyName));
+}
+
+// Publishing goes in dependency order, so a package is only published after every workspace it installs with.
+// The order is otherwise the discovery order; a dependency cycle is broken where it is found, so one package on it goes first.
+function inDependencyOrder(names) {
+    const ordered = [];
+    const state = {};
+    const visit = name => {
+        if (state[name] === 'done') return;
+        if (state[name] === 'visiting') {
+            console.log(`Workspace '${name}' is part of a dependency cycle - the cycle is broken at it, so its order on the cycle is not guaranteed`);
+            return;
+        }
+        state[name] = 'visiting';
+        localInstallDependenciesOf(name).forEach(visit);
+        state[name] = 'done';
+        ordered.push(name);
+    };
+    names.forEach(visit);
+    return ordered;
+}
+
+const workspaceOrder = task === 'publish-version' ? inDependencyOrder(workspaceNames) : workspaceNames;
+const localInstallDependencies = Object.fromEntries(
+    task === 'publish-version' ? workspaceNames.map(name => [name, localInstallDependenciesOf(name)]) : []);
 
 // npm lists every file of the package it packs. Printing a few hundred lines of that in one write to the runner's pipe ended the release
 // part way (the process exits with nothing printed after the biggest package), so only the end of the output - where the outcome is - is shown.
@@ -96,7 +129,7 @@ function tailOf(output, lines = 40) {
     return all.length <= lines ? all.join('\n') : `... ${all.length - lines} earlier line(s) of npm output not shown\n${all.slice(-lines).join('\n')}`;
 }
 
-for (const workspaceName in workspaces) {
+for (const workspaceName of workspaceOrder) {
     const workspaceRelativeLocation = workspaces[workspaceName];
     const workspaceAbsoluteLocation = path.join(process.cwd(), workspaceRelativeLocation);
     const packageJsonFile = path.join(workspaceAbsoluteLocation, 'package.json');
@@ -111,6 +144,14 @@ for (const workspaceName in workspaces) {
         }
 
         if (task === 'publish-version') {
+            // A package whose dependency did not reach the registry is not published: consumers could not install it.
+            const unpublished = localInstallDependencies[workspaceName].filter(_ => publishFailures.includes(_) || publishBlocked.includes(_));
+            if (unpublished.length > 0) {
+                console.log(`Not publishing workspace '${workspaceName}' - it depends on unpublished ${unpublished.map(_ => `'${_}'`).join(', ')}`);
+                publishBlocked.push(workspaceName);
+                continue;
+            }
+
             if (args.length === 1) {
                 const version = args[0];
                 file.set('version', version);
@@ -134,7 +175,8 @@ for (const workspaceName in workspaces) {
                 } else if (result.status !== 0) {
                     // Don't abort the release: a single workspace failing (e.g. a brand-new
                     // package whose npm trusted publisher isn't configured yet) must not
-                    // strand the other packages. Collect and fail at the end instead.
+                    // strand the packages that do not depend on it. The ones that do are
+                    // skipped above. Collect and fail at the end instead.
                     console.log(`Error publishing workspace '${workspaceName}' - continuing with remaining workspaces`);
                     publishFailures.push(workspaceName);
                 }
@@ -162,5 +204,8 @@ for (const workspaceName in workspaces) {
 
 if (publishFailures.length > 0) {
     console.log(`\n${publishFailures.length} workspace(s) failed to publish: ${publishFailures.join(', ')}`);
+    if (publishBlocked.length > 0) {
+        console.log(`${publishBlocked.length} workspace(s) not published because a dependency failed: ${publishBlocked.join(', ')}`);
+    }
     process.exit(1);
 }
