@@ -44,7 +44,7 @@ export const describeDiagnostic = (diagnostic: OutletDiagnostic): string =>
     `${diagnostic.code}|${diagnostic.severity}|${diagnostic.outlet}|${diagnostic.owner ?? '-'}|${diagnostic.item ?? '-'}|${diagnostic.message}`;
 
 const kindOf = (item: OutletItem): string =>
-    item.kind === OutletItemKind.Group ? `group(${item.items.map(child => child.id).join(',')})` : item.kind;
+    item.kind === OutletItemKind.Group ? `group(${(item.items ?? []).map(child => child.id).join(',')})` : item.kind;
 
 export const describeOutlet = (outlet: EffectiveOutlet): ExpectedOutlet => ({
     kind: outlet.kind ?? null,
