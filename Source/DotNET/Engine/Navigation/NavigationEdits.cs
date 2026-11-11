@@ -26,6 +26,17 @@ public static class NavigationEdits
     const string LogoLevel = "The logo is defined at the application level only.";
     const string NeedsOutlet = "A navigation edit names the outlet it changes.";
 
+    static readonly Dictionary<NavigationEditKind, Func<EditTarget, (NavigationModel Model, string? Rejected)>> _handlers = new()
+    {
+        [NavigationEditKind.SetOutletMode] = ApplySetOutletMode,
+        [NavigationEditKind.SetOutletItems] = ApplySetOutletItems,
+        [NavigationEditKind.AddItem] = ApplyAddItem,
+        [NavigationEditKind.UpdateItem] = ApplyUpdateItem,
+        [NavigationEditKind.MoveItem] = ApplyMoveItem,
+        [NavigationEditKind.RemoveItem] = ApplyRemoveItem,
+        [NavigationEditKind.HideItem] = ApplyHideItem
+    };
+
     /// <summary>
     /// Plans switching how a module treats an outlet it inherits.
     /// </summary>
@@ -205,6 +216,11 @@ public static class NavigationEdits
         OutletNavigationItem navigation => navigation with { Title = title },
         OutletAction action => action with { Title = title },
         OutletGroup group => group with { Title = title },
+        _ => RetitledOther(item, title)
+    };
+
+    static OutletItem? RetitledOther(OutletItem item, string title) => item switch
+    {
         OutletFilter filter => filter with { Title = title },
         OutletTab tab => tab with { Title = title },
         OutletStat stat => stat with { Title = title },
@@ -387,17 +403,11 @@ public static class NavigationEdits
         return (new EditTarget(model, edit, outlet, declared, nested, NavigationOutlets.OwnItems(model, edit.Module, outlet)), null);
     }
 
-    static (NavigationModel Model, string? Rejected) ApplyToTarget(EditTarget target) => target.Edit.Kind switch
-    {
-        NavigationEditKind.SetOutletMode => ApplySetOutletMode(target),
-        NavigationEditKind.SetOutletItems => (WithOwnItems(target.Model, target.Edit.Module, target.Declared, _ => target.Edit.Items ?? []), null),
-        NavigationEditKind.AddItem => ApplyAddItem(target),
-        NavigationEditKind.UpdateItem => ApplyUpdateItem(target),
-        NavigationEditKind.MoveItem => ApplyMoveItem(target),
-        NavigationEditKind.RemoveItem => ApplyRemoveItem(target),
-        NavigationEditKind.HideItem => ApplyHideItem(target),
-        _ => (target.Model, $"'{target.Edit.Kind}' is not a navigation edit.")
-    };
+    static (NavigationModel Model, string? Rejected) ApplyToTarget(EditTarget target) =>
+        _handlers.TryGetValue(target.Edit.Kind, out var handler) ? handler(target) : (target.Model, $"'{target.Edit.Kind}' is not a navigation edit.");
+
+    static (NavigationModel Model, string? Rejected) ApplySetOutletItems(EditTarget target) =>
+        (WithOwnItems(target.Model, target.Edit.Module, target.Declared, _ => target.Edit.Items ?? []), null);
 
     static (NavigationModel Model, string? Rejected) ApplySetOutletMode(EditTarget target)
     {

@@ -45,12 +45,7 @@ public static class NavigationDiagnostics
             DiagnoseEntry(run, graph.Entries[index], index);
         }
 
-        foreach (var cycle in HostingCycles.Find(graph.Screens?.Select(screen => screen.Name) ?? [], run.HostedIn))
-        {
-            diagnostics.Add(new(
-                NavigationDiagnosticCode.NavigationCycle,
-                $"Navigation cycle {string.Join(" -> ", cycle.Append(cycle[0]))}: each screen is placed in a slot owned by the next, so composition never terminates."));
-        }
+        diagnostics.AddRange(HostingCycles.Find(graph.Screens?.Select(screen => screen.Name) ?? [], run.HostedIn).Select(CycleDiagnostic));
 
         if (graph.Structure is not null && graph.Navigation is not null)
         {
@@ -60,31 +55,39 @@ public static class NavigationDiagnostics
         return diagnostics;
     }
 
+    static NavigationDiagnostic CycleDiagnostic(IReadOnlyList<string> cycle) => new(
+        NavigationDiagnosticCode.NavigationCycle,
+        $"Navigation cycle {string.Join(" -> ", cycle.Append(cycle[0]))}: each screen is placed in a slot owned by the next, so composition never terminates.");
+
     static void DiagnoseEntry(DiagnosisRun run, NavigationEntry navigationEntry, int index)
     {
         var destination = navigationEntry.Destination;
         var entry = navigationEntry.Id ?? $"#{index + 1}";
         var kind = destination.Kind ?? (string.IsNullOrEmpty(destination.Dialog) ? DestinationKind.Slot : DestinationKind.Dialog);
-        void Report(NavigationDiagnosticCode code, string message) => run.Diagnostics.Add(new(code, message, entry));
+        var placement = new Placement(run.Graph, run.Screens, destination, kind, entry, (code, message) => run.Diagnostics.Add(new(code, message, entry)));
 
         if (NamesNoTarget(destination))
         {
-            Report(NavigationDiagnosticCode.UnavailableTarget, $"Destination '{entry}' names no screen, stable identity, route or dialog.");
+            placement.Report(NavigationDiagnosticCode.UnavailableTarget, $"Destination '{entry}' names no screen, stable identity, route or dialog.");
             return;
         }
 
-        var placement = new Placement(run.Graph, run.Screens, destination, kind, entry, Report);
         DiagnoseTarget(placement);
         var owner = DiagnoseSlot(placement, run.Slots);
-        if (owner is { OwnedByLayout: false } && !string.IsNullOrEmpty(destination.Screen) && run.Screens?.ContainsKey(destination.Screen) == true)
-        {
-            RecordHosts(run.Graph, owner, destination.Screen, run.HostedIn);
-        }
+        if (IsHostedByTemplate(owner, placement)) RecordHosts(run.Graph, owner!, destination.Screen!, run.HostedIn);
+        DiagnoseRoute(run, placement);
+    }
 
-        var route = kind == DestinationKind.External ? null : run.RouteKey(destination);
+    static bool IsHostedByTemplate(SlotOwner? owner, Placement placement) =>
+        owner is { OwnedByLayout: false } && !string.IsNullOrEmpty(placement.Destination.Screen) && placement.Screens?.ContainsKey(placement.Destination.Screen) == true;
+
+    static void DiagnoseRoute(DiagnosisRun run, Placement placement)
+    {
+        var destination = placement.Destination;
+        var route = placement.Kind == DestinationKind.External ? null : run.RouteKey(destination);
         if (string.IsNullOrEmpty(route)) return;
-        var conflict = ClaimRoute(run.Routes, route, (entry, NavigationRoutes.TargetOf(destination, KindName(kind))), destination.Route ?? route);
-        if (conflict is not null) Report(NavigationDiagnosticCode.DuplicateRoute, conflict);
+        var conflict = ClaimRoute(run.Routes, route, (placement.Entry, NavigationRoutes.TargetOf(destination, KindName(placement.Kind))), destination.Route ?? route);
+        if (conflict is not null) placement.Report(NavigationDiagnosticCode.DuplicateRoute, conflict);
     }
 
     static bool NamesNoTarget(DestinationReference destination) =>
@@ -113,6 +116,19 @@ public static class NavigationDiagnostics
             : $"Route '{shown}' is used by destinations '{existing.Entry}' and '{claim.Entry}', which open different targets.";
     }
 
+    static NavigationDiagnostic? ClaimSlot(Dictionary<string, SlotOwner> owners, SlotOwner claim)
+    {
+        if (!owners.TryGetValue(claim.Slot.Name, out var existing))
+        {
+            owners[claim.Slot.Name] = claim;
+            return null;
+        }
+
+        return new(
+            NavigationDiagnosticCode.DuplicateSlot,
+            $"Slot '{claim.Slot.Name}' is declared by both '{existing.Owner}' and '{claim.Owner}'; destinations cannot tell them apart.");
+    }
+
     static Dictionary<string, SlotOwner> CollectSlots(NavigationGraph graph, List<NavigationDiagnostic> diagnostics)
     {
         var owners = new Dictionary<string, SlotOwner>(StringComparer.Ordinal);
@@ -125,15 +141,8 @@ public static class NavigationDiagnostics
         {
             foreach (var slot in declared)
             {
-                if (owners.TryGetValue(slot.Name, out var existing))
-                {
-                    diagnostics.Add(new(
-                        NavigationDiagnosticCode.DuplicateSlot,
-                        $"Slot '{slot.Name}' is declared by both '{existing.Owner}' and '{name}'; destinations cannot tell them apart."));
-                    continue;
-                }
-
-                owners[slot.Name] = new(slot, name, ownedByLayout);
+                var duplicate = ClaimSlot(owners, new(slot, name, ownedByLayout));
+                if (duplicate is not null) diagnostics.Add(duplicate);
             }
         }
 
@@ -175,7 +184,24 @@ public static class NavigationDiagnostics
 
     static SlotOwner? DiagnoseSlot(Placement placement, Dictionary<string, SlotOwner> slots)
     {
-        var (_, screens, destination, kind, entry, report) = placement;
+        var owner = FindSlotOwner(placement, slots);
+        if (owner is null) return null;
+
+        var screen = PlacedScreen(placement);
+        if (screen is not null) DiagnosePlacedScreen(placement, owner, screen);
+        return owner;
+    }
+
+    static Screen? PlacedScreen(Placement placement)
+    {
+        var (_, screens, destination, _, _, _) = placement;
+        if (string.IsNullOrEmpty(destination.Screen) || screens is null) return null;
+        return screens.GetValueOrDefault(destination.Screen);
+    }
+
+    static SlotOwner? FindSlotOwner(Placement placement, Dictionary<string, SlotOwner> slots)
+    {
+        var (_, _, destination, kind, entry, report) = placement;
         if (string.IsNullOrEmpty(destination.Slot)) return null;
 
         if (kind != DestinationKind.Slot)
@@ -185,16 +211,9 @@ public static class NavigationDiagnostics
             return null;
         }
 
-        if (!slots.TryGetValue(destination.Slot, out var owner))
-        {
-            report(NavigationDiagnosticCode.MissingSlot, $"Destination '{entry}' targets missing slot '{destination.Slot}'.");
-            return null;
-        }
-
-        if (string.IsNullOrEmpty(destination.Screen) || screens is null || !screens.TryGetValue(destination.Screen, out var screen)) return owner;
-
-        DiagnosePlacedScreen(placement, owner, screen);
-        return owner;
+        if (slots.TryGetValue(destination.Slot, out var owner)) return owner;
+        report(NavigationDiagnosticCode.MissingSlot, $"Destination '{entry}' targets missing slot '{destination.Slot}'.");
+        return null;
     }
 
     static void DiagnosePlacedScreen(Placement placement, SlotOwner owner, Screen screen)
