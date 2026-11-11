@@ -21,13 +21,15 @@ static class BlueprintMetadataVerification
     internal static List<string> Problems(BlueprintSource source, string label, HashSet<string> availableTemplates, string foundation)
     {
         var blueprint = source.Manifest.Blueprint!;
-        var problems = DomainProblems(label, blueprint);
-        problems.AddRange(DescriptionProblems(label, blueprint));
-        problems.AddRange(ThumbnailProblems(label, blueprint.Thumbnail, source.Files));
-        problems.AddRange(BlueprintScreenSetVerification.Problems(source, label, availableTemplates));
-        problems.AddRange(SampleDataDefaultProblems(label, blueprint, (source.Manifest.SampleData ?? []).Select(reference => reference.Id).ToList()));
-        problems.AddRange(FoundationDependencyProblems(source.Manifest, label, foundation));
-        return problems;
+        return
+        [
+            .. DomainProblems(label, blueprint),
+            .. DescriptionProblems(label, blueprint),
+            .. ThumbnailProblems(label, blueprint.Thumbnail, source.Files),
+            .. BlueprintScreenSetVerification.Problems(source, label, availableTemplates),
+            .. SampleDataDefaultProblems(label, blueprint, (source.Manifest.SampleData ?? []).Select(reference => reference.Id).ToList()),
+            .. FoundationDependencyProblems(source.Manifest, label, foundation)
+        ];
     }
 
     /// <summary>

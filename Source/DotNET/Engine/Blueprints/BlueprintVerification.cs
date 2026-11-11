@@ -38,16 +38,16 @@ public static class BlueprintVerification
             return [$"Package '{manifest.Name}' is not a Blueprint package"];
         }
 
-        var problems = VersionProblems(label, manifest);
-        var blueprint = manifest.Blueprint;
-        var domain = blueprint is not null;
-        problems.AddRange(BlueprintProblems(source, library, label, options));
-
-        problems.AddRange(SampleDataValidation.ValidatePackages([new SampleDataPackSource(manifest, source.Packs)]));
-        problems.AddRange(BlueprintMetadataVerification.SampleDataFileProblems(source, label));
-        problems.AddRange(BlueprintTemplateVerification.Problems(source, library, domain));
-        problems.AddRange(BlueprintPlacementVerification.Problems(source, library, label, domain));
-        return problems;
+        var domain = manifest.Blueprint is not null;
+        return
+        [
+            .. VersionProblems(label, manifest),
+            .. BlueprintProblems(source, library, label, options),
+            .. SampleDataValidation.ValidatePackages([new SampleDataPackSource(manifest, source.Packs)]),
+            .. BlueprintMetadataVerification.SampleDataFileProblems(source, label),
+            .. BlueprintTemplateVerification.Problems(source, library, domain),
+            .. BlueprintPlacementVerification.Problems(source, library, label, domain)
+        ];
     }
 
     static List<string> VersionProblems(string label, ScenePackage manifest) =>
