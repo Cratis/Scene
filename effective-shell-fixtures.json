@@ -214,6 +214,21 @@
               }
             }
           ]
+        },
+        {
+          "manifest": {
+            "name": "shadow",
+            "version": "1.0.0",
+            "kind": "Blueprint",
+            "dependencies": [],
+            "components": [],
+            "layouts": [
+              "ShadowShell"
+            ],
+            "screenTemplates": [],
+            "dialogTemplates": [],
+            "themes": []
+          }
         }
       ]
     },
@@ -1621,6 +1636,92 @@
         "primarySlot": "content",
         "options": {},
         "diagnostics": []
+      }
+    },
+    {
+      "name": "a pin the installed version does not satisfy on a template that is not a shell",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "crm"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "Pipeline Board",
+            "blueprint": "crm",
+            "version": "^2.0.0"
+          }
+        }
+      },
+      "expected": {
+        "origin": "blueprintDefault",
+        "kind": "layout",
+        "source": "blueprint",
+        "name": "CrmShell",
+        "reference": {
+          "source": "Blueprint",
+          "id": "CrmShell",
+          "blueprint": "crm",
+          "version": "^1.4.2"
+        },
+        "package": "crm",
+        "packageVersion": "1.4.2",
+        "pinStatus": "Current",
+        "pin": "^1.4.2",
+        "slots": [
+          "sidebar",
+          "content"
+        ],
+        "primarySlot": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateVersionNotSatisfied",
+            "subject": "Pipeline Board",
+            "message": "Root template 'Pipeline Board' cannot be used: Template 'Pipeline Board' was chosen from blueprint 'crm' ^2.0.0 but version 1.4.2 is installed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "a layout only the manifest of the blueprint lists",
+      "library": "default",
+      "profile": {
+        "name": "Desktop",
+        "targetPlatform": "web",
+        "packages": [
+          "core",
+          "shadow"
+        ],
+        "root": {
+          "template": {
+            "source": "Blueprint",
+            "id": "ShadowShell",
+            "blueprint": "shadow"
+          }
+        }
+      },
+      "expected": {
+        "origin": "bare",
+        "kind": "layout",
+        "source": "builtIn",
+        "name": "Bare",
+        "slots": [
+          "content"
+        ],
+        "primarySlot": "content",
+        "options": {},
+        "diagnostics": [
+          {
+            "code": "rootTemplateNotApplicable",
+            "subject": "ShadowShell",
+            "message": "Root template 'ShadowShell' cannot be the application's shell: it is a template, and only a layout or a screen template with the root role can be a shell"
+          }
+        ]
       }
     },
     {
