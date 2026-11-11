@@ -14,6 +14,7 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../sl
     primary: { name: string; slots: Slot[]; expected: string | null }[];
     upgrades: { name: string; input: unknown; expected: { document: unknown; changed: boolean; diagnostics: Diagnostic[] } }[];
     validations: { name: string; document: unknown; expected: Diagnostic[] }[];
+    characterization: { name: string; document: unknown; expected: string }[];
 };
 
 const describeDiagnostics = (diagnostics: Diagnostic[]) => diagnostics.map(diagnostic => `${diagnostic.code}|${diagnostic.path}|${diagnostic.message}`);
@@ -52,6 +53,16 @@ describe('when checking the slot shape against the shared fixture corpus', () =>
 
     for (const fixture of corpus.validations) {
         it(`should validate ${fixture.name}`, () => describeDiagnostics(validateSlotShape(fixture.document)).should.deep.equal(describeDiagnostics(fixture.expected)));
+    }
+
+    for (const fixture of corpus.characterization) {
+        describe(`and validating ${fixture.name}`, () => {
+            const written = JSON.stringify(fixture.document);
+            const diagnostics = validateSlotShape(fixture.document);
+
+            it('should report the diagnostics in order, as written', () => JSON.stringify(diagnostics).should.equal(fixture.expected));
+            it('should leave the document as it was', () => JSON.stringify(fixture.document).should.equal(written));
+        });
     }
 
     it('should find every upgraded document in the slot shape, unless something could not be mapped', () => {

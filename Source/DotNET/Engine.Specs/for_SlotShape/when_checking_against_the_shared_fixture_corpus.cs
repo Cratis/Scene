@@ -12,6 +12,8 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
 {
     static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web) { Converters = { new JsonStringEnumConverter() } };
 
+    static readonly JsonSerializerOptions _written = new() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
     JsonNode _corpus = null!;
 
     void Establish()
@@ -105,6 +107,33 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     }
 
     [Fact]
+    void should_report_every_characterized_document_in_order_as_written()
+    {
+        var mismatches = Cases("characterization")
+            .Where(fixture => Write(SlotShapeValidator.Validate(fixture["document"].DeepClone())) != fixture["expected"].GetValue<string>())
+            .Select(fixture => $"{fixture["name"]}: {Write(SlotShapeValidator.Validate(fixture["document"].DeepClone()))}");
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
+    void should_leave_every_characterized_document_as_it_was()
+    {
+        var mismatches = new List<string>();
+        foreach (var fixture in Cases("characterization"))
+        {
+            var document = fixture["document"].DeepClone();
+            var written = document.ToJsonString();
+            SlotShapeValidator.Validate(document);
+            if (document.ToJsonString() != written)
+            {
+                mismatches.Add(fixture["name"].GetValue<string>());
+            }
+        }
+
+        mismatches.ShouldBeEmpty();
+    }
+
+    [Fact]
     void should_upgrade_every_mappable_document_into_the_slot_shape()
     {
         var unexpected = Cases("upgrades")
@@ -115,6 +144,11 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
     }
 
     IEnumerable<JsonNode> Cases(string section) => _corpus[section]!.AsArray().Select(fixture => fixture!);
+
+    static string Write(IEnumerable<SlotShapeDiagnostic> diagnostics) =>
+        JsonSerializer.Serialize(
+            diagnostics.Select(diagnostic => new { code = ToCamelCase(diagnostic.Code.ToString()), path = diagnostic.Path, message = diagnostic.Message }),
+            _written);
 
     static IEnumerable<string> Describe(IEnumerable<SlotShapeDiagnostic> diagnostics) =>
         diagnostics.Select(diagnostic => $"{ToCamelCase(diagnostic.Code.ToString())}|{diagnostic.Path}|{diagnostic.Message}");
