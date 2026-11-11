@@ -1,6 +1,9 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+
 namespace Cratis.Scene.Engine.Packages;
 
 /// <summary>
@@ -21,6 +24,28 @@ namespace Cratis.Scene.Engine.Packages;
 /// </remarks>
 public static class PackageVersionRange
 {
+    static readonly (string Token, RangeOperator Operator)[] _operators =
+    [
+        (">=", RangeOperator.AtLeast),
+        ("<=", RangeOperator.AtMost),
+        ("^", RangeOperator.Caret),
+        ("~", RangeOperator.Tilde),
+        (">", RangeOperator.GreaterThan),
+        ("<", RangeOperator.LessThan),
+        ("=", RangeOperator.Exact)
+    ];
+
+    enum RangeOperator
+    {
+        Exact = 0,
+        Caret = 1,
+        Tilde = 2,
+        AtLeast = 3,
+        GreaterThan = 4,
+        AtMost = 5,
+        LessThan = 6
+    }
+
     /// <summary>
     /// Whether a version satisfies a range.
     /// </summary>
@@ -30,7 +55,7 @@ public static class PackageVersionRange
     public static bool IsSatisfiedBy(string version, string? range)
     {
         var trimmed = range?.Trim();
-        if (string.IsNullOrEmpty(trimmed) || trimmed == "*")
+        if (MatchesAnyVersion(trimmed))
         {
             return true;
         }
@@ -46,16 +71,7 @@ public static class PackageVersionRange
             return false;
         }
 
-        return op switch
-        {
-            "^" => Compare(actual, required) >= 0 && Compare(actual, CaretUpperBound(required)) < 0,
-            "~" => Compare(actual, required) >= 0 && Compare(actual, (required.Major, required.Minor + 1, 0)) < 0,
-            ">=" => Compare(actual, required) >= 0,
-            ">" => Compare(actual, required) > 0,
-            "<=" => Compare(actual, required) <= 0,
-            "<" => Compare(actual, required) < 0,
-            _ => Compare(actual, required) == 0
-        };
+        return Satisfies(op, actual, required);
     }
 
     /// <summary>
@@ -67,7 +83,7 @@ public static class PackageVersionRange
     public static bool IsValidRange(string? range)
     {
         var trimmed = range?.Trim();
-        return string.IsNullOrEmpty(trimmed) || trimmed == "*" || TryParse(Split(trimmed).Literal, out _);
+        return MatchesAnyVersion(trimmed) || TryParse(Split(trimmed).Literal, out _);
     }
 
     /// <summary>
@@ -97,17 +113,41 @@ public static class PackageVersionRange
         return !rightValid ? 1 : Compare(leftVersion, rightVersion);
     }
 
-    static (string Operator, string Literal) Split(string range)
-    {
-        foreach (var op in (string[])[">=", "<=", "^", "~", ">", "<", "="])
+    static bool MatchesAnyVersion([NotNullWhen(false)] string? trimmedRange) =>
+        string.IsNullOrEmpty(trimmedRange) || trimmedRange == "*";
+
+    static bool Satisfies(RangeOperator op, ParsedVersion actual, ParsedVersion required) =>
+        op switch
         {
-            if (range.StartsWith(op, StringComparison.Ordinal))
+            RangeOperator.Caret => IsWithin(actual, required, CaretUpperBound(required)),
+            RangeOperator.Tilde => IsWithin(actual, required, new ParsedVersion(required.Major, required.Minor + 1, 0)),
+            _ => SatisfiesComparison(op, Compare(actual, required))
+        };
+
+    static bool SatisfiesComparison(RangeOperator op, int comparison) =>
+        op switch
+        {
+            RangeOperator.AtLeast => comparison >= 0,
+            RangeOperator.GreaterThan => comparison > 0,
+            RangeOperator.AtMost => comparison <= 0,
+            RangeOperator.LessThan => comparison < 0,
+            _ => comparison == 0
+        };
+
+    static bool IsWithin(ParsedVersion actual, ParsedVersion lower, ParsedVersion upperExclusive) =>
+        Compare(actual, lower) >= 0 && Compare(actual, upperExclusive) < 0;
+
+    static (RangeOperator Operator, string Literal) Split(string range)
+    {
+        foreach (var (token, op) in _operators)
+        {
+            if (range.StartsWith(token, StringComparison.Ordinal))
             {
-                return (op == "=" ? string.Empty : op, range[op.Length..].Trim());
+                return (op, range[token.Length..].Trim());
             }
         }
 
-        return (string.Empty, range);
+        return (RangeOperator.Exact, range);
     }
 
     /// <summary>
@@ -117,38 +157,39 @@ public static class PackageVersionRange
     /// </summary>
     /// <param name="version">The version the caret was written against.</param>
     /// <returns>The exclusive upper bound the caret allows.</returns>
-    static (int Major, int Minor, int Patch) CaretUpperBound((int Major, int Minor, int Patch) version) =>
+    static ParsedVersion CaretUpperBound(ParsedVersion version) =>
         version switch
         {
-            { Major: > 0 } => (version.Major + 1, 0, 0),
-            { Minor: > 0 } => (0, version.Minor + 1, 0),
-            _ => (0, 0, version.Patch + 1)
+            { Major: > 0 } => new ParsedVersion(version.Major + 1, 0, 0),
+            { Minor: > 0 } => new ParsedVersion(0, version.Minor + 1, 0),
+            _ => new ParsedVersion(0, 0, version.Patch + 1)
         };
 
-    static int Compare((int Major, int Minor, int Patch) left, (int Major, int Minor, int Patch) right)
-    {
-        if (left.Major != right.Major) return left.Major.CompareTo(right.Major);
-        if (left.Minor != right.Minor) return left.Minor.CompareTo(right.Minor);
-        return left.Patch.CompareTo(right.Patch);
-    }
+    static int Compare(ParsedVersion left, ParsedVersion right) =>
+        (left.Major, left.Minor, left.Patch).CompareTo((right.Major, right.Minor, right.Patch));
 
-    static bool TryParse(string value, out (int Major, int Minor, int Patch) version)
+    static bool TryParse(string value, out ParsedVersion version)
     {
         version = default;
-        var numeric = value.Trim();
-        var suffix = numeric.IndexOfAny(['-', '+']);
-        if (suffix >= 0)
-        {
-            numeric = numeric[..suffix];
-        }
-
-        var parts = numeric.Split('.');
-        if (parts.Length is 0 or > 3)
+        var parts = WithoutSuffix(value.Trim()).Split('.');
+        if (parts.Length is 0 or > 3 || !TryParseComponents(parts, out var components))
         {
             return false;
         }
 
-        var components = new int[3];
+        version = new ParsedVersion(components[0], components[1], components[2]);
+        return true;
+    }
+
+    static string WithoutSuffix(string numeric)
+    {
+        var suffix = numeric.IndexOfAny(['-', '+']);
+        return suffix >= 0 ? numeric[..suffix] : numeric;
+    }
+
+    static bool TryParseComponents(string[] parts, out int[] components)
+    {
+        components = new int[3];
         for (var index = 0; index < parts.Length; index++)
         {
             if (!int.TryParse(parts[index], out components[index]) || components[index] < 0)
@@ -157,7 +198,9 @@ public static class PackageVersionRange
             }
         }
 
-        version = (components[0], components[1], components[2]);
         return true;
     }
+
+    [StructLayout(LayoutKind.Auto)]
+    readonly record struct ParsedVersion(int Major, int Minor, int Patch);
 }
