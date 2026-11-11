@@ -1543,6 +1543,44 @@
       "expected": []
     }
   ],
+  "fixEdgeCases": [
+    {
+      "name": "add package without a package name",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] },
+      "fix": { "kind": "addPackage", "label": "Add package" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] }
+    },
+    {
+      "name": "use theme accent without an appearance",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] },
+      "fix": { "kind": "useThemeAccent", "label": "Use theme accent" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] }
+    },
+    {
+      "name": "use default blueprint without a root",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] },
+      "fix": { "kind": "useDefaultBlueprint", "label": "Use default blueprint" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] }
+    },
+    {
+      "name": "use initials without an identity",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] },
+      "fix": { "kind": "useInitials", "label": "Use initials" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"], "identity": { "logo": { "kind": "Initials" } } }
+    },
+    {
+      "name": "switch to drawer without a root",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] },
+      "fix": { "kind": "switchToDrawer", "label": "Switch to Drawer" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"] }
+    },
+    {
+      "name": "switch to drawer for a root without options",
+      "profile": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"], "root": { "template": { "source": "Own", "id": "OwnShell" } } },
+      "fix": { "kind": "switchToDrawer", "label": "Switch to Drawer" },
+      "expected": { "name": "Desktop", "targetPlatform": "web", "packages": ["core"], "root": { "template": { "source": "Own", "id": "OwnShell" }, "options": { "navigationMode": "drawer" } } }
+    }
+  ],
   "contrast": [
     {
       "color": "#ffffff",
