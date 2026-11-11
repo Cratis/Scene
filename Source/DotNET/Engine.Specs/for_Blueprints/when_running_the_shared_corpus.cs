@@ -26,6 +26,7 @@ public class when_running_the_shared_corpus : Specification
     List<CatalogCase> _catalog = null!;
     List<PinCase> _pin = null!;
     List<CompareCase> _compare = null!;
+    List<string> _pristine = null!;
     List<(VerificationCase Case, IReadOnlyList<string> Problems)> _verified = null!;
     List<(CatalogCase Case, IReadOnlyList<BlueprintCatalogEntry> Entries)> _described = null!;
     List<(PinCase Case, BlueprintPinEvaluation Evaluation)> _evaluated = null!;
@@ -43,6 +44,7 @@ public class when_running_the_shared_corpus : Specification
         _catalog = document.RootElement.GetProperty("catalog").Deserialize<List<CatalogCase>>(_options);
         _pin = document.RootElement.GetProperty("pin").Deserialize<List<PinCase>>(_options);
         _compare = document.RootElement.GetProperty("compare").Deserialize<List<CompareCase>>(_options);
+        _pristine = [.. _verification.Select(Snapshot)];
     }
 
     void Because()
@@ -74,16 +76,7 @@ public class when_running_the_shared_corpus : Specification
     [Fact]
     void should_leave_the_blueprint_the_library_and_the_options_as_they_were()
     {
-        var mismatches = new List<string>();
-        foreach (var fixture in _verification)
-        {
-            var before = JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw);
-            BlueprintVerification.Verify(fixture.Source, fixture.Library, fixture.Options);
-            if (JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw) != before)
-            {
-                mismatches.Add(fixture.Name);
-            }
-        }
+        var mismatches = _verification.Where((fixture, index) => Snapshot(fixture) != _pristine[index]).Select(fixture => fixture.Name);
 
         mismatches.ShouldBeEmpty();
     }
@@ -114,6 +107,8 @@ public class when_running_the_shared_corpus : Specification
             ((fixture.Left, fixture.Right), Math.Sign(PackageVersionRange.CompareVersions(fixture.Left, fixture.Right))).ShouldEqual(((fixture.Left, fixture.Right), fixture.Expected));
         }
     }
+
+    static string Snapshot(VerificationCase fixture) => JsonSerializer.Serialize(new { fixture.Source, fixture.Library, fixture.Options }, _raw);
 
     record VerificationCase(string Name, BlueprintSource Source, IReadOnlyList<TemplateSource> Library, BlueprintVerificationOptions? Options, IReadOnlyList<string> ExpectedProblems);
 

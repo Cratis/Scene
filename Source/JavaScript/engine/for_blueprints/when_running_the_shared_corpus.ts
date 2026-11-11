@@ -20,18 +20,17 @@ const corpus = JSON.parse(readFileSync(join(import.meta.dirname, '../../../../bl
     compare: CompareCase[];
 };
 
-for (const fixture of corpus.verification) {
+const snapshot = (fixture: VerificationCase) => JSON.stringify({ source: fixture.source, library: fixture.library, options: fixture.options });
+const pristine = corpus.verification.map(snapshot);
+
+for (const [index, fixture] of corpus.verification.entries()) {
     describe(`when verifying a blueprint for ${fixture.name}`, () => {
         it('should report the same problems, in the same order, as the C# engine', () =>
             verifyBlueprintPackage(fixture.source, fixture.library, fixture.options).should.deep.equal(fixture.expectedProblems));
 
         it('should leave the blueprint, the library and the options as they were', () => {
-            const source = structuredClone(fixture.source);
-            const library = structuredClone(fixture.library);
-            const options = structuredClone(fixture.options);
-            const before = JSON.stringify({ source, library, options });
-            verifyBlueprintPackage(source, library, options);
-            JSON.stringify({ source, library, options }).should.equal(before);
+            verifyBlueprintPackage(fixture.source, fixture.library, fixture.options);
+            snapshot(fixture).should.equal(pristine[index]);
         });
     });
 }
