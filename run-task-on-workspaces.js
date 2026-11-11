@@ -99,14 +99,14 @@ function localInstallDependenciesOf(workspaceName) {
 }
 
 // Publishing goes in dependency order, so a package is only published after every workspace it installs with.
-// The order is otherwise the discovery order; a dependency cycle keeps the discovery order for the packages on it.
+// The order is otherwise the discovery order; a dependency cycle is broken where it is found, so one package on it goes first.
 function inDependencyOrder(names) {
     const ordered = [];
     const state = {};
     const visit = name => {
         if (state[name] === 'done') return;
         if (state[name] === 'visiting') {
-            console.log(`Workspace '${name}' is part of a dependency cycle - keeping the discovery order for it`);
+            console.log(`Workspace '${name}' is part of a dependency cycle - the cycle is broken at it, so its order on the cycle is not guaranteed`);
             return;
         }
         state[name] = 'visiting';
