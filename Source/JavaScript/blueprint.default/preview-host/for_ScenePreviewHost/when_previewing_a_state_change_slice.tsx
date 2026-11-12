@@ -24,7 +24,7 @@ describe('when previewing a State Change slice', () => {
         });
 
         it('should open the task dialog of the slice and draw nothing of the page of the feature behind it', () => [dialog()!.getAttribute('aria-label'), document.querySelector('[data-page="orders"]'), document.querySelector('.layout-topbar')].should.deep.equal(['Place order', null, null]));
-        it('should derive the dialog from the slice', () => [screen.getByRole('heading', { name: 'Place order' }).textContent, document.querySelector('.scene-slice-dialog-subtitle')!.textContent].should.deep.equal(['Place order', 'State Change · PlaceOrder']));
+        it('should derive the dialog from the slice', () => [screen.getByRole('heading', { name: 'Place order' }).textContent, document.querySelector('[data-scene-slice-dialog]')!.getAttribute('data-scene-command')].should.deep.equal(['Place order', 'PlaceOrder']));
         it('should fill the fields from the active sample data pack', () => [field('Customer').value, field('Product').value, field('Quantity').value].should.deep.equal(['Fjordline AS', 'Scanner', '4']));
         it('should report the slice in the breadcrumb', () => breadcrumbs.should.deep.equal([['Sales', 'Orders', 'Place order']]));
         it('should have a Cancel button and a button titled like the slice', () => [screen.getByRole('button', { name: 'Cancel' }).textContent, document.querySelector('.scene-slice-dialog-submit')!.textContent].should.deep.equal(['Cancel', 'Place order']));

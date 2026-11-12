@@ -1198,13 +1198,6 @@
     font-size: 1.35rem;
 }
 
-.scene-slice-dialog-subtitle {
-    margin: 0.25rem 0 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.8rem;
-    color: var(--scene-text-muted-color, #6b7280);
-}
-
 .scene-slice-dialog-fields {
     display: flex;
     flex-direction: column;

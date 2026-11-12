@@ -34,8 +34,8 @@ describe('when a toolbar button opens a slice as a task dialog', () => {
 
         it('should open a modal dialog named by the button title', () =>
             [dialog()!.getAttribute('aria-modal'), dialog()!.getAttribute('aria-label')].should.deep.equal(['true', 'New order']));
-        it('should show the title and the slice as the subtitle', () =>
-            [screen.getByRole('heading', { name: 'New order' }).textContent, document.querySelector('.scene-slice-dialog-subtitle')!.textContent].should.deep.equal(['New order', 'State Change · PlaceOrder']));
+        it('should show the title', () => screen.getByRole('heading', { name: 'New order' }).textContent!.should.equal('New order'));
+        it('should not show what the slice is called in the model', () => (document.querySelector('.scene-slice-dialog')!.textContent ?? '').should.not.contain('State Change'));
         it('should show a labelled field for each command property', () =>
             Array.from(document.querySelectorAll('.scene-slice-dialog-field label')).map(label => label.textContent).should.deep.equal(['Customer *', 'Product', 'Quantity', 'Express delivery']));
         it('should focus the first field', () => document.activeElement!.getAttribute('name')!.should.equal('customer'));
