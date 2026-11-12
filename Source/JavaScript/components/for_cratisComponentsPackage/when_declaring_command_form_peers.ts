@@ -14,9 +14,9 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8')) as {
 describe('when declaring native command form peers', () => {
     it('requires the published footer and native custom-error execution contracts', () => {
         expect(packageJson.name).toBe('@cratis/scene.components');
-        expect(packageJson.peerDependencies['@cratis/components']).toBe('^4.13.0');
-        expect(packageJson.peerDependencies['@cratis/arc']).toBe('^22.19.1');
-        expect(packageJson.peerDependencies['@cratis/arc.react']).toBe('^22.19.1');
+        expect(packageJson.peerDependencies['@cratis/components']).toBe('^4.40.1');
+        expect(packageJson.peerDependencies['@cratis/arc']).toBe('>=22.19.1 <24');
+        expect(packageJson.peerDependencies['@cratis/arc.react']).toBe('>=22.19.1 <24');
     });
 
     it('requires Arc, because @cratis/components loads it at module load', () => {
