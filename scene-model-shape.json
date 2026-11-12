@@ -409,6 +409,9 @@
     "ApplicationTriggerInteractionTrigger": [
       "triggerName"
     ],
+    "SignalInteractionTrigger": [
+      "signalName"
+    ],
     "InteractionAction": [
       "kind",
       "arguments",

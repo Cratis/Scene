@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Behavior, InteractionActionKind, InteractionTriggerKind } from '@cratis/scene.model';
-import { BehaviorAttachment, resolveApplicationTriggerBehaviors, resolveBehaviors } from '../resolveBehaviors';
+import { BehaviorAttachment, resolveApplicationTriggerBehaviors, resolveBehaviors, resolveSignalBehaviors } from '../resolveBehaviors';
 
 const behavior = (name: string | undefined, kind: InteractionTriggerKind, order?: number): Behavior => ({
     name,
@@ -92,6 +92,26 @@ describe('when resolving additive attachments', () => {
         );
 
         resolved.should.have.lengthOf(1);
+    });
+
+    it('should resolve a raised signal separately from an application trigger of the same name', () => {
+        const attachments: BehaviorAttachment[] = [
+            {
+                level: 'component',
+                behaviors: [
+                    {
+                        bindings: [
+                            { trigger: { signalName: 'succeeded' } as never, actions: [] },
+                            { trigger: { signalName: 'failed' } as never, actions: [] },
+                            { trigger: { triggerName: 'succeeded' } as never, actions: [] },
+                        ],
+                    },
+                ],
+            },
+        ];
+
+        resolveSignalBehaviors(attachments, 'succeeded').should.have.lengthOf(1);
+        resolveApplicationTriggerBehaviors(attachments, 'succeeded').should.have.lengthOf(1);
     });
 
     it('should tolerate an attachment with no behaviors at all', () => {
