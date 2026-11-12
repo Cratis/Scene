@@ -2,9 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FormEvent, KeyboardEvent, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { ApplicationStructureIndex } from '@cratis/scene.engine';
 import { SceneNavigationContextInternal } from '../navigation/SceneNavigationContext';
-import { useSceneNavigationModel } from '../navigation/region/SceneNavigationModelContext';
 import { InvocationResult } from './InvocationResult';
 import { InvocationValidationError } from './InvocationValidationError';
 import { SliceCommandField } from './SliceCommandField';
@@ -70,14 +68,15 @@ export function slicePayload(fields: SliceCommandField[], values: Record<string,
 }
 
 /**
- * The task dialog of a toolbar slice button (TB4): a modal card with the button's title, the slice as its subtitle, a labelled
- * field for each command property, and Cancel and a submit button labelled with the title.
+ * The task dialog of a toolbar slice button (TB4): a modal card with the button's title, a labelled field for each command
+ * property, and Cancel and a submit button labelled with the title. The slice is what the dialog is for, but that is the model's word,
+ * not the person's: it is kept on the dialog's `data-scene-slice-dialog` attribute, never shown.
  *
  * - The first field takes focus when it opens, Tab stays inside, Escape cancels, and focus returns to the button that opened it.
  * - Submit validates required fields, then calls the `SliceInvoker` in scope - real, dry-run or the announcing default. The
  *   problems it reports are shown against their fields (`aria-invalid`, `aria-describedby`) or for the form; success closes the
  *   dialog and hands the result to the host (`dialogResult`).
- * - The fields come from the `SliceCommandFieldsProvider`; the subtitle names the slice from the navigation model.
+ * - The fields come from the `SliceCommandFieldsProvider`.
  *
  * Inside a navigation host it is the content of the dialog a toolbar button opens; `core:sliceDialog` registers it so a host can
  * author the dialog template with it.
@@ -91,13 +90,7 @@ export function SliceDialogView({ slice: sliceProp, command: commandProp, title:
 
     const invoker = useSliceInvoker();
     const fieldsFor = useSliceCommandFields();
-    const model = useSceneNavigationModel();
     const fields = useMemo(() => fieldsFor?.(command, slice) ?? [], [command, fieldsFor, slice]);
-    const sliceName = useMemo(() => {
-        if (!model) return slice.split('.').pop() ?? slice;
-        const index = model.structure instanceof ApplicationStructureIndex ? model.structure : new ApplicationStructureIndex(model.structure);
-        return index.findSlice(slice)?.id ?? slice.split('.').pop() ?? slice;
-    }, [model, slice]);
 
     const [values, setValues] = useState<Record<string, string | boolean>>(() => initialValuesOf(fields));
     const [errors, setErrors] = useState<InvocationValidationError[]>([]);
@@ -161,7 +154,6 @@ export function SliceDialogView({ slice: sliceProp, command: commandProp, title:
     return <form ref={form} className={`scene-slice-dialog scene-slice-dialog-${presentation}`} data-scene-presentation={presentation} data-scene-slice-dialog={slice} data-scene-command={command} noValidate onSubmit={submit} onKeyDown={onKeyDown}>
         <header className='scene-slice-dialog-header'>
             <h2 className='scene-slice-dialog-title'>{title}</h2>
-            <p className='scene-slice-dialog-subtitle'>State Change · {sliceName}</p>
         </header>
         <div className='scene-slice-dialog-fields'>
             {fields.map(field => {

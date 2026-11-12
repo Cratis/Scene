@@ -82,7 +82,7 @@ change slice **opens its dialog** instead of announcing the command:
 - The button navigates to the dialog destination `sliceDialogDestination(resolved)` - the template `sliceDialogFor` picked, with the
   `slice`, `command` and `title` as parameters. The host renders `dialogs[template]` when the application authors one (the
   `core:sliceDialog` component, or its own element, reading `currentDialogParameters`), and the built-in **`SliceDialogView`** otherwise.
-- The dialog is a centred modal card: the button title, the subtitle `State Change · <Slice>`, a labelled field per command property,
+- The dialog is a centred modal card: the button title, a labelled field per command property,
   and `Cancel` with a submit button labelled with the title. The first field takes focus, Tab stays inside, Escape cancels, and focus
   goes back to the button. Required fields are checked before anything is invoked.
 - The fields come from the command, through `SliceCommandFieldsProvider` (`fieldsFor(command, slice)` returns `{ name, type, label?, required? }`
