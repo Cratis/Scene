@@ -70,10 +70,10 @@ describe('when previewing the business templates in every state', () => {
     });
 
     it('should render settings with every field named, identically in every state', () => {
-        // Settings loads nothing, so no state may change it. Generated element ids differ per mount and are not compared.
+        // Settings loads nothing, so no state may change it. Generated element and component instance ids differ per mount and are not compared.
         const markup = Object.values(TemplatePreviewState).map(state => {
             const { container, unmount } = renderPreview('ProfileSettings', state);
-            const html = container.innerHTML.replace(/\b(id|for|aria-controls|aria-labelledby|aria-describedby)="[^"]*"/g, '');
+            const html = container.innerHTML.replace(/\b(id|for|aria-controls|aria-labelledby|aria-describedby|data-cratis-component-instance)="[^"]*"/g, '');
             unmount();
             return html;
         });
