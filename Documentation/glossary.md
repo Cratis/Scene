@@ -36,6 +36,7 @@ is what makes an interaction that names nothing real a diagnostic instead of a d
 | --- | --- |
 | **Interaction trigger** | What starts an interaction — a click, a submit, a screen becoming live, an observed domain event, an elapsed interval, or a declared application trigger firing. Anonymous: it exists only inside a behavior. |
 | **Application trigger** | Screenplay's declared top-level signal consumed by backend reactions. A different concept with a similar name — an interaction may `raise` one, which is how the two connect. |
+| **Signal trigger** | An interaction trigger started by an extension component raising a signal its contract declares (`on <signal>`). It is named by the signal alone, belongs to the component the behavior is attached to, and is resolved with `resolveSignalBehaviors`. Not an application trigger, even when the names match. |
 | **Action** | One declarative effect: execute a command, navigate, open or close a dialog, refresh a query, set state, notify, confirm, raise. |
 | **Continuation** | The `on success` / `on failure` / `on result` actions that run after an action that can fail. |
 | **Behavior** | A bundle of interaction-trigger-to-action bindings, attachable to an element, form, screen, template, layout, module or feature. Anonymous when written inline; named when reusable. Attachments are additive — a template's behavior and an element's both run. |

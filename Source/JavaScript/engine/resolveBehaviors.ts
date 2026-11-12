@@ -101,6 +101,20 @@ export function resolveApplicationTriggerBehaviors(attachments: BehaviorAttachme
 }
 
 /**
+ * Collects the bindings that respond to an extension component raising a signal (`on <signal>`).
+ *
+ * Pass the attachments of the component that raised it: a signal belongs to its component, so the name is not
+ * qualified and an application trigger of the same name is never matched.
+ *
+ * @param attachments The attachment levels, outermost first.
+ * @param signalName The signal the component raised, as its contract names it.
+ * @returns The bindings to run, in order.
+ */
+export function resolveSignalBehaviors(attachments: BehaviorAttachment[], signalName: string): ResolvedBinding[] {
+    return collect(attachments, trigger => (trigger as { signalName?: string }).signalName === signalName);
+}
+
+/**
  * Collects the bindings that respond to a modeled domain event being observed.
  *
  * @param attachments The attachment levels, outermost first.

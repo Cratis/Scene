@@ -136,3 +136,9 @@ The subject supplies the definition, the properties it mounts with, different pr
 
 - [Screenplay screens](https://github.com/Cratis/Screenplay/blob/main/Documentation/screenplay/screens.md): placing a component on a screen.
 - [Stage custom packages](https://github.com/Cratis/Stage/blob/main/Documentation/reference/custom-packages.md): how Stage loads packages at runtime. Hosting extension components is tracked in [Cratis/Stage#1070](https://github.com/Cratis/Stage/issues/1070) and the language support in [Cratis/Screenplay#1255](https://github.com/Cratis/Screenplay/issues/1255).
+
+## Binding a raised signal to a screen interaction
+
+A screen handles a signal with `on <signal>`. Scene models that binding as a `SignalInteractionTrigger`, which carries only the `signalName` as the component's contract declares it (`@cratis/scene.model`, `Cratis.Scene.Model.Interactions`). It serializes as `{ "signalName": "succeeded" }` in an interaction binding's `trigger`, next to `kind`, `eventName`, `seconds` and `triggerName` triggers; the other trigger kinds are unchanged.
+
+When a component raises a signal, the host collects the behaviors attached to that component and resolves them with `resolveSignalBehaviors(attachments, signalName)` from `@cratis/scene.engine`. The result is in the same deterministic order as other triggers. A signal trigger never matches an application trigger of the same name, and the reverse.

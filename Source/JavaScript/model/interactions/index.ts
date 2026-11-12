@@ -8,6 +8,7 @@ export * from './BuiltInInteractionTrigger';
 export * from './EventInteractionTrigger';
 export * from './IntervalInteractionTrigger';
 export * from './ApplicationTriggerInteractionTrigger';
+export * from './SignalInteractionTrigger';
 export * from './InteractionMessage';
 export * from './InteractionArgument';
 export * from './InteractionActionKind';

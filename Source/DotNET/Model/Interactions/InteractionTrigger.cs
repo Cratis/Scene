@@ -18,4 +18,5 @@ namespace Cratis.Scene.Model.Interactions;
 [JsonDerivedType(typeof(EventInteractionTrigger))]
 [JsonDerivedType(typeof(IntervalInteractionTrigger))]
 [JsonDerivedType(typeof(ApplicationTriggerInteractionTrigger))]
+[JsonDerivedType(typeof(SignalInteractionTrigger))]
 public abstract record InteractionTrigger;
