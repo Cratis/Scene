@@ -67,9 +67,9 @@
         "@cratis/scene.react": "1.0.0"
     },
     "devDependencies": {
-        "@cratis/arc": "22.128.1",
-        "@cratis/arc.react": "22.128.1",
-        "@cratis/components": "4.34.0",
+        "@cratis/arc": "23.0.0",
+        "@cratis/arc.react": "23.0.0",
+        "@cratis/components": "4.40.1",
         "@cratis/scene.engine": "1.0.0",
         "@cratis/scene.model": "1.0.0",
         "@cratis/scene.react": "1.0.0",
@@ -82,9 +82,9 @@
         "storybook": "^10.6.2"
     },
     "peerDependencies": {
-        "@cratis/arc": "^22.19.1",
-        "@cratis/arc.react": "^22.19.1",
-        "@cratis/components": "^4.13.0",
+        "@cratis/arc": ">=22.19.1 <24",
+        "@cratis/arc.react": ">=22.19.1 <24",
+        "@cratis/components": "^4.40.1",
         "@cratis/fundamentals": "^7.19.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
