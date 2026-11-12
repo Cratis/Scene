@@ -57,7 +57,7 @@ jobs:
       publish: ${{ steps.release.outputs.should-publish }}
       reason: ${{ steps.release.outputs.reason }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Release
         id: release
         uses: cratis/release-action@v1
@@ -73,8 +73,8 @@ jobs:
     permissions:
       id-token: write   # Required for NuGet trusted publishing using OIDC tokens
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
           dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -101,8 +101,8 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 23.x
           registry-url: 'https://registry.npmjs.org'
@@ -115,7 +115,7 @@ jobs:
           echo "NODE_AUTH_TOKEN=" >> "$GITHUB_ENV"
       - name: Upgrade npm for trusted publishing (requires >= 11.5.1)
         run: npm install -g npm@11
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: yarn-cache
         with:
           path: |
