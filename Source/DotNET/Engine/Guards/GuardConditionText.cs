@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Globalization;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace Cratis.Scene.Engine.Guards;
@@ -19,6 +20,9 @@ namespace Cratis.Scene.Engine.Guards;
 /// </summary>
 public static class GuardConditionText
 {
+    /// <summary>Writes a text the way JavaScript's JSON.stringify does: only the quote, the backslash and control characters are escaped.</summary>
+    static readonly JsonSerializerOptions _text = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
     static readonly Dictionary<string, string> _written = new(StringComparer.Ordinal)
     {
         ["Equal"] = "==",
@@ -68,12 +72,17 @@ public static class GuardConditionText
 
     static string DescribeLiteral(JsonElement literal) => literal.ValueKind switch
     {
-        JsonValueKind.String => JsonSerializer.Serialize(literal.GetString()),
-        JsonValueKind.Number => literal.GetDouble().ToString(CultureInfo.InvariantCulture),
+        JsonValueKind.String => JsonSerializer.Serialize(literal.GetString(), _text),
+        JsonValueKind.Number => DescribeNumber(literal.GetDouble()),
         JsonValueKind.True => "true",
         JsonValueKind.False => "false",
         _ => "null",
     };
+
+    /// <summary>A negative zero has no meaning in a comparison and JSON.stringify writes it as 0.</summary>
+    /// <param name="number">The number.</param>
+    /// <returns>Its text.</returns>
+    static string DescribeNumber(double number) => (number == 0 ? 0 : number).ToString(CultureInfo.InvariantCulture);
 
     static string DescribeLogical(JsonElement condition, string @operator)
     {

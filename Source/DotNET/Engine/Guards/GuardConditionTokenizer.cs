@@ -128,7 +128,7 @@ sealed class GuardConditionTokenizer(string text)
         if (end == _index) return null;
         var value = double.Parse(text[_index..end], CultureInfo.InvariantCulture);
         _index = end;
-        return GuardToken.Literal(JsonValue.Create(value));
+        return GuardToken.Literal(JsonValue.Create(value == 0 ? 0 : value));
     }
 
     GuardToken? ReadWord()
