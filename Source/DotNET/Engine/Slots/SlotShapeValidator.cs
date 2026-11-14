@@ -161,7 +161,7 @@ public static class SlotShapeValidator
             diagnostics.Add(new(
                 SlotShapeDiagnosticCode.LegacyToolbarElement,
                 $"{path}.componentName",
-                $"The element '{LegacyOutletShape.Describe(value["id"])}' is a {LegacyOutletShape.Text(value["componentName"])}. {LegacyToolbarElement.MigrationHint}"));
+                $"The element '{LegacyOutletShape.DescribeId(value["id"])}' is a {LegacyOutletShape.Text(value["componentName"])}. {LegacyToolbarElement.MigrationHint}"));
         }
     }
 
@@ -169,11 +169,11 @@ public static class SlotShapeValidator
     {
         if (LegacyActionPresentation.IsActionComponent(value) && value["properties"] is JsonObject properties)
         {
-            return (properties, $"{path}.properties", LegacyOutletShape.Describe(value["id"]));
+            return (properties, $"{path}.properties", LegacyOutletShape.DescribeId(value["id"]));
         }
 
         return LegacyOutletShape.Text(value["kind"]) is { } kind && _actionItemKinds.Contains(kind)
-            ? (value, path, LegacyOutletShape.Describe(value["id"]))
+            ? (value, path, LegacyOutletShape.DescribeId(value["id"]))
             : null;
     }
 
@@ -194,7 +194,7 @@ public static class SlotShapeValidator
         diagnostics.Add(new(
             SlotShapeDiagnosticCode.LegacyActionPresentation,
             $"{path}.properties.{LegacyActionPresentation.Property}",
-            $"The action '{LegacyOutletShape.Describe(value["id"])}' stores a presentation. {LegacyActionPresentation.MigrationHint}"));
+            $"The action '{LegacyOutletShape.DescribeId(value["id"])}' stores a presentation. {LegacyActionPresentation.MigrationHint}"));
     }
 
     static void CheckActionOpens(JsonObject value, string path, List<SlotShapeDiagnostic> diagnostics)
@@ -239,7 +239,7 @@ public static class SlotShapeValidator
         diagnostics.Add(new(
             SlotShapeDiagnosticCode.UnknownButtonDisplay,
             $"{path}.display",
-            $"The button '{LegacyOutletShape.Describe(value["id"])}' shows '{LegacyOutletShape.Describe(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)"));
+            $"The button '{LegacyOutletShape.DescribeId(value["id"])}' shows '{LegacyOutletShape.Describe(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)"));
     }
 
     static void CheckPlacement(JsonObject value, string path, List<SlotShapeDiagnostic> diagnostics)

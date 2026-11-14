@@ -4,6 +4,7 @@
 import { Opens, OutletButtonDisplay, OutletItemKind, OutletKind, ScreenFit, SlotRole } from '@cratis/scene.model';
 import { actionPresentationMigrationHint, isLegacyActionPresentation, legacyActionPresentationProperty } from './upgradeActionPresentation';
 import { describeOutletItemKinds, groupItemKinds, outletItemKindName, outletItemKinds } from '../outlets/outletItemKinds';
+import { describeId } from './describeId';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 import { isLegacyNavigationContribution, isLegacyNavigationModel } from './upgradeNavigationShape';
@@ -89,7 +90,7 @@ function checkLegacy(value: JsonObject, path: string, diagnostics: SlotShapeDiag
         diagnostics.push({
             code: SlotShapeDiagnosticCode.LegacyToolbarElement,
             path: `${path}.componentName`,
-            message: `The element '${String(value.id)}' is a ${String(value.componentName)}. ${toolbarElementMigrationHint}`,
+            message: `The element '${describeId(value.id)}' is a ${String(value.componentName)}. ${toolbarElementMigrationHint}`,
         });
     }
 }
@@ -109,9 +110,9 @@ function isActionItem(value: JsonObject): boolean {
 
 function actionOf(value: JsonObject, path: string): { action: JsonObject; path: string; name: string } | undefined {
     if (isActionComponent(value) && isObject(value.properties)) {
-        return { action: value.properties, path: `${path}.properties`, name: String(value.id) };
+        return { action: value.properties, path: `${path}.properties`, name: describeId(value.id) };
     }
-    if (isActionItem(value)) return { action: value, path, name: String(value.id) };
+    if (isActionItem(value)) return { action: value, path, name: describeId(value.id) };
     return undefined;
 }
 
@@ -129,7 +130,7 @@ function checkActionPresentation(value: JsonObject, path: string, diagnostics: S
     diagnostics.push({
         code: SlotShapeDiagnosticCode.LegacyActionPresentation,
         path: `${path}.properties.${legacyActionPresentationProperty}`,
-        message: `The action '${String(value.id)}' stores a presentation. ${actionPresentationMigrationHint}`,
+        message: `The action '${describeId(value.id)}' stores a presentation. ${actionPresentationMigrationHint}`,
     });
 }
 
@@ -168,7 +169,7 @@ function checkButtonDisplay(value: JsonObject, path: string, diagnostics: SlotSh
     diagnostics.push({
         code: SlotShapeDiagnosticCode.UnknownButtonDisplay,
         path: `${path}.display`,
-        message: `The button '${String(value.id)}' shows '${String(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)`,
+        message: `The button '${describeId(value.id)}' shows '${String(display)}'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)`,
     });
 }
 

@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { describeId } from './describeId';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 
@@ -63,7 +64,7 @@ function asButton(element: unknown): { button: JsonObject; dropped: string[] } |
     }
 
     const properties = element.properties;
-    const id = String(element.id);
+    const id = describeId(element.id);
     const presentation = isObject(properties.presentation) ? properties.presentation : {};
     const mode = typeof presentation.mode === 'string' ? presentation.mode.toLowerCase() : undefined;
     const display = mode !== undefined ? displays.get(mode) : undefined;
@@ -138,7 +139,7 @@ export function upgradeToolbarElement(owner: JsonObject, path: string, diagnosti
             diagnostics.push({
                 code: SlotShapeDiagnosticCode.LegacyToolbarElement,
                 path: `${path}.slots.items`,
-                message: `The toolbar '${String(owner.id)}' ${result.reason}, so it is kept as it is`,
+                message: `The toolbar '${describeId(owner.id)}' ${result.reason}, so it is kept as it is`,
             });
             return false;
         }
@@ -147,7 +148,7 @@ export function upgradeToolbarElement(owner: JsonObject, path: string, diagnosti
             dropped.push({
                 code: SlotShapeDiagnosticCode.DroppedPresentationHints,
                 path: `${path}.slots.items[${index}].properties.presentation`,
-                message: `The toolbar '${String(owner.id)}' has the item '${String(result.button.id)}' with the presentation hints ${result.dropped.join(', ')}, which an outlet button has no place for, so they are dropped`,
+                message: `The toolbar '${describeId(owner.id)}' has the item '${describeId(result.button.id)}' with the presentation hints ${result.dropped.join(', ')}, which an outlet button has no place for, so they are dropped`,
             });
         }
     }

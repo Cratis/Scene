@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Opens } from '@cratis/scene.model';
+import { describeId } from './describeId';
 import { SlotShapeDiagnostic } from './SlotShapeDiagnostic';
 import { SlotShapeDiagnosticCode } from './SlotShapeDiagnosticCode';
 
@@ -57,7 +58,7 @@ export function upgradeActionPresentation(owner: JsonObject, path: string, diagn
         diagnostics.push({
             code: SlotShapeDiagnosticCode.LegacyActionPresentation,
             path: propertyPath,
-            message: `The action '${String(owner.id)}' is presented as '${String(presentation)}', which is not none, modal or drawer, so it has no opens to become`,
+            message: `The action '${describeId(owner.id)}' is presented as '${String(presentation)}', which is not none, modal or drawer, so it has no opens to become`,
         });
         return false;
     }
@@ -66,7 +67,7 @@ export function upgradeActionPresentation(owner: JsonObject, path: string, diagn
         diagnostics.push({
             code: SlotShapeDiagnosticCode.LegacyActionPresentation,
             path: propertyPath,
-            message: `The action '${String(owner.id)}' is presented as '${String(presentation)}' but opens '${String(properties.opens)}'; keep one`,
+            message: `The action '${describeId(owner.id)}' is presented as '${String(presentation)}' but opens '${String(properties.opens)}'; keep one`,
         });
         return false;
     }

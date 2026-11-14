@@ -136,4 +136,11 @@ static class LegacyOutletShape
     /// <param name="value">The value.</param>
     /// <returns>Its text.</returns>
     public static string Describe(JsonNode? value) => Text(value) ?? value?.ToJsonString() ?? "null";
+
+    /// <summary>
+    /// The id of an element, action or button as it reads in a message: one that has none reads (no id), as the items of an outlet do.
+    /// </summary>
+    /// <param name="id">The id.</param>
+    /// <returns>Its text, or (no id).</returns>
+    public static string DescribeId(JsonNode? id) => id is null ? "(no id)" : Describe(id);
 }
