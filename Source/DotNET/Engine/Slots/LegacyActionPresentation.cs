@@ -64,7 +64,7 @@ static class LegacyActionPresentation
 
         var properties = (JsonObject)owner["properties"]!;
         var presentation = properties[Property];
-        var id = LegacyOutletShape.Describe(owner["id"]);
+        var id = LegacyOutletShape.DescribeId(owner["id"]);
         var propertyPath = $"{path}.properties.{Property}";
         if (LegacyOutletShape.Text(presentation) is not { } text || !_opens.TryGetValue(text, out var opens))
         {

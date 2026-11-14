@@ -92,7 +92,7 @@ static class LegacyToolbarElement
                 diagnostics.Add(new(
                     SlotShapeDiagnosticCode.LegacyToolbarElement,
                     $"{path}.slots.items",
-                    $"The toolbar '{LegacyOutletShape.Describe(owner["id"])}' {reason}, so it is kept as it is"));
+                    $"The toolbar '{LegacyOutletShape.DescribeId(owner["id"])}' {reason}, so it is kept as it is"));
                 return false;
             }
 
@@ -102,7 +102,7 @@ static class LegacyToolbarElement
                 dropped.Add(new(
                     SlotShapeDiagnosticCode.DroppedPresentationHints,
                     $"{path}.slots.items[{index}].properties.presentation",
-                    $"The toolbar '{LegacyOutletShape.Describe(owner["id"])}' has the item '{LegacyOutletShape.Describe(button["id"])}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for, so they are dropped"));
+                    $"The toolbar '{LegacyOutletShape.DescribeId(owner["id"])}' has the item '{LegacyOutletShape.DescribeId(button["id"])}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for, so they are dropped"));
             }
         }
 
@@ -149,7 +149,7 @@ static class LegacyToolbarElement
             return (null, $"holds '{name}', which is not a {ToolbarItemComponentName}", []);
         }
 
-        var id = LegacyOutletShape.Describe(item["id"]);
+        var id = LegacyOutletShape.DescribeId(item["id"]);
         var presentation = properties["presentation"] as JsonObject ?? [];
         var mode = LegacyOutletShape.Text(presentation["mode"])?.ToLowerInvariant();
         var mapsMode = mode is not null && _displays.ContainsKey(mode);

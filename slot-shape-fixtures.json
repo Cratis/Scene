@@ -790,6 +790,55 @@
       }
     },
     {
+      "name": "an action and a toolbar without an id are named (no id) when reported",
+      "input": {
+        "screens": [{ "name": "Products", "slotContent": { "main": [
+          { "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+          { "componentName": "core:toolbar", "properties": { "name": "main" }, "slots": { "items": [
+            { "componentName": "core:toolbarItem", "properties": { "kind": "Action", "target": "EditInvoice", "parameters": { "invoiceId": "i-7" } }, "slots": {} }
+          ] } }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Products", "slotContent": { "main": [
+            { "componentName": "core:action", "properties": { "command": "DraftProduct", "presentation": "popover" }, "slots": {} },
+            { "componentName": "core:toolbar", "properties": { "name": "main" }, "slots": { "items": [
+              { "componentName": "core:toolbarItem", "properties": { "kind": "Action", "target": "EditInvoice", "parameters": { "invoiceId": "i-7" } }, "slots": {} }
+            ] } }
+          ] } }]
+        },
+        "changed": false,
+        "diagnostics": [
+          { "code": "legacyActionPresentation", "path": "$.screens[0].slotContent.main[0].properties.presentation", "message": "The action '(no id)' is presented as 'popover', which is not none, modal or drawer, so it has no opens to become" },
+          { "code": "legacyToolbarElement", "path": "$.screens[0].slotContent.main[1].slots.items", "message": "The toolbar '(no id)' has the item '(no id)' that passes parameters to its command, which an outlet button takes from the slice's inputs instead, so it is kept as it is" }
+        ]
+      }
+    },
+    {
+      "name": "a toolbar without an id names itself (no id) when its item drops presentation hints",
+      "input": {
+        "screens": [{ "name": "Orders", "slotContent": { "main": [
+          { "componentName": "core:toolbar", "properties": {}, "slots": { "items": [
+            { "id": "info", "componentName": "core:toolbarItem", "properties": { "kind": "Navigate", "target": "Info", "presentation": { "mode": "icon", "placement": "end" } }, "slots": {} }
+          ] } }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Orders", "slotContent": { "main": [
+            { "componentName": "core:outletItems", "properties": { "name": "toolbar", "kind": "actions", "items": [
+              { "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" }, "display": "icon" }
+            ] }, "slots": {} }
+          ] } }]
+        },
+        "changed": true,
+        "diagnostics": [
+          { "code": "droppedPresentationHints", "path": "$.screens[0].slotContent.main[0].slots.items[0].properties.presentation", "message": "The toolbar '(no id)' has the item 'info' with the presentation hints placement, which an outlet button has no place for, so they are dropped" }
+        ]
+      }
+    },
+    {
       "name": "a toolbar element whose item passes parameters to its command is reported and kept",
       "input": {
         "screens": [
@@ -1131,6 +1180,23 @@
           "path": "$.screenTemplates[0].outlets[0].defaults[3].display",
           "message": "The button 'share' shows 'iconOnly'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)"
         }
+      ]
+    },
+    {
+      "name": "elements without an id are named (no id), never null or undefined",
+      "document": {
+        "slotContent": { "main": [
+          { "componentName": "x:action", "properties": { "opens": "nope" } },
+          { "kind": "button", "display": "bad" },
+          { "componentName": "core:action", "properties": { "presentation": "modal" } },
+          { "componentName": "core:toolbar", "properties": {}, "slots": {} }
+        ] }
+      },
+      "expected": [
+        { "code": "unknownOpens", "path": "$.slotContent.main[0].properties.opens", "message": "The action '(no id)' opens 'nope'; an action opens automatically, runs directly (none), or opens in a dialog, a drawer or a slot" },
+        { "code": "unknownButtonDisplay", "path": "$.slotContent.main[1].display", "message": "The button '(no id)' shows 'bad'; a button shows its icon and title (iconAndTitle), only its icon (icon) or only its title (title)" },
+        { "code": "legacyActionPresentation", "path": "$.slotContent.main[2].properties.presentation", "message": "The action '(no id)' stores a presentation. Scene 5 replaced an action's presentation with opens: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" },
+        { "code": "legacyToolbarElement", "path": "$.slotContent.main[3].componentName", "message": "The element '(no id)' is a core:toolbar. Scene 5 replaced the core:toolbar component and its core:toolbarItem items with an outlet of actions drawn by core:outletItems: upgrade the document (upgradeSlotShape, or SlotShapeUpgrader in C#), or run `screenplay migrate --from 5 --to 6` on its Screenplay source" }
       ]
     },
     {

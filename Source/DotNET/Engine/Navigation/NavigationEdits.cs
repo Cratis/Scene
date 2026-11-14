@@ -358,24 +358,34 @@ public static class NavigationEdits
     static NavigationModel WithApplicationOutlet(NavigationModel model, Outlet outlet, Func<Outlet, Outlet> change)
     {
         var declared = model.Application.Outlets ?? [];
-        var outlets = declared.Any(candidate => candidate.Name == outlet.Name)
-            ? declared.Select(candidate => candidate.Name == outlet.Name ? change(candidate) : candidate)
-            : declared.Append(change(outlet));
-        return model with { Application = model.Application with { Outlets = [.. outlets] } };
+        var outlets = ChangeFirst(declared, candidate => candidate.Name == outlet.Name, change, () => change(outlet));
+        return model with { Application = model.Application with { Outlets = outlets } };
+    }
+
+    /// <summary>Reads resolve to the first declaration, so an edit changes that one only, as the TypeScript engine does.</summary>
+    /// <typeparam name="T">The type of the declarations.</typeparam>
+    /// <param name="source">The declarations.</param>
+    /// <param name="matches">Whether a declaration is the one to change.</param>
+    /// <param name="change">Changes a declaration.</param>
+    /// <param name="add">Makes the declaration to add when none matches.</param>
+    /// <returns>The declarations with the first match changed, or the new one added.</returns>
+    static List<T> ChangeFirst<T>(IEnumerable<T> source, Func<T, bool> matches, Func<T, T> change, Func<T> add)
+    {
+        var result = source.ToList();
+        var index = result.FindIndex(candidate => matches(candidate));
+        if (index < 0) result.Add(add());
+        else result[index] = change(result[index]);
+        return result;
     }
 
     static NavigationModel WithRefinement(NavigationModel model, string module, string outlet, Func<OutletRefinement, OutletRefinement> change)
     {
         var block = NavigationOutlets.FindModule(model, module) ?? new ModuleNavigation(module);
         var refinements = block.Refinements ?? [];
-        var changed = refinements.Any(refinement => refinement.Outlet == outlet)
-            ? refinements.Select(refinement => refinement.Outlet == outlet ? change(refinement) : refinement)
-            : refinements.Append(change(new OutletRefinement(outlet)));
-        var updated = block with { Refinements = [.. changed] };
-        var modules = model.Modules.Any(candidate => candidate.Module == module)
-            ? model.Modules.Select(candidate => candidate.Module == module ? updated : candidate)
-            : model.Modules.Append(updated);
-        return model with { Modules = [.. modules] };
+        var changed = ChangeFirst(refinements, refinement => refinement.Outlet == outlet, change, () => change(new OutletRefinement(outlet)));
+        var updated = block with { Refinements = changed };
+        var modules = ChangeFirst(model.Modules, candidate => candidate.Module == module, _ => updated, () => updated);
+        return model with { Modules = modules };
     }
 
     static NavigationModel WithOwnItems(NavigationModel model, string? module, Outlet declared, Func<IReadOnlyList<OutletItem>, IReadOnlyList<OutletItem>> change) =>
