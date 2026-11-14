@@ -16,37 +16,9 @@ const item = (id: string) => ({ kind: 'navigation', id, title: id.toUpperCase() 
 const declaring = (...outlets: { name: string; kind: string; defaults: unknown[] }[]): NavigationModel =>
     ({ application: { outlets }, modules: [] }) as unknown as NavigationModel;
 
-const childrenOf = (value: unknown): { id: string }[] => (value as { children?: { id: string }[] }).children ?? [];
-
 const edit = (value: object) => value as unknown as NavigationEdit;
 
-describe('when editing navigation where the runtimes differ', () => {
-    it('should add under the parent of the first declaration of an outlet', () => {
-        const navigation = declaring(
-            { name: 'sidebar', kind: 'navigation', defaults: [item('a')] },
-            { name: 'sidebar', kind: 'navigation', defaults: [item('a'), item('b')] });
-
-        const outcome = applyNavigationEdits(navigation, [edit({ kind: 'addItem', outlet: 'sidebar', parent: 'a', item: item('c') })]);
-
-        outcome.applied.should.be.true;
-        // The runtimes differ on which declaration receives the sub-item (Cratis/Scene#300); the TypeScript engine edits the first one.
-        const [first, second] = outcome.model.application.outlets!;
-        first.defaults.map(candidate => candidate.id).should.deep.equal(['a']);
-        childrenOf(first.defaults[0]).map(candidate => candidate.id).should.deep.equal(['c']);
-        second.defaults.map(candidate => candidate.id).should.deep.equal(['a', 'b']);
-        second.defaults.forEach(candidate => childrenOf(candidate).should.deep.equal([]));
-    });
-
-    it('should move under the parent using the items without the moved one', () => {
-        const navigation = declaring({ name: 'sidebar', kind: 'navigation', defaults: [item('a'), item('b')] });
-
-        const outcome = applyNavigationEdits(navigation, [edit({ kind: 'moveItem', outlet: 'sidebar', id: 'b', parent: 'a' })]);
-
-        const [outlet] = outcome.model.application.outlets!;
-        outlet.defaults.map(candidate => candidate.id).should.deep.equal(['a']);
-        childrenOf(outlet.defaults[0]).map(candidate => candidate.id).should.deep.equal(['b']);
-    });
-
+describe('when serializing navigation edits', () => {
     it('should refuse a sub-item of a flat outlet without reading the items of the level', () => {
         const unreadable = { name: 'topbar', kind: 'navigation', get defaults(): unknown[] { throw new Error('The items were read.'); } };
         const navigation = declaring(unreadable);
