@@ -816,6 +816,29 @@
       }
     },
     {
+      "name": "a toolbar without an id names itself (no id) when its item drops presentation hints",
+      "input": {
+        "screens": [{ "name": "Orders", "slotContent": { "main": [
+          { "componentName": "core:toolbar", "properties": {}, "slots": { "items": [
+            { "id": "info", "componentName": "core:toolbarItem", "properties": { "kind": "Navigate", "target": "Info", "presentation": { "mode": "icon", "placement": "end" } }, "slots": {} }
+          ] } }
+        ] } }]
+      },
+      "expected": {
+        "document": {
+          "screens": [{ "name": "Orders", "slotContent": { "main": [
+            { "componentName": "core:outletItems", "properties": { "name": "toolbar", "kind": "actions", "items": [
+              { "kind": "button", "id": "info", "title": "info", "navigateTo": { "screen": "Info" }, "display": "icon" }
+            ] }, "slots": {} }
+          ] } }]
+        },
+        "changed": true,
+        "diagnostics": [
+          { "code": "droppedPresentationHints", "path": "$.screens[0].slotContent.main[0].slots.items[0].properties.presentation", "message": "The toolbar '(no id)' has the item 'info' with the presentation hints placement, which an outlet button has no place for, so they are dropped" }
+        ]
+      }
+    },
+    {
       "name": "a toolbar element whose item passes parameters to its command is reported and kept",
       "input": {
         "screens": [

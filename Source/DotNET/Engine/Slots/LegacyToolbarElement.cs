@@ -102,7 +102,7 @@ static class LegacyToolbarElement
                 dropped.Add(new(
                     SlotShapeDiagnosticCode.DroppedPresentationHints,
                     $"{path}.slots.items[{index}].properties.presentation",
-                    $"The toolbar '{LegacyOutletShape.Describe(owner["id"])}' has the item '{LegacyOutletShape.DescribeId(button["id"])}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for, so they are dropped"));
+                    $"The toolbar '{LegacyOutletShape.DescribeId(owner["id"])}' has the item '{LegacyOutletShape.DescribeId(button["id"])}' with the presentation hints {string.Join(", ", hints)}, which an outlet button has no place for, so they are dropped"));
             }
         }
 
