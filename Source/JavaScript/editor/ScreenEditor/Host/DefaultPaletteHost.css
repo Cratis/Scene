@@ -1,0 +1,13 @@
+.studio-screen-editor-palette-host[data-placement='floating'] {
+    position: fixed;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Above the editor's backdrop, which sits below an application toolbar at 100. */
+    z-index: 100;
+}
+
+.studio-screen-editor-palette-host[data-placement='inline'] {
+    flex: 0 0 auto;
+    padding: 16px 0 16px 16px;
+}

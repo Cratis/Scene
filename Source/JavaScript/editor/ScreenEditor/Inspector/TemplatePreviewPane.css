@@ -1,0 +1,68 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-editor-template-preview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: .5rem;
+    padding: .5rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+}
+
+.studio-editor-template-preview__controls,
+.studio-editor-template-preview__actions {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.studio-editor-template-preview__frame {
+    /* A blueprint lays its shell out with fixed positioning; a transform makes the frame the containing block, so the
+       preview stays inside it. It is a picture to look at, so it takes no pointer events. */
+    position: relative;
+    transform: translateZ(0);
+    contain: layout paint;
+    overflow: hidden;
+    height: 16rem;
+    margin-inline: auto;
+    border: 1px solid var(--cratis-surface-border);
+    background: var(--cratis-surface-ground);
+}
+
+.studio-editor-template-preview__frame[data-size='desktop'] {
+    width: 100%;
+}
+
+.studio-editor-template-preview__frame[data-size='tablet'] {
+    width: min(768px, 100%);
+}
+
+.studio-editor-template-preview__frame[data-size='phone'] {
+    width: min(375px, 100%);
+}
+
+.studio-editor-template-preview__facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .125rem .5rem;
+    margin: 0;
+    font-size: .75rem;
+}
+
+.studio-editor-template-preview__facts dt {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-template-preview__facts dd {
+    margin: 0;
+}
+
+.studio-editor-template-preview__none {
+    padding: 1rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-template-preview__frame > * {
+    pointer-events: none;
+}

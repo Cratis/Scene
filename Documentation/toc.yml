@@ -27,6 +27,8 @@
   items:
     - name: Editing screens and templates
       href: editing/toc.yml
+    - name: The Scene editor package
+      href: editor/toc.yml
 
 - name: Reference
   items:

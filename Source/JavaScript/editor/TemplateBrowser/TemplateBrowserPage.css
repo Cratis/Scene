@@ -1,0 +1,25 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-template-browser-page {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    min-height: 0;
+    padding: 1rem 1.5rem;
+}
+
+.studio-template-browser-page__header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.studio-template-browser-page__header p {
+    margin: 0.25rem 0 0;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-template-browser-page > .studio-template-browser {
+    flex: 1 1 auto;
+}

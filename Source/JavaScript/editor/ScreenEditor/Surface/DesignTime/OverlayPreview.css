@@ -1,0 +1,84 @@
+/* An overlay shown in place: a dashed frame that says it is an overlay, around its own content. The frame is design-time chrome; what is in
+   it is drawn by the same components, with the same theme, as when the overlay is open. */
+.studio-overlay-preview {
+    position: relative;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 22px 8px 8px;
+    border: 1px dashed var(--cratis-primary-color, currentColor);
+    border-radius: var(--cratis-border-radius, 6px);
+    background: color-mix(in srgb, var(--cratis-primary-color, currentColor) 5%, transparent);
+}
+
+.studio-overlay-preview__tag {
+    position: absolute;
+    top: 2px;
+    left: 8px;
+    font: 600 0.6875rem/1.2 system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cratis-primary-color, currentColor);
+}
+
+/* The window itself reads from the theme's overlay tokens, as the opened dialog does. */
+.studio-overlay-preview__window {
+    border: 1px solid var(--p-overlay-modal-border-color, var(--p-content-border-color, currentColor));
+    border-radius: var(--p-overlay-modal-border-radius, var(--p-content-border-radius, 6px));
+    background: var(--p-overlay-modal-background, var(--p-content-background, transparent));
+    color: var(--p-overlay-modal-color, var(--p-text-color, inherit));
+    box-shadow: var(--p-overlay-modal-shadow, 0 8px 24px rgba(0, 0, 0, 0.2));
+}
+
+.studio-overlay-preview__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: var(--p-overlay-modal-padding, 1rem);
+}
+
+.studio-overlay-preview__body {
+    padding: 0 var(--p-overlay-modal-padding, 1rem) var(--p-overlay-modal-padding, 1rem);
+}
+
+.studio-overlay-preview__tooltip {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.studio-overlay-preview__bubble {
+    padding: 4px 8px;
+    border-radius: var(--p-tooltip-border-radius, 4px);
+    background: var(--p-tooltip-background, #334155);
+    color: var(--p-tooltip-color, #fff);
+    font-size: 0.8125rem;
+}
+
+.studio-overlay-preview__masked {
+    position: relative;
+    min-height: 3rem;
+}
+
+.studio-overlay-preview__mask {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--p-mask-background, rgba(0, 0, 0, 0.35));
+    color: var(--p-mask-color, #fff);
+    border-radius: inherit;
+}
+
+.studio-overlay-preview__busy {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: var(--p-overlay-modal-padding, 1rem);
+    border: 1px solid var(--p-overlay-modal-border-color, var(--p-content-border-color, currentColor));
+    border-radius: var(--p-overlay-modal-border-radius, var(--p-content-border-radius, 6px));
+    background: var(--p-overlay-modal-background, var(--p-content-background, transparent));
+    color: var(--p-overlay-modal-color, var(--p-text-color, inherit));
+}

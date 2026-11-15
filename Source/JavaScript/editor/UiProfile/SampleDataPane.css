@@ -1,0 +1,115 @@
+.studio-sample-data {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.studio-sample-data__section h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-sample-data__hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-sample-data__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studio-sample-data__list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+}
+
+.studio-sample-data__list li .studio-sample-data__hint {
+    grid-column: 1;
+}
+
+.studio-sample-data__list li button {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+}
+
+.studio-sample-data__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.studio-sample-data__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-sample-data__form input[type='text'],
+.studio-sample-data__form select,
+.studio-sample-data__form textarea,
+.studio-sample-data__table select {
+    padding: 0.5rem 0.625rem;
+    background: var(--cratis-surface-card, transparent);
+    color: var(--cratis-text-color);
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    font: inherit;
+}
+
+.studio-sample-data__form textarea {
+    font-family: ui-monospace, monospace;
+    font-size: 0.8rem;
+}
+
+.studio-sample-data__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.studio-sample-data__table th,
+.studio-sample-data__table td {
+    padding: 0.375rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--cratis-surface-border);
+    font-weight: 400;
+}
+
+.studio-sample-data__table thead th {
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-sample-data__problems {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--cratis-red-500, #d33);
+    border-radius: var(--cratis-border-radius);
+    font-size: 0.8rem;
+}
+
+.studio-sample-data__problems ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+}
+
+.studio-sample-data__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}

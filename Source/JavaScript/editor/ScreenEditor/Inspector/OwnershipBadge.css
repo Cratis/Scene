@@ -1,0 +1,14 @@
+.studio-editor-ownership-badge {
+    flex: 0 0 auto;
+    padding: 0 6px;
+    border-radius: var(--cratis-border-radius);
+    font-size: 0.7rem;
+    line-height: 1.4;
+    background: var(--cratis-info-background);
+    color: var(--cratis-info-text);
+}
+
+.studio-editor-ownership-badge[data-ownership='configurableInherited'] {
+    background: var(--cratis-success-background);
+    color: var(--cratis-success-text);
+}

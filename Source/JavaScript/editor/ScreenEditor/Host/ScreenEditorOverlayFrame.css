@@ -1,0 +1,23 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* Studio chrome that slides in from the right edge beside the window; it is never part of the designed screen. */
+.prototype-editor-overlay-inspector {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+    border-left: 1px solid var(--cratis-surface-border);
+    box-shadow: var(--cratis-shadow-overlay);
+    transform: translateX(100%);
+    transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 12;
+}
+
+.prototype-editor-overlay-inspector--open {
+    transform: translateX(0);
+}

@@ -1,0 +1,74 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-bindings-lens {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    overflow: visible;
+}
+
+.studio-bindings-lens__mark {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px dashed #4f9cf7;
+    border-radius: 4px;
+}
+
+.studio-bindings-lens__mark--query,
+.studio-bindings-lens__mark--filter {
+    border-color: #38b27a;
+}
+
+.studio-bindings-lens__mark--unlinkedHook {
+    border-color: #e8a317;
+}
+
+.studio-bindings-lens__mark--unboundText {
+    border: 1px solid #ff4d4f;
+    box-shadow: 0 0 8px 2px rgba(255, 77, 79, 0.75);
+}
+
+.studio-bindings-lens__mark--blocked {
+    border-style: solid;
+    border-color: #8a8f98;
+}
+
+.studio-bindings-lens__chip {
+    position: absolute;
+    left: -1px;
+    top: -17px;
+    padding: 0 5px;
+    font: 600 10px/16px system-ui, sans-serif;
+    white-space: nowrap;
+    color: #fff;
+    background: #2f6fbd;
+    border-radius: 3px;
+}
+
+.studio-bindings-lens__mark--query .studio-bindings-lens__chip,
+.studio-bindings-lens__mark--filter .studio-bindings-lens__chip {
+    background: #23805a;
+}
+
+.studio-bindings-lens__mark--unlinkedHook .studio-bindings-lens__chip {
+    background: #b57d0c;
+}
+
+.studio-bindings-lens__mark--unboundText .studio-bindings-lens__chip {
+    background: #c9302c;
+}
+
+.studio-bindings-lens__reason {
+    position: absolute;
+    left: -1px;
+    top: 100%;
+    margin-top: 2px;
+    padding: 1px 6px;
+    font: 500 10px/14px system-ui, sans-serif;
+    white-space: nowrap;
+    color: #3d2f00;
+    background: #ffe8a3;
+    border-radius: 3px;
+}

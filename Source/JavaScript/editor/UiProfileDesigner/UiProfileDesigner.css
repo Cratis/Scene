@@ -1,0 +1,40 @@
+.studio-editor-ui-profile-designer section {
+    margin-bottom: 1rem;
+}
+
+.studio-editor-ui-profile-designer header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    opacity: 0.75;
+    margin-bottom: 0.25rem;
+}
+
+.studio-editor-ui-profile-designer-packages,
+.studio-editor-ui-profile-designer-collisions,
+.studio-editor-ui-profile-designer-themes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.studio-editor-ui-profile-designer-packages li,
+.studio-editor-ui-profile-designer-themes li {
+    padding: 0.375rem 0.75rem;
+    border-top: 1px solid var(--surface-border);
+}
+
+.studio-editor-ui-profile-designer-themes li {
+    cursor: pointer;
+}
+
+.studio-editor-ui-profile-designer-collisions li {
+    padding: 0.375rem 0.75rem;
+    border-top: 1px solid var(--surface-border);
+    background: var(--yellow-100);
+    color: var(--yellow-900);
+}
+
+.studio-editor-ui-profile-designer-collision-name {
+    font-weight: 600;
+}

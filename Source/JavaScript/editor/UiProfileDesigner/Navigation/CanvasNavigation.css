@@ -1,0 +1,87 @@
+.studio-uiprofile-canvas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    min-height: 0;
+}
+
+.studio-uiprofile-canvas .studio-uiprofile-canvas__frame {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 0;
+}
+
+.studio-uiprofile-canvas__frame[data-device='mobile'] {
+    border-width: 8px;
+    border-radius: 28px;
+    box-shadow: 0 0 0 1px var(--cratis-surface-border);
+}
+
+.studio-uiprofile-canvas__footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 4px 0;
+    font-size: 0.85em;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-uiprofile-canvas__problems {
+    margin-inline-start: auto;
+    color: var(--cratis-warning-text-color, #ffb74d);
+}
+
+.studio-uiprofile-canvas__hint {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-uiprofile-showing {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.studio-uiprofile-showing__select {
+    max-width: 280px;
+    padding: 2px 6px;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+}
+
+.studio-uiprofile-peek {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 12px;
+    border: 1px solid var(--cratis-primary-color, #6366f1);
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+    font-size: 0.9em;
+}
+
+.studio-uiprofile-peek__text {
+    margin-inline-end: auto;
+    font-weight: 600;
+}
+
+.studio-uiprofile-peek__action {
+    border: none;
+    background: transparent;
+    color: var(--cratis-primary-color, #6366f1);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* The navigation entry the author selected on the canvas (design mode). */
+.studio-uiprofile-canvas [data-design-selected='true'] {
+    outline: 2px solid var(--cratis-primary-color, #6366f1);
+    outline-offset: -2px;
+}
+
+.studio-uiprofile-canvas[data-mode='design'] .scene-preview-host {
+    cursor: default;
+}

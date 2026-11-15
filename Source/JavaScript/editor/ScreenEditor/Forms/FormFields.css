@@ -1,0 +1,38 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* A command form's fields, drawn the same in the screen editor and in the preview (FormFields). */
+.studio-form-fields {
+    display: grid;
+    gap: .75rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.studio-form-fields__field {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    min-width: 0;
+    font-size: .875rem;
+}
+
+.studio-form-fields__field--checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+
+.studio-form-fields__field input:not([type='checkbox']) {
+    width: 100%;
+    box-sizing: border-box;
+    padding: .5rem .65rem;
+    border: 1px solid color-mix(in srgb, var(--cratis-text-color, currentColor) 25%, transparent);
+    border-radius: var(--cratis-border-radius, .5rem);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.studio-form-fields__field input[readonly] {
+    cursor: inherit;
+}

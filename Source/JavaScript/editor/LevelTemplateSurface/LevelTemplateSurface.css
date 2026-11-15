@@ -1,0 +1,354 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-level-surface {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.studio-level-surface__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.studio-level-surface__controls label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.studio-level-surface__screens {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studio-level-surface__zoom,
+.studio-level-surface__saving {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-level-surface__notice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.625rem 0.75rem;
+    border: 1px dashed var(--cratis-surface-border);
+    border-radius: 6px;
+    background: var(--cratis-surface-card);
+    font-size: 0.85rem;
+}
+
+.studio-level-surface__notice-text {
+    margin: 0;
+}
+
+.studio-level-surface__notice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.studio-level-surface__frame {
+    display: flex;
+    justify-content: center;
+}
+
+.studio-level-surface__window {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 6px;
+    background: var(--cratis-surface-card);
+}
+
+.studio-level-surface__title-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    border-bottom: 1px solid var(--cratis-surface-border);
+    background: var(--cratis-surface-card);
+}
+
+.studio-level-surface__title {
+    font-size: 11px;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-level-surface__body {
+    position: relative;
+    overflow: hidden;
+    background: var(--cratis-surface-ground);
+
+    /* A blueprint lays its shell out with fixed positioning; a transform makes the stage the containing block, so the preview stays inside it. */
+    transform: translateZ(0);
+    contain: layout paint;
+}
+
+.studio-level-surface__stage {
+    position: relative;
+    transform-origin: 0 0;
+}
+
+.studio-level-surface__surface {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    outline: none;
+}
+
+/* An outlet with nothing in it draws nothing, and an outlet that is not drawn cannot be outlined: it keeps a box to be hooked into. */
+.studio-level-surface__surface [data-scene-outlet] {
+    min-width: 96px;
+    min-height: 28px;
+}
+
+/* The editor's marks sit over the template and never take part in its layout; only the controls take the pointer. */
+.studio-level-surface__chrome {
+    position: absolute;
+    inset: 0;
+    z-index: 2147483601;
+    pointer-events: none;
+}
+
+.studio-level-surface__outlet[data-selected='true'] .studio-design-frame {
+    border-color: #2f62e8;
+    border-style: solid;
+}
+
+.studio-level-surface__tags {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.studio-level-surface__kind,
+.studio-level-surface__region {
+    padding: 0 8px;
+    border: 1px solid #c3c8d2;
+    border-radius: 999px;
+    background: #fff;
+    color: #5b6472;
+    font: 400 11px/16px ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: nowrap;
+}
+
+.studio-level-surface__region {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.studio-level-surface__region:disabled {
+    cursor: default;
+}
+
+.studio-level-surface__region[data-sources='inherit'] {
+    border-color: #b9a8f5;
+    background: #f1ecff;
+    color: #5b3fc4;
+}
+
+.studio-level-surface__region[data-sources='extend'] {
+    border-color: #9fd0b3;
+    background: #e9f7ef;
+    color: #1f6b3d;
+}
+
+.studio-level-surface__region[data-sources='override'] {
+    border-color: #f0c27b;
+    background: #fff3de;
+    color: #8a5a0a;
+}
+
+.studio-level-surface__add {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #2f62e8;
+    border-radius: 999px;
+    background: #fff;
+    color: #2f62e8;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.studio-level-surface__add:hover,
+.studio-level-surface__add:focus-visible {
+    background: #2f62e8;
+    color: #fff;
+}
+
+.studio-level-surface__add:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.studio-level-surface__hidden {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    max-width: 420px;
+    pointer-events: auto;
+    font: 400 11px/16px ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #5b6472;
+}
+
+.studio-level-surface__bring-back {
+    padding: 0 8px;
+    border: 1px dashed #c3c8d2;
+    border-radius: 999px;
+    background: #fff;
+    color: #5b6472;
+    font: inherit;
+    cursor: pointer;
+}
+
+.studio-level-surface__bring-back:hover {
+    border-color: #2f62e8;
+    color: #2f62e8;
+}
+
+.studio-level-surface__picker,
+.studio-level-surface__modes {
+    position: absolute;
+    z-index: 5;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #c3c8d2;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgb(15 23 42 / 18%);
+    color: #1f2937;
+    font: 400 13px/18px system-ui, sans-serif;
+    pointer-events: auto;
+}
+
+.studio-level-surface__picker-title {
+    margin: 0 0 6px;
+    font-weight: 600;
+}
+
+.studio-level-surface__picker-search {
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 6px;
+    padding: 6px 8px;
+    border: 1px solid #c3c8d2;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.studio-level-surface__picker-empty {
+    margin: 4px 0;
+    color: #5b6472;
+}
+
+.studio-level-surface__picker-list,
+.studio-level-surface__modes ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 240px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.studio-level-surface__picker-list button,
+.studio-level-surface__modes button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-level-surface__picker-list button:hover,
+.studio-level-surface__picker-list button:focus-visible,
+.studio-level-surface__modes button:hover,
+.studio-level-surface__modes button:focus-visible {
+    border-color: #2f62e8;
+    background: #eef3ff;
+}
+
+.studio-level-surface__modes button[aria-checked='true'] {
+    border-color: #2f62e8;
+}
+
+.studio-level-surface__picker-origin,
+.studio-level-surface__mode-description {
+    color: #5b6472;
+    font-size: 12px;
+}
+
+.studio-level-surface__mode-title {
+    font-weight: 600;
+}
+
+.studio-level-surface__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.studio-level-surface__undrawn {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-level-surface__none {
+    margin: 0;
+    color: var(--cratis-text-color-secondary);
+}
+
+/* The outlets a template exposes but does not draw: a strip over the top of the preview, because a template lays its shell out over the whole stage. */
+.studio-level-surface__strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2147483600;
+    padding: 30px 28px 6px;
+    border-bottom: 1px dashed var(--cratis-surface-border);
+    background: var(--cratis-surface-card, #fff);
+}
+
+.studio-level-surface__strip > * {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.studio-level-surface__strip [data-scene-outlet] {
+    min-width: 340px;
+    margin: 0 0 30px;
+}

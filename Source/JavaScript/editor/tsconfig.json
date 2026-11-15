@@ -1,0 +1,53 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "dist/esm",
+        "types": [
+            "vite/client"
+        ],
+        "paths": {
+            "@cratis/scene.model/*": ["../model/dist/esm/*"],
+            "@cratis/scene.engine/*": ["../engine/dist/esm/*"],
+            "@cratis/scene.react/*": ["../react/dist/esm/*"]
+        }
+    },
+    "files": [
+        "../../../test.d.ts",
+        "../../../global.d.ts",
+        "global.d.ts"
+    ],
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "IconLibraries/Lucide/catalog.json"
+    ],
+    "references": [
+        { "path": "../model" },
+        { "path": "../engine" },
+        { "path": "../react" },
+        { "path": "../tailwind" },
+        { "path": "../primereact" },
+        { "path": "../components" },
+        { "path": "../blueprint.approvals" },
+        { "path": "../blueprint.bookings" },
+        { "path": "../blueprint.catalog" },
+        { "path": "../blueprint.components" },
+        { "path": "../blueprint.contracts" },
+        { "path": "../blueprint.crm" },
+        { "path": "../blueprint.customer-portal" },
+        { "path": "../blueprint.default" },
+        { "path": "../blueprint.invoicing" },
+        { "path": "../blueprint.orders" },
+        { "path": "../blueprint.ticketing" },
+        { "path": "../blueprint.vendors" },
+        { "path": "../blueprint.work-orders" }
+    ],
+    "exclude": [
+        "dist",
+        "vite.config.mts",
+        "vitest.browser.config.mts",
+        "vitest.setup.ts",
+        ".storybook"
+    ]
+}

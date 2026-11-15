@@ -1,0 +1,47 @@
+.studio-window-title-bar {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    flex-shrink: 0;
+    padding-inline: 12px;
+    box-sizing: border-box;
+    border-bottom: 1.5px solid var(--cratis-surface-border);
+    border-radius: 6px 6px 0 0;
+    background: var(--cratis-surface-section);
+}
+
+.studio-window-title-bar__controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    min-width: 0;
+}
+
+/* On a narrow window the controls would run past its edge, out of reach. What can be read elsewhere gives way first: the size label
+   (the window shows its own size) and the save state's text, which stays for assistive technology and for the status role. */
+.studio-window-title-bar {
+    container-type: inline-size;
+    container-name: studio-window-title-bar;
+}
+
+@container studio-window-title-bar (max-width: 560px) {
+    .studio-window-title-bar .studio-editor-viewport-controls__size {
+        display: none;
+    }
+
+    .studio-window-title-bar .studio-screen-editor-window__state {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}
+
+.studio-window-title-bar__title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}

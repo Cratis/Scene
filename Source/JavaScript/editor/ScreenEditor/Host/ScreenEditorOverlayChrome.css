@@ -1,0 +1,90 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* ── Prototype Editor Overlay ─────────────────────────────────────────────── */
+
+.prototype-editor-overlay-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    /* Intentionally below the application toolbar (z-index: 100) so the toolbar
+       remains usable when the prototype editor is open. See Source/Core/zIndex.ts. */
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    pointer-events: auto;
+}
+
+.prototype-editor-overlay-backdrop--visible {
+    opacity: 1;
+}
+
+.prototype-editor-overlay-content {
+    position: fixed;
+    /* width, height, margin-left, margin-top are set inline for resizing */
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
+    opacity: 0;
+    transform: scale(0.08);
+}
+
+.prototype-editor-overlay-content--visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.prototype-editor-overlay-content--closing {
+    opacity: 0;
+    transform: scale(0.08);
+}
+
+/* ── Resize handles ─────────────────────────────────────────────────── */
+.prototype-editor-overlay-resize {
+    position: absolute;
+    z-index: 10;
+}
+
+/* Edge handles */
+.prototype-editor-overlay-resize--n {
+    top: 0; left: 8px; right: 8px; height: 6px;
+    cursor: ns-resize;
+}
+.prototype-editor-overlay-resize--s {
+    bottom: 0; left: 8px; right: 8px; height: 6px;
+    cursor: ns-resize;
+}
+.prototype-editor-overlay-resize--e {
+    right: 0; top: 8px; bottom: 8px; width: 6px;
+    cursor: ew-resize;
+}
+.prototype-editor-overlay-resize--w {
+    left: 0; top: 8px; bottom: 8px; width: 6px;
+    cursor: ew-resize;
+}
+
+/* Corner handles */
+.prototype-editor-overlay-resize--ne {
+    top: 0; right: 0; width: 12px; height: 12px;
+    cursor: nesw-resize;
+}
+.prototype-editor-overlay-resize--nw {
+    top: 0; left: 0; width: 12px; height: 12px;
+    cursor: nwse-resize;
+}
+.prototype-editor-overlay-resize--se {
+    bottom: 0; right: 0; width: 12px; height: 12px;
+    cursor: nwse-resize;
+}
+.prototype-editor-overlay-resize--sw {
+    bottom: 0; left: 0; width: 12px; height: 12px;
+    cursor: nesw-resize;
+}

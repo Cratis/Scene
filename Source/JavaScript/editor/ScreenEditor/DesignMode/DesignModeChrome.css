@@ -1,0 +1,320 @@
+/* Design-mode chrome (spec 7, p12-1, p13-3, p14-1): the "+" that adds an item, the floating toolbar of the selected item, and the popover of a
+   choice. It is drawn over the rendered screen by the editor - never part of it - so none of it is in preview or Stage. The chrome layer takes no
+   pointer events of its own; these parts take them back. */
+.studio-design-add,
+.studio-design-toolbar,
+.studio-design-popover {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    font: 500 13px/1.3 Inter, system-ui, sans-serif;
+}
+
+/* The solid near-black circle with a white plus, right after the last item of the region. */
+.studio-design-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #161b22;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.studio-design-add svg {
+    width: 16px;
+    height: 16px;
+}
+
+.studio-design-add:hover:not(:disabled) {
+    background: #2a313c;
+}
+
+/* A screen open to be read cannot be added to: the "+" is drawn dimmed, and its title says why. */
+.studio-design-add:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.studio-design-add:focus-visible,
+.studio-design-toolbar button:focus-visible,
+.studio-design-toolbar input:focus-visible {
+    outline: 2px solid #7ea0ff;
+    outline-offset: 1px;
+}
+
+/* The near-black rounded panel anchored to the selected item. */
+.studio-design-toolbar {
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 6px 8px;
+    border-radius: 14px;
+    background: #161b22;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    white-space: nowrap;
+}
+
+/* The compact form - an item of a sidebar - is three rows: the title, the chips, the buttons. */
+.studio-design-toolbar[data-compact='true'] {
+    flex-direction: column;
+    align-items: stretch;
+    width: 212px;
+    gap: 4px;
+    padding: 8px;
+}
+
+.studio-design-toolbar[data-compact='true'] .studio-design-toolbar__divider {
+    display: none;
+}
+
+.studio-design-toolbar__title {
+    box-sizing: border-box;
+    min-width: 8.5rem;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #3a424e;
+    border-radius: 9px;
+    background: #161b22;
+    color: #fff;
+    font: inherit;
+}
+
+.studio-design-toolbar__title::selection {
+    background: #2a55e0;
+    color: #fff;
+}
+
+.studio-design-toolbar__divider {
+    align-self: stretch;
+    width: 1px;
+    margin: 2px 2px;
+    background: #3a424e;
+}
+
+.studio-design-toolbar__chips,
+.studio-design-toolbar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.studio-design-toolbar__chip,
+.studio-design-toolbar__button,
+.studio-design-toolbar__text-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.studio-design-toolbar__chip svg,
+.studio-design-toolbar__button svg,
+.studio-design-toolbar__reason svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+}
+
+.studio-design-toolbar__chip:hover,
+.studio-design-toolbar__button:hover:not(:disabled),
+.studio-design-toolbar__text-action:hover,
+.studio-design-toolbar__chip[aria-expanded='true'] {
+    background: #2a313c;
+}
+
+/* A choice that has not been made - a button with no slice, an item linked to nothing - reads as waiting for one. */
+.studio-design-toolbar__chip[data-unlinked='true'] {
+    color: #f5c15c;
+}
+
+.studio-design-toolbar__button {
+    justify-content: center;
+    width: 28px;
+    padding: 0;
+}
+
+.studio-design-toolbar__button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+/* An item that may not be changed: why, and what can be done about it, in one short row. */
+.studio-design-toolbar[data-read-only='true'] {
+    flex-wrap: nowrap;
+    gap: 14px;
+    padding: 8px 14px;
+}
+
+.studio-design-toolbar__reason {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #c4cad4;
+    font-weight: 400;
+}
+
+.studio-design-toolbar__text-action {
+    padding: 0 6px;
+    font-weight: 600;
+}
+
+/* The popover of a choice: a white card under the chip that opened it, holding the registry's editor for the property. */
+.studio-design-popover {
+    z-index: 6;
+    max-height: 420px;
+    overflow: auto;
+    padding: 12px;
+    border: 1px solid var(--cratis-surface-border, #d7dbe3);
+    border-radius: 14px;
+    background: var(--cratis-surface-card, #fff);
+    color: var(--cratis-text-color, #161b22);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+}
+
+.studio-design-popover:focus {
+    outline: none;
+}
+
+.studio-design-announcement {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* The light dashed box around a toolbar or a navigation list, with a small pill naming it on its top-left edge (spec p11-1). */
+.studio-design-frame {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px dashed #c3c8d2;
+    border-radius: 14px;
+    pointer-events: none;
+}
+
+.studio-design-frame__name {
+    position: absolute;
+    top: -9px;
+    left: 14px;
+    padding: 0 8px;
+    border: 1px solid #c3c8d2;
+    border-radius: 999px;
+    background: #fff;
+    color: #5b6472;
+    font: 400 11px/16px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* A topbar or a sidebar: the region itself, tagged with where its items come from (p04-1, p11-1, p12-3, p13-4); outlined in dashed blue when it is selected. */
+.studio-design-region {
+    position: absolute;
+    box-sizing: border-box;
+    pointer-events: none;
+    border: 2px dashed transparent;
+}
+
+.studio-design-region[data-selected='true'] {
+    border-color: #2f62e8;
+}
+
+.studio-design-region__tag {
+    position: absolute;
+    padding: 0 9px;
+    border: 1px solid #c3c8d2;
+    border-radius: 999px;
+    background: #fff;
+    color: #5b6472;
+    font: 400 11px/17px ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: nowrap;
+}
+
+/* The topbar's tag sits at the right end of its bottom edge; the sidebar's at the bottom-left of it. */
+.studio-design-region[data-region='topbar'] .studio-design-region__tag {
+    right: 12px;
+    bottom: -9px;
+}
+
+.studio-design-region[data-region='sidebar'] .studio-design-region__tag {
+    left: 12px;
+    bottom: 10px;
+}
+
+.studio-design-region__tag[data-sources='inherited'] {
+    border-color: #b9a8f5;
+    background: #f1ecff;
+    color: #5b3fc4;
+}
+
+/* The slice picker and the other lists in a popover read at the size the spec draws them (p14-2): 15px rows, 12px capital headings with the name at the left. */
+.studio-design-popover .studio-editor-select__option {
+    font-size: 15px;
+    padding: 9px 12px;
+}
+
+.studio-design-popover .studio-editor-select__option small {
+    font-size: 13px;
+}
+
+.studio-design-popover .studio-editor-select__group {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding-inline: 12px;
+}
+
+.studio-design-popover .studio-editor-select__option--chosen {
+    background: #e7efff;
+    color: #2f62e8;
+    font-weight: 500;
+}
+
+.studio-design-popover .studio-editor-select__option[aria-disabled='true'] {
+    color: #8a93a3;
+    cursor: default;
+    opacity: 1;
+}
+
+.studio-design-popover .studio-editor-select__option[aria-disabled='true']:hover {
+    background: transparent;
+}
+
+/* The slot the screen fills: a dashed near-black outline, its name in a mono pill inside the top-right corner (p12-1, p13-3). Design chrome only. */
+.studio-design-slot {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1.5px dashed #161b22;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.studio-design-slot__name {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    padding: 0 8px;
+    border: 1px solid #d7dbe3;
+    border-radius: 6px;
+    background: #fff;
+    color: #5b6472;
+    font: 400 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* An outlet's tag: where its items come from, as Scene resolves it for the level being edited ("Catalog + Products"). */
+.studio-design-frame__tag {
+    right: 8px;
+    top: -9px;
+}

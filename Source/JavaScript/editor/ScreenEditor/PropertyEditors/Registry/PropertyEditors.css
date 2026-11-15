@@ -1,0 +1,531 @@
+/* The look of the property editors (spec section 8): small-caps field labels, grey rounded inputs, chip groups whose chosen chip has a blue border
+   and a pale-blue fill, grey helper text. Everything an editor shows disabled stays visible with its value. */
+.studio-editor-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    min-width: 0;
+}
+
+.studio-editor-field--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.studio-editor-field__label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-field__control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.studio-editor-field--inline .studio-editor-field__control {
+    flex-direction: row;
+}
+
+.studio-editor-field__input,
+.studio-editor-select__trigger,
+.studio-editor-select__search {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 8px;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    color: inherit;
+    font: inherit;
+}
+
+.studio-editor-field__input:focus-visible,
+.studio-editor-select__trigger:focus-visible,
+.studio-editor-select__search:focus-visible,
+.studio-editor-chip:focus-visible,
+.studio-editor-segment:focus-visible,
+.studio-editor-switch:focus-visible {
+    outline: 2px solid var(--cratis-primary-color, #2563eb);
+    outline-offset: 1px;
+}
+
+.studio-editor-field__input[aria-invalid='true'],
+.studio-editor-select__trigger[aria-invalid='true'] {
+    border-color: var(--cratis-danger-text, #b00020);
+}
+
+.studio-editor-field__input:disabled,
+.studio-editor-select__trigger:disabled,
+.studio-editor-chip:disabled,
+.studio-editor-segment:disabled,
+.studio-editor-switch:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.studio-editor-field__problem {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--cratis-danger-text, #b00020);
+}
+
+.studio-editor-field__reason {
+    margin: 0;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    background: var(--cratis-warning-background, #fff7e0);
+    color: var(--cratis-warning-text, #7a5b00);
+}
+
+.studio-editor-number {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.studio-editor-number__unit {
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.8rem;
+}
+
+.studio-editor-chips,
+.studio-editor-segments,
+.studio-editor-color__tokens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.studio-editor-chip,
+.studio-editor-segment {
+    padding: 3px 12px;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 999px;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    color: inherit;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.studio-editor-chip--chosen,
+.studio-editor-segment--chosen {
+    border-color: var(--cratis-primary-color, #2563eb);
+    background: var(--cratis-highlight-bg, #e6efff);
+    color: var(--cratis-text-color, var(--cratis-primary-color, #1d4ed8));
+}
+
+.studio-editor-chip--error {
+    border-color: var(--cratis-danger-text, #b00020);
+    background: #fdecea;
+    color: var(--cratis-danger-text, #b00020);
+    cursor: default;
+}
+
+.studio-editor-segments {
+    gap: 0;
+}
+
+.studio-editor-segment {
+    border-radius: 0;
+}
+
+.studio-editor-segment:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.studio-editor-segment:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.studio-editor-switch {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 999px;
+    background: var(--cratis-surface-ground, #d8dbe0);
+    cursor: pointer;
+}
+
+.studio-editor-switch--on {
+    border-color: var(--cratis-primary-color, #2563eb);
+    background: var(--cratis-primary-color, #2563eb);
+}
+
+.studio-editor-switch__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 120ms;
+}
+
+.studio-editor-switch--on .studio-editor-switch__thumb {
+    transform: translateX(16px);
+}
+
+.studio-editor-select {
+    position: relative;
+    display: flex;
+    gap: 4px;
+    min-width: 0;
+}
+
+.studio-editor-select__trigger {
+    flex: 1;
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-editor-select__placeholder {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-select__clear {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-select__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    margin-top: 4px;
+    padding: 6px;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 10px;
+    background: var(--cratis-surface-card, #fff);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.studio-editor-select__options,
+.studio-editor-select__options ul {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: 240px;
+    overflow: auto;
+}
+
+.studio-editor-select__group {
+    padding: 6px 8px 2px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-select__option {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.studio-editor-select__option--active {
+    background: var(--cratis-highlight-bg, #eef2ff);
+}
+
+.studio-editor-select__option--chosen {
+    background: var(--cratis-highlight-bg, #e6efff);
+    font-weight: 600;
+}
+
+.studio-editor-select__option[aria-disabled='true'] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.studio-editor-select__option small,
+.studio-editor-select__empty {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-select__empty {
+    padding: 6px 8px;
+}
+
+.studio-editor-color {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.studio-editor-color__swatch {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.studio-editor-color__swatch--chosen {
+    outline: 2px solid var(--cratis-primary-color, #2563eb);
+    outline-offset: 2px;
+}
+
+.studio-editor-color__custom {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.studio-editor-list,
+.studio-editor-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    min-width: 0;
+}
+
+.studio-editor-list__row,
+.studio-editor-columns__row {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.studio-editor-columns__row {
+    flex-wrap: wrap;
+}
+
+.studio-editor-columns__width {
+    width: 64px;
+}
+
+.studio-editor-slot__diagram {
+    width: 120px;
+    margin-top: 6px;
+}
+
+.studio-editor-slot__page {
+    fill: var(--cratis-surface-ground, #f3f4f6);
+    stroke: var(--cratis-surface-border, #c8ccd2);
+}
+
+.studio-editor-slot__region {
+    fill: transparent;
+    stroke: var(--cratis-surface-border, #c8ccd2);
+    stroke-dasharray: 2 2;
+}
+
+.studio-editor-slot__region--chosen {
+    fill: var(--cratis-highlight-bg, #cfe0ff);
+    stroke: var(--cratis-primary-color, #2563eb);
+    stroke-dasharray: none;
+}
+
+.studio-editor-mode__prompt {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--cratis-warning-background, #fff7e0);
+}
+
+.studio-editor-summary {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* The tree of the application a navigation item can lead to (spec p11-2): "Not linked", then modules with their features indented. */
+.studio-editor-target {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.studio-editor-target__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.studio-editor-target__row:hover:not(:disabled) {
+    background: rgba(127, 127, 127, 0.12);
+}
+
+.studio-editor-target__row[data-chosen] {
+    background: #e7efff;
+    color: #2f62e8;
+    font-weight: 600;
+}
+
+.studio-editor-target__row[data-module] {
+    font-weight: 600;
+}
+
+.studio-editor-target__kind {
+    color: #8a93a3;
+    font: 400 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* The inheritance mode of a module's region as three cards (spec p13-1): the chosen one has a blue border and a pale-blue fill. */
+.studio-editor-mode-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.studio-editor-mode-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border: 1px solid #d7dbe3;
+    border-radius: 12px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.studio-editor-mode-card span {
+    color: #6b7482;
+    font-size: 12px;
+}
+
+.studio-editor-mode-card--chosen {
+    border-color: #2f62e8;
+    background: rgba(47, 98, 232, 0.16);
+}
+
+.studio-editor-mode-card--chosen span {
+    color: inherit;
+}
+
+/* An item a level above defines (spec p18-2): a violet chip and an amber note. */
+.studio-editor-chip--inherited {
+    border-color: #b9a8f5;
+    background: #f1ecff;
+    color: #5b3fc4;
+}
+
+.studio-editor-callout {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff1e0;
+    color: #8a4b08;
+    font-size: 12.5px;
+}
+
+.studio-editor-logo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 12px 0 0;
+    padding: 8px 10px;
+    border: 1px solid #d7dbe3;
+    border-radius: 10px;
+}
+
+.studio-editor-logo label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+}
+
+.studio-editor-logo[data-locked] {
+    border-style: dashed;
+    opacity: 0.75;
+}
+
+/* A list with sections - the slice picker (p14-2): headings in capitals, the name at the left and the module, or the kind, at the right. */
+.studio-editor-select__option small {
+    margin-inline-start: auto;
+    font-size: 0.78rem;
+}
+
+/* The panel of a select that is the whole of a popover: in the flow, no frame of its own, the list as tall as it needs (p14-2). */
+.studio-editor-select__panel--inline {
+    position: static;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    background: transparent;
+}
+
+.studio-editor-select__panel--inline .studio-editor-select__options {
+    max-height: 420px;
+}
+
+.studio-editor-select__panel--inline .studio-editor-select__group {
+    padding: 8px 10px 4px;
+}
+
+.studio-editor-select__panel--inline .studio-editor-select__option {
+    padding: 8px 10px;
+}
+
+.studio-editor-select__panel--inline {
+    flex: 1;
+    min-width: 0;
+}
+
+.studio-design-popover .studio-editor-field {
+    margin-top: 0;
+}
+
+.studio-design-popover .studio-editor-select__group {
+    padding-top: 10px;
+}
+
+.studio-design-popover .studio-editor-select__group:first-child {
+    padding-top: 2px;
+}
+
+/* The module and feature a run of options sits in, inside a section of the list (TB3): small, grey, not selectable. */
+.studio-editor-select__subgroup {
+    padding: 6px 12px 2px;
+    color: #8a93a3;
+    font-size: 11.5px;
+    list-style: none;
+}
+
+.studio-editor-target__row[aria-disabled='true'] {
+    color: #8a93a3;
+    cursor: default;
+}
+
+.studio-editor-target__row[aria-disabled='true']:hover {
+    background: transparent;
+}

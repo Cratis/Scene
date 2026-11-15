@@ -1,0 +1,38 @@
+.studio-shell-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.studio-shell-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    align-items: baseline;
+    padding: 12px;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 8px;
+    background: var(--cratis-surface-card);
+}
+
+.studio-shell-card__name { font-weight: 600; }
+
+.studio-shell-card__badge {
+    padding: 0 8px;
+    border-radius: 999px;
+    font-size: 0.75em;
+    border: 1px solid var(--cratis-surface-border);
+}
+
+.studio-shell-card__badge[data-source='blueprint'] { border-color: var(--cratis-primary-color); }
+.studio-shell-card__from,
+.studio-shell-card__pin { flex-basis: 100%; font-size: 0.85em; color: var(--cratis-text-color-secondary); }
+.studio-shell-card__pin[data-status='NotSatisfied'],
+.studio-shell-card__pin[data-status='Invalid'] { color: var(--cratis-danger-text-color, #ff8a80); }
+.studio-shell-card__pin[data-status='UpdateAvailable'],
+.studio-shell-card__pin[data-status='UpdateBlockedByPin'] { color: var(--cratis-primary-color); }
+
+.studio-shell-section__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.studio-shell-section__version { display: flex; flex-direction: column; gap: 4px; font-size: 0.9em; }
+
+.studio-shell-section__starts { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; border: 1px dashed var(--cratis-surface-border); border-radius: 6px; }
