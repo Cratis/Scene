@@ -94,6 +94,31 @@ The engine reads the subject once, selects once, and runs the chosen list with t
 
 The existing binding-expression `condition` remains unchanged, including host-owned `$guard` resolution. Existing `actions`-only bindings and the three-parameter C# `InteractionBinding` constructor remain available.
 
+## Running interactions from a host
+
+A host does not sequence actions itself. It asks `@cratis/scene.engine` which bindings respond, then hands them to the engine to run through its own `ActionDispatcher`:
+
+| Function | Does |
+| --- | --- |
+| `resolveBehaviors(attachments, kind)` | Collects the bindings that respond to a built-in interaction kind, in the order they run. Attachments are additive and ordered outermost first; a behavior's `order` wins over position. |
+| `resolveApplicationTriggerBehaviors`, `resolveSignalBehaviors`, `resolveEventBehaviors`, `resolveIntervalBehaviors` | The same, for a named application trigger, an extension component's signal, an observed domain event, and every interval binding. |
+| `runBindings(bindings, dispatcher, context)` | Runs the resolved bindings in order, honoring each one's guard. A navigation or a declined `confirm` ends the whole interaction. |
+| `runActions(actions, dispatcher, context)` | Runs one action list in order, with its `onSuccess`, `onFailure` and `onResult` continuations. |
+
+```typescript
+import { InteractionTriggerKind } from '@cratis/scene.model';
+import { resolveBehaviors, runBindings, InteractionStop } from '@cratis/scene.engine';
+
+const bindings = resolveBehaviors(attachments, InteractionTriggerKind.Click);
+const run = await runBindings(bindings, dispatcher, { resolve });
+
+if (run.stop === InteractionStop.Reported) {
+    // run.findings says what could not be done.
+}
+```
+
+Both run functions return an `InteractionRun`: `stop` (`Completed`, `Declined`, `Navigated` or `Reported`), the `findings` collected instead of thrown, and `ran`, the actions that actually ran. An action kind the engine does not know is reported and the sequence abandoned, never skipped.
+
 ## Guard vocabulary
 
 A comparison contains `kind: "comparison"`, a `left` subject reference, an `operator` and a scalar `right` literal. Supported operators are `Equal`, `NotEqual`, `GreaterThan`, `GreaterThanOrEqual`, `LessThan`, `LessThanOrEqual`, `Contains` and `StartsWith`.
