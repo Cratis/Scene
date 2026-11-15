@@ -49,35 +49,39 @@ the dialog". Every interactive adapter therefore seeds local state from its prop
 is intentional: a preview is operable rather than frozen, and the interaction stays local to the rendered
 component.
 
-## The token vocabulary
+## Design-system anatomy
 
-Thirteen semantic tokens, and every Scene package must agree on them — a vocabulary that grows per
-package is one no package can rely on. `primeReactTheme.css` is the only place the Scene names and
-PrimeReact's names meet.
+A component takes its look from the anatomy a design system declares - "the `primary` Button's `background`
+in `hover`" - and never from a token name, so every Scene package agrees on the components, not on a
+vocabulary. `primeReactTheme.css` is the only place Scene's anatomy and PrimeReact's names meet.
 
-| Scene token | CSS custom property | PrimeReact 11 design token |
+| Anatomy | CSS custom property | PrimeReact 11 design token |
 | --- | --- | --- |
-| `primary.color` | `--scene-primary-color` | `--p-primary-color` |
-| `primary.contrastColor` | `--scene-primary-contrast-color` | `--p-primary-contrast-color` |
-| `surface.background` | `--scene-surface-background` | `--p-surface-50` / `--p-surface-950` |
-| `surface.card` | `--scene-surface-card` | `--p-content-background` |
-| `surface.border` | `--scene-surface-border` | `--p-content-border-color` |
-| `surface.hover` | `--scene-surface-hover` | `--p-content-hover-background` |
-| `surface.overlay` | `--scene-surface-overlay` | `--p-overlay-popover-background` |
-| `text.color` | `--scene-text-color` | `--p-text-color` |
-| `text.mutedColor` | `--scene-text-muted-color` | `--p-text-muted-color` |
-| `highlight.background` | `--scene-highlight-background` | `--p-highlight-background` |
-| `highlight.color` | `--scene-highlight-color` | `--p-highlight-color` |
-| `content.borderRadius` | `--scene-content-border-radius` | `--p-content-border-radius` |
-| `focus.ring` | `--scene-focus-ring` | `--p-focus-ring-shadow` |
+| `Button` `primary` `background` | `--ds-button-primary-background` | `--p-primary-color` |
+| `Button` `primary` `text` | `--ds-button-primary-text` | `--p-primary-contrast-color` |
+| `Button` `primary` `shadow` in `focus` | `--ds-button-primary-shadow-focus` | `--p-focus-ring-shadow` |
+| `Shell` `default` `background` | `--ds-shell-default-background` | `--p-surface-50` / `--p-surface-950` |
+| `Shell` `default` `font` | `--ds-shell-default-font` | `--p-font-family` |
+| `Card` `default` `background` | `--ds-card-default-background` | `--p-content-background` |
+| `Card` `default` `border` | `--ds-card-default-border` | `--p-content-border-color` |
+| `Card` `default` `radius` | `--ds-card-default-radius` | `--p-content-border-radius` |
+| `Menu` `default` `background` in `hover` | `--ds-menu-default-background-hover` | `--p-content-hover-background` |
+| `Menu` `default` `background` / `text` in `selected` | `--ds-menu-default-background-selected`, `--ds-menu-default-text-selected` | `--p-highlight-background`, `--p-highlight-color` |
+| `Popover` `default` `background` | `--ds-popover-default-background` | `--p-overlay-popover-background` |
+| `Text` `default` `text` | `--ds-text-default-text` | `--p-text-color` |
+| `Text` `muted` `text` | `--ds-text-muted-text` | `--p-text-muted-color` |
+
+The package declares what it draws in `primeReactAnatomy`; a design system that asks for a part, variant or state
+a component does not draw is told so (`linkDesignSystem`) rather than approximated. See
+[Rendering the design system](../../../Documentation/blueprints/design-system.md).
 
 The v10 column of this table was an ad-hoc vocabulary that could only be learned by reading compiled
 stylesheets; v11's is one systematic `--p-*` namespace derived from the preset's own token paths, so
 the bridge shrank.
 
-The bridge runs both ways, and the scoping is load-bearing. On `:root`, each Scene token falls back to
+The bridge runs both ways, and the scoping is load-bearing. On `:root`, each anatomy variable falls back to
 the active preset's `--p-*` value. Inside `[data-scene-theme-root]` — the element `SceneThemeProvider` writes
-tokens onto — the Scene tokens are fed back onto PrimeReact's variables. The second rule must never move
+the design's anatomy onto — the anatomy is fed back onto PrimeReact's variables. The second rule must never move
 to `:root`: custom properties that reference each other on the *same* element form a cycle, are invalid
 at computed-value time, and resolve to nothing.
 

@@ -64,7 +64,7 @@ screen templates, three dialog templates and two themes.
 - **[Regions and slots](regions-and-slots.md)** — every region the two layouts expose.
 - **[Layout modes](layout-modes.md)** — all eight modes, and the mobile regime nobody chooses.
 - **[The template set](template-set.md)** — every screen and dialog template it ships.
-- **[Theme tokens](theme-tokens.md)** — the thirteen shared tokens, and every theme's attribution.
+- **[Rendering the design system](design-system.md)** — the resolved design system, component anatomy and how it becomes CSS, the default design system, and every theme's attribution.
 - **[Ship your own blueprint](ship-your-own-blueprint.md)** — when the default is not your look.
 - **[The CRM blueprint](crm-blueprint.md)** — the first domain blueprint: leads, contacts, companies and deals, with navigation and sample data.
 - **[The Ticketing blueprint](ticketing-blueprint.md)** — a support desk: queue, board, ticket pages, a public portal form and a knowledge base.

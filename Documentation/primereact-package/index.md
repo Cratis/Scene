@@ -119,11 +119,11 @@ together:
 
 ```mermaid
 flowchart LR
-    Theme["Scene Theme<br/>(name + 13 tokens)"]
+    Theme["Scene Theme<br/>(name + token values)"]
     Hook["usePrimeReactTheme"]
     Provider["SceneThemeProvider"]
     Preset["PrimeReactProvider<br/>--p-* properties"]
-    Tokens["--scene-* on the<br/>theme root element"]
+    Tokens["--ds-* anatomy on the<br/>theme root element"]
     Prime["PrimeReact components<br/>(read --p-*)"]
     Wrappers["Scene wrappers, core,<br/>layout CSS"]
 
@@ -134,14 +134,14 @@ flowchart LR
 
 Neither half is enough alone: drop the hook and PrimeReact's components render unstyled; drop the provider
 and the wrappers around them do not follow. [Switch themes live](./switch-themes-live.md) shows the wiring,
-and [Understanding design tokens](./understanding-design-tokens.md) explains the bridge in the middle.
+and [Understanding design-system anatomy](./understanding-design-tokens.md) explains the bridge in the middle.
 
 ## Where to go next
 
 | If you want to | Read |
 | --- | --- |
 | Know why `button` resolves here and not to `core` | [Understanding name resolution](./understanding-name-resolution.md) |
-| Understand the token vocabulary and the CSS bridge | [Understanding design tokens](./understanding-design-tokens.md) |
+| Understand the anatomy this package reads and the CSS bridge | [Understanding design-system anatomy](./understanding-design-tokens.md) |
 | Wire up a theme picker that switches without a reload | [Switch themes live](./switch-themes-live.md) |
 | Look up what an abstract name maps to | [Component reference](./component-reference.md) |
 | See every theme, its author and its license | [Theme reference](./theme-reference.md) |

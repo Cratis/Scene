@@ -2,7 +2,7 @@
   href: index.md
 - name: Understanding name resolution
   href: understanding-name-resolution.md
-- name: Understanding design tokens
+- name: Understanding design-system anatomy
   href: understanding-design-tokens.md
 - name: Switch themes live
   href: switch-themes-live.md

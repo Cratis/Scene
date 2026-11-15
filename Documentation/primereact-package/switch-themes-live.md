@@ -40,8 +40,8 @@ Theming a Scene screen still takes two pieces, but the first one changed complet
 `@primeuix/themes` preset plus its dark-mode selector. That is what makes `@primeuix/styled` emit the
 `--p-*` custom properties PrimeReact's own components read.
 
-`SceneThemeProvider` writes the same theme's semantic tokens onto the wrapping element, which is what
-reaches this package's own wrappers, `core`'s primitives, and any layout CSS reading `--scene-*`.
+`SceneThemeProvider` writes the same theme's resolved anatomy onto the wrapping element, which is what
+reaches this package's own wrappers, `core`'s primitives, and any layout CSS reading `--ds-*`.
 
 ```tsx
 import { useState } from 'react';
@@ -113,5 +113,5 @@ leaves PrimeReact's own styling to whichever package owns that theme.
 ## See also
 
 - [Theme reference](./theme-reference.md) — the 24 themes, their preset families and the attribution table.
-- [Understanding design tokens](./understanding-design-tokens.md) — what the thirteen Scene tokens mean and
+- [Understanding design-system anatomy](./understanding-design-tokens.md) — what the anatomy means and
   how the bridge resolves them.

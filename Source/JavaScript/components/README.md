@@ -209,24 +209,22 @@ screen that already writes the name.
 `dataTable` and `table` are the same adapter under two names, so adopting the package does not require
 rewriting screens.
 
-## Token bridge
+## Anatomy bridge
 
-`theme/sceneTokenBridge.css`, exported as `@cratis/scene.components/styles`, maps Scene's `--scene-*` tokens
-onto the `--cratis-*` names `@cratis/components` reads:
+`theme/sceneTokenBridge.css`, exported as `@cratis/scene.components/styles`, maps the anatomy a design system declares
+(`--ds-<component>-<variant>-<part>[-<state>]`) onto the `--cratis-*` names `@cratis/components` reads:
 
 ```css
---cratis-surface-card: var(--scene-surface-card, var(--p-content-background, var(--surface-card)));
-/*                         ^ Scene theme           ^ PrimeReact v11         ^ v10 legacy */
+--cratis-surface-card: var(--ds-card-default-background, var(--p-content-background, var(--surface-card)));
+/*                         ^ design-system anatomy       ^ PrimeReact v11         ^ v10 legacy */
 ```
 
-It extends the library's own fallback chain rather than replacing it, so a partial theme leaves the rest as
+It extends the library's own fallback chain rather than replacing it, so a design that declares fewer parts leaves the rest as
 the PrimeReact theme had it. The rules are scoped to `[data-scene-theme-root], [data-scene-theme]` — never
-`:root`, where `--scene-*` does not exist and every mapping would resolve to nothing.
+`:root`, where `--ds-*` does not exist and every mapping would resolve to nothing.
 
-The vocabulary is thirteen tokens, verified against `theme/themePresets.ts` in `@cratis/scene.primereact` so
-both packages write themes in one language: `primary.color`, `primary.contrastColor`, `surface.background`,
-`surface.card`, `surface.border`, `surface.hover`, `surface.overlay`, `text.color`, `text.mutedColor`,
-`highlight.background`, `highlight.color`, `content.borderRadius`, `focus.ring`.
+The anatomy it reads is that of the components the library draws - `Page`, `Card`, `Menu`, `Popover`, `Button` and `Text` - and is shared
+with `@cratis/scene.primereact`, so a design system drives both packages in one language.
 
 ## Deliberately not covered
 
