@@ -1,0 +1,68 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-template-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 11rem;
+    overflow: auto;
+}
+
+.studio-template-rail__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studio-template-rail__heading {
+    margin: 0.75rem 0 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-template-rail__row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border: 0;
+    border-radius: var(--cratis-border-radius);
+    background: transparent;
+    color: var(--cratis-text-color);
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-template-rail__row:hover {
+    background: var(--cratis-surface-hover, var(--cratis-surface-ground));
+}
+
+.studio-template-rail__row[aria-current='true'] {
+    background: var(--cratis-highlight-bg, var(--cratis-surface-ground));
+    font-weight: 600;
+}
+
+.studio-template-rail__row:focus-visible {
+    outline: 2px solid var(--cratis-primary-color);
+    outline-offset: -2px;
+}
+
+.studio-template-rail__label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.studio-template-rail__count {
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+}

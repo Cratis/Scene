@@ -1,0 +1,150 @@
+/* The toolbox (spec section 9): a filter, then Frequently used and one accordion group per category, each with its count at the right; every
+   component is a two-letter rounded badge and its name. The filter highlights what matched in yellow and hints when only a keyword did. */
+.studio-component-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 4px;
+    color: var(--cratis-text-color);
+}
+
+.studio-component-picker__filter {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 10px;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    color: inherit;
+    font: inherit;
+}
+
+.studio-component-picker__filter:focus-visible,
+.studio-component-picker__group-header:focus-visible,
+.studio-component-picker__row:focus-visible {
+    outline: 2px solid var(--cratis-primary-color, #2563eb);
+    outline-offset: 1px;
+}
+
+.studio-component-picker__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.studio-component-picker__group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 6px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-component-picker__group-header:hover,
+.studio-component-picker__row:hover {
+    background: var(--cratis-surface-hover, rgba(0, 0, 0, 0.05));
+}
+
+.studio-component-picker__chevron {
+    width: 1rem;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+.studio-component-picker__star {
+    color: #b7791f;
+    font-size: 1rem;
+}
+
+.studio-component-picker__group-title {
+    flex: 1;
+}
+
+.studio-component-picker__count {
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.studio-component-picker__rows {
+    margin: 0;
+    padding: 0 0 4px 20px;
+    list-style: none;
+}
+
+.studio-component-picker__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 6px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: grab;
+}
+
+.studio-component-picker__badge {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 1.6rem;
+    border: 1px solid var(--cratis-surface-border, #d0d0d0);
+    border-radius: 7px;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    color: var(--cratis-text-color-secondary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.studio-component-picker__label {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    min-width: 0;
+}
+
+.studio-component-picker__name mark {
+    padding: 0 1px;
+    border-radius: 3px;
+    background: #fde68a;
+    color: #1f2937;
+}
+
+.studio-component-picker__hint,
+.studio-component-picker__package,
+.studio-component-picker__note,
+.studio-component-picker__empty {
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.78rem;
+}
+
+.studio-component-picker__package {
+    flex: none;
+    font-size: 0.7rem;
+}
+
+.studio-component-picker__note,
+.studio-component-picker__empty {
+    margin: 4px 6px 0;
+}

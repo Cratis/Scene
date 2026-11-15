@@ -1,0 +1,104 @@
+.studio-screen-editor-window {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border: 1.5px solid var(--cratis-surface-border);
+    border-radius: 8px;
+    background: var(--cratis-surface-card);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.studio-screen-editor-window__canvas {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    background: var(--cratis-surface-ground);
+}
+
+.studio-screen-editor-window__notice-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.studio-screen-editor-window__notice p {
+    margin: 0;
+}
+
+.studio-screen-editor-window__notice {
+    margin: 0;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+    background: var(--cratis-surface-hover);
+}
+
+.studio-screen-editor-window__device {
+    margin: 0 auto;
+    background: var(--cratis-surface-ground);
+    box-shadow: 0 0 0 1px var(--cratis-surface-border);
+}
+
+.studio-screen-editor-unreadable {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 520px;
+    margin: 64px auto;
+    padding: 16px;
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+    border: 1px solid var(--cratis-surface-border);
+}
+
+.studio-screen-editor-unreadable > div {
+    display: flex;
+    gap: 8px;
+}
+
+/* The canvas is the viewport the screen is designed for: the surface fills it, so everything in it can be dropped on. */
+.studio-screen-editor-window__canvas,
+.studio-screen-editor-window__viewport {
+    display: flex;
+    flex-direction: column;
+}
+
+.studio-screen-editor-window__viewport {
+    flex: 1 0 auto;
+}
+
+.studio-screen-editor-window__state {
+    margin-right: auto;
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+    white-space: nowrap;
+}
+
+.studio-screen-editor-window__state[data-dirty] {
+    color: var(--cratis-warning-text);
+}
+
+/* The bar over a destination peeked at from the application's shell around the screen being edited. */
+.studio-screen-editor-window__peek {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 12px;
+    border-bottom: 1px solid var(--cratis-primary-color, #6366f1);
+    background: var(--cratis-surface-card);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.studio-screen-editor-window__peek button {
+    margin-inline-start: auto;
+    border: none;
+    background: transparent;
+    color: var(--cratis-primary-color, #6366f1);
+    text-decoration: underline;
+    cursor: pointer;
+}

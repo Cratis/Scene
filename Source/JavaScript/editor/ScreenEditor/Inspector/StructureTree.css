@@ -1,0 +1,84 @@
+.studio-editor-structure-tree {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+}
+
+.studio-editor-structure-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding-inline-end: 8px;
+    cursor: pointer;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+}
+
+.studio-editor-structure-row:hover {
+    background: var(--cratis-surface-hover);
+}
+
+.studio-editor-structure-row[aria-selected='true'] {
+    background: var(--cratis-highlight-bg);
+    color: var(--cratis-highlight-text-color);
+}
+
+.studio-editor-structure-row:focus-visible {
+    outline: 2px solid var(--cratis-focus-ring);
+    outline-offset: -2px;
+}
+
+/* Inherited rows read as secondary but stay fully legible: they can still be selected and inspected. */
+.studio-editor-structure-row[data-ownership='inherited'] .studio-editor-structure-row__name,
+.studio-editor-structure-row[data-ownership='configurableInherited'] .studio-editor-structure-row__name {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-structure-row[data-drop-zone='before'] { border-top-color: var(--cratis-primary-color); }
+.studio-editor-structure-row[data-drop-zone='after'] { border-bottom-color: var(--cratis-primary-color); }
+.studio-editor-structure-row[data-drop-zone='inside'] { outline: 2px dashed var(--cratis-primary-color); outline-offset: -2px; }
+
+.studio-editor-structure-row__toggle {
+    flex: 0 0 16px;
+    width: 16px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.studio-editor-structure-row__name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.studio-editor-structure-empty,
+.studio-editor-structure-announcement {
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+/* A node of a tree of choices says what is chosen after its name; a node that owns problems carries a badge with their number. */
+.studio-editor-structure-row__detail {
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.85em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.studio-editor-structure-row[aria-selected='true'] .studio-editor-structure-row__detail {
+    color: inherit;
+}
+
+.studio-editor-structure-row__problems {
+    margin-inline-start: auto;
+    font-size: 0.85em;
+    font-weight: 600;
+}

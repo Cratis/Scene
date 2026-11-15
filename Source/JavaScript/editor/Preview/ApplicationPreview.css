@@ -1,0 +1,144 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-preview {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: .75rem;
+    box-sizing: border-box;
+    background: var(--cratis-surface-ground, #eceef3);
+}
+
+/* The rendered application: the real shell, drawn with no design chrome at all (PRV8). */
+.studio-preview__stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #161b22;
+    border-radius: 1.25rem;
+    background: var(--cratis-surface-ground, #fff);
+    /* The shell and the dialogs of the application are fixed to the viewport; here the stage is their viewport, so the strip stays above them. */
+    contain: layout paint;
+    isolation: isolate;
+}
+
+/* The application fills the stage to its bottom, in its own background - a short screen does not leave the rest of the stage another colour. */
+.studio-preview__stage > [data-scene-theme-root],
+.studio-preview__stage .scene-preview-host,
+.studio-preview__stage .scene-preview-host > [data-scene-slot='primary'] {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.studio-preview__stage .scene-preview-host > [data-scene-slot='primary'] > * {
+    flex: 1 0 auto;
+}
+
+.studio-preview__status {
+    margin: 1rem;
+    color: var(--cratis-text-color-secondary, #555);
+}
+
+/* The table and the summary of a screenplay screen, drawn with the rows of the sample data (previewDataComponents). */
+.studio-preview-data {
+    width: 100%;
+    overflow: auto;
+}
+
+.studio-preview-data table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+.studio-preview-data th,
+.studio-preview-data td {
+    padding: .45rem .75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--cratis-surface-border, #dfe3ea);
+}
+
+.studio-preview-data th {
+    font-weight: 600;
+    color: var(--cratis-text-color-secondary, #5b6475);
+}
+
+.studio-preview-data--summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: .75rem 1.5rem;
+    margin: 0;
+}
+
+.studio-preview-data--summary dt {
+    font-size: .8rem;
+    color: var(--cratis-text-color-secondary, #5b6475);
+}
+
+.studio-preview-data--summary dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.studio-preview-action {
+    display: inline-flex;
+    align-self: flex-start;
+    justify-self: start;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem .9rem;
+    border: 1px solid var(--cratis-primary-color);
+    border-radius: var(--cratis-border-radius, .5rem);
+    background: var(--cratis-primary-color);
+    color: var(--cratis-primary-color-text);
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.25;
+    cursor: pointer;
+}
+
+.studio-preview-command-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    width: 100%;
+}
+
+/* A dialog's button row, at its end as the screen editor draws it. */
+.studio-preview-command-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+}
+
+.studio-preview-action:hover {
+    background: color-mix(in srgb, var(--cratis-primary-color) 85%, var(--cratis-text-color));
+}
+
+.studio-preview-action:focus-visible {
+    outline: 2px solid var(--cratis-primary-color);
+    outline-offset: 2px;
+}
+
+.studio-preview-data__row--interactive {
+    cursor: pointer;
+}
+
+.studio-preview-data__row--interactive:hover td {
+    background: var(--cratis-surface-hover, #f1f4f9);
+}
+
+/* The task dialog names the slice it is for as "State Change · DraftProduct" - the model's words, not the person's (Cratis/Scene#314). */
+.scene-preview-host .scene-slice-dialog-subtitle {
+    display: none;
+}

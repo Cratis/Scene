@@ -1,0 +1,11 @@
+/* PrimeReact 11 derives every light and dark value with CSS `light-dark()`, which follows `color-scheme`. The host around a screen - Studio's
+   own chrome is dark - sets one of its own, and a theme root would inherit it whatever the profile's theme is. The theme says which scheme
+   it is (`data-scene-color-scheme`); the root takes it. Play and the editor's surface both draw inside this root, so inputs, cards, tags and
+   text come out in the theme's own scheme in both, and nowhere else. */
+.studio-profile-theme[data-scene-color-scheme='light'] {
+    color-scheme: light;
+}
+
+.studio-profile-theme[data-scene-color-scheme='dark'] {
+    color-scheme: dark;
+}

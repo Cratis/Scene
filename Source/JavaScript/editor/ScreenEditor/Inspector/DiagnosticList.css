@@ -1,0 +1,58 @@
+.studio-editor-diagnostics {
+    list-style: none;
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+
+.studio-editor-diagnostics li {
+    margin-bottom: 4px;
+    padding-block: 4px;
+}
+
+/* Each severity uses its text and background tokens as the pair they are designed to be. */
+.studio-editor-diagnostics [data-severity='error'] {
+    padding-inline: 8px;
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-danger-background);
+    color: var(--cratis-danger-text);
+}
+
+.studio-editor-diagnostics [data-severity='warning'] {
+    padding-inline: 8px;
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-warning-background);
+    color: var(--cratis-warning-text);
+}
+
+/* The wrapper announces the list; it takes no part in the layout. */
+.studio-editor-diagnostics__announce {
+    display: contents;
+}
+
+.studio-editor-diagnostics__severity {
+    margin-inline-end: 8px;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.studio-editor-diagnostics__where {
+    margin-inline-start: 8px;
+    opacity: 0.85;
+}
+
+.studio-editor-diagnostics__where::before {
+    content: '· ';
+}
+
+.studio-editor-diagnostics__jump {
+    margin-inline-start: 8px;
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}

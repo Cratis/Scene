@@ -1,0 +1,43 @@
+.studio-editor-inspector {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.studio-editor-inspector__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--cratis-surface-border);
+}
+
+.studio-editor-inspector__title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.studio-editor-inspector__close {
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.studio-editor-inspector__tabs {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+}
+
+/* The native lists the panel's pickers open take the theme, so their options read in dark and light alike instead of drawing light text on the browser's white list. */
+.studio-editor-inspector select,
+.studio-editor-inspector option,
+.studio-editor-inspector optgroup {
+    background-color: var(--cratis-surface-card, Canvas);
+    color: var(--cratis-text-color, CanvasText);
+}

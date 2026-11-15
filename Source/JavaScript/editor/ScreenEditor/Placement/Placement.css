@@ -1,0 +1,103 @@
+/* Where a hook opens its slice and when it is enabled (StudioIssues#1331): the choices that say why, shared by the floating item toolbar and the action editor. */
+.studio-placement {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 260px;
+}
+
+.studio-placement__choices {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.studio-placement__choice button,
+.studio-placement__slots button {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d7dbe3;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.studio-placement__choice span,
+.studio-placement__slots span,
+.studio-placement__slots em {
+    color: #6b7482;
+    font-size: 12px;
+    font-style: normal;
+}
+
+.studio-placement__choice[data-chosen] button,
+.studio-placement__slots li[data-chosen] button {
+    border-color: #2f62e8;
+    background: rgba(47, 98, 232, 0.12);
+}
+
+/* A choice that cannot be taken stays visible and says why. */
+.studio-placement__choice[data-unavailable] button,
+.studio-placement__slots li[data-unavailable] button {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.studio-placement__slots {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0 0 0 12px;
+    list-style: none;
+}
+
+.studio-placement__resolved,
+.studio-placement__note,
+.studio-placement__heading {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7482;
+}
+
+.studio-placement__heading {
+    font-weight: 600;
+}
+
+.studio-placement__resolved {
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(47, 98, 232, 0.08);
+    color: inherit;
+}
+
+.studio-placement__field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+}
+
+.studio-placement__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+}
+
+.studio-placement__steps li[data-outcome='blocked'] {
+    color: #a1341b;
+}
+
+.studio-placement__steps li[data-outcome='unchecked'] {
+    color: #6b7482;
+}

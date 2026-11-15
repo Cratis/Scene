@@ -1,0 +1,3089 @@
+[
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000103",
+    "name": "text",
+    "componentName": "Text",
+    "properties": {
+      "label": "text",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000002",
+    "name": "button",
+    "componentName": "Button",
+    "properties": {
+      "label": "button",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000003",
+    "name": "card",
+    "componentName": "Card",
+    "properties": {
+      "label": "card",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000004",
+    "name": "data",
+    "componentName": "Data",
+    "properties": {
+      "label": "data",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000108",
+    "name": "action",
+    "componentName": "Action",
+    "properties": {
+      "label": "action",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000006",
+    "name": "guarded-action",
+    "componentName": "Guarded-action",
+    "properties": {
+      "label": "guarded-action",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000106",
+    "name": "section",
+    "componentName": "Section",
+    "properties": {
+      "label": "section",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000008",
+    "name": "navigate",
+    "componentName": "Navigate",
+    "properties": {
+      "label": "navigate",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000104",
+    "name": "title",
+    "componentName": "Title",
+    "properties": {
+      "label": "title",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000115",
+    "name": "table",
+    "componentName": "Table",
+    "properties": {
+      "label": "table",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000050",
+    "name": "column",
+    "componentName": "Column",
+    "properties": {
+      "label": "column",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000107",
+    "name": "summary",
+    "componentName": "Summary",
+    "properties": {
+      "label": "summary",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000105",
+    "name": "field",
+    "componentName": "Field",
+    "properties": {
+      "label": "field",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000014",
+    "name": "code",
+    "componentName": "Code",
+    "properties": {
+      "label": "code",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000015",
+    "name": "file",
+    "componentName": "File",
+    "properties": {
+      "label": "file",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000016",
+    "name": "navigationBar",
+    "componentName": "NavigationBar",
+    "properties": {
+      "label": "navigationBar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000017",
+    "name": "slot",
+    "componentName": "Slot",
+    "properties": {
+      "label": "slot",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000018",
+    "name": "outletItems",
+    "componentName": "OutletItems",
+    "properties": {
+      "label": "outletItems",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000019",
+    "name": "sliceDialog",
+    "componentName": "SliceDialog",
+    "properties": {
+      "label": "sliceDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.InputText",
+    "id": "00000000-0000-4000-8000-000000000020",
+    "name": "inputText",
+    "componentName": "InputText",
+    "properties": {
+      "label": "inputText",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000021",
+    "name": "inputTextarea",
+    "componentName": "InputTextarea",
+    "properties": {
+      "label": "inputTextarea",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.InputNumber",
+    "id": "00000000-0000-4000-8000-000000000022",
+    "name": "inputNumber",
+    "componentName": "InputNumber",
+    "properties": {
+      "label": "inputNumber",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Password",
+    "id": "00000000-0000-4000-8000-000000000023",
+    "name": "password",
+    "componentName": "Password",
+    "properties": {
+      "label": "password",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.FloatLabel",
+    "id": "00000000-0000-4000-8000-000000000024",
+    "name": "floatLabel",
+    "componentName": "FloatLabel",
+    "properties": {
+      "label": "floatLabel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.IconField",
+    "id": "00000000-0000-4000-8000-000000000025",
+    "name": "iconField",
+    "componentName": "IconField",
+    "properties": {
+      "label": "iconField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000137",
+    "name": "dropdown",
+    "componentName": "Dropdown",
+    "properties": {
+      "label": "dropdown",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.MultiSelect",
+    "id": "00000000-0000-4000-8000-000000000027",
+    "name": "multiSelect",
+    "componentName": "MultiSelect",
+    "properties": {
+      "label": "multiSelect",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ListBox",
+    "id": "00000000-0000-4000-8000-000000000028",
+    "name": "listBox",
+    "componentName": "ListBox",
+    "properties": {
+      "label": "listBox",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.SelectButton",
+    "id": "00000000-0000-4000-8000-000000000029",
+    "name": "selectButton",
+    "componentName": "SelectButton",
+    "properties": {
+      "label": "selectButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Checkbox",
+    "id": "00000000-0000-4000-8000-000000000030",
+    "name": "checkbox",
+    "componentName": "Checkbox",
+    "properties": {
+      "label": "checkbox",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.MultiStateCheckbox",
+    "id": "00000000-0000-4000-8000-000000000031",
+    "name": "multiStateCheckbox",
+    "componentName": "MultiStateCheckbox",
+    "properties": {
+      "label": "multiStateCheckbox",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.RadioButton",
+    "id": "00000000-0000-4000-8000-000000000032",
+    "name": "radioButton",
+    "componentName": "RadioButton",
+    "properties": {
+      "label": "radioButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000033",
+    "name": "toggleSwitch",
+    "componentName": "ToggleButton",
+    "properties": {
+      "label": "toggleSwitch",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Slider",
+    "id": "00000000-0000-4000-8000-000000000034",
+    "name": "slider",
+    "componentName": "Slider",
+    "properties": {
+      "label": "slider",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Rating",
+    "id": "00000000-0000-4000-8000-000000000035",
+    "name": "rating",
+    "componentName": "Rating",
+    "properties": {
+      "label": "rating",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Knob",
+    "id": "00000000-0000-4000-8000-000000000036",
+    "name": "knob",
+    "componentName": "Knob",
+    "properties": {
+      "label": "knob",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.DatePicker",
+    "id": "00000000-0000-4000-8000-000000000037",
+    "name": "calendar",
+    "componentName": "DatePicker",
+    "properties": {
+      "label": "calendar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ColorPicker",
+    "id": "00000000-0000-4000-8000-000000000038",
+    "name": "colorPicker",
+    "componentName": "ColorPicker",
+    "properties": {
+      "label": "colorPicker",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000039",
+    "name": "chips",
+    "componentName": "Chips",
+    "properties": {
+      "label": "chips",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.AutoComplete",
+    "id": "00000000-0000-4000-8000-000000000040",
+    "name": "autoComplete",
+    "componentName": "AutoComplete",
+    "properties": {
+      "label": "autoComplete",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.TreeSelect",
+    "id": "00000000-0000-4000-8000-000000000041",
+    "name": "treeSelect",
+    "componentName": "TreeSelect",
+    "properties": {
+      "label": "treeSelect",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Editor",
+    "id": "00000000-0000-4000-8000-000000000042",
+    "name": "editor",
+    "componentName": "Editor",
+    "properties": {
+      "label": "editor",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.FileUpload",
+    "id": "00000000-0000-4000-8000-000000000043",
+    "name": "fileUpload",
+    "componentName": "FileUpload",
+    "properties": {
+      "label": "fileUpload",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Button",
+    "id": "00000000-0000-4000-8000-000000000044",
+    "name": "button",
+    "componentName": "Button",
+    "properties": {
+      "label": "button",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.SplitButton",
+    "id": "00000000-0000-4000-8000-000000000045",
+    "name": "splitButton",
+    "componentName": "SplitButton",
+    "properties": {
+      "label": "splitButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.SpeedDial",
+    "id": "00000000-0000-4000-8000-000000000046",
+    "name": "speedDial",
+    "componentName": "SpeedDial",
+    "properties": {
+      "label": "speedDial",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000047",
+    "name": "buttonGroup",
+    "componentName": "ButtonGroup",
+    "properties": {
+      "label": "buttonGroup",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.DataTable",
+    "id": "00000000-0000-4000-8000-000000000048",
+    "name": "dataTable",
+    "componentName": "DataTable",
+    "properties": {
+      "label": "dataTable",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.DataView",
+    "id": "00000000-0000-4000-8000-000000000051",
+    "name": "dataView",
+    "componentName": "DataView",
+    "properties": {
+      "label": "dataView",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.DataScroller",
+    "id": "00000000-0000-4000-8000-000000000052",
+    "name": "dataScroller",
+    "componentName": "DataScroller",
+    "properties": {
+      "label": "dataScroller",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Tree",
+    "id": "00000000-0000-4000-8000-000000000053",
+    "name": "tree",
+    "componentName": "Tree",
+    "properties": {
+      "label": "tree",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.TreeTable",
+    "id": "00000000-0000-4000-8000-000000000054",
+    "name": "treeTable",
+    "componentName": "TreeTable",
+    "properties": {
+      "label": "treeTable",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Timeline",
+    "id": "00000000-0000-4000-8000-000000000055",
+    "name": "timeline",
+    "componentName": "Timeline",
+    "properties": {
+      "label": "timeline",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Paginator",
+    "id": "00000000-0000-4000-8000-000000000056",
+    "name": "paginator",
+    "componentName": "Paginator",
+    "properties": {
+      "label": "paginator",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.OrderList",
+    "id": "00000000-0000-4000-8000-000000000057",
+    "name": "orderList",
+    "componentName": "OrderList",
+    "properties": {
+      "label": "orderList",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.PickList",
+    "id": "00000000-0000-4000-8000-000000000058",
+    "name": "pickList",
+    "componentName": "PickList",
+    "properties": {
+      "label": "pickList",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.OrgChart",
+    "id": "00000000-0000-4000-8000-000000000059",
+    "name": "organizationChart",
+    "componentName": "OrgChart",
+    "properties": {
+      "label": "organizationChart",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Chart",
+    "id": "00000000-0000-4000-8000-000000000060",
+    "name": "chart",
+    "componentName": "Chart",
+    "properties": {
+      "label": "chart",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Card",
+    "id": "00000000-0000-4000-8000-000000000061",
+    "name": "card",
+    "componentName": "Card",
+    "properties": {
+      "label": "card",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Panel",
+    "id": "00000000-0000-4000-8000-000000000062",
+    "name": "panel",
+    "componentName": "Panel",
+    "properties": {
+      "label": "panel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Accordion",
+    "id": "00000000-0000-4000-8000-000000000063",
+    "name": "accordion",
+    "componentName": "Accordion",
+    "properties": {
+      "label": "accordion",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Fieldset",
+    "id": "00000000-0000-4000-8000-000000000064",
+    "name": "fieldset",
+    "componentName": "Fieldset",
+    "properties": {
+      "label": "fieldset",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Divider",
+    "id": "00000000-0000-4000-8000-000000000065",
+    "name": "divider",
+    "componentName": "Divider",
+    "properties": {
+      "label": "divider",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Splitter",
+    "id": "00000000-0000-4000-8000-000000000066",
+    "name": "splitter",
+    "componentName": "Splitter",
+    "properties": {
+      "label": "splitter",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ScrollPanel",
+    "id": "00000000-0000-4000-8000-000000000067",
+    "name": "scrollPanel",
+    "componentName": "ScrollPanel",
+    "properties": {
+      "label": "scrollPanel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.TabView",
+    "id": "00000000-0000-4000-8000-000000000068",
+    "name": "tabView",
+    "componentName": "TabView",
+    "properties": {
+      "label": "tabView",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Toolbar",
+    "id": "00000000-0000-4000-8000-000000000069",
+    "name": "toolbar",
+    "componentName": "Toolbar",
+    "properties": {
+      "label": "toolbar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Stepper",
+    "id": "00000000-0000-4000-8000-000000000070",
+    "name": "stepper",
+    "componentName": "Stepper",
+    "properties": {
+      "label": "stepper",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000130",
+    "name": "dialog",
+    "componentName": "Dialog",
+    "properties": {
+      "label": "dialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ConfirmDialog",
+    "id": "00000000-0000-4000-8000-000000000072",
+    "name": "confirmDialog",
+    "componentName": "ConfirmDialog",
+    "properties": {
+      "label": "confirmDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000073",
+    "name": "overlayPanel",
+    "componentName": "OverlayPanel",
+    "properties": {
+      "label": "overlayPanel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000156",
+    "name": "sidebar",
+    "componentName": "Sidebar",
+    "properties": {
+      "label": "sidebar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Tooltip",
+    "id": "00000000-0000-4000-8000-000000000075",
+    "name": "tooltip",
+    "componentName": "Tooltip",
+    "properties": {
+      "label": "tooltip",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Menu",
+    "id": "00000000-0000-4000-8000-000000000076",
+    "name": "menu",
+    "componentName": "Menu",
+    "properties": {
+      "label": "menu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Menubar",
+    "id": "00000000-0000-4000-8000-000000000077",
+    "name": "menubar",
+    "componentName": "Menubar",
+    "properties": {
+      "label": "menubar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Breadcrumb",
+    "id": "00000000-0000-4000-8000-000000000078",
+    "name": "breadcrumb",
+    "componentName": "Breadcrumb",
+    "properties": {
+      "label": "breadcrumb",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.TabMenu",
+    "id": "00000000-0000-4000-8000-000000000079",
+    "name": "tabMenu",
+    "componentName": "TabMenu",
+    "properties": {
+      "label": "tabMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Steps",
+    "id": "00000000-0000-4000-8000-000000000080",
+    "name": "steps",
+    "componentName": "Steps",
+    "properties": {
+      "label": "steps",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.TieredMenu",
+    "id": "00000000-0000-4000-8000-000000000081",
+    "name": "tieredMenu",
+    "componentName": "TieredMenu",
+    "properties": {
+      "label": "tieredMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.PanelMenu",
+    "id": "00000000-0000-4000-8000-000000000082",
+    "name": "panelMenu",
+    "componentName": "PanelMenu",
+    "properties": {
+      "label": "panelMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ContextMenu",
+    "id": "00000000-0000-4000-8000-000000000083",
+    "name": "contextMenu",
+    "componentName": "ContextMenu",
+    "properties": {
+      "label": "contextMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.MegaMenu",
+    "id": "00000000-0000-4000-8000-000000000084",
+    "name": "megaMenu",
+    "componentName": "MegaMenu",
+    "properties": {
+      "label": "megaMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Dock",
+    "id": "00000000-0000-4000-8000-000000000085",
+    "name": "dock",
+    "componentName": "Dock",
+    "properties": {
+      "label": "dock",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Message",
+    "id": "00000000-0000-4000-8000-000000000086",
+    "name": "message",
+    "componentName": "Message",
+    "properties": {
+      "label": "message",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000087",
+    "name": "inlineMessage",
+    "componentName": "InlineMessage",
+    "properties": {
+      "label": "inlineMessage",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Toast",
+    "id": "00000000-0000-4000-8000-000000000088",
+    "name": "toast",
+    "componentName": "Toast",
+    "properties": {
+      "label": "toast",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Image",
+    "id": "00000000-0000-4000-8000-000000000089",
+    "name": "image",
+    "componentName": "Image",
+    "properties": {
+      "label": "image",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Galleria",
+    "id": "00000000-0000-4000-8000-000000000090",
+    "name": "galleria",
+    "componentName": "Galleria",
+    "properties": {
+      "label": "galleria",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Carousel",
+    "id": "00000000-0000-4000-8000-000000000091",
+    "name": "carousel",
+    "componentName": "Carousel",
+    "properties": {
+      "label": "carousel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Avatar",
+    "id": "00000000-0000-4000-8000-000000000092",
+    "name": "avatar",
+    "componentName": "Avatar",
+    "properties": {
+      "label": "avatar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Badge",
+    "id": "00000000-0000-4000-8000-000000000093",
+    "name": "badge",
+    "componentName": "Badge",
+    "properties": {
+      "label": "badge",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Chip",
+    "id": "00000000-0000-4000-8000-000000000094",
+    "name": "chip",
+    "componentName": "Chip",
+    "properties": {
+      "label": "chip",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Tag",
+    "id": "00000000-0000-4000-8000-000000000095",
+    "name": "tag",
+    "componentName": "Tag",
+    "properties": {
+      "label": "tag",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000142",
+    "name": "progressBar",
+    "componentName": "ProgressBar",
+    "properties": {
+      "label": "progressBar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000097",
+    "name": "progressSpinner",
+    "componentName": "ProgressSpinner",
+    "properties": {
+      "label": "progressSpinner",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Skeleton",
+    "id": "00000000-0000-4000-8000-000000000098",
+    "name": "skeleton",
+    "componentName": "Skeleton",
+    "properties": {
+      "label": "skeleton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.ScrollTop",
+    "id": "00000000-0000-4000-8000-000000000099",
+    "name": "scrollTop",
+    "componentName": "ScrollTop",
+    "properties": {
+      "label": "scrollTop",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.BlockUI",
+    "id": "00000000-0000-4000-8000-000000000100",
+    "name": "blockUI",
+    "componentName": "BlockUI",
+    "properties": {
+      "label": "blockUI",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Inplace",
+    "id": "00000000-0000-4000-8000-000000000101",
+    "name": "inplace",
+    "componentName": "Inplace",
+    "properties": {
+      "label": "inplace",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "PrimeReact.Terminal",
+    "id": "00000000-0000-4000-8000-000000000102",
+    "name": "terminal",
+    "componentName": "Terminal",
+    "properties": {
+      "label": "terminal",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000109",
+    "name": "page",
+    "componentName": "Page",
+    "properties": {
+      "label": "page",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000110",
+    "name": "dataPage",
+    "componentName": "DataPage",
+    "properties": {
+      "label": "dataPage",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000111",
+    "name": "formElement",
+    "componentName": "FormElement",
+    "properties": {
+      "label": "formElement",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000112",
+    "name": "singleResult",
+    "componentName": "SingleResult",
+    "properties": {
+      "label": "singleResult",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000113",
+    "name": "queryInputForm",
+    "componentName": "QueryInputForm",
+    "properties": {
+      "label": "queryInputForm",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000114",
+    "name": "dataTable",
+    "componentName": "DataTable",
+    "properties": {
+      "label": "dataTable",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000116",
+    "name": "observableDataTable",
+    "componentName": "ObservableDataTable",
+    "properties": {
+      "label": "observableDataTable",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000117",
+    "name": "commandForm",
+    "componentName": "CommandForm",
+    "properties": {
+      "label": "commandForm",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000118",
+    "name": "inputTextField",
+    "componentName": "InputTextField",
+    "properties": {
+      "label": "inputTextField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000119",
+    "name": "numberField",
+    "componentName": "NumberField",
+    "properties": {
+      "label": "numberField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000120",
+    "name": "checkboxField",
+    "componentName": "CheckboxField",
+    "properties": {
+      "label": "checkboxField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000121",
+    "name": "textAreaField",
+    "componentName": "TextAreaField",
+    "properties": {
+      "label": "textAreaField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000122",
+    "name": "dropdownField",
+    "componentName": "DropdownField",
+    "properties": {
+      "label": "dropdownField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000123",
+    "name": "sliderField",
+    "componentName": "SliderField",
+    "properties": {
+      "label": "sliderField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000124",
+    "name": "calendarField",
+    "componentName": "CalendarField",
+    "properties": {
+      "label": "calendarField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000125",
+    "name": "colorPickerField",
+    "componentName": "ColorPickerField",
+    "properties": {
+      "label": "colorPickerField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000126",
+    "name": "multiSelectField",
+    "componentName": "MultiSelectField",
+    "properties": {
+      "label": "multiSelectField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000127",
+    "name": "chipsField",
+    "componentName": "ChipsField",
+    "properties": {
+      "label": "chipsField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000128",
+    "name": "radioButtonField",
+    "componentName": "RadioButtonField",
+    "properties": {
+      "label": "radioButtonField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000129",
+    "name": "radioGroupField",
+    "componentName": "RadioGroupField",
+    "properties": {
+      "label": "radioGroupField",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000131",
+    "name": "confirmationDialog",
+    "componentName": "ConfirmationDialog",
+    "properties": {
+      "label": "confirmationDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000132",
+    "name": "busyIndicatorDialog",
+    "componentName": "BusyIndicatorDialog",
+    "properties": {
+      "label": "busyIndicatorDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000133",
+    "name": "commandDialog",
+    "componentName": "CommandDialog",
+    "properties": {
+      "label": "commandDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000134",
+    "name": "stepperCommandDialog",
+    "componentName": "StepperCommandDialog",
+    "properties": {
+      "label": "stepperCommandDialog",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000135",
+    "name": "icon",
+    "componentName": "Icon",
+    "properties": {
+      "label": "icon",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000136",
+    "name": "tooltip",
+    "componentName": "Tooltip",
+    "properties": {
+      "label": "tooltip",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000138",
+    "name": "errorBoundary",
+    "componentName": "ErrorBoundary",
+    "properties": {
+      "label": "errorBoundary",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000139",
+    "name": "tag",
+    "componentName": "Tag",
+    "properties": {
+      "label": "tag",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000140",
+    "name": "avatar",
+    "componentName": "Avatar",
+    "properties": {
+      "label": "avatar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000141",
+    "name": "message",
+    "componentName": "Message",
+    "properties": {
+      "label": "message",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000143",
+    "name": "objectContentEditor",
+    "componentName": "ObjectContentEditor",
+    "properties": {
+      "label": "objectContentEditor",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000144",
+    "name": "objectNavigationalBar",
+    "componentName": "ObjectNavigationalBar",
+    "properties": {
+      "label": "objectNavigationalBar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000145",
+    "name": "schemaEditor",
+    "componentName": "SchemaEditor",
+    "properties": {
+      "label": "schemaEditor",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000146",
+    "name": "timeMachine",
+    "componentName": "TimeMachine",
+    "properties": {
+      "label": "timeMachine",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000147",
+    "name": "filterPanel",
+    "componentName": "FilterPanel",
+    "properties": {
+      "label": "filterPanel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000148",
+    "name": "toolbar",
+    "componentName": "Toolbar",
+    "properties": {
+      "label": "toolbar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000149",
+    "name": "toolbarButton",
+    "componentName": "ToolbarButton",
+    "properties": {
+      "label": "toolbarButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000150",
+    "name": "toolbarGroup",
+    "componentName": "ToolbarGroup",
+    "properties": {
+      "label": "toolbarGroup",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000151",
+    "name": "toolbarSeparator",
+    "componentName": "ToolbarSeparator",
+    "properties": {
+      "label": "toolbarSeparator",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000152",
+    "name": "appShell",
+    "componentName": "AppShell",
+    "properties": {
+      "label": "appShell",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000153",
+    "name": "fullPageShell",
+    "componentName": "FullPageShell",
+    "properties": {
+      "label": "fullPageShell",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000154",
+    "name": "topbar",
+    "componentName": "Topbar",
+    "properties": {
+      "label": "topbar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000155",
+    "name": "bar",
+    "componentName": "Bar",
+    "properties": {
+      "label": "bar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000157",
+    "name": "menu",
+    "componentName": "Menu",
+    "properties": {
+      "label": "menu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000158",
+    "name": "menuItem",
+    "componentName": "MenuItem",
+    "properties": {
+      "label": "menuItem",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000159",
+    "name": "breadcrumb",
+    "componentName": "Breadcrumb",
+    "properties": {
+      "label": "breadcrumb",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000160",
+    "name": "footer",
+    "componentName": "Footer",
+    "properties": {
+      "label": "footer",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000161",
+    "name": "rightPanel",
+    "componentName": "RightPanel",
+    "properties": {
+      "label": "rightPanel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000162",
+    "name": "configPanel",
+    "componentName": "ConfigPanel",
+    "properties": {
+      "label": "configPanel",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000163",
+    "name": "pageHeader",
+    "componentName": "PageHeader",
+    "properties": {
+      "label": "pageHeader",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000164",
+    "name": "mask",
+    "componentName": "Mask",
+    "properties": {
+      "label": "mask",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000165",
+    "name": "logo",
+    "componentName": "Logo",
+    "properties": {
+      "label": "logo",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000166",
+    "name": "userMenu",
+    "componentName": "UserMenu",
+    "properties": {
+      "label": "userMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000167",
+    "name": "themeSwitcher",
+    "componentName": "ThemeSwitcher",
+    "properties": {
+      "label": "themeSwitcher",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000168",
+    "name": "layoutModeSwitcher",
+    "componentName": "LayoutModeSwitcher",
+    "properties": {
+      "label": "layoutModeSwitcher",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000169",
+    "name": "emptyState",
+    "componentName": "EmptyState",
+    "properties": {
+      "label": "emptyState",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000170",
+    "name": "statCard",
+    "componentName": "StatCard",
+    "properties": {
+      "label": "statCard",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000171",
+    "name": "trendChip",
+    "componentName": "TrendChip",
+    "properties": {
+      "label": "trendChip",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000172",
+    "name": "statusChip",
+    "componentName": "StatusChip",
+    "properties": {
+      "label": "statusChip",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000173",
+    "name": "chartWrapper",
+    "componentName": "ChartWrapper",
+    "properties": {
+      "label": "chartWrapper",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000174",
+    "name": "filterBuilder",
+    "componentName": "FilterBuilder",
+    "properties": {
+      "label": "filterBuilder",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000175",
+    "name": "columnChooser",
+    "componentName": "ColumnChooser",
+    "properties": {
+      "label": "columnChooser",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000176",
+    "name": "savedViewsMenu",
+    "componentName": "SavedViewsMenu",
+    "properties": {
+      "label": "savedViewsMenu",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000177",
+    "name": "checklistSection",
+    "componentName": "ChecklistSection",
+    "properties": {
+      "label": "checklistSection",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000178",
+    "name": "activityFeed",
+    "componentName": "ActivityFeed",
+    "properties": {
+      "label": "activityFeed",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000179",
+    "name": "avatarStack",
+    "componentName": "AvatarStack",
+    "properties": {
+      "label": "avatarStack",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000180",
+    "name": "fileUploader",
+    "componentName": "FileUploader",
+    "properties": {
+      "label": "fileUploader",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000181",
+    "name": "approvalChainStepper",
+    "componentName": "ApprovalChainStepper",
+    "properties": {
+      "label": "approvalChainStepper",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000182",
+    "name": "orgTree",
+    "componentName": "OrgTree",
+    "properties": {
+      "label": "orgTree",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000183",
+    "name": "permissionMatrix",
+    "componentName": "PermissionMatrix",
+    "properties": {
+      "label": "permissionMatrix",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000184",
+    "name": "dataList",
+    "componentName": "DataList",
+    "properties": {
+      "label": "dataList",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000185",
+    "name": "tabSet",
+    "componentName": "TabSet",
+    "properties": {
+      "label": "tabSet",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000186",
+    "name": "subNavigation",
+    "componentName": "SubNavigation",
+    "properties": {
+      "label": "subNavigation",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000187",
+    "name": "dialogFrame",
+    "componentName": "DialogFrame",
+    "properties": {
+      "label": "dialogFrame",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000188",
+    "name": "actionButton",
+    "componentName": "ActionButton",
+    "properties": {
+      "label": "actionButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000189",
+    "name": "notice",
+    "componentName": "Notice",
+    "properties": {
+      "label": "notice",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000190",
+    "name": "bulkBar",
+    "componentName": "BulkBar",
+    "properties": {
+      "label": "bulkBar",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000191",
+    "name": "globalSearch",
+    "componentName": "GlobalSearch",
+    "properties": {
+      "label": "globalSearch",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000192",
+    "name": "notificationsButton",
+    "componentName": "NotificationsButton",
+    "properties": {
+      "label": "notificationsButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000193",
+    "name": "indicatorButton",
+    "componentName": "IndicatorButton",
+    "properties": {
+      "label": "indicatorButton",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000194",
+    "name": "kanbanBoard",
+    "componentName": "KanbanBoard",
+    "properties": {
+      "label": "kanbanBoard",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000195",
+    "name": "wizardProgress",
+    "componentName": "WizardProgress",
+    "properties": {
+      "label": "wizardProgress",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000196",
+    "name": "formScreenBody",
+    "componentName": "FormScreenBody",
+    "properties": {
+      "label": "formScreenBody",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000197",
+    "name": "calendarGrid",
+    "componentName": "CalendarGrid",
+    "properties": {
+      "label": "calendarGrid",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000198",
+    "name": "timelineGrid",
+    "componentName": "TimelineGrid",
+    "properties": {
+      "label": "timelineGrid",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000199",
+    "name": "inboxList",
+    "componentName": "InboxList",
+    "properties": {
+      "label": "inboxList",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "externalComponent",
+    "id": "00000000-0000-4000-8000-000000000200",
+    "name": "arcPageHeader",
+    "componentName": "ArcPageHeader",
+    "properties": {
+      "label": "arcPageHeader",
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {},
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Stack",
+    "id": "00000000-0000-4000-8000-000000000203",
+    "name": "stack",
+    "componentName": "Stack",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000201",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000202",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Row",
+    "id": "00000000-0000-4000-8000-000000000206",
+    "name": "row",
+    "componentName": "Row",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000204",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000205",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Grid",
+    "id": "00000000-0000-4000-8000-000000000209",
+    "name": "grid",
+    "componentName": "Grid",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000207",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000208",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Container",
+    "id": "00000000-0000-4000-8000-000000000212",
+    "name": "container",
+    "componentName": "Container",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000210",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000211",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Wrap",
+    "id": "00000000-0000-4000-8000-000000000215",
+    "name": "wrap",
+    "componentName": "Wrap",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000213",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000214",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  },
+  {
+    "_derivedTypeId": "StudioLayout.Canvas",
+    "id": "00000000-0000-4000-8000-000000000218",
+    "name": "canvas",
+    "componentName": "Canvas",
+    "properties": {
+      "canvas": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "slots": {
+      "children": [
+        {
+          "_derivedTypeId": "PrimeReact.Button",
+          "id": "00000000-0000-4000-8000-000000000216",
+          "name": "Save",
+          "componentName": "Button",
+          "properties": {
+            "label": "Save",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        },
+        {
+          "_derivedTypeId": "externalComponent",
+          "id": "00000000-0000-4000-8000-000000000217",
+          "name": "Title",
+          "componentName": "Text",
+          "properties": {
+            "text": "Hello",
+            "canvas": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "slots": {},
+          "ZIndex": 0
+        }
+      ]
+    },
+    "ZIndex": 0
+  }
+]

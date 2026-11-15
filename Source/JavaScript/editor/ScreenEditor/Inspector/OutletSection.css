@@ -1,0 +1,74 @@
+.studio-editor-outlet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.studio-editor-outlet__level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.studio-editor-outlet__items-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.studio-editor-outlet__items,
+.studio-editor-outlet__others ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.studio-editor-outlet__items li,
+.studio-editor-outlet__others li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.studio-editor-outlet__items li[data-selected] {
+    outline: 1px solid var(--cratis-primary-color);
+    border-radius: var(--cratis-border-radius);
+}
+
+.studio-editor-outlet__item,
+.studio-editor-outlet__others button {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.studio-editor-outlet__items small,
+.studio-editor-outlet__others small {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-outlet__items li[data-removal] s {
+    flex: 1;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-outlet__item-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.studio-editor-outlet__item-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}

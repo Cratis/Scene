@@ -1,0 +1,251 @@
+/* The profile's theme root: the screen's own background and text, as Play has them. It fills the viewport the screen is designed for. */
+.studio-screen-surface-theme {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+.studio-screen-surface {
+    outline: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    min-height: var(--studio-surface-viewport-height, 100%);
+    box-sizing: border-box;
+
+    /* The surface is the screen's viewport: nothing the screen draws leaves it sideways, and text wraps inside its box. */
+    max-width: 100%;
+    overflow-x: clip;
+    overflow-wrap: break-word;
+
+    /* The screen is drawn inside a viewport of its own. Parts of a shell are positioned against the page (`position: fixed`); this
+       makes the surface that page, so they are drawn inside the screen instead of over the editor around it. */
+    contain: layout;
+}
+
+/* Components that fill the screen are written against the browser's viewport. On the surface the viewport is the one the
+   screen is designed for, which is what the same component fills in Play. */
+.studio-screen-surface .layout-wrapper,
+.studio-screen-surface .layout-full-page,
+.studio-screen-surface .layout-main {
+    min-height: var(--studio-surface-viewport-height, 100%);
+}
+
+/* The screen itself - the composition and the root panel the author works in - takes the whole surface, so the empty part of the
+   screen is part of it and can be dropped on. Their ids are those of `composeEditorScreen` and `studioScreen`. */
+.studio-screen-surface > [data-scene-id='composition'],
+.studio-screen-surface > [data-scene-id='composition'] > [data-scene-id='screen-root'] {
+    flex: 1 0 auto;
+}
+
+/* Every layout container shows where it is, whatever is inside it: a faint outline that does not shift the layout, since an outline takes
+   no space. The screen's own wrapper and root are the surface itself and are not outlined. */
+.studio-screen-surface [data-scene-kind='Panel'] {
+    outline: 1px dashed color-mix(in srgb, var(--cratis-text-color-secondary) 35%, transparent);
+    outline-offset: -1px;
+}
+
+.studio-screen-surface > [data-scene-id='composition'],
+.studio-screen-surface > [data-scene-id='composition'] > [data-scene-id='screen-root'] {
+    outline: none;
+}
+
+/* A container with nothing in it draws nothing, so it could not be seen or dropped on. While designing, it holds a visible place. */
+.studio-screen-surface [data-scene-kind='Panel']:empty {
+    min-height: 3rem;
+    box-sizing: border-box;
+    border: 1px dashed var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: color-mix(in srgb, var(--cratis-surface-hover) 40%, transparent);
+}
+
+.studio-screen-surface [data-scene-kind='Panel']:empty::before {
+    content: var(--studio-empty-container-label);
+    display: block;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+/* A disabled control hears nothing in some browsers - not even a click that would travel on to the element around it - so pressing a navigation
+   item that has no destination yet, or any other disabled control, selected nothing. While designing, a disabled control lets the press through
+   to the element it belongs to. */
+.studio-screen-surface :disabled,
+.studio-screen-surface [aria-disabled='true'] {
+    pointer-events: none;
+}
+
+/* The editor's marks sit over the rendered screen and never take part in its layout or its pointer events. */
+.studio-screen-surface__chrome {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.studio-screen-surface__selection {
+    position: absolute;
+    box-sizing: border-box;
+    outline: 2px solid var(--cratis-primary-color);
+    outline-offset: 1px;
+}
+
+.studio-screen-surface__target {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+/* The exact insertion point: a line between two siblings, with a cap at each end so it reads as a place and not as a border. */
+.studio-screen-surface__target--between {
+    background: var(--cratis-primary-color);
+    border-radius: 2px;
+    min-width: 4px;
+    min-height: 4px;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cratis-primary-color) 28%, transparent);
+}
+
+/* Dropping into the container itself - an empty one, or after its last child. */
+.studio-screen-surface__target--container {
+    border: 2px solid var(--cratis-primary-color);
+    background: color-mix(in srgb, var(--cratis-primary-color) 14%, transparent);
+}
+
+/* The container that receives the drop, outlined while a marker shows where inside it. */
+.studio-screen-surface__drop-container {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px dashed var(--cratis-primary-color);
+    background: color-mix(in srgb, var(--cratis-primary-color) 6%, transparent);
+    border-radius: var(--cratis-border-radius);
+}
+
+/* Nothing may be dropped here: the whole surface says so, and the pointer shows the same. */
+.studio-screen-surface__denied {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12px;
+    border: 2px solid var(--cratis-danger-text, #c62828);
+    background: color-mix(in srgb, var(--cratis-danger-text, #c62828) 8%, transparent);
+    color: var(--cratis-danger-text, #c62828);
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+/* The grip on the selected element: the one part of the marks that takes the pointer, so the element can be picked up and moved without
+   the component under it having to know. */
+.studio-screen-surface__grip {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    pointer-events: auto;
+    cursor: grab;
+    border-radius: var(--cratis-border-radius) var(--cratis-border-radius) 0 0;
+    background: var(--cratis-primary-color);
+    color: var(--cratis-primary-color-text, #fff);
+    font-size: 0.7rem;
+}
+
+.studio-screen-surface__grip:active {
+    cursor: grabbing;
+}
+
+/* The element being carried stays where it was, quieter, so the marker shows where it will go and where it came from. */
+.studio-screen-surface__selection[data-moving='true'] {
+    outline-style: dashed;
+    opacity: 0.5;
+}
+
+/* The card that follows the pointer while a toolbar item or an element is dragged. */
+.studio-drag-preview {
+    position: fixed;
+    top: -1000px;
+    left: -1000px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color-text, #fff);
+    font: 600 0.8125rem Inter, sans-serif;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    white-space: nowrap;
+}
+
+.studio-drag-preview svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* On a canvas a child is drawn at its position and is as big as what it holds, so one with nothing in it (an empty scroll area, say) would
+   have no width to see or grab. A design-time minimum keeps it selectable; a component with content is bigger and unaffected. */
+.studio-screen-surface [data-scene-placement] {
+    min-width: 8rem;
+    min-height: 1.5rem;
+}
+
+/* Content the surface shows from a sample because the element sets none is muted, so it reads as a placeholder and not as the screen's own words.
+   `data-studio-sample` is set by the surface and never reaches the saved screen; a component the author has filled in is drawn exactly as Play draws it.
+   Only opacity changes: nothing that changes a component's size or spacing (display, font, padding), or the surface would lay a screen out
+   differently from Play. */
+.studio-screen-surface [data-studio-sample] > :not(.studio-design-placeholder) {
+    opacity: 0.7;
+}
+
+/* Spoken, not seen: the drop target announced to assistive technology while something is dragged over the surface. */
+.studio-screen-surface__announcement {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* A canvas is as big as its extent says, and with none it is as big as what flows inside it - which is nothing when every child is placed by
+   coordinates, so it collapses to a line that cannot be seen or dropped on. While designing, a canvas keeps room to put things in. */
+.studio-screen-surface [data-scene-kind='Panel'][style*='position: relative']:not([data-scene-id='screen-root']) {
+    min-height: 8rem;
+}
+
+/* A component the selected element takes a value from, outlined where it is on the screen and labelled with what it feeds. */
+.studio-screen-surface__binding-source {
+    position: absolute;
+    border: 1px dashed var(--cratis-primary-color);
+    border-radius: var(--cratis-border-radius);
+    pointer-events: none;
+}
+
+.studio-screen-surface__binding-label {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    padding: 0 .375rem;
+    font-size: .6875rem;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-primary-color);
+    color: var(--cratis-primary-color-text);
+}
+
+/* A disabled action of an outlet - one that waits for a selection - is still picked for editing: the press falls through to its outlet, which finds it. */
+.studio-screen-surface [data-scene-outlet-item]:disabled {
+    pointer-events: none;
+}
+
+/* The buttons of an outlet of actions stand in one row, centred on each other: a button with an icon does not sit lower than one without. */
+.scene-outlet-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}

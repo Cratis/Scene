@@ -1,0 +1,79 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-preview-strip__lens {
+    padding: .4rem .9rem;
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgb(255 255 255 / .35);
+    border-radius: .75rem;
+    font: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.studio-preview-strip__lens:hover {
+    background: rgb(255 255 255 / .12);
+}
+
+.studio-preview-strip__lens--on {
+    background: #2f6fbd;
+    border-color: #2f6fbd;
+}
+
+.studio-preview-strip__lens:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.studio-preview-strip__persona {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    white-space: nowrap;
+}
+
+.studio-preview-strip__persona select {
+    padding: .4rem .9rem;
+    background: #161b22;
+    color: #fff;
+    border: 1px solid rgb(255 255 255 / .35);
+    border-radius: .75rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+.studio-preview-strip__persona select:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.studio-preview-strip__lens-persona {
+    margin: 0;
+    font-size: .85rem;
+    opacity: .85;
+}
+
+.studio-preview-strip__lens-problems {
+    margin: 0;
+    padding: .5rem .75rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    color: #fff;
+    background: #1d2430;
+    border-radius: .75rem;
+}
+
+.studio-preview-strip__lens-heading {
+    font-weight: 700;
+}
+
+.studio-preview-strip__lens-code {
+    margin-left: .5rem;
+    padding: 0 .4rem;
+    font-size: .75rem;
+    border: 1px solid rgb(255 255 255 / .35);
+    border-radius: .5rem;
+}

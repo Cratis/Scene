@@ -1,0 +1,18 @@
+/* The menu holds the component picker. The picker is a list rather than a grid of tiles, so it takes a width of its own, capped by the window. The
+   menu scrolls as a whole (its header stays put), so the picker's own scrolling list gives way to it and the filter stays at the top while the groups
+   scroll under it. */
+.studio-palette-folder--picker .studio-menu-popover__body {
+    width: 22rem;
+    max-width: 100%;
+}
+
+.studio-palette-folder--picker .studio-component-picker__groups {
+    max-height: none;
+    overflow: visible;
+}
+
+.studio-palette-folder--picker .studio-component-picker__filter {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}

@@ -1,0 +1,3 @@
+/* The rich text control's own stylesheet, bundled into the editor's stylesheet so no host has to import it, and so no JavaScript
+   module of this package imports a stylesheet a server-side render could not load. */
+@import 'quill/dist/quill.snow.css';

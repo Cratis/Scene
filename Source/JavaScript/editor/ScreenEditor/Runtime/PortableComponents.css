@@ -1,0 +1,54 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* The portable core components are drawn without styling of their own, so that whoever draws them can give them a look. This is the editor's: the
+   one stylesheet that gives them one, in the theme's own tokens, so a screen reads the same on the surface, in Play and in a board's miniature,
+   and in whichever theme - light, or a host's dark - the screen is drawn in. Nothing here changes how a component lays out beyond giving it chrome. */
+
+/* The navigation bar: a bar of items, each its own pill. Its items have no destination until the author picks one, and are disabled until then, so a
+   disabled item is drawn as an item, not as something switched off.
+
+   Every Scene component that is a `nav` carries `data-scene-id` - the menu (a title and a list), the breadcrumb, a region's navigation - so that attribute
+   alone does not say which one this is. The bar is the one whose items are its own buttons; a `nav` that holds a list (`ul`, `ol`) or a block (`div`) is some other component,
+   and giving it the bar's flex row, border and padding put a menu's section title beside its list inside a box. And because this stylesheet is global
+   and arrives with whichever editor chunk is loaded first, the same screen was drawn right until that chunk was loaded and wrong after it. */
+.studio-profile-theme nav[data-scene-id]:not(:has(> ul, > ol, > div)) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid var(--scene-surface-border, currentColor);
+    border-radius: calc(var(--scene-content-border-radius, 0.375rem) * 2);
+    background: var(--scene-surface-card, transparent);
+    color: var(--scene-text-color, inherit);
+}
+
+.studio-profile-theme nav[data-scene-id] > button[data-scene-item] {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.studio-profile-theme nav[data-scene-id] > button[data-scene-item]:first-child {
+    background: var(--scene-highlight-background, var(--scene-surface-hover, transparent));
+    color: var(--scene-highlight-color, inherit);
+}
+
+.studio-profile-theme nav[data-scene-id] > button[data-scene-item]:hover:not(:first-child) {
+    background: var(--scene-surface-hover, transparent);
+}
+
+.studio-profile-theme nav[data-scene-id] > button[data-scene-item]:disabled {
+    opacity: 1;
+    cursor: default;
+}

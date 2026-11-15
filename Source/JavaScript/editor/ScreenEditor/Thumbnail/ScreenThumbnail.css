@@ -1,0 +1,87 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* A miniature of a screen on a board: the window's frame, with the screen drawn at its real size inside and scaled down. */
+.screen-thumbnail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: var(--surface-card);
+    cursor: default;
+}
+
+.screen-thumbnail--clickable {
+    cursor: pointer;
+}
+
+.screen-thumbnail__title-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 0 5px;
+    position: relative;
+    border-bottom: 1px solid var(--surface-200);
+    background: var(--surface-50);
+}
+
+.screen-thumbnail__light {
+    box-sizing: border-box;
+    width: 6px;
+    height: 6px;
+    border: 1px solid;
+    border-radius: 50%;
+}
+
+.screen-thumbnail__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    font-size: 8px;
+    color: var(--text-color-secondary);
+    pointer-events: none;
+}
+
+.screen-thumbnail__body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface-ground);
+    line-height: normal;
+}
+
+/* The screen at its real size, scaled from the corner. The body clips whatever the scaling leaves outside. Nothing in it takes the pointer: a press on
+   the miniature is a press on the miniature, which opens the editor. */
+.screen-thumbnail__canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transform-origin: top left;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+
+    /* The screen is drawn in a viewport of its own, as on the editor's surface: what is positioned against the page is drawn inside the screen. */
+    contain: layout;
+}
+
+.screen-thumbnail__canvas .studio-profile-theme {
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+.screen-thumbnail__canvas .layout-wrapper,
+.screen-thumbnail__canvas .layout-full-page,
+.screen-thumbnail__canvas .layout-main {
+    min-height: var(--studio-surface-viewport-height, 100%);
+}

@@ -1,0 +1,29 @@
+.studio-screen-editor-workspace {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+/* The stage and the inspector lay out around the chrome that floats over the page they are set into - the project and tools bars
+   above them and the tool rail beside the stage (see Source/Core/Components/Viewport/floatingChrome) - so nothing is drawn
+   underneath a bar, and the window and the inspector start on the same line. Where the host publishes none of it the stage keeps
+   its plain 16px margin and the inspector the full height. */
+.studio-screen-editor-workspace__stage {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-block: max(16px, var(--studio-chrome-height, 0px)) 16px;
+    padding-inline: max(16px, var(--studio-rail-inset, 0px)) 16px;
+    box-sizing: border-box;
+}
+
+/* The inspector's width is set by the component. Its top edge is the bars' bottom edge, so its header is never under the tools bar. */
+.studio-screen-editor-workspace__inspector {
+    flex: 0 0 auto;
+    margin-top: var(--studio-chrome-height, 0px);
+    border-left: 1px solid var(--cratis-surface-border);
+    border-top: 1px solid var(--cratis-surface-border);
+    border-top-left-radius: 8px;
+    background: var(--cratis-surface-card);
+    min-height: 0;
+}

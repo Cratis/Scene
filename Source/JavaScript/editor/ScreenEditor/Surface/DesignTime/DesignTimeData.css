@@ -1,0 +1,40 @@
+/* The table and the summary of a screenplay screen, drawn with sample rows on the editor surface (designTimeDataComponents). */
+.studio-design-data {
+    width: 100%;
+    overflow: auto;
+}
+
+.studio-design-data table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9rem;
+}
+
+.studio-design-data th,
+.studio-design-data td {
+    padding: .45rem .75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--cratis-surface-border, #dfe3ea);
+}
+
+.studio-design-data th {
+    font-weight: 600;
+    color: var(--cratis-text-color-secondary, #5b6475);
+}
+
+.studio-design-data--summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: .75rem 1.5rem;
+    margin: 0;
+}
+
+.studio-design-data--summary dt {
+    font-size: .8rem;
+    color: var(--cratis-text-color-secondary, #5b6475);
+}
+
+.studio-design-data--summary dd {
+    margin: 0;
+    font-weight: 600;
+}

@@ -1,0 +1,54 @@
+.studio-shell-switch-dialog .studio-template-browser {
+    min-height: 32rem;
+    max-height: 74vh;
+}
+
+.studio-shell-switch__use {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+}
+
+.studio-shell-switch__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    overflow: auto;
+}
+
+.studio-shell-switch__toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.studio-shell-switch__toggle button {
+    padding: 4px 14px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.studio-shell-switch__toggle button[aria-checked='true'] { background: var(--cratis-primary-color); color: var(--cratis-primary-color-text, #fff); }
+
+.studio-shell-switch__preview {
+    flex: 0 0 auto;
+    height: 26rem;
+    overflow: hidden;
+    /* A blueprint lays its shell out with fixed positioning; a transform makes this box the containing block, so the preview stays inside it. */
+    transform: translateZ(0);
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 6px;
+}
+
+.studio-shell-switch__plan h3,
+.studio-shell-switch__plan h4 { margin: 8px 0 4px; font-size: 0.95em; }
+.studio-shell-switch__moves { margin: 0; padding-inline-start: 18px; font-size: 0.9em; }
+.studio-shell-switch__remap table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+.studio-shell-switch__remap th,
+.studio-shell-switch__remap td { padding: 4px 8px; text-align: start; border-bottom: 1px solid var(--cratis-surface-border); }
+.studio-shell-switch__blockers { color: var(--cratis-danger-text-color, #ff8a80); }
