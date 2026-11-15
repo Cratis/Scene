@@ -1,8 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DialogTemplate, Layout, ScreenTemplate, Theme, UiProfile } from '@cratis/scene.model';
-import { TemplateCatalogEntry, describeTemplateCatalog, incompatiblePackages, resolvePackageDependencies } from '@cratis/scene.engine';
+import { DesignSystem, DialogTemplate, Layout, ScreenTemplate, Theme, UiProfile } from '@cratis/scene.model';
+import { DesignLinking, ResolvedDesign, TemplateCatalogEntry, describeTemplateCatalog, incompatiblePackages, linkDesignSystem, resolveDesign, resolvePackageDependencies } from '@cratis/scene.engine';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { ScenePackageBundle, mergePackageRegistries, validatePackageBundle } from './ScenePackageBundle';
 import { isNetworkAsset } from './isNetworkAsset';
@@ -22,6 +22,9 @@ export interface PackageHostConfiguration {
 
     /** The Scene version the host runs, checked against each template's compatibility range when given. */
     sceneVersion?: string;
+
+    /** Whether the system is in dark mode; decides a profile's `System` colour scheme. Absent means light. */
+    systemIsDark?: boolean;
 }
 
 export interface ResolvedPackageHost {
@@ -43,6 +46,27 @@ export interface ResolvedPackageHost {
      * whether it can be used with this package set. Template browsers read this rather than the raw lists.
      */
     templates: TemplateCatalogEntry[];
+
+    /** Every design system the approved packages ship. */
+    designSystems: DesignSystem[];
+
+    /**
+     * The design system the profile is drawn from: the one the profile carries, else the last one an approved package ships. Absent when
+     * neither exists, in which case the packages' own fallbacks apply.
+     */
+    designSystem?: DesignSystem;
+
+    /** The design resolved for the profile's theme, colour scheme, accent, corners and font. Absent without a design system. */
+    design?: ResolvedDesign;
+
+    /** How the design system's components link to the components of the approved packages. Absent without a design system. */
+    designLinking?: DesignLinking;
+
+    /**
+     * Everything about the design that could not be honoured, ready to show: a theme that is not found, a part a package cannot render, a
+     * component nobody draws. Never silent (invariant I6) and never blocking - the host still renders, as well as it can.
+     */
+    designDiagnostics: string[];
     icons: IconAdapterRegistry;
     assets: string[];
     fonts: string[];
@@ -119,6 +143,26 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         diagnostics.push(`Theme '${theme.name}' is not compatible with ${incompatiblePackages(theme, configuration.profile).join(', ')} in UI profile '${configuration.profile.name}'`);
     }
 
+    const designSystems = bundles.flatMap(bundle => bundle.designSystems ?? []);
+    const designSystem = configuration.profile.designSystem ?? designSystems[designSystems.length - 1];
+    let design: ResolvedDesign | undefined;
+    let designLinking: DesignLinking | undefined;
+    const designDiagnostics: string[] = [];
+    if (designSystem !== undefined) {
+        design = resolveDesign({
+            designSystem,
+            theme: configuration.profile.theme,
+            packageThemes: themes,
+            appearance: configuration.profile.appearance,
+            systemIsDark: configuration.systemIsDark,
+        });
+        designDiagnostics.push(...design.diagnostics.map(diagnostic => diagnostic.message), ...design.appearance.diagnostics.map(diagnostic => diagnostic.message));
+
+        const catalog = Object.fromEntries(bundles.map(bundle => [bundle.manifest.name, bundle.manifest.components]));
+        designLinking = linkDesignSystem(designSystem, configuration.profile, catalog, bundles.flatMap(bundle => bundle.descriptors ?? []));
+        designDiagnostics.push(...designLinking.diagnostics.map(diagnostic => diagnostic.message));
+    }
+
     const blocked = diagnostics.length > 0;
     const approved = blocked ? [] : bundles;
     const approvedAssets = blocked ? [] : assets;
@@ -133,6 +177,11 @@ export function resolvePackageHost(configuration: PackageHostConfiguration): Res
         layout: blocked ? undefined : layout,
         theme: blocked ? undefined : theme,
         templates: describeTemplateCatalog(approved, configuration.sceneVersion),
+        designSystems: approved.flatMap(bundle => bundle.designSystems ?? []),
+        designSystem: blocked ? undefined : designSystem,
+        design: blocked ? undefined : design,
+        designLinking: blocked ? undefined : designLinking,
+        designDiagnostics: blocked ? [] : designDiagnostics,
         icons: createIconAdapterRegistry(approved.map(bundle => bundle.iconLibrary?.adapter).filter(adapter => adapter !== undefined)),
         assets: approvedAssets,
         fonts: approvedAssets.filter(isFontAsset),

@@ -7,8 +7,8 @@
       "isDark": false,
       "description": "The default light palette",
       "tokens": {
-        "primary.color": "#4f46e5",
-        "content.borderRadius": "0.5rem"
+        "color.primary": "#4f46e5",
+        "radius.content": "0.5rem"
       }
     },
     {
@@ -17,8 +17,8 @@
       "isDark": true,
       "description": "The default dark palette",
       "tokens": {
-        "primary.color": "#818cf8",
-        "content.borderRadius": "0.5rem"
+        "color.primary": "#818cf8",
+        "radius.content": "0.5rem"
       }
     },
     {
@@ -27,8 +27,8 @@
       "isDark": false,
       "description": "Material look",
       "tokens": {
-        "primary.color": "#6750a4",
-        "content.borderRadius": "10px"
+        "color.primary": "#6750a4",
+        "radius.content": "10px"
       }
     },
     {
@@ -36,7 +36,7 @@
       "compatibleWith": [],
       "isDark": true,
       "tokens": {
-        "primary.color": "#d0bcff"
+        "color.primary": "#d0bcff"
       }
     }
   ],

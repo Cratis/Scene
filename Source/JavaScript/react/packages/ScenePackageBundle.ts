@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { validateComponentDescriptors } from '@cratis/scene.engine';
-import { ComponentDescriptor, DiagnosticCode, DialogTemplate, Layout, PackageKind, PropertyDescriptor, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
+import { ComponentDescriptor, DesignSystem, DiagnosticCode, DialogTemplate, Layout, PackageKind, PropertyDescriptor, PropertyValueType, ScenePackage, Screen, ScreenTemplate, Theme } from '@cratis/scene.model';
 import { IconAdapterRegistry, createIconAdapterRegistry } from '../icons/IconAdapterRegistry';
 import { IconLibraryBundle } from '../icons/IconLibraryBundle';
 import { ComponentRegistry } from '../renderer';
@@ -67,6 +67,12 @@ export interface ScenePackageBundle {
      * The themes this package ships, if any.
      */
     themes?: Theme[];
+
+    /**
+     * The design systems this package ships, if any - a blueprint's default design system, for one. The profile draws the one it names
+     * (`UiProfile.designSystem`) or, when it names none, the last one an active package ships.
+     */
+    designSystems?: DesignSystem[];
 
     /**
      * The icon catalog and renderer adapter of an icon-library package. Present exactly when the
@@ -149,6 +155,20 @@ export function validatePackageBundle(bundle: ScenePackageBundle): string[] {
     for (const name of manifest.themes) {
         if (!providedThemes.has(name)) {
             problems.push(`declares the theme '${name}' but provides no definition for it`);
+        }
+    }
+
+    const providedDesignSystems = new Set((bundle.designSystems ?? []).map((designSystem) => designSystem.name));
+    for (const name of manifest.designSystems ?? []) {
+        if (!providedDesignSystems.has(name)) {
+            problems.push(`declares the design system '${name}' but provides no definition for it`);
+        }
+    }
+
+    const declaredDesignSystems = new Set(manifest.designSystems ?? []);
+    for (const name of providedDesignSystems) {
+        if (!declaredDesignSystems.has(name)) {
+            problems.push(`provides the design system '${name}', which the manifest does not declare`);
         }
     }
 

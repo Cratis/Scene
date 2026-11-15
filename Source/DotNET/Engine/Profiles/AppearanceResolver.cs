@@ -3,6 +3,7 @@
 
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Cratis.Scene.Model.DesignSystems;
 using Cratis.Scene.Model.Profiles;
 
 namespace Cratis.Scene.Engine.Profiles;
@@ -14,16 +15,27 @@ namespace Cratis.Scene.Engine.Profiles;
 public static partial class AppearanceResolver
 {
     /// <summary>
+    /// Gets the token roles Scene's default design system (the one <c language="csharp">blueprint.default</c> ships) takes an accent, a corner style and a font through. A design
+    /// system of a product states its own <see cref="AppearanceBindings"/>; nothing else in Scene assumes a token name.
+    /// </summary>
+    public static AppearanceBindings DefaultBindings { get; } = new("color.primary", "shadow.focus-ring", "radius.content", "font.sans");
+
+    /// <summary>
     /// Resolves the appearance.
     /// </summary>
     /// <param name="theme">The theme the profile selects, or <see langword="null"/> when there are no theme tokens to start from.</param>
     /// <param name="appearance">The appearance of the profile.</param>
     /// <param name="systemIsDark">Whether the system is in dark mode; decides <see cref="ColorScheme.System"/>.</param>
     /// <param name="availableFonts">The ids of the fonts the host can use, or <see langword="null"/> for every font of the catalog.</param>
+    /// <param name="bindings">Which token roles the accent, the corner style and the font replace; <see cref="DefaultBindings"/> when <see langword="null"/>. A design system that does not bind one ignores the choice and says so.</param>
     /// <returns>The scheme and tokens to apply, and a diagnostic for everything that was refused.</returns>
-    public static ResolvedAppearance Resolve(Theme? theme, ProfileAppearance? appearance, bool systemIsDark = false, IReadOnlyCollection<string>? availableFonts = null)
+    public static ResolvedAppearance Resolve(Theme? theme, ProfileAppearance? appearance, bool systemIsDark = false, IReadOnlyCollection<string>? availableFonts = null, AppearanceBindings? bindings = null)
     {
         appearance ??= new ProfileAppearance();
+        bindings ??= DefaultBindings;
+        static void Unbound(List<AppearanceDiagnostic> into, string choice) =>
+            into.Add(new(AppearanceDiagnosticCode.AppearanceNotBound, $"The design system does not say which token the {choice} replaces, so the {choice} is ignored."));
+
         var diagnostics = new List<AppearanceDiagnostic>();
         var tokens = new Dictionary<string, string>(theme?.Tokens ?? new Dictionary<string, string>(), StringComparer.Ordinal);
 
@@ -44,10 +56,17 @@ public static partial class AppearanceResolver
             {
                 diagnostics.Add(new(AppearanceDiagnosticCode.AccentInvalid, $"The accent '{appearance.Accent}' is not a hex colour such as #4f46e5, so the theme's accent is kept."));
             }
+            else if (bindings.Accent is null)
+            {
+                Unbound(diagnostics, "accent");
+            }
             else
             {
-                tokens["primary.color"] = appearance.Accent;
-                tokens["focus.ring"] = string.Create(CultureInfo.InvariantCulture, $"0 0 0 2px rgb({rgb.Value.Red} {rgb.Value.Green} {rgb.Value.Blue} / 0.4)");
+                tokens[bindings.Accent] = appearance.Accent;
+                if (bindings.FocusRing is not null)
+                {
+                    tokens[bindings.FocusRing] = string.Create(CultureInfo.InvariantCulture, $"0 0 0 2px rgb({rgb.Value.Red} {rgb.Value.Green} {rgb.Value.Blue} / 0.4)");
+                }
             }
         }
 
@@ -59,7 +78,14 @@ public static partial class AppearanceResolver
         };
         if (radius is not null)
         {
-            tokens["content.borderRadius"] = radius;
+            if (bindings.Corners is null)
+            {
+                Unbound(diagnostics, "corner style");
+            }
+            else
+            {
+                tokens[bindings.Corners] = radius;
+            }
         }
 
         FontChoice? font = null;
@@ -76,7 +102,14 @@ public static partial class AppearanceResolver
                 diagnostics.Add(new(AppearanceDiagnosticCode.FontUnavailable, $"The font '{appearance.Font}' is not available, so the system font is used."));
             }
 
-            tokens["text.fontFamily"] = font.Family;
+            if (bindings.Font is null)
+            {
+                Unbound(diagnostics, "font");
+            }
+            else
+            {
+                tokens[bindings.Font] = font.Family;
+            }
         }
 
         return new(colorScheme, tokens, font?.Id, font?.Source == FontSource.Hosted ? font.Stylesheet : null, diagnostics);
