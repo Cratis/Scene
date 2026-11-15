@@ -102,7 +102,7 @@ they refer to changes, nothing is deleted:
 A screen or nested template may change exactly the properties the templates above it expose to it, and nothing else:
 
 - a scalar it was exposed, such as a title - the innermost level that sets it wins;
-- a collection it was exposed, with only the operations (`add`, `remove`, `reorder`, `editFields`) and fields it was granted - items are appended in nesting order, owner first;
+- a collection it was exposed, with only the operations (`add`, `remove`, `reorder`, `edit-fields`) and fields it was granted - items are appended in nesting order, owner first;
 - never more than the owner allows: a re-exposure only narrows, and a collection never grows past its `maximumItems`.
 
 A saved value that does not fit is reported and left out of the result, but stays in the saved data:
