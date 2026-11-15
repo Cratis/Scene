@@ -14,12 +14,12 @@ new ScenePackage(
     Name: "Cratis.Blueprint.Default",
     Version: "1.0.0",
     Kind: PackageKind.Blueprint,
-    Dependencies: [new PackageDependency("PrimeReact"), new PackageDependency("Cratis.Components")],
+    Dependencies: [new PackageDependency("Cratis.Components")],
     Components: ["appShell", "topbar", "sidebar", /* ... */],
-    Layouts: ["AppShell", "FullPage"],
-    ScreenTemplates: ["ModuleWorkspace", "FeatureList", /* ... */],
-    DialogTemplates: ["Confirm", /* ... */],
-    Themes: ["Daylight", "Midnight"]);
+    Layouts: ["AppShell", "DashboardShell", "MinimalShell", "FullPage"],
+    ScreenTemplates: ["WorkspaceScreen", "DashboardScreen", "ListScreen", "ModuleWorkspace", /* ... */],
+    DialogTemplates: ["ConfirmDialog", "FormDialog", "DetailDialog", /* ... */],
+    Themes: ["Scene Default Light", "Scene Default Dark"]);
 ```
 
 Because those dependencies are declared, "which blueprints can I use" is answerable from the packages a
@@ -53,15 +53,15 @@ then resolvable by name, exactly as its components are.
 
 ## The default blueprint
 
-`@cratis/scene.blueprint.default` is the one you get for free: two layouts, eight menu modes, twenty-four
-screen templates, three dialog templates and two themes.
+`@cratis/scene.blueprint.default` is the one you get for free: four layouts, eight menu modes, forty-three
+screen templates, seven dialog templates and two themes.
 
 - **[Use the default blueprint](getting-started.md)** — render a screen, switch its mode, switch its theme.
 - **[Understanding blueprints](understanding-blueprints.md)** — how a blueprint differs from a component
   library, and when it is the wrong fit.
 - **[Composing screens from templates](composing-screens.md)** — how a nested template chain is placed, and
   what the size class does to an arrangement.
-- **[Regions and slots](regions-and-slots.md)** — every region the two layouts expose.
+- **[Regions and slots](regions-and-slots.md)** — every region the four layouts expose.
 - **[Layout modes](layout-modes.md)** — all eight modes, and the mobile regime nobody chooses.
 - **[The template set](template-set.md)** — every screen and dialog template it ships.
 - **[Theme tokens](theme-tokens.md)** — the thirteen shared tokens, and every theme's attribution.

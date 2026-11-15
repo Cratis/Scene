@@ -32,7 +32,7 @@ You pick the template and supply a query name. The page is done.
 
 ## What is in the box
 
-Eleven screen templates and three dialog templates. Every one of them is a whole page or a whole dialog,
+Twelve screen templates and three dialog templates. Every one of them is a whole page or a whole dialog,
 not a fragment.
 
 | Template | What it is |
@@ -43,6 +43,7 @@ not a fragment.
 | `MasterDetailPage` | A queried list in the larger column, the record in the narrower one |
 | `DashboardPage` | Four query-backed widgets, arranged the way people read a dashboard |
 | `CommandFormPage` | A generated command form with its own action bar |
+| `SettingsPage` | A module's settings as a generated command form, with save and discard |
 | `SchemaEditorPage` | An event type's schema, edited as a typed property tree |
 | `ObjectEditorPage` | One document against its schema, with its trail and version history |
 | `DataModulePage` · `DataFeatureSection` · `CommandSliceSection` | A worked three-level nesting chain |
@@ -55,8 +56,8 @@ bindings it names.
 
 They are both blueprints, and they do opposite halves of the job.
 
-The default blueprint answers **"what does this application look like"**. It ships two layouts, sixteen
-shell components, twenty-four screen templates and two themes, and its templates are built from
+The default blueprint answers **"what does this application look like"**. It ships four layouts, seventeen
+shell components, forty-three screen templates and two themes, and its templates are built from
 primitives — a `dataTable` handed rows, a form of `inputText` fields, a dialog assembled from a title, a
 message and two buttons. Those templates are about *shape*. They render fully with no backend at all,
 because there is no backend in them.

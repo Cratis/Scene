@@ -1,10 +1,13 @@
 ---
 title: Regions and slots
-description: Every region the default blueprint's two layouts expose, what fills it, and what happens to it at each size class.
+description: Every region the default blueprint's four layouts expose, what fills it, and what happens to it at each size class.
 ---
 
-The default blueprint exposes nine regions across two layouts. A screen fills them by slot name; the shell
+The default blueprint exposes nine regions across four layouts. A screen fills them by slot name; the shell
 components read the same names.
+
+Three of the layouts are the application shell: `AppShell`, `DashboardShell` and `MinimalShell` share the
+same slots and arrangement. The fourth, `FullPage`, has no chrome.
 
 ## The AppShell layout
 
@@ -19,6 +22,22 @@ components read the same names.
 | `rightPanel` | the inspector column down the right edge | `rightPanel` | it has content |
 | `configPanel` | the floating configurator | `configPanel` | it has content |
 
+## The DashboardShell and MinimalShell layouts
+
+`dashboardShellLayout` and `minimalShellLayout` are the `AppShell` layout under another name. They have the
+same slots, the same size-class arrangement and the same navigation outlets, so everything in the table above
+holds for them too. What differs is their metadata: the display name a designer shows for each, and the
+[menu mode](./layout-modes.md#the-typed-options-and-the-touch-regime) choosing it sets.
+
+| Layout | Export | Display name | Menu mode it starts in |
+| --- | --- | --- | --- |
+| `AppShell` | `appShellLayout` | Cratis Default | `static` |
+| `DashboardShell` | `dashboardShellLayout` | Dashboard | `horizontal` |
+| `MinimalShell` | `minimalShellLayout` | Minimal | `slim` |
+
+A screen written for `AppShell` fills `DashboardShell` and `MinimalShell` by the same slot names. Choosing one
+only sets the starting mode; the author can change the mode afterwards.
+
 ## The FullPage layout
 
 | Slot | Region | Filled with |
@@ -27,7 +46,7 @@ components read the same names.
 | `content` | the form, message or hero | any content |
 | `configPanel` | the floating configurator | `configPanel` |
 
-## Why two layouts and not one
+## Why a separate full-page layout
 
 Sign-in, register, forgotten password, new password, verification, lock, error, access-denied, not-found
 and landing screens have no navigation state, no sidebar to remember and no breadcrumb to place. Hanging

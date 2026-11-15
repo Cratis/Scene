@@ -11,10 +11,12 @@
       href: architecture/guarded-actions.md
     - name: Command responses and form continuations
       href: architecture/command-responses.md
+    - name: Command form geometry
+      href: command-form-geometry.md
     - name: Glossary
       href: glossary.md
-    - name: Packages
-      href: packages/toc.yml
+    - name: Frontend package hosting
+      href: package-hosting.md
 
 - name: Extensions
   items:
@@ -32,6 +34,8 @@
       href: icon-libraries/toc.yml
     - name: Blueprints
       href: blueprints/toc.yml
+    - name: Business blueprint pattern notes
+      href: business-blueprint-patterns.md
     - name: Cratis Components blueprint
       href: blueprint-components/toc.yml
     - name: PrimeReact package

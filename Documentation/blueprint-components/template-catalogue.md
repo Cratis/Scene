@@ -8,7 +8,7 @@ them; slots are `TemplateSlotName` values.
 
 ## Screen templates
 
-All eight page templates set `fitsSlot: SlotName.Content`, which is the only region a layout offers a
+All nine page templates set `fitsSlot: SlotName.Content`, which is the only region a layout offers a
 screen. The three nesting-chain templates fit each other.
 
 | Template | Slots | Bindings | What it is |
@@ -19,6 +19,7 @@ screen. The three nesting-chain templates fit each other.
 | `MasterDetailPage` | `header`, `primary`, `secondary` | `AllInvoices` | A `dataTable` in the larger column, the record in the narrower |
 | `DashboardPage` | `header`, `stats`, `primary`, `secondary` | `RevenueByMonth`, `InvoicesInFlight`, `OpenTickets`, `AllInvoices`, `AllAdjustments` | Query-backed widgets over a wide and a narrow column |
 | `CommandFormPage` | `header`, `body`, `actions` | `RegisterInvoice` | A generated command form with its own action bar |
+| `SettingsPage` | `header`, `body`, `actions` | `ChangeBillingSettings` | A module's settings as a generated command form, with save and discard |
 | `SchemaEditorPage` | `header`, `toolbar`, `body` | none | An event type's schema as a typed property tree |
 | `ObjectEditorPage` | `header`, `toolbar`, `body`, `sidePanel` | `InvoiceById` | One document against its schema, with trail and history |
 | `DataModulePage` | `header`, `body`, `sidePanel` | none | Module level — fits the layout's `content` |
