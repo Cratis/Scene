@@ -6,6 +6,11 @@
         <PackageTags>cratis;scene;screenplay;ui;design</PackageTags>
     </PropertyGroup>
     <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Cratis.Scene.Design.AI</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Cratis.Chronicle" />
         <ProjectReference Include="../Model/Model.csproj" />
         <ProjectReference Include="../Engine/Engine.csproj" />

@@ -31,11 +31,11 @@ sealed record QueryBindingValue(string QueryId, string Query, IReadOnlyList<Quer
     /// </summary>
     /// <param name="Parameter">The parameter it is for.</param>
     /// <param name="SourcePath">The path of what supplies it.</param>
-    public sealed record Argument(string Parameter, string SourcePath);
+    internal sealed record Argument(string Parameter, string SourcePath);
 
     /// <summary>
     /// One result of a bound query.
     /// </summary>
     /// <param name="Field">The result field.</param>
-    public sealed record Result(string Field);
+    internal sealed record Result(string Field);
 }
