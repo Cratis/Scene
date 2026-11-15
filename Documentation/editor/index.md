@@ -23,6 +23,7 @@ host: the model it edits, the commands that store what it produces and the words
 | `BlueprintGallery` | The domain blueprints as cards, with their preview and sample data |
 | `SampleData` | Choosing, importing and managing sample-data packs |
 | `FormDesigner`, `NavigationDesigner`, `StringResourceDesigner`, `LayoutDesigner` | The smaller designers for a command form, navigation, string resources and a freeform arrangement |
+| `DesignSystem` | The design system editor: foundations, themes, components, words, Screenplay, conflicts, what is off the standard and a draft's changes, all through a host seam. See [the design system editor](design-system-editor.md) |
 | `Icons`, `IconLibraries` | The icon property field and the Lucide library |
 | `CascadeMenu`, `Crash`, `NewProjectWizard` | Shared widgets: the cascading menu, the crash panel and boundary, the new project wizard |
 

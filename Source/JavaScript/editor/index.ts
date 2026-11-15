@@ -177,6 +177,7 @@ export * from './Icons';
 export * from './IconLibraries/Lucide';
 export * from './Preview';
 export * from './Crash';
+export * from './DesignSystem';
 export * from './UiProfileDesigner/Shell/ShellHost';
 export * from './UiProfileDesigner/Shell/ShellSwitchDialog';
 export * from './UiProfileDesigner/Shell/screensOfDocuments';

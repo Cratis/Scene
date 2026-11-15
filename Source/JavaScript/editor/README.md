@@ -25,6 +25,7 @@ Every folder is an area and keeps its specifications beside the code, in `for_<S
 | `TemplateBrowser`, `TemplatePicker`, `ScreenTemplates`, `LevelTemplateSurface` | Browsing, choosing and authoring screen templates |
 | `Preview`, `PreviewSurface`, `BlueprintPreview`, `BlueprintGallery` | Application and blueprint previews, and the gallery |
 | `SampleData`, `Icons`, `IconLibraries` | Sample data packs, the icon field and the Lucide library |
+| `DesignSystemEditor` | Browse and edit a design system on a draft; every effect goes through a `DesignSystemHost` |
 | `FormDesigner`, `NavigationDesigner`, `StringResourceDesigner`, `LayoutDesigner` | The smaller designers |
 | `CascadeMenu`, `Crash`, `NewProjectWizard` | Shared widgets |
 
