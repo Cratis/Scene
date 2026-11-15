@@ -3,32 +3,32 @@
 
 import { primeReactThemes } from '../theme';
 
-describe('when checking the token vocabulary', () => {
-    const vocabulary = [
-        'primary.color',
-        'primary.contrastColor',
-        'surface.background',
-        'surface.card',
-        'surface.border',
-        'surface.hover',
-        'surface.overlay',
-        'text.color',
-        'text.mutedColor',
-        'highlight.background',
-        'highlight.color',
-        'content.borderRadius',
-        'focus.ring',
+describe('when checking the token roles', () => {
+    const roles = [
+        'color.primary',
+        'color.on-primary',
+        'color.background',
+        'color.surface',
+        'color.border',
+        'color.hover',
+        'color.overlay',
+        'color.text',
+        'color.text-muted',
+        'color.highlight',
+        'color.on-highlight',
+        'radius.content',
+        'shadow.focus-ring',
     ];
 
-    it('should give every theme the whole vocabulary', () => {
+    it('should give every theme a value for each role it supplies', () => {
         const incomplete = primeReactThemes
-            .filter((theme) => vocabulary.some((token) => theme.tokens?.[token] === undefined))
+            .filter((theme) => roles.some((token) => theme.tokens?.[token] === undefined))
             .map((theme) => theme.name);
         incomplete.should.deep.equal([]);
     });
 
-    it('should give every theme nothing but the vocabulary, so packages can agree on it', () => {
-        const extra = primeReactThemes.flatMap((theme) => Object.keys(theme.tokens ?? {}).filter((token) => !vocabulary.includes(token)));
+    it('should give every theme nothing but the roles of the default design system, so a theme fills the contract and nothing more', () => {
+        const extra = primeReactThemes.flatMap((theme) => Object.keys(theme.tokens ?? {}).filter((token) => !roles.includes(token)));
         extra.should.deep.equal([]);
     });
 
@@ -56,7 +56,7 @@ describe('when checking the token vocabulary', () => {
     });
 
     it('should mirror the accent the preset binds for a light theme', () => {
-        primeReactThemes.find((theme) => theme.name === 'lara-light-blue')!.tokens!['primary.color'].should.equal('#3b82f6');
+        primeReactThemes.find((theme) => theme.name === 'lara-light-blue')!.tokens!['color.primary'].should.equal('#3b82f6');
     });
 
     /**
@@ -65,6 +65,6 @@ describe('when checking the token vocabulary', () => {
      * legible everywhere except its own accent.
      */
     it('should take the accent from the lighter end of the ramp for a dark theme', () => {
-        primeReactThemes.find((theme) => theme.name === 'lara-dark-blue')!.tokens!['primary.color'].should.equal('#60a5fa');
+        primeReactThemes.find((theme) => theme.name === 'lara-dark-blue')!.tokens!['color.primary'].should.equal('#60a5fa');
     });
 });

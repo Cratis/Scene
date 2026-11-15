@@ -1,8 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { incompatiblePackages } from '@cratis/scene.engine';
-import { themeTokenProperty } from '@cratis/scene.react';
+import { defaultDesignSystem, incompatiblePackages, tokenAddress } from '@cratis/scene.engine';
+import { designAnatomyProperty, designTokenProperty } from '@cratis/scene.react';
 import { galleryProfile } from '../gallery';
 import { darkTheme, defaultBlueprintThemes, lightTheme } from '../themes';
 
@@ -31,7 +31,7 @@ describe('when checking attribution and tokens', () => {
         });
     }
 
-    it('should define exactly the same token names in both themes', () => {
+    it('should define exactly the same token roles in both themes', () => {
         Object.keys(lightTheme.tokens ?? {})
             .sort()
             .should.deep.equal(Object.keys(darkTheme.tokens ?? {}).sort());
@@ -42,9 +42,15 @@ describe('when checking attribution and tokens', () => {
         defaultBlueprintThemes.filter(theme => theme.isDark !== true).should.have.lengthOf(1);
     });
 
-    it('should name tokens that become the custom properties the stylesheet reads', () => {
-        themeTokenProperty('primary.contrastColor').should.equal('--scene-primary-contrast-color');
-        themeTokenProperty('text.mutedColor').should.equal('--scene-text-muted-color');
-        themeTokenProperty('content.borderRadius').should.equal('--scene-content-border-radius');
+    it('should give every role of the default design system a value in both themes', () => {
+        const roles = defaultDesignSystem.tokens.map(tokenAddress).sort();
+        Object.keys(lightTheme.tokens ?? {}).sort().should.deep.equal(roles);
+        Object.keys(darkTheme.tokens ?? {}).sort().should.deep.equal(roles);
+    });
+
+    it('should name the custom properties the stylesheet reads', () => {
+        designTokenProperty('color.on-primary').should.equal('--ds-token-color-on-primary');
+        designAnatomyProperty('Menu', 'default', 'background', 'selected').should.equal('--ds-menu-default-background-selected');
+        designAnatomyProperty('StatusChip', 'success', 'text').should.equal('--ds-status-chip-success-text');
     });
 });

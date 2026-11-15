@@ -7,10 +7,10 @@ import { DockPosition } from './DockPosition';
 
 const dockStyle: CSSProperties = {
     position: 'absolute',
-    background: 'var(--scene-surface-overlay)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
-    color: 'var(--scene-text-color)',
+    background: 'var(--ds-popover-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
+    color: 'var(--ds-text-default-text)',
 };
 
 const entryStyle: CSSProperties = {

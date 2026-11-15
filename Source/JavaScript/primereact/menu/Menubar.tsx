@@ -7,10 +7,10 @@ import { MenuItemAction } from './MenuItemAction';
 import { MenuItemContent } from './MenuItemContent';
 
 const barStyle: CSSProperties = {
-    background: 'var(--scene-surface-card)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
-    color: 'var(--scene-text-color)',
+    background: 'var(--ds-card-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
+    color: 'var(--ds-text-default-text)',
 };
 
 const triggerStyle: CSSProperties = {
@@ -28,14 +28,14 @@ const panelStyle: CSSProperties = {
     left: 0,
     zIndex: 1,
     minWidth: '12rem',
-    background: 'var(--scene-surface-overlay)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
+    background: 'var(--ds-popover-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
 };
 
 const panelItemStyle: CSSProperties = { ...triggerStyle, width: '100%', textAlign: 'left' };
 
-const separatorStyle: CSSProperties = { border: 'none', borderTop: '1px solid var(--scene-surface-border)', margin: 0 };
+const separatorStyle: CSSProperties = { border: 'none', borderTop: '1px solid var(--ds-card-default-border)', margin: 0 };
 
 /**
  * The configuration {@link Menubar} takes.

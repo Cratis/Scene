@@ -67,9 +67,9 @@ describe.each(['light', 'dark'] as const)('when PrimeReact controls share the %s
                 const token = (name: string) => getComputedStyle(themed).getPropertyValue(name).trim();
                 const style = (selector: string) => getComputedStyle(document.querySelector(selector)!);
                 return {
-                    primary: token('--scene-primary-color'), contrast: token('--scene-primary-contrast-color'),
+                    primary: token('--ds-button-primary-background'), contrast: token('--ds-button-primary-text'),
                     legacyPrimary: token('--primary-color'), legacyText: token('--text-color'),
-                    text: token('--scene-text-color'), card: token('--scene-surface-card'),
+                    text: token('--ds-text-default-text'), card: token('--ds-card-default-background'),
                     button: style('[data-scene-id="action"]').backgroundColor,
                     buttonText: style('[data-scene-id="action"]').color,
                     cardBackground: style('[data-scene-id="card"]').backgroundColor,

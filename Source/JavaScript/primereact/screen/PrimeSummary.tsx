@@ -41,10 +41,10 @@ export function PrimeSummary({ element, slots }: RegisteredComponentProps) {
                 <dl className='grid grid-cols-2 gap-2'>
                     {items.map((item, index) => (
                         <div key={index} className='flex flex-col'>
-                            <dt className='text-sm' style={{ color: 'var(--scene-text-muted-color)' }}>
+                            <dt className='text-sm' style={{ color: 'var(--ds-text-muted-text)' }}>
                                 {String(item.label ?? '')}
                             </dt>
-                            <dd style={{ color: 'var(--scene-text-color)' }}>{String(item.value ?? '')}</dd>
+                            <dd style={{ color: 'var(--ds-text-default-text)' }}>{String(item.value ?? '')}</dd>
                         </div>
                     ))}
                 </dl>

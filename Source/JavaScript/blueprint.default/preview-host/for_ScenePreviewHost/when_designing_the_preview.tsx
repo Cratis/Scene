@@ -143,9 +143,9 @@ describe('when designing the preview', () => {
     describe('and the appearance chooses corners and an accent', () => {
         beforeEach(() => render(preview({ document: designed({ appearance: { corners: CornerStyle.Round, accent: '#0a7a4b', font: 'inter' } }) })));
 
-        it('should set the corner radius token', () => host().style.getPropertyValue('--scene-content-border-radius').should.equal('18px'));
-        it('should set the accent token', () => host().style.getPropertyValue('--scene-primary-color').should.equal('#0a7a4b'));
-        it('should set the font token', () => host().style.getPropertyValue('--scene-text-font-family').should.contain('Inter'));
+        it('should set the corner radius of the Card anatomy', () => host().style.getPropertyValue('--ds-card-default-radius').should.equal('18px'));
+        it('should set the accent as the primary Button background', () => host().style.getPropertyValue('--ds-button-primary-background').should.equal('#0a7a4b'));
+        it('should set the font of the Shell', () => host().style.getPropertyValue('--ds-shell-default-font').should.contain('Inter'));
     });
 });
 

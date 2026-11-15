@@ -5,4 +5,6 @@ export * from './blueprintThemeCompatibility';
 export * from './light';
 export * from './dark';
 export * from './defaultBlueprintThemes';
+export * from './defaultBlueprintDesignSystem';
+export * from './defaultFontStack';
 export * from './LayoutThemeProvider';

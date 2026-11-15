@@ -7,10 +7,10 @@ import { MenuItemAction } from './MenuItemAction';
 import { MenuItemContent } from './MenuItemContent';
 
 const rootStyle: CSSProperties = {
-    background: 'var(--scene-surface-card)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
-    color: 'var(--scene-text-color)',
+    background: 'var(--ds-card-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
+    color: 'var(--ds-text-default-text)',
     width: 'fit-content',
 };
 
@@ -32,12 +32,12 @@ const submenuStyle: CSSProperties = {
     top: 0,
     left: '100%',
     zIndex: 1,
-    background: 'var(--scene-surface-overlay)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
+    background: 'var(--ds-popover-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
 };
 
-const separatorStyle: CSSProperties = { borderTop: '1px solid var(--scene-surface-border)', margin: 0 };
+const separatorStyle: CSSProperties = { borderTop: '1px solid var(--ds-card-default-border)', margin: 0 };
 
 /**
  * The configuration {@link TieredMenu} takes.

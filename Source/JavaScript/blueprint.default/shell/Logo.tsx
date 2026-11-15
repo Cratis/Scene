@@ -2,7 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import { useSceneTheme } from '@cratis/scene.react';
+import { ColorScheme as ProfileColorScheme } from '@cratis/scene.model';
+import { useSceneDesign } from '@cratis/scene.react';
 import { ProfileRegion } from '@cratis/scene.engine';
 import { readBoolean, readOptionalString, readString } from './elementProperties';
 import { ShellIcon } from './ShellIcon';
@@ -16,17 +17,17 @@ const logoIconClass: Record<string, string> = {
 /**
  * The brand mark.
  *
- * This is the one place in the shell that reads the active theme directly rather than through a token,
+ * This is the one place in the shell that reads the active design directly rather than through anatomy,
  * because picking between a light-background and a dark-background logo asset is a decision no CSS custom
- * property can express - the two are different files. `useSceneTheme` exists for exactly this case.
+ * property can express - the two are different files. `useSceneDesign` exists for exactly this case.
  */
 export function Logo({ element }: RegisteredComponentProps) {
-    const theme = useSceneTheme();
+    const design = useSceneDesign();
     const label = readString(element, 'label', 'Cratis');
     const initials = readString(element, 'initials', label.slice(0, 1).toUpperCase());
     const lightSource = readOptionalString(element, 'lightImageUrl');
     const darkSource = readOptionalString(element, 'darkImageUrl');
-    const source = theme?.isDark ? darkSource ?? lightSource : lightSource ?? darkSource;
+    const source = design?.colorScheme === ProfileColorScheme.Dark ? darkSource ?? lightSource : lightSource ?? darkSource;
     const iconName = readOptionalString(element, 'iconName');
     const showName = readBoolean(element, 'showName', true);
     const targetScreen = readString(element, 'targetScreen', 'Dashboard');

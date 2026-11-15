@@ -2,11 +2,12 @@
 /* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
 
 /*
- * Scene design tokens <-> PrimeReact 11 design tokens.
+ * Scene design-system anatomy <-> PrimeReact 11 design tokens.
  *
  * This is the seam that lets layout and component CSS stay library-agnostic. Everything Scene writes -
- * a layout's grid, this package's own wrappers, a screen's own styling - reads `--scene-*` and never
- * names a PrimeReact variable. This file is the only place the two vocabularies meet, so swapping the
+ * a layout's grid, this package's own wrappers, a screen's own styling - reads the anatomy a design
+ * system declares (`--ds-<component>-<variant>-<part>[-<state>]`) and never names a PrimeReact variable
+ * or a token of a design system. This file is the only place the two vocabularies meet, so swapping the
  * component library underneath a screen is a matter of shipping a different bridge, not of editing
  * every rule that mentioned a color.
  *
@@ -24,30 +25,30 @@
  *
  * The bridge runs in both directions, and the order matters:
  *
- *   1. On `:root`, every Scene token falls back to the active preset's `--p-*` value. An application
- *      that hands `PrimeReactProvider` a preset and applies no Scene theme at all still gets meaningful
- *      values for every `--scene-*` token.
+ *   1. On `:root`, every anatomy variable falls back to the active preset's `--p-*` value. An application
+ *      that hands `PrimeReactProvider` a preset and applies no design at all still gets meaningful
+ *      values for every `--ds-*` variable.
  *
- *   2. Inside a Scene theme root, the Scene tokens are fed *back* onto PrimeReact's variables, so a
- *      Scene theme re-tints PrimeReact's own components and not only Scene's wrappers.
+ *   2. Inside a Scene theme root, the anatomy is fed *back* onto PrimeReact's variables, so a design
+ *      system re-tints PrimeReact's own components and not only Scene's wrappers.
  *
  * The second rule is deliberately scoped to `[data-scene-theme-root]` and must never be moved to
  * `:root`. Custom properties that reference each other in a cycle are invalid at computed-value time and
- * resolve to nothing, so `--scene-primary-color: var(--p-primary-color)` and
- * `--p-primary-color: var(--scene-primary-color)` on the *same* element would silently blank both. Split
- * across two elements there is no cycle: `SceneThemeProvider` writes the theme's tokens as inline styles
+ * resolve to nothing, so `--ds-button-primary-background: var(--p-primary-color)` and
+ * `--p-primary-color: var(--ds-button-primary-background)` on the *same* element would silently blank both. Split
+ * across two elements there is no cycle: `SceneThemeProvider` writes the design's anatomy as inline styles
  * on the theme root, which is a literal value with no dependency, and the fallbacks on `:root` are
  * already resolved by the time they inherit down.
  *
- * The token vocabulary is small on purpose. Every Scene package has to agree on it, and a vocabulary
- * that grows per package is one no package can rely on. Thirteen tokens: a primary color and its
- * contrast, five surfaces, two text colors, two highlight colors, a radius and a focus ring.
+ * The anatomy this file reads is that of the components PrimeReact draws: the primary Button, the Card,
+ * the Menu (its overlay, hover and selected states), Text and the Shell canvas. A design system that
+ * declares those components restyles PrimeReact; the names of its own tokens never reach this file.
  */
 
 :root {
     /* Primary brand */
-    --scene-primary-color: var(--p-primary-color);
-    --scene-primary-contrast-color: var(--p-primary-contrast-color);
+    --ds-button-primary-background: var(--p-primary-color);
+    --ds-button-primary-text: var(--p-primary-contrast-color);
 
     /*
      * Surfaces. `content.background` is the raised surface a card or panel paints itself with; the page
@@ -55,106 +56,106 @@
      * resolve to for a light and a dark preset respectively. Only the ground needs the light/dark split
      * spelled out - every other token below already carries it inside the preset's own `light-dark()`.
      */
-    --scene-surface-background: var(--p-surface-50);
-    --scene-surface-card: var(--p-content-background);
-    --scene-surface-border: var(--p-content-border-color);
-    --scene-surface-hover: var(--p-content-hover-background);
-    --scene-surface-overlay: var(--p-overlay-popover-background);
+    --ds-shell-default-background: var(--p-surface-50);
+    --ds-card-default-background: var(--p-content-background);
+    --ds-card-default-border: var(--p-content-border-color);
+    --ds-menu-default-background-hover: var(--p-content-hover-background);
+    --ds-popover-default-background: var(--p-overlay-popover-background);
 
     /* Text */
-    --scene-text-color: var(--p-text-color);
-    --scene-text-muted-color: var(--p-text-muted-color);
+    --ds-text-default-text: var(--p-text-color);
+    --ds-text-muted-text: var(--p-text-muted-color);
 
     /* Selection */
-    --scene-highlight-background: var(--p-highlight-background);
-    --scene-highlight-color: var(--p-highlight-color);
+    --ds-menu-default-background-selected: var(--p-highlight-background);
+    --ds-menu-default-text-selected: var(--p-highlight-color);
 
     /* Geometry and focus */
-    --scene-content-border-radius: var(--p-content-border-radius);
-    --scene-text-font-family: var(--p-font-family, inherit);
-    --scene-focus-ring: var(--p-focus-ring-shadow);
+    --ds-card-default-radius: var(--p-content-border-radius);
+    --ds-shell-default-font: var(--p-font-family, inherit);
+    --ds-button-primary-shadow-focus: var(--p-focus-ring-shadow);
 }
 
 .scene-dark,
 [data-scene-color-scheme='dark'] {
     /*
      * The ground follows both the preset's class and the shell's color-scheme marker. It is the one
-     * token the bridge picks off the ramp by hand, so the bridge also flips it by hand. Explicit Scene
-     * surface tokens supplied inline by SceneThemeProvider remain authoritative.
+     * value the bridge picks off the ramp by hand, so the bridge also flips it by hand. Explicit Scene
+     * anatomy supplied inline by SceneThemeProvider remains authoritative.
      */
-    --scene-surface-background: var(--p-surface-950);
+    --ds-shell-default-background: var(--p-surface-950);
 }
 
 [data-scene-theme-root] {
-    --p-primary-color: var(--scene-primary-color);
-    --p-primary-contrast-color: var(--scene-primary-contrast-color);
+    --p-primary-color: var(--ds-button-primary-background);
+    --p-primary-contrast-color: var(--ds-button-primary-text);
 
-    --p-content-background: var(--scene-surface-card);
-    --p-content-border-color: var(--scene-surface-border);
-    --p-content-hover-background: var(--scene-surface-hover);
-    --p-overlay-popover-background: var(--scene-surface-overlay);
+    --p-content-background: var(--ds-card-default-background);
+    --p-content-border-color: var(--ds-card-default-border);
+    --p-content-hover-background: var(--ds-menu-default-background-hover);
+    --p-overlay-popover-background: var(--ds-popover-default-background);
 
-    --p-text-color: var(--scene-text-color);
-    --p-text-muted-color: var(--scene-text-muted-color);
+    --p-text-color: var(--ds-text-default-text);
+    --p-text-muted-color: var(--ds-text-muted-text);
 
-    --p-highlight-background: var(--scene-highlight-background);
-    --p-highlight-color: var(--scene-highlight-color);
+    --p-highlight-background: var(--ds-menu-default-background-selected);
+    --p-highlight-color: var(--ds-menu-default-text-selected);
 
-    --p-content-border-radius: var(--scene-content-border-radius);
-    --p-focus-ring-shadow: var(--scene-focus-ring);
+    --p-content-border-radius: var(--ds-card-default-radius);
+    --p-focus-ring-shadow: var(--ds-button-primary-shadow-focus);
 
     /*
-     * Presets resolve component references on :root, before a Scene theme is inherited. Rebinding
-     * only the semantic tokens above therefore leaves, for example, a button emerald and a card
+     * Presets resolve component references on :root, before a design is inherited. Rebinding
+     * only the semantic variables above therefore leaves, for example, a button emerald and a card
      * dark while Scene's text is still using the blueprint's palette. Rebind the component pairs
      * together at the same theme boundary, including the foreground of the progress value.
      */
-    --p-button-primary-background: var(--scene-primary-color);
-    --p-button-primary-border-color: var(--scene-primary-color);
-    --p-button-primary-color: var(--scene-primary-contrast-color);
-    --p-button-primary-hover-background: color-mix(in srgb, var(--scene-primary-color) 90%, var(--scene-text-color));
+    --p-button-primary-background: var(--ds-button-primary-background);
+    --p-button-primary-border-color: var(--ds-button-primary-background);
+    --p-button-primary-color: var(--ds-button-primary-text);
+    --p-button-primary-hover-background: color-mix(in srgb, var(--ds-button-primary-background) 90%, var(--ds-text-default-text));
     --p-button-primary-hover-border-color: var(--p-button-primary-hover-background);
-    --p-button-primary-hover-color: var(--scene-primary-contrast-color);
-    --p-button-primary-active-background: color-mix(in srgb, var(--scene-primary-color) 80%, var(--scene-text-color));
+    --p-button-primary-hover-color: var(--ds-button-primary-text);
+    --p-button-primary-active-background: color-mix(in srgb, var(--ds-button-primary-background) 80%, var(--ds-text-default-text));
     --p-button-primary-active-border-color: var(--p-button-primary-active-background);
-    --p-button-primary-active-color: var(--scene-primary-contrast-color);
-    --p-button-primary-focus-ring-color: var(--scene-primary-color);
+    --p-button-primary-active-color: var(--ds-button-primary-text);
+    --p-button-primary-focus-ring-color: var(--ds-button-primary-background);
 
-    --p-card-background: var(--scene-surface-card);
-    --p-card-color: var(--scene-text-color);
-    --p-card-subtitle-color: var(--scene-text-muted-color);
-    --p-panel-background: var(--scene-surface-card);
-    --p-panel-color: var(--scene-text-color);
-    --p-panel-border-color: var(--scene-surface-border);
-    --p-panel-header-background: var(--scene-surface-card);
-    --p-panel-header-color: var(--scene-text-color);
-    --p-panel-header-border-color: var(--scene-surface-border);
+    --p-card-background: var(--ds-card-default-background);
+    --p-card-color: var(--ds-text-default-text);
+    --p-card-subtitle-color: var(--ds-text-muted-text);
+    --p-panel-background: var(--ds-card-default-background);
+    --p-panel-color: var(--ds-text-default-text);
+    --p-panel-border-color: var(--ds-card-default-border);
+    --p-panel-header-background: var(--ds-card-default-background);
+    --p-panel-header-color: var(--ds-text-default-text);
+    --p-panel-header-border-color: var(--ds-card-default-border);
 
-    --p-tag-primary-background: var(--scene-primary-color);
-    --p-tag-primary-color: var(--scene-primary-contrast-color);
-    --p-progressbar-background: var(--scene-surface-border);
-    --p-progressbar-value-background: var(--scene-primary-color);
-    --p-progressbar-label-color: var(--scene-primary-contrast-color);
+    --p-tag-primary-background: var(--ds-button-primary-background);
+    --p-tag-primary-color: var(--ds-button-primary-text);
+    --p-progressbar-background: var(--ds-card-default-border);
+    --p-progressbar-value-background: var(--ds-button-primary-background);
+    --p-progressbar-label-color: var(--ds-button-primary-text);
 
     /* Legacy theme consumers use the same vocabulary, not a second palette. */
-    --primary-color: var(--scene-primary-color);
-    --primary-color-text: var(--scene-primary-contrast-color);
-    --text-color: var(--scene-text-color);
-    --text-color-secondary: var(--scene-text-muted-color);
-    --surface-ground: var(--scene-surface-background);
-    --surface-card: var(--scene-surface-card);
-    --surface-border: var(--scene-surface-border);
-    --surface-hover: var(--scene-surface-hover);
-    --surface-overlay: var(--scene-surface-overlay);
-    --highlight-bg: var(--scene-highlight-background);
-    --highlight-text-color: var(--scene-highlight-color);
+    --primary-color: var(--ds-button-primary-background);
+    --primary-color-text: var(--ds-button-primary-text);
+    --text-color: var(--ds-text-default-text);
+    --text-color-secondary: var(--ds-text-muted-text);
+    --surface-ground: var(--ds-shell-default-background);
+    --surface-card: var(--ds-card-default-background);
+    --surface-border: var(--ds-card-default-border);
+    --surface-hover: var(--ds-menu-default-background-hover);
+    --surface-overlay: var(--ds-popover-default-background);
+    --highlight-bg: var(--ds-menu-default-background-selected);
+    --highlight-text-color: var(--ds-menu-default-text-selected);
 
     /*
      * A themed root paints itself, so a preview embedded in a host page reads as the theme rather than
      * as the host's background showing through between components.
      */
-    background: var(--scene-surface-background);
-    color: var(--scene-text-color);
+    background: var(--ds-shell-default-background);
+    color: var(--ds-text-default-text);
 }
 
 /*
@@ -174,12 +175,12 @@
 
 [data-scene-component='dataScroller'] li {
     padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--scene-surface-border, #d4d4d8);
+    border-bottom: 1px solid var(--ds-card-default-border, #d4d4d8);
 }
 
 [data-scene-component='dataScroller'] dl {
     margin: 0.25rem 0 0;
-    color: var(--scene-text-muted-color, inherit);
+    color: var(--ds-text-muted-text, inherit);
 }
 
 [data-scene-component='dataScroller'] dl > div {
@@ -204,24 +205,24 @@
 [data-scene-component='treeTable'] td {
     padding: 0.5rem 0.75rem;
     text-align: start;
-    border-bottom: 1px solid var(--scene-surface-border, #d4d4d8);
+    border-bottom: 1px solid var(--ds-card-default-border, #d4d4d8);
 }
 
 [data-scene-component='treeTable'] tbody tr:hover {
-    background: var(--scene-surface-hover, #f4f4f5);
+    background: var(--ds-menu-default-background-hover, #f4f4f5);
 }
 
 [data-scene-component='treeTable'] tbody tr[aria-selected='true'] {
-    background: var(--scene-highlight-background, #e0e7ff);
-    color: var(--scene-highlight-color, inherit);
+    background: var(--ds-menu-default-background-selected, #e0e7ff);
+    color: var(--ds-menu-default-text-selected, inherit);
 }
 
 [data-scene-component='treeTable'] tbody tr:focus-visible {
-    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline: 2px solid var(--ds-button-primary-background, #4f46e5);
     outline-offset: -2px;
 }
 
 [data-scene-component='dataScroller'] li:focus-visible {
-    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline: 2px solid var(--ds-button-primary-background, #4f46e5);
     outline-offset: -2px;
 }

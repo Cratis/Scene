@@ -15,7 +15,7 @@ export interface MenuModeCard {
     schematic: string;
 }
 
-const accent = 'var(--scene-primary-color, #4f46e5)';
+const accent = 'var(--ds-button-primary-background, #4f46e5)';
 const stroke = 'currentColor';
 
 const rect = (x: number, y: number, width: number, height: number, fill: string, extra = '') => `<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="1.5" fill="${fill}" ${extra}/>`;
@@ -26,19 +26,19 @@ const rows = (x: number, width: number, count: number, gap: number) => Array.fro
 /** The part of the schematic that is the menu, per mode. The frame, the top bar and the content card are the same in all. */
 const menuOf: Record<NavigationMode, string> = {
     [NavigationMode.Static]: rect(0, 12, 24, 52, stroke, 'opacity="0.12"') + rows(4, 16, 5, 8),
-    [NavigationMode.Overlay]: rect(0, 12, 26, 52, 'var(--scene-surface-card, #fff)', `stroke="${stroke}" stroke-opacity="0.4"`) + rows(4, 18, 4, 8),
+    [NavigationMode.Overlay]: rect(0, 12, 26, 52, 'var(--ds-card-default-background, #fff)', `stroke="${stroke}" stroke-opacity="0.4"`) + rows(4, 18, 4, 8),
     [NavigationMode.Slim]: rect(0, 12, 10, 52, stroke, 'opacity="0.12"') + dots(2.5, 5, false),
     [NavigationMode.SlimPlus]: rect(0, 12, 14, 52, stroke, 'opacity="0.12"') + dots(4.5, 5, true),
     [NavigationMode.Compact]: rect(0, 12, 19, 52, stroke, 'opacity="0.12"') + rows(3, 13, 6, 6.5),
     [NavigationMode.Horizontal]: [0, 1, 2, 3].map(index => rect(24 + index * 14, 4, 10, 3, index === 0 ? accent : stroke, index === 0 ? '' : 'opacity="0.35"')).join(''),
     [NavigationMode.Reveal]: rect(0, 12, 10, 52, stroke, 'opacity="0.12"') + dots(2.5, 5, false)
         + rect(10, 12, 24, 52, 'none', `stroke="${stroke}" stroke-opacity="0.5" stroke-dasharray="2 2"`) + rows(14, 16, 4, 8),
-    [NavigationMode.Drawer]: rect(0, 12, 96, 52, '#000', 'opacity="0.28"') + rect(0, 12, 26, 52, 'var(--scene-surface-card, #fff)', `stroke="${stroke}" stroke-opacity="0.4"`) + rows(4, 18, 4, 8),
+    [NavigationMode.Drawer]: rect(0, 12, 96, 52, '#000', 'opacity="0.28"') + rect(0, 12, 26, 52, 'var(--ds-card-default-background, #fff)', `stroke="${stroke}" stroke-opacity="0.4"`) + rows(4, 18, 4, 8),
 };
 
 const contentOf = (mode: NavigationMode): string => {
     const left = { [NavigationMode.Static]: 28, [NavigationMode.Slim]: 14, [NavigationMode.SlimPlus]: 18, [NavigationMode.Compact]: 23, [NavigationMode.Reveal]: 14 }[mode as string] ?? 4;
-    return rect(left, 16, 92 - left, 44, 'var(--scene-surface-card, #fff)', `stroke="${stroke}" stroke-opacity="0.25"`);
+    return rect(left, 16, 92 - left, 44, 'var(--ds-card-default-background, #fff)', `stroke="${stroke}" stroke-opacity="0.25"`);
 };
 
 /** The schematic of a menu mode: a framed screen with a top bar, a content card, and the menu where the mode puts it. */

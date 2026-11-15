@@ -13,6 +13,7 @@ export * from './editors';
 export * from './toolbar';
 export * from './cratisComponents';
 export * from './cratisComponentsDescriptors';
+export * from './cratisComponentsAnatomy';
 export * from './cratisComponentsPackage';
 export * from './cratisComponentsRuntimePackage';
 export * from './designTime/cratisComponentsDesignTime';

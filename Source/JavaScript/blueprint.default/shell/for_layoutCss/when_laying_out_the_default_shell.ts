@@ -10,7 +10,7 @@ const rule = (selector: string) => new RegExp(`${selector.replace(/[.\-:()+]/g, 
 
 // @cratis/components ships no font stack, so the shell must not fall back to the browser's serif (Scene#250).
 describe('when laying out the default shell', () => {
-    it('should read the theme font before the sans stack', () => css.should.contain('font-family: var(--scene-text-font-family, var(--layout-font-stack))'));
+    it('should read the theme font before the sans stack', () => css.should.contain('font-family: var(--ds-shell-default-font, var(--layout-font-stack))'));
     it('should end the sans stack in the generic sans-serif family', () => /--layout-font-stack:[^;]*sans-serif;/.test(css).should.equal(true));
     it('should dock a static sidebar from the top edge so no block is left above it', () => rule('.layout-static:not(.layout-static-inactive) .layout-sidebar').should.contain('inset-block-start: 0'));
     it('should show the brand once by hiding the topbar logo only beside a docked sidebar that has one', () => rule('.layout-static:not(.layout-static-inactive):has(.layout-sidebar .layout-logo) .layout-topbar .layout-logo').should.contain('display: none'));

@@ -15,10 +15,10 @@ export function PrimeField({ element, slots }: RegisteredComponentProps) {
     const labelId = `${element.id}-label`;
     return (
         <div data-scene-id={element.id} className='flex flex-col gap-1'>
-            <span id={labelId} className='text-sm' style={{ color: 'var(--scene-text-muted-color)' }}>
+            <span id={labelId} className='text-sm' style={{ color: 'var(--ds-text-muted-text)' }}>
                 {stringProperty(element, 'label', '')}
             </span>
-            <div aria-labelledby={labelId} style={{ color: 'var(--scene-text-color)' }}>
+            <div aria-labelledby={labelId} style={{ color: 'var(--ds-text-default-text)' }}>
                 {slots.content?.length ? slots.content : stringProperty(element, 'value', '')}
             </div>
         </div>

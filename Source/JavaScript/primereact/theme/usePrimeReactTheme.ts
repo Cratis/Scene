@@ -49,7 +49,7 @@ export interface PrimeReactThemeConfiguration {
  *
  * Theming a Scene screen takes two halves, and this is the half `SceneThemeProvider` cannot do. The
  * provider writes the theme's semantic tokens onto the wrapping element, which reaches anything reading
- * `--scene-*` - this package's own wrappers, `core`'s primitives, a layout's CSS. But PrimeReact's own
+ * `--ds-*` anatomy - this package's own wrappers, `core`'s primitives, a layout's CSS. But PrimeReact's own
  * components read `--p-*`, and those only exist once a preset has been handed to `PrimeReactProvider`. So:
  * `SceneThemeProvider` for the Scene tokens, this hook for the PrimeReact ones.
  *
