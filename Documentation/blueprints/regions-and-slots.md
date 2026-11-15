@@ -26,10 +26,10 @@ same slots and arrangement. The fourth, `FullPage`, has no chrome.
 
 `dashboardShellLayout` and `minimalShellLayout` are the `AppShell` layout under another name. They have the
 same slots, the same size-class arrangement and the same navigation outlets, so everything in the table above
-holds for them too. What differs is their metadata: the card a designer offers for each, and the
+holds for them too. What differs is their metadata: the display name a designer shows for each, and the
 [menu mode](./layout-modes.md#the-typed-options-and-the-touch-regime) choosing it sets.
 
-| Layout | Export | Card title | Menu mode it starts in |
+| Layout | Export | Display name | Menu mode it starts in |
 | --- | --- | --- | --- |
 | `AppShell` | `appShellLayout` | Cratis Default | `static` |
 | `DashboardShell` | `dashboardShellLayout` | Dashboard | `horizontal` |
