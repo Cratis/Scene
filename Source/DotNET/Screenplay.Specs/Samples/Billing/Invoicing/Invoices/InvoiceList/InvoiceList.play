@@ -1,0 +1,77 @@
+module Invoicing
+
+  feature Invoices
+
+    slice StateView InvoiceList
+      description "The list every billing day starts from"
+
+      readmodel InvoiceSummary
+        id InvoiceId key
+        invoiceNumber InvoiceNumber
+        customerName CustomerName
+        amount Money
+        status InvoiceStatus
+        canCancel Bool
+
+      projection InvoiceSummaryProjection => InvoiceSummary
+        from InvoiceRegistered
+          invoiceNumber = invoiceNumber
+          customerName = customerName
+          amount = amount
+          status = "draft"
+          canCancel = true
+        from InvoiceIssued
+          status = "issued"
+          canCancel = true
+        from InvoiceCancelled
+          status = "cancelled"
+          canCancel = false
+
+      query Invoices => observable InvoiceSummary[]
+        description "Every invoice the caller is allowed to see"
+        filter status InvoiceStatus optional
+        authorize IsBillingClerk or IsBillingManager
+
+      query InvoiceById => InvoiceSummary?
+        by id InvoiceId
+
+      screen InvoiceList
+        template InvoiceWorkspace
+          header
+            title $strings.invoice.listTitle
+            toolbar invoiceActions
+              button register title "Register invoice" slice Invoicing.Invoices.RegisterInvoice emphasis primary icon add
+              button cancel title "Cancel invoice" slice CancelInvoice emphasis quiet
+          body
+            data InvoiceSummary[] via query Invoices
+            table InvoiceSummary
+              column invoiceNumber label $strings.invoice.number
+              column customerName label $strings.invoice.customer
+              column amount label $strings.invoice.amount
+              column status label $strings.invoice.status
+              on row-click navigate to InvoiceDetails by id
+            uses RefreshOnReturn
+            on double click
+              open dialog ConfirmationDialog
+                on result
+                  refresh Invoices
+          aside
+            section Totals
+              summary InvoiceSummary
+                field amount label $strings.invoice.amount
+                field status label $strings.invoice.status
+
+      screen InvoiceDetails
+        data InvoiceSummary via query InvoiceById by id
+        title $strings.invoice.detailsTitle
+        section Details
+          summary InvoiceSummary
+            field invoiceNumber label $strings.invoice.number
+            field amount label $strings.invoice.amount
+        action IssueInvoice
+          label $strings.invoice.issue
+        uses ConfirmThenExecute
+          command CancelInvoice
+          message $strings.invoice.confirmCancel
+        on leave
+          refresh Invoices

@@ -85,6 +85,12 @@ public record SceneApplication(
     public IReadOnlyList<TemplateAssignment> TemplateReferences { get; init; } = [];
 
     /// <summary>
+    /// Gets source constructs the Stage runtime cannot run, such as a guard it cannot evaluate. These are not Scene wire members.
+    /// </summary>
+    [JsonIgnore]
+    public IReadOnlyList<SceneRuntimeIssue> RuntimeIssues { get; init; } = [];
+
+    /// <summary>
     /// Gets source constructs omitted during conversion. Errors prevent rendering, but importers may retain the partial contract.
     /// </summary>
     [JsonIgnore]

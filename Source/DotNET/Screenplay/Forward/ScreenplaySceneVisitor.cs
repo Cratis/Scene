@@ -151,6 +151,9 @@ public sealed class ScreenplaySceneVisitor : ScreenplaySyntax.IApplicationSyntax
             ConvertModuleScreens(module, layouts.FirstOrDefault()?.Name ?? string.Empty, screens, scope);
         }
 
+        var runtime = new SceneRuntimeAdmission(scope);
+        runtime.VisitApplication(syntax);
+
         var structure = scope.Structure ?? StructureConverter.Convert(syntax);
 
         return new SceneApplication(uiProfiles, themes, layouts, screenTemplates, dialogTemplates, PagesBeforeDialogs([.. TemplateSlotPlacement.Place(screens, screenTemplates)]))
@@ -163,6 +166,7 @@ public sealed class ScreenplaySceneVisitor : ScreenplaySyntax.IApplicationSyntax
             TemplateReferences = TemplateReferenceConverter.Collect(syntax),
             SampleDataPacks = SampleDataConverter.Packs(syntax),
             BlueprintSampleDataPacks = SampleDataConverter.BlueprintPacks(syntax),
+            RuntimeIssues = runtime.Issues,
             ConversionDiagnostics = diagnostics?.All ?? []
         };
     }

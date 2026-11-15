@@ -6,6 +6,11 @@
         <PackageTags>cratis;scene;screenplay;ui;bridge</PackageTags>
     </PropertyGroup>
     <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Cratis.Scene.Screenplay.Specs</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Cratis.Screenplay" />
         <ProjectReference Include="../Model/Model.csproj" />
         <ProjectReference Include="../Engine/Engine.csproj" />
