@@ -3,6 +3,7 @@
 
 import { BindingMode, BindingSourceKind, ComponentDescriptor, DesignTimeActionPlacement, PropertyDescriptor, PropertyValueType, QueryResultShape } from '@cratis/scene.model';
 import { componentRegistryKey, describeComponents } from '@cratis/scene.react';
+import { cratisComponentsAnatomy } from './cratisComponentsAnatomy';
 import { cratisComponentsMetadata } from './cratisComponentsMetadata';
 
 // The package name, spelled out so describing components does not pull every adapter (and its UI dependencies) in
@@ -168,4 +169,4 @@ const describedCratisComponents: ComponentDescriptor[] = [
 ];
 
 /** The `Cratis.Components` descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
-export const cratisComponentsDescriptors: ComponentDescriptor[] = describeComponents('Cratis.Components', describedCratisComponents, cratisComponentsMetadata);
+export const cratisComponentsDescriptors: ComponentDescriptor[] = describeComponents('Cratis.Components', describedCratisComponents, cratisComponentsMetadata, cratisComponentsAnatomy);

@@ -43,6 +43,11 @@ namespace Cratis.Scene.Model.Profiles;
 /// <param name="Appearance">The colour scheme, accent colour, corner style and font the application presents, or <see langword="null"/> for the theme's defaults.</param>
 /// <param name="Defaults">Application-wide authoring defaults such as the template new screens start from, or <see langword="null"/> for none.</param>
 /// <param name="Identity">The application's name and logo, set once and drawn by every blueprint, or <see langword="null"/> for the host's application name and initials taken from it.</param>
+/// <param name="DesignSystem">
+/// The resolved design system the application is drawn from - its tokens, components and themes - or <see langword="null"/> to draw the
+/// default design system the active blueprint ships, so an application that names none looks as it always did. When set, <paramref name="Theme"/>
+/// and <see cref="ProfileAppearance.ColorScheme"/> choose among its themes and modes.
+/// </param>
 /// <remarks>
 /// A profile is where the choices that make a description concrete are made: which component vocabulary,
 /// which shell, which theme. Deliberately none of them are stated by a <see cref="Screens.Screen"/> - that
@@ -61,7 +66,8 @@ public record UiProfile(
     RootTemplate? Root = null,
     ProfileAppearance? Appearance = null,
     ProfileDefaults? Defaults = null,
-    ProfileIdentity? Identity = null)
+    ProfileIdentity? Identity = null,
+    DesignSystems.DesignSystem? DesignSystem = null)
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="UiProfile"/> record with the members it had before the identity.
@@ -88,7 +94,38 @@ public record UiProfile(
         RootTemplate? root,
         ProfileAppearance? appearance,
         ProfileDefaults? defaults)
-        : this(name, targetPlatform, packages, defaultSizeClass, layout, theme, sampleData, root, appearance, defaults, null)
+        : this(name, targetPlatform, packages, defaultSizeClass, layout, theme, sampleData, root, appearance, defaults, null, null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UiProfile"/> record with the members it had before the design system.
+    /// Kept so a package compiled against an earlier version still finds the constructor it was built with.
+    /// </summary>
+    /// <param name="name">The profile's name.</param>
+    /// <param name="targetPlatform">The target platform.</param>
+    /// <param name="packages">The packages.</param>
+    /// <param name="defaultSizeClass">The default size class.</param>
+    /// <param name="layout">The legacy layout.</param>
+    /// <param name="theme">The theme.</param>
+    /// <param name="sampleData">The sample data selection.</param>
+    /// <param name="root">The root template.</param>
+    /// <param name="appearance">The appearance.</param>
+    /// <param name="defaults">The defaults for new work.</param>
+    /// <param name="identity">The application's name and logo.</param>
+    public UiProfile(
+        string name,
+        string targetPlatform,
+        IReadOnlyList<string> packages,
+        TargetSizeClass? defaultSizeClass,
+        string? layout,
+        string? theme,
+        SampleData.SampleDataSelection? sampleData,
+        RootTemplate? root,
+        ProfileAppearance? appearance,
+        ProfileDefaults? defaults,
+        ProfileIdentity? identity)
+        : this(name, targetPlatform, packages, defaultSizeClass, layout, theme, sampleData, root, appearance, defaults, identity, null)
     {
     }
 }

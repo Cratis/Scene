@@ -3,7 +3,7 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ProfileAppearance, Theme } from '@cratis/scene.model';
+import { AppearanceBindings, ProfileAppearance, Theme } from '@cratis/scene.model';
 import { AppearanceDiagnosticCode, resolveAppearance } from '../index';
 
 interface AppearanceCase {
@@ -13,6 +13,7 @@ interface AppearanceCase {
     appearance: ProfileAppearance | null;
     systemIsDark: boolean;
     availableFonts: string[] | null;
+    bindings?: AppearanceBindings;
     expected: { diagnostics: { code: string }[] };
 }
 
@@ -22,6 +23,7 @@ const resolved = (fixture: AppearanceCase) => JSON.parse(JSON.stringify(resolveA
     appearance: fixture.appearance ?? undefined,
     systemIsDark: fixture.systemIsDark,
     availableFonts: fixture.availableFonts ?? undefined,
+    bindings: fixture.bindings,
 })));
 
 describe('when resolving the appearance against the shared fixture corpus', () => {

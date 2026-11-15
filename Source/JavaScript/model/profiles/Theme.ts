@@ -18,10 +18,11 @@ export interface Theme {
     compatibleWith: string[];
 
     /**
-     * The theme's design tokens, keyed by semantic name (`primary.color`, `surface.background`,
-     * `content.borderColor`, ...). Deliberately semantic rather than CSS: a renderer decides how a token
-     * becomes a custom property, a native style, or anything else. Absent for a theme a package applies
-     * by its own means rather than through tokens.
+     * The value of each token role of a design system for one mode, keyed by `<category>.<name>` (`color.primary`,
+     * `radius.content`, ...). Which design system, and so which roles, is the package's to say; the default design
+     * system's twenty-one are what the themes Scene ships fill. Deliberately semantic rather than CSS: a renderer
+     * decides how a value becomes a custom property, a native style, or anything else. Absent for a theme a package
+     * applies by its own means rather than through tokens.
      */
     tokens?: Record<string, string>;
 

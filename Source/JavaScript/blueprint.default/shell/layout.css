@@ -6,36 +6,49 @@
  *
  * The shell owns its layout modes; its controls use Cratis Components and React Aria.
  *
- * TOKEN BRIDGE
- * ------------
- * Scene themes publish semantic tokens as `--scene-*` custom properties (see `themeTokens.ts` in
- * `@cratis/scene.react` for how a token name becomes a property name). This file aliases those into
+ * ANATOMY BRIDGE
+ * --------------
+ * The shell is a component of the design system. It takes its look from the anatomy a design system
+ * declares for the components it draws - Shell, Topbar, Sidebar, Menu, Card, Button, Text, Footer - which
+ * `SceneThemeProvider` writes onto its wrapping element as `--ds-<component>-<variant>-<part>[-<state>]`
+ * custom properties (see `designProperties.ts` in `@cratis/scene.react`). This file aliases those into
  * `--layout-*` locals exactly once, in the block below, and every rule after that references only the
- * `--layout-*` names - the same indirection `@cratis/components` uses for its `--cratis-*` layer.
+ * `--layout-*` names - the same indirection `@cratis/components` uses for its `--cratis-*` layer. A rule
+ * never names a token of a design system: it reads "the Menu's `selected` background", not "the
+ * highlight color".
  *
- * That single seam is what makes the shell theme-agnostic: swap the theme and every mode restyles, and
- * a host that wants to take over the look overrides `--scene-*` (or `--layout-*` directly) without
- * touching a rule here. The fallbacks are neutral greys so an unthemed shell is still legible rather
- * than invisible - they are a safety net, not a palette.
+ * That single seam is what makes the shell design-system-agnostic: swap the theme and every mode
+ * restyles, and a host that wants to take over the look overrides `--ds-*` (or `--layout-*` directly)
+ * without touching a rule here. The fallbacks are the default design system's light values so an
+ * unstyled shell is still legible rather than invisible - they are a safety net, not a palette.
  */
 
 .layout-wrapper,
 .layout-full-page,
 .layout-overlay-theme {
-    /* Palette - aliased from the active Scene theme's tokens, never referenced directly below. */
-    --layout-primary: var(--scene-primary-color, #4f46e5);
-    --layout-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
-    --layout-background: var(--scene-surface-background, #f4f5f7);
-    --layout-card: var(--scene-surface-card, #ffffff);
-    --layout-border: var(--scene-surface-border, #e2e5e9);
-    --layout-hover: var(--scene-surface-hover, #eceef1);
-    --layout-overlay: var(--scene-surface-overlay, #ffffff);
-    --layout-text: var(--scene-text-color, #1f2430);
-    --layout-text-muted: var(--scene-text-muted-color, #6b7280);
-    --layout-highlight: var(--scene-highlight-background, #eef2ff);
-    --layout-highlight-text: var(--scene-highlight-color, #3730a3);
-    --layout-radius: var(--scene-content-border-radius, 0.5rem);
-    --layout-focus-ring: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+    /* Palette - aliased from the anatomy of the active design system, never referenced directly below. */
+    --layout-primary: var(--ds-button-primary-background, #4f46e5);
+    --layout-primary-contrast: var(--ds-button-primary-text, #ffffff);
+    --layout-background: var(--ds-shell-default-background, #f4f5f7);
+    --layout-card: var(--ds-card-default-background, #ffffff);
+    --layout-border: var(--ds-card-default-border, #e2e5e9);
+    --layout-hover: var(--ds-menu-default-background-hover, #eceef1);
+    --layout-overlay: var(--ds-popover-default-background, #ffffff);
+    --layout-text: var(--ds-text-default-text, #1f2430);
+    --layout-text-muted: var(--ds-text-muted-text, #6b7280);
+    --layout-highlight: var(--ds-menu-default-background-selected, #eef2ff);
+    --layout-highlight-text: var(--ds-menu-default-text-selected, #3730a3);
+    --layout-radius: var(--ds-card-default-radius, 0.5rem);
+    --layout-focus-ring: var(--ds-button-primary-shadow-focus, 0 0 0 2px rgb(79 70 229 / 0.4));
+
+    /* Spacing, the scrim and the elevation of an overlay - the shell's own measurements, not a design system's. */
+    --layout-space-1: 0.25rem;
+    --layout-space-2: 0.5rem;
+    --layout-space-3: 0.75rem;
+    --layout-space-5: 1.25rem;
+    --layout-ground: #e9ebf0;
+    --layout-shadow-overlay: 0 0.5rem 1.5rem rgb(0 0 0 / 0.15);
+    --layout-backdrop: rgb(0 0 0 / 0.4);
 
     /* @cratis/components ships colour and spacing tokens but no font stack, so the shell supplies the sans stack itself. */
     --layout-font-stack: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -58,8 +71,8 @@
     --layout-z-config: 1100;
 
     /* Derived surfaces - computed from the tokens above rather than introducing new ones. */
-    --layout-sidebar-surface: var(--layout-card);
-    --layout-sidebar-text: var(--layout-text);
+    --layout-sidebar-surface: var(--ds-sidebar-default-background, var(--layout-card));
+    --layout-sidebar-text: var(--ds-sidebar-default-text, var(--layout-text));
     --layout-sidebar-muted: var(--layout-text-muted);
     --layout-sidebar-hover: var(--layout-hover);
 
@@ -70,7 +83,7 @@
     min-height: 100vh;
     color: var(--layout-text);
     background: var(--layout-background);
-    font-family: var(--scene-text-font-family, var(--layout-font-stack));
+    font-family: var(--ds-shell-default-font, var(--layout-font-stack));
 }
 
 .layout-wrapper *,
@@ -90,8 +103,8 @@
 }
 
 .layout-menu-primary {
-    --layout-sidebar-surface: var(--layout-primary);
-    --layout-sidebar-text: var(--layout-primary-contrast);
+    --layout-sidebar-surface: var(--ds-sidebar-primary-background, var(--layout-primary));
+    --layout-sidebar-text: var(--ds-sidebar-primary-text, var(--layout-primary-contrast));
     --layout-sidebar-muted: color-mix(in srgb, var(--layout-primary-contrast) 70%, transparent);
     --layout-sidebar-hover: color-mix(in srgb, var(--layout-primary-contrast) 15%, transparent);
 }
@@ -112,8 +125,8 @@
     gap: var(--layout-gap);
     height: var(--layout-topbar-height);
     padding: 0 1.25rem;
-    background: var(--layout-card);
-    border-bottom: 1px solid var(--layout-border);
+    background: var(--ds-topbar-default-background, var(--layout-card));
+    border-bottom: 1px solid var(--ds-topbar-default-border, var(--layout-border));
     transition: inset-inline-start var(--layout-transition);
 }
 
@@ -187,7 +200,7 @@
     justify-content: space-between;
     gap: var(--layout-gap);
     padding: 1rem 1.5rem;
-    color: var(--layout-text-muted);
+    color: var(--ds-footer-default-text, var(--layout-text-muted));
     border-top: 1px solid var(--layout-border);
 }
 
@@ -811,17 +824,17 @@
 
 .shell-bar {
     /* The same aliases of the Scene theme's tokens the shell makes, so a bar looks right outside a shell. */
-    --layout-primary: var(--scene-primary-color, #4f46e5);
-    --layout-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
-    --layout-card: var(--scene-surface-card, #ffffff);
-    --layout-border: var(--scene-surface-border, #e2e5e9);
-    --layout-hover: var(--scene-surface-hover, #eceef1);
-    --layout-text: var(--scene-text-color, #1f2430);
-    --layout-text-muted: var(--scene-text-muted-color, #6b7280);
-    --layout-highlight: var(--scene-highlight-background, #eef2ff);
-    --layout-highlight-text: var(--scene-highlight-color, #3730a3);
-    --layout-radius: var(--scene-content-border-radius, 0.5rem);
-    --layout-focus-ring: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+    --layout-primary: var(--ds-button-primary-background, #4f46e5);
+    --layout-primary-contrast: var(--ds-button-primary-text, #ffffff);
+    --layout-card: var(--ds-card-default-background, #ffffff);
+    --layout-border: var(--ds-card-default-border, #e2e5e9);
+    --layout-hover: var(--ds-menu-default-background-hover, #eceef1);
+    --layout-text: var(--ds-text-default-text, #1f2430);
+    --layout-text-muted: var(--ds-text-muted-text, #6b7280);
+    --layout-highlight: var(--ds-menu-default-background-selected, #eef2ff);
+    --layout-highlight-text: var(--ds-menu-default-text-selected, #3730a3);
+    --layout-radius: var(--ds-card-default-radius, 0.5rem);
+    --layout-focus-ring: var(--ds-button-primary-shadow-focus, 0 0 0 2px rgb(79 70 229 / 0.4));
     --layout-sidebar-text: var(--layout-text);
     --layout-sidebar-muted: var(--layout-text-muted);
     --layout-sidebar-hover: var(--layout-hover);
@@ -1063,30 +1076,30 @@
     gap: 0.4rem;
     padding: 0.5rem 1rem;
     font: inherit;
-    color: var(--scene-text-color, #1f2430);
+    color: var(--ds-text-default-text, #1f2430);
     cursor: pointer;
-    background: var(--scene-surface-card, #ffffff);
-    border: 1px solid var(--scene-surface-border, #d4d8de);
-    border-radius: var(--scene-content-border-radius, 0.5rem);
+    background: var(--ds-card-default-background, #ffffff);
+    border: 1px solid var(--ds-card-default-border, #d4d8de);
+    border-radius: var(--ds-card-default-radius, 0.5rem);
 }
 
 .scene-toolbar-button:hover {
-    background: var(--scene-surface-hover, #eceef1);
+    background: var(--ds-menu-default-background-hover, #eceef1);
 }
 
 .scene-toolbar-button:focus-visible {
     outline: none;
-    box-shadow: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+    box-shadow: var(--ds-button-primary-shadow-focus, 0 0 0 2px rgb(79 70 229 / 0.4));
 }
 
 .scene-toolbar-button-primary {
-    color: var(--scene-primary-contrast-color, #ffffff);
-    background: var(--scene-primary-color, #4f46e5);
-    border-color: var(--scene-primary-color, #4f46e5);
+    color: var(--ds-button-primary-text, #ffffff);
+    background: var(--ds-button-primary-background, #4f46e5);
+    border-color: var(--ds-button-primary-background, #4f46e5);
 }
 
 .scene-toolbar-button-primary:hover {
-    background: color-mix(in srgb, var(--scene-primary-color, #4f46e5) 88%, black);
+    background: color-mix(in srgb, var(--ds-button-primary-background, #4f46e5) 88%, black);
 }
 
 .scene-toolbar-button-quiet {
@@ -1115,10 +1128,10 @@
     min-width: 18rem;
     max-width: min(28rem, calc(100vw - 2rem));
     padding: 1.25rem;
-    color: var(--scene-text-color, #1f2430);
-    background: var(--scene-surface-card, #ffffff);
-    border: 1px solid var(--scene-surface-border, #d4d8de);
-    border-radius: var(--scene-content-border-radius, 0.5rem);
+    color: var(--ds-text-default-text, #1f2430);
+    background: var(--ds-card-default-background, #ffffff);
+    border: 1px solid var(--ds-card-default-border, #d4d8de);
+    border-radius: var(--ds-card-default-radius, 0.5rem);
     box-shadow: 0 12px 32px rgb(15 23 42 / 0.25);
 }
 
@@ -1151,7 +1164,7 @@
 
 .scene-preview-host[data-scene-preview-surface] {
     min-height: 100%;
-    background: var(--scene-surface-ground, #e9ebf0);
+    background: var(--layout-ground, #e9ebf0);
 }
 
 .scene-preview-host[data-scene-preview-surface] .layout-full-page {
@@ -1166,8 +1179,8 @@
     width: min(30rem, 100%);
     margin-inline: auto;
     padding: 1.5rem;
-    color: var(--scene-text-color, #1f2430);
-    background: var(--scene-surface-overlay, #ffffff);
+    color: var(--ds-text-default-text, #1f2430);
+    background: var(--ds-popover-default-background, #ffffff);
     border-radius: 1rem;
     box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.3);
 }
@@ -1187,8 +1200,8 @@
     gap: 1rem;
     width: min(30rem, calc(100vw - 2rem));
     padding: 1.5rem;
-    color: var(--scene-text-color, #1f2430);
-    background: var(--scene-surface-overlay, #ffffff);
+    color: var(--ds-text-default-text, #1f2430);
+    background: var(--ds-popover-default-background, #ffffff);
     border-radius: 1rem;
     box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.3);
 }
@@ -1212,20 +1225,20 @@
 
 .scene-slice-dialog-field label {
     font-size: 0.875rem;
-    color: var(--scene-text-muted-color, #6b7280);
+    color: var(--ds-text-muted-text, #6b7280);
 }
 
 .scene-slice-dialog-field input:not([type='checkbox']) {
     padding: 0.6rem 0.75rem;
     font: inherit;
     color: inherit;
-    background: var(--scene-surface-background, #f4f5f7);
-    border: 1px solid var(--scene-surface-border, #d4d8de);
-    border-radius: var(--scene-content-border-radius, 0.5rem);
+    background: var(--ds-shell-default-background, #f4f5f7);
+    border: 1px solid var(--ds-card-default-border, #d4d8de);
+    border-radius: var(--ds-card-default-radius, 0.5rem);
 }
 
 .scene-slice-dialog-field input:focus-visible {
-    outline: 2px solid var(--scene-primary-color, #4f46e5);
+    outline: 2px solid var(--ds-button-primary-background, #4f46e5);
     outline-offset: 1px;
 }
 
@@ -1250,8 +1263,8 @@
     padding: 0.55rem 1.1rem;
     font: inherit;
     cursor: pointer;
-    border: 1px solid var(--scene-surface-border, #d4d8de);
-    border-radius: var(--scene-content-border-radius, 0.5rem);
+    border: 1px solid var(--ds-card-default-border, #d4d8de);
+    border-radius: var(--ds-card-default-radius, 0.5rem);
 }
 
 .scene-slice-dialog-cancel {
@@ -1260,9 +1273,9 @@
 }
 
 .scene-slice-dialog-submit {
-    color: var(--scene-primary-contrast-color, #ffffff);
-    background: var(--scene-primary-color, #4f46e5);
-    border-color: var(--scene-primary-color, #4f46e5);
+    color: var(--ds-button-primary-text, #ffffff);
+    background: var(--ds-button-primary-background, #4f46e5);
+    border-color: var(--ds-button-primary-background, #4f46e5);
 }
 
 .scene-slice-dialog-submit:disabled {
@@ -1273,7 +1286,7 @@
 .scene-slice-dialog-cancel:focus-visible,
 .scene-slice-dialog-submit:focus-visible {
     outline: none;
-    box-shadow: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.4));
+    box-shadow: var(--ds-button-primary-shadow-focus, 0 0 0 2px rgb(79 70 229 / 0.4));
 }
 
 [data-scene-toolbar] {
@@ -1342,26 +1355,26 @@
  * second stylesheet.
  */
 .foundation {
-    --foundation-text: var(--scene-text-color, #1f2430);
-    --foundation-muted: var(--scene-text-muted-color, #5b6472);
-    --foundation-surface: var(--scene-surface-card, #ffffff);
-    --foundation-background: var(--scene-surface-background, #f4f5f7);
-    --foundation-border: var(--scene-surface-border, #d5d9df);
-    --foundation-hover: var(--scene-surface-hover, #eceef1);
-    --foundation-primary: var(--scene-primary-color, #4f46e5);
-    --foundation-primary-contrast: var(--scene-primary-contrast-color, #ffffff);
-    --foundation-highlight: var(--scene-highlight-background, #eef2ff);
-    --foundation-highlight-text: var(--scene-highlight-color, #3730a3);
-    --foundation-radius: var(--scene-content-border-radius, 0.5rem);
-    --foundation-focus: var(--scene-focus-ring, 0 0 0 2px rgb(79 70 229 / 0.55));
-    --foundation-success: var(--scene-status-success-color, #166534);
-    --foundation-success-background: var(--scene-status-success-background, #dcfce7);
-    --foundation-warning: var(--scene-status-warning-color, #854d0e);
-    --foundation-warning-background: var(--scene-status-warning-background, #fef3c7);
-    --foundation-danger: var(--scene-status-danger-color, #991b1b);
-    --foundation-danger-background: var(--scene-status-danger-background, #fee2e2);
-    --foundation-info: var(--scene-status-info-color, #1e40af);
-    --foundation-info-background: var(--scene-status-info-background, #dbeafe);
+    --foundation-text: var(--ds-text-default-text, #1f2430);
+    --foundation-muted: var(--ds-text-muted-text, #5b6472);
+    --foundation-surface: var(--ds-card-default-background, #ffffff);
+    --foundation-background: var(--ds-shell-default-background, #f4f5f7);
+    --foundation-border: var(--ds-card-default-border, #d5d9df);
+    --foundation-hover: var(--ds-menu-default-background-hover, #eceef1);
+    --foundation-primary: var(--ds-button-primary-background, #4f46e5);
+    --foundation-primary-contrast: var(--ds-button-primary-text, #ffffff);
+    --foundation-highlight: var(--ds-menu-default-background-selected, #eef2ff);
+    --foundation-highlight-text: var(--ds-menu-default-text-selected, #3730a3);
+    --foundation-radius: var(--ds-card-default-radius, 0.5rem);
+    --foundation-focus: var(--ds-button-primary-shadow-focus, 0 0 0 2px rgb(79 70 229 / 0.55));
+    --foundation-success: var(--ds-status-chip-success-text, #166534);
+    --foundation-success-background: var(--ds-status-chip-success-background, #dcfce7);
+    --foundation-warning: var(--ds-status-chip-warning-text, #854d0e);
+    --foundation-warning-background: var(--ds-status-chip-warning-background, #fef3c7);
+    --foundation-danger: var(--ds-status-chip-danger-text, #991b1b);
+    --foundation-danger-background: var(--ds-status-chip-danger-background, #fee2e2);
+    --foundation-info: var(--ds-status-chip-info-text, #1e40af);
+    --foundation-info-background: var(--ds-status-chip-info-background, #dbeafe);
     --foundation-space-1: 0.25rem;
     --foundation-space-2: 0.5rem;
     --foundation-space-3: 0.75rem;
@@ -1758,7 +1771,7 @@
     padding: var(--foundation-space-2);
     border: 1px solid var(--foundation-border);
     border-radius: var(--foundation-radius);
-    background: var(--scene-surface-overlay, var(--foundation-surface));
+    background: var(--ds-popover-default-background, var(--foundation-surface));
 }
 
 .foundation-popover[hidden] {
@@ -3527,7 +3540,7 @@ a[data-nav-problem='navTargetMissing']::after {
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    padding: var(--scene-space-2, 0.5rem);
+    padding: var(--layout-space-2, 0.5rem);
     color: inherit;
     background: transparent;
     border: 0;
@@ -3550,7 +3563,7 @@ a[data-nav-problem='navTargetMissing']::after {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--scene-space-2, 0.5rem);
+    gap: var(--layout-space-2, 0.5rem);
     padding: 0;
     margin: 0;
     list-style: none;
@@ -3560,7 +3573,7 @@ a[data-nav-problem='navTargetMissing']::after {
 .layout-breadcrumb-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--scene-space-2, 0.5rem);
+    gap: var(--layout-space-2, 0.5rem);
 }
 
 .layout-breadcrumb-item > .layout-icon {
@@ -3586,20 +3599,20 @@ a[data-nav-problem='navTargetMissing']::after {
 
 .layout-user-actions {
     min-width: 10rem;
-    padding: var(--scene-space-1, 0.25rem);
+    padding: var(--layout-space-1, 0.25rem);
     color: var(--layout-text);
     background: var(--layout-overlay);
     border: 1px solid var(--layout-border);
     border-radius: var(--layout-radius);
-    box-shadow: var(--scene-shadow-overlay, 0 0.5rem 1.5rem rgb(0 0 0 / 0.15));
+    box-shadow: var(--layout-shadow-overlay, 0 0.5rem 1.5rem rgb(0 0 0 / 0.15));
     outline: none;
 }
 
 .layout-user-action {
     display: flex;
     align-items: center;
-    gap: var(--scene-space-2, 0.5rem);
-    padding: var(--scene-space-2, 0.5rem) var(--scene-space-3, 0.75rem);
+    gap: var(--layout-space-2, 0.5rem);
+    padding: var(--layout-space-2, 0.5rem) var(--layout-space-3, 0.75rem);
     color: inherit;
     text-decoration: none;
     border-radius: var(--layout-radius);
@@ -3623,7 +3636,7 @@ a[data-nav-problem='navTargetMissing']::after {
     z-index: 1200;
     display: flex;
     justify-content: flex-end;
-    background: var(--scene-backdrop, rgb(0 0 0 / 0.4));
+    background: var(--layout-backdrop, rgb(0 0 0 / 0.4));
 }
 
 .layout-config-positioner {
@@ -3644,7 +3657,7 @@ a[data-nav-problem='navTargetMissing']::after {
 }
 
 .layout-config-body {
-    padding: 0 var(--scene-space-5, 1.25rem) var(--scene-space-5, 1.25rem);
+    padding: 0 var(--layout-space-5, 1.25rem) var(--layout-space-5, 1.25rem);
 }
 
 .layout-config-surface .cratis-dialog__document {
@@ -3663,7 +3676,7 @@ a[data-nav-problem='navTargetMissing']::after {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--scene-space-5, 1.25rem);
+    padding: var(--layout-space-5, 1.25rem);
 }
 
 .layout-config-header h2 {

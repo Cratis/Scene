@@ -11,6 +11,8 @@
       href: architecture/guarded-actions.md
     - name: Command responses and form continuations
       href: architecture/command-responses.md
+    - name: Component anatomy
+      href: component-anatomy.md
     - name: Glossary
       href: glossary.md
     - name: Packages

@@ -13,7 +13,7 @@ import { CratisComponentsProvider } from '@cratis/components/Common';
 // utilities that consume it, and `theme` is the Cratis-authored MIT baseline that assigns those tokens
 // actual values. That order matters: the last two both read the first.
 //
-// The Scene package's bridge puts Scene's `--scene-*` tokens in front of that, and the default blueprint's
+// The Scene package's bridge puts the design system's `--ds-*` anatomy in front of that, and the default blueprint's
 // `layout.css` draws the shell every one of these pages sits inside - which is the sheet this package does
 // not have and does not want, because the shell is not its.
 //

@@ -77,7 +77,7 @@ back - it was kept, not overwritten.
 Still in the configurator, the **Theme** section offers the two themes the blueprint ships. Click
 **Scene Default Dark**.
 
-The page changes color and nothing remounts. `SceneThemeProvider` writes the new token values onto the
+The page changes color and nothing remounts. `SceneThemeProvider` writes the new anatomy values onto the
 element that is already there, so scroll position, an open menu, and anything typed into a form all
 survive. That is what "live re-resolution" means, and it is why theme switching is fast enough to be a
 thing people actually do rather than a thing they do once.

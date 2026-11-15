@@ -10,6 +10,7 @@ export * from './shell';
 export * from './foundation';
 export * from './themes';
 export * from './defaultBlueprintComponents';
+export * from './defaultBlueprintAnatomy';
 export * from './defaultBlueprint';
 export * from './templateProvenance';
 export * from './preview-host';

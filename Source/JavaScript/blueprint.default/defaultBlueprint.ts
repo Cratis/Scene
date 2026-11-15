@@ -4,20 +4,21 @@
 import { PackageKind, ScenePackage } from '@cratis/scene.model';
 import { ScenePackageBundle, describeComponents } from '@cratis/scene.react';
 import { ComponentName } from './ComponentName';
+import { defaultBlueprintAnatomy } from './defaultBlueprintAnatomy';
 import { defaultBlueprintComponentMetadata } from './defaultBlueprintComponentMetadata';
 import { foundationDescriptors } from './foundation';
 import { defaultBlueprintComponents } from './defaultBlueprintComponents';
 import { galleryDialogTemplates, galleryScreenTemplates, galleryScreens } from './gallery';
 import { LayoutName, defaultLayouts } from './layouts';
 import { defaultBlueprintName } from './packageName';
-import { defaultBlueprintThemes } from './themes';
+import { defaultBlueprintDesignSystem, defaultBlueprintThemes } from './themes';
 
 /**
  * The default blueprint's declaration.
  *
  * A blueprint is the package an application picks once to get a coherent shape: the {@link Layout}s that
  * are its base navigational look, the {@link ScreenTemplate}s and {@link DialogTemplate}s that go inside
- * them, the components that fill their slots, and the themes that color all of it. Picking the parts
+ * them, the components that fill their slots, the themes that color all of it, and the design system that says how. Picking the parts
  * separately is how an application ends up with a sidebar from one design language and a form from
  * another.
  *
@@ -37,6 +38,7 @@ export const defaultBlueprintManifest: ScenePackage = {
     screenTemplates: galleryScreenTemplates.map(template => template.name),
     dialogTemplates: galleryDialogTemplates.map(template => template.name),
     themes: defaultBlueprintThemes.map(theme => theme.name),
+    designSystems: [defaultBlueprintDesignSystem.name],
     displayName: 'Cratis Default Blueprint',
     description: 'Application shells with eight menu modes, the components that fill their slots, and a full screen and dialog template set.',
     module: '@cratis/scene.blueprint.default',
@@ -64,5 +66,6 @@ export const defaultBlueprint: ScenePackageBundle = {
     dialogTemplates: galleryDialogTemplates,
     screens: galleryScreens,
     themes: defaultBlueprintThemes,
-    descriptors: describeComponents(defaultBlueprintManifest.name, foundationDescriptors, defaultBlueprintComponentMetadata),
+    designSystems: [defaultBlueprintDesignSystem],
+    descriptors: describeComponents(defaultBlueprintManifest.name, foundationDescriptors, defaultBlueprintComponentMetadata, defaultBlueprintAnatomy),
 };

@@ -11,10 +11,10 @@ namespace Cratis.Scene.Model.Profiles;
 /// <param name="Name">The theme's name.</param>
 /// <param name="CompatibleWith">The component packages this theme is declared compatible with.</param>
 /// <param name="Tokens">
-/// The theme's design tokens, keyed by semantic name (<c language="csharp">primary.color</c>, <c language="csharp">surface.background</c>,
-/// <c language="csharp">content.borderColor</c>, ...). Deliberately semantic rather than CSS: a renderer decides how a token
-/// becomes a custom property, a native style, or anything else. Empty for a theme a package applies by
-/// its own means rather than through tokens.
+/// The value of each token role of a design system for one mode, keyed by <c language="csharp">&lt;category&gt;.&lt;name&gt;</c> (<c language="csharp">color.primary</c>,
+/// <c language="csharp">radius.content</c>, ...). Which design system, and so which roles, is the package's to say; the default design system's twenty-one are what
+/// the themes Scene ships fill. Deliberately semantic rather than CSS: a renderer decides how a value becomes a custom property, a native style, or anything
+/// else. Empty for a theme a package applies by its own means rather than through tokens.
 /// </param>
 /// <param name="IsDark">Whether the theme is a dark scheme, so a picker can group and preview it correctly.</param>
 /// <param name="Author">

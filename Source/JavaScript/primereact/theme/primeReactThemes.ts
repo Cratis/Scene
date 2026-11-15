@@ -67,7 +67,7 @@ export const primeReactThemes: Theme[] = themePresets.map((preset) => ({
     ...preset,
     tokens: {
         ...preset.tokens,
-        'primary.contrastColor': accessiblePrimaryContrast(preset.tokens!['primary.color'], preset.tokens!['primary.contrastColor']),
+        'color.on-primary': accessiblePrimaryContrast(preset.tokens!['color.primary'], preset.tokens!['color.on-primary']),
     },
     compatibleWith: primeReactThemeCompatibility,
     author: 'PrimeTek',

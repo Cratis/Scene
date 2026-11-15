@@ -14,6 +14,7 @@ export * from './PropertyDescriptor';
 export * from './ComponentCategory';
 export * from './ComponentDesignModeDescriptor';
 export * from './componentIcon';
+export * from './ComponentAnatomy';
 export * from './ComponentDescriptor';
 export * from './CollectionOperation';
 export * from './LayoutType';

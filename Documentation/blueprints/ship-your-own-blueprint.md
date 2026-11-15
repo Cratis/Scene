@@ -189,10 +189,10 @@ layout, the template's slots and the content that fills them. If a component is 
 with the package declarations and the registry used by the preview before changing the arrangement. This is a separate check from
 validating the bundle.
 
-## Style it against the tokens
+## Style it against the anatomy
 
-Reference the [shared tokens](./theme-tokens.md), aliased once into locals of your own, and never
-a component library's variables directly. That indirection is what lets one blueprint work across
+Reference the anatomy of the [design system](./design-system.md) (`--ds-<component>-<variant>-<part>`), aliased once into locals of your own, and never
+a component library's variables directly. Declare the anatomy your components support - see [Component anatomy](../component-anatomy.md). That indirection is what lets one blueprint work across
 PrimeReact versions and lets a host override the look without editing your rules.
 
 ## A domain blueprint

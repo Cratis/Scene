@@ -7,12 +7,12 @@ import { MenuItem } from '../MenuItem';
 import { MenuItemAction } from './MenuItemAction';
 import { MenuItemContent } from './MenuItemContent';
 
-const rootStyle: CSSProperties = { color: 'var(--scene-text-color)', width: '16rem' };
+const rootStyle: CSSProperties = { color: 'var(--ds-text-default-text)', width: '16rem' };
 
 const headerStyle: CSSProperties = {
-    background: 'var(--scene-surface-card)',
-    border: '1px solid var(--scene-surface-border)',
-    borderRadius: 'var(--scene-content-border-radius)',
+    background: 'var(--ds-card-default-background)',
+    border: '1px solid var(--ds-card-default-border)',
+    borderRadius: 'var(--ds-card-default-radius)',
     color: 'inherit',
     cursor: 'pointer',
     font: 'inherit',

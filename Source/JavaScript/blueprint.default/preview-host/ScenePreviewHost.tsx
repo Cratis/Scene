@@ -4,11 +4,11 @@
 import { CSSProperties, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, ReactNode, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { ApplicationStructure, DestinationKind, DestinationReference, NavigationModel, OutletItemKind, OutletKind, SceneElement, Screen, SliceKind, Theme } from '@cratis/scene.model';
 import {
-    ApplicationStructureIndex, EffectiveNavItem, ProfileRegion, defaultNavigationMode, navigationModes, normalizeNavigationMode, resolveAppearance, resolveProfileIdentity, resolveToolbarButton,
+    ApplicationStructureIndex, EffectiveNavItem, ProfileRegion, defaultDesignSystem, defaultNavigationMode, navigationModes, normalizeNavigationMode, resolveDesign, resolveProfileIdentity, resolveToolbarButton,
 } from '@cratis/scene.engine';
 import {
     ComponentRegistry, NavigationActivation, NavigationActivationRequest, NavigationMode, SceneHistory, SceneThemeProvider, SliceCommandFieldsProvider, SliceCommandFieldsSource, SliceInvoker,
-    SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, sliceDialogDestination, themeTokenProperty, useSceneNavigation,
+    SliceInvokerProvider, createDryRunInvoker, createMemorySceneHistory, designCustomProperties, sliceDialogDestination, useSceneNavigation,
 } from '@cratis/scene.react';
 import { ColorScheme as ProfileColorScheme } from '@cratis/scene.model';
 import { ColorScheme, LayoutMode, MenuTheme } from '../configuration';
@@ -162,7 +162,12 @@ export function ScenePreviewHost({
     const index = useMemo(() => structure instanceof ApplicationStructureIndex ? structure : new ApplicationStructureIndex(structure), [structure]);
     const profile = useMemo(() => previewProfile(application.uiProfiles), [application.uiProfiles]);
     const identity = useMemo(() => resolveProfileIdentity(profile, navigation.application.logo?.title ?? profile.name), [navigation.application.logo?.title, profile]);
-    const appearance = useMemo(() => resolveAppearance({ appearance: profile.appearance, theme }), [profile.appearance, theme]);
+    const design = useMemo(() => resolveDesign({
+        designSystem: profile.designSystem ?? defaultDesignSystem,
+        theme: theme?.name ?? profile.theme,
+        packageThemes: theme === undefined ? undefined : [theme],
+        appearance: profile.appearance,
+    }), [profile.appearance, profile.designSystem, profile.theme, theme]);
     const compose = useMemo<CompositionOptions>(() => ({ logo: navigation.application.logo, ...(profile.identity === undefined ? {} : { identity }), ...composition }), [composition, identity, navigation.application.logo, profile.identity]);
     const layoutConfig = useMemo(() => {
         const mode = normalizeNavigationMode(profile.root?.options?.navigationMode) ?? defaultNavigationMode;
@@ -170,12 +175,10 @@ export function ScenePreviewHost({
         return {
             mode: (navigationModes.find(candidate => candidate.id === mode)?.legacy ?? LayoutMode.Static) as LayoutMode,
             menuTheme: (typeof menuTheme === 'string' && Object.values(MenuTheme).includes(menuTheme as MenuTheme) ? menuTheme : MenuTheme.Light) as MenuTheme,
-            colorScheme: shellScheme(appearance.colorScheme),
+            colorScheme: shellScheme(design.colorScheme),
         };
-    }, [appearance.colorScheme, profile.root?.options]);
-    const appearanceStyle = useMemo<CSSProperties>(
-        () => Object.fromEntries(Object.entries(appearance.tokens).map(([token, value]) => [themeTokenProperty(token), value])) as CSSProperties,
-        [appearance.tokens]);
+    }, [design.colorScheme, profile.root?.options]);
+    const appearanceStyle = useMemo<CSSProperties>(() => designCustomProperties(design) as CSSProperties, [design]);
 
     const hostRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(regions, () => ({ regionRect: region => hostRef.current ? measureRegion(hostRef.current, region) : undefined }), []);
@@ -338,7 +341,7 @@ export function ScenePreviewHost({
         </SliceInvokerProvider>
     );
 
-    return theme ? <SceneThemeProvider theme={theme}>{body}</SceneThemeProvider> : body;
+    return theme ? <SceneThemeProvider theme={theme} design={design}>{body}</SceneThemeProvider> : body;
 }
 
 /** What the host draws for the target: the screens, the one it starts on, and - for a slice - how the slice is presented. */

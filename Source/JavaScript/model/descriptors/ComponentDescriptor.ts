@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IconReference } from '../icons';
+import { ComponentAnatomy } from './ComponentAnatomy';
 import { ComponentDesignModeDescriptor } from './ComponentDesignModeDescriptor';
 import { DesignTimeActionDescriptor } from './DesignTimeActionDescriptor';
 import { PropertyDescriptor } from './PropertyDescriptor';
@@ -57,8 +58,14 @@ export interface ComponentDescriptor {
 
     /** Names an optional package-provided property display renderer set. */
     propertyDisplayKind?: string;
+
+    /**
+     * The parts, variants and states the component can take from a design system (R2). Absent for a component that draws no
+     * design-system look of its own - its colors, radii and fonts then come from the component it is placed in.
+     */
+    anatomy?: ComponentAnatomy;
 }
 
 export const ComponentDescriptorPropertyNames: (keyof ComponentDescriptor)[] = [
-    'component', 'displayName', 'description', 'category', 'icon', 'badge', 'keywords', 'designMode', 'editorKind', 'properties', 'actions', 'previewKind', 'propertyDisplayKind',
+    'component', 'displayName', 'description', 'category', 'icon', 'badge', 'keywords', 'designMode', 'editorKind', 'properties', 'actions', 'previewKind', 'propertyDisplayKind', 'anatomy',
 ];

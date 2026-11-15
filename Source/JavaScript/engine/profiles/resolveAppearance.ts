@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ColorScheme, CornerStyle, ProfileAppearance, Theme } from '@cratis/scene.model';
+import { AppearanceBindings, ColorScheme, CornerStyle, ProfileAppearance, Theme } from '@cratis/scene.model';
+import { defaultAppearanceBindings } from '../design/defaultAppearanceBindings';
 import { FontChoice, FontSource, fontCatalog, systemFontId } from './fontCatalog';
 
 /** What can be wrong with the appearance of a profile. The codes are camelCase and engine-owned. */
@@ -14,6 +15,9 @@ export enum AppearanceDiagnosticCode {
 
     /** The theme is a dark theme under a light scheme or the other way round; the theme is applied as chosen. */
     ThemeSchemeMismatch = 'themeSchemeMismatch',
+
+    /** The design system does not say which token role the accent, the corner style or the font replaces; the choice is ignored. */
+    AppearanceNotBound = 'appearanceNotBound',
 }
 
 export interface AppearanceDiagnostic {
@@ -34,6 +38,12 @@ export interface AppearanceContext {
 
     /** The ids of the fonts the host can use. Absent means every font of the catalog. */
     availableFonts?: readonly string[];
+
+    /**
+     * Which token roles the accent, the corner style and the font replace. Absent means the roles of Scene's default design system
+     * ({@link defaultAppearanceBindings}); a design system that does not bind one ignores the choice and says so.
+     */
+    bindings?: AppearanceBindings;
 }
 
 /** The appearance as a renderer applies it. */
@@ -87,6 +97,11 @@ export function resolveAppearance(context: AppearanceContext): ResolvedAppearanc
     const appearance = context.appearance ?? {};
     const diagnostics: AppearanceDiagnostic[] = [];
     const tokens: Record<string, string> = { ...(context.theme?.tokens ?? {}) };
+    const bindings = context.bindings ?? defaultAppearanceBindings;
+    const unbound = (choice: string) => diagnostics.push({
+        code: AppearanceDiagnosticCode.AppearanceNotBound,
+        message: `The design system does not say which token the ${choice} replaces, so the ${choice} is ignored.`,
+    });
 
     const requested = appearance.colorScheme ?? (context.theme?.isDark === true ? ColorScheme.Dark : ColorScheme.Light);
     const colorScheme = requested === ColorScheme.System ? (context.systemIsDark === true ? ColorScheme.Dark : ColorScheme.Light) : requested;
@@ -105,14 +120,19 @@ export function resolveAppearance(context: AppearanceContext): ResolvedAppearanc
                 code: AppearanceDiagnosticCode.AccentInvalid,
                 message: `The accent '${appearance.accent}' is not a hex colour such as #4f46e5, so the theme's accent is kept.`,
             });
+        } else if (bindings.accent === undefined) {
+            unbound('accent');
         } else {
-            tokens['primary.color'] = appearance.accent;
-            tokens['focus.ring'] = `0 0 0 2px rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / 0.4)`;
+            tokens[bindings.accent] = appearance.accent;
+            if (bindings.focusRing !== undefined) tokens[bindings.focusRing] = `0 0 0 2px rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / 0.4)`;
         }
     }
 
     const radius = cornerRadii[appearance.corners ?? CornerStyle.Default];
-    if (radius !== undefined) tokens['content.borderRadius'] = radius;
+    if (radius !== undefined) {
+        if (bindings.corners === undefined) unbound('corner style');
+        else tokens[bindings.corners] = radius;
+    }
 
     const requestedFont = appearance.font;
     let font: FontChoice | undefined;
@@ -127,7 +147,8 @@ export function resolveAppearance(context: AppearanceContext): ResolvedAppearanc
                 message: `The font '${requestedFont}' is not available, so the system font is used.`,
             });
         }
-        tokens['text.fontFamily'] = font.family;
+        if (bindings.font === undefined) unbound('font');
+        else tokens[bindings.font] = font.family;
     }
 
     return {

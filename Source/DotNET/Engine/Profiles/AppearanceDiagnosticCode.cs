@@ -21,5 +21,10 @@ public enum AppearanceDiagnosticCode
     /// <summary>
     /// The theme is a dark theme under a light scheme or the other way round; the theme is applied as chosen.
     /// </summary>
-    ThemeSchemeMismatch = 2
+    ThemeSchemeMismatch = 2,
+
+    /// <summary>
+    /// The design system does not say which token role the accent, the corner style or the font replaces; the choice is ignored.
+    /// </summary>
+    AppearanceNotBound = 3
 }

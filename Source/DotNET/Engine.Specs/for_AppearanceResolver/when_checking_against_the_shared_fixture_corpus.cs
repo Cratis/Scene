@@ -4,6 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Cratis.Scene.Model.DesignSystems;
 using Cratis.Scene.Model.Profiles;
 
 namespace Cratis.Scene.Engine.Profiles.for_AppearanceResolver;
@@ -35,7 +36,8 @@ public class when_checking_against_the_shared_fixture_corpus : Specification
             var theme = item["theme"].Deserialize<Theme>(_options);
             var appearance = item["appearance"].Deserialize<ProfileAppearance>(_options);
             var fonts = item["availableFonts"].Deserialize<List<string>>(_options);
-            var resolved = AppearanceResolver.Resolve(theme, appearance, item["systemIsDark"].GetValue<bool>(), fonts);
+            var bindings = item["bindings"].Deserialize<AppearanceBindings>(_options);
+            var resolved = AppearanceResolver.Resolve(theme, appearance, item["systemIsDark"].GetValue<bool>(), fonts, bindings);
             var actual = JsonSerializer.SerializeToNode(resolved, _options);
             actual.AsObject().Remove("fontStylesheet");
             if (resolved.FontStylesheet is not null)

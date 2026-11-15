@@ -36,7 +36,7 @@ const showcase = sceneGallery('theme-showcase', [
  *
  * `usePrimeReactTheme` swaps the compiled PrimeReact stylesheet that skins the components;
  * `SceneThemeProvider` writes the same theme's semantic tokens onto the wrapping element, which is what
- * reaches this package's own wrappers and anything else reading `--scene-*`. Neither half is enough
+ * reaches this package's own wrappers and anything else reading `--ds-*`. Neither half is enough
  * alone - drop the hook and PrimeReact's components keep the old skin; drop the provider and the
  * wrappers around them do not follow.
  *

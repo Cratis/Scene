@@ -1,7 +1,8 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ColorScheme, ScenePackage, Theme, UiProfile } from '@cratis/scene.model';
+import { AppearanceBindings, ColorScheme, ScenePackage, Theme, UiProfile } from '@cratis/scene.model';
+import { defaultAppearanceBindings } from '../design/defaultAppearanceBindings';
 import { BlueprintPinStatus, defaultBlueprintPin, evaluateBlueprintPin } from '../blueprints/evaluateBlueprintPin';
 import { TemplateLibrary } from '../templates/TemplateLibrary';
 import { TemplateSource } from '../templates/TemplateSource';
@@ -110,16 +111,17 @@ function cornersOf(radius: string | undefined): string | undefined {
  * @param themes Every theme that could be chosen, in the order to offer them.
  * @param catalog Every package that could be selected; a theme belongs to the package that lists it.
  * @param scheme The colour scheme to show themes of; every theme when absent.
+ * @param bindings Which token roles hold a theme's accent and corner radius; the roles of Scene's default design system when absent.
  * @returns The cards.
  */
-export function describeThemeCards(profile: UiProfile, themes: readonly Theme[], catalog: readonly ScenePackage[], scheme?: ColorScheme.Light | ColorScheme.Dark): ThemeCard[] {
+export function describeThemeCards(profile: UiProfile, themes: readonly Theme[], catalog: readonly ScenePackage[], scheme?: ColorScheme.Light | ColorScheme.Dark, bindings: AppearanceBindings = defaultAppearanceBindings): ThemeCard[] {
     return themes
         .filter(theme => scheme === undefined || (theme.isDark === true ? ColorScheme.Dark : ColorScheme.Light) === scheme)
         .map(theme => {
             const suppliers = catalog.filter(candidate => candidate.themes.includes(theme.name));
             const missing = suppliers.length > 0 && !suppliers.some(supplier => profile.packages.includes(supplier.name)) ? suppliers[0] : undefined;
-            const accent = theme.tokens?.['primary.color'];
-            const corners = cornersOf(theme.tokens?.['content.borderRadius']);
+            const accent = bindings.accent === undefined ? undefined : theme.tokens?.[bindings.accent];
+            const corners = cornersOf(bindings.corners === undefined ? undefined : theme.tokens?.[bindings.corners]);
             return {
                 name: theme.name,
                 scheme: theme.isDark === true ? 'dark' : 'light',

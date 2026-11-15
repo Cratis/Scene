@@ -11,10 +11,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": null,
@@ -23,10 +23,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -43,7 +43,7 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "content.borderRadius": "18px"
+          "radius.content": "18px"
         },
         "diagnostics": []
       }
@@ -58,10 +58,10 @@
         ],
         "isDark": true,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         }
       },
       "appearance": null,
@@ -70,10 +70,10 @@
       "expected": {
         "colorScheme": "Dark",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         },
         "diagnostics": []
       }
@@ -88,10 +88,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -102,10 +102,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -120,10 +120,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -134,10 +134,10 @@
       "expected": {
         "colorScheme": "Dark",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": [
           {
@@ -157,10 +157,10 @@
         ],
         "isDark": true,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         }
       },
       "appearance": {
@@ -171,10 +171,10 @@
       "expected": {
         "colorScheme": "Dark",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         },
         "diagnostics": []
       }
@@ -189,10 +189,10 @@
         ],
         "isDark": true,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         }
       },
       "appearance": {
@@ -203,10 +203,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         },
         "diagnostics": [
           {
@@ -226,10 +226,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -240,10 +240,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#0d9488",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#0d9488",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -258,10 +258,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -272,10 +272,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#f80",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(255 136 0 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#f80",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(255 136 0 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -290,10 +290,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -304,10 +304,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#0d948880",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#0d948880",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(13 148 136 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -322,10 +322,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -336,10 +336,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -354,10 +354,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -368,10 +368,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": [
           {
@@ -391,10 +391,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -405,10 +405,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "4px",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "4px",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -423,10 +423,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -437,10 +437,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -455,10 +455,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -469,10 +469,10 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "18px",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "18px",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         },
         "diagnostics": []
       }
@@ -487,10 +487,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -501,11 +501,11 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111",
-          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111",
+          "font.sans": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
         },
         "font": "inter",
         "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
@@ -522,10 +522,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -536,11 +536,11 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111",
-          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111",
+          "font.sans": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
         },
         "font": "system-ui",
         "diagnostics": []
@@ -556,10 +556,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -570,11 +570,11 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111",
-          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111",
+          "font.sans": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
         },
         "font": "system-ui",
         "diagnostics": [
@@ -595,10 +595,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -611,11 +611,11 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111",
-          "text.fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111",
+          "font.sans": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
         },
         "font": "system-ui",
         "diagnostics": [
@@ -636,10 +636,10 @@
         ],
         "isDark": false,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111"
         }
       },
       "appearance": {
@@ -653,11 +653,11 @@
       "expected": {
         "colorScheme": "Light",
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#111111",
-          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#111111",
+          "font.sans": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
         },
         "font": "inter",
         "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
@@ -674,10 +674,10 @@
         ],
         "isDark": true,
         "tokens": {
-          "primary.color": "#4f46e5",
-          "content.borderRadius": "0.5rem",
-          "focus.ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
-          "text.color": "#eeeeee"
+          "color.primary": "#4f46e5",
+          "radius.content": "0.5rem",
+          "shadow.focus-ring": "0 0 0 2px rgb(79 70 229 / 0.4)",
+          "color.text": "#eeeeee"
         }
       },
       "appearance": {
@@ -691,15 +691,143 @@
       "expected": {
         "colorScheme": "Dark",
         "tokens": {
-          "primary.color": "#ff0000",
-          "content.borderRadius": "4px",
-          "focus.ring": "0 0 0 2px rgb(255 0 0 / 0.4)",
-          "text.color": "#eeeeee",
-          "text.fontFamily": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+          "color.primary": "#ff0000",
+          "radius.content": "4px",
+          "shadow.focus-ring": "0 0 0 2px rgb(255 0 0 / 0.4)",
+          "color.text": "#eeeeee",
+          "font.sans": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
         },
         "font": "inter",
         "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
         "diagnostics": []
+      }
+    },
+    {
+      "name": "bindings to the design system's own roles",
+      "description": "a design system that names its own accent, focus ring, corner and font roles gets them replaced",
+      "theme": {
+        "name": "B",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "color.brand": "#111111",
+          "glow": "0 0 0 1px #111111",
+          "corner": "2px",
+          "color.text": "#222222"
+        }
+      },
+      "bindings": {
+        "accent": "color.brand",
+        "focusRing": "glow",
+        "corners": "corner",
+        "font": "font.body"
+      },
+      "appearance": {
+        "accent": "#ff0000",
+        "corners": "Round",
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "color.brand": "#ff0000",
+          "glow": "0 0 0 2px rgb(255 0 0 / 0.4)",
+          "corner": "18px",
+          "color.text": "#222222",
+          "font.body": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+        },
+        "font": "inter",
+        "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "accent without a focus ring role",
+      "description": "a design system that binds an accent but no focus ring replaces only the accent",
+      "theme": {
+        "name": "B",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "color.brand": "#111111",
+          "glow": "0 0 0 1px #111111",
+          "corner": "2px",
+          "color.text": "#222222"
+        }
+      },
+      "bindings": {
+        "accent": "color.brand"
+      },
+      "appearance": {
+        "accent": "#00ff00"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "color.brand": "#00ff00",
+          "glow": "0 0 0 1px #111111",
+          "corner": "2px",
+          "color.text": "#222222"
+        },
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "nothing bound",
+      "description": "a design system that binds nothing ignores the accent, corners and font and says so for each",
+      "theme": {
+        "name": "B",
+        "compatibleWith": [
+          "core"
+        ],
+        "isDark": false,
+        "tokens": {
+          "color.brand": "#111111",
+          "glow": "0 0 0 1px #111111",
+          "corner": "2px",
+          "color.text": "#222222"
+        }
+      },
+      "bindings": {},
+      "appearance": {
+        "accent": "#ff0000",
+        "corners": "Sharp",
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "colorScheme": "Light",
+        "tokens": {
+          "color.brand": "#111111",
+          "glow": "0 0 0 1px #111111",
+          "corner": "2px",
+          "color.text": "#222222"
+        },
+        "font": "inter",
+        "fontStylesheet": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        "diagnostics": [
+          {
+            "code": "appearanceNotBound",
+            "message": "The design system does not say which token the accent replaces, so the accent is ignored."
+          },
+          {
+            "code": "appearanceNotBound",
+            "message": "The design system does not say which token the corner style replaces, so the corner style is ignored."
+          },
+          {
+            "code": "appearanceNotBound",
+            "message": "The design system does not say which token the font replaces, so the font is ignored."
+          }
+        ]
       }
     }
   ]

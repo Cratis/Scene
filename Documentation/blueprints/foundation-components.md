@@ -48,8 +48,8 @@ that already reports `loading` and `error` needs nothing more.
 
 ## Cross-cutting rules (Part B 1.5)
 
-- **Tokens only.** Colors, radii and spacing come from the theme tokens and one spacing scale; a specification
-  scans the stylesheet and fails on a color literal or a spacing length. The status tokens are in the [theme tokens](theme-tokens.md).
+- **Anatomy only.** Colors, radii and spacing come from the design system's anatomy and one spacing scale; a specification
+  scans the stylesheet and fails on a color literal or a spacing length. The status roles are in [Rendering the design system](design-system.md).
 - **Localization.** A component's own text comes from a strings table (`foundationStrings`) merged with the element's
   `strings` property. Dates, numbers and currency are formatted with `Intl` for the element's `locale`, else the document language.
 - **Right to left.** Direction-sensitive CSS uses logical properties, so a `dir="rtl"` page needs no second stylesheet.

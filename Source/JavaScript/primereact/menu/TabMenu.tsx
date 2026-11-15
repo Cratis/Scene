@@ -5,19 +5,19 @@ import { CSSProperties, HTMLAttributes, useState } from 'react';
 import { MenuItem } from '../MenuItem';
 import { MenuItemAction } from './MenuItemAction';
 
-const barStyle: CSSProperties = { borderBottom: '1px solid var(--scene-surface-border)', color: 'var(--scene-text-color)' };
+const barStyle: CSSProperties = { borderBottom: '1px solid var(--ds-card-default-border)', color: 'var(--ds-text-default-text)' };
 
 const tabStyle: CSSProperties = {
     background: 'transparent',
     border: 'none',
     borderBottom: '2px solid transparent',
-    color: 'var(--scene-text-muted-color)',
+    color: 'var(--ds-text-muted-text)',
     cursor: 'pointer',
     font: 'inherit',
     textDecoration: 'none',
 };
 
-const selectedTabStyle: CSSProperties = { ...tabStyle, borderBottomColor: 'var(--scene-primary-color)', color: 'var(--scene-text-color)' };
+const selectedTabStyle: CSSProperties = { ...tabStyle, borderBottomColor: 'var(--ds-button-primary-background)', color: 'var(--ds-text-default-text)' };
 
 /**
  * The configuration {@link TabMenu} takes.

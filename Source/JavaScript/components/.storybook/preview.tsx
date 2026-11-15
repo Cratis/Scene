@@ -12,7 +12,7 @@ import { CratisComponentsProvider } from '@cratis/components/Common';
 //
 // `tokens` declares the `--cratis-*` layer every component stylesheet reads, `styles` is that component
 // CSS plus the compiled Tailwind utilities and the vendored Allotment sheet `DataPage`'s split view needs,
-// `theme` fills the tokens in, and this package's bridge puts Scene's `--scene-*` tokens in front of all
+// `theme` fills the tokens in, and this package's bridge puts the design system's `--ds-*` anatomy in front of all
 // of it wherever a Scene theme is applied. Each layer consumes the one before it, so the order is not
 // cosmetic.
 import '@cratis/components/tokens';

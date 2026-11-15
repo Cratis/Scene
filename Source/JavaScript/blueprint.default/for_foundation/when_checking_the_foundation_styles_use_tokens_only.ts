@@ -25,7 +25,7 @@ function declarations(): Declaration[] {
 const withoutTokens = (value: string) => value.replace(/var\((?:[^()]|\([^()]*\))*\)/g, '');
 const spacingProperties = /^(padding|margin|gap|row-gap|column-gap|inset|top|bottom|left|right)(-|$)/;
 
-// Spec Part B 1.5: theming uses only theme tokens, with no hard-coded colors or spacing.
+// Spec Part B 1.5: theming uses only the design system's anatomy, with no hard-coded colors or spacing.
 describe('when checking the foundation styles use tokens only', () => {
     const all = declarations().filter(declaration => !declaration.property.startsWith('--'));
 
@@ -39,8 +39,8 @@ describe('when checking the foundation styles use tokens only', () => {
         all.filter(_ => spacingProperties.test(_.property) && !_.selector.includes('visually-hidden') && /\d(px|rem|em)\b/.test(withoutTokens(_.value)))
             .map(_ => `${_.selector} { ${_.property}: ${_.value} }`).should.deep.equal([]));
 
-    it('should size the alias block from the Scene tokens', () => {
+    it('should size the alias block from the anatomy of the design system', () => {
         const aliases = section.slice(section.indexOf('.foundation {'), section.indexOf('}', section.indexOf('.foundation {')));
-        aliases.match(/--foundation-(?!space|row)[a-z-]+: var\(--scene-/g)!.length.should.be.greaterThan(15);
+        aliases.match(/--foundation-(?!space|row)[a-z-]+: var\(--ds-/g)!.length.should.be.greaterThan(15);
     });
 });

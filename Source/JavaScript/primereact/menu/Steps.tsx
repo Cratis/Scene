@@ -5,25 +5,25 @@ import { CSSProperties, HTMLAttributes } from 'react';
 import { MenuItem } from '../MenuItem';
 import { MenuItemContent } from './MenuItemContent';
 
-const listStyle: CSSProperties = { listStyle: 'none', margin: 0, padding: 0, color: 'var(--scene-text-color)' };
+const listStyle: CSSProperties = { listStyle: 'none', margin: 0, padding: 0, color: 'var(--ds-text-default-text)' };
 
 const markerStyle: CSSProperties = {
     width: '1.75rem',
     height: '1.75rem',
     borderRadius: '50%',
-    border: '1px solid var(--scene-surface-border)',
-    background: 'var(--scene-surface-card)',
-    color: 'var(--scene-text-muted-color)',
+    border: '1px solid var(--ds-card-default-border)',
+    background: 'var(--ds-card-default-background)',
+    color: 'var(--ds-text-muted-text)',
 };
 
 const reachedMarkerStyle: CSSProperties = {
     ...markerStyle,
-    background: 'var(--scene-primary-color)',
-    borderColor: 'var(--scene-primary-color)',
-    color: 'var(--scene-primary-contrast-color)',
+    background: 'var(--ds-button-primary-background)',
+    borderColor: 'var(--ds-button-primary-background)',
+    color: 'var(--ds-button-primary-text)',
 };
 
-const pendingStepStyle: CSSProperties = { color: 'var(--scene-text-muted-color)' };
+const pendingStepStyle: CSSProperties = { color: 'var(--ds-text-muted-text)' };
 
 /**
  * The configuration {@link Steps} takes.
