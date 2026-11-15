@@ -66,7 +66,7 @@ export interface CommentPosition {
     y: number;
 }
 
-/** A comment on a screen, anchored to the element's stable id; a position only when no element is under the pin. */
+/** A comment on a screen, anchored to the element's stable id; a position only when no element is under the pin (a `CommentPinned` event sets it). */
 export interface DesignComment {
     id: string;
     screen: string;

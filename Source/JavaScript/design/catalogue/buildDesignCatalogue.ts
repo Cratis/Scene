@@ -175,13 +175,13 @@ function designComponentEntries(designSystem: DesignSystem, components: DesignCo
 function themeEntries(input: DesignCatalogueInput): DesignThemeEntry[] {
     const themes: DesignThemeEntry[] = (input.designSystem?.themes ?? []).map(theme => {
         const entry: DesignThemeEntry = { name: theme.name, source: 'designSystem', modes: theme.modes.map(mode => mode.mode) };
-        if (theme.isDefault !== undefined) entry.isDefault = theme.isDefault;
+        if (theme.isDefault === true) entry.isDefault = true;
         return entry;
     });
     for (const theme of input.themes ?? []) {
         if (themes.some(existing => existing.name === theme.name)) continue;
         const entry: DesignThemeEntry = { name: theme.name, source: 'package', modes: [] };
-        if (theme.isDark !== undefined) entry.isDark = theme.isDark;
+        if (theme.isDark === true) entry.isDark = true;
         themes.push(entry);
     }
     return themes;

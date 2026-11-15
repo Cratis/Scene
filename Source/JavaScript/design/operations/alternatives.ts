@@ -68,6 +68,24 @@ function offSystemAlternatives(operation: DesignOperation, refusal: DesignRefusa
     return [];
 }
 
+/** For an insert whose property does not take its value: the choices the property does take, the component without it, and - for a variant - a proposal. */
+function insertValueAlternatives(operation: Extract<DesignOperation, { op: 'insert' }>, refusal: DesignRefusal, context: DesignContext): DesignAlternative[] {
+    const component = findComponent(context.catalogue, operation.component);
+    if (component === undefined) return [];
+    const props = Object.entries(operation.props ?? {});
+    const offending = props.find(([name, value]) => checkProperty(component, name, value, context.catalogue)?.code === refusal.code);
+    if (offending === undefined) return [];
+    const [name, value] = offending;
+    const rest = Object.fromEntries(props.filter(([key]) => key !== name));
+    const choices = component.properties.find(property => property.name === name)?.choices ?? [];
+    const alternatives: DesignAlternative[] = first(choices, 2).map(choice => ({ label: `Use ${choice}`, operations: [{ ...operation, props: { ...operation.props, [name]: choice } }] }));
+    alternatives.push({ label: `Add ${component.label} without ${name}`, operations: [{ ...operation, props: rest }] });
+    if (refusal.code === DesignRefusalCode.VariantNotInDesignSystem) {
+        alternatives.push({ label: 'Propose it to the design system', proposal: { kind: 'variant', component: component.label, variant: String(value), summary: `Add the ${String(value)} variant of ${component.label}` } });
+    }
+    return alternatives;
+}
+
 /** When an operation is refused for a reason the design can route around: the nearest operations that would be accepted. */
 export function alternativesFor(operation: DesignOperation, refusal: DesignRefusal, workspace: DesignWorkspace, context: DesignContext): DesignAlternative[] {
     switch (refusal.code) {
@@ -86,6 +104,7 @@ export function alternativesFor(operation: DesignOperation, refusal: DesignRefus
                 : [];
         case DesignRefusalCode.ValueNotAllowed:
         case DesignRefusalCode.VariantNotInDesignSystem: {
+            if (operation.op === 'insert') return insertValueAlternatives(operation, refusal, context);
             if (operation.op !== 'set') return [];
             const target = resolveTarget(workspace.document, operation);
             const place = target === undefined ? undefined : findElement(target, operation.element);

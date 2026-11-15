@@ -41,7 +41,7 @@ export function reduceDesignSession(session: DesignSession | undefined, event: D
             id: event.sessionId, subject: event.subject, mode: event.mode, startedBy: event.startedBy,
             screens: [], revisions: [], variationGroups: [], tweaks: [], comments: [],
         };
-        if (event.templateSet !== undefined) started.templateSet = [...event.templateSet];
+        if (event.templateSet !== undefined && event.templateSet.length > 0) started.templateSet = [...event.templateSet];
         if (event.seededFromSessionId !== undefined) started.seededFrom = event.seededFromSessionId;
         return started;
     }
@@ -49,7 +49,7 @@ export function reduceDesignSession(session: DesignSession | undefined, event: D
     switch (event.type) {
         case 'DesignTemplateSetChanged': {
             const { templateSet: _previous, ...rest } = session;
-            return event.templateSet === undefined ? rest : { ...rest, templateSet: [...event.templateSet] };
+            return event.templateSet === undefined || event.templateSet.length === 0 ? rest : { ...rest, templateSet: [...event.templateSet] };
         }
         case 'ScreenRevisionRecorded':
             return recorded(session, event);
@@ -100,10 +100,12 @@ export function reduceDesignSession(session: DesignSession | undefined, event: D
             if (session.comments.some(comment => comment.id === event.commentId)) return session;
             const comment = {
                 id: event.commentId, screen: event.screen, text: event.text, author: event.author, resolved: false,
-                ...(event.elementId === undefined ? {} : { elementId: event.elementId }), ...(event.position === undefined ? {} : { position: event.position }),
+                ...(event.elementId === undefined || event.elementId === '' ? {} : { elementId: event.elementId }),
             };
             return { ...session, comments: [...session.comments, comment] };
         }
+        case 'CommentPinned':
+            return { ...session, comments: session.comments.map(comment => comment.id === event.commentId ? { ...comment, position: { x: event.x, y: event.y } } : comment) };
         case 'CommentResolved':
             return { ...session, comments: session.comments.map(comment => comment.id === event.commentId ? { ...comment, resolved: true } : comment) };
         case 'CommentReopened':

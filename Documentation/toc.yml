@@ -29,6 +29,8 @@
       href: editing/toc.yml
     - name: The Scene editor package
       href: editor/toc.yml
+    - name: Designing with Scene Design
+      href: design/toc.yml
 
 - name: Reference
   items:

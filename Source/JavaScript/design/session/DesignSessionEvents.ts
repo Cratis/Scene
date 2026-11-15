@@ -3,7 +3,7 @@
 
 import { DesignOperation, TweakControl } from '../operations/DesignOperation';
 import { DesignSubject } from '../subject/DesignSubject';
-import { CommentPosition, DesignMode } from './DesignSession';
+import { DesignMode } from './DesignSession';
 
 /** A design session began, on a subject, in a mode and - when it is constrained - with the templates it may use. */
 export interface DesignSessionStarted {
@@ -17,7 +17,7 @@ export interface DesignSessionStarted {
     seededFromSessionId?: string;
 }
 
-/** The templates a session may use changed; absent lifts the constraint. */
+/** The templates a session may use changed; absent or empty lifts the constraint. */
 export interface DesignTemplateSetChanged {
     type: 'DesignTemplateSetChanged';
     templateSet?: string[];
@@ -102,14 +102,22 @@ export interface TweakDismissed {
     tweakId: string;
 }
 
+/** A comment was added to a screen, anchored to an element when one was under the pin. */
 export interface CommentAdded {
     type: 'CommentAdded';
     commentId: string;
     screen: string;
     elementId?: string;
-    position?: CommentPosition;
     text: string;
     author: string;
+}
+
+/** A comment anchored to no element was pinned to a position of its screen. */
+export interface CommentPinned {
+    type: 'CommentPinned';
+    commentId: string;
+    x: number;
+    y: number;
 }
 
 export interface CommentResolved {
@@ -126,6 +134,6 @@ export type DesignSessionEvent =
     | DesignSessionStarted | DesignTemplateSetChanged
     | ScreenRevisionRecorded | ScreenRemovedFromDesign | ScreensReordered | ScreenReverted
     | VariationsProposed | VariationChosen | TweaksProposed | TweakDismissed
-    | CommentAdded | CommentResolved | CommentReopened;
+    | CommentAdded | CommentPinned | CommentResolved | CommentReopened;
 
 export type DesignSessionEventType = DesignSessionEvent['type'];
