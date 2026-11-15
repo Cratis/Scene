@@ -15,4 +15,4 @@ export interface ExposePropertyEdit {
     property: ExposedProperty;
 }
 
-export const ExposePropertyEditPropertyNames: (keyof ExposePropertyEdit)[] = ['kind', 'owner', 'property'];
+export const ExposePropertyEditPropertyNames: (keyof ExposePropertyEdit)[] = ['owner', 'property'];

@@ -19,4 +19,4 @@ export interface ChangeLayoutTypeEdit {
     acceptLoss?: boolean;
 }
 
-export const ChangeLayoutTypeEditPropertyNames: (keyof ChangeLayoutTypeEdit)[] = ['kind', 'nodeId', 'to', 'acceptLoss'];
+export const ChangeLayoutTypeEditPropertyNames: (keyof ChangeLayoutTypeEdit)[] = ['nodeId', 'to', 'acceptLoss'];

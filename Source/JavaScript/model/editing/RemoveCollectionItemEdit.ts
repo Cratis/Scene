@@ -14,4 +14,4 @@ export interface RemoveCollectionItemEdit {
     itemId: string;
 }
 
-export const RemoveCollectionItemEditPropertyNames: (keyof RemoveCollectionItemEdit)[] = ['kind', 'instance', 'component', 'path', 'itemId'];
+export const RemoveCollectionItemEditPropertyNames: (keyof RemoveCollectionItemEdit)[] = ['instance', 'component', 'path', 'itemId'];

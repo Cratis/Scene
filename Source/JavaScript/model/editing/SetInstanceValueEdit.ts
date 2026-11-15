@@ -16,4 +16,4 @@ export interface SetInstanceValueEdit {
     value: unknown;
 }
 
-export const SetInstanceValueEditPropertyNames: (keyof SetInstanceValueEdit)[] = ['kind', 'instance', 'component', 'path', 'value'];
+export const SetInstanceValueEditPropertyNames: (keyof SetInstanceValueEdit)[] = ['instance', 'component', 'path', 'value'];
