@@ -253,6 +253,52 @@ static class SceneNavigation
     /// </summary>
     public static JsonNode? WithoutEmptyModules(JsonNode? navigation) => navigation is JsonObject model ? WithoutEmptyModules(model) : navigation;
 
+    /// <summary>
+    /// The navigation the documents state goes on the layout the stage shells every screen in - the first - and on the modules that
+    /// declare their own. The compiler's rules for it are asked, so navigation it would refuse (a target the application does not
+    /// declare, a slot no layout has) is left out with the reason rather than written into a document that does not compile.
+    /// </summary>
+    public static (LayoutSyntax[] Layouts, List<ModuleSyntax> Modules) OnApplication(SceneNavigationDeclaration? navigation, LayoutSyntax[] layouts, List<ModuleSyntax> modules, ScreenplayExportWarnings warnings, bool otherEventModelsMayBeTargeted = false)
+    {
+        if (navigation is not { IsEmpty: false })
+        {
+            return (layouts, modules);
+        }
+
+        if (layouts.Length == 0)
+        {
+            warnings.Add("Navigation: the application declares no layout to put the navigation regions on, so they were not exported.");
+            return (layouts, modules);
+        }
+
+        var names = modules.Select(module => module.Name).ToHashSet(StringComparer.Ordinal);
+        foreach (var unknown in navigation.Modules.Where(module => !names.Contains(module.Module)))
+        {
+            warnings.Add($"Navigation: module '{unknown.Module}' is not a module of the application, so its navigation regions were not exported.");
+        }
+
+        // For Stage - a preview or a Play of the modules of one event model - only the navigation to the modules it has is written; the rest stays in the documents.
+        var applicationOutlets = otherEventModelsMayBeTargeted ? navigation.ApplicationOutlets() : SceneNavigation.WithoutTargetsOutside(navigation.ApplicationOutlets(), names);
+        var carried = layouts.Select((layout, index) => index == 0
+            ? layout with { Outlets = [.. layout.Outlets.Where(outlet => applicationOutlets.All(declared => declared.Name != outlet.Name)), .. applicationOutlets] }
+            : layout).ToArray();
+        var navigated = modules.ConvertAll(module => module with
+        {
+            Outlets = [.. module.Outlets.Where(outlet => navigation.OutletsOf(module.Name).All(refined => refined.Name != outlet.Name)), .. navigation.OutletsOf(module.Name)]
+        });
+        if (SceneNavigation.Refusals(carried, navigated, otherEventModelsMayBeTargeted) is { Count: > 0 } refusals)
+        {
+            foreach (var refusal in refusals)
+            {
+                warnings.Add($"Navigation: {refusal} - the navigation regions were not exported.");
+            }
+
+            return (layouts, modules);
+        }
+
+        return (carried, navigated);
+    }
+
     internal static bool IsOutletCode(string code) => IsNavigationCode(code);
 
     internal static bool IsNavigation(string name, IReadOnlySet<string> navigationNames) =>
