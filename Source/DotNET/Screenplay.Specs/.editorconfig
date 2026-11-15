@@ -1,0 +1,7 @@
+# The specs were moved from Stage and Studio with their conventions: Screenplay source in raw string literals, and a comment
+# that explains a scenario rather than a documentation comment.
+[*.cs]
+dotnet_diagnostic.MA0136.severity = none
+dotnet_diagnostic.RCS1181.severity = none
+dotnet_diagnostic.RCS1140.severity = none
+dotnet_diagnostic.SA1402.severity = none

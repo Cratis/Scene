@@ -5,6 +5,8 @@
   items:
     - name: Layering and seams
       href: architecture/layering.md
+    - name: The Screenplay bridge
+      href: architecture/screenplay-bridge.md
     - name: Binding resolution
       href: architecture/binding-resolution.md
     - name: Guarded actions and interactions

@@ -1,0 +1,4 @@
+module Ledger
+
+  feature Integration
+    description "Reserved for future integration with the legacy invoicing system"

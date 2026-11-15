@@ -1,0 +1,15 @@
+module Ledger
+  description
+    ```text
+    The ledger is the part of billing that other systems talk to. It exists so the invoicing
+    module never has to know that a legacy system is still the system of record for payments.
+    ```
+
+  contribute to mainNav
+    navigate to PaymentList
+    label $strings.navigation.payments
+    order 3
+
+  // The ledger shows the application's sidebar and adds one item of its own; its topbar is the application's.
+  outlet sidebar extends
+    item reconciliation title "Reconciliation" target Ledger.Integration

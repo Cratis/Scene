@@ -1,0 +1,72 @@
+theme Corporate
+  compatible with core
+  compatible with PrimeReact
+
+theme HighContrast
+  compatible with core
+
+layout AppShell
+  category Shell
+  topbar
+  sidebar
+  outlet mainNav of navigation in sidebar
+  content
+  footer
+
+  // The application's navigation. A module inherits these items, extends them or overrides them.
+  outlet topbar of navigation
+    logo image "/assets/billing.svg" title "Billing"
+    default invoicing title "Invoicing" icon receipt target Invoicing
+    default ledger title "Ledger" icon book target Ledger
+  outlet sidebar of navigation
+    default invoicing title "Invoicing" icon receipt target Invoicing
+      item invoices title "Invoices" target Invoicing.Invoices
+    default ledger title "Ledger" icon book target Ledger
+      item payments title "Payments" target Ledger.Payments
+
+  arrangement flow
+    row gap 0
+      sidebar width 240
+      column
+        topbar height 56
+        content grow
+        footer height 32
+    when width compact
+      column gap 0
+        topbar height 56
+        content grow
+
+// Design and preview time only: the rows a table shows before a backend feeds it. The profile chooses the active pack once.
+sample data NordicDemo
+  title "Billing - Nordic demo"
+  locale nb-NO
+  shape InvoiceSummary
+    row
+      invoiceNumber = "INV-1001"
+      customerName = "Fjordline AS"
+      status = "issued"
+      canCancel = true
+    row
+      invoiceNumber = "INV-1002"
+      customerName = "Nordlys Kraft"
+      status = "paid"
+      canCancel = false
+
+ui profile Desktop
+  target platform web
+  target size expanded
+  packages
+    core
+    PrimeReact
+  root template AppShell
+  theme Corporate
+  sample data
+    active NordicDemo
+
+ui profile Phone
+  target platform web, ios, android
+  target size compact
+  packages
+    core
+  root template AppShell
+  theme HighContrast
