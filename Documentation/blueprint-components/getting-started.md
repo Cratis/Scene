@@ -130,5 +130,5 @@ At that point you are writing templates, not screens — which is the moment to 
 ## Where to go next
 
 - [Wire the binding registry](wiring-the-binding-registry.md) — every name these templates ask for.
-- [The template catalogue](template-catalogue.md) — the other ten screen templates and the three dialogs.
+- [The template catalogue](template-catalogue.md) — the other eleven screen templates and the three dialogs.
 - [Add a template of your own](add-a-template.md) — the two rules that keep a new template composable.
