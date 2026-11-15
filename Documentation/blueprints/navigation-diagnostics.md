@@ -61,6 +61,27 @@ A host served as a single file or from a path it does not control - a generated 
 - **Back and forward.** The browser's buttons step through entries, and `back()` does the same from a screen.
 - **Dialogs.** A dialog destination opens as its own entry over the screen that opened it. `closeDialog(result)` returns to that screen and exposes the result as `dialogResult`; the browser's back button also closes the dialog.
 
+### Reading the navigation context
+
+Everything above - `currentScreen`, `currentParameters`, `dialogResult`, `unresolvedUrl`, and the `navigate`,
+`closeDialog`, `closeSlot` and `back` operations - is the `SceneNavigationContextValue` a component inside the host
+reads with a hook:
+
+| Hook | Returns |
+| --- | --- |
+| `useSceneNavigation()` | The context of the enclosing host. Throws outside one. |
+| `useOptionalSceneNavigation()` | The context of the enclosing host, or `undefined` outside one, for a control that also works on its own. |
+
+```tsx
+import { useSceneNavigation } from '@cratis/scene.react';
+
+const navigation = useSceneNavigation();
+navigation.navigate({ screen: 'WorkItemDetails' });
+```
+
+`SceneNavigationHost` provides the context itself. A host that implements navigation another way, such as a
+designer that fakes it, provides its own `SceneNavigationContextValue` with `SceneNavigationProvider`.
+
 ## Nested slots
 
 A screen declares a nested slot with a `core:slot` element and a `name`. A destination whose `slot` names it places its screen there and keeps the declaring screen on the page. The placed screen may declare slots of its own, so composition nests to any depth. When the declaring screen is not on the page yet, as with a deep link to the innermost level, the host places it first, through the destination that opens it. Back closes the innermost level, and a destination into a slot no screen declares replaces the whole composition. The host stops after 32 levels, so a model whose screens host each other cannot loop; navigation diagnostics report such a model as `navigationCycle`.

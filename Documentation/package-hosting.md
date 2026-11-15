@@ -45,6 +45,31 @@ A host is blocked, with a diagnostic, when:
 - the policy forbids network assets and a package declares one: any absolute URL other than `data:` or `blob:`, or a protocol-relative `//host/...` reference (`isNetworkAsset`);
 - the policy forbids executable imports while loading design time, and a package brings design-time code.
 
+## Rendering through a host surface
+
+`PackageHostView` resolves the configuration and renders one Scene element with the effective registry,
+assets and fonts. When the host is blocked it renders the diagnostics in an alert instead, and nothing from
+the rejected profile runs.
+
+```tsx
+import { StandalonePackageHost } from '@cratis/scene.react';
+
+<StandalonePackageHost configuration={configuration} element={screen} dataContext={readModel} />
+```
+
+Three wrappers fix the surface mode, and otherwise take the same props (`configuration`, `element`, and
+optionally `dataContext`, `queryResults` and `componentOutputs`):
+
+| Component | `PackageHostRenderMode` | Use it for |
+| --- | --- | --- |
+| `StandalonePackageHost` | `Standalone` | A browser application that renders Scene on its own |
+| `EmbeddedPackageHost` | `Embedded` | An application or designer pane that embeds a preview |
+| `WebViewPackageHost` | `WebView` | A constrained webview, such as a VS Code panel |
+
+The mode does not change what resolves. It is written to the `data-scene-host-mode` attribute on the
+rendered section, so a host's styles and tests can tell the surfaces apart. `PackageHostView` on its own
+defaults to `Embedded`.
+
 ## Approved package sets for custom runtime packages
 
 A host that renders with packages it does not ship (a charts package, an in-house component library) approves them with one **approved package set** document. The CLI, Stage's planner and a React host all read the same file, so there is no per-host resolver:
