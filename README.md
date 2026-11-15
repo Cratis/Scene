@@ -13,9 +13,34 @@ forms, contribution points, ui profiles and themes), `Scene.Engine` (binding/res
 ## Packages / Deployables
 
 [![Nuget](https://img.shields.io/nuget/v/Cratis.Scene.Model?logo=nuget)](http://nuget.org/packages/Cratis.Scene.Model)
+[![Nuget](https://img.shields.io/nuget/v/Cratis.Scene.Engine?logo=nuget)](http://nuget.org/packages/Cratis.Scene.Engine)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.model?label=@cratis/scene.model&logo=npm)](https://www.npmjs.com/package/@cratis/scene.model)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.engine?label=@cratis/scene.engine&logo=npm)](https://www.npmjs.com/package/@cratis/scene.engine)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.react?label=@cratis/scene.react&logo=npm)](https://www.npmjs.com/package/@cratis/scene.react)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.extensions?label=@cratis/scene.extensions&logo=npm)](https://www.npmjs.com/package/@cratis/scene.extensions)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.components?label=@cratis/scene.components&logo=npm)](https://www.npmjs.com/package/@cratis/scene.components)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.primereact?label=@cratis/scene.primereact&logo=npm)](https://www.npmjs.com/package/@cratis/scene.primereact)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.tailwind?label=@cratis/scene.tailwind&logo=npm)](https://www.npmjs.com/package/@cratis/scene.tailwind)
+
+Blueprints:
+
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.default?label=@cratis/scene.blueprint.default&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.default)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.components?label=@cratis/scene.blueprint.components&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.components)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.administration?label=@cratis/scene.blueprint.administration&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.administration)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.approvals?label=@cratis/scene.blueprint.approvals&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.approvals)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.bookings?label=@cratis/scene.blueprint.bookings&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.bookings)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.catalog?label=@cratis/scene.blueprint.catalog&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.catalog)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.contracts?label=@cratis/scene.blueprint.contracts&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.contracts)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.crm?label=@cratis/scene.blueprint.crm&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.crm)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.customer-portal?label=@cratis/scene.blueprint.customer-portal&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.customer-portal)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.hr?label=@cratis/scene.blueprint.hr&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.hr)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.inventory?label=@cratis/scene.blueprint.inventory&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.inventory)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.invoicing?label=@cratis/scene.blueprint.invoicing&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.invoicing)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.orders?label=@cratis/scene.blueprint.orders&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.orders)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.project-tracker?label=@cratis/scene.blueprint.project-tracker&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.project-tracker)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.ticketing?label=@cratis/scene.blueprint.ticketing&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.ticketing)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.vendors?label=@cratis/scene.blueprint.vendors&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.vendors)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.blueprint.work-orders?label=@cratis/scene.blueprint.work-orders&logo=npm)](https://www.npmjs.com/package/@cratis/scene.blueprint.work-orders)
 
 ## .NET support
 
