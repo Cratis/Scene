@@ -4,6 +4,8 @@
   href: descriptors.md
 - name: Inspecting and editing
   href: inspection-and-editing.md
+- name: Applying edits from .NET
+  href: applying-edits-in-dotnet.md
 - name: Package design-time extensions
   href: design-time-extensions.md
 - name: Designer patterns from WinForms and ASP.NET
