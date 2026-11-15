@@ -15,8 +15,8 @@ blueprint.default/
 ├── ComponentName.ts                the bare names this blueprint declares
 ├── packageName.ts                  the name a ui profile lists it under
 ├── configuration/                  the layout-mode state machine, its React provider and persistence
-├── layouts/                        the two Layout definitions and the flow builders behind them
-├── shell/                          the sixteen shell components, and layout.css
+├── layouts/                        the four Layout definitions and the flow builders behind them
+├── shell/                          the shell components, and layout.css
 ├── gallery/                        the screen and dialog templates, the screens, and preview helpers
 ├── themes/                         the two themes and the provider that applies them
 └── for_*/                          BDD specs beside the code they specify
@@ -26,10 +26,13 @@ blueprint.default/
 
 | Concept | What it is | How many |
 | --- | --- | --- |
-| **Layout** | the application's base navigational look | one per application, chosen from two |
-| **Screen template** | a reusable shape *inside* a layout, at module / feature / slice level | twenty-four |
-| **Dialog template** | the same, for overlays - no `fitsSlot`, because a dialog occupies no parent slot | three |
-| **Screen** | an instance: names its layout and template, and provides the content | twenty-four |
+| **Layout** | the application's base navigational look | one per application, chosen from four |
+| **Screen template** | a reusable shape *inside* a layout, at module / feature / slice level | forty-three |
+| **Dialog template** | the same, for overlays - no `fitsSlot`, because a dialog occupies no parent slot | seven |
+| **Screen** | an instance: names its layout and template, and provides the content | one per screen template |
+
+`defaultBlueprintComponents` registers forty-eight components: seventeen shell components and the
+foundation widgets the templates place.
 
 A screen template states where it belongs, in `fitsSlot`, rather than being told by whatever hosts it.
 That one rule composes at every depth: a module's template fits the layout's `content`, a feature's fits a
@@ -170,15 +173,16 @@ Theme compatibility metadata still supports both kinds of host.
 
 ## Deliberately not built
 
-- **No router.** `menuItem` and `breadcrumb` render hash routes (`#/Dashboard`) against a screen name. A
-  host with a real router wraps the shell and rewrites them; hashes keep the gallery navigable with no
-  router at all, which is what a preview needs.
+- **No router.** `menuItem`, `breadcrumb` and the other shell links render hash routes (`#/Dashboard`)
+  against a screen name. Inside a navigation host, `useShellLink` intercepts a plain click and navigates
+  through the host's navigation context instead, so a host does not rewrite the links. Outside a host they
+  stay hash links, which keeps the gallery navigable with no router at all - what a preview needs.
 - **No widget adapters.** Every widget a template places comes from PrimeReact or Cratis Components. A
   blueprint that shipped its own table would be a component library wearing a blueprint's manifest.
 - **No layout-arrangement renderer.** The layouts' `FlowArrangement`s are evaluated by the real
   `evaluateFlowArrangement` in specs, but the shell positions its regions with CSS. Rendering an
   arrangement generically is Scene#4's job, layered on top rather than folded in here.
-- **No `FreeformSlotArrangement`.** Both layouts reflow; neither has a fixed-position variant worth
+- **No `FreeformSlotArrangement`.** Every layout reflows; none has a fixed-position variant worth
   expressing as absolute placements.
 
 ## Known gaps outside this package
@@ -188,12 +192,6 @@ Theme compatibility metadata still supports both kinds of host.
   `Package for @cratis/scene.blueprint.default@workspace:... not found in the project`. Run `yarn install`
   once; until then the gates run through `npx tsc -b`, `npx rollup -c ./rollup.config.mjs`, `npx vitest run`,
   `npx eslint --cache --quiet .` and `npx storybook build`, which are what the `g:*` scripts invoke.
-- `Source/JavaScript/blueprint.default` is not in the root `tsconfig.json` `references` (which now lists
-  `tailwind`, `primereact` and `components`), so a root `npx tsc -b` does not build it.
-- `FlowRow`, `FlowColumn` and a `FlowGrid` with no `columns` are structurally identical in `Scene.Model`,
-  so a consumer cannot tell a row from a column by value. The builders in `layouts/flowBuilders.ts` keep
-  the *intent* legible at the declaration site, and `grid()` always sets `columns`, but the model gap is
-  real.
 
 ## Gates
 

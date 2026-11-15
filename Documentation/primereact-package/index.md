@@ -62,6 +62,26 @@ that activates PrimeReact without Tailwind renders those wrappers unstyled. Decl
 makes a profile picker offer Tailwind alongside PrimeReact, instead of leaving the gap to be discovered on
 screen.
 
+### The Tailwind package
+
+The `Tailwind` the dependency names is `@cratis/scene.tailwind`, a styling package. It contributes no
+components, layouts, templates or themes; it exists so a profile can state which utility CSS system its
+component libraries are written against, and so those libraries can depend on it.
+
+```ts
+import { tailwindPackage, tailwindPackageManifest } from '@cratis/scene.tailwind';
+
+tailwindPackageManifest.name;   // 'Tailwind'
+tailwindPackageManifest.kind;   // PackageKind.Styling
+tailwindPackageManifest.module; // '@cratis/scene.tailwind'
+
+tailwindPackage.manifest;       // tailwindPackageManifest
+tailwindPackage.components;     // {} - nothing to register
+```
+
+`tailwindPackageManifest` is the `ScenePackage` declaration a profile and a package host read.
+`tailwindPackage` is the loadable `ScenePackageBundle` you hand a host next to the PrimeReact bundle.
+
 The manifest declares no layouts, screen templates or dialog templates, and that is deliberate rather than
 unfinished. A component library supplies the vocabulary a template is built *from*; a **blueprint** package
 supplies the layout and the templates themselves. See [Blueprints](../blueprints/index.md).

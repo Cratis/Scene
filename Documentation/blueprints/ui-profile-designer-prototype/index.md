@@ -11,7 +11,7 @@ difference between the prototype and a host is a bug in the host unless an issue
 | --- | --- |
 | [`ui-profile-editor.html`](ui-profile-editor.html) | The prototype. One self-contained page, plain JavaScript, no build. Open it in a browser. Every setting lives in one state object; every change goes through one function that records an undo step and re-renders the preview and the inspector. |
 | [`UI-Profile-Editor-Walkthrough.pdf`](UI-Profile-Editor-Walkthrough.pdf) | The walkthrough (prototype v4, 17 October 2026): every region, widget and interaction, with a screenshot of each state. |
-| [`screenshots/`](screenshots) | Every screenshot of the walkthrough as a separate image, numbered in the order of the walkthrough. Captured from the running prototype at 1440 x 900. |
+| `screenshots/` | Every screenshot of the walkthrough as a separate image, numbered in the order of the walkthrough, from [`01-editor-at-a-glance.jpg`](screenshots/01-editor-at-a-glance.jpg) to [`59-studio-light-chrome.jpg`](screenshots/59-studio-light-chrome.jpg). Captured from the running prototype at 1440 x 900. |
 
 > The catalog in the prototype is **invented**: the blueprint, package, theme, sample pack and font names, the versions and the "who supplies
 > what" table are placeholders. The behavior is the specification; the content is replaced by the real catalog.

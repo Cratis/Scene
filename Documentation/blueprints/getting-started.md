@@ -109,5 +109,5 @@ Fill `slotContent` with the shell chrome and your content, keyed by the layout's
 
 - [Screen and dialog templates](./screen-templates.md) - the model behind what you just rendered, and how
   templates nest.
-- [The template set](./template-set.md) - the other twenty-two shapes you did not have to build.
+- [The template set](./template-set.md) - the other forty-one shapes you did not have to build.
 - [Ship your own blueprint](./ship-your-own-blueprint.md) - when the default one is not the look you want.

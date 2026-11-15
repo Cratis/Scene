@@ -117,6 +117,20 @@ The URL encoding is shared, so every host writes the same URL:
 
 A query the screen shows reads the filters' values with `useSceneQueryParameters`.
 
+A component that reads or changes the route itself asks for the router with a hook:
+
+| Hook | Returns |
+| --- | --- |
+| `useSceneRouter()` | The router of the enclosing `SceneRouterProvider`. Outside one, a router of the component's own that keeps the state in memory, so a control rendered on its own still works. |
+| `useOptionalSceneRouter()` | The router of the enclosing provider, or `undefined` outside one. Use it when the component should behave differently with no host router. |
+
+```tsx
+import { useSceneRouter } from '@cratis/scene.react';
+
+const router = useSceneRouter();
+router.setQueryParameter('status', 'onSale');
+```
+
 ## The toolbar is an outlet of actions
 
 The `core:toolbar` component and its `core:toolbarItem` items are gone: a screen's toolbar is an outlet of actions drawn

@@ -30,6 +30,18 @@ export const Chart = mountComponent((host, properties, context) => { /* ... */ }
 
 `reactComponent` always declares `['web']`. `mountComponent` takes the platforms it supports and defaults to `['web']`; an empty list throws. A frontend module exports its components by the name the contract declares (`ExtensionFrontendModule`).
 
+The types behind the two functions:
+
+| Type | Meaning |
+| --- | --- |
+| `ReactExtensionComponent` | What `reactComponent` returns: `kind: 'react'`, the `component`, and `platforms`. |
+| `MountExtensionComponent` | What `mountComponent` returns: `kind: 'mount'`, the `mount` factory, and `platforms`. |
+| `ExtensionComponentDefinition` | Either of the two; what a frontend module registers for one component name. |
+| `ExtensionComponentKind` | `'react'`, `'mount'` or `'screenplay'`. |
+| `MountFactory` | `(host, properties, context) => MountedInstance`. |
+| `ExtensionPlatform` | `'web'`, `'desktop'`, `'ios'`, `'android'`, or any other string a host adds. |
+| `webPlatform` | The constant `'web'`: what every React component declares and the `mountComponent` default. |
+
 A mounted component answers with a `MountedInstance`:
 
 | Member | Meaning |

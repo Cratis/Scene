@@ -75,6 +75,24 @@ engine pretend otherwise? Two reasons, both practical:
   first `location.href` is the point where the document stops describing an application and starts describing a
   web page.
 
+### The renderer contract
+
+The engine's side of the seam is a tree walk. `renderElement(element, renderer, resolveBinding)` visits a Scene
+element tree, renders each node's children before the node itself, and hands the results to a `Renderer<TOutput>`.
+A renderer implements one method per element kind the model ships:
+
+| Method | Receives |
+| --- | --- |
+| `renderContentControl(element, content)` | The element and its rendered content. |
+| `renderItemsControl(element, items)` | The element and one rendered item per entry its `itemsSource` binding resolves to. |
+| `renderExternalComponent(element, slots)` | The element and its rendered named slots. |
+| `renderPanel(element, children)` | The element and its rendered children. |
+
+`TOutput` is whatever the platform needs; `@cratis/scene.react` supplies a `Renderer<ReactNode>` through
+`createReactRenderer(registry)`, and `SceneElementView` runs the walk with it. The walk is structural only:
+resolving a profile's packages, aggregating contributions and arranging layout are separate engine functions
+layered on top of it.
+
 ## The invariants
 
 These are checked, not aspirational.
