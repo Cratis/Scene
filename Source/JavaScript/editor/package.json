@@ -41,6 +41,7 @@
         "!vitest.setup.ts",
         "!vitest.browser.config.mts",
         "!**/*.browser.ts",
+        "!**/*.stories.tsx",
         "!.storybook/**"
     ],
     "main": "dist/cjs/index.js",
@@ -72,6 +73,11 @@
             "types": "./dist/esm/Crash/index.d.ts",
             "require": "./dist/cjs/Crash/index.js",
             "import": "./dist/esm/Crash/index.js"
+        },
+        "./DesignSystem": {
+            "types": "./dist/esm/DesignSystem/index.d.ts",
+            "require": "./dist/cjs/DesignSystem/index.js",
+            "import": "./dist/esm/DesignSystem/index.js"
         },
         "./IconLibraries/Lucide": {
             "types": "./dist/esm/IconLibraries/Lucide/index.d.ts",
@@ -156,6 +162,8 @@
         "test:browser": "yarn g:test --config ./vitest.browser.config.mts",
         "ci": "yarn g:ci",
         "up": "yarn g:up",
+        "dev": "storybook dev -p 6007",
+        "build-storybook": "storybook build",
         "generate-lucide-catalog": "node IconLibraries/Lucide/generate-catalog.mjs"
     },
     "dependencies": {
@@ -190,6 +198,9 @@
         "@primereact/headless": "11.2.0",
         "@primereact/styles": "11.2.0",
         "@primereact/types": "11.2.0",
+        "@storybook/addon-links": "^10.6.2",
+        "@storybook/react": "^10.6.2",
+        "@storybook/react-vite": "^10.6.2",
         "chart.js": "4.5.1",
         "esbuild": "0.28.2",
         "lucide-static": "1.71.0",
@@ -198,7 +209,8 @@
         "primereact": "11.2.0",
         "quill": "2.0.3",
         "react": "^19.3.1",
-        "react-dom": "^19.3.1"
+        "react-dom": "^19.3.1",
+        "storybook": "^10.6.2"
     },
     "peerDependencies": {
         "@cratis/components": "^4.40.1",
