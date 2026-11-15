@@ -1,0 +1,157 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.design-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+}
+
+.design-chat__turns {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.design-chat__prompt {
+    margin: 0;
+    font-weight: 500;
+}
+
+.design-chat__author {
+    margin-inline-end: 6px;
+    color: var(--cratis-text-color-secondary, #6b7280);
+    font-weight: 400;
+}
+
+.design-chat__status {
+    margin: 2px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-chat__turn--failed .design-chat__status {
+    color: var(--cratis-danger-text, #b91c1c);
+}
+
+.design-chat__turn--refused .design-chat__status {
+    color: var(--cratis-warning-text, #b45309);
+}
+
+.design-chat__spinner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--cratis-surface-border, #d1d5db);
+    border-top-color: var(--cratis-primary-color, #3b82f6);
+    animation: design-chat-spin 0.8s linear infinite;
+}
+
+@keyframes design-chat-spin {
+    to { transform: rotate(360deg); }
+}
+
+.design-chat__reply {
+    margin: 4px 0 0;
+}
+
+.design-chat__touched {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 4px 0 0;
+}
+
+.design-chat__screen,
+.design-chat__undo,
+.design-chat__alternative,
+.design-chat__proposal button {
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    color: inherit;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font: inherit;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+.design-chat__alternative {
+    border-color: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color, #3b82f6);
+}
+
+.design-chat__refusal,
+.design-chat__proposal {
+    margin-top: 6px;
+    padding: 8px;
+    border-radius: var(--cratis-border-radius, 6px);
+    border: 1px solid var(--cratis-warning-background, #fde68a);
+    background: color-mix(in srgb, var(--cratis-warning-background, #fde68a) 35%, transparent);
+}
+
+.design-chat__refusal p {
+    margin: 0 0 6px;
+}
+
+.design-chat__alternatives {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.design-chat__proposal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.design-chat__form {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.design-chat__input {
+    flex: 1 1 auto;
+    resize: none;
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 6px 8px;
+    font: inherit;
+    background: var(--cratis-surface-ground, #fff);
+    color: inherit;
+}
+
+.design-chat__send,
+.design-chat__cancel {
+    border: 0;
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 8px 16px;
+    font: inherit;
+    cursor: pointer;
+    background: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color-text, #fff);
+}
+
+.design-chat__cancel {
+    background: var(--cratis-surface-hover, #e5e7eb);
+    color: inherit;
+}
+
+.design-chat__send:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

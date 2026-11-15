@@ -1,0 +1,78 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.template-schematic {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+}
+
+.template-schematic__slots {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    border-radius: var(--cratis-border-radius, 6px);
+}
+
+.template-schematic__slot {
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    border: 1px dashed var(--cratis-surface-border, #9ca3af);
+    background: color-mix(in srgb, var(--cratis-primary-color, #3b82f6) 7%, var(--cratis-surface-card, #fff));
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+.template-schematic__slot--primary {
+    border-style: solid;
+    border-color: var(--cratis-primary-color, #3b82f6);
+    background: color-mix(in srgb, var(--cratis-primary-color, #3b82f6) 14%, var(--cratis-surface-card, #fff));
+}
+
+.template-schematic__slot--optional {
+    opacity: 0.8;
+}
+
+.template-schematic__name {
+    font-weight: 600;
+}
+
+.template-schematic__flag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.template-schematic__description {
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.template-schematic__none {
+    padding: 24px;
+    text-align: center;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.template-schematic__outlets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.template-schematic__outlets li {
+    padding: 2px 8px;
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
