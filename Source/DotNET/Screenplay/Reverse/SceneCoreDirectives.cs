@@ -32,6 +32,7 @@ static class SceneCoreDirectives
     {
         ScreenTitleSyntax => true,
         ScreenDataSyntax data => !data.Type.IsOptional,
+        ScreenNeedSyntax => true,
         ScreenTableSyntax table => table.RowClick is null && !table.Behaviors.Any() && !table.UsedBehaviors.Any(),
         ScreenSummarySyntax => true,
         ScreenToolbarSyntax toolbar => !toolbar.Items.Any() && toolbar.Buttons.Any(),
@@ -47,6 +48,12 @@ static class SceneCoreDirectives
             ["isCollection"] = data.Type.IsCollection,
             ["query"] = data.Query,
             ["by"] = data.By
+        }),
+        ScreenNeedSyntax need => Component(names, $"data-{Slug(need.Alias ?? need.Type.Name)}", $"Data {need.Alias ?? need.Type.Name}", Data, new()
+        {
+            [TypeName] = need.Type.Name,
+            ["isCollection"] = need.Type.IsCollection,
+            ["need"] = need.Alias
         }),
         ScreenTableSyntax table => WithChildren(
             Component(names, $"table-{Slug(table.Target)}", $"Table {table.Target}", Table, new() { [TypeName] = table.Target }),
@@ -85,6 +92,8 @@ static class SceneCoreDirectives
         {
             Title when OnlyMembers(properties, "text") && slots.Count == 0 && String(properties, "text") is { } text && IsImported(element, "title", text) =>
                 new ScreenTitleSyntax(text, SourceLocation.Start),
+            Data when OnlyMembers(properties, TypeName, "isCollection", "need") && slots.Count == 0 && NeedOf(properties) is { } need
+                && IsImported(element, $"data-{Slug(need.Alias ?? need.Type.Name)}", $"Data {need.Alias ?? need.Type.Name}") => need,
             Data when OnlyMembers(properties, TypeName, "isCollection", "query", "by") && slots.Count == 0 && DataOf(properties) is { } data
                 && IsImported(element, $"data-{Slug(data.Type.Name)}", $"Data {data.Type.Name}") => data,
             Table when OnlyMembers(properties, TypeName) && String(properties, TypeName) is { } target && IsImported(element, $"table-{Slug(target)}", $"Table {target}")
@@ -129,6 +138,16 @@ static class SceneCoreDirectives
 
         return new ScreenToolbarSyntax(name, [], SourceLocation.Start) { Buttons = [.. buttons.Cast<ToolbarButtonSyntax>()] };
     }
+
+    /// <summary>
+    /// A need is data a screen reads and no query provides yet: the shape, whether it is a list and, when the screen needs the shape twice, the alias that tells them apart.
+    /// </summary>
+    static ScreenNeedSyntax? NeedOf(JsonObject properties) =>
+        String(properties, TypeName) is { } type && properties["query"] is null &&
+        properties["isCollection"] is JsonValue collection && collection.TryGetValue<bool>(out var isCollection) &&
+        (properties["need"] is null || String(properties, "need") is not null)
+            ? new ScreenNeedSyntax(new TypeRefSyntax(type, isCollection, false, SourceLocation.Start), String(properties, "need"), SourceLocation.Start)
+            : null;
 
     static ScreenDataSyntax? DataOf(JsonObject properties) =>
         String(properties, TypeName) is { } type && String(properties, "query") is { } query &&

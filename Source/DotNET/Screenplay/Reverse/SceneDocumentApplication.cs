@@ -42,7 +42,9 @@ public static class SceneDocumentApplication
     /// <returns>The <see cref="SceneDocumentApplicationPrint"/>.</returns>
     public static SceneDocumentApplicationPrint Print(IEnumerable<SceneModuleDocument> documents, bool forStage = false)
     {
-        var all = documents.ToArray();
+        var extracted = documents.Select(document => (Document: document, Free: SceneFreeScreens.Extract(document.Document))).ToArray();
+        var free = FreeScreenDeclarations.Merge(extracted.Select(entry => entry.Free.Free));
+        var all = extracted.Select(entry => entry.Document with { Document = entry.Free.Document }).Where(document => HasScreens(document.Document) || extracted.Length == 1).ToArray();
         var exports = SceneModuleExports.ForApplication(forStage, all);
         var declarations = SceneDocumentScreenplayBridge.Declarations(all.Select(document => document.Document), exports.Values);
         var warnings = new ScreenplayExportWarnings();
@@ -62,6 +64,12 @@ public static class SceneDocumentApplication
             ? []
             : [new FeatureSyntax(ModuleName, [], [new SliceSyntax(Cratis.Screenplay.Syntax.SliceType.StateView, ModuleName, [], [], [], [], [], [], screens, [], [], SourceLocation.Start)], SourceLocation.Start)];
         List<ModuleSyntax> modules = [new ModuleSyntax(ModuleName, declarations.ScreenTemplates, features, SourceLocation.Start, Forms: forms, DialogTemplates: declarations.DialogTemplates)];
+        foreach (var diagnostic in free.Diagnostics)
+        {
+            warnings.Add($"Free screens: {diagnostic}");
+        }
+
+        modules = SceneFreeScreens.OnApplication(free, modules, out var applicationScreens, out var shapes);
         var layouts = ShellLayouts(declarations, forStage);
 
         modules = WithNavigationTargets(declarations.Navigation, modules);
@@ -81,6 +89,8 @@ public static class SceneDocumentApplication
             Behaviors = declarations.Behaviors,
             DesignSystems = declarations.DesignSystems,
             Types = declarations.Types,
+            Shapes = shapes,
+            Screens = applicationScreens,
             SampleDataPacks = declarations.SampleDataPacks,
             Templates = declarations.Templates,
             Exposures = declarations.Exposures,
@@ -110,6 +120,11 @@ public static class SceneDocumentApplication
             : null;
         var allScreens = application.Modules.SelectMany(module => Features(module.Features)).SelectMany(feature => feature.Slices).SelectMany(slice => slice.Screens).Select(screen => screen.Name).ToArray();
         List<ImportedScreenDocument> documents = [];
+        if (SceneFreeScreens.Read(application) is { } freeScreens)
+        {
+            documents.Add(freeScreens);
+        }
+
         foreach (var module in application.Modules)
         {
             var forms = module.Forms ?? [];
@@ -199,6 +214,9 @@ public static class SceneDocumentApplication
             return existing is null ? [.. features.Append(declared)] : [.. features.Select(feature => ReferenceEquals(feature, existing) ? declared : feature)];
         }
     }
+
+    static bool HasScreens(string document) =>
+        SceneJson.Parse(document) is { } root && SceneJson.Array(root, "screens").Count > 0;
 
     static IEnumerable<FeatureSyntax> Features(IEnumerable<FeatureSyntax> features) =>
         features.SelectMany(feature => new[] { feature }.Concat(Features(feature.Features)));
