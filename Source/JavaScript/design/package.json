@@ -1,0 +1,58 @@
+{
+    "name": "@cratis/scene.design",
+    "version": "1.0.0",
+    "description": "Scene Design: the catalogue that grounds a design, the design operations and their lowering to Scene edits, the screen set, and the design session with its Chronicle events and reducer. The TypeScript mirror of Cratis.Scene.Design.",
+    "homepage": "https://www.cratis.io/screenplay/",
+    "keywords": [
+        "cratis",
+        "scene",
+        "ui",
+        "design",
+        "catalogue",
+        "screenplay",
+        "low-code"
+    ],
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist",
+        "**/*.ts",
+        "!**/for_*/**"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up"
+    },
+    "dependencies": {
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0"
+    },
+    "devDependencies": {
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0"
+    }
+}

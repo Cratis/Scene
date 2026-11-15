@@ -730,7 +730,7 @@
     "SetPropertyEdit": ["nodeId", "path", "value"],
     "UnexposePropertyEdit": ["owner", "component", "path"],
     "CollectionItemDescriptor": ["label", "properties", "open", "positional"],
-    "ComponentDescriptor": ["component", "displayName", "description", "category", "icon", "badge", "keywords", "designMode", "editorKind", "properties", "actions", "previewKind", "propertyDisplayKind"],
+    "ComponentDescriptor": ["component", "displayName", "description", "category", "icon", "badge", "keywords", "designMode", "editorKind", "properties", "actions", "previewKind", "propertyDisplayKind", "anatomy"],
     "ComponentDesignModeDescriptor": ["itemsPath", "addActions", "itemToolbar"],
     "DesignModeAddAction": ["id", "label", "icon", "collectionPath"],
     "DesignModeItemAction": ["id", "icon", "title", "compact", "availability", "readOnlyReason"],

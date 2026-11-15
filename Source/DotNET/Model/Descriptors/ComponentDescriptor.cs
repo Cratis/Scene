@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Cratis.Scene.Model.DesignSystems;
 using Cratis.Scene.Model.Icons;
 
 namespace Cratis.Scene.Model.Descriptors;
@@ -21,6 +22,7 @@ namespace Cratis.Scene.Model.Descriptors;
 /// <param name="Actions">What may be done to it while designing.</param>
 /// <param name="PreviewKind">The preview to use.</param>
 /// <param name="PropertyDisplayKind">How its properties are shown.</param>
+/// <param name="Anatomy">The parts, variants and states of its look that a design system can restyle.</param>
 public record ComponentDescriptor(
     string Component,
     IReadOnlyList<PropertyDescriptor> Properties,
@@ -34,4 +36,5 @@ public record ComponentDescriptor(
     string? EditorKind = null,
     IReadOnlyList<DesignTimeActionDescriptor>? Actions = null,
     string? PreviewKind = null,
-    string? PropertyDisplayKind = null);
+    string? PropertyDisplayKind = null,
+    ComponentAnatomy? Anatomy = null);
