@@ -12,7 +12,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// <summary>
 /// The navigation of a module: the outlets of the application's navigation it inherits, extends or overrides.
 /// </summary>
-sealed record SceneModuleNavigation(string Module, IReadOnlyList<OutletSyntax> Outlets);
+public sealed record SceneModuleNavigation(string Module, IReadOnlyList<OutletSyntax> Outlets);
 
 /// <summary>
 /// The navigation a Scene document carries as its 'navigation' member (Scene 5): the application's outlets of navigation - the topbar
@@ -20,7 +20,7 @@ sealed record SceneModuleNavigation(string Module, IReadOnlyList<OutletSyntax> O
 /// Screenplay 6 `outlet &lt;name&gt; of navigation` declarations of the application's layout and the outlet refinements of its modules,
 /// so what the designer authors exports and imports.
 /// </summary>
-sealed record SceneNavigationDeclaration(IReadOnlyList<OutletSyntax> Outlets, NavigationLogoSyntax? Logo, IReadOnlyList<SceneModuleNavigation> Modules)
+public sealed record SceneNavigationDeclaration(IReadOnlyList<OutletSyntax> Outlets, NavigationLogoSyntax? Logo, IReadOnlyList<SceneModuleNavigation> Modules)
 {
     public bool IsEmpty => Outlets.Count == 0 && Logo is null && Modules.All(module => module.Outlets.Count == 0);
 
@@ -43,7 +43,10 @@ sealed record SceneNavigationDeclaration(IReadOnlyList<OutletSyntax> Outlets, Na
     }
 }
 
-static class SceneNavigation
+/// <summary>
+/// Reads and writes the navigation a Scene document carries as its 'navigation' member, and puts it onto the application's layout and modules.
+/// </summary>
+public static class SceneNavigation
 {
     public const string Member = "navigation";
     public const string Topbar = "topbar";
@@ -299,15 +302,15 @@ static class SceneNavigation
         return (carried, navigated);
     }
 
-    internal static bool IsOutletCode(string code) => IsNavigationCode(code);
+    public static bool IsOutletCode(string code) => IsNavigationCode(code);
 
-    internal static bool IsNavigation(string name, IReadOnlySet<string> navigationNames) =>
+    public static bool IsNavigation(string name, IReadOnlySet<string> navigationNames) =>
         navigationNames.Contains(name) || (BaseOf(name, ScreenplayButtonsSuffix) is { } region && navigationNames.Contains(region));
 
     /// <summary>
     /// The outlets a level refines, as the level's JSON states them: a module's refinements of the navigation, and the refinements of a feature or a screen.
     /// </summary>
-    internal static List<OutletSyntax> LevelRefinements(JsonObject level, string owner, IReadOnlySet<string> navigationNames, SceneTransportGaps gaps)
+    public static List<OutletSyntax> LevelRefinements(JsonObject level, string owner, IReadOnlySet<string> navigationNames, SceneTransportGaps gaps)
     {
         List<OutletSyntax> outlets = [];
         foreach (var refinement in SceneJson.Array(level, "refinements").OfType<JsonObject>())
@@ -359,7 +362,7 @@ static class SceneNavigation
         return outlets;
     }
 
-    internal static JsonObject Refinement(OutletSyntax outlet, IReadOnlySet<string> navigationNames)
+    public static JsonObject Refinement(OutletSyntax outlet, IReadOnlySet<string> navigationNames)
     {
         var json = new JsonObject
         {

@@ -7,7 +7,6 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using Cratis.Scene.Design.Operations;
 using Cratis.Scene.Design.Session;
-using Cratis.Scene.Model;
 using Cratis.Scene.Model.Editing;
 using Cratis.Scene.Screenplay;
 using Cratis.Scene.Screenplay.Forward;
@@ -17,6 +16,7 @@ using Cratis.Screenplay.Diagnostics;
 using Cratis.Screenplay.Printing;
 using Cratis.Screenplay.Syntax;
 using DiagnosticSeverity = Cratis.Screenplay.Diagnostics.DiagnosticSeverity;
+using SceneJson = Cratis.Scene.Model.SceneJson;
 
 namespace Cratis.Scene.Design.AI.Workbench;
 
@@ -26,9 +26,12 @@ namespace Cratis.Scene.Design.AI.Workbench;
 /// <remarks>
 /// The screens a design holds are compiled together with the Screenplay of the application they are designed for, so what they name - shapes,
 /// queries, templates, a design system - is checked where it is declared. The compiler's diagnostics are reported against the text that wrote them.
+/// It is public so that a host that shows or edits a screen as Screenplay text on the server - the design canvas's 'screenplay' seam - reads the text
+/// exactly as a design turn does: <see cref="ToDocument"/> turns texts into a Scene document and <see cref="ToText"/> prints a screen or a screen template
+/// of a document back.
 /// </remarks>
 /// <param name="application">The Screenplay of the application the design is for.</param>
-internal sealed partial class ScreenplayBridge(string application)
+public sealed partial class ScreenplayBridge(string application)
 {
     /// <summary>
     /// The module the screen templates of a design are declared in, so that a text can declare one at its own top level.

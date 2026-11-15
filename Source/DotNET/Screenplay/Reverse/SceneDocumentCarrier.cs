@@ -11,7 +11,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// The preservation carrier: the exact Scene document, encoded beside the typed screen, for content Screenplay cannot
 /// say. It is used only together with a diagnostic naming what could not travel, and static generation refuses it.
 /// </summary>
-static class SceneDocumentCarrier
+public static class SceneDocumentCarrier
 {
     const string MetadataFormPrefix = "StudioSceneDocument";
     const string MetadataCommand = "StudioSceneDocumentTransport";
@@ -35,11 +35,20 @@ static class SceneDocumentCarrier
             null,
             SourceLocation.Start);
 
+    /// <summary>
+    /// Whether the form is a preservation carrier rather than a form the author wrote.
+    /// </summary>
     public static bool IsCarrier(FormSyntax form) => form.Name.StartsWith(MetadataFormPrefix, StringComparison.Ordinal);
 
+    /// <summary>
+    /// Whether the file reference is a preservation carrier rather than one the author wrote.
+    /// </summary>
     public static bool IsCarrier(FileReferenceSyntax file) =>
         file.Path.StartsWith(ScreenplaySceneDocumentReferences.Prefix, StringComparison.Ordinal);
 
+    /// <summary>
+    /// Whether the directive is a preservation carrier rather than one the author wrote.
+    /// </summary>
     public static bool IsCarrier(ScreenDirectiveSyntax directive) =>
         directive is ScreenCodeSyntax code && code.Code.Code.Contains(ScreenplaySceneDocumentReferences.Prefix, StringComparison.Ordinal);
 

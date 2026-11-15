@@ -9,7 +9,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// What a Scene document holds that typed Screenplay cannot say. Every entry names the member, so the author can see
 /// exactly which part of the screen keeps the document on its preservation carrier.
 /// </summary>
-sealed class SceneTransportGaps
+public sealed class SceneTransportGaps
 {
     readonly List<string> _messages = [];
 

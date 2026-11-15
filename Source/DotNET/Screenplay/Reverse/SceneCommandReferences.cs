@@ -17,6 +17,18 @@ public static class SceneCommandReferences
     static readonly string[] _componentsThatNameACommand = ["action", "commandForm"];
 
     /// <summary>
+    /// The name of the command of each State Change slice, by the slice's id, for <see cref="Resolve(string, IReadOnlyDictionary{Guid, string})"/>.
+    /// A slice with no command name is left out, and the first name wins when an id is listed more than once.
+    /// </summary>
+    /// <param name="slices">Every slice of the event model that holds a command, flattened - its id and the command's name.</param>
+    /// <returns>The command name of each slice that has one.</returns>
+    public static IReadOnlyDictionary<Guid, string> CommandNames(IEnumerable<(Guid SliceId, string? CommandName)> slices) =>
+        slices
+            .Where(slice => !string.IsNullOrEmpty(slice.CommandName))
+            .GroupBy(slice => slice.SliceId)
+            .ToDictionary(group => group.Key, group => group.First().CommandName!);
+
+    /// <summary>
     /// The document with every command it names by a slice id naming the command's name instead. The same text when it names none.
     /// </summary>
     public static string Resolve(string document, IReadOnlyDictionary<Guid, string> names)

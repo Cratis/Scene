@@ -6,6 +6,9 @@ using Cratis.Screenplay.Syntax;
 
 namespace Cratis.Scene.Screenplay.Reverse;
 
+/// <summary>
+/// One Scene document as typed Screenplay: the screens and the module forms it reads back as, the diagnostics naming what could not travel typed, and the declarations it brings.
+/// </summary>
 public sealed record SceneDocumentScreenplayExport(
     IReadOnlyList<ScreenSyntax> Screens,
     IReadOnlyList<FormSyntax> Forms,
@@ -32,6 +35,9 @@ public sealed record SceneDocumentScreenplayExport(
     };
 }
 
+/// <summary>
+/// The ui profiles, layouts, templates, exposures and instance contributions a set of Scene documents declare, merged once for the application the way Screenplay declares them.
+/// </summary>
 public sealed record SceneDocumentScreenplayDeclarations(
     IReadOnlyList<LayoutSyntax> Layouts,
     IReadOnlyList<UiProfileSyntax> UiProfiles,
@@ -60,17 +66,17 @@ public sealed record SceneDocumentScreenplayDeclarations(
     /// <summary>
     /// The navigation regions the documents state, for the application's layout and its modules to carry.
     /// </summary>
-    internal SceneNavigationDeclaration? Navigation { get; init; }
+    public SceneNavigationDeclaration? Navigation { get; init; }
 
     /// <summary>
     /// How the documents' features refine outlets, for the features of the application to carry.
     /// </summary>
-    internal IReadOnlyList<SceneFeatureOutlets> FeatureOutlets { get; init; } = [];
+    public IReadOnlyList<SceneFeatureOutlets> FeatureOutlets { get; init; } = [];
 
     /// <summary>
     /// What the documents kept natively, for the modules to take their own from.
     /// </summary>
-    internal NativeResidue Native { get; init; } = NativeResidue.Empty;
+    public NativeResidue Native { get; init; } = NativeResidue.Empty;
 }
 
 /// <summary>

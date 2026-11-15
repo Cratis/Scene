@@ -30,7 +30,11 @@ public static class SceneDocumentCanonicalForm
     public static string? FirstDifference(JsonNode? expected, JsonNode? actual) =>
         Difference(Normalize(expected?.DeepClone(), null), Normalize(actual?.DeepClone(), null), "$");
 
-    internal static JsonObject StudioLayoutDeclaration() => StudioLayoutJson();
+    /// <summary>
+    /// The layout every screen document draws its screens in, as the Scene document declares it: the Studio screen layout with its one content slot.
+    /// </summary>
+    /// <returns>A new layout declaration.</returns>
+    public static JsonObject DefaultLayoutDeclaration() => StudioLayoutJson();
 
     static JsonNode? Normalize(JsonNode? node, string? member) => node switch
     {

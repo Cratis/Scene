@@ -63,6 +63,49 @@ SceneDocumentApplicationPrint print = SceneDocumentApplication.Print(documents);
 IReadOnlyList<ImportedScreenDocument> read = SceneDocumentApplication.Read(application);
 ```
 
+### The pieces, public
+
+A host with a board (Studio's export and import) assembles the application from the same pieces the two functions above use, so they are
+public in `Cratis.Scene.Screenplay.Reverse` and take plain `string` and `Guid` identities:
+
+| Piece | What a host uses it for |
+| --- | --- |
+| `SceneDocumentScreenplayBridge`, `SceneModuleExports`, `SceneDocumentScreenplayText` | Export a role's document (or a module's, or the application's) as typed screens and forms, and read screens back as documents |
+| `SceneDeclarationSet`, `SceneDocumentScreenplayDeclarations` | What the documents declare beside their screens, merged once for the application: layouts, templates, exposures, instance contributions, ui profiles, themes - and `Navigation`, `FeatureOutlets` and `Native`, which the host puts on the application's layout, its modules and its features |
+| `SceneNavigation`, `SceneOutletLevels` (`ApplyTo`) | Read the `navigation` and `outletLevels` members, and put the regions and the outlet refinements on the layout, the modules and the features |
+| `SceneNative` | What a document keeps natively because Scene has no element for it (`Of`, `Uses`, `Queries`, `ResidueOf`, `FeatureAt` on the residue) |
+| `SceneTemplates`, `SceneElementImport`, `SceneElementFrame`, `SceneJson`, `SceneTransportGaps` | Read and write layouts and templates, turn typed directives back into Scene elements, read a document's JSON tolerantly and collect what could not travel |
+| `SceneDocumentCarrier` | Recognize the preservation carrier (`IsCarrier`) so the host can leave it out of what it shows |
+| `SceneCommandReferences` | `CommandNames` lists the command of each State Change slice by the slice's id; `Resolve` makes a document name commands instead of slice ids before it is exported |
+| `SceneDocumentCanonicalForm` | Compare two documents by meaning (`FirstDifference`); `DefaultLayoutDeclaration()` is the layout every screen the editor draws is drawn in |
+| `SceneDocumentUpgrade` | Bring a document stored before Scene 5 to the slot shape when it is read |
+
+No public type is nested in a type that is not public: type discovery in a host lists nested types by their declaring type, and a public
+type inside an internal one stops the host's build. A specification in the package checks it.
+
+### Screenplay text and a Scene document
+
+A host that shows or edits a screen as Screenplay text on its own server - the canvas's `screenplay` seam - does not re-implement that.
+`ScreenplayBridge` in `Cratis.Scene.Design.AI.Workbench` (package `Cratis.Scene.Design.AI`) is the bridge a design turn runs through:
+
+```csharp
+var bridge = new ScreenplayBridge(applicationScreenplay);
+
+// text -> document: the texts are compiled together with the application, so what they name is checked where it is declared
+BridgeDocument compiled = bridge.ToDocument([screenText], DesignMode.Screens);   // DesignMode.Templates for screen templates
+if (compiled.Succeeded) { SceneDocument document = compiled.Document!; }
+// compiled.Diagnostics: errors and warnings by the screen that wrote them
+
+// document -> text: null when what the document holds cannot be said as Screenplay
+string? text = bridge.ToText(document, "InvoiceList", DesignMode.Screens, shapesDeclaredElsewhere: new HashSet<string>());
+
+IReadOnlyList<string> names = ScreenplayBridge.Declared(text, DesignMode.Screens);
+IReadOnlySet<string> shapes = ScreenplayBridge.DeclaredShapes(text);
+```
+
+It lives in the Design.AI package because it speaks in design sessions and modes (`DesignMode`, `DesignDiagnostic`), which `Cratis.Scene.Screenplay`
+does not know; a host that already references Design.AI gets it without a copy.
+
 Every role's screens become the screens of one slice, and what the documents declare beside their screens - layouts, templates,
 profiles, themes, design systems, behaviors, sample data, exposures, navigation and outlet refinements - is declared once for the
 application, the way Screenplay declares them.
@@ -128,6 +171,7 @@ puts them in the one slice of the application; the slices of the original board 
 | --- | --- |
 | Package | `Cratis.Scene.Screenplay` |
 | Depends on | `Cratis.Scene.Model`, `Cratis.Scene.Engine`, `Cratis.Screenplay` |
+| Text bridge for hosts | `ScreenplayBridge` in `Cratis.Scene.Design.AI` |
 | Consumed by | Stage, Studio, Direct, and `Cratis.Scene.Design` where it reads or writes Screenplay |
 
 ## See also

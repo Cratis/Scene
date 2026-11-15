@@ -11,7 +11,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// The layouts, screen templates and dialog templates a Scene document declares, as typed Screenplay declarations - their
 /// slots, metadata, outlets, display text and the content they put in their own slots - and back.
 /// </summary>
-static class SceneTemplates
+public static class SceneTemplates
 {
     const string Layout = "layout";
     const string ScreenTemplate = "screen template";
@@ -37,6 +37,9 @@ static class SceneTemplates
     public static IEnumerable<LayoutSyntax> Layouts(JsonObject root, SceneTransportGaps gaps) =>
         SceneJson.Array(root, "layouts").OfType<JsonObject>().Select(layout => ToLayout(layout, gaps)).OfType<LayoutSyntax>();
 
+    /// <summary>
+    /// The screen templates a document declares, as Screenplay syntax. What cannot travel is added to the gaps.
+    /// </summary>
     public static IEnumerable<ScreenTemplateSyntax> ScreenTemplates(JsonObject root, SceneTransportGaps gaps, bool includeNative = true) =>
         SceneJson.Array(root, "screenTemplates").OfType<JsonObject>().Select(template => ToScreenTemplate(template, gaps, includeNative)).OfType<ScreenTemplateSyntax>();
 
@@ -55,6 +58,9 @@ static class SceneTemplates
         return Declaration(layout.Name, WithRecursive(layout.Slots, layout.RecursiveSlots), layout.TemplateType, layout.Category, layout.RestrictsScopes, layout.Scopes, outlets, SceneArrangements.WithoutStudiosOwn(layout.Name, layout.Arrangement), layout.SliceKinds);
     }
 
+    /// <summary>
+    /// The screen template as a Scene document declares it.
+    /// </summary>
     public static JsonObject ToJson(ScreenTemplateSyntax template)
     {
         var json = Declaration(template.Name, WithRecursive(template.Slots, template.RecursiveSlots), template.TemplateType, template.Category, template.RestrictsScopes, template.Scopes, template.Outlets, template.Arrangement, template.SliceKinds);
@@ -63,6 +69,9 @@ static class SceneTemplates
         return json;
     }
 
+    /// <summary>
+    /// The dialog template as a Scene document declares it.
+    /// </summary>
     public static JsonObject ToJson(DialogTemplateSyntax template)
     {
         var json = Declaration(template.Name, WithRecursive(template.Slots, template.RecursiveSlots), template.TemplateType, template.Category, template.RestrictsScopes, template.Scopes, template.Outlets, template.Arrangement, template.SliceKinds);

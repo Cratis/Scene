@@ -3,7 +3,10 @@
 
 namespace Cratis.Scene.Screenplay.Reverse;
 
-sealed class SceneElementScope(SceneScreenNames names, SceneTransportGaps gaps, bool includeNative = true)
+/// <summary>
+/// What reading Scene elements back from Screenplay needs to know: how the screens are named, where gaps are reported, and whether natively kept entries are woven back in.
+/// </summary>
+public sealed class SceneElementScope(SceneScreenNames names, SceneTransportGaps gaps, bool includeNative = true)
 {
     readonly HashSet<string> _names = [with(StringComparer.Ordinal)];
 

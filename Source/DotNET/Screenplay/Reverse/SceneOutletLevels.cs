@@ -12,7 +12,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// <summary>
 /// How a feature refines the outlets it inherits - the Screenplay 6 `outlet &lt;name&gt; extends` written on the feature.
 /// </summary>
-sealed record SceneFeatureOutlets(string Feature, IReadOnlyList<OutletSyntax> Outlets);
+public sealed record SceneFeatureOutlets(string Feature, IReadOnlyList<OutletSyntax> Outlets);
 
 /// <summary>
 /// What a Scene document keeps as 'outletLevels': how the features and the screens of the application refine the outlets they inherit (StudioIssues#1330).
@@ -20,7 +20,7 @@ sealed record SceneFeatureOutlets(string Feature, IReadOnlyList<OutletSyntax> Ou
 /// exactly where Screenplay 6 reads them. The module and feature levels are the board's now, and a document no longer gets them: this reads what documents stored before
 /// that hold. A level that declares outlets of its own or contributes to others, and a level of any other kind, is left to the preservation carrier - they have no such place.
 /// </summary>
-static class SceneOutletLevels
+public static class SceneOutletLevels
 {
     public const string Member = "outletLevels";
 
@@ -243,7 +243,7 @@ static class SceneOutletLevels
     /// <summary>
     /// The levels a document states, as the Screenplay the screens and the features say them in.
     /// </summary>
-    internal sealed record Levels(IReadOnlyDictionary<string, IReadOnlyList<OutletSyntax>> Screens, IReadOnlyList<SceneFeatureOutlets> Features)
+    public sealed record Levels(IReadOnlyDictionary<string, IReadOnlyList<OutletSyntax>> Screens, IReadOnlyList<SceneFeatureOutlets> Features)
     {
         public static readonly Levels None = new(new Dictionary<string, IReadOnlyList<OutletSyntax>>(), []);
 

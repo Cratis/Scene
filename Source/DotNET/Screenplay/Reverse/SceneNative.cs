@@ -19,8 +19,11 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// templates a Scene declaration has no member for, and the forms no screen reaches, travel in the same member of the document
 /// root. The Scene editor deep-copies every document it edits, so a member it does not know survives its edits.
 /// </summary>
-static class SceneNative
+public static class SceneNative
 {
+    /// <summary>
+    /// The member a document keeps what typed Scene cannot say in.
+    /// </summary>
     public const string Member = "native";
 
     const string Placeholder = "Native";
@@ -115,6 +118,9 @@ static class SceneNative
         owner[Member] = native;
     }
 
+    /// <summary>
+    /// The native entries a container (a screen slot, a section or a component outlet) of the owner holds.
+    /// </summary>
     public static JsonNode? Of(JsonObject owner, string container) => SceneJson.Object(owner, Member)?[container];
 
     /// <summary>
@@ -538,7 +544,7 @@ static class SceneNative
 /// <summary>
 /// What the documents of an application kept natively: the application-level declarations and the modules' own.
 /// </summary>
-sealed record NativeResidue(IReadOnlyList<ApplicationSyntax> Applications, IReadOnlyList<ModuleSyntax> Modules)
+public sealed record NativeResidue(IReadOnlyList<ApplicationSyntax> Applications, IReadOnlyList<ModuleSyntax> Modules)
 {
     public static readonly NativeResidue Empty = new([], []);
 

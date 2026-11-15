@@ -11,7 +11,7 @@ namespace Cratis.Scene.Design.AI.Workbench;
 /// </summary>
 /// <param name="Document">The Scene document of the design; <see langword="null"/> when the texts do not compile.</param>
 /// <param name="Diagnostics">What the compiler and the conversion to Scene report, by the screen that wrote it.</param>
-internal sealed record BridgeDocument(SceneDocument? Document, IReadOnlyList<DesignDiagnostic> Diagnostics)
+public sealed record BridgeDocument(SceneDocument? Document, IReadOnlyList<DesignDiagnostic> Diagnostics)
 {
     /// <summary>
     /// Gets a value indicating whether the texts compiled without an error.

@@ -9,8 +9,11 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// The members every Scene element carries for its own placement. Screenplay has no element geometry, so only the
 /// values the editor gives a new element travel - implicitly - and anything else is a gap.
 /// </summary>
-static class SceneElementFrame
+public static class SceneElementFrame
 {
+    /// <summary>
+    /// The component name of a panel, the element that holds other elements.
+    /// </summary>
     public const string PanelComponent = "panel";
     public const string PanelChildren = "children";
 

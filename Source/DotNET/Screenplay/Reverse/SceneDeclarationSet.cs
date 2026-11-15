@@ -32,13 +32,13 @@ public sealed record SceneDeclarationSet(
     /// <summary>
     /// The navigation regions of the application's layout and of its modules, which a document holds as its 'navigation' member.
     /// </summary>
-    internal SceneNavigationDeclaration? Navigation { get; init; }
+    public SceneNavigationDeclaration? Navigation { get; init; }
 
     /// <summary>
     /// How the features of documents stored before the board kept the levels of the outlets refine them, which a document holds as the 'feature' levels of its 'outletLevels'
     /// member. A feature's outlets are the board's now (StudioIssues#1327), so what an application says is not put in a document.
     /// </summary>
-    internal IReadOnlyList<SceneFeatureOutlets> FeatureOutlets { get; init; } = [];
+    public IReadOnlyList<SceneFeatureOutlets> FeatureOutlets { get; init; } = [];
 
     public static SceneDeclarationSet Of(ApplicationSyntax application, ModuleSyntax? module) =>
         new(
@@ -79,7 +79,7 @@ public sealed record SceneDeclarationSet(
         var layouts = Layouts.Select(layout => (JsonNode)SceneTemplates.ToJson(layout)).ToList();
         if (!Layouts.Any(layout => layout.Name == SceneDocumentCanonicalForm.StudioLayoutName))
         {
-            layouts.Insert(0, SceneDocumentCanonicalForm.StudioLayoutDeclaration());
+            layouts.Insert(0, SceneDocumentCanonicalForm.DefaultLayoutDeclaration());
         }
 
         var screenNames = screens.ToHashSet(StringComparer.Ordinal);

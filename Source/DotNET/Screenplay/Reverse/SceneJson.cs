@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -8,8 +9,15 @@ using System.Text.RegularExpressions;
 
 namespace Cratis.Scene.Screenplay.Reverse;
 
-internal static partial class SceneJson
+/// <summary>
+/// Reads Scene document JSON tolerantly: a missing or mistyped member is absent, never an exception. The shared helpers every reverse-bridge reader uses, public so a host that assembles its own documents reads them the same way.
+/// </summary>
+[SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "Reading a member as a string, an object or an integer is what these readers are named for; hosts call them by these names.")]
+public static partial class SceneJson
 {
+    /// <summary>
+    /// The serializer options a Scene document is written with: web casing, compact.
+    /// </summary>
     public static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web) { WriteIndented = false };
 
     [GeneratedRegex(@"^[A-Za-z_]\w*$", RegexOptions.None, 1000)]
@@ -18,6 +26,9 @@ internal static partial class SceneJson
     [GeneratedRegex(@"^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*$", RegexOptions.None, 1000)]
     private static partial Regex PathRegex { get; }
 
+    /// <summary>
+    /// Parses a document into its root object; null when the text is not a JSON object.
+    /// </summary>
     public static JsonObject? Parse(string document)
     {
         try
@@ -30,14 +41,26 @@ internal static partial class SceneJson
         }
     }
 
+    /// <summary>
+    /// The string value of a member; null when it is missing or not a string.
+    /// </summary>
     public static string? String(JsonNode? node, string property) =>
         Member(node, property) is JsonValue value && value.GetValueKind() == JsonValueKind.String ? value.GetValue<string>() : null;
 
+    /// <summary>
+    /// The member of a node; null when the node is not an object or has no such member.
+    /// </summary>
     public static JsonNode? Member(JsonNode? node, string property) =>
         node is JsonObject json && json.TryGetPropertyValue(property, out var value) ? value : null;
 
+    /// <summary>
+    /// The member as an object; null when it is missing or not an object.
+    /// </summary>
     public static JsonObject? Object(JsonNode? node, string property) => Member(node, property) as JsonObject;
 
+    /// <summary>
+    /// The member as an array; empty when it is missing or not an array.
+    /// </summary>
     public static JsonArray Array(JsonNode? node, string property) => Member(node, property) as JsonArray ?? [];
 
     public static bool Has(JsonNode? node, string property) => Member(node, property) is not null;
@@ -85,6 +108,9 @@ internal static partial class SceneJson
         return node.Select(member => member.Key).Where(key => !supported.Contains(key));
     }
 
+    /// <summary>
+    /// Whether the value is a Screenplay identifier: a letter or underscore followed by word characters.
+    /// </summary>
     public static bool IsIdentifier(string? value) => value is not null && IdentifierRegex.IsMatch(value);
 
     public static bool IsPath(string? value) => value is not null && PathRegex.IsMatch(value);

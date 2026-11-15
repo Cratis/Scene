@@ -9,7 +9,7 @@ namespace Cratis.Scene.Screenplay.Reverse;
 /// <summary>
 /// Typed Screenplay screen directives back to the Scene elements the editor opens.
 /// </summary>
-static class SceneElementImport
+public static class SceneElementImport
 {
     const string NameProperty = "name";
 
@@ -20,13 +20,16 @@ static class SceneElementImport
     /// </summary>
     static readonly string[] _dottedPackages = ["Cratis.Blueprint.Components", "Cratis.Blueprint.Default", "Cratis.Components"];
 
+    /// <summary>
+    /// The Scene elements the editor opens for typed Screenplay screen directives, in order.
+    /// </summary>
     public static JsonArray ToElements(IEnumerable<ScreenDirectiveSyntax> directives, SceneScreenNames names) =>
         [.. directives.Select(directive => ToElement(directive, names)).OfType<JsonNode>()];
 
     public static IEnumerable<BehaviorSyntax> Behaviors(IEnumerable<ScreenDirectiveSyntax> directives) =>
         directives.OfType<ScreenBehaviorSyntax>().Select(directive => directive.Behavior);
 
-    internal static JsonObject Base(string id, string name, IEnumerable<BehaviorSyntax> behaviors, SceneScreenNames names)
+    public static JsonObject Base(string id, string name, IEnumerable<BehaviorSyntax> behaviors, SceneScreenNames names)
     {
         var element = new JsonObject { ["id"] = id, ["name"] = name };
         foreach (var (member, value) in SceneElementFrame.Defaults())
