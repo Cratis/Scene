@@ -243,7 +243,7 @@ static class SceneOutletLevels
     /// <summary>
     /// The levels a document states, as the Screenplay the screens and the features say them in.
     /// </summary>
-    public sealed record Levels(IReadOnlyDictionary<string, IReadOnlyList<OutletSyntax>> Screens, IReadOnlyList<SceneFeatureOutlets> Features)
+    internal sealed record Levels(IReadOnlyDictionary<string, IReadOnlyList<OutletSyntax>> Screens, IReadOnlyList<SceneFeatureOutlets> Features)
     {
         public static readonly Levels None = new(new Dictionary<string, IReadOnlyList<OutletSyntax>>(), []);
 

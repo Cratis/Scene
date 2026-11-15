@@ -61,7 +61,7 @@ public static class SceneFreeScreens
 
         var freeRoot = (JsonObject)root.DeepClone();
         freeRoot["screens"] = cleaned;
-        var (syntaxes, _, _) = SceneScreens.ToSyntax(string.Empty, freeRoot, gaps, includeNative: false);
+        var (syntaxes, _, _) = SceneScreens.ToSyntax(string.Empty, freeRoot, gaps);
         var declared = syntaxes.Select((syntax, index) => new SceneFreeScreen(paths[index], syntax)).ToArray();
 
         var remainder = (JsonObject)root.DeepClone();

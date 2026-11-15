@@ -8,6 +8,8 @@
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.402" />
     <!-- Cratis -->
     <PackageVersion Include="Cratis.Chronicle" Version="19.156.2" />
+    <!-- Backend AI services shared by Direct and Studio: IAIChatClients (purposes, pools, usage, causation). The version Direct pins. -->
+    <PackageVersion Include="Cratis.AI" Version="7.153.8" />
     <!-- Pre-release carrying free screens, shape/uses screen/provisions and the resolved design system; the released version replaces it. -->
     <PackageVersion Include="Cratis.Screenplay" Version="6.99.0-scenedesign.2" />
     <!-- Analysis -->
