@@ -15,6 +15,7 @@ It ships twice with the same meaning: `@cratis/scene.design` (TypeScript) and `C
 | **Operations** | `addScreen`, `insert`, `set`, `remove`, `move`, `link`, `profile`, `variations`, `tweaks`, `refuse` and the template-mode set. Checked against the catalogue, lowered to Scene edits, applied through the engine. | [Design operations](operations.md) |
 | **Screen set** | Several screens, the navigation between them and storylines; the default storyline follows the screen order. | [Screen sets and storylines](screen-set.md) |
 | **Session** | Screens, their revisions, variation groups, tweak controls and comments, keyed to a subject; Chronicle events and a reducer. | [The design session](session.md), [Session events](events.md) |
+| **Canvas** | `@cratis/scene.design.react`: artboards along storylines, a chat bar, layouts, tweaks, history, comment pins, direct manipulation, template mode and a screens overview, mounted through host seams. | [The design canvas](canvas.md) |
 
 ## What it does not do
 

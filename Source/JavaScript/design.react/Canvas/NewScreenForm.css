@@ -1,0 +1,56 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.design-new-screen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+}
+
+.design-new-screen label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.85em;
+}
+
+.design-new-screen input,
+.design-new-screen select {
+    font: inherit;
+    padding: 4px 8px;
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    border-radius: var(--cratis-border-radius, 6px);
+    background: var(--cratis-surface-ground, #fff);
+    color: inherit;
+}
+
+.design-new-screen__problem {
+    flex: 1 0 100%;
+    margin: 0;
+    color: var(--cratis-danger-text, #b91c1c);
+}
+
+.design-new-screen__actions {
+    display: inline-flex;
+    gap: 6px;
+}
+
+.design-new-screen__actions button {
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    color: inherit;
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 4px 12px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.design-new-screen__actions button[type='submit']:not(:disabled) {
+    background: var(--cratis-primary-color, #3b82f6);
+    border-color: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color-text, #fff);
+}

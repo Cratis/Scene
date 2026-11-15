@@ -1,0 +1,52 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.design-variations {
+    border: 1px dashed var(--cratis-surface-border, #9ca3af);
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 8px;
+    background: var(--cratis-surface-ground, #f3f4f6);
+}
+
+.design-variations__prompt {
+    margin: 0 0 6px;
+    font-size: 0.85em;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-variations__row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.design-variations__candidate {
+    margin: 0;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.design-variations__candidate figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.design-variations__reading {
+    width: 220px;
+    padding: 32px 8px;
+    text-align: center;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-variations__candidate button {
+    border: 1px solid var(--cratis-primary-color, #3b82f6);
+    background: var(--cratis-surface-card, #fff);
+    color: var(--cratis-primary-color, #3b82f6);
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 2px 8px;
+    cursor: pointer;
+}

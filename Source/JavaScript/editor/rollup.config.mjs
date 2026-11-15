@@ -26,7 +26,9 @@ function keepStaticAssets() {
             if (!/\.(css|json)$/.test(source) || !importer || !source.startsWith('.')) return null;
             const absolute = path.resolve(path.dirname(importer), source);
             assets.set(path.relative(import.meta.dirname, absolute), absolute);
-            return { id: source, external: true };
+            // The absolute path, so Rollup writes the import relative to the module that holds it. The specifier as written is relative to the
+            // source file and is only right for a stylesheet beside the module: `../../CascadeMenu/CascadeMenu.css` came out as `./CascadeMenu.css`.
+            return { id: absolute, external: true };
         },
         generateBundle() {
             for (const [fileName, absolute] of assets) {

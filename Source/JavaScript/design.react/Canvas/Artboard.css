@@ -1,0 +1,125 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.design-artboard {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--cratis-text-color, inherit);
+}
+
+.design-artboard__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 24px;
+}
+
+.design-artboard__name {
+    border: 0;
+    background: transparent;
+    padding: 2px 6px;
+    border-radius: var(--cratis-border-radius, 6px);
+    font: inherit;
+    font-weight: 600;
+    color: inherit;
+    cursor: pointer;
+}
+
+.design-artboard--selected .design-artboard__name {
+    background: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color-text, #fff);
+}
+
+.design-artboard__caption {
+    font-size: 0.8em;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-artboard__moves {
+    margin-inline-start: auto;
+    display: inline-flex;
+    gap: 2px;
+}
+
+.design-artboard__moves button {
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    color: var(--cratis-text-color-secondary, #6b7280);
+    border-radius: var(--cratis-border-radius, 6px);
+    font-size: 0.7em;
+    padding: 1px 6px;
+    cursor: pointer;
+}
+
+.design-artboard__moves button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.design-artboard__frame {
+    position: relative;
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    border-radius: var(--cratis-border-radius, 6px);
+    background: var(--cratis-surface-card, #fff);
+    overflow: visible;
+}
+
+.design-artboard--selected .design-artboard__frame {
+    outline: 2px solid var(--cratis-primary-color, #3b82f6);
+    outline-offset: 2px;
+}
+
+.design-artboard__empty {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-artboard__capture {
+    position: absolute;
+    inset: 0;
+    cursor: crosshair;
+    background: color-mix(in srgb, var(--cratis-primary-color, #3b82f6) 6%, transparent);
+    z-index: 2;
+}
+
+.design-artboard__pins {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.design-pin {
+    pointer-events: auto;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 50% 50% 0;
+    border: 2px solid #fff;
+    background: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color-text, #fff);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+}
+
+.design-pin--loose {
+    border-radius: 50%;
+    border-style: dashed;
+}
+
+.design-pin--resolved {
+    background: var(--cratis-text-color-secondary, #6b7280);
+    opacity: 0.7;
+}
+
+.design-pin--open {
+    outline: 2px solid var(--cratis-highlight-bg, #f59e0b);
+    outline-offset: 2px;
+}
