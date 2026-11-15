@@ -48,7 +48,7 @@ export const inspectionsDesignTimePackage: ScenePackageBundle = { ...inspections
 
 Designers and editors read the shared `DesignTimeContext` and change the document only through `submitEdits` and `submitAction`. The host's validation and undo history stay in charge.
 
-The designer host wraps a contribution in `DesignTimeProvider`, so a component nested anywhere inside it reads the same context with `useDesignTimeContext()` instead of passing it down. The hook throws outside a provider.
+Your designer host wraps each contribution in `DesignTimeProvider`; Scene does not do it for you. Then a component nested anywhere inside it reads the same context with `useDesignTimeContext()` instead of passing it down. The hook throws outside a provider.
 
 ```tsx
 import { useDesignTimeContext } from '@cratis/scene.react';

@@ -101,7 +101,7 @@ A host does not sequence actions itself. It asks `@cratis/scene.engine` which bi
 | Function | Does |
 | --- | --- |
 | `resolveBehaviors(attachments, kind)` | Collects the bindings that respond to a built-in interaction kind, in the order they run. Attachments are additive and ordered outermost first; a behavior's `order` wins over position. |
-| `resolveApplicationTriggerBehaviors`, `resolveSignalBehaviors`, `resolveEventBehaviors`, `resolveIntervalBehaviors` | The same, for a named application trigger, an extension component's signal, an observed domain event, and every interval binding. |
+| `resolveApplicationTriggerBehaviors`, `resolveSignalBehaviors`, `resolveEventBehaviors`, `resolveIntervalBehaviors` | Collect the bindings for a named application trigger, an extension component's signal, an observed domain event, and every interval binding. These keep declaration order, outermost attachment first; a behavior's `order` is not applied. |
 | `runBindings(bindings, dispatcher, context)` | Runs the resolved bindings in order, honoring each one's guard. A navigation or a declined `confirm` ends the whole interaction. |
 | `runActions(actions, dispatcher, context)` | Runs one action list in order, with its `onSuccess`, `onFailure` and `onResult` continuations. |
 
