@@ -1,0 +1,11 @@
+ui profile Desktop
+  target platform web
+  target size regular
+  root template AppShell
+
+  new screens use template Sheet
+
+  packages
+    Cratis.Components
+
+  theme {name}

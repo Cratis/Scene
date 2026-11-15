@@ -11,6 +11,9 @@
         </AssemblyAttribute>
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Include="Starter/*.play" LogicalName="Starter/%(Filename)%(Extension)" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Cratis.Chronicle" />
         <ProjectReference Include="../Model/Model.csproj" />
         <ProjectReference Include="../Engine/Engine.csproj" />
