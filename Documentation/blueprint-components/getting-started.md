@@ -85,6 +85,17 @@ Unresolved query binding 'AllInvoices' on Cratis.Components:dataPage
 That last line is not an error to fix before continuing. It is the design-time state: the template carries
 a query *name*, and nothing has supplied the class behind it yet.
 
+### The preview bundles and registry
+
+`GalleryScreenPreview` resolves against two exports you can use on their own:
+
+| Export | What it is |
+| --- | --- |
+| `componentsPreviewBundles` | The `ScenePackageBundle` list a preview hands to `resolvePackageHost`: `core`, `Cratis.Components`, the default blueprint and this blueprint, plus stand-ins for `Tailwind` and `PrimeReact`. The PrimeReact stand-in renders each name as a labeled placeholder rather than the real component. |
+| `componentsPreviewRegistry` | The `ComponentRegistry` those bundles resolve to, for a caller that renders a single gallery element with `SceneElementView` instead of booting a whole screen. |
+
+Use them for previews and specifications. An application lists the real packages in its profile instead.
+
 ## Register the query
 
 Only a host owns the generated Arc proxies, so only a host can close that gap. It registers every proxy a
