@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* eslint-disable header/header */
 
-// Packs every public workspace package (dry run) and fails when the archive would carry specifications.
+// Packs every public workspace package (dry run) and fails when the archive would carry specifications, or when
+// it lacks a declaration file that the package's `types` or `exports` point to (every consumer would get TS7016).
 //
 // Specifications live next to the code they describe, in `for_*` folders. `tsc -b` type-checks and emits
 // them with everything else, so the build output contains them and only the `files` list in each
@@ -43,6 +44,28 @@ function packedFiles(packageDirectory) {
     return entry.files.map(_ => _.path);
 }
 
+// Every `types` target the package advertises: the top-level `types`/`typings` and each `types` condition inside `exports`.
+function declaredTypes(packageJson) {
+    const targets = new Set();
+    const visit = node => {
+        if (typeof node !== 'object' || node === null) {
+            return;
+        }
+
+        for (const [key, value] of Object.entries(node)) {
+            if (key === 'types' && typeof value === 'string') {
+                targets.add(value);
+            } else {
+                visit(value);
+            }
+        }
+    };
+
+    [packageJson.types, packageJson.typings].filter(_ => typeof _ === 'string').forEach(_ => targets.add(_));
+    visit(packageJson.exports);
+    return [...targets].map(_ => path.posix.normalize(_));
+}
+
 const packageFiles = glob('Source/JavaScript/*/package.json', { cwd: process.cwd(), ignore: ['**/dist/**', '**/node_modules/**'] });
 const problems = [];
 let packages = 0;
@@ -59,6 +82,14 @@ for (const packageFile of packageFiles.sort()) {
     if (!files.some(_ => _.startsWith('dist/'))) {
         problems.push(`${packageJson.name}: the archive has no 'dist/' output - run the build before verifying`);
         continue;
+    }
+
+    for (const target of declaredTypes(packageJson)) {
+        // A subpath pattern (`./*`) is satisfied by at least one packed file that matches it.
+        const pattern = new RegExp(`^${target.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.+')}$`);
+        if (!files.some(_ => pattern.test(_))) {
+            problems.push(`${packageJson.name}: '${target}' is where the package's 'types'/'exports' point, but the archive does not contain it (no declarations for consumers)`);
+        }
     }
 
     for (const file of files) {
@@ -85,4 +116,4 @@ if (problems.length > 0) {
     process.exit(1);
 }
 
-console.log(`\nNo specifications or test-runner imports in ${packages} packed package(s)`);
+console.log(`\nNo specifications, test-runner imports or missing declarations in ${packages} packed package(s)`);
