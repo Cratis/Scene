@@ -151,6 +151,8 @@ public sealed class ScreenplaySceneVisitor : ScreenplaySyntax.IApplicationSyntax
             ConvertModuleScreens(module, layouts.FirstOrDefault()?.Name ?? string.Empty, screens, scope);
         }
 
+        screens.AddRange(FreeScreenConverter.Convert(syntax, layouts.FirstOrDefault()?.Name ?? string.Empty, scope, diagnostics));
+
         var runtime = new SceneRuntimeAdmission(scope);
         runtime.VisitApplication(syntax);
 

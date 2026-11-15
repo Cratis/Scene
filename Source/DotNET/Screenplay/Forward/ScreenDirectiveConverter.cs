@@ -147,6 +147,12 @@ public static class ScreenDirectiveConverter
                 [SceneElementProperties.Query] = data.Query,
                 ["by"] = data.By,
             }),
+            ScreenplaySyntax.ScreenNeedSyntax need => SceneElementFactory.Component(id, "core:data", new Dictionary<string, object?>
+            {
+                [SceneElementProperties.TypeName] = need.Type.Name,
+                ["isCollection"] = need.Type.IsCollection,
+                [FreeScreenConverter.NeedProperty] = need.Alias,
+            }),
             ScreenplaySyntax.ScreenActionSyntax action => SceneElementFactory.Component(id, "core:action", new Dictionary<string, object?>
             {
                 ["command"] = action.Command,
@@ -454,6 +460,7 @@ public static class ScreenDirectiveConverter
         directive switch
         {
             ScreenplaySyntax.ScreenDataSyntax => "data",
+            ScreenplaySyntax.ScreenNeedSyntax => "data",
             ScreenplaySyntax.ScreenActionSyntax => "action",
             ScreenplaySyntax.ScreenGuardedActionSyntax => "guarded-action",
             ScreenplaySyntax.ScreenSectionSyntax => "section",
