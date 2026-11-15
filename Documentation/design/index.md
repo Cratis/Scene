@@ -16,11 +16,12 @@ It ships twice with the same meaning: `@cratis/scene.design` (TypeScript) and `C
 | **Screen set** | Several screens, the navigation between them and storylines; the default storyline follows the screen order. | [Screen sets and storylines](screen-set.md) |
 | **Session** | Screens, their revisions, variation groups, tweak controls and comments, keyed to a subject; Chronicle events and a reducer. | [The design session](session.md), [Session events](events.md) |
 | **AI** | `Cratis.Scene.Design.AI`: the tool loop that lets a model read the catalogue and write checked screens, variations, tweaks and design-system proposals, turn a sketch into a screen and establish a design system from sources. | [Design with AI](ai.md) |
+| **Starter** | `DesignSystemStarter` (C#): the design system a product starts from when it has none - Scene's default design system as Screenplay, with its theme, shell, page patterns and profile. | [The design system starter](design-system-starter.md) |
 | **Canvas** | `@cratis/scene.design.react`: artboards along storylines, a chat bar, layouts, tweaks, history, comment pins, direct manipulation, template mode and a screens overview, mounted through host seams. | [The design canvas](canvas.md) |
 
 ## What it does not do
 
-- It does not read or write Screenplay. A revision stores Screenplay *text*; a caller converts text to a Scene document and back with `Cratis.Scene.Screenplay`. Everything here is expressed in text and Scene documents.
+- It does not read or write Screenplay, apart from the text of the [design system starter](design-system-starter.md). A revision stores Screenplay *text*; a caller converts text to a Scene document and back with `Cratis.Scene.Screenplay`. Everything here is expressed in text and Scene documents.
 - It does not own commands, authorization or event streams. A host appends the session's events to a stream it owns and runs the reducer over them.
 - It does not call a model. The AI layer ([`Cratis.Scene.Design.AI`](ai.md)) calls the catalogue's read tools and the operations; this package is what makes their answers deterministic.
 
