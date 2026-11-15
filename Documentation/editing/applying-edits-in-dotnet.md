@@ -68,7 +68,8 @@ listed.
 - `documents`: the starting documents, by name.
 - `cases`: each with a `name`, the `document` it starts from, the editing `scope`, optional `queryCandidates` and a list of
   `edits`. Beside those it records, for every edit in order, whether it was `applied` and the `diagnostics` it gave
-  (`steps`), and the `expectedDocument` after the last one.
+  (`steps`), and the `expectedChanges`: the sections of the document (`layouts`, `screens`, `exposures` and so on) that differ
+  from the starting document after the last edit. Every other section is the starting document's.
 
 Both suites apply every case:
 
@@ -78,7 +79,7 @@ Both suites apply every case:
 | C# | `Engine.Specs/for_EditApplier/when_applying_the_shared_edit_corpus.cs` |
 
 A step is checked in full: applied or refused, the diagnostics, that a refused edit hands back the document it was given, and
-that the final document equals the recorded one.
+that the final document equals the starting document with the recorded changes.
 
 The cases cover every kind of edit, what each accepts and what each refuses, the diagnostics, edits that span size-class
 variants of a freeform element, query-binding checks against the host's candidates, and sequences of edits applied one after the

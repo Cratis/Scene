@@ -3,7 +3,6 @@
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Cratis.Scene.Engine.Editing.Applying;
 using Cratis.Scene.Model;
 using Cratis.Scene.Model.Descriptors;
 using Cratis.Scene.Model.Editing;
@@ -63,10 +62,16 @@ public class when_applying_the_shared_edit_corpus : Specification
                 document = outcome.Model;
             }
 
-            var finalDocument = JsonSerializer.SerializeToNode(document, SceneJson.Options);
-            if (!JsonNode.DeepEquals(finalDocument, fixtureCase["expectedDocument"]))
+            var expected = documents[fixtureCase["document"]!.GetValue<string>()]!.DeepClone().AsObject();
+            foreach (var (section, value) in fixtureCase["expectedChanges"]!.AsObject())
             {
-                _mismatches.Add($"{name}: document {finalDocument!.ToJsonString()}, expected {fixtureCase["expectedDocument"]!.ToJsonString()}");
+                expected[section] = value!.DeepClone();
+            }
+
+            var finalDocument = JsonSerializer.SerializeToNode(document, SceneJson.Options);
+            if (!JsonNode.DeepEquals(finalDocument, expected))
+            {
+                _mismatches.Add($"{name}: document {finalDocument!.ToJsonString()}, expected {expected.ToJsonString()}");
             }
         }
     }

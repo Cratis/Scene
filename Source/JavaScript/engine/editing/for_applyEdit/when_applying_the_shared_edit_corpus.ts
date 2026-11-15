@@ -12,7 +12,7 @@ interface EditCorpusCase {
     scope: EditingScope;
     queryCandidates?: QueryCandidate[];
     steps: { edit: SceneEdit; applied: boolean; diagnostics: SceneDiagnostic[] }[];
-    expectedDocument: SceneDocument;
+    expectedChanges: Partial<SceneDocument>;
 }
 
 const path = join(import.meta.dirname, '..', '..', '..', '..', '..', 'scene-edit-fixtures.json');
@@ -52,7 +52,7 @@ describe('when applying the shared edit corpus', () => {
                 current = outcome.model;
             }
 
-            JSON.parse(JSON.stringify(current)).should.deep.equal(fixture.expectedDocument);
+            JSON.parse(JSON.stringify(current)).should.deep.equal({ ...corpus.documents[fixture.document], ...fixture.expectedChanges });
         });
     }
 });

@@ -464,8 +464,13 @@ for (const fixture of cases) {
         current = plain(outcome.model);
     }
 
-    result.cases.push({ ...fixture, steps, expectedDocument: current });
+    // Only the parts of the document the edits changed are recorded; everything else is the starting document's.
+    const start = documents[fixture.document];
+    const changed = Object.fromEntries(Object.keys(start).filter(section => JSON.stringify(start[section]) !== JSON.stringify(current[section])).map(section => [section, current[section]]));
+    result.cases.push({ ...fixture, steps, expectedChanges: changed });
 }
 
-writeFileSync(join(import.meta.dirname, 'scene-edit-fixtures.json'), `${JSON.stringify(result, null, 2)}\n`);
+// One line per case keeps the file reviewable and small; the rest is indented.
+const text = JSON.stringify({ ...result, cases: '@cases@' }, null, 2).replace('"@cases@"', `[\n${result.cases.map(fixture => `    ${JSON.stringify(fixture)}`).join(',\n')}\n  ]`);
+writeFileSync(join(import.meta.dirname, 'scene-edit-fixtures.json'), `${text}\n`);
 console.log(`${result.cases.length} cases, ${result.cases.reduce((count, fixture) => count + fixture.steps.length, 0)} edits`);
