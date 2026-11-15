@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Design.AI</AssemblyName>
+        <RootNamespace>Cratis.Scene.Design.AI</RootNamespace>
+        <Description>Scene Design with AI: a tool loop over the design catalogue and the Screenplay compiler that designs screens, variations and tweaks, turns images into screens, and establishes a design system from the sources a host supplies.</Description>
+        <PackageTags>cratis;scene;screenplay;ui;design;ai</PackageTags>
+    </PropertyGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Cratis.Scene.Design.AI.Specs</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Cratis.AI" />
+        <ProjectReference Include="../Design/Design.csproj" />
+        <ProjectReference Include="../Screenplay/Screenplay.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Prompts/*.md" LogicalName="Prompts/%(Filename)%(Extension)" />
+    </ItemGroup>
+</Project>
