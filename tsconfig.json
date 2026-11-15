@@ -55,6 +55,9 @@
             "path": "./Source/JavaScript/engine"
         },
         {
+            "path": "./Source/JavaScript/design"
+        },
+        {
             "path": "./Source/JavaScript/react"
         },
         {
