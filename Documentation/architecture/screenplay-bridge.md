@@ -14,8 +14,7 @@ Screenplay syntax ──── Forward ───▶ Scene model         (Cratis.
         └──────── Reverse ───── Scene document (JSON)    (Cratis.Scene.Screenplay.Reverse)
 ```
 
-Screenplay knows nothing of Scene. The package depends on `Cratis.Scene.Model`, `Cratis.Scene.Engine` and `Cratis.Screenplay`, and
-`Cratis.Scene.Design` depends on it.
+Screenplay knows nothing of Scene. The package depends on `Cratis.Scene.Model`, `Cratis.Scene.Engine` and `Cratis.Screenplay`.
 
 ## Forward: Screenplay into Scene
 
@@ -129,7 +128,7 @@ puts them in the one slice of the application; the slices of the original board 
 | --- | --- |
 | Package | `Cratis.Scene.Screenplay` |
 | Depends on | `Cratis.Scene.Model`, `Cratis.Scene.Engine`, `Cratis.Screenplay` |
-| Consumed by | `Cratis.Scene.Design`, Stage, Studio, Direct |
+| Consumed by | Stage, Studio, Direct, and `Cratis.Scene.Design` where it reads or writes Screenplay |
 
 ## See also
 
