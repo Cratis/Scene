@@ -7,5 +7,7 @@
         <Project Path="Source/DotNET/Engine.Specs/Engine.Specs.csproj" />
         <Project Path="Source/DotNET/Design/Design.csproj" />
         <Project Path="Source/DotNET/Design.Specs/Design.Specs.csproj" />
+        <Project Path="Source/DotNET/Screenplay/Screenplay.csproj" />
+        <Project Path="Source/DotNET/Screenplay.Specs/Screenplay.Specs.csproj" />
     </Folder>
 </Solution>

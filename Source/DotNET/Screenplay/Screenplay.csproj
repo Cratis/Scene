@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Screenplay</AssemblyName>
+        <RootNamespace>Cratis.Scene.Screenplay</RootNamespace>
+        <Description>The two-way bridge between Screenplay and Scene: Screenplay syntax converted into Scene's model (screens, templates, layouts, profiles, design system, free screens) and a Scene document printed back as Screenplay.</Description>
+        <PackageTags>cratis;scene;screenplay;ui;bridge</PackageTags>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Cratis.Screenplay" />
+        <ProjectReference Include="../Model/Model.csproj" />
+        <ProjectReference Include="../Engine/Engine.csproj" />
+    </ItemGroup>
+</Project>
