@@ -19,5 +19,5 @@ export interface EditCollectionItemEdit {
 }
 
 export const EditCollectionItemEditPropertyNames: (keyof EditCollectionItemEdit)[] = [
-    'kind', 'instance', 'component', 'path', 'itemId', 'field', 'value',
+    'instance', 'component', 'path', 'itemId', 'field', 'value',
 ];

@@ -11,4 +11,4 @@ export interface RemoveNodeEdit {
     nodeId: string;
 }
 
-export const RemoveNodeEditPropertyNames: (keyof RemoveNodeEdit)[] = ['kind', 'nodeId'];
+export const RemoveNodeEditPropertyNames: (keyof RemoveNodeEdit)[] = ['nodeId'];

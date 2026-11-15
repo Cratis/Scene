@@ -13,7 +13,7 @@ namespace Cratis.Scene.Engine.Editing;
 /// </summary>
 sealed class ParsedSceneDocument
 {
-    static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web) { Converters = { new CollectionOperationConverter() } };
+    static readonly JsonSerializerOptions _options = new(JsonSerializerDefaults.Web);
     static readonly JsonDocumentOptions _documentOptions = new() { MaxDepth = 256 };
 
     /// <summary>

@@ -1,11 +1,14 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
+
 namespace Cratis.Scene.Model.Exposure;
 
 /// <summary>
 /// What an instance may do to a collection a template exposed to it. Operations are granted one by one.
 /// </summary>
+[JsonConverter(typeof(CollectionOperationConverter))]
 public enum CollectionOperation
 {
     /// <summary>

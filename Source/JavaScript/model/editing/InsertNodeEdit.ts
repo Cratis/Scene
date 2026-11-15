@@ -27,4 +27,4 @@ export interface InsertNodeEdit {
     flowNode?: FlowNode;
 }
 
-export const InsertNodeEditPropertyNames: (keyof InsertNodeEdit)[] = ['kind', 'target', 'slot', 'index', 'element', 'flowNode'];
+export const InsertNodeEditPropertyNames: (keyof InsertNodeEdit)[] = ['target', 'slot', 'index', 'element', 'flowNode'];

@@ -3,9 +3,8 @@
 
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Cratis.Scene.Model.Exposure;
 
-namespace Cratis.Scene.Engine.Editing;
+namespace Cratis.Scene.Model.Exposure;
 
 /// <summary>
 /// Reads and writes a <see cref="CollectionOperation"/> as the name a Scene document stores it under:

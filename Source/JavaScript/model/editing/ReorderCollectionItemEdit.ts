@@ -16,5 +16,5 @@ export interface ReorderCollectionItemEdit {
 }
 
 export const ReorderCollectionItemEditPropertyNames: (keyof ReorderCollectionItemEdit)[] = [
-    'kind', 'instance', 'component', 'path', 'itemId', 'index',
+    'instance', 'component', 'path', 'itemId', 'index',
 ];

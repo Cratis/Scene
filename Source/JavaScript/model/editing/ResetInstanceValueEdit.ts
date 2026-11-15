@@ -14,4 +14,4 @@ export interface ResetInstanceValueEdit {
     path: string;
 }
 
-export const ResetInstanceValueEditPropertyNames: (keyof ResetInstanceValueEdit)[] = ['kind', 'instance', 'component', 'path'];
+export const ResetInstanceValueEditPropertyNames: (keyof ResetInstanceValueEdit)[] = ['instance', 'component', 'path'];
