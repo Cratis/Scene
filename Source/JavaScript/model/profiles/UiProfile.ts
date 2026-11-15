@@ -1,6 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { DesignSystem } from '../designSystems';
 import { SampleDataSelection } from '../sampleData';
 import { ProfileAppearance } from './ProfileAppearance';
 import { ProfileDefaults } from './ProfileDefaults';
@@ -76,6 +77,13 @@ export interface UiProfile {
 
     /** The application's name and logo, set once and drawn by every blueprint. Absent uses the host's application name and initials taken from it. */
     identity?: ProfileIdentity;
+
+    /**
+     * The resolved design system the application is drawn from - its tokens, components and themes. Absent draws the default design
+     * system the active blueprint ships, so an application that names none looks as it always did. When set, {@link UiProfile.theme}
+     * and the colour scheme of {@link UiProfile.appearance} choose among its themes and modes.
+     */
+    designSystem?: DesignSystem;
 }
 
 export const UiProfilePropertyNames: (keyof UiProfile)[] = [
@@ -90,4 +98,5 @@ export const UiProfilePropertyNames: (keyof UiProfile)[] = [
     'appearance',
     'defaults',
     'identity',
+    'designSystem',
 ];

@@ -214,7 +214,8 @@
       "root",
       "appearance",
       "defaults",
-      "identity"
+      "identity",
+      "designSystem"
     ],
     "RootTemplate": [
       "template",
@@ -251,6 +252,20 @@
       "description",
       "licenseUrl"
     ],
+    "DesignSystem": ["name", "modes", "tokens", "components", "themes", "words", "contrastRules", "contrastFindings", "appearance"],
+    "TokenRole": ["category", "name", "description"],
+    "DesignComponent": ["name", "parts", "variants", "mapping"],
+    "ComponentAnatomy": ["parts", "variants", "states", "variantProperty"],
+    "DesignVariant": ["name", "parts", "states"],
+    "ComponentMapping": ["mapsTo", "variantProperty", "variantValues"],
+    "DesignTheme": ["name", "modes", "isDefault", "description"],
+    "DesignThemeMode": ["mode", "tokens", "components", "problems"],
+    "ResolvedDesignComponent": ["name", "variants"],
+    "ResolvedDesignVariant": ["name", "parts", "states"],
+    "DesignWords": ["voice", "naming"],
+    "ContrastRule": ["foreground", "background", "minimumRatio"],
+    "ContrastFinding": ["theme", "mode", "component", "variant", "state", "foreground", "background", "ratio", "required"],
+    "AppearanceBindings": ["accent", "focusRing", "corners", "font"],
     "PackageDependency": [
       "name",
       "versionRange"
@@ -275,7 +290,8 @@
       "assets",
       "runtimeSingletons",
       "sampleData",
-      "blueprint"
+      "blueprint",
+      "designSystems"
     ],
     "IconReference": [
       "library",

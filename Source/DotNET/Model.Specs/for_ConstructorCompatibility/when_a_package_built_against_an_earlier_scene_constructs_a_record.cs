@@ -20,6 +20,7 @@ public class when_a_package_built_against_an_earlier_scene_constructs_a_record :
     static readonly (Type Type, Type[] Parameters)[] _constructors =
     [
         (typeof(UiProfile), [typeof(string), typeof(string), typeof(IReadOnlyList<string>), typeof(TargetSizeClass?), typeof(string), typeof(string), typeof(SampleDataSelection), typeof(RootTemplate), typeof(ProfileAppearance), typeof(ProfileDefaults)]),
+        (typeof(UiProfile), [typeof(string), typeof(string), typeof(IReadOnlyList<string>), typeof(TargetSizeClass?), typeof(string), typeof(string), typeof(SampleDataSelection), typeof(RootTemplate), typeof(ProfileAppearance), typeof(ProfileDefaults), typeof(ProfileIdentity)]),
         (typeof(ProfileAppearance), [typeof(ColorScheme?), typeof(string)]),
         (typeof(InteractionBinding), [typeof(InteractionTrigger), typeof(IReadOnlyList<InteractionAction>), typeof(BindingExpression)]),
         (typeof(SampleDataPackReference), [typeof(string), typeof(string), typeof(string), typeof(string)]),
