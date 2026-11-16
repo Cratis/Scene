@@ -5,6 +5,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { currentRevisionOf, revisionsOf } from '@cratis/scene.design';
 import { aStartedDesign, sessionOf } from '../../given/aStartedDesign';
 import { askTheChat, openTab } from '../../given/canvasInteractions';
+import { askTheFakeAI } from '../../Testing/askTheFakeAI';
 import type { FakeDesignHost } from '../../Testing/createFakeDesignHost';
 import { DesignCanvas } from '../DesignCanvas';
 
@@ -46,6 +47,23 @@ describe('when tweaking a screen', () => {
         it('should record that it was dismissed', () => sessionOf(fake).tweaks[0]!.dismissed.should.equal(true));
         it('should say there is nothing to tweak', () => Boolean(screen.getByText(/Nothing to tweak yet/)).should.equal(true));
     });
+});
+
+describe('when moving a tweak that was offered with no screen in view', () => {
+    let fake: FakeDesignHost;
+
+    beforeEach(async () => {
+        // The way a story seeds a design: the turns are asked of the AI directly, so the tweaks belong to the design and not to a screen.
+        fake = aStartedDesign();
+        await askTheFakeAI(fake, 'Add a screen called Home');
+        await askTheFakeAI(fake, 'Give me some tweaks');
+        render(<DesignCanvas host={fake.host} />);
+        openTab('Tweaks');
+        fireEvent.change(await screen.findByRole('combobox', { name: 'Corners' }), { target: { value: 'Round' } });
+    });
+
+    it('should record the edit on the screen that is in view', async () => { await waitFor(() => revisionsOf(sessionOf(fake), 'Home').length.should.equal(2)); });
+    it('should hand the profile to the host to keep', async () => { await waitFor(() => fake.profile.current.appearance!.corners!.should.equal('Round')); });
 });
 
 describe('when going back in the history of a screen', () => {

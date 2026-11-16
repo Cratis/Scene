@@ -19,7 +19,8 @@ describe('when choosing between layouts', () => {
     });
 
     describe('and layouts have been offered', () => {
-        it('should show them side by side with the screen', async () => (await screen.findAllByRole('figure')).length.should.be.within(1, 3));
+        it('should show them side by side with the screen', async () => { await screen.findAllByRole('figure'); document.querySelectorAll('[data-candidate]').length.should.be.within(1, 3); });
+        it('should draw each of them, not a placeholder for a component the profile cannot resolve', async () => { await screen.findAllByRole('figure'); document.querySelector('.design-variations')!.textContent!.should.not.contain('Unresolved'); });
         it('should name them by letter', async () => (await screen.findByText('A')).textContent!.should.equal('A'));
         it('should offer each to be used', async () => (await screen.findAllByRole('button', { name: 'Use this layout' })).length.should.be.greaterThan(0));
         it('should not change the screen yet', () => sessionOf(fake).revisions.filter(revision => revision.screen === 'Orders').length.should.equal(1));
