@@ -65,6 +65,10 @@ Outside design and preview (`isDesignOrPreview` not `true`, which is the default
 - `owner`: `user` for the author's own pack, `blueprint:<id>` for one a blueprint ships.
 - The label the UI shows is `<Blueprint> · <Pack>` (`CRM · Nordic SMB`); the generated fallback is `Generic (typed by field kind)`.
 
+### Packs written in Screenplay
+
+`SampleDataConverter` (`Cratis.Scene.Screenplay`) turns a Screenplay `sample data` pack into this format. A row field keeps its authored literal: text stays a string, a number stays a whole number or a decimal, `true` and `false` stay Booleans and `null` stays null. A field that holds child rows becomes an ordered JSON array of objects, recursively, so a row can carry its lines and each line its own discounts; an explicitly empty collection stays `[]`. A value kind the converter does not know is refused with `UnknownSampleDataValueKind` rather than turned into text, so sample data is never lost silently.
+
 ## Shipping packs in a blueprint
 
 A `Blueprint` package declares its packs in its manifest and ships each as `sampleData/<name>.json`:

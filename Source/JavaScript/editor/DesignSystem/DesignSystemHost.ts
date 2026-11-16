@@ -6,7 +6,7 @@ import type { DesignSystem } from '@cratis/scene.model';
 import type { DesignSystemConflictEntry } from './Conflicts/DesignSystemConflict';
 import type { DesignSystemPreview } from './Previewing/DesignSystemPreview';
 import type { DesignChange } from './Resolving/designEdits';
-import type { OffStandardEntry, OffStandardIssue, OffStandardScreen } from './Standard/offStandard';
+import type { OffStandardEntry, OffStandardIssue, OffStandardScreen } from './Standard/offStandardEntries';
 
 /** What happened to a design system version. */
 export type DesignSystemHistoryKind =

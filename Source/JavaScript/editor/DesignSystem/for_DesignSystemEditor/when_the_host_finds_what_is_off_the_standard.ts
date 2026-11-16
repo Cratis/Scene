@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { defaultDesignSystemEditorStrings } from '../defaultDesignSystemEditorStrings';
 import { drawEditor } from './given/draw';
 import { OffStandard } from '../Standard/OffStandard';
-import { offStandardEntries, type OffStandardScreen } from '../Standard/offStandard';
+import { offStandardEntries, type OffStandardScreen } from '../Standard/offStandardEntries';
 import type { OffStandardState } from '../Standard/useOffStandard';
 
 const screens: OffStandardScreen[] = [

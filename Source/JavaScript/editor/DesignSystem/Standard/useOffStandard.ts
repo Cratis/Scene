@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DesignSystemEditorStrings } from '../DesignSystemEditorStrings';
 import type { DesignSystemRefusal, DesignSystemStandardHost } from '../DesignSystemHost';
-import { issueFor, offStandardEntries, replacementFor, type OffStandardEntry } from './offStandard';
+import { issueFor, offStandardEntries, replacementFor, type OffStandardEntry } from './offStandardEntries';
 
 /**
  * What the designs have outside the design system, and the ways of bringing it back. Read when the editor first asks, and

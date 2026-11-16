@@ -14,7 +14,7 @@ import type {
 } from '../DesignSystemHost';
 import type { DesignSystemPreview } from '../Previewing/DesignSystemPreview';
 import type { DesignChange } from '../Resolving/designEdits';
-import type { OffStandardEntry, OffStandardIssue, OffStandardScreen } from '../Standard/offStandard';
+import type { OffStandardEntry, OffStandardIssue, OffStandardScreen } from '../Standard/offStandardEntries';
 import { applyDesignChanges } from './applyDesignChange';
 import { sampleDesignSystem } from './sampleDesignSystem';
 

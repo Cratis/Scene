@@ -6,7 +6,7 @@ import { fill } from '../fill';
 import { Chip } from '../Parts/Chip';
 import { InFlightButton } from '../Parts/InFlightButton';
 import { EmptyNote, Panel } from '../Parts/Panel';
-import type { OffStandardEntry, OffStandardKind } from './offStandard';
+import type { OffStandardEntry, OffStandardKind } from './offStandardEntries';
 import type { OffStandardState } from './useOffStandard';
 
 export interface OffStandardProps {
