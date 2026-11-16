@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { defaultDesignSystemEditorStrings } from '../../../defaultDesignSystemEditorStrings';
-import { issueFor, issueLine, offStandardEntries, offStandardEntryOf, proposalBrief, replacementFor, type OffStandardScreen } from '../../offStandard';
+import { issueFor, issueLine, offStandardEntries, offStandardEntryOf, proposalBrief, replacementFor, type OffStandardScreen } from '../../offStandardEntries';
 
 const screens: OffStandardScreen[] = [
     { id: 'a', title: 'Orders', values: [{ kind: 'color', value: '#123456', suggestion: '--color-primary', count: 2 }, { kind: 'component', value: 'Chip', suggestion: '', count: 1 }] },

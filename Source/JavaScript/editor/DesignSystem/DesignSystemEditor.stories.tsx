@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import type { DesignSystemConflictEntry } from './Conflicts/DesignSystemConflict';
 import { DesignSystemEditor } from './DesignSystemEditor';
 import type { DesignSystemPreview } from './Previewing/DesignSystemPreview';
-import type { OffStandardScreen } from './Standard/offStandard';
+import type { OffStandardScreen } from './Standard/offStandardEntries';
 import { createFakeDesignSystemHost, type FakeDesignSystemHostOptions } from './Testing/createFakeDesignSystemHost';
 
 interface StoryProps {

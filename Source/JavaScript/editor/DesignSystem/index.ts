@@ -38,7 +38,7 @@ export * from './Editing/DraftChanges';
 export * from './Conflicts/DesignSystemConflict';
 export * from './Conflicts/conflicts';
 export * from './Conflicts/ConflictsPanel';
-export * from './Standard/offStandard';
+export * from './Standard/offStandardEntries';
 export * from './Standard/useOffStandard';
 export * from './Standard/OffStandard';
 export * from './Previewing/DesignSystemPreview';
