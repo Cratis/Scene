@@ -16,6 +16,15 @@ export function withScreenAsPrimary(document: SceneDocument, screen?: string): S
     };
 }
 
+// Undoes withScreenAsPrimary for a document that was opened on `screen` and edited: the screen that has the name Screen gets `screen`'s name back, and the screen that
+// had it before gets Screen back. A document that held no screen called Screen has none to swap with, so the one called Screen is renamed.
+export function withScreenRestored(document: SceneDocument, screen?: string): SceneDocument {
+    if (screen === undefined || screen === screenName) return document;
+    if (document.screens.some(candidate => candidate.name === screen)) return withScreenAsPrimary(document, screen);
+    if (!document.screens.some(candidate => candidate.name === screenName)) return document;
+    return { ...document, screens: document.screens.map(candidate => candidate.name === screenName ? { ...candidate, name: screen } : candidate) };
+}
+
 // The names of the screens a document holds, the one called 'Screen' first.
 export function screenNamesOf(document: SceneDocument): string[] {
     const names = document.screens.map(screen => screen.name);

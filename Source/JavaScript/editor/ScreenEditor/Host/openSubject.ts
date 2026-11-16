@@ -46,7 +46,7 @@ export function openSubject(subject: ScreenEditorSubject, runtime?: OpeningRunti
 function openDocument(subject: ScreenEditorSubject, runtime?: OpeningRuntime, selectableTemplates: readonly ScreenTemplate[] = []): OpenResult {
     const stored = subject.documentText ?? subject.document;
     if (stored !== undefined) {
-        const read = readSceneDocument(stored, subject.authoringTemplate);
+        const read = readSceneDocument(stored, subject.authoringTemplate, subject.screen);
         if (!read.readable) return { opened: false, problem: read.problem };
         const qualified = runtime ? qualifyStoredComponentNames(read.document, runtime.profile, runtime.packages) : read.document;
         // Another screen of the document is opened as it is: the template chosen for the slice is the first screen's.
