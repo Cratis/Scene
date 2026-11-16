@@ -246,4 +246,10 @@ The canvas draws with the `--cratis-*` custom properties a host already has for 
 ```bash
 yarn build && yarn test && yarn lint
 yarn workspace @cratis/scene.design.react dev    # Storybook with the fake host
+yarn workspace @cratis/scene.design.react test:browser   # every story, driven in Chromium
 ```
+
+`test:browser` mounts each story of the canvas in a real Chromium and checks it draws what it is meant to show without a console error, a request that fails or a
+placeholder for a component the profile cannot resolve, then drives the canvas the way a designer does: choosing a layout, moving a tweak and going back, commenting and
+resolving, asking the chat (running, cancelling, refusing, failing), adding a screen, arranging the storylines and opening the editor on a screen. The design system editor's
+stories have the same lane in `@cratis/scene.editor`. Both run in the browser-specification shards of CI.

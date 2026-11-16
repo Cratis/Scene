@@ -6,7 +6,7 @@ import { ScreenThumbnail, withScreenAsPrimary, type ScreenEditorRuntime } from '
 import type { DesignRouting } from '../Host/DesignCanvasHost';
 import { designStringsOf } from '../Host/defaultDesignStrings';
 import type { DesignCanvasStrings } from '../Host/DesignCanvasHost';
-import { countScreens, filterOverview, kindsOf, overviewScreenKey, type OverviewSubject } from './screensOverview';
+import { countScreens, filterOverview, kindsOf, overviewScreenKey, type OverviewSubject } from './overviewScreens';
 import './ScreensOverview.css';
 
 export interface ScreensOverviewProps {

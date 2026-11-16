@@ -16,6 +16,9 @@ import 'primeicons/primeicons.css';
 // The baseline theme is scoped to a `cratis-theme` ancestor rather than to `:root`, so something has to carry the class.
 document.body.classList.add('cratis-theme');
 
+// A host sets the font of its page; a story is the page, and a browser's default is a serif that nothing in the editor was drawn against.
+document.body.style.fontFamily = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+
 const preview: Preview = {
     decorators: [
         Story => (

@@ -6,7 +6,7 @@ import type { DesignSubject } from '@cratis/scene.design';
 import { screenEditorRuntimeForProfile } from '@cratis/scene.editor';
 import { jsonScreenplayBridge } from '../../Testing/jsonScreenplayBridge';
 import { ScreensOverview } from '../ScreensOverview';
-import type { OverviewSubject } from '../screensOverview';
+import type { OverviewSubject } from '../overviewScreens';
 
 const runtime = screenEditorRuntimeForProfile(undefined);
 const bridge = jsonScreenplayBridge([]);

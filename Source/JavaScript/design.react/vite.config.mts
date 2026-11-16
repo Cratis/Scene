@@ -27,4 +27,7 @@ config.test.include = [...config.test.include, '**/for_*/when_*/**/*.tsx', '**/f
 config.test.setupFiles = [config.test.setupFiles as string, './vitest.setup.ts'];
 config.test.fileParallelism = true;
 
+// Specifications that need a real Chromium run through `yarn test:browser` instead.
+config.test.exclude = [...config.test.exclude, '**/*.browser.ts'];
+
 export default defineConfig(config);
