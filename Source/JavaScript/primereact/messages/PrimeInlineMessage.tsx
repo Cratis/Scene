@@ -3,7 +3,7 @@
 
 import { Message } from 'primereact/message';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import {severityProperty, stringProperty} from '../properties';
+import {messageSeverityProperty, stringProperty} from '../properties';
 
 /**
  * The `primeicons` class that stands for each severity.
@@ -36,13 +36,13 @@ const severityIcons: Record<string, string> = {
  * so nothing here is lost with it.
  */
 export function PrimeInlineMessage({ element }: RegisteredComponentProps) {
-    const severity = severityProperty(element, 'severity', 'info');
+    const severity = messageSeverityProperty(element, 'severity');
     return (
         <Message.Root
             data-scene-id={element.id}
             className='inline-flex'
             variant='simple'
-            severity={severity as 'success' | 'info' | 'warn' | 'error'}>
+            severity={severity}>
             <Message.Icon>
                 <i className={severityIcons[severity] ?? severityIcons.info} aria-hidden='true' />
             </Message.Icon>

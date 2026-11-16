@@ -72,7 +72,12 @@ vocabulary. `primeReactTheme.css` is the only place Scene's anatomy and PrimeRea
 | `Text` `muted` `text` | `--ds-text-muted-text` | `--p-text-muted-color` |
 
 The package declares what it draws in `primeReactAnatomy`; a design system that asks for a part, variant or state
-a component does not draw is told so (`linkDesignSystem`) rather than approximated. See
+a component does not draw is told so (`linkDesignSystem`) rather than approximated. Every variant PrimeReact has is
+drawn: the Button's eight severities and its `outlined`, `text` and `link` forms, the Tag's and the Badge's
+severities and the Message's four, each from the design system's `--ds-<component>-<variant>-<part>` values
+(`--ds-button-danger-background`, `--ds-button-outlined-text`, `--ds-message-danger-text`, ...), with the preset's
+own value for a variant the design system does not declare. The table lists the `primary` Button; the rest follow
+the same pattern - see [the variants it draws](../../../Documentation/primereact-package/understanding-design-tokens.md#the-variants-it-draws). See
 [Rendering the design system](../../../Documentation/blueprints/design-system.md).
 
 The v10 column of this table was an ad-hoc vocabulary that could only be learned by reading compiled

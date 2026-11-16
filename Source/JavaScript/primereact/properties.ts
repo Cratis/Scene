@@ -176,3 +176,21 @@ export function severityProperty(element: SceneElement, name: string, fallback?:
     const translated = authored === 'warning' ? 'warn' : authored;
     return severities.includes(translated as PrimeSeverity) ? (translated as PrimeSeverity) : fallback;
 }
+
+/**
+ * Reads a Message's severity off a Scene element.
+ *
+ * A Message is the one PrimeReact component that spells the danger severity `error`, while every other one - and a design system's Message
+ * variants - say `danger`. Both are accepted and both mean `error`, so the variant a design system declares for the Message is the value
+ * the element carries. `warning` is `warn`, as everywhere else; an unrecognized value is `info`, the way an absent one is.
+ *
+ * @param element The element whose properties to read.
+ * @param name The property name, `severity` for every current caller.
+ * @returns The severity.
+ */
+export function messageSeverityProperty(element: SceneElement, name: string): 'success' | 'info' | 'warn' | 'error' {
+    const authored = stringProperty(element, name);
+    if (authored === 'error' || authored === 'danger') return 'error';
+    if (authored === 'warning' || authored === 'warn') return 'warn';
+    return authored === 'success' ? 'success' : 'info';
+}

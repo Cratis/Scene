@@ -3,7 +3,7 @@
 
 import { Message } from 'primereact/message';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import {severityProperty, stringProperty} from '../properties';
+import {messageSeverityProperty, stringProperty} from '../properties';
 
 /**
  * The `primeicons` class that stands for each severity.
@@ -34,12 +34,12 @@ const severityIcons: Record<string, string> = {
  *
  * v10's `warning` is translated to v11's `warn` so screens written against the old vocabulary keep their
  * color; `error` was and still is spelled the same here, unlike everywhere else in PrimeReact where the
- * danger severity is called `danger`.
+ * danger severity is called `danger` - and `danger`, the name a design system's Message variant has, is accepted as `error`.
  */
 export function PrimeMessage({ element }: RegisteredComponentProps) {
-    const severity = severityProperty(element, 'severity', 'info');
+    const severity = messageSeverityProperty(element, 'severity');
     return (
-        <Message.Root data-scene-id={element.id} className='w-full' severity={severity as 'success' | 'info' | 'warn' | 'error'}>
+        <Message.Root data-scene-id={element.id} className='w-full' severity={severity}>
             <Message.Icon>
                 <i className={severityIcons[severity] ?? severityIcons.info} aria-hidden='true' />
             </Message.Icon>

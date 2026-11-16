@@ -30,6 +30,33 @@ The components PrimeReact draws, and the parts a design system declares for them
 | `Text` `default` `text` | `--ds-text-default-text` | Body text |
 | `Text` `muted` `text` | `--ds-text-muted-text` | Secondary and supporting text |
 
+### The variants it draws
+
+The `Button`, the `Tag`, the `Badge` and the `Message` come in variants, and the package draws every one PrimeReact has - each from
+the design system's own variant, with the preset's value standing in for a variant the design system does not declare.
+
+| Component | Variants | Parts | PrimeReact props |
+| --- | --- | --- | --- |
+| `Button` | `primary`, `secondary`, `success`, `info`, `warn`, `danger`, `help`, `contrast` | `background`, `text`, `border`, `radius`, `shadow` | `severity` (`primary` is PrimeReact's default) |
+| `Button` | `outlined`, `text`, `link` | the same | `variant` |
+| `Tag`, `Badge` | `primary`, `secondary`, `success`, `info`, `warn`, `danger`, `contrast` | `background`, `text` | `severity` (PrimeReact draws no `help`) |
+| `Message` | `info`, `success`, `warn`, `danger` | `background`, `text`, `border` | `severity` (`danger` is PrimeReact's `error`) |
+
+The `severity` property of a screen element is what chooses the variant - the one list a design system declares - and
+`PrimeButton` tells the two PrimeReact props apart: `severity: danger` is the `danger` severity, `severity: outlined` is the `outlined` form.
+The `outlined` and `text` flags a screen can also set still combine with a severity, so an outlined `danger` button is
+painted from the `danger` variant's own colour. A design system names its variants as PrimeReact does, because the name of a variant is
+what its custom properties are called; one PrimeReact has no look for is reported as `variantUnsupported`.
+
+States follow the same rule as parts. A Button variant's `hover` and `active` states are read from
+`--ds-button-<variant>-<part>-hover` and `-active` when the design system declares them, and otherwise derived from the variant's own
+background (10% and 20% towards the text colour), so a variant that declares no states still reacts. The corners are the variant's
+`radius`, written onto PrimeReact's own `--p-button-border-radius` on the button, so a button group still squares off the corners it
+means to.
+
+The `outlined`, `text` and `link` forms of the `primary` severity are the design system's `outlined`, `text` and `link` variants; every
+other severity combined with a form derives its colours from its own variant (the filled `background`, or the `text` of a `secondary`).
+
 Anatomy is semantic and platform-neutral in the model on purpose - a design system carries "the `primary` `Button`'s `background`",
 not a CSS property name. `designAnatomyProperty` in `@cratis/scene.react` is the one place that decides what it looks like in CSS,
 so a future non-DOM renderer can make an entirely different choice:
