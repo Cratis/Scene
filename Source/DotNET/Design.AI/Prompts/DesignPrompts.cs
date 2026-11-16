@@ -21,12 +21,12 @@ public static class DesignPrompts
     /// <summary>
     /// The name of the system prompt of establishing and revising a design system.
     /// </summary>
-    public const string DesignSystem = "design-system";
+    public const string DesignSystem = "establishing-design-system";
 
     /// <summary>
     /// The name of the steps of establishing a design system, one section each.
     /// </summary>
-    public const string DesignSystemSteps = "design-system-steps";
+    public const string DesignSystemSteps = "establishing-design-system-steps";
 
     /// <summary>
     /// Reads a prompt.
