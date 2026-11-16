@@ -39,6 +39,7 @@ namespace Cratis.Scene.Model.Packages;
 /// <param name="RuntimeSingletons">Runtime singleton dependency names that must not be duplicated across approved bundles.</param>
 /// <param name="SampleData">The sample-data packs this package ships (<c language="csharp">sampleData/*.json</c>). Design and preview time only: a Stage production build never includes or resolves them.</param>
 /// <param name="Blueprint">What a domain blueprint declares about itself: its domain, gallery description and thumbnail, and its ready-to-use screen set. Present for a domain <see cref="PackageKind.Blueprint"/>; a blueprint that only provides foundation layouts and templates has none.</param>
+/// <param name="DesignSystems">The names of the <see cref="Cratis.Scene.Model.DesignSystems.DesignSystem"/>s this package ships - a blueprint's default design system, for one. <see langword="null"/> or empty for a package that ships none.</param>
 public record ScenePackage(
     string Name,
     string Version,
@@ -59,4 +60,5 @@ public record ScenePackage(
     IReadOnlyList<string>? Assets = null,
     IReadOnlyList<string>? RuntimeSingletons = null,
     IReadOnlyList<SampleData.SampleDataPackReference>? SampleData = null,
-    BlueprintMetadata? Blueprint = null);
+    BlueprintMetadata? Blueprint = null,
+    IReadOnlyList<string>? DesignSystems = null);

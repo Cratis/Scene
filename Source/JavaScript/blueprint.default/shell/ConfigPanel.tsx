@@ -4,7 +4,8 @@
 import { useId, useState } from 'react';
 import { IconButton } from '@cratis/components/Common';
 import { Dialog, DialogInitialFocus } from '@cratis/components/Dialogs';
-import { RegisteredComponentProps, themeTokenProperty, useSceneTheme } from '@cratis/scene.react';
+import { ColorScheme as ProfileColorScheme } from '@cratis/scene.model';
+import { RegisteredComponentProps, designCustomProperties, useSceneDesign } from '@cratis/scene.react';
 import { ShellIcon } from './ShellIcon';
 import { ColorScheme, MenuTheme, colorSchemes, menuThemes, useLayoutConfig } from '../configuration';
 import { LayoutModeSwitcher } from './LayoutModeSwitcher';
@@ -32,15 +33,15 @@ const menuThemeLabels: Record<MenuTheme, string> = {
  * configurator with more knobs than that becomes a settings screen nobody finishes reading.
  *
  * Cratis Dialog supplies an end-placed side sheet, focus containment, dismissal and focus restoration.
- * Its portalled root receives the active Scene tokens so switching theme updates the panel as well as
+ * Its portalled root receives the active design's anatomy so switching theme updates the panel as well as
  * the page without remounting either.
  */
 export function ConfigPanel({ element, slots }: RegisteredComponentProps) {
     const { config, setColorScheme, setMenuTheme } = useLayoutConfig();
     const [isOpen, setIsOpen] = useState(false);
-    const theme = useSceneTheme();
+    const design = useSceneDesign();
     const dialogId = useId();
-    const themeStyle = Object.fromEntries(Object.entries(theme?.tokens ?? {}).map(([token, value]) => [themeTokenProperty(token), value]));
+    const themeStyle = design === undefined ? {} : designCustomProperties(design);
     const title = readString(element, 'title', 'Settings');
     const showsMenuTheme = readBoolean(element, 'showMenuTheme', true);
     const showsMode = readBoolean(element, 'showLayoutMode', true);
@@ -61,7 +62,7 @@ export function ConfigPanel({ element, slots }: RegisteredComponentProps) {
                 closeAriaLabel={`Close ${title}`}
                 className='layout-overlay-theme layout-config-surface'
                 pt={{
-                    root: { id: dialogId, style: themeStyle, 'data-scene-theme': theme?.name, 'data-scene-color-scheme': theme ? theme.isDark ? 'dark' : 'light' : undefined },
+                    root: { id: dialogId, style: themeStyle, 'data-scene-theme': design?.theme, 'data-scene-mode': design?.mode, 'data-scene-color-scheme': design ? design.colorScheme === ProfileColorScheme.Dark ? 'dark' : 'light' : undefined },
                     backdrop: { className: 'layout-config-backdrop' },
                     positioner: { className: 'layout-config-positioner' },
                     header: { className: 'layout-config-header' },

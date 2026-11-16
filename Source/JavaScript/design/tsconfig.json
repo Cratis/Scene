@@ -1,0 +1,34 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "dist/esm",
+        "paths": {
+            "@cratis/scene.model/*": ["../model/dist/esm/*"],
+            "@cratis/scene.engine/*": ["../engine/dist/esm/*"],
+            "@cratis/scene.extensions/*": ["../extensions/dist/esm/*"]
+        }
+    },
+    "files": [
+        "../../../test.d.ts",
+        "../../../global.d.ts"
+    ],
+    "include": [
+        "**/*.ts"
+    ],
+    "references": [
+        {
+            "path": "../model"
+        },
+        {
+            "path": "../engine"
+        },
+        {
+            "path": "../extensions"
+        }
+    ],
+    "exclude": [
+        "dist",
+        "vite.config.mts"
+    ]
+}

@@ -12,4 +12,4 @@ export interface ResetPropertyEdit {
     path: string;
 }
 
-export const ResetPropertyEditPropertyNames: (keyof ResetPropertyEdit)[] = ['kind', 'nodeId', 'path'];
+export const ResetPropertyEditPropertyNames: (keyof ResetPropertyEdit)[] = ['nodeId', 'path'];

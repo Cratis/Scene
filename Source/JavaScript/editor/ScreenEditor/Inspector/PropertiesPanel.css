@@ -1,0 +1,298 @@
+.studio-editor-properties,
+.studio-editor-properties-empty {
+    margin: 0;
+    padding: 12px;
+}
+
+.studio-editor-properties-empty,
+.studio-editor-properties__hint {
+    font-size: 0.85rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-properties__header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.studio-editor-properties__header span {
+    font-size: 0.75rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-properties__layout,
+.studio-editor-properties__location,
+.studio-editor-properties__collection,
+.studio-editor-properties__templates,
+.studio-editor-properties__forms,
+.studio-editor-properties__designers,
+.studio-editor-properties__actions,
+.studio-editor-properties__exposure {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--cratis-surface-border);
+}
+
+.studio-editor-properties__layout label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.8rem;
+}
+
+.studio-editor-properties__confirm {
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-warning-background);
+    color: var(--cratis-warning-text);
+}
+
+.studio-editor-properties__exposure ul {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+.studio-editor-properties__list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 12px;
+    margin: 0 0 12px;
+}
+
+.studio-editor-properties__list dt {
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-properties__list dd {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.studio-editor-properties__hint {
+    margin: 0;
+}
+
+.studio-editor-properties__icons,
+.studio-editor-properties__templates,
+.studio-editor-properties__forms,
+.studio-editor-properties__form,
+.studio-editor-properties__form-fields,
+.studio-editor-properties__form-layout,
+.studio-editor-properties__designers,
+.studio-editor-properties__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.studio-editor-properties__templates label,
+.studio-editor-properties__forms label,
+.studio-editor-properties__form label,
+.studio-editor-properties__form-layout label,
+.studio-editor-destination label,
+.studio-editor-slots__item label,
+.studio-editor-dialog-templates__item label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.studio-editor-slots__item label:has(input[type='checkbox']) {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.studio-editor-destinations,
+.studio-editor-slots,
+.studio-editor-dialog-templates {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.studio-editor-destination,
+.studio-editor-slots__item,
+.studio-editor-dialog-templates__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+}
+
+.studio-editor-slots__actions,
+.studio-editor-dialog-templates__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.studio-editor-properties__form-layout-row,
+.studio-editor-properties__form-width {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.studio-editor-properties__form-width input {
+    width: 5rem;
+}
+
+.studio-editor-properties__action-messages {
+    color: var(--cratis-warning-text);
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.studio-editor-properties__icon {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.studio-editor-properties__icon-label {
+    font-size: 0.8rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-editor-properties__location-path ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    list-style: none;
+    margin: 2px 0 0;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.studio-editor-properties__location-path li + li::before {
+    content: '/';
+    margin-right: 4px;
+    opacity: 0.6;
+}
+
+.studio-editor-properties__location-move label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.8rem;
+}
+
+.studio-editor-properties__location-failed {
+    color: var(--p-red-400, #f87171);
+}
+
+/* The application navigation section (StudioIssues#948): a level picker, region tabs, the items of the region and what can be done with the selected one. */
+.studio-editor-properties__shell-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--cratis-surface-border);
+}
+
+.studio-editor-properties__shell-navigation label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.studio-editor-properties__tabs,
+.studio-editor-properties__shell-navigation .studio-editor-properties__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.studio-editor-properties__tabs button,
+.studio-editor-properties__shell-navigation .studio-editor-properties__actions button {
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.studio-editor-properties__tabs button[aria-selected='true'],
+.studio-editor-properties__items button[aria-pressed='true'] {
+    border-color: var(--cratis-primary-color, #60a5fa);
+    background: color-mix(in srgb, var(--cratis-primary-color, #60a5fa) 20%, transparent);
+}
+
+.studio-editor-properties__shell-navigation .studio-editor-properties__actions button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.studio-editor-properties__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studio-editor-properties__items button {
+    width: 100%;
+    padding: 0.375rem 0.625rem;
+    border: 1px solid transparent;
+    border-radius: var(--cratis-border-radius);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-editor-properties__items [data-read-only='true'] button {
+    opacity: 0.7;
+}
+
+.studio-editor-properties__field-markers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.studio-editor-properties__chip {
+    font-size: 0.65rem;
+    padding: 0 0.4rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--cratis-border-color, rgba(0, 0, 0, 0.25));
+    color: var(--cratis-text-color-secondary, inherit);
+}
+
+.studio-editor-properties__chip[data-mapping='broken'] {
+    border-color: var(--cratis-danger-color, #dc2626);
+    color: var(--cratis-danger-color, #dc2626);
+}
+
+.studio-editor-properties__chip[data-marker='inheritedFromRules'] {
+    border-color: var(--cratis-warning-color, #d97706);
+}
+
+.studio-editor-properties__choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}

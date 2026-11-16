@@ -15,4 +15,4 @@ export interface SetPropertyEdit {
     value: unknown;
 }
 
-export const SetPropertyEditPropertyNames: (keyof SetPropertyEdit)[] = ['kind', 'nodeId', 'path', 'value'];
+export const SetPropertyEditPropertyNames: (keyof SetPropertyEdit)[] = ['nodeId', 'path', 'value'];

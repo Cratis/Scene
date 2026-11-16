@@ -122,4 +122,4 @@ If you are adding a name to this package, or writing a package of your own:
 ## Next
 
 Names decide *which* component renders. Tokens decide what it looks like — see
-[Understanding design tokens](./understanding-design-tokens.md).
+[Understanding design-system anatomy](./understanding-design-tokens.md).

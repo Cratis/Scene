@@ -16,4 +16,4 @@ export interface MoveNodeEdit {
     index?: number;
 }
 
-export const MoveNodeEditPropertyNames: (keyof MoveNodeEdit)[] = ['kind', 'nodeId', 'target', 'slot', 'index'];
+export const MoveNodeEditPropertyNames: (keyof MoveNodeEdit)[] = ['nodeId', 'target', 'slot', 'index'];

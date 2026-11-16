@@ -1,0 +1,3348 @@
+{
+  "description": "Shared by both engines: resolving a design system for the theme, mode and appearance a UI profile asks for.",
+  "cases": [
+    {
+      "name": "default theme, first mode",
+      "description": "a profile that chooses nothing gets the default theme in the first mode, with the values the design system resolved",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#ffffff",
+          "color.text": "#111827",
+          "color.primary": "#4338ca",
+          "color.on-primary": "#ffffff",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #4338ca",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#4338ca",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#4338ca",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #4338ca"
+                  },
+                  "disabled": {
+                    "text": "#111827",
+                    "background": "#ffffff",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#ffffff",
+                  "text": "#111827",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "dark scheme",
+      "description": "the dark colour scheme selects the dark mode; its components are evaluated from the anatomy",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": {
+        "colorScheme": "Dark"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "dark",
+        "colorScheme": "Dark",
+        "tokens": {
+          "color.surface": "#111827",
+          "color.text": "#ffffff",
+          "color.primary": "#818cf8",
+          "color.on-primary": "#111827",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #818cf8",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#111827",
+                  "background": "#818cf8",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#111827",
+                    "background": "#818cf8",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #818cf8"
+                  },
+                  "disabled": {
+                    "text": "#ffffff",
+                    "background": "#111827",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#111827",
+                  "text": "#ffffff",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "system follows the system",
+      "description": "the system scheme selects the mode the system is in",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": {
+        "colorScheme": "System"
+      },
+      "systemIsDark": true,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "dark",
+        "colorScheme": "Dark",
+        "tokens": {
+          "color.surface": "#111827",
+          "color.text": "#ffffff",
+          "color.primary": "#818cf8",
+          "color.on-primary": "#111827",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #818cf8",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#111827",
+                  "background": "#818cf8",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#111827",
+                    "background": "#818cf8",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #818cf8"
+                  },
+                  "disabled": {
+                    "text": "#ffffff",
+                    "background": "#111827",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#111827",
+                  "text": "#ffffff",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "named theme",
+      "description": "a profile's theme name selects that theme",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Dusk",
+      "packageThemes": null,
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Dusk",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#f5f3ff",
+          "color.text": "#1e1b4b",
+          "color.primary": "#6d28d9",
+          "color.on-primary": "#ffffff",
+          "radius.control": "2px",
+          "shadow.ring": "0 0 0 2px #6d28d9",
+          "font.sans": "serif"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#6d28d9",
+                  "radius": "2px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#6d28d9",
+                    "radius": "2px",
+                    "shadow": "0 0 0 2px #6d28d9"
+                  },
+                  "disabled": {
+                    "text": "#1e1b4b",
+                    "background": "#f5f3ff",
+                    "radius": "2px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#f5f3ff",
+                  "text": "#1e1b4b",
+                  "font": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "unknown theme",
+      "description": "a theme nobody has falls back to the default theme and says so",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Nowhere",
+      "packageThemes": null,
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#ffffff",
+          "color.text": "#111827",
+          "color.primary": "#4338ca",
+          "color.on-primary": "#ffffff",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #4338ca",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#4338ca",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#4338ca",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #4338ca"
+                  },
+                  "disabled": {
+                    "text": "#111827",
+                    "background": "#ffffff",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#ffffff",
+                  "text": "#111827",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "themeNotFound",
+            "message": "The theme 'Nowhere' is not a theme of the design system 'ShopDesign' or of its packages, so the default theme is used."
+          }
+        ],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "scheme that is not a mode",
+      "description": "a colour scheme the design system does not declare as a mode uses its first mode and says so",
+      "designSystem": {
+        "name": "DayNight",
+        "modes": [
+          "day",
+          "night"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Page",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "color.text"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Plain",
+            "isDefault": true,
+            "modes": [
+              {
+                "mode": "day",
+                "tokens": {
+                  "color.text": "#000000"
+                }
+              },
+              {
+                "mode": "night",
+                "tokens": {
+                  "color.text": "#ffffff"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": {
+        "colorScheme": "Dark"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "DayNight",
+        "theme": "Plain",
+        "mode": "day",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.text": "#000000"
+        },
+        "components": [
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "#000000"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "modeNotDeclared",
+            "message": "The colour scheme dark is not a mode of the design system 'DayNight', so its first mode is used."
+          }
+        ],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "mode the theme does not implement",
+      "description": "a theme without values for the mode is drawn without them: every part is unresolved",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Dusk",
+      "packageThemes": null,
+      "appearance": {
+        "colorScheme": "Dark"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Dusk",
+        "mode": "dark",
+        "colorScheme": "Dark",
+        "tokens": {},
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {},
+                "states": {
+                  "focus": {},
+                  "disabled": {}
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {}
+              }
+            ]
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "modeNotImplemented",
+            "message": "The theme 'Dusk' has no values for the mode 'dark'."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary: part 'text' refers to 'color.on-primary', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary: part 'background' refers to 'color.primary', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary: part 'radius' refers to 'radius.control', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary.focus: part 'shadow' refers to 'shadow.ring', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary.disabled: part 'text' refers to 'color.text', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Button.primary.disabled: part 'background' refers to 'color.surface', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Page.default: part 'background' refers to 'color.surface', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Page.default: part 'text' refers to 'color.text', which has no value."
+          },
+          {
+            "code": "tokenUnresolved",
+            "message": "Page.default: part 'font' refers to 'font.sans', which has no value."
+          }
+        ],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "accent, corners and font",
+      "description": "the profile's accent, corners and font replace the roles the design system binds; the components are evaluated again",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": {
+        "accent": "#ff0000",
+        "corners": "Sharp",
+        "font": "inter"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#ffffff",
+          "color.text": "#111827",
+          "color.primary": "#ff0000",
+          "color.on-primary": "#ffffff",
+          "radius.control": "4px",
+          "shadow.ring": "0 0 0 2px rgb(255 0 0 / 0.4)",
+          "font.sans": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#ff0000",
+                  "radius": "4px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#ff0000",
+                    "radius": "4px",
+                    "shadow": "0 0 0 2px rgb(255 0 0 / 0.4)"
+                  },
+                  "disabled": {
+                    "text": "#111827",
+                    "background": "#ffffff",
+                    "radius": "4px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#ffffff",
+                  "text": "#111827",
+                  "font": "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "nothing bound",
+      "description": "a design system that binds nothing ignores the profile's accent and says so",
+      "designSystem": {
+        "name": "NoBindings",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ]
+      },
+      "theme": null,
+      "packageThemes": null,
+      "appearance": {
+        "accent": "#ff0000"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "NoBindings",
+        "theme": "Daylight",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#ffffff",
+          "color.text": "#111827",
+          "color.primary": "#4338ca",
+          "color.on-primary": "#ffffff",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #4338ca",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#4338ca",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#4338ca",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #4338ca"
+                  },
+                  "disabled": {
+                    "text": "#111827",
+                    "background": "#ffffff",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#ffffff",
+                  "text": "#111827",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": [
+          "appearanceNotBound"
+        ]
+      }
+    },
+    {
+      "name": "theme shipped by a package",
+      "description": "a theme a package ships supplies the values of the roles, in the mode it declares; parts it has no value for are left out without a problem",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Pkg Light",
+      "packageThemes": [
+        {
+          "name": "Pkg Light",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": false,
+          "tokens": {
+            "color.surface": "#fafafa",
+            "color.text": "#222222",
+            "color.primary": "#0a7",
+            "color.on-primary": "#ffffff"
+          }
+        },
+        {
+          "name": "Pkg Dark",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": true,
+          "tokens": {
+            "color.surface": "#101010",
+            "color.text": "#eeeeee",
+            "color.primary": "#5eead4",
+            "color.on-primary": "#000000"
+          }
+        }
+      ],
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Pkg Light",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#fafafa",
+          "color.text": "#222222",
+          "color.primary": "#0a7",
+          "color.on-primary": "#ffffff"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#0a7"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#0a7"
+                  },
+                  "disabled": {
+                    "text": "#222222",
+                    "background": "#fafafa"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#fafafa",
+                  "text": "#222222"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "dark theme shipped by a package",
+      "description": "a dark package theme is drawn in the dark mode",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Pkg Dark",
+      "packageThemes": [
+        {
+          "name": "Pkg Light",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": false,
+          "tokens": {
+            "color.surface": "#fafafa",
+            "color.text": "#222222",
+            "color.primary": "#0a7",
+            "color.on-primary": "#ffffff"
+          }
+        },
+        {
+          "name": "Pkg Dark",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": true,
+          "tokens": {
+            "color.surface": "#101010",
+            "color.text": "#eeeeee",
+            "color.primary": "#5eead4",
+            "color.on-primary": "#000000"
+          }
+        }
+      ],
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Pkg Dark",
+        "mode": "dark",
+        "colorScheme": "Dark",
+        "tokens": {
+          "color.surface": "#101010",
+          "color.text": "#eeeeee",
+          "color.primary": "#5eead4",
+          "color.on-primary": "#000000"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#000000",
+                  "background": "#5eead4"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#000000",
+                    "background": "#5eead4"
+                  },
+                  "disabled": {
+                    "text": "#eeeeee",
+                    "background": "#101010"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#101010",
+                  "text": "#eeeeee"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    },
+    {
+      "name": "package theme against the other scheme",
+      "description": "a package theme has one scheme of its own; asking for the other is reported and the theme is drawn as chosen",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Pkg Dark",
+      "packageThemes": [
+        {
+          "name": "Pkg Light",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": false,
+          "tokens": {
+            "color.surface": "#fafafa",
+            "color.text": "#222222",
+            "color.primary": "#0a7",
+            "color.on-primary": "#ffffff"
+          }
+        },
+        {
+          "name": "Pkg Dark",
+          "compatibleWith": [
+            "core"
+          ],
+          "isDark": true,
+          "tokens": {
+            "color.surface": "#101010",
+            "color.text": "#eeeeee",
+            "color.primary": "#5eead4",
+            "color.on-primary": "#000000"
+          }
+        }
+      ],
+      "appearance": {
+        "colorScheme": "Light"
+      },
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Pkg Dark",
+        "mode": "dark",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#101010",
+          "color.text": "#eeeeee",
+          "color.primary": "#5eead4",
+          "color.on-primary": "#000000"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#000000",
+                  "background": "#5eead4"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#000000",
+                    "background": "#5eead4"
+                  },
+                  "disabled": {
+                    "text": "#eeeeee",
+                    "background": "#101010"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#101010",
+                  "text": "#eeeeee"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": [
+          "themeSchemeMismatch"
+        ]
+      }
+    },
+    {
+      "name": "design system theme wins over a package theme of the same name",
+      "description": "a theme the design system has is not shadowed by a package's",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "theme": "Daylight",
+      "packageThemes": [
+        {
+          "name": "Daylight",
+          "compatibleWith": [],
+          "tokens": {
+            "color.surface": "#000000"
+          }
+        }
+      ],
+      "appearance": null,
+      "systemIsDark": false,
+      "availableFonts": null,
+      "expected": {
+        "designSystem": "ShopDesign",
+        "theme": "Daylight",
+        "mode": "light",
+        "colorScheme": "Light",
+        "tokens": {
+          "color.surface": "#ffffff",
+          "color.text": "#111827",
+          "color.primary": "#4338ca",
+          "color.on-primary": "#ffffff",
+          "radius.control": "8px",
+          "shadow.ring": "0 0 0 2px #4338ca",
+          "font.sans": "inter"
+        },
+        "components": [
+          {
+            "name": "Button",
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "#ffffff",
+                  "background": "#4338ca",
+                  "radius": "8px"
+                },
+                "states": {
+                  "focus": {
+                    "text": "#ffffff",
+                    "background": "#4338ca",
+                    "radius": "8px",
+                    "shadow": "0 0 0 2px #4338ca"
+                  },
+                  "disabled": {
+                    "text": "#111827",
+                    "background": "#ffffff",
+                    "radius": "8px"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "#ffffff",
+                  "text": "#111827",
+                  "font": "inter"
+                }
+              }
+            ]
+          }
+        ],
+        "diagnostics": [],
+        "appearanceDiagnostics": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Cratis.Scene.Design</AssemblyName>
+        <RootNamespace>Cratis.Scene.Design</RootNamespace>
+        <Description>Scene Design: the catalogue that grounds a design, design operations lowered to Scene edits, the screen set, and the design session with its Chronicle event types and reducer.</Description>
+        <PackageTags>cratis;scene;screenplay;ui;design</PackageTags>
+    </PropertyGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Cratis.Scene.Design.AI</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Starter/*.play" LogicalName="Starter/%(Filename)%(Extension)" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Cratis.Chronicle" />
+        <ProjectReference Include="../Model/Model.csproj" />
+        <ProjectReference Include="../Engine/Engine.csproj" />
+    </ItemGroup>
+</Project>

@@ -24,4 +24,5 @@ export * from './screen';
 export * from './theme';
 export * from './primeReactComponents';
 export * from './primeReactDescriptors';
+export * from './primeReactAnatomy';
 export * from './primeReactPackage';

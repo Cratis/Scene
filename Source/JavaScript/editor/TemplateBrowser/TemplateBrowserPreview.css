@@ -1,0 +1,130 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-template-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.studio-template-preview__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.studio-template-preview__controls label {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+/* The pane the window is centered in. It is only measured: the window inside takes the width and the height of the device chosen, scaled to fit. */
+.studio-template-preview__frame {
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+/* The preview as a browser window, the same frame the miniature of a screen on the board has: a title bar with its three lights, and the template
+   laid out at the size of the device inside it and scaled down, in its own shape. */
+.studio-template-preview__window {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 6px;
+    background: var(--cratis-surface-card);
+}
+
+.studio-template-preview__title-bar {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 22px;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--cratis-surface-border);
+    background: var(--cratis-surface-card);
+}
+
+.studio-template-preview__light {
+    box-sizing: border-box;
+    width: 9px;
+    height: 9px;
+    border: 1px solid;
+    border-radius: 50%;
+}
+
+.studio-template-preview__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-template-preview__body {
+    position: relative;
+    overflow: hidden;
+    background: var(--cratis-surface-ground);
+
+    /* A blueprint lays its shell out with fixed positioning; a transform makes the stage the containing block, so the preview stays inside it. */
+    transform: translateZ(0);
+    contain: layout paint;
+}
+
+.studio-template-preview__stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transform-origin: top left;
+    overflow: hidden;
+    contain: layout;
+}
+
+.studio-template-preview__stage .studio-profile-theme {
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+.studio-template-preview__stage .layout-wrapper,
+.studio-template-preview__stage .layout-full-page,
+.studio-template-preview__stage .layout-main {
+    min-height: var(--studio-surface-viewport-height, 100%);
+}
+
+.studio-template-preview__none {
+    margin: 1rem;
+    color: var(--cratis-text-color-secondary);
+}
+
+.studio-template-preview__screens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.studio-template-preview__screens button {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: 999px;
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.studio-template-preview__screens button[aria-pressed='true'] {
+    border-color: var(--cratis-primary-color);
+    font-weight: 600;
+}

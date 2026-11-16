@@ -197,6 +197,10 @@ function describeTheme(profile: UiProfile, context: UiProfileDescriptorContext):
             choices: fontCatalog.map((font): PropertyChoice => ({ value: font.id, label: font.displayName, description: fontSampleLine })),
             description: 'The font the application uses. Leave it out to use the theme\'s own.',
         },
+        {
+            path: 'designSystem', label: 'Design system', group: 'Appearance', valueType: PropertyValueType.Json,
+            description: 'The resolved design system the application is drawn from: its token roles, components and themes. Leave it out to use the default design system the blueprint ships.',
+        },
     ]);
 }
 

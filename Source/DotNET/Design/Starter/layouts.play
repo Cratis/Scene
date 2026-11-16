@@ -1,0 +1,33 @@
+layout AppShell
+  category application
+  topbar
+  sidebar
+  content
+  footer
+
+module Workspaces
+  screen template Sheet
+    category Page
+    scopes feature
+    content
+
+  screen template MasterDetail
+    category Page
+    scopes feature
+    sidebar
+    main
+
+  screen template SettingsPage
+    category Page
+    scopes feature
+    sections
+
+  screen template EmptyState
+    category Page
+    scopes feature
+    content
+
+  dialog template Dialog
+    category Dialog
+    body
+    actions

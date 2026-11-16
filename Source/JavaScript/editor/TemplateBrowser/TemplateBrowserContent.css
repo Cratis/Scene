@@ -1,0 +1,89 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-template-browser {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1.6fr) minmax(18rem, 1fr);
+    gap: 1rem;
+    min-height: 0;
+    height: 100%;
+}
+
+.studio-template-browser--previewing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.studio-template-browser__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+.studio-template-browser__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.studio-template-browser__filter {
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+}
+
+.studio-template-browser__category {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: var(--cratis-surface-card);
+    color: var(--cratis-text-color);
+}
+
+.studio-template-browser__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0.25rem;
+    list-style: none;
+}
+
+.studio-template-browser__empty,
+.studio-template-browser__hidden {
+    margin: 0;
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 70rem) {
+    .studio-template-browser {
+        grid-template-columns: 10rem minmax(0, 1fr);
+    }
+
+    .studio-template-browser > .studio-template-pane {
+        grid-column: 1 / -1;
+        padding-inline-start: 0;
+        border-inline-start: 0;
+    }
+}
+
+.studio-template-browser__detail {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+/* With the detail of a host (the shell chooser), the pane is wider than the browser's own: it draws the application. */
+.studio-template-browser[data-detail='host'] {
+    grid-template-columns: 11rem minmax(13rem, 0.8fr) minmax(24rem, 1.6fr);
+}

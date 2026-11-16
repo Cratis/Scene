@@ -18,4 +18,4 @@ export interface AddCollectionItemEdit {
     index?: number;
 }
 
-export const AddCollectionItemEditPropertyNames: (keyof AddCollectionItemEdit)[] = ['kind', 'instance', 'component', 'path', 'item', 'index'];
+export const AddCollectionItemEditPropertyNames: (keyof AddCollectionItemEdit)[] = ['instance', 'component', 'path', 'item', 'index'];

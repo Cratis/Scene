@@ -20,7 +20,7 @@ export function PrimeTitle({ element }: RegisteredComponentProps) {
         {
             'data-scene-id': element.id,
             className: `${sizes[level - 1]} font-semibold`,
-            style: { color: 'var(--scene-text-color)' },
+            style: { color: 'var(--ds-text-default-text)' },
         },
         stringProperty(element, 'text', '')
     );

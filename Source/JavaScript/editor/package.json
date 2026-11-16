@@ -1,0 +1,227 @@
+{
+    "name": "@cratis/scene.editor",
+    "version": "1.0.0",
+    "description": "The deterministic Scene editors: the screen editor, the UI profile designer, the template browser and picker, the application preview, sample data, the form, navigation and string resource designers, and the blueprint gallery. Hosts supply the data and the commands.",
+    "homepage": "https://www.cratis.io/screenplay/",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "editor",
+        "designer",
+        "event-modeling",
+        "cqrs",
+        "low-code"
+    ],
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": [
+        "**/*.css"
+    ],
+    "files": [
+        "dist",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.css",
+        "IconLibraries/Lucide/catalog.json",
+        "!**/for_*/**",
+        "!for_*/**",
+        "!**/given/**",
+        "ScreenTemplates/given/**",
+        "dist/**/ScreenTemplates/given/**",
+        "!global.d.ts",
+        "!**/vitest.setup.*",
+        "!vitest.browser.config.mts",
+        "!**/*.browser.ts",
+        "!**/*.stories.tsx",
+        "!.storybook/**"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        },
+        "./BlueprintGallery": {
+            "types": "./dist/esm/BlueprintGallery/index.d.ts",
+            "require": "./dist/cjs/BlueprintGallery/index.js",
+            "import": "./dist/esm/BlueprintGallery/index.js"
+        },
+        "./BlueprintPreview": {
+            "types": "./dist/esm/BlueprintPreview/index.d.ts",
+            "require": "./dist/cjs/BlueprintPreview/index.js",
+            "import": "./dist/esm/BlueprintPreview/index.js"
+        },
+        "./CascadeMenu": {
+            "types": "./dist/esm/CascadeMenu/index.d.ts",
+            "require": "./dist/cjs/CascadeMenu/index.js",
+            "import": "./dist/esm/CascadeMenu/index.js"
+        },
+        "./Crash": {
+            "types": "./dist/esm/Crash/index.d.ts",
+            "require": "./dist/cjs/Crash/index.js",
+            "import": "./dist/esm/Crash/index.js"
+        },
+        "./DesignSystem": {
+            "types": "./dist/esm/DesignSystem/index.d.ts",
+            "require": "./dist/cjs/DesignSystem/index.js",
+            "import": "./dist/esm/DesignSystem/index.js"
+        },
+        "./IconLibraries/Lucide": {
+            "types": "./dist/esm/IconLibraries/Lucide/index.d.ts",
+            "require": "./dist/cjs/IconLibraries/Lucide/index.js",
+            "import": "./dist/esm/IconLibraries/Lucide/index.js"
+        },
+        "./Icons": {
+            "types": "./dist/esm/Icons/index.d.ts",
+            "require": "./dist/cjs/Icons/index.js",
+            "import": "./dist/esm/Icons/index.js"
+        },
+        "./LevelTemplateSurface": {
+            "types": "./dist/esm/LevelTemplateSurface/index.d.ts",
+            "require": "./dist/cjs/LevelTemplateSurface/index.js",
+            "import": "./dist/esm/LevelTemplateSurface/index.js"
+        },
+        "./Preview": {
+            "types": "./dist/esm/Preview/index.d.ts",
+            "require": "./dist/cjs/Preview/index.js",
+            "import": "./dist/esm/Preview/index.js"
+        },
+        "./SampleData": {
+            "types": "./dist/esm/SampleData/index.d.ts",
+            "require": "./dist/cjs/SampleData/index.js",
+            "import": "./dist/esm/SampleData/index.js"
+        },
+        "./ScreenEditor": {
+            "types": "./dist/esm/ScreenEditor/index.d.ts",
+            "require": "./dist/cjs/ScreenEditor/index.js",
+            "import": "./dist/esm/ScreenEditor/index.js"
+        },
+        "./ScreenEditor/Integration": {
+            "types": "./dist/esm/ScreenEditor/Integration/index.d.ts",
+            "require": "./dist/cjs/ScreenEditor/Integration/index.js",
+            "import": "./dist/esm/ScreenEditor/Integration/index.js"
+        },
+        "./ScreenEditor/PropertyEditors/Registry": {
+            "types": "./dist/esm/ScreenEditor/PropertyEditors/Registry/index.d.ts",
+            "require": "./dist/cjs/ScreenEditor/PropertyEditors/Registry/index.js",
+            "import": "./dist/esm/ScreenEditor/PropertyEditors/Registry/index.js"
+        },
+        "./ScreenEditor/PropertyEditors/Structured": {
+            "types": "./dist/esm/ScreenEditor/PropertyEditors/Structured/index.d.ts",
+            "require": "./dist/cjs/ScreenEditor/PropertyEditors/Structured/index.js",
+            "import": "./dist/esm/ScreenEditor/PropertyEditors/Structured/index.js"
+        },
+        "./ScreenTemplates": {
+            "types": "./dist/esm/ScreenTemplates/index.d.ts",
+            "require": "./dist/cjs/ScreenTemplates/index.js",
+            "import": "./dist/esm/ScreenTemplates/index.js"
+        },
+        "./TemplateBrowser": {
+            "types": "./dist/esm/TemplateBrowser/index.d.ts",
+            "require": "./dist/cjs/TemplateBrowser/index.js",
+            "import": "./dist/esm/TemplateBrowser/index.js"
+        },
+        "./TemplatePicker": {
+            "types": "./dist/esm/TemplatePicker/index.d.ts",
+            "require": "./dist/cjs/TemplatePicker/index.js",
+            "import": "./dist/esm/TemplatePicker/index.js"
+        },
+        "./UiProfile": {
+            "types": "./dist/esm/UiProfile/index.d.ts",
+            "require": "./dist/cjs/UiProfile/index.js",
+            "import": "./dist/esm/UiProfile/index.js"
+        },
+        "./IconLibraries/Lucide/catalog.json": "./dist/esm/IconLibraries/Lucide/catalog.json",
+        "./*.css": "./dist/esm/*.css",
+        "./*": {
+            "types": "./dist/esm/*.d.ts",
+            "require": "./dist/cjs/*.js",
+            "import": "./dist/esm/*.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "test:browser": "yarn g:test --config ./vitest.browser.config.mts",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up",
+        "dev": "storybook dev -p 6007",
+        "build-storybook": "storybook build",
+        "generate-lucide-catalog": "node IconLibraries/Lucide/generate-catalog.mjs"
+    },
+    "dependencies": {
+        "@cratis/scene.blueprint.approvals": "1.0.0",
+        "@cratis/scene.blueprint.bookings": "1.0.0",
+        "@cratis/scene.blueprint.catalog": "1.0.0",
+        "@cratis/scene.blueprint.components": "1.0.0",
+        "@cratis/scene.blueprint.contracts": "1.0.0",
+        "@cratis/scene.blueprint.crm": "1.0.0",
+        "@cratis/scene.blueprint.customer-portal": "1.0.0",
+        "@cratis/scene.blueprint.default": "1.0.0",
+        "@cratis/scene.blueprint.invoicing": "1.0.0",
+        "@cratis/scene.blueprint.orders": "1.0.0",
+        "@cratis/scene.blueprint.ticketing": "1.0.0",
+        "@cratis/scene.blueprint.vendors": "1.0.0",
+        "@cratis/scene.blueprint.work-orders": "1.0.0",
+        "@cratis/scene.components": "1.0.0",
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0",
+        "@cratis/scene.primereact": "1.0.0",
+        "@cratis/scene.react": "1.0.0",
+        "@cratis/scene.tailwind": "1.0.0",
+        "lucide-react": "1.71.0",
+        "react-icons": "^5.7.0"
+    },
+    "devDependencies": {
+        "@cratis/arc": "23.0.0",
+        "@cratis/arc.react": "23.0.0",
+        "@cratis/components": "4.40.1",
+        "@cratis/fundamentals": "7.25.2",
+        "@primereact/core": "11.2.0",
+        "@primereact/headless": "11.2.0",
+        "@primereact/styles": "11.2.0",
+        "@primereact/types": "11.2.0",
+        "@storybook/addon-links": "^10.6.2",
+        "@storybook/react": "^10.6.2",
+        "@storybook/react-vite": "^10.6.2",
+        "chart.js": "4.5.1",
+        "esbuild": "0.28.2",
+        "lucide-static": "1.71.0",
+        "playwright-core": "1.64.1",
+        "primeicons": "8.0.2",
+        "primereact": "11.2.0",
+        "quill": "2.0.3",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "storybook": "^10.6.2"
+    },
+    "peerDependencies": {
+        "@cratis/components": "^4.40.1",
+        "@primereact/core": "^11.0.0",
+        "@primereact/styles": "^11.0.0",
+        "@primereact/types": "^11.0.0",
+        "chart.js": "^4.5.1",
+        "primeicons": "^8.0.0",
+        "primereact": "^11.0.0",
+        "quill": "^2.0.3",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    }
+}

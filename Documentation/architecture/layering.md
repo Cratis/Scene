@@ -15,7 +15,7 @@ Screenplay (.play)              The model. Declarative, portable, human-authored
         ▼  compile
 Screenplay semantic model       The compiler's answer: syntax → semantics.
         │
-        ▼  convert
+        ▼  convert                 Cratis.Scene.Screenplay - the two-way bridge, in Scene.
 Scene model                     The platform-neutral UI model. Serializable — the wire contract.
   Cratis.Scene.Model            Still knows nothing about React or URLs.
   ≡ @cratis/scene.model
@@ -32,6 +32,10 @@ Scene renderer                  Turns engine output into platform widgets.
 Packages and blueprints         core → components → primereact/tailwind → blueprints.
                                 Blueprints supply the shell chrome and the template set.
 ```
+
+The convert step lives in Scene, in `Cratis.Scene.Screenplay`, and runs both ways: Screenplay into the Scene model, and a
+Scene document printed back as Screenplay. Screenplay itself knows nothing of Scene, and Stage, Studio and Direct consume the one
+bridge rather than each holding a converter. See [The Screenplay bridge](screenplay-bridge.md).
 
 ## The seam rule
 

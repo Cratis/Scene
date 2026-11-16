@@ -128,7 +128,8 @@ public static partial class ApprovedPackageSetJson
                             License = package.Manifest.License,
                             LicenseUrl = package.Manifest.LicenseUrl,
                             Assets = [.. package.Manifest.Assets ?? []],
-                            RuntimeSingletons = [.. package.Manifest.RuntimeSingletons ?? []]
+                            RuntimeSingletons = [.. package.Manifest.RuntimeSingletons ?? []],
+                            DesignSystems = package.Manifest.DesignSystems is { Count: > 0 } ? [.. package.Manifest.DesignSystems] : null
                         },
                         Module = new Module
                         {
@@ -240,7 +241,10 @@ public static partial class ApprovedPackageSetJson
             null,
             null,
             [.. manifest.Assets ?? []],
-            [.. manifest.RuntimeSingletons ?? []]);
+            [.. manifest.RuntimeSingletons ?? []],
+            null,
+            null,
+            manifest.DesignSystems is { Count: > 0 } ? [.. manifest.DesignSystems] : null);
 
         return new(scenePackage, new(module.Npm!, module.Version!, module.Export!, [.. module.Styles ?? []]));
     }
@@ -292,6 +296,8 @@ public static partial class ApprovedPackageSetJson
         public List<string>? Assets { get; set; }
 
         public List<string>? RuntimeSingletons { get; set; }
+
+        public List<string>? DesignSystems { get; set; }
 
         /// <summary>Gets or sets the gallery metadata of a domain blueprint; design-time only, read and dropped.</summary>
         public JsonElement? Blueprint { get; set; }

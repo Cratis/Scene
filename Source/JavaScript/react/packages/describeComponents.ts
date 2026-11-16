@@ -1,7 +1,7 @@
 // Copyright (c) Cratis. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ComponentDescriptor, ComponentDesignModeDescriptor, componentIcon } from '@cratis/scene.model';
+import { ComponentAnatomy, ComponentDescriptor, ComponentDesignModeDescriptor, componentIcon } from '@cratis/scene.model';
 import { componentRegistryKey } from './ScenePackageBundle';
 
 /**
@@ -41,6 +41,14 @@ export function componentMetadata(
 }
 
 /**
+ * What a component takes from a design system, in one line: the parts it draws, the variants it renders and the states it reacts to. The
+ * variant property is the well-known one (`variant`, else `emphasis`) unless the component says otherwise.
+ */
+export function componentAnatomy(parts: string[], variants: string[] = [], states: string[] = [], variantProperty?: string): ComponentAnatomy {
+    return { parts, variants, states, ...(variantProperty === undefined ? {} : { variantProperty }) };
+}
+
+/**
  * Builds the descriptors a bundle ships: the ones written by hand with the package's component metadata merged in, plus a descriptor with
  * no editable properties for every component the metadata names that nobody described - such a component still has a name, a
  * category and a place in a picker. A hand-written descriptor keeps everything it already says; metadata only fills in what it
@@ -48,11 +56,15 @@ export function componentMetadata(
  *
  * The component list is the metadata table's own, so a component the table forgets has no descriptor and `validateComponentMetadata`
  * reports it (CMP1); one the table names but the manifest does not declare is reported by `validatePackageBundle`.
+ *
+ * `anatomy` is the table of what each component takes from a design system (R2), keyed by the bare component name. A component the
+ * table does not name declares none, and the engine reports a design-system component that finds it.
  */
 export function describeComponents(
     packageName: string,
     described: readonly ComponentDescriptor[],
-    metadata: Readonly<Record<string, ComponentMetadata>>
+    metadata: Readonly<Record<string, ComponentMetadata>>,
+    anatomy: Readonly<Record<string, ComponentAnatomy>> = {}
 ): ComponentDescriptor[] {
     const describedKeys = new Set(described.map(descriptor => descriptor.component));
     const bare = Object.keys(metadata)
@@ -60,7 +72,14 @@ export function describeComponents(
         .filter(key => !describedKeys.has(key))
         .map((key): ComponentDescriptor => ({ component: key, properties: [] }));
 
-    return [...described, ...bare].map(descriptor => withMetadata(descriptor, metadata[descriptor.component.slice(packageName.length + 1)]));
+    return [...described, ...bare].map(descriptor => withAnatomy(
+        withMetadata(descriptor, metadata[descriptor.component.slice(packageName.length + 1)]),
+        anatomy[descriptor.component.slice(packageName.length + 1)]
+    ));
+}
+
+function withAnatomy(descriptor: ComponentDescriptor, anatomy: ComponentAnatomy | undefined): ComponentDescriptor {
+    return anatomy === undefined || descriptor.anatomy !== undefined ? descriptor : { ...descriptor, anatomy };
 }
 
 function withMetadata(descriptor: ComponentDescriptor, metadata: ComponentMetadata | undefined): ComponentDescriptor {

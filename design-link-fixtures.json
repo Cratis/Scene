@@ -1,0 +1,1426 @@
+{
+  "description": "Shared by both engines: linking a design system's components to the Scene components of the active packages and checking the anatomy they declare.",
+  "cases": [
+    {
+      "name": "by name",
+      "description": "a component finds the one of the same name and feeds its variant through the well-known property",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x",
+                  "background": "x"
+                },
+                "states": {
+                  "hover": {
+                    "background": "y"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Lib",
+            "component": "button",
+            "variantProperty": "variant",
+            "variantValues": {
+              "primary": "primary"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "names compared loosely",
+      "description": "case, dashes, underscores and dots do not matter when finding a component",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "MenuItem",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "MenuItem",
+            "package": "Lib",
+            "component": "Menu_Item",
+            "variantValues": {
+              "default": "default"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "mapped",
+      "description": "maps to names the package and component, whatever the design-system component is called",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Shell",
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "x"
+                }
+              }
+            ],
+            "mapping": {
+              "mapsTo": "Shell.appShell"
+            }
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Shell",
+            "package": "Shell",
+            "component": "appShell",
+            "variantValues": {
+              "default": "default"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "variant property and values",
+      "description": "the component's own variant property and the mapping's values decide how a variant reaches it",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "StatusChip",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "good",
+                "parts": {
+                  "text": "x"
+                }
+              },
+              {
+                "name": "bad",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ],
+            "mapping": {
+              "variantValues": {
+                "good": "success",
+                "bad": "danger"
+              }
+            }
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "StatusChip",
+            "package": "Lib",
+            "component": "statusChip",
+            "variantProperty": "tone",
+            "variantValues": {
+              "good": "success",
+              "bad": "danger"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "mapping overrides the property",
+      "description": "a variant property stated by the design system wins over the component's",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ],
+            "mapping": {
+              "variantProperty": "emphasis"
+            }
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Lib",
+            "component": "button",
+            "variantProperty": "emphasis",
+            "variantValues": {
+              "primary": "primary"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "unsupported part, variant and state",
+      "description": "every part, variant and state the component does not support is reported",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x"
+                },
+                "states": {
+                  "hover": {
+                    "background": "y"
+                  },
+                  "pressed": {
+                    "background": "y"
+                  }
+                }
+              },
+              {
+                "name": "danger",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Lib",
+            "component": "button",
+            "variantProperty": "variant",
+            "variantValues": {
+              "primary": "primary",
+              "danger": "danger"
+            }
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "partUnsupported",
+            "designComponent": "Button",
+            "member": "shadow",
+            "message": "'Lib.button' does not draw the part 'shadow' of 'Button'."
+          },
+          {
+            "code": "stateUnsupported",
+            "designComponent": "Button",
+            "member": "pressed",
+            "message": "'Lib.button' does not react to the state 'pressed' of 'Button'."
+          },
+          {
+            "code": "variantUnsupported",
+            "designComponent": "Button",
+            "member": "danger",
+            "message": "'Lib.button' does not render the variant 'danger' of 'Button'."
+          }
+        ]
+      }
+    },
+    {
+      "name": "unbound",
+      "description": "a component no package declares is reported, and one mapped to nothing too",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Toast",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Banner",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ],
+            "mapping": {
+              "mapsTo": "Lib.banner"
+            }
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [],
+        "diagnostics": [
+          {
+            "code": "componentUnbound",
+            "designComponent": "Toast",
+            "message": "The design-system component 'Toast' finds no component 'Toast' in the packages of profile 'Web', so nothing renders its look."
+          },
+          {
+            "code": "componentUnbound",
+            "designComponent": "Banner",
+            "message": "The design-system component 'Banner' finds no component 'Lib.banner' in the packages of profile 'Web', so nothing renders its look."
+          }
+        ]
+      }
+    },
+    {
+      "name": "without anatomy",
+      "description": "a component that declares no anatomy cannot take a look from the design system",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Text",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        }
+      ],
+      "expected": {
+        "links": [],
+        "diagnostics": [
+          {
+            "code": "componentWithoutAnatomy",
+            "designComponent": "Text",
+            "message": "'core.text' renders the design-system component 'Text' but declares no anatomy, so it cannot take its look from the design system."
+          }
+        ]
+      }
+    },
+    {
+      "name": "nothing to choose a variant by",
+      "description": "several variants and no property to choose by is reported",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x"
+                }
+              },
+              {
+                "name": "secondary",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "primary",
+              "secondary"
+            ],
+            "states": []
+          }
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Lib",
+            "component": "button",
+            "variantValues": {
+              "primary": "primary",
+              "secondary": "secondary"
+            }
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "variantPropertyMissing",
+            "designComponent": "Button",
+            "message": "'Lib.button' has no property (variant or emphasis) to choose a variant of 'Button' by."
+          }
+        ]
+      }
+    },
+    {
+      "name": "the last package wins",
+      "description": "two packages declaring the name link to the one the profile lists last",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "button"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text",
+              "background"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": [
+              "hover"
+            ]
+          }
+        },
+        {
+          "component": "Lib:statusChip",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "success",
+              "danger"
+            ],
+            "states": [],
+            "variantProperty": "tone"
+          }
+        },
+        {
+          "component": "Shell:appShell",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "background"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "Lib:Menu_Item",
+          "properties": [],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "default"
+            ],
+            "states": []
+          }
+        },
+        {
+          "component": "core:text",
+          "properties": [],
+          "anatomy": null
+        },
+        {
+          "component": "Shell:button",
+          "properties": [
+            "variant"
+          ],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": []
+          }
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Shell",
+            "component": "button",
+            "variantProperty": "variant",
+            "variantValues": {
+              "primary": "primary"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "emphasis property",
+      "description": "a component with emphasis and no variant property is fed through emphasis",
+      "designSystem": {
+        "name": "Shop",
+        "modes": [
+          "light"
+        ],
+        "tokens": [],
+        "themes": [],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "x"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "profile": {
+        "name": "Web",
+        "targetPlatform": "web",
+        "packages": [
+          "Lib",
+          "Shell"
+        ]
+      },
+      "catalog": {
+        "core": [
+          "text"
+        ],
+        "Lib": [
+          "button",
+          "statusChip",
+          "Menu_Item"
+        ],
+        "Shell": [
+          "appShell"
+        ]
+      },
+      "components": [
+        {
+          "component": "Lib:button",
+          "properties": [
+            "emphasis"
+          ],
+          "anatomy": {
+            "parts": [
+              "text"
+            ],
+            "variants": [
+              "primary"
+            ],
+            "states": []
+          }
+        }
+      ],
+      "expected": {
+        "links": [
+          {
+            "designComponent": "Button",
+            "package": "Lib",
+            "component": "button",
+            "variantProperty": "emphasis",
+            "variantValues": {
+              "primary": "primary"
+            }
+          }
+        ],
+        "diagnostics": []
+      }
+    }
+  ]
+}

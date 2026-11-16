@@ -57,8 +57,10 @@ is what makes an interaction that names nothing real a diagnostic instead of a d
 | Term | Meaning |
 | --- | --- |
 | **Package** | A named set of components a profile draws from, in override-priority order. `core` is the final fallback. |
-| **Blueprint** | A shipped bundle: layouts, shell chrome, a template set and theme tokens. Selected by name in a UI profile, the same way a theme is. |
-| **Theme** | A set of visual tokens, compatible with one or more packages. |
+| **Blueprint** | A shipped bundle: layouts, shell chrome, a template set and design system and themes. Selected by name in a UI profile, the same way a theme is. |
+| **Theme** | A set of visual token values, compatible with one or more packages; in a design system, the values of every token role in every mode. |
+| **Design system** | The resolved contract an application is drawn from: modes, token roles, components with parts, variants and states, themes, words and contrast. See [Rendering the design system](blueprints/design-system.md). |
+| **Anatomy** | The parts, variants and states a component draws, as a design system declares them and as a component descriptor supports them. A component reads anatomy, never a token name. See [Component anatomy](component-anatomy.md). |
 | **Icon library** | A package of kind `IconLibrary`: a named, versioned set of icons that screens refer to by `IconReference`. Several coexist in one profile. |
 | **Icon reference** | `{ library, key, variant? }` - the persisted, renderer-neutral identity of one icon. Never a CSS class or markup. |
 | **Shadowing** | A higher-priority package supplying a component by the same name, overriding a lower one. |

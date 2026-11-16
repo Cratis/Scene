@@ -5,5 +5,11 @@
         <Project Path="Source/DotNET/Model.Specs/Model.Specs.csproj" />
         <Project Path="Source/DotNET/Engine/Engine.csproj" />
         <Project Path="Source/DotNET/Engine.Specs/Engine.Specs.csproj" />
+        <Project Path="Source/DotNET/Design/Design.csproj" />
+        <Project Path="Source/DotNET/Design.Specs/Design.Specs.csproj" />
+        <Project Path="Source/DotNET/Screenplay/Screenplay.csproj" />
+        <Project Path="Source/DotNET/Screenplay.Specs/Screenplay.Specs.csproj" />
+        <Project Path="Source/DotNET/Design.AI/Design.AI.csproj" />
+        <Project Path="Source/DotNET/Design.AI.Specs/Design.AI.Specs.csproj" />
     </Folder>
 </Solution>

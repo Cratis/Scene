@@ -1,0 +1,351 @@
+{
+  "description": "Shared by both engines: the WCAG contrast ratio of two colors, and the contrast a design system's rules measure over its themes, modes, variants and states.",
+  "ratios": [
+    {
+      "foreground": "#000000",
+      "background": "#ffffff",
+      "expected": 21
+    },
+    {
+      "foreground": "#ffffff",
+      "background": "#ffffff",
+      "expected": 1
+    },
+    {
+      "foreground": "#777777",
+      "background": "#ffffff",
+      "expected": 4.48
+    },
+    {
+      "foreground": "#fff",
+      "background": "#000",
+      "expected": 21
+    },
+    {
+      "foreground": "rgb(0, 0, 0)",
+      "background": "#ffffff",
+      "expected": 21
+    },
+    {
+      "foreground": "rgb(0 0 0 / 0.5)",
+      "background": "#ffffffff",
+      "expected": 21
+    },
+    {
+      "foreground": "#4338ca",
+      "background": "#ffffff",
+      "expected": 7.9
+    },
+    {
+      "foreground": "red",
+      "background": "#ffffff",
+      "expected": null
+    },
+    {
+      "foreground": "rgb(300, 0, 0)",
+      "background": "#ffffff",
+      "expected": null
+    },
+    {
+      "foreground": "var(--x)",
+      "background": "#ffffff",
+      "expected": null
+    }
+  ],
+  "systems": [
+    {
+      "name": "ShopDesign",
+      "designSystem": {
+        "name": "ShopDesign",
+        "modes": [
+          "light",
+          "dark"
+        ],
+        "tokens": [
+          {
+            "category": "color",
+            "name": "surface",
+            "description": "page background"
+          },
+          {
+            "category": "color",
+            "name": "text",
+            "description": "body text"
+          },
+          {
+            "category": "color",
+            "name": "primary",
+            "description": "primary action"
+          },
+          {
+            "category": "color",
+            "name": "on-primary",
+            "description": "text on a primary action"
+          },
+          {
+            "category": "radius",
+            "name": "control",
+            "description": "inputs and buttons"
+          },
+          {
+            "category": "shadow",
+            "name": "ring",
+            "description": "focus indicator"
+          },
+          {
+            "category": "font",
+            "name": "sans",
+            "description": "interface text"
+          }
+        ],
+        "components": [
+          {
+            "name": "Button",
+            "parts": [
+              "text",
+              "background",
+              "radius",
+              "shadow"
+            ],
+            "variants": [
+              {
+                "name": "primary",
+                "parts": {
+                  "text": "color.on-primary",
+                  "background": "color.primary",
+                  "radius": "radius.control"
+                },
+                "states": {
+                  "focus": {
+                    "shadow": "shadow.ring"
+                  },
+                  "disabled": {
+                    "text": "color.text",
+                    "background": "color.surface"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Page",
+            "parts": [
+              "background",
+              "text",
+              "font"
+            ],
+            "variants": [
+              {
+                "name": "default",
+                "parts": {
+                  "background": "color.surface",
+                  "text": "color.text",
+                  "font": "font.sans"
+                }
+              }
+            ]
+          }
+        ],
+        "themes": [
+          {
+            "name": "Daylight",
+            "isDefault": true,
+            "description": "The light brand",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#ffffff",
+                  "color.text": "#111827",
+                  "color.primary": "#4338ca",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #4338ca",
+                  "font.sans": "inter"
+                },
+                "components": [
+                  {
+                    "name": "Button",
+                    "variants": [
+                      {
+                        "name": "primary",
+                        "parts": {
+                          "text": "#ffffff",
+                          "background": "#4338ca",
+                          "radius": "8px"
+                        },
+                        "states": {
+                          "focus": {
+                            "text": "#ffffff",
+                            "background": "#4338ca",
+                            "radius": "8px",
+                            "shadow": "0 0 0 2px #4338ca"
+                          },
+                          "disabled": {
+                            "text": "#111827",
+                            "background": "#ffffff",
+                            "radius": "8px"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Page",
+                    "variants": [
+                      {
+                        "name": "default",
+                        "parts": {
+                          "background": "#ffffff",
+                          "text": "#111827",
+                          "font": "inter"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "mode": "dark",
+                "tokens": {
+                  "color.surface": "#111827",
+                  "color.text": "#ffffff",
+                  "color.primary": "#818cf8",
+                  "color.on-primary": "#111827",
+                  "radius.control": "8px",
+                  "shadow.ring": "0 0 0 2px #818cf8",
+                  "font.sans": "inter"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dusk",
+            "modes": [
+              {
+                "mode": "light",
+                "tokens": {
+                  "color.surface": "#f5f3ff",
+                  "color.text": "#1e1b4b",
+                  "color.primary": "#6d28d9",
+                  "color.on-primary": "#ffffff",
+                  "radius.control": "2px",
+                  "shadow.ring": "0 0 0 2px #6d28d9",
+                  "font.sans": "serif"
+                }
+              }
+            ]
+          }
+        ],
+        "contrastRules": [
+          {
+            "foreground": "text",
+            "background": "background",
+            "minimumRatio": 4.5
+          }
+        ],
+        "appearance": {
+          "accent": "color.primary",
+          "focusRing": "shadow.ring",
+          "corners": "radius.control",
+          "font": "font.sans"
+        }
+      },
+      "expected": [
+        {
+          "theme": "Daylight",
+          "mode": "light",
+          "component": "Button",
+          "variant": "primary",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 7.9,
+          "required": 4.5
+        },
+        {
+          "theme": "Daylight",
+          "mode": "light",
+          "component": "Button",
+          "variant": "primary",
+          "state": "focus",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 7.9,
+          "required": 4.5
+        },
+        {
+          "theme": "Daylight",
+          "mode": "light",
+          "component": "Page",
+          "variant": "default",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 17.74,
+          "required": 4.5
+        },
+        {
+          "theme": "Daylight",
+          "mode": "dark",
+          "component": "Button",
+          "variant": "primary",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 5.95,
+          "required": 4.5
+        },
+        {
+          "theme": "Daylight",
+          "mode": "dark",
+          "component": "Button",
+          "variant": "primary",
+          "state": "focus",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 5.95,
+          "required": 4.5
+        },
+        {
+          "theme": "Daylight",
+          "mode": "dark",
+          "component": "Page",
+          "variant": "default",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 17.74,
+          "required": 4.5
+        },
+        {
+          "theme": "Dusk",
+          "mode": "light",
+          "component": "Button",
+          "variant": "primary",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 7.1,
+          "required": 4.5
+        },
+        {
+          "theme": "Dusk",
+          "mode": "light",
+          "component": "Button",
+          "variant": "primary",
+          "state": "focus",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 7.1,
+          "required": 4.5
+        },
+        {
+          "theme": "Dusk",
+          "mode": "light",
+          "component": "Page",
+          "variant": "default",
+          "foreground": "text",
+          "background": "background",
+          "ratio": 14.58,
+          "required": 4.5
+        }
+      ]
+    }
+  ]
+}

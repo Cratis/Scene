@@ -87,18 +87,17 @@ pointer was over it, or whether the viewport was narrow - restoring those produc
 state nobody chose. Everything read back is validated against the enums, because storage outlives the
 version of the package that wrote it and an unknown mode puts a class on the wrapper that no rule matches.
 
-## Token vocabulary
+## Design system
 
-Thirteen tokens, matching `@cratis/scene.primereact`'s table exactly. A vocabulary that grows per package
-is one no package can rely on.
+The package ships the default design system, **Scene Default** (`defaultBlueprintDesignSystem`), so an application that names no
+design system looks exactly as it always did. Its twenty-one tokens and the font are the roles of the design system, and the shell and
+foundation components - `Shell`, `Page`, `Topbar`, `Sidebar`, `Menu`, `Popover`, `Footer`, `Text`, `Card`, `Button`, `Input` and `StatusChip` -
+take their look from the anatomy it declares for them. The two flat themes, *Scene Default Light* and *Scene Default Dark*, are the same
+palettes as the two modes of its theme. See [Rendering the design system](../../../Documentation/blueprints/design-system.md).
 
-`primary.color`, `primary.contrastColor`, `surface.background`, `surface.card`, `surface.border`,
-`surface.hover`, `surface.overlay`, `text.color`, `text.mutedColor`, `highlight.background`,
-`highlight.color`, `content.borderRadius`, `focus.ring`.
-
-`layout.css` aliases the `--scene-*` custom properties into `--layout-*` locals once, at the top, and no
-rule below references a `--scene-*` name - the same bridge pattern `@cratis/components` uses for its
-`--cratis-*` layer. Overriding the look means overriding tokens, never editing a rule.
+`layout.css` aliases the `--ds-*` anatomy custom properties into `--layout-*` locals once, at the top, and no
+rule below references a `--ds-*` name - the same bridge pattern `@cratis/components` uses for its
+`--cratis-*` layer. Overriding the look means overriding anatomy, never editing a rule.
 
 The stylesheet is a plain `.css` file rather than an import from TypeScript, because this repo's rollup
 config has no CSS plugin and adding one is not this package's call. A host imports

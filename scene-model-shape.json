@@ -214,7 +214,8 @@
       "root",
       "appearance",
       "defaults",
-      "identity"
+      "identity",
+      "designSystem"
     ],
     "RootTemplate": [
       "template",
@@ -251,6 +252,20 @@
       "description",
       "licenseUrl"
     ],
+    "DesignSystem": ["name", "modes", "tokens", "components", "themes", "words", "contrastRules", "contrastFindings", "appearance"],
+    "TokenRole": ["category", "name", "description"],
+    "DesignComponent": ["name", "parts", "variants", "mapping"],
+    "ComponentAnatomy": ["parts", "variants", "states", "variantProperty"],
+    "DesignVariant": ["name", "parts", "states"],
+    "ComponentMapping": ["mapsTo", "variantProperty", "variantValues"],
+    "DesignTheme": ["name", "modes", "isDefault", "description"],
+    "DesignThemeMode": ["mode", "tokens", "components", "problems"],
+    "ResolvedDesignComponent": ["name", "variants"],
+    "ResolvedDesignVariant": ["name", "parts", "states"],
+    "DesignWords": ["voice", "naming"],
+    "ContrastRule": ["foreground", "background", "minimumRatio"],
+    "ContrastFinding": ["theme", "mode", "component", "variant", "state", "foreground", "background", "ratio", "required"],
+    "AppearanceBindings": ["accent", "focusRing", "corners", "font"],
     "PackageDependency": [
       "name",
       "versionRange"
@@ -275,7 +290,8 @@
       "assets",
       "runtimeSingletons",
       "sampleData",
-      "blueprint"
+      "blueprint",
+      "designSystems"
     ],
     "IconReference": [
       "library",
@@ -690,7 +706,49 @@
       "thumbnail",
       "screenSet",
       "defaultSampleData"
-    ]
+    ],
+    "AddCollectionItemEdit": ["instance", "component", "path", "item", "index"],
+    "ChangeLayoutTypeEdit": ["nodeId", "to", "acceptLoss"],
+    "EditCollectionItemEdit": ["instance", "component", "path", "itemId", "field", "value"],
+    "EffectiveCollectionItem": ["id", "values", "origin", "fixed"],
+    "EffectiveComponentConfiguration": ["component", "owner", "properties", "values"],
+    "EffectiveConfiguration": ["components", "diagnostics"],
+    "EffectivePropertyValue": ["path", "value", "source", "inheritedValue", "contributedBy", "items"],
+    "ExposePropertyEdit": ["owner", "property"],
+    "InsertNodeEdit": ["target", "slot", "index", "element", "flowNode"],
+    "MoveNodeEdit": ["nodeId", "target", "slot", "index"],
+    "NodeProvenance": ["kind", "source"],
+    "RemoveCollectionItemEdit": ["instance", "component", "path", "itemId"],
+    "RemoveNodeEdit": ["nodeId"],
+    "ReorderCollectionItemEdit": ["instance", "component", "path", "itemId", "index"],
+    "ResetInstanceValueEdit": ["instance", "component", "path"],
+    "ResetPropertyEdit": ["nodeId", "path"],
+    "SceneDiagnostic": ["code", "severity", "message", "nodeId", "instance", "component", "path", "itemId"],
+    "SceneDocument": ["layouts", "screenTemplates", "dialogTemplates", "screens", "exposures", "instanceContributions"],
+    "SceneEdit": [],
+    "SetInstanceValueEdit": ["instance", "component", "path", "value"],
+    "SetPropertyEdit": ["nodeId", "path", "value"],
+    "UnexposePropertyEdit": ["owner", "component", "path"],
+    "CollectionItemDescriptor": ["label", "properties", "open", "positional"],
+    "ComponentDescriptor": ["component", "displayName", "description", "category", "icon", "badge", "keywords", "designMode", "editorKind", "properties", "actions", "previewKind", "propertyDisplayKind", "anatomy"],
+    "ComponentDesignModeDescriptor": ["itemsPath", "addActions", "itemToolbar"],
+    "DesignModeAddAction": ["id", "label", "icon", "collectionPath"],
+    "DesignModeItemAction": ["id", "icon", "title", "compact", "availability", "readOnlyReason"],
+    "DesignTimeActionDescriptor": ["id", "label", "placement", "availability", "description"],
+    "LayoutCapabilities": ["acceptsChildren", "maximumChildren", "childPlacement", "supportsGridSpan", "supportsSizeClassVariants", "convertibleTo"],
+    "LayoutTypeDescriptor": ["type", "label", "description", "capabilities", "properties"],
+    "PropertyChoice": ["value", "label", "description"],
+    "PropertyConstraints": ["required", "minimum", "maximum", "integer", "minimumLength", "maximumLength", "pattern", "minimumItems", "maximumItems", "resultShapes"],
+    "PropertyDescriptor": ["path", "label", "group", "valueType", "choices", "default", "constraints", "editorKind", "editorOptions", "description", "item", "properties", "open", "readOnly", "output", "acceptedBindingKinds", "bindingMode"],
+    "PropertyEditorOptions": ["multiline", "placeholder", "unit", "step", "kinds", "reference", "fieldKinds", "tokensOnly"],
+    "ReferenceFilterDescriptor": ["target", "kinds", "predicate"],
+    "QueryArgumentBinding": ["parameter", "source"],
+    "QueryBinding": ["queryId", "query", "arguments", "results"],
+    "QueryCandidate": ["id", "name", "origin", "parameters", "resultShape", "resultFields"],
+    "QueryOrigin": ["kind", "id", "name"],
+    "QueryParameter": ["name", "type", "required"],
+    "QueryResultBinding": ["target", "field"],
+    "QueryResultField": ["name", "type", "isIdentity"]
   },
   "enums": {
     "GuardOperator": ["Equal", "NotEqual", "GreaterThan", "GreaterThanOrEqual", "LessThan", "LessThanOrEqual", "Contains", "StartsWith"],
@@ -901,6 +959,19 @@
     ],
     "TemplateRole": [
       "Root"
-    ]
+    ],
+    "DiagnosticCode": ["UnknownNode", "DuplicateElementId", "UnknownScope", "InvalidEdit", "UnknownProperty", "InvalidValue", "ReadOnlyProperty", "NodeNotEditable", "MissingComponentDescriptor", "NotALayoutNode", "LayoutTypeNotConvertible", "LossyConversionNotAccepted", "LossyConversion", "TargetDoesNotAcceptChildren", "UnknownSlot", "ContainmentCycle", "IndexOutOfRange", "ElementIdInUse", "MaximumChildrenExceeded", "NodeNotRemovable", "MissingQuery", "IncompatibleResultShape", "MissingRequiredParameter", "UnknownParameter", "ArgumentTypeMismatch", "UnresolvedArgumentSource", "UnknownResultField", "ExposureTargetMissing", "ExposureWidensOwner", "ReExposureBroken", "ContributionNotExposed", "ContributionTargetMissing", "ContributionTypeMismatch", "ContributionOperationNotPermitted", "UnknownCollectionField", "CollectionItemNotFound", "DuplicateCollectionItem", "UnknownInstance", "MissingIconLibrary", "MissingIcon", "MissingIconVariant", "IncompatibleIconLibrary", "IconCatalogUnavailable", "IconNotVerified", "ComponentCategoryMissing", "ComponentCategoryUnknown", "ComponentDesignModeInvalid", "PropertyEditorOptionsInvalid"],
+    "DiagnosticSeverity": ["Error", "Warning"],
+    "EditTarget": ["Node", "Instance"],
+    "ProvenanceKind": ["Local", "Inherited", "ConfigurableInherited"],
+    "SceneEditKind": ["SetProperty", "ResetProperty", "ChangeLayoutType", "InsertNode", "MoveNode", "RemoveNode", "SetInstanceValue", "ResetInstanceValue", "AddCollectionItem", "RemoveCollectionItem", "ReorderCollectionItem", "EditCollectionItem", "ExposeProperty", "UnexposeProperty"],
+    "SceneNodeKind": ["Layout", "ScreenTemplate", "DialogTemplate", "Screen", "Slot", "Element", "FlowNode", "Freeform", "Placement"],
+    "ValueSource": ["Default", "Local", "Instance"],
+    "DesignTimeActionPlacement": ["Toolbar", "ContextMenu", "Inspector"],
+    "LayoutChildPlacement": ["None", "Ordered", "Positioned"],
+    "LayoutType": ["FlowRow", "FlowColumn", "FlowGrid", "FlowLeaf", "FlowSlotLeaf", "Freeform", "StackPanel", "WrapPanel", "DockPanel", "GridPanel", "Canvas"],
+    "PropertyValueType": ["String", "Number", "Boolean", "Enum", "Icon", "Destination", "QueryReference", "Collection", "Object", "Json"],
+    "QueryOriginKind": ["Feature", "Slice"],
+    "QueryResultShape": ["Collection", "Single", "OptionalSingle"]
   }
 }

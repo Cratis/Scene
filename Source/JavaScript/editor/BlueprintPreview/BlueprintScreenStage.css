@@ -1,0 +1,31 @@
+.studio-blueprint-stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    background: var(--surface-ground);
+
+    /* Layout containment makes this element the containing block for `position: fixed` descendants, which
+       is what lets an application shell built to own the browser window render inside a panel instead of
+       over Studio's own chrome. Without it the previewed topbar and sidebar pin themselves to the window. */
+    contain: layout paint;
+}
+
+.studio-blueprint-stage--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color-secondary);
+    font-size: 0.85rem;
+}
+
+.studio-blueprint-stage__theme {
+    height: 100%;
+}
+
+/* The shell sizes itself to the viewport, because that is what an application shell does. Inside the
+   stage the panel is the viewport, so the same rule has to mean the panel's height instead. */
+.studio-blueprint-stage .layout-wrapper,
+.studio-blueprint-stage .layout-full-page {
+    min-height: 100%;
+}

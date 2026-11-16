@@ -1,0 +1,19 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-own-template-thumbnail {
+    /* A template may lay parts out with fixed positioning; a transform makes the frame the containing block, so the drawing stays inside the card. */
+    position: absolute;
+    inset: 0;
+    transform: translateZ(0);
+    contain: layout paint;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+.studio-own-template-thumbnail__stage {
+    transform-origin: top left;
+    overflow: hidden;
+    position: relative;
+}

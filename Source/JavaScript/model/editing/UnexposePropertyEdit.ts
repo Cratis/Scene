@@ -13,4 +13,4 @@ export interface UnexposePropertyEdit {
     path: string;
 }
 
-export const UnexposePropertyEditPropertyNames: (keyof UnexposePropertyEdit)[] = ['kind', 'owner', 'component', 'path'];
+export const UnexposePropertyEditPropertyNames: (keyof UnexposePropertyEdit)[] = ['owner', 'component', 'path'];

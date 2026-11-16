@@ -193,9 +193,9 @@ The catalog changed shape too — 25 v10 themes became 24 built on four preset f
 [Theme reference](./theme-reference.md) for the full list, the attribution table, and the themes that did
 not survive.
 
-### The token bridge got simpler
+### The bridge got simpler
 
-`primeReactTheme.css` is the seam between Scene's `--scene-*` tokens and PrimeReact's own, and the port
+`primeReactTheme.css` is the seam between Scene's design-system anatomy (`--ds-*`) and PrimeReact's own tokens, and the port
 made it **smaller**.
 
 In v10 the right-hand side of each mapping was whatever the theme's SCSS happened to call it, so the bridge
@@ -208,9 +208,9 @@ paths, so every mapping is the same mechanical `token.path` → `--p-token-path`
 
 ```css
 :root {
-    --scene-primary-color: var(--p-primary-color);
-    --scene-surface-card: var(--p-content-background);
-    --scene-text-muted-color: var(--p-text-muted-color);
+    --ds-button-primary-background: var(--p-primary-color);
+    --ds-card-default-background: var(--p-content-background);
+    --ds-text-muted-text: var(--p-text-muted-color);
     /* … */
 }
 ```

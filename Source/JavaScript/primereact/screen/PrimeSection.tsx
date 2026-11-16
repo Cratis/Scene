@@ -18,7 +18,7 @@ export function PrimeSection({ element, slots }: RegisteredComponentProps) {
         <section data-scene-id={element.id} className='flex flex-col'>
             {title !== undefined && (
                 <>
-                    <h2 className='text-lg font-semibold' style={{ color: 'var(--scene-text-color)' }}>
+                    <h2 className='text-lg font-semibold' style={{ color: 'var(--ds-text-default-text)' }}>
                         {title}
                     </h2>
                     <Divider />

@@ -80,10 +80,10 @@ export const Switcher: Story = {
 
         const themed = canvasElement.querySelector('[data-scene-theme-root]') as HTMLElement;
         await expect(themed.getAttribute('data-scene-color-scheme')).toBe('dark');
-        await expect(themed.style.getPropertyValue('--scene-surface-card')).toBe('#171a23');
+        await expect(themed.style.getPropertyValue('--ds-card-default-background')).toBe('#171a23');
 
         await userEvent.click(canvas.getByRole('button', { name: 'Scene Default Light' }));
         await expect(themed.getAttribute('data-scene-color-scheme')).toBe('light');
-        await expect(themed.style.getPropertyValue('--scene-surface-card')).toBe('#ffffff');
+        await expect(themed.style.getPropertyValue('--ds-card-default-background')).toBe('#ffffff');
     },
 };

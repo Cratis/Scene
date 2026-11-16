@@ -1,0 +1,17 @@
+{
+    "packages": ["Tailwind"],
+    "templatePacks": [],
+    "resolvedPackages": ["core", "Tailwind", "Cratis.Components", "Cratis.Blueprint.Default"],
+    "theme": "Scene Default Light",
+    "root": {
+        "template": { "source": "blueprint", "blueprint": "Cratis.Blueprint.Default", "id": "AppShell", "version": "", "isNone": false },
+        "optionsJson": "{\"navigationMode\":\"static\"}"
+    },
+    "appearance": { "colorScheme": "light", "accent": "" },
+    "defaults": { "newScreenTemplate": { "source": "", "blueprint": "", "id": "", "version": "", "isNone": true } },
+    "style": {
+        "identity": { "name": "", "logoKind": "", "initials": "", "icon": "", "image": "", "showName": true },
+        "corners": "",
+        "font": ""
+    }
+}

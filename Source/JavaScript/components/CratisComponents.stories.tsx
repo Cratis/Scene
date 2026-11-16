@@ -202,7 +202,7 @@ export const Display: Story = {
  * A Scene theme driving `@cratis/components` through the token bridge.
  *
  * Neither side knows about the other: the theme carries semantic Scene tokens, `SceneThemeProvider`
- * writes them as `--scene-*` custom properties, and this package's stylesheet maps those onto the
+ * writes its anatomy as `--ds-*` custom properties, and this package's stylesheet maps those onto the
  * `--cratis-*` names the library reads. Nothing in `@cratis/components` was changed to make this work.
  */
 const midnight: Theme = {
@@ -211,19 +211,19 @@ const midnight: Theme = {
     isDark: true,
     description: 'A dark Scene theme, applied to Cratis Components entirely through design tokens.',
     tokens: {
-        'primary.color': '#a78bfa',
-        'primary.contrastColor': '#1e1b4b',
-        'surface.background': '#0f172a',
-        'surface.card': '#1e293b',
-        'surface.border': '#334155',
-        'surface.hover': '#273449',
-        'surface.overlay': '#1e293b',
-        'text.color': '#e2e8f0',
-        'text.mutedColor': '#94a3b8',
-        'highlight.background': '#312e81',
-        'highlight.color': '#e0e7ff',
-        'content.borderRadius': '10px',
-        'focus.ring': '0 0 0 0.2rem #4c1d95',
+        'color.primary': '#a78bfa',
+        'color.on-primary': '#1e1b4b',
+        'color.background': '#0f172a',
+        'color.surface': '#1e293b',
+        'color.border': '#334155',
+        'color.hover': '#273449',
+        'color.overlay': '#1e293b',
+        'color.text': '#e2e8f0',
+        'color.text-muted': '#94a3b8',
+        'color.highlight': '#312e81',
+        'color.on-highlight': '#e0e7ff',
+        'radius.content': '10px',
+        'shadow.focus-ring': '0 0 0 0.2rem #4c1d95',
     },
 };
 

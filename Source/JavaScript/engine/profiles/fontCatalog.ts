@@ -20,7 +20,7 @@ export interface FontChoice {
 
     displayName: string;
 
-    /** The CSS `font-family` value the `text.fontFamily` token takes, ending in a generic fallback so a font that fails to load still renders. */
+    /** The CSS `font-family` value the font role of the design system takes, ending in a generic fallback so a font that fails to load still renders. */
     family: string;
 
     source: FontSource;

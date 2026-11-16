@@ -1,0 +1,166 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-cascade-menu {
+    display: contents;
+}
+
+.studio-cascade-menu__panel {
+    position: fixed;
+    z-index: 1400;
+    display: flex;
+    flex-direction: column;
+    min-width: 14rem;
+    max-width: 22rem;
+    max-height: min(32rem, calc(100vh - 16px));
+    overflow-y: auto;
+    padding: .5rem;
+    background: var(--cratis-surface-overlay, var(--cratis-surface-card, #fff));
+    color: var(--cratis-text-color, #212529);
+    border: 1px solid var(--cratis-surface-border, #dee2e6);
+    border-radius: calc(var(--cratis-border-radius, 8px) * 1.5);
+    box-shadow: var(--cratis-shadow-overlay, 0 8px 28px rgba(0, 0, 0, .22));
+    font-size: .875rem;
+}
+
+.studio-cascade-menu__list {
+    display: flex;
+    flex-direction: column;
+}
+
+.studio-cascade-menu__filter {
+    margin: 0 0 .375rem;
+    padding: .5rem .625rem;
+    background: var(--cratis-surface-ground, #f8f9fa);
+    color: inherit;
+    border: 1px solid var(--cratis-surface-border, #dee2e6);
+    border-radius: var(--cratis-border-radius, 8px);
+    font: inherit;
+}
+
+.studio-cascade-menu__heading {
+    padding: .375rem .5rem .125rem;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--cratis-text-color-secondary, #6c757d);
+}
+
+.studio-cascade-menu__subheading {
+    padding: .25rem .5rem .125rem;
+    font-size: .75rem;
+    color: var(--cratis-text-color-secondary, #6c757d);
+}
+
+.studio-cascade-menu__note {
+    padding: .375rem .5rem;
+    font-size: .8125rem;
+    color: var(--cratis-text-color-secondary, #6c757d);
+}
+
+.studio-cascade-menu__separator {
+    height: 1px;
+    margin: .375rem .25rem;
+    background: var(--cratis-surface-border, #dee2e6);
+}
+
+.studio-cascade-menu__line {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+.studio-cascade-menu__line .studio-cascade-menu__row {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.studio-cascade-menu__row {
+    display: flex;
+    align-items: center;
+    gap: .375rem;
+    width: 100%;
+    padding: .5rem .5rem;
+    background: none;
+    border: none;
+    border-radius: var(--cratis-border-radius, 8px);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.studio-cascade-menu__row:hover,
+.studio-cascade-menu__row:focus-visible,
+.studio-cascade-menu__row--open {
+    background: var(--cratis-surface-hover, rgba(127, 127, 127, .14));
+    outline: none;
+}
+
+.studio-cascade-menu__row--current {
+    background: var(--cratis-highlight-bg, color-mix(in srgb, var(--cratis-primary-color, #2f5bea) 16%, transparent));
+    color: var(--cratis-highlight-text-color, var(--cratis-primary-color, #2f5bea));
+}
+
+.studio-cascade-menu__row--disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.studio-cascade-menu__check {
+    flex: 0 0 1rem;
+    width: 1rem;
+    text-align: center;
+}
+
+.studio-cascade-menu__text {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.studio-cascade-menu__description {
+    font-size: .75rem;
+    color: var(--cratis-text-color-secondary, #6c757d);
+}
+
+.studio-cascade-menu__trailing {
+    flex: 0 0 auto;
+    font-size: .8125rem;
+    color: var(--cratis-text-color-secondary, #6c757d);
+}
+
+.studio-cascade-menu__row--submenu .studio-cascade-menu__label {
+    flex: 1 1 auto;
+}
+
+.studio-cascade-menu__chevron {
+    flex: 0 0 auto;
+    font-size: .75rem;
+}
+
+.studio-cascade-menu__secondary {
+    flex: 0 0 auto;
+    padding: .125rem .5rem;
+    background: none;
+    border: 1px solid var(--cratis-surface-border, #dee2e6);
+    border-radius: var(--cratis-border-radius, 8px);
+    color: var(--cratis-text-color-secondary, #6c757d);
+    font: inherit;
+    font-size: .75rem;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.studio-cascade-menu__line:hover .studio-cascade-menu__secondary,
+.studio-cascade-menu__line:focus-within .studio-cascade-menu__secondary {
+    opacity: 1;
+}
+
+.studio-cascade-menu__secondary:hover,
+.studio-cascade-menu__secondary:focus-visible {
+    color: var(--cratis-text-color, #212529);
+    outline: 2px solid var(--cratis-primary-color, #2f5bea);
+}

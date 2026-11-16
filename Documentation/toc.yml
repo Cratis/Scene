@@ -5,12 +5,16 @@
   items:
     - name: Layering and seams
       href: architecture/layering.md
+    - name: The Screenplay bridge
+      href: architecture/screenplay-bridge.md
     - name: Binding resolution
       href: architecture/binding-resolution.md
     - name: Guarded actions and interactions
       href: architecture/guarded-actions.md
     - name: Command responses and form continuations
       href: architecture/command-responses.md
+    - name: Component anatomy
+      href: component-anatomy.md
     - name: Command form geometry
       href: command-form-geometry.md
     - name: Glossary
@@ -27,6 +31,10 @@
   items:
     - name: Editing screens and templates
       href: editing/toc.yml
+    - name: The Scene editor package
+      href: editor/toc.yml
+    - name: Designing with Scene Design
+      href: design/toc.yml
 
 - name: Reference
   items:

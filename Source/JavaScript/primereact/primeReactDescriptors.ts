@@ -9,6 +9,7 @@ import { ChartType } from './chart';
 import { TreeTableSelectionMode } from './data';
 import { FileUploadMode } from './file';
 import { primeReactInputDescriptors } from './inputDescriptors';
+import { primeReactAnatomy } from './primeReactAnatomy';
 import { primeReactComponentMetadata } from './primeReactComponentMetadata';
 
 const key = (name: string) => componentRegistryKey('PrimeReact', name);
@@ -196,4 +197,4 @@ const describedPrimeReact: ComponentDescriptor[] = [
 ];
 
 /** The `PrimeReact` descriptors: the hand-written ones above with every component's category, icon, keywords and design mode (CMP1). */
-export const primeReactDescriptors: ComponentDescriptor[] = describeComponents('PrimeReact', describedPrimeReact, primeReactComponentMetadata);
+export const primeReactDescriptors: ComponentDescriptor[] = describeComponents('PrimeReact', describedPrimeReact, primeReactComponentMetadata, primeReactAnatomy);

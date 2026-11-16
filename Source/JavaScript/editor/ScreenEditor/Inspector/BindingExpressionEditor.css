@@ -1,0 +1,39 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-editor-binding {
+    border: 1px solid var(--cratis-surface-border, var(--surface-border));
+    border-radius: var(--cratis-border-radius, 0.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-block: 0.75rem;
+    padding: 0.75rem;
+}
+
+.studio-editor-binding legend {
+    font-weight: 600;
+    padding-inline: 0.25rem;
+}
+
+.studio-editor-binding label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.studio-editor-binding select,
+.studio-editor-binding input {
+    min-height: 2rem;
+}
+
+.studio-editor-binding__row {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+.studio-editor-binding__missing {
+    color: var(--cratis-warning-text, var(--yellow-700));
+    margin: 0;
+}

@@ -129,6 +129,15 @@ The loaded bundles render in every host surface, not only a standalone applicati
 
 A host that cannot list its imports at build time - a prebuilt application such as Stage's live `cratis/stage` image - builds the importers at runtime from module URLs it serves itself (`{ '@acme/scene.charts': () => import(moduleUrl) }`), one for each package the set names and never an address taken from a model. The loader still checks every loaded bundle against its declaration. Such a package is an ES module that leaves `react` (and anything else the host shares) external, resolved by an import map to the host's own copy so hooks and contexts are shared; see Stage's [custom packages](https://github.com/Cratis/Stage/blob/main/Documentation/reference/custom-packages.md#a-live-stage-loads-the-packages-at-runtime).
 
+## What a package ships
+
+Every public `@cratis/scene.*` package ships its compiled output under `dist/` and the declarations its `types` and `exports` point to - an
+application consuming a package has no types without them (TS7016). A package's `files` list therefore keeps specifications, stories and
+test setup out of the archive, and never a pattern that also matches `dist/**/*.d.ts` (`!**/*.d.ts` did, and left `editor` and
+`design.react` without declarations). `yarn verify-packages` packs every public package (`npm pack --dry-run --json`) and fails when
+the archive carries a specification, a test-runner import or sample data in a runtime bundle, or lacks a file that `types` or any `types`
+condition of `exports` names (a subpath pattern such as `./*` needs at least one matching file). Run it after `yarn build`; CI does.
+
 ## Embedded host example
 
 `Source/JavaScript/thirdparty.inspections/webview` is a runnable embedded-host example: one custom package set rendered by `WebViewPackageHost`, the way a VS Code or Event Models webview embeds Scene. The build turns it into `dist-webview/index.html`, a single file whose inline script loads nothing from the network, under a content security policy of `default-src 'none'`. It needs no Studio global. Rendered content reaches the embedder only through the `cratis.scene.command` and `cratis.scene.navigate` events, which the example forwards to VS Code's `acquireVsCodeApi().postMessage`, or to the parent frame when that API is absent.

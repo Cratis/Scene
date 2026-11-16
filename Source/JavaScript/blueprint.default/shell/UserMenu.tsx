@@ -3,7 +3,7 @@
 
 import { Avatar } from '@cratis/components/Display';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { RegisteredComponentProps, SceneThemeProvider, useSceneTheme } from '@cratis/scene.react';
+import { RegisteredComponentProps, SceneThemeProvider, useSceneDesign } from '@cratis/scene.react';
 import { readRecords, readString, recordString } from './elementProperties';
 import { ShellIcon } from './ShellIcon';
 import { useShellLink } from './useShellLink';
@@ -13,7 +13,7 @@ import { useShellLink } from './useShellLink';
  * Cratis Components has an action menubar, but no popup menu or context-aware menu trigger.
  */
 export function UserMenu({ element }: RegisteredComponentProps) {
-    const theme = useSceneTheme();
+    const design = useSceneDesign();
     const name = readString(element, 'name');
     const role = readString(element, 'role');
     const initials = readString(element, 'initials', name.slice(0, 1).toUpperCase());
@@ -29,7 +29,7 @@ export function UserMenu({ element }: RegisteredComponentProps) {
             <MenuTrigger>
                 <Button className='layout-icon-button' aria-label={`Open the menu for ${name}`}><ShellIcon name='angle-down' /></Button>
                 <Popover className='layout-user-popover' placement='bottom end'>
-                    <SceneThemeProvider theme={theme} className='layout-overlay-theme'>
+                    <SceneThemeProvider design={design} className='layout-overlay-theme'>
                         <Menu className='layout-user-actions' aria-label={`Menu for ${name}`}>
                             {items.map((item, index) => <UserMenuEntry key={`${recordString(item, 'label')}-${index}`} id={`${element.id}-${recordString(item, 'label')}`} label={recordString(item, 'label')} icon={recordString(item, 'icon')} screen={recordString(item, 'targetScreen') || undefined} />)}
                         </Menu>

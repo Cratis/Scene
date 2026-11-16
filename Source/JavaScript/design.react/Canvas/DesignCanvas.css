@@ -1,0 +1,168 @@
+/* Copyright (c) Cratis. All rights reserved.
+   Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* The canvas fills the box it is given: it has no page chrome, so a host can drop it in as one tab of a larger workspace. */
+.design-canvas {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    position: relative;
+    background: var(--cratis-surface-ground, #f3f4f6);
+    color: var(--cratis-text-color, inherit);
+    font-family: inherit;
+}
+
+.design-canvas__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    flex-wrap: wrap;
+}
+
+.design-canvas__spacer {
+    flex: 1 1 auto;
+}
+
+.design-canvas__toolbar button,
+.design-canvas__tab {
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    color: inherit;
+    border-radius: var(--cratis-border-radius, 6px);
+    padding: 3px 10px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.design-canvas__toolbar button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.design-canvas__add,
+.design-canvas__tool--on {
+    background: var(--cratis-primary-color, #3b82f6) !important;
+    border-color: var(--cratis-primary-color, #3b82f6) !important;
+    color: var(--cratis-primary-color-text, #fff) !important;
+}
+
+.design-canvas__zoom {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.design-canvas__problem {
+    margin: 0;
+    padding: 6px 12px;
+    background: var(--cratis-danger-background, #fee2e2);
+    color: var(--cratis-danger-text, #b91c1c);
+}
+
+.design-canvas__main {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+}
+
+.design-canvas__stage {
+    flex: 1 1 auto;
+    min-width: 0;
+    position: relative;
+    display: flex;
+}
+
+.design-canvas__viewport {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 24px;
+    position: relative;
+}
+
+.design-canvas__stage .design-edit {
+    z-index: 5;
+}
+
+.design-canvas__empty {
+    margin: 48px auto;
+    text-align: center;
+    color: var(--cratis-text-color-secondary, #6b7280);
+}
+
+.design-canvas__row {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.design-canvas__arrow {
+    align-self: center;
+    font-size: 1.6em;
+    color: var(--cratis-surface-border, #9ca3af);
+}
+
+.design-canvas__arrow--linked {
+    color: var(--cratis-primary-color, #3b82f6);
+}
+
+.design-canvas__side {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    border-inline-start: 1px solid var(--cratis-surface-border, #d1d5db);
+    background: var(--cratis-surface-card, #fff);
+    min-height: 0;
+}
+
+.design-canvas__tabs {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+    border-bottom: 1px solid var(--cratis-surface-border, #d1d5db);
+    flex-wrap: wrap;
+}
+
+.design-canvas__tab--on {
+    border-color: var(--cratis-primary-color, #3b82f6);
+    color: var(--cratis-primary-color, #3b82f6);
+}
+
+.design-canvas__panel {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+/* The storyline bar. */
+.design-storylines {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.design-storylines label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.design-storylines select,
+.design-storylines input[type='text'],
+.design-storylines__add input {
+    font: inherit;
+    padding: 3px 6px;
+    border: 1px solid var(--cratis-surface-border, #d1d5db);
+    border-radius: var(--cratis-border-radius, 6px);
+    background: var(--cratis-surface-ground, #fff);
+    color: inherit;
+}
+
+.design-storylines__add {
+    display: inline-flex;
+    gap: 4px;
+}

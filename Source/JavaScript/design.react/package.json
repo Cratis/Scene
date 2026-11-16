@@ -1,0 +1,108 @@
+{
+    "name": "@cratis/scene.design.react",
+    "version": "1.0.0",
+    "description": "The Scene Design canvas: artboards and storylines, a chat bar with refusals and alternatives, variations, tweaks, revision history, comment pins, direct manipulation through the Scene editor, template mode and the screens overview. The host supplies persistence, the AI transport, the catalogue, the Screenplay bridge, comments' author and routing.",
+    "homepage": "https://www.cratis.io/screenplay/",
+    "keywords": [
+        "cratis",
+        "scene",
+        "react",
+        "ui",
+        "design",
+        "canvas",
+        "screenplay",
+        "low-code"
+    ],
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": [
+        "**/*.css"
+    ],
+    "files": [
+        "dist",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.css",
+        "!**/for_*/**",
+        "!for_*/**",
+        "!**/given/**",
+        "!global.d.ts",
+        "!**/vitest.setup.*",
+        "!**/*.stories.tsx",
+        "!.storybook/**"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        },
+        "./testing": {
+            "types": "./dist/esm/Testing/index.d.ts",
+            "require": "./dist/cjs/Testing/index.js",
+            "import": "./dist/esm/Testing/index.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up",
+        "dev": "storybook dev -p 6008",
+        "build-storybook": "storybook build"
+    },
+    "dependencies": {
+        "@cratis/scene.design": "1.0.0",
+        "@cratis/scene.editor": "1.0.0",
+        "@cratis/scene.engine": "1.0.0",
+        "@cratis/scene.model": "1.0.0",
+        "@cratis/scene.react": "1.0.0"
+    },
+    "devDependencies": {
+        "@cratis/arc": "23.0.0",
+        "@cratis/arc.react": "23.0.0",
+        "@cratis/components": "4.40.1",
+        "@cratis/fundamentals": "7.25.2",
+        "@primereact/core": "11.2.0",
+        "@primereact/headless": "11.2.0",
+        "@primereact/styles": "11.2.0",
+        "@primereact/types": "11.2.0",
+        "@storybook/addon-links": "^10.6.2",
+        "@storybook/react": "^10.6.2",
+        "@storybook/react-vite": "^10.6.2",
+        "chart.js": "4.5.1",
+        "primeicons": "8.0.2",
+        "primereact": "11.2.0",
+        "quill": "2.0.3",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "storybook": "^10.6.2"
+    },
+    "peerDependencies": {
+        "@cratis/components": "^4.40.1",
+        "@primereact/core": "^11.0.0",
+        "@primereact/styles": "^11.0.0",
+        "@primereact/types": "^11.0.0",
+        "chart.js": "^4.5.1",
+        "primeicons": "^8.0.0",
+        "primereact": "^11.0.0",
+        "quill": "^2.0.3",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    }
+}

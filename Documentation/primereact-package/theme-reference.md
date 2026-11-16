@@ -82,12 +82,12 @@ A v11 preset has no such block: its values are token *references* — `{emerald.
 by hand would mean re-implementing the resolver in one's head, once per theme.
 
 So the values in `themePresets.ts` are **generated**: each preset is loaded, its `primary` scale bound to
-the chosen color ramp, and the thirteen Scene tokens resolved through the same `light-dark()` and `{path}`
+the chosen color ramp, and the roles of the default design system resolved through the same `light-dark()` and `{path}`
 rules `@primeuix/styled` applies. What is committed is the output of that resolution, so the catalog stays
 plain data a theme picker can read without booting a theme engine — while still agreeing, value for value,
 with what the preset actually renders.
 
-A spec (`for_primeReactThemes/when_checking_the_token_vocabulary.ts`) fails the build if any token still
+A spec (`for_primeReactThemes/when_checking_the_token_roles.ts`) fails the build if any token still
 contains an unresolved `{...}` reference or an unpicked `light-dark(...)`, so a resolver that silently gave
 up cannot reach the catalog.
 

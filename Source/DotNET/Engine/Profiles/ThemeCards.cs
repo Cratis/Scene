@@ -3,6 +3,7 @@
 
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Cratis.Scene.Model.DesignSystems;
 using Cratis.Scene.Model.Packages;
 using Cratis.Scene.Model.Profiles;
 
@@ -24,8 +25,9 @@ public static partial class ThemeCards
     /// <param name="themes">Every theme that could be chosen, in the order to offer them.</param>
     /// <param name="catalog">Every package that could be selected; a theme belongs to the package that lists it.</param>
     /// <param name="scheme">The colour scheme to show themes of; every theme when <see langword="null"/>.</param>
+    /// <param name="bindings">Which token roles hold a theme's accent and corner radius; the roles of Scene's default design system when <see langword="null"/>.</param>
     /// <returns>The cards.</returns>
-    public static IReadOnlyList<ThemeCard> Describe(UiProfile profile, IReadOnlyList<Theme> themes, IReadOnlyList<ScenePackage> catalog, ColorScheme? scheme = null) =>
+    public static IReadOnlyList<ThemeCard> Describe(UiProfile profile, IReadOnlyList<Theme> themes, IReadOnlyList<ScenePackage> catalog, ColorScheme? scheme = null, AppearanceBindings? bindings = null) =>
     [
         .. themes
             .Where(theme => scheme is null || (theme.IsDark ? ColorScheme.Dark : ColorScheme.Light) == scheme)
@@ -35,8 +37,17 @@ public static partial class ThemeCards
                 var missing = suppliers.Count > 0 && !suppliers.Exists(supplier => profile.Packages.Contains(supplier.Name)) ? suppliers[0] : null;
                 string? accent = null;
                 string? radius = null;
-                theme.Tokens?.TryGetValue("primary.color", out accent);
-                theme.Tokens?.TryGetValue("content.borderRadius", out radius);
+                var roles = bindings ?? AppearanceResolver.DefaultBindings;
+                if (roles.Accent is not null)
+                {
+                    theme.Tokens?.TryGetValue(roles.Accent, out accent);
+                }
+
+                if (roles.Corners is not null)
+                {
+                    theme.Tokens?.TryGetValue(roles.Corners, out radius);
+                }
+
                 return new ThemeCard(
                     theme.Name,
                     theme.IsDark ? "dark" : "light",

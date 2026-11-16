@@ -1,0 +1,58 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+/* A screen that opens as a dialog or a drawer is drawn as that popup: its frame - a heading and the body - on a neutral backdrop, with nothing of the
+   application or of a page around it. The element carrying `data-studio-dialog` is the backdrop; the composition inside it is the popup. */
+[data-studio-dialog] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+    box-sizing: border-box;
+    padding: 2rem;
+    background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+[data-studio-dialog] > [data-scene-id='composition'] {
+    flex: 0 1 auto;
+    width: min(100%, 36rem);
+    box-sizing: border-box;
+    padding: 1.25rem;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: 0.75rem;
+    background: var(--surface-card, Canvas);
+    box-shadow: 0 0.5rem 2rem color-mix(in srgb, currentColor 25%, transparent);
+}
+
+[data-studio-dialog] > [data-scene-id='composition']::before {
+    content: var(--studio-dialog-title, none);
+    display: block;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* A drawer comes in from the inline end and takes the height of the screen. */
+[data-studio-dialog='drawer'] {
+    align-items: flex-end;
+    justify-content: stretch;
+    padding: 0;
+}
+
+[data-studio-dialog='drawer'] > [data-scene-id='composition'] {
+    flex: 1 0 auto;
+    width: min(100%, 26rem);
+    border-radius: 0;
+    border-block: 0;
+    border-inline-end: 0;
+}
+
+/* A dialog's button row - Cancel and Submit - at the end of the popup, as the application and the preview draw it. The row's free space stays the row's,
+   so clicking beside the buttons selects the row. */
+[data-studio-dialog] [data-scene-id='dialog-actions-chrome'] .scene-outlet-actions {
+    width: fit-content;
+    margin-inline-start: auto;
+}

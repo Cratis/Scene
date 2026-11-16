@@ -1,0 +1,66 @@
+// Copyright (c) Cratis. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+const list = (names: readonly string[]): string => names.join(', ');
+
+/** The words of every refusal and summary. Both engines use the same text, so what a tool reads does not depend on the language. */
+export const designMessages = {
+    editUnknown: (op: string) => `The operation '${op}' is not one a design knows.`,
+    targetMissing: 'Name exactly one of a screen and a template to change.',
+    screenUnknown: (name: string) => `There is no screen named '${name}'.`,
+    screenExists: (name: string) => `A screen named '${name}' already exists.`,
+    templateUnknown: (name: string) => `There is no screen template named '${name}' in the design.`,
+    templateExists: (name: string) => `A screen template named '${name}' already exists.`,
+    templateNotInCatalogue: (name: string, names: readonly string[]) => `The template '${name}' is not in the catalogue. Templates: ${list(names)}.`,
+    templateNotInSet: (name: string, set: readonly string[]) => `The template '${name}' is outside the templates this design may use: ${list(set)}.`,
+    noLayout: 'The document has no layout to put a screen in.',
+    elementUnknown: (id: string) => `There is no element '${id}' there.`,
+    elementIdTaken: (id: string) => `The id '${id}' is already used in the document.`,
+    componentNotInCatalogue: (name: string) => `The component '${name}' is not in the catalogue.`,
+    overlayNeedsAction: (label: string) => `${label} is an overlay: it opens from an action and is not placed in an outlet.`,
+    shellComponent: (label: string) => `${label} belongs to the root template and is not placed on a screen.`,
+    outletUnknown: (target: string, outlet: string, homes: readonly string[]) =>
+        `'${target}' has no outlet '${outlet}'.${homes.length > 0 ? ` It takes this in: ${list(homes)}.` : ''}`,
+    outletDoesNotAccept: (outlet: string, label: string, homes: readonly string[]) =>
+        `The outlet '${outlet}' does not take ${label}.${homes.length > 0 ? ` It fits: ${list(homes)}.` : ''}`,
+    outletFull: (outlet: string, max: number) => `The outlet '${outlet}' holds at most ${max}.`,
+    propertyUnknown: (component: string, prop: string, names: readonly string[]) => `${component} has no property '${prop}'. Properties: ${list(names)}.`,
+    valueNotAllowed: (prop: string, expected: string) => `'${prop}' ${expected}.`,
+    variantNotInDesignSystem: (component: string, value: string, variants: readonly string[]) =>
+        `The design system has no '${value}' variant of ${component}. Variants: ${list(variants)}.`,
+    queryUnknown: (name: string, names: readonly string[]) => `There is no query '${name}'. Queries: ${list(names)}.`,
+    destinationUnknown: (name: string) => `There is no screen '${name}' to navigate to.`,
+    noDestinationProperty: (component: string) => `${component} has no property that navigates.`,
+    freeStyling: (prop: string) => `'${prop}' is free styling. A design uses the components, variants and tokens of the design system.`,
+    offSystem: (value: string) => `'${value}' is a value of its own. A design uses the tokens and variants of the design system.`,
+    noProfile: 'The design has no UI profile to change.',
+    profileKeyUnknown: (key: string) => `'${key}' is not a key of the profile a design changes.`,
+    profileValueNotAllowed: (key: string, value: string, allowed: readonly string[]) =>
+        `'${value}' is not a value of ${key}.${allowed.length > 0 ? ` Allowed: ${list(allowed)}.` : ''}`,
+    slotExists: (template: string, slot: string) => `The template '${template}' already has a slot '${slot}'.`,
+    slotUnknown: (template: string, slot: string) => `The template '${template}' has no slot '${slot}'.`,
+    slotInUse: (template: string, slot: string) => `The slot '${slot}' of '${template}' is still placed by its arrangement.`,
+    arrangementInvalid: (slot: string) => `The arrangement places the slot '${slot}', which the template does not have.`,
+    slotNameMissing: 'A slot has a name.',
+    tooManyTemplates: (max: number) => `Variations offer at most ${max} templates.`,
+    tooManyControls: (max: number) => `A design offers at most ${max} tweak controls.`,
+    tweakUnresolved: (label: string) => `The tweak '${label}' is bound to nothing the design has, or to something that is not a choice.`,
+    refusedByDefault: 'The request is outside what the design system offers.',
+    addedScreen: (name: string, template: string) => `Added screen ${name} on ${template}`,
+    removedScreen: (name: string) => `Removed screen ${name}`,
+    movedScreen: (name: string, index: number) => `Moved screen ${name} to position ${index}`,
+    addedTemplate: (name: string) => `Added template ${name}`,
+    addedSlot: (template: string, slot: string) => `Added slot ${slot} to ${template}`,
+    removedSlot: (template: string, slot: string) => `Removed slot ${slot} from ${template}`,
+    arranged: (template: string) => `Arranged the slots of ${template}`,
+    addedComponent: (label: string, outlet: string) => `Added ${label} to ${outlet}`,
+    setProperty: (prop: string, label: string) => `Set ${prop} of ${label}`,
+    removedElement: (id: string) => `Removed ${id}`,
+    movedElement: (id: string, outlet: string) => `Moved ${id} to ${outlet}`,
+    linked: (id: string, to: string) => `${id} navigates to ${to}`,
+    changedProfile: (key: string) => `Changed ${key}`,
+    variationsOffered: (count: number, screen: string) => `${count} ${count === 1 ? 'variation' : 'variations'} of ${screen}`,
+    tweaksOffered: (count: number) => `${count} ${count === 1 ? 'tweak control' : 'tweak controls'}`,
+    notCarriedOver: (element: string, template: string) => `${element} has no outlet on ${template} that takes it`,
+    danglingLink: (element: string, screen: string) => `${element} navigates to ${screen}, which is no longer in the design`,
+} as const;

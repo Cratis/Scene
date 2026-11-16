@@ -1,0 +1,25 @@
+.studio-editor-viewport-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--cratis-text-color-secondary);
+    font-size: 0.75rem;
+}
+
+.studio-editor-viewport-controls button[aria-pressed='true'] {
+    background: var(--cratis-highlight-bg);
+    color: var(--cratis-highlight-text-color);
+}
+
+.studio-editor-viewport-controls__size {
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+/* What a screen that is a dialog or a drawer says in place of the shell toggle. */
+.studio-editor-viewport-controls__opens-as {
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0.75;
+}

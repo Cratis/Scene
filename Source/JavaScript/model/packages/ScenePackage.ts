@@ -117,6 +117,12 @@ export interface ScenePackage {
      * and templates has none.
      */
     blueprint?: BlueprintMetadata;
+
+    /**
+     * The names of the {@link DesignSystem}s this package ships - a blueprint's default design system, for one. Absent or empty
+     * for a package that ships none.
+     */
+    designSystems?: string[];
 }
 
 export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
@@ -140,4 +146,5 @@ export const ScenePackagePropertyNames: (keyof ScenePackage)[] = [
     'runtimeSingletons',
     'sampleData',
     'blueprint',
+    'designSystems',
 ];

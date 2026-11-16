@@ -1,0 +1,28 @@
+/* Copyright (c) Cratis. All rights reserved. */
+/* Licensed under the MIT license. See LICENSE file in the project root for full license information. */
+
+.studio-blueprint-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: min(46rem, calc(100vh - 12rem));
+    min-height: 24rem;
+}
+
+.studio-blueprint-preview__stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    border: 1px solid var(--cratis-surface-border);
+    border-radius: var(--cratis-border-radius);
+    background: #fff;
+    /* The shell and the dialogs of the application are fixed to the viewport; here the stage is their viewport, so the gallery's own dialog stays around them. */
+    contain: layout paint;
+    isolation: isolate;
+}
+
+.studio-blueprint-preview__loading {
+    margin: 1rem;
+    color: var(--cratis-text-color-secondary);
+}

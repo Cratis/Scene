@@ -131,7 +131,7 @@ error to explain it.
 ## Next
 
 - [Regions and slots](./regions-and-slots.md) - what the modes are moving around.
-- [Theme tokens](./theme-tokens.md) - how the modes get their colors.
+- [Rendering the design system](./design-system.md) - how the modes get their colors.
 
 ## The typed options and the touch regime
 
