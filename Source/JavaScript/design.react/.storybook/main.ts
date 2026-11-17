@@ -25,14 +25,10 @@ const config: StorybookConfig = {
             '@cratis/scene.design': resolve(__dirname, '../../design/index.ts'),
             '@cratis/scene.editor': resolve(__dirname, '../../editor/index.ts'),
         };
-        // `@cratis/arc` and `@cratis/fundamentals` are peer dependencies of `@cratis/components` that the host application
-        // supplies. A story is not a host: it has no Arc client and no backend - the canvas' effects leave it through its host
-        // seams - so they are left external rather than installed.
-        config.build = config.build || {};
-        config.build.rollupOptions = {
-            ...(config.build.rollupOptions ?? {}),
-            external: [/^@cratis\/arc/, '@cratis/fundamentals'],
-        };
+        // `@cratis/arc`, `@cratis/arc.react` and `@cratis/fundamentals` are peer dependencies of `@cratis/components` that the host
+        // application supplies, and development dependencies here, so they are bundled into the stories: left external they stay bare
+        // specifiers (`@cratis/arc.react/dialogs`) that a browser cannot resolve, and every story fails to render. A story still has no
+        // Arc client and no backend - the canvas' effects leave it through its host seams.
         return config;
     },
 };

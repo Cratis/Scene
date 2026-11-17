@@ -41,7 +41,8 @@ export interface DesignActions {
     revert(screen: string, revisionId: string): Promise<void>;
     revertTurn(turnId: string): Promise<void>;
     chooseVariation(groupId: string, candidateId: string): Promise<void>;
-    applyTweak(tweak: TweakRecord, value: string): Promise<RecordedDesignOperations>;
+    /** Moves a tweak to a value. A tweak of the design as a whole belongs to no screen, so its revision is recorded on `focus`, the screen in view. */
+    applyTweak(tweak: TweakRecord, value: string, focus?: string): Promise<RecordedDesignOperations>;
     dismissTweak(tweakId: string): Promise<void>;
     addComment(screen: string, anchor: PinAnchor, text: string): Promise<void>;
     resolveComment(commentId: string): Promise<void>;
@@ -162,9 +163,10 @@ export function useDesignModel(host: DesignCanvasHost, options: DesignModelOptio
             chooseVariation: async (groupId, candidateId) => append([{
                 type: 'VariationChosen', groupId, candidateId, revisionId: ids.next('revision'), author: host.user.id, turnId: ids.next('turn'),
             }]),
-            applyTweak: (tweak, value) => {
+            applyTweak: (tweak, value, focus) => {
                 const { operations, proposals } = tweakOperations(tweak, value);
-                return record(operations, { ...(tweak.screen === undefined ? {} : { focus: tweak.screen }) })
+                const screen = tweak.screen ?? focus;
+                return record(operations, { ...(screen === undefined ? {} : { focus: screen }) })
                     .then(recorded => ({ ...recorded, proposals: [...recorded.proposals, ...proposals] }));
             },
             dismissTweak: async tweakId => append([dismissTweakEvent(tweakId)]),

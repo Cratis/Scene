@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import type { SceneDocument } from '@cratis/scene.model';
-import { countScreens, filterOverview, kindsOf, overviewScreenKey, type OverviewSubject } from '../screensOverview';
+import { countScreens, filterOverview, kindsOf, overviewScreenKey, type OverviewSubject } from '../overviewScreens';
 
 const document = {} as SceneDocument;
 const subjects: OverviewSubject[] = [

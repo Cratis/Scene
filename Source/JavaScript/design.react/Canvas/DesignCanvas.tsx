@@ -245,7 +245,7 @@ export const DesignCanvas = ({ host, mode, templateSet, initialScreen, editorKit
                                     strings={strings}
                                     onChange={(tweakId, value) => {
                                         const tweak = session.tweaks.find(candidate => candidate.id === tweakId);
-                                        if (tweak !== undefined) void attempt(async () => { const applied = await actions.applyTweak(tweak, value); if (applied.proposals.length > 0) setProposals(current => [...current, ...applied.proposals]); });
+                                        if (tweak !== undefined) void attempt(async () => { const applied = await actions.applyTweak(tweak, value, focused); if (applied.proposals.length > 0) setProposals(current => [...current, ...applied.proposals]); });
                                     }}
                                     onDismiss={tweakId => { void attempt(() => actions.dismissTweak(tweakId)); }} />
                             )}

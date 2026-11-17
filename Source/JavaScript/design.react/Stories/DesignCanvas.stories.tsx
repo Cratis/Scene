@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { foldDesignSession, type DesignMode, type DesignSessionEvent, type DesignSubject } from '@cratis/scene.design';
 import { DesignCanvas } from '../Canvas/DesignCanvas';
 import { ScreensOverview } from '../Overview/ScreensOverview';
-import type { OverviewSubject } from '../Overview/screensOverview';
+import type { OverviewSubject } from '../Overview/overviewScreens';
 import { askTheFakeAI } from '../Testing/askTheFakeAI';
 import { createFakeDesignHost, type FakeDesignHost } from '../Testing/createFakeDesignHost';
 

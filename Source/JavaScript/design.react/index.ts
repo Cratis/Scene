@@ -41,5 +41,5 @@ export * from './Panels/ProposalList';
 export * from './Panels/EditOverlay';
 
 // The read-only screens overview, for a product-wide "Screens" tab.
-export * from './Overview/screensOverview';
+export * from './Overview/overviewScreens';
 export * from './Overview/ScreensOverview';

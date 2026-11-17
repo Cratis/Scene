@@ -23,7 +23,9 @@ const collections = ['layouts', 'screenTemplates', 'dialogTemplates', 'screens',
 // reported, never replaced, so what was stored is not overwritten by a guess. A document stored before Scene 5 - regions declared as outlets, navigation as
 // regions, a toolbar element, an action's presentation - is read in the slot shape through Scene's upgrader (StudioIssues#1328); the stored text is left as it
 // is, and the next save writes the new shape.
-export function readSceneDocument(stored: unknown, authoringTemplate?: string): ReadSceneDocument {
+// `screen` is the screen the editor was asked to open when the document holds several; it is the one called 'Screen' when left out. A document whose screens are
+// all named for what they are (a design's screens are) is read for the screen asked for, not for one that is not there.
+export function readSceneDocument(stored: unknown, authoringTemplate?: string, screen?: string): ReadSceneDocument {
     let value = stored;
     if (typeof stored === 'string') {
         try {
@@ -46,7 +48,8 @@ export function readSceneDocument(stored: unknown, authoringTemplate?: string): 
             : { readable: false, problem: SceneDocumentProblem.MissingTemplate };
     }
 
-    return document.screens.some(screen => screen.name === screenName)
+    const wanted = screen ?? screenName;
+    return document.screens.some(candidate => candidate.name === wanted)
         ? { readable: true, document }
         : { readable: false, problem: SceneDocumentProblem.MissingScreen };
 }

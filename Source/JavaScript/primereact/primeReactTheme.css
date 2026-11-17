@@ -40,9 +40,15 @@
  * on the theme root, which is a literal value with no dependency, and the fallbacks on `:root` are
  * already resolved by the time they inherit down.
  *
- * The anatomy this file reads is that of the components PrimeReact draws: the primary Button, the Card,
- * the Menu (its overlay, hover and selected states), Text and the Shell canvas. A design system that
- * declares those components restyles PrimeReact; the names of its own tokens never reach this file.
+ * The anatomy this file reads is that of the components PrimeReact draws: every variant of the Button
+ * (the severities and the outlined, text and link forms), the Tag, the Badge and the Message in their
+ * severities, the Card, the Menu (its overlay, hover and selected states), Text and the Shell canvas. A
+ * design system that declares those components restyles PrimeReact; the names of its own tokens never reach
+ * this file. A variant it does not declare keeps the preset's own look, because every `--ds-*` variable
+ * below falls back to the preset's value on `:root`.
+ *
+ * The variants are written out rather than generated: the rule for one is the rule for all, and
+ * `for_primeReactThemeBridge` checks that every variant `primeReactAnatomy` declares has all of it.
  */
 
 :root {
@@ -74,6 +80,74 @@
     --ds-card-default-radius: var(--p-content-border-radius);
     --ds-shell-default-font: var(--p-font-family, inherit);
     --ds-button-primary-shadow-focus: var(--p-focus-ring-shadow);
+
+    /* Corners, and the other Button variants, Tag, Badge and Message, fall back to the active preset's own values. */
+    --ds-button-primary-radius: var(--p-button-border-radius);
+    --ds-button-secondary-background: var(--p-button-secondary-background);
+    --ds-button-secondary-text: var(--p-button-secondary-color);
+    --ds-button-secondary-shadow-focus: var(--p-button-secondary-focus-ring-shadow);
+    --ds-button-secondary-radius: var(--p-button-border-radius);
+    --ds-button-success-background: var(--p-button-success-background);
+    --ds-button-success-text: var(--p-button-success-color);
+    --ds-button-success-shadow-focus: var(--p-button-success-focus-ring-shadow);
+    --ds-button-success-radius: var(--p-button-border-radius);
+    --ds-button-info-background: var(--p-button-info-background);
+    --ds-button-info-text: var(--p-button-info-color);
+    --ds-button-info-shadow-focus: var(--p-button-info-focus-ring-shadow);
+    --ds-button-info-radius: var(--p-button-border-radius);
+    --ds-button-warn-background: var(--p-button-warn-background);
+    --ds-button-warn-text: var(--p-button-warn-color);
+    --ds-button-warn-shadow-focus: var(--p-button-warn-focus-ring-shadow);
+    --ds-button-warn-radius: var(--p-button-border-radius);
+    --ds-button-danger-background: var(--p-button-danger-background);
+    --ds-button-danger-text: var(--p-button-danger-color);
+    --ds-button-danger-shadow-focus: var(--p-button-danger-focus-ring-shadow);
+    --ds-button-danger-radius: var(--p-button-border-radius);
+    --ds-button-help-background: var(--p-button-help-background);
+    --ds-button-help-text: var(--p-button-help-color);
+    --ds-button-help-shadow-focus: var(--p-button-help-focus-ring-shadow);
+    --ds-button-help-radius: var(--p-button-border-radius);
+    --ds-button-contrast-background: var(--p-button-contrast-background);
+    --ds-button-contrast-text: var(--p-button-contrast-color);
+    --ds-button-contrast-shadow-focus: var(--p-button-contrast-focus-ring-shadow);
+    --ds-button-contrast-radius: var(--p-button-border-radius);
+
+    --ds-tag-secondary-background: var(--p-tag-secondary-background);
+    --ds-tag-secondary-text: var(--p-tag-secondary-color);
+    --ds-tag-success-background: var(--p-tag-success-background);
+    --ds-tag-success-text: var(--p-tag-success-color);
+    --ds-tag-info-background: var(--p-tag-info-background);
+    --ds-tag-info-text: var(--p-tag-info-color);
+    --ds-tag-warn-background: var(--p-tag-warn-background);
+    --ds-tag-warn-text: var(--p-tag-warn-color);
+    --ds-tag-danger-background: var(--p-tag-danger-background);
+    --ds-tag-danger-text: var(--p-tag-danger-color);
+    --ds-tag-contrast-background: var(--p-tag-contrast-background);
+    --ds-tag-contrast-text: var(--p-tag-contrast-color);
+    --ds-badge-secondary-background: var(--p-badge-secondary-background);
+    --ds-badge-secondary-text: var(--p-badge-secondary-color);
+    --ds-badge-success-background: var(--p-badge-success-background);
+    --ds-badge-success-text: var(--p-badge-success-color);
+    --ds-badge-info-background: var(--p-badge-info-background);
+    --ds-badge-info-text: var(--p-badge-info-color);
+    --ds-badge-warn-background: var(--p-badge-warn-background);
+    --ds-badge-warn-text: var(--p-badge-warn-color);
+    --ds-badge-danger-background: var(--p-badge-danger-background);
+    --ds-badge-danger-text: var(--p-badge-danger-color);
+    --ds-badge-contrast-background: var(--p-badge-contrast-background);
+    --ds-badge-contrast-text: var(--p-badge-contrast-color);
+    --ds-message-info-background: var(--p-message-info-background);
+    --ds-message-info-text: var(--p-message-info-color);
+    --ds-message-info-border: var(--p-message-info-border-color);
+    --ds-message-success-background: var(--p-message-success-background);
+    --ds-message-success-text: var(--p-message-success-color);
+    --ds-message-success-border: var(--p-message-success-border-color);
+    --ds-message-warn-background: var(--p-message-warn-background);
+    --ds-message-warn-text: var(--p-message-warn-color);
+    --ds-message-warn-border: var(--p-message-warn-border-color);
+    --ds-message-danger-background: var(--p-message-error-background);
+    --ds-message-danger-text: var(--p-message-error-color);
+    --ds-message-danger-border: var(--p-message-error-border-color);
 }
 
 .scene-dark,
@@ -110,16 +184,162 @@
      * dark while Scene's text is still using the blueprint's palette. Rebind the component pairs
      * together at the same theme boundary, including the foreground of the progress value.
      */
+    --p-button-border-radius: var(--ds-button-primary-radius);
     --p-button-primary-background: var(--ds-button-primary-background);
-    --p-button-primary-border-color: var(--ds-button-primary-background);
+    --p-button-primary-border-color: var(--ds-button-primary-border, var(--ds-button-primary-background));
     --p-button-primary-color: var(--ds-button-primary-text);
-    --p-button-primary-hover-background: color-mix(in srgb, var(--ds-button-primary-background) 90%, var(--ds-text-default-text));
-    --p-button-primary-hover-border-color: var(--p-button-primary-hover-background);
-    --p-button-primary-hover-color: var(--ds-button-primary-text);
-    --p-button-primary-active-background: color-mix(in srgb, var(--ds-button-primary-background) 80%, var(--ds-text-default-text));
-    --p-button-primary-active-border-color: var(--p-button-primary-active-background);
-    --p-button-primary-active-color: var(--ds-button-primary-text);
+    --p-button-primary-hover-background: var(--ds-button-primary-background-hover, color-mix(in srgb, var(--ds-button-primary-background) 90%, var(--ds-text-default-text)));
+    --p-button-primary-hover-border-color: var(--ds-button-primary-border-hover, var(--p-button-primary-hover-background));
+    --p-button-primary-hover-color: var(--ds-button-primary-text-hover, var(--ds-button-primary-text));
+    --p-button-primary-active-background: var(--ds-button-primary-background-active, color-mix(in srgb, var(--ds-button-primary-background) 80%, var(--ds-text-default-text)));
+    --p-button-primary-active-border-color: var(--ds-button-primary-border-active, var(--p-button-primary-active-background));
+    --p-button-primary-active-color: var(--ds-button-primary-text-active, var(--ds-button-primary-text));
     --p-button-primary-focus-ring-color: var(--ds-button-primary-background);
+    --p-button-primary-focus-ring-shadow: var(--ds-button-primary-shadow-focus);
+
+    --p-button-secondary-background: var(--ds-button-secondary-background);
+    --p-button-secondary-border-color: var(--ds-button-secondary-border, var(--ds-button-secondary-background));
+    --p-button-secondary-color: var(--ds-button-secondary-text);
+    --p-button-secondary-hover-background: var(--ds-button-secondary-background-hover, color-mix(in srgb, var(--ds-button-secondary-background) 90%, var(--ds-text-default-text)));
+    --p-button-secondary-hover-border-color: var(--ds-button-secondary-border-hover, var(--p-button-secondary-hover-background));
+    --p-button-secondary-hover-color: var(--ds-button-secondary-text-hover, var(--ds-button-secondary-text));
+    --p-button-secondary-active-background: var(--ds-button-secondary-background-active, color-mix(in srgb, var(--ds-button-secondary-background) 80%, var(--ds-text-default-text)));
+    --p-button-secondary-active-border-color: var(--ds-button-secondary-border-active, var(--p-button-secondary-active-background));
+    --p-button-secondary-active-color: var(--ds-button-secondary-text-active, var(--ds-button-secondary-text));
+    --p-button-secondary-focus-ring-color: var(--ds-button-secondary-background);
+    --p-button-secondary-focus-ring-shadow: var(--ds-button-secondary-shadow-focus);
+
+    --p-button-success-background: var(--ds-button-success-background);
+    --p-button-success-border-color: var(--ds-button-success-border, var(--ds-button-success-background));
+    --p-button-success-color: var(--ds-button-success-text);
+    --p-button-success-hover-background: var(--ds-button-success-background-hover, color-mix(in srgb, var(--ds-button-success-background) 90%, var(--ds-text-default-text)));
+    --p-button-success-hover-border-color: var(--ds-button-success-border-hover, var(--p-button-success-hover-background));
+    --p-button-success-hover-color: var(--ds-button-success-text-hover, var(--ds-button-success-text));
+    --p-button-success-active-background: var(--ds-button-success-background-active, color-mix(in srgb, var(--ds-button-success-background) 80%, var(--ds-text-default-text)));
+    --p-button-success-active-border-color: var(--ds-button-success-border-active, var(--p-button-success-active-background));
+    --p-button-success-active-color: var(--ds-button-success-text-active, var(--ds-button-success-text));
+    --p-button-success-focus-ring-color: var(--ds-button-success-background);
+    --p-button-success-focus-ring-shadow: var(--ds-button-success-shadow-focus);
+
+    --p-button-info-background: var(--ds-button-info-background);
+    --p-button-info-border-color: var(--ds-button-info-border, var(--ds-button-info-background));
+    --p-button-info-color: var(--ds-button-info-text);
+    --p-button-info-hover-background: var(--ds-button-info-background-hover, color-mix(in srgb, var(--ds-button-info-background) 90%, var(--ds-text-default-text)));
+    --p-button-info-hover-border-color: var(--ds-button-info-border-hover, var(--p-button-info-hover-background));
+    --p-button-info-hover-color: var(--ds-button-info-text-hover, var(--ds-button-info-text));
+    --p-button-info-active-background: var(--ds-button-info-background-active, color-mix(in srgb, var(--ds-button-info-background) 80%, var(--ds-text-default-text)));
+    --p-button-info-active-border-color: var(--ds-button-info-border-active, var(--p-button-info-active-background));
+    --p-button-info-active-color: var(--ds-button-info-text-active, var(--ds-button-info-text));
+    --p-button-info-focus-ring-color: var(--ds-button-info-background);
+    --p-button-info-focus-ring-shadow: var(--ds-button-info-shadow-focus);
+
+    --p-button-warn-background: var(--ds-button-warn-background);
+    --p-button-warn-border-color: var(--ds-button-warn-border, var(--ds-button-warn-background));
+    --p-button-warn-color: var(--ds-button-warn-text);
+    --p-button-warn-hover-background: var(--ds-button-warn-background-hover, color-mix(in srgb, var(--ds-button-warn-background) 90%, var(--ds-text-default-text)));
+    --p-button-warn-hover-border-color: var(--ds-button-warn-border-hover, var(--p-button-warn-hover-background));
+    --p-button-warn-hover-color: var(--ds-button-warn-text-hover, var(--ds-button-warn-text));
+    --p-button-warn-active-background: var(--ds-button-warn-background-active, color-mix(in srgb, var(--ds-button-warn-background) 80%, var(--ds-text-default-text)));
+    --p-button-warn-active-border-color: var(--ds-button-warn-border-active, var(--p-button-warn-active-background));
+    --p-button-warn-active-color: var(--ds-button-warn-text-active, var(--ds-button-warn-text));
+    --p-button-warn-focus-ring-color: var(--ds-button-warn-background);
+    --p-button-warn-focus-ring-shadow: var(--ds-button-warn-shadow-focus);
+
+    --p-button-danger-background: var(--ds-button-danger-background);
+    --p-button-danger-border-color: var(--ds-button-danger-border, var(--ds-button-danger-background));
+    --p-button-danger-color: var(--ds-button-danger-text);
+    --p-button-danger-hover-background: var(--ds-button-danger-background-hover, color-mix(in srgb, var(--ds-button-danger-background) 90%, var(--ds-text-default-text)));
+    --p-button-danger-hover-border-color: var(--ds-button-danger-border-hover, var(--p-button-danger-hover-background));
+    --p-button-danger-hover-color: var(--ds-button-danger-text-hover, var(--ds-button-danger-text));
+    --p-button-danger-active-background: var(--ds-button-danger-background-active, color-mix(in srgb, var(--ds-button-danger-background) 80%, var(--ds-text-default-text)));
+    --p-button-danger-active-border-color: var(--ds-button-danger-border-active, var(--p-button-danger-active-background));
+    --p-button-danger-active-color: var(--ds-button-danger-text-active, var(--ds-button-danger-text));
+    --p-button-danger-focus-ring-color: var(--ds-button-danger-background);
+    --p-button-danger-focus-ring-shadow: var(--ds-button-danger-shadow-focus);
+
+    --p-button-help-background: var(--ds-button-help-background);
+    --p-button-help-border-color: var(--ds-button-help-border, var(--ds-button-help-background));
+    --p-button-help-color: var(--ds-button-help-text);
+    --p-button-help-hover-background: var(--ds-button-help-background-hover, color-mix(in srgb, var(--ds-button-help-background) 90%, var(--ds-text-default-text)));
+    --p-button-help-hover-border-color: var(--ds-button-help-border-hover, var(--p-button-help-hover-background));
+    --p-button-help-hover-color: var(--ds-button-help-text-hover, var(--ds-button-help-text));
+    --p-button-help-active-background: var(--ds-button-help-background-active, color-mix(in srgb, var(--ds-button-help-background) 80%, var(--ds-text-default-text)));
+    --p-button-help-active-border-color: var(--ds-button-help-border-active, var(--p-button-help-active-background));
+    --p-button-help-active-color: var(--ds-button-help-text-active, var(--ds-button-help-text));
+    --p-button-help-focus-ring-color: var(--ds-button-help-background);
+    --p-button-help-focus-ring-shadow: var(--ds-button-help-shadow-focus);
+
+    --p-button-contrast-background: var(--ds-button-contrast-background);
+    --p-button-contrast-border-color: var(--ds-button-contrast-border, var(--ds-button-contrast-background));
+    --p-button-contrast-color: var(--ds-button-contrast-text);
+    --p-button-contrast-hover-background: var(--ds-button-contrast-background-hover, color-mix(in srgb, var(--ds-button-contrast-background) 90%, var(--ds-text-default-text)));
+    --p-button-contrast-hover-border-color: var(--ds-button-contrast-border-hover, var(--p-button-contrast-hover-background));
+    --p-button-contrast-hover-color: var(--ds-button-contrast-text-hover, var(--ds-button-contrast-text));
+    --p-button-contrast-active-background: var(--ds-button-contrast-background-active, color-mix(in srgb, var(--ds-button-contrast-background) 80%, var(--ds-text-default-text)));
+    --p-button-contrast-active-border-color: var(--ds-button-contrast-border-active, var(--p-button-contrast-active-background));
+    --p-button-contrast-active-color: var(--ds-button-contrast-text-active, var(--ds-button-contrast-text));
+    --p-button-contrast-focus-ring-color: var(--ds-button-contrast-background);
+    --p-button-contrast-focus-ring-shadow: var(--ds-button-contrast-shadow-focus);
+
+    --p-button-outlined-primary-color: var(--ds-button-outlined-text, var(--ds-button-primary-background));
+    --p-button-outlined-primary-border-color: var(--ds-button-outlined-border, color-mix(in srgb, var(--ds-button-outlined-text, var(--ds-button-primary-background)) 35%, transparent));
+    --p-button-outlined-primary-hover-background: var(--ds-button-outlined-background-hover, color-mix(in srgb, var(--ds-button-outlined-text, var(--ds-button-primary-background)) 8%, transparent));
+    --p-button-outlined-primary-active-background: var(--ds-button-outlined-background-active, color-mix(in srgb, var(--ds-button-outlined-text, var(--ds-button-primary-background)) 16%, transparent));
+    --p-button-text-primary-color: var(--ds-button-text-text, var(--ds-button-primary-background));
+    --p-button-text-primary-hover-background: var(--ds-button-text-background-hover, color-mix(in srgb, var(--ds-button-text-text, var(--ds-button-primary-background)) 8%, transparent));
+    --p-button-text-primary-active-background: var(--ds-button-text-background-active, color-mix(in srgb, var(--ds-button-text-text, var(--ds-button-primary-background)) 16%, transparent));
+    --p-button-outlined-secondary-color: var(--ds-button-secondary-text);
+    --p-button-outlined-secondary-border-color: color-mix(in srgb, var(--ds-button-secondary-text) 35%, transparent);
+    --p-button-outlined-secondary-hover-background: color-mix(in srgb, var(--ds-button-secondary-text) 8%, transparent);
+    --p-button-outlined-secondary-active-background: color-mix(in srgb, var(--ds-button-secondary-text) 16%, transparent);
+    --p-button-text-secondary-color: var(--ds-button-secondary-text);
+    --p-button-text-secondary-hover-background: color-mix(in srgb, var(--ds-button-secondary-text) 8%, transparent);
+    --p-button-text-secondary-active-background: color-mix(in srgb, var(--ds-button-secondary-text) 16%, transparent);
+    --p-button-outlined-success-color: var(--ds-button-success-background);
+    --p-button-outlined-success-border-color: color-mix(in srgb, var(--ds-button-success-background) 35%, transparent);
+    --p-button-outlined-success-hover-background: color-mix(in srgb, var(--ds-button-success-background) 8%, transparent);
+    --p-button-outlined-success-active-background: color-mix(in srgb, var(--ds-button-success-background) 16%, transparent);
+    --p-button-text-success-color: var(--ds-button-success-background);
+    --p-button-text-success-hover-background: color-mix(in srgb, var(--ds-button-success-background) 8%, transparent);
+    --p-button-text-success-active-background: color-mix(in srgb, var(--ds-button-success-background) 16%, transparent);
+    --p-button-outlined-info-color: var(--ds-button-info-background);
+    --p-button-outlined-info-border-color: color-mix(in srgb, var(--ds-button-info-background) 35%, transparent);
+    --p-button-outlined-info-hover-background: color-mix(in srgb, var(--ds-button-info-background) 8%, transparent);
+    --p-button-outlined-info-active-background: color-mix(in srgb, var(--ds-button-info-background) 16%, transparent);
+    --p-button-text-info-color: var(--ds-button-info-background);
+    --p-button-text-info-hover-background: color-mix(in srgb, var(--ds-button-info-background) 8%, transparent);
+    --p-button-text-info-active-background: color-mix(in srgb, var(--ds-button-info-background) 16%, transparent);
+    --p-button-outlined-warn-color: var(--ds-button-warn-background);
+    --p-button-outlined-warn-border-color: color-mix(in srgb, var(--ds-button-warn-background) 35%, transparent);
+    --p-button-outlined-warn-hover-background: color-mix(in srgb, var(--ds-button-warn-background) 8%, transparent);
+    --p-button-outlined-warn-active-background: color-mix(in srgb, var(--ds-button-warn-background) 16%, transparent);
+    --p-button-text-warn-color: var(--ds-button-warn-background);
+    --p-button-text-warn-hover-background: color-mix(in srgb, var(--ds-button-warn-background) 8%, transparent);
+    --p-button-text-warn-active-background: color-mix(in srgb, var(--ds-button-warn-background) 16%, transparent);
+    --p-button-outlined-danger-color: var(--ds-button-danger-background);
+    --p-button-outlined-danger-border-color: color-mix(in srgb, var(--ds-button-danger-background) 35%, transparent);
+    --p-button-outlined-danger-hover-background: color-mix(in srgb, var(--ds-button-danger-background) 8%, transparent);
+    --p-button-outlined-danger-active-background: color-mix(in srgb, var(--ds-button-danger-background) 16%, transparent);
+    --p-button-text-danger-color: var(--ds-button-danger-background);
+    --p-button-text-danger-hover-background: color-mix(in srgb, var(--ds-button-danger-background) 8%, transparent);
+    --p-button-text-danger-active-background: color-mix(in srgb, var(--ds-button-danger-background) 16%, transparent);
+    --p-button-outlined-help-color: var(--ds-button-help-background);
+    --p-button-outlined-help-border-color: color-mix(in srgb, var(--ds-button-help-background) 35%, transparent);
+    --p-button-outlined-help-hover-background: color-mix(in srgb, var(--ds-button-help-background) 8%, transparent);
+    --p-button-outlined-help-active-background: color-mix(in srgb, var(--ds-button-help-background) 16%, transparent);
+    --p-button-text-help-color: var(--ds-button-help-background);
+    --p-button-text-help-hover-background: color-mix(in srgb, var(--ds-button-help-background) 8%, transparent);
+    --p-button-text-help-active-background: color-mix(in srgb, var(--ds-button-help-background) 16%, transparent);
+    --p-button-outlined-contrast-color: var(--ds-button-contrast-background);
+    --p-button-outlined-contrast-border-color: color-mix(in srgb, var(--ds-button-contrast-background) 35%, transparent);
+    --p-button-outlined-contrast-hover-background: color-mix(in srgb, var(--ds-button-contrast-background) 8%, transparent);
+    --p-button-outlined-contrast-active-background: color-mix(in srgb, var(--ds-button-contrast-background) 16%, transparent);
+    --p-button-text-contrast-color: var(--ds-button-contrast-background);
+    --p-button-text-contrast-hover-background: color-mix(in srgb, var(--ds-button-contrast-background) 8%, transparent);
+    --p-button-text-contrast-active-background: color-mix(in srgb, var(--ds-button-contrast-background) 16%, transparent);
+    --p-button-link-color: var(--ds-button-link-text, var(--ds-button-primary-background));
+    --p-button-link-hover-color: var(--ds-button-link-text-hover, var(--p-button-link-color));
+    --p-button-link-active-color: var(--ds-button-link-text-active, var(--p-button-link-color));
 
     --p-card-background: var(--ds-card-default-background);
     --p-card-color: var(--ds-text-default-text);
@@ -131,8 +351,59 @@
     --p-panel-header-color: var(--ds-text-default-text);
     --p-panel-header-border-color: var(--ds-card-default-border);
 
-    --p-tag-primary-background: var(--ds-button-primary-background);
-    --p-tag-primary-color: var(--ds-button-primary-text);
+    --p-tag-primary-background: var(--ds-tag-primary-background, var(--ds-button-primary-background));
+    --p-tag-primary-color: var(--ds-tag-primary-text, var(--ds-button-primary-text));
+    --p-tag-secondary-background: var(--ds-tag-secondary-background);
+    --p-tag-secondary-color: var(--ds-tag-secondary-text);
+    --p-tag-success-background: var(--ds-tag-success-background);
+    --p-tag-success-color: var(--ds-tag-success-text);
+    --p-tag-info-background: var(--ds-tag-info-background);
+    --p-tag-info-color: var(--ds-tag-info-text);
+    --p-tag-warn-background: var(--ds-tag-warn-background);
+    --p-tag-warn-color: var(--ds-tag-warn-text);
+    --p-tag-danger-background: var(--ds-tag-danger-background);
+    --p-tag-danger-color: var(--ds-tag-danger-text);
+    --p-tag-contrast-background: var(--ds-tag-contrast-background);
+    --p-tag-contrast-color: var(--ds-tag-contrast-text);
+    --p-badge-primary-background: var(--ds-badge-primary-background, var(--ds-button-primary-background));
+    --p-badge-primary-color: var(--ds-badge-primary-text, var(--ds-button-primary-text));
+    --p-badge-secondary-background: var(--ds-badge-secondary-background);
+    --p-badge-secondary-color: var(--ds-badge-secondary-text);
+    --p-badge-success-background: var(--ds-badge-success-background);
+    --p-badge-success-color: var(--ds-badge-success-text);
+    --p-badge-info-background: var(--ds-badge-info-background);
+    --p-badge-info-color: var(--ds-badge-info-text);
+    --p-badge-warn-background: var(--ds-badge-warn-background);
+    --p-badge-warn-color: var(--ds-badge-warn-text);
+    --p-badge-danger-background: var(--ds-badge-danger-background);
+    --p-badge-danger-color: var(--ds-badge-danger-text);
+    --p-badge-contrast-background: var(--ds-badge-contrast-background);
+    --p-badge-contrast-color: var(--ds-badge-contrast-text);
+
+    --p-message-info-background: var(--ds-message-info-background);
+    --p-message-info-border-color: var(--ds-message-info-border);
+    --p-message-info-color: var(--ds-message-info-text);
+    --p-message-info-simple-color: var(--ds-message-info-text);
+    --p-message-info-outlined-color: var(--ds-message-info-text);
+    --p-message-info-outlined-border-color: var(--ds-message-info-border);
+    --p-message-success-background: var(--ds-message-success-background);
+    --p-message-success-border-color: var(--ds-message-success-border);
+    --p-message-success-color: var(--ds-message-success-text);
+    --p-message-success-simple-color: var(--ds-message-success-text);
+    --p-message-success-outlined-color: var(--ds-message-success-text);
+    --p-message-success-outlined-border-color: var(--ds-message-success-border);
+    --p-message-warn-background: var(--ds-message-warn-background);
+    --p-message-warn-border-color: var(--ds-message-warn-border);
+    --p-message-warn-color: var(--ds-message-warn-text);
+    --p-message-warn-simple-color: var(--ds-message-warn-text);
+    --p-message-warn-outlined-color: var(--ds-message-warn-text);
+    --p-message-warn-outlined-border-color: var(--ds-message-warn-border);
+    --p-message-error-background: var(--ds-message-danger-background);
+    --p-message-error-border-color: var(--ds-message-danger-border);
+    --p-message-error-color: var(--ds-message-danger-text);
+    --p-message-error-simple-color: var(--ds-message-danger-text);
+    --p-message-error-outlined-color: var(--ds-message-danger-text);
+    --p-message-error-outlined-border-color: var(--ds-message-danger-border);
     --p-progressbar-background: var(--ds-card-default-border);
     --p-progressbar-value-background: var(--ds-button-primary-background);
     --p-progressbar-label-color: var(--ds-button-primary-text);
@@ -156,6 +427,54 @@
      */
     background: var(--ds-shell-default-background);
     color: var(--ds-text-default-text);
+}
+
+[data-scene-theme-root] .p-button-outlined {
+    --p-button-border-radius: var(--ds-button-outlined-radius, var(--ds-button-primary-radius));
+}
+
+[data-scene-theme-root] .p-button-text {
+    --p-button-border-radius: var(--ds-button-text-radius, var(--ds-button-primary-radius));
+}
+
+[data-scene-theme-root] .p-button-link {
+    --p-button-border-radius: var(--ds-button-link-radius, var(--ds-button-primary-radius));
+}
+
+[data-scene-theme-root] .p-button-secondary {
+    --p-button-border-radius: var(--ds-button-secondary-radius);
+}
+
+[data-scene-theme-root] .p-button-success {
+    --p-button-border-radius: var(--ds-button-success-radius);
+}
+
+[data-scene-theme-root] .p-button-info {
+    --p-button-border-radius: var(--ds-button-info-radius);
+}
+
+[data-scene-theme-root] .p-button-warn {
+    --p-button-border-radius: var(--ds-button-warn-radius);
+}
+
+[data-scene-theme-root] .p-button-danger {
+    --p-button-border-radius: var(--ds-button-danger-radius);
+}
+
+[data-scene-theme-root] .p-button-help {
+    --p-button-border-radius: var(--ds-button-help-radius);
+}
+
+[data-scene-theme-root] .p-button-contrast {
+    --p-button-border-radius: var(--ds-button-contrast-radius);
+}
+
+[data-scene-theme-root] .p-button.p-button-outlined:not(:hover, :active) {
+    background-color: var(--ds-button-outlined-background, transparent);
+}
+
+[data-scene-theme-root] .p-button.p-button-text:not(:hover, :active) {
+    background-color: var(--ds-button-text-background, transparent);
 }
 
 /*

@@ -3,7 +3,8 @@
 
 import { Button } from 'primereact/button';
 import { RegisteredComponentProps } from '@cratis/scene.react';
-import {booleanProperty, severityProperty, stringProperty} from '../properties';
+import {booleanProperty, stringProperty} from '../properties';
+import { readButtonLook } from './readButtonLook';
 
 /**
  * The `PrimeReact:button` component.
@@ -18,6 +19,10 @@ import {booleanProperty, severityProperty, stringProperty} from '../properties';
  * a single `variant`, which is the better model - they were never combinable - and the authored booleans
  * are still read and translated. `warning` became `warn`.
  *
+ * The look is `readButtonLook`'s: the `severity` property takes a severity or a form, so every variant a design system declares for the
+ * Button reaches PrimeReact as its own `severity` and `variant` props, and the design system's `--ds-button-<variant>-<part>` values
+ * paint it (see `primeReactTheme.css`).
+ *
  * `loading` is the one that could not simply be translated: v11 dropped it. The state still matters to a
  * screen, so it is rebuilt from parts that exist - a spinning icon in place of the button's own, the
  * button disabled so the action cannot be fired twice, and `aria-busy` so the state is announced rather
@@ -25,12 +30,8 @@ import {booleanProperty, severityProperty, stringProperty} from '../properties';
  */
 export function PrimeButton({ element, slots, interactions }: RegisteredComponentProps) {
     const icon = stringProperty(element, 'icon');
-    const severity = severityProperty(element, 'severity');
+    const { severity, variant } = readButtonLook(element);
     const loading = booleanProperty(element, 'loading', false);
-
-    let variant: 'link' | 'text' | 'outlined' | undefined;
-    if (booleanProperty(element, 'outlined', false)) variant = 'outlined';
-    else if (booleanProperty(element, 'text', false)) variant = 'text';
 
     return (
         <Button

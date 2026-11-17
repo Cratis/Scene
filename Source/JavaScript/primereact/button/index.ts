@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export * from './PrimeButton';
+export * from './PrimeButtonForm';
+export * from './ButtonLook';
+export * from './readButtonLook';
 export * from './PrimeSplitButton';
 export * from './PrimeSpeedDial';
 export * from './PrimeButtonGroup';
