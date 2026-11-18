@@ -50,8 +50,6 @@ export const bindingToJson = (binding: UiBindingSyntax): Record<string, JsonValu
     return json;
 };
 
-export const pathBinding = (path: string): Record<string, JsonValue> => ({ path });
-
 export const optional = (json: Record<string, JsonValue>, member: string, value: string | null | undefined): void => {
     if (value !== null && value !== undefined) json[member] = value;
 };

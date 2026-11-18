@@ -7,6 +7,3 @@
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [member: string]: JsonValue };
 
 export type JsonObject = { [member: string]: JsonValue };
-
-export const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
-    typeof value === 'object' && value !== null && !Array.isArray(value);
