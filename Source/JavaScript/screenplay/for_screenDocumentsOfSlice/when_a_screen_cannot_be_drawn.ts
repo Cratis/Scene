@@ -43,6 +43,18 @@ describe('when a screen keeps its design in a file', () => {
     it('should say the backend is the one that can read it', () => expect(imported.findings[0].message).toContain('read only by the Studio backend'));
 });
 
+describe('when a screen states a directive this bridge has never heard of', () => {
+    // A directive kind added to Screenplay after this bridge was written. It must be reported by name rather than
+    // ignored, so a model that gains one is never quietly drawn as if it had not.
+    const unheardOf: ScreenDirectiveSyntax = { kind: 'ScreenSomethingNewSyntax' };
+    const imported = screenDocumentsOfSlice({ sliceId, screens: [screen('Orders', title('Orders'), unheardOf)] });
+
+    it('should report it', () => expect(imported.findings).toHaveLength(1));
+    it('should name the kind, since it has nothing better to say about it', () =>
+        expect(imported.findings[0].message).toContain("a 'ScreenSomethingNewSyntax' directive"));
+    it('should still draw the rest of the screen', () => expect(imported.documents[0].document).toContain('core:title'));
+});
+
 describe('when a slice has no screen at all', () => {
     const imported = screenDocumentsOfSlice({ sliceId, screens: [] });
 
