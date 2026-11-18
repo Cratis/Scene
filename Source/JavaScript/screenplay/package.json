@@ -1,0 +1,50 @@
+{
+    "name": "@cratis/scene.screenplay",
+    "version": "1.0.0",
+    "description": "The TypeScript mirror of Cratis.Scene.Screenplay's screen-document bridge: a Screenplay screen read as the Scene document a host draws.",
+    "homepage": "https://www.cratis.io/screenplay/",
+    "keywords": [
+        "cratis",
+        "scene",
+        "screenplay",
+        "event-modeling",
+        "event-sourcing",
+        "cqrs",
+        "low-code"
+    ],
+    "author": "Cratis",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Cratis/Scene.git"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist",
+        "**/*.ts",
+        "!**/for_*/**"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "types": "./dist/esm/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        }
+    },
+    "scripts": {
+        "prepare": "yarn g:build",
+        "clean": "yarn g:clean",
+        "build": "yarn g:build",
+        "lint": "yarn g:lint",
+        "lint:ci": "yarn g:lint:ci",
+        "test": "yarn g:test",
+        "ci": "yarn g:ci",
+        "up": "yarn g:up"
+    }
+}
