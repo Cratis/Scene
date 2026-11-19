@@ -1,0 +1,19 @@
+{
+    "extends": "../../../tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "dist/esm"
+    },
+    "references": [],
+    "files": [
+        "../../../test.d.ts",
+        "../../../global.d.ts"
+    ],
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "dist",
+        "vite.config.mts"
+    ]
+}
