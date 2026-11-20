@@ -238,16 +238,15 @@ public static class ScreenDocumentCorpusCases
     // which directive, which encoding - is the bridge's own and must stay the thing the mirror reads.
     public static IEnumerable<ScreenDocumentCorpusCase> Printed()
     {
-        yield return new("a screen that carries the document Studio saved", DocumentTransport.Export(
-        [
-            ("buyer", "Buyer", PreservedDocument)
-        ]).Source);
+        (string ActorId, string Role, string Document)[] carried = [("buyer", "Buyer", PreservedDocument)];
+        yield return new("a screen that carries the document Studio saved", DocumentTransport.Export(carried).Source);
 
-        yield return new("two roles, one of them carrying its document", DocumentTransport.Export(
+        (string ActorId, string Role, string Document)[] carriedAndTyped =
         [
             ("buyer", "Buyer", PreservedDocument),
             ("seller", "Seller", TypedDocument)
-        ]).Source);
+        ];
+        yield return new("two roles, one of them carrying its document", DocumentTransport.Export(carriedAndTyped).Source);
     }
 
     // A document with a member no typed Screenplay screen can say, so the bridge preserves it whole.
