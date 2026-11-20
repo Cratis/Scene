@@ -21,6 +21,7 @@ forms, contribution points, ui profiles and themes), `Scene.Engine` (binding/res
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.components?label=@cratis/scene.components&logo=npm)](https://www.npmjs.com/package/@cratis/scene.components)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.primereact?label=@cratis/scene.primereact&logo=npm)](https://www.npmjs.com/package/@cratis/scene.primereact)
 [![NPM](https://img.shields.io/npm/v/@cratis/scene.tailwind?label=@cratis/scene.tailwind&logo=npm)](https://www.npmjs.com/package/@cratis/scene.tailwind)
+[![NPM](https://img.shields.io/npm/v/@cratis/scene.screenplay?label=@cratis/scene.screenplay&logo=npm)](https://www.npmjs.com/package/@cratis/scene.screenplay)
 
 Blueprints:
 

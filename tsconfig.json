@@ -52,6 +52,9 @@
             "path": "./Source/JavaScript/model"
         },
         {
+            "path": "./Source/JavaScript/screenplay"
+        },
+        {
             "path": "./Source/JavaScript/engine"
         },
         {
