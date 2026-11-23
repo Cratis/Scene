@@ -11,7 +11,7 @@
     <!-- Backend AI services shared by Direct and Studio: IAIChatClients (purposes, pools, usage, causation). The version Direct pins. -->
     <PackageVersion Include="Cratis.AI" Version="7.153.8" />
     <!-- Pre-release carrying free screens, shape/uses screen/provisions and the resolved design system; the released version replaces it. -->
-    <PackageVersion Include="Cratis.Screenplay" Version="6.32.0" />
+    <PackageVersion Include="Cratis.Screenplay" Version="6.37.0" />
     <!-- Analysis -->
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" NoWarn="NU5104" />
     <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1" />

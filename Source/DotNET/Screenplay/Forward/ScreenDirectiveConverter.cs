@@ -153,14 +153,7 @@ public static class ScreenDirectiveConverter
                 ["isCollection"] = need.Type.IsCollection,
                 [FreeScreenConverter.NeedProperty] = need.Alias,
             }),
-            ScreenplaySyntax.ScreenActionSyntax action => SceneElementFactory.Component(id, "core:action", new Dictionary<string, object?>
-            {
-                ["command"] = action.Command,
-                ["label"] = action.Label,
-                ["navigateToScreen"] = action.Navigate?.Screen,
-                ["navigateByParameter"] = action.Navigate?.By,
-                [SceneElementProperties.Destination] = action.Navigate is null ? null : CompositionConverter.Destination(action.Navigate),
-            }.WithSubject(action.Subject, action.Inputs)),
+            ScreenplaySyntax.ScreenActionSyntax action => ConvertAction(action, id),
             ScreenplaySyntax.ScreenGuardedActionSyntax action => ConvertGuardedAction(action, id, scope),
             ScreenplaySyntax.ScreenSectionSyntax section => ConvertSection(section, id, scope),
             ScreenplaySyntax.ScreenNavigateSyntax navigate => SceneElementFactory.Component(id, "core:navigate", new Dictionary<string, object?>
@@ -183,6 +176,26 @@ public static class ScreenDirectiveConverter
             _ => Unsupported(directive, id, scope.Diagnostics),
         };
 
+    static SceneElements.ExternalComponent ConvertAction(ScreenplaySyntax.ScreenActionSyntax action, string id)
+    {
+        var properties = new Dictionary<string, object?>
+        {
+            ["command"] = action.Command,
+            ["label"] = action.Label,
+            ["navigateToScreen"] = action.Navigate?.Screen,
+            ["navigateByParameter"] = action.Navigate?.By,
+            [SceneElementProperties.Destination] = action.Navigate is null ? null : CompositionConverter.Destination(action.Navigate),
+        }.WithSubject(action.Subject, action.Inputs);
+
+        var presentation = action.Presentation.ToDictionary(value => value.Name, value => value.Value, StringComparer.Ordinal);
+        if (presentation.Count > 0)
+        {
+            properties["presentation"] = presentation;
+        }
+
+        return SceneElementFactory.Component(id, "core:action", properties);
+    }
+
     static SceneElements.ExternalComponent? Unsupported(ScreenplaySyntax.ScreenDirectiveSyntax directive, string path, ConversionDiagnostics? diagnostics)
     {
         if (diagnostics is null) throw new UnknownScreenDirective(directive.GetType().Name);
@@ -202,47 +215,7 @@ public static class ScreenDirectiveConverter
     /// </summary>
     static SceneElements.ExternalComponent ConvertToolbar(ScreenplaySyntax.ScreenToolbarSyntax toolbar, string id, BehaviorScope scope)
     {
-        var items = new List<SceneOutlets.OutletItem>();
-        foreach (var item in toolbar.Items)
-        {
-            if (item.Kind == ScreenplaySyntax.ToolbarItemKind.Action && item.Parameters.Any() && scope.Diagnostics is { } diagnostics)
-            {
-                diagnostics.Report(new("STAGE-SCENE-TOOLBAR-001", DiagnosticSeverity.Warning, "toolbar action parameters", $"{id}.{item.Name}", item.Location, $"The parameters of the toolbar action '{item.Name}' were omitted: an outlet button takes its command's inputs from the slice."));
-            }
-
-            SceneToolbar.ToolbarEmphasis? emphasis = null;
-            SceneOutlets.OutletButtonDisplay? display = null;
-            foreach (var presentation in item.Presentation)
-            {
-                if (emphasis is null && EmphasisOf(presentation) is { } authored)
-                {
-                    emphasis = authored;
-                    continue;
-                }
-
-                if (display is null && DisplayOf(presentation) is { } shown)
-                {
-                    display = shown;
-                    continue;
-                }
-
-                scope.Diagnostics?.Report(new("STAGE-SCENE-TOOLBAR-002", DiagnosticSeverity.Warning, "toolbar item presentation", $"{id}.{item.Name}", presentation.Location, $"The presentation '{presentation.Name}' of the toolbar item '{item.Name}' was omitted: an outlet button carries only its emphasis (placement primary, secondary or quiet) and what it shows (mode icon, title or iconAndTitle)."));
-            }
-
-            items.Add(new SceneOutlets.OutletButton
-            {
-                Id = item.Name,
-                Title = item.Label ?? item.Name,
-                Icon = item.Icon,
-                Command = item.Kind == ScreenplaySyntax.ToolbarItemKind.Action ? item.Target : null,
-                NavigateTo = ToolbarDestination(item),
-                Subject = OutletConverter.SubjectOf(item.Subject),
-                EnabledWhen = item.EnabledWhen is null ? null : OutletConverter.ConditionText(item.EnabledWhen),
-                Confirm = item.Confirm,
-                Emphasis = emphasis,
-                Display = display
-            });
-        }
+        var items = toolbar.Items.Select(item => (SceneOutlets.OutletItem)ConvertToolbarItem(item, id, scope)).ToList();
 
         items.AddRange(toolbar.Buttons.Select(button => OutletConverter.Button(button, scope.Structure)));
 
@@ -255,6 +228,57 @@ public static class ScreenDirectiveConverter
                 ["kind"] = "actions",
                 ["items"] = items
             });
+    }
+
+    static SceneOutlets.OutletButton ConvertToolbarItem(ScreenplaySyntax.ToolbarItemSyntax item, string id, BehaviorScope scope)
+    {
+        ReportToolbarParameters(item, id, scope.Diagnostics);
+        var (emphasis, display) = ToolbarPresentation(item, id, scope.Diagnostics);
+        return new SceneOutlets.OutletButton
+        {
+            Id = item.Name,
+            Title = item.Label ?? item.Name,
+            Icon = item.Icon,
+            Command = item.Kind == ScreenplaySyntax.ToolbarItemKind.Action ? item.Target : null,
+            NavigateTo = ToolbarDestination(item),
+            Subject = OutletConverter.SubjectOf(item.Subject),
+            EnabledWhen = item.EnabledWhen is null ? null : OutletConverter.ConditionText(item.EnabledWhen),
+            Confirm = item.Confirm,
+            Emphasis = emphasis,
+            Display = display
+        };
+    }
+
+    static void ReportToolbarParameters(ScreenplaySyntax.ToolbarItemSyntax item, string id, ConversionDiagnostics? diagnostics)
+    {
+        if (diagnostics is not null && item.Kind == ScreenplaySyntax.ToolbarItemKind.Action && item.Parameters.Any())
+        {
+            diagnostics.Report(new("STAGE-SCENE-TOOLBAR-001", DiagnosticSeverity.Warning, "toolbar action parameters", $"{id}.{item.Name}", item.Location, $"The parameters of the toolbar action '{item.Name}' were omitted: an outlet button takes its command's inputs from the slice."));
+        }
+    }
+
+    static (SceneToolbar.ToolbarEmphasis? Emphasis, SceneOutlets.OutletButtonDisplay? Display) ToolbarPresentation(ScreenplaySyntax.ToolbarItemSyntax item, string id, ConversionDiagnostics? diagnostics)
+    {
+        SceneToolbar.ToolbarEmphasis? emphasis = null;
+        SceneOutlets.OutletButtonDisplay? display = null;
+        foreach (var presentation in item.Presentation)
+        {
+            if (emphasis is null && EmphasisOf(presentation) is { } authored)
+            {
+                emphasis = authored;
+                continue;
+            }
+
+            if (display is null && DisplayOf(presentation) is { } shown)
+            {
+                display = shown;
+                continue;
+            }
+
+            diagnostics?.Report(new("STAGE-SCENE-TOOLBAR-002", DiagnosticSeverity.Warning, "toolbar item presentation", $"{id}.{item.Name}", presentation.Location, $"The presentation '{presentation.Name}' of the toolbar item '{item.Name}' was omitted: an outlet button carries only its emphasis (placement primary, secondary or quiet) and what it shows (mode icon, title or iconAndTitle)."));
+        }
+
+        return (emphasis, display);
     }
 
     /// <summary>
@@ -386,7 +410,6 @@ public static class ScreenDirectiveConverter
 
     static SceneElements.ExternalComponent ConvertTable(ScreenplaySyntax.ScreenTableSyntax table, string id, BehaviorScope scope)
     {
-        var row = scope.At(table);
         var properties = new Dictionary<string, object?>
         {
             // The route-resolution pass a running Stage attaches routes with (StageSceneRoutes.WithRoutes)
@@ -403,20 +426,7 @@ public static class ScreenDirectiveConverter
             .Select((column, index) =>
             {
                 var columnProperties = new Dictionary<string, object?> { ["property"] = column.Property, ["label"] = column.Label };
-                var field = row.FieldType($"{SceneGuards.SubjectPrefix}{column.Property}");
-                if (scope.GuardContexts is not null && field.Kind == GuardFieldKind.Enumeration)
-                {
-                    columnProperties["options"] = field.Members;
-                    if (field.MemberNumbers is not null) columnProperties["optionValues"] = field.MemberNumbers;
-                }
-                else if (scope.GuardContexts is null && scope.Enumerations is { } enumerations && enumerations.TryGetValue(table.Target, out var fields) && fields.TryGetValue(column.Property, out var members))
-                {
-                    columnProperties["options"] = members;
-                    if (scope.EnumerationNumbers is { } numbers && numbers.TryGetValue(table.Target, out var numberedFields) && numberedFields.TryGetValue(column.Property, out var memberNumbers))
-                    {
-                        columnProperties["optionValues"] = memberNumbers;
-                    }
-                }
+                AddColumnOptions(columnProperties, table, column.Property, scope);
 
                 return (SceneElements.SceneElement)SceneElementFactory.Component($"{id}.{index}-column", "core:column", columnProperties);
             })
@@ -426,6 +436,37 @@ public static class ScreenDirectiveConverter
         {
             Behaviors = scope.Resolve(table.Behaviors, table.UsedBehaviors, id)
         };
+    }
+
+    static void AddColumnOptions(Dictionary<string, object?> properties, ScreenplaySyntax.ScreenTableSyntax table, string property, BehaviorScope scope)
+    {
+        var field = scope.At(table).FieldType($"{SceneGuards.SubjectPrefix}{property}");
+        if (scope.GuardContexts is not null)
+        {
+            if (field.Kind == GuardFieldKind.Enumeration)
+            {
+                properties["options"] = field.Members;
+                if (field.MemberNumbers is not null) properties["optionValues"] = field.MemberNumbers;
+            }
+
+            return;
+        }
+
+        AddLegacyColumnOptions(properties, table.Target, property, scope);
+    }
+
+    static void AddLegacyColumnOptions(Dictionary<string, object?> properties, string target, string property, BehaviorScope scope)
+    {
+        if (scope.Enumerations is not { } enumerations || !enumerations.TryGetValue(target, out var fields) || !fields.TryGetValue(property, out var members))
+        {
+            return;
+        }
+
+        properties["options"] = members;
+        if (scope.EnumerationNumbers is { } numbers && numbers.TryGetValue(target, out var numberedFields) && numberedFields.TryGetValue(property, out var memberNumbers))
+        {
+            properties["optionValues"] = memberNumbers;
+        }
     }
 
     static SceneElements.ExternalComponent ConvertSummary(ScreenplaySyntax.ScreenSummarySyntax summary, string id)
